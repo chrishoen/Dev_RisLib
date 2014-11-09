@@ -1,0 +1,176 @@
+/*==============================================================================
+Description:
+==============================================================================*/
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+#include <stdlib.h>
+#include <stdio.h>
+#include "my_functions.h"
+
+#include <math.h>
+#include <string.h>
+
+#include "risFilterStatistics.h"
+
+namespace Ris
+{
+namespace Filter
+{
+
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   void AlphaStatistics::initialize(double aAlpha)
+   {
+      mEXAlpha.initialize(aAlpha);
+      mUXAlpha.initialize(aAlpha);
+   }
+
+   //******************************************************************************
+
+   void AlphaStatistics::reset()
+   {
+      // Output values
+      mX = 0.0;
+      mEX = 0.0;
+      mUX = 0.0;
+      mK = 0;
+   }
+
+   //******************************************************************************
+
+   void AlphaStatistics::put(double aX)
+   {
+      // Update filters
+
+      // This will result in the mean
+      mEXAlpha.put(aX);
+      // This will result in the standard deviation
+      mUXAlpha.put(abs(aX - mEXAlpha.mXX));
+
+      // Update output values
+      mX = aX;
+      mEX = mEXAlpha.mXX;
+      mUX = mUXAlpha.mXX;
+
+      // Update
+      mK++;
+   }
+
+   //******************************************************************************
+
+   void AlphaStatistics::show()
+   {
+      printf("%3d %8.3f %8.3f %8.3f\n",
+         mK,
+         mX,
+         mEX,
+         mUX);
+   }
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   void PeriodicStatistics::initialize(int aSize)
+   {
+      mSize = aSize;
+      mFirstFlag = true;
+      mX = 0.0;
+      mNewFlag = false;
+      mEX = 0.0;
+      mUX = 0.0;
+      mMinX = 0.0;
+      mMaxX = 0.0;
+      mEXSum = 0.0;
+      mUXSum = 0.0;
+      mPutCount = 0;
+      mK = 0;
+   }
+   
+   //******************************************************************************
+
+   void PeriodicStatistics::put(double aX)
+   {
+      //--------------------------------------------------------------------------- 
+      // Store current input
+      mX = aX;
+
+      //--------------------------------------------------------------------------- 
+      // Update min and max
+
+      // If first in period, set to current input  
+      if (mFirstFlag)
+      {
+         mFirstFlag = false;
+         mMinX = mX;
+         mMaxX = mX;
+      }
+      // Else, calculate min and max
+      else
+      {
+         if (mX < mMinX) mMinX = mX;
+         if (mX > mMaxX) mMaxX = mX;
+      }
+
+      //--------------------------------------------------------------------------- 
+      // Update sums
+
+      mEXSum += aX;
+      mUXSum += abs(aX - mEX);
+
+      //--------------------------------------------------------------------------- 
+      // If at the end of the period
+
+      if (++mPutCount == mSize)
+      {
+         // Calculate results
+         mEX = mEXSum / mPutCount;
+         mUX = mUXSum / mPutCount;
+
+         // Reset sums and counts
+         mEXSum = 0.0;;
+         mUXSum = 0.0;
+         mPutCount = 0;
+
+         // Indicate end of period
+         mNewFlag   = true;
+         mFirstFlag = true;
+      }
+      else
+      {
+         // Indicate not end of period
+         mNewFlag = false;
+      }
+
+      //--------------------------------------------------------------------------- 
+      // Done
+      mK++;
+   }
+
+   //******************************************************************************
+
+   void PeriodicStatistics::show()
+   {
+      printf("%3d %d %8.3f %8.3f %8.3f  %8.3f\n",
+         mK,
+         mNewFlag,
+         mEX,
+         mUX,
+         mMinX,
+         mMaxX);
+   }
+
+}//namespace
+}//namespace
+

@@ -1,0 +1,520 @@
+/*==============================================================================
+==============================================================================*/
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+#include <stdlib.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+//#include <ctype.h>
+#include <string.h>
+
+#include "risCmdLineCmd.h"
+
+namespace Ris
+{
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Regional functions
+
+// Converts a string to all upper case
+static void r_myStrupr(char* aString);
+
+// Similar to strtok
+static char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr);
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Parse command line string into command and argument members
+
+CmdLineCmd::CmdLineCmd()
+{
+   mGoodCmd=false;
+   mDefaultEnable=false;
+   strcpy(mDelimiters," ,\t");
+
+   for (int i=0;i<MaxNumOfArgs;i++)
+   {
+      mArgPtr[i] = &mArgStore[i][0];
+   }
+
+   mResponseValid=false;
+}
+
+//******************************************************************************
+// Parse command line string into command and argument members
+
+void CmdLineCmd::parseCmdLine(char* aCommandLine)
+{
+   //---------------------------------------------------------------------------
+   // Locals
+
+   int   i;
+   char* tToken;
+   int   tArgIndex=1;
+   int   tTokenIndex=0;
+
+   //---------------------------------------------------------------------------
+   // Initialize members
+
+   mGoodCmd=false;
+   for (i=1;i<=MaxNumOfArgs;i++)
+   {
+      mArgFlag[i]=false;
+   }
+
+   mArgNum      = 0;
+   mDefaultEnable = false;
+   mValidFlag   = 0;
+
+   //---------------------------------------------------------------------------
+   // Guard
+
+   if(strlen(aCommandLine)==0) return;
+
+   //---------------------------------------------------------------------------
+   // Convert command line to upper case
+
+   r_myStrupr(aCommandLine);
+
+   //---------------------------------------------------------------------------
+   // Parse command line into command and argument members
+
+   tToken = r_myStrtok(aCommandLine,mDelimiters,&tTokenIndex);
+
+   // Guard against line with one space
+   if(tToken==0) return;
+
+   // Set valid
+   mValidFlag = 1;
+
+   // Store command in arg[0]
+   strcpy(mArgPtr[0],tToken);
+
+   // Loop through command line to extract argument pointers
+   // First argument is at arg[1]
+   tArgIndex = 1;
+   while(tToken = r_myStrtok(aCommandLine,mDelimiters,&tTokenIndex))
+   {
+      // Store argument pointer
+      strcpy(mArgPtr[tArgIndex],tToken);
+
+      // Set argument valid flag 
+      mArgFlag [tArgIndex]=true;
+
+      // Test for max
+      if(mArgNum==MaxNumOfArgs) break;
+
+      // Advance
+      mArgNum++;
+      tArgIndex++;
+   }
+   mDefaultEnable = mArgNum==0;
+
+}
+
+//******************************************************************************
+// Compare arg[0] with a string
+
+bool CmdLineCmd::isCmd(char* aString)
+{
+   // Guard 
+   if (!mValidFlag) return false;
+
+   // Copy to temp and convert to upper case
+   char tString[200];
+   strcpy(tString,aString);
+   r_myStrupr(tString);
+
+   // Compare mCommand and aString 
+   if ((strcmp(mArgPtr[0],tString)==0))
+   {
+      // Set good command
+      mGoodCmd=true;
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+
+//******************************************************************************
+// Return true if no call to isCmd returned true
+
+bool CmdLineCmd::isBadCmd()
+{
+   return(!mGoodCmd);
+}
+
+//******************************************************************************
+// Return number of arguments
+
+int CmdLineCmd::numArg()
+{
+   // Return number of arguments
+   return mArgNum;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return argument value
+
+int CmdLineCmd::argInt(int aArgIndex)
+{
+   int tValue=0;
+
+   // Guard
+   if(!mArgFlag[aArgIndex]) return 0;
+
+   // Convert argument string
+   sscanf(mArgPtr[aArgIndex],    "%d",    &tValue);
+   if (tValue==0)
+   {
+      sscanf(mArgPtr[aArgIndex], "%x", &tValue);
+   }
+
+   // Return argument value
+   return tValue;
+}
+
+//******************************************************************************
+// Return argument value
+
+bool CmdLineCmd::argBool(int aArgIndex)
+{
+   bool tValue=false;
+
+   // Guard
+   if(!mArgFlag[aArgIndex]) return false;
+
+   // Convert argument string
+   if (strcmp(mArgPtr[aArgIndex],"1")==0)       tValue=true;
+   if (strcmp(mArgPtr[aArgIndex],"TRUE")==0)    tValue=true;
+
+   // Return argument value
+   return tValue;
+}
+
+//******************************************************************************
+// Return argument value
+
+double CmdLineCmd::argDouble(int aArgIndex)
+{
+   double tValue=0.0;
+
+   // Guard
+   if(!mArgFlag[aArgIndex]) return 0;
+
+   // Convert argument string
+   tValue = atof(mArgPtr[aArgIndex]);
+
+   // Return argument value
+   return tValue;
+}
+
+//******************************************************************************
+// Return argument value
+
+char* rCmdEmptyString = "NULL";
+
+char* CmdLineCmd::argString(int aArgIndex)
+{
+   char* tValue = rCmdEmptyString;
+
+   // Guard
+   if(!mArgFlag[aArgIndex]) return rCmdEmptyString;
+
+   // Convert argument string
+   tValue = mArgPtr[aArgIndex];
+
+   // Return char* argument
+   return tValue;
+}
+
+//******************************************************************************
+// Return argument value
+
+bool CmdLineCmd::isArgString (int aArgIndex,char* aStr)
+{
+   char tTemp[200];
+
+   // Guard
+   if(!mArgFlag[aArgIndex]) return 0;
+
+   // Copy to tTemp and convert to upper case
+   strcpy(tTemp,aStr);
+   r_myStrupr(tTemp);
+
+   // Compare aString with argument string   
+   return (strcmp(mArgPtr[aArgIndex],tTemp)==0);
+}
+
+//******************************************************************************
+// Return argument value
+
+void CmdLineCmd::copyArgString (int aArgIndex,char* aString)
+{
+   // Guard
+   if(!mArgFlag[aArgIndex])
+   {
+	   aString[0]=0;
+	   return;
+   }
+
+   // Copy argument to string
+   strcpy(aString,mArgPtr[aArgIndex]);
+}
+
+        //---------------------------------------------------------------------------
+        // Set defaults for arguments from the command line.
+        // Used if no arguments are entered.
+
+//******************************************************************************
+// Set default argument
+
+void CmdLineCmd::setArgDefault(int aArgIndex, int aValue)
+{
+   if (!mDefaultEnable) return;
+
+   sprintf(mArgPtr[aArgIndex],"%d",aValue);
+
+   mArgFlag[aArgIndex] = true;
+   mArgNum = aArgIndex;
+}
+
+void CmdLineCmd::setArgDefault(int aArgIndex, bool aValue)
+{
+   if (!mDefaultEnable) return;
+
+   strcpy(mArgPtr[aArgIndex],aValue?"TRUE":"FALSE");
+
+   mArgFlag[aArgIndex] = true;
+   mArgNum = aArgIndex;
+}
+
+void CmdLineCmd::setArgDefault(int aArgIndex, double aValue)
+{
+   if (!mDefaultEnable) return;
+
+   sprintf(mArgPtr[aArgIndex],"%f",aValue);
+
+   mArgFlag[aArgIndex] = true;
+   mArgNum = aArgIndex;
+}
+
+void CmdLineCmd::setArgDefault(int aArgIndex, char* aValue)
+{
+   if (!mDefaultEnable) return;
+
+   strcpy(mArgPtr[aArgIndex],aValue);
+   r_myStrupr(mArgPtr[aArgIndex]);
+
+   mArgFlag[aArgIndex] = true;
+   mArgNum = aArgIndex;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Convert string to upper case
+
+void r_myStrupr(char* aString)
+{
+   unsigned char* tPtr = (unsigned char*)aString;
+   int tIndex=0;
+   while (tPtr[tIndex]!=0)
+   {
+      int tValue = (int)tPtr[tIndex];
+      if ((tValue >= 97)&&(tValue <= 122))
+      {
+         tValue -= 32;
+         tPtr[tIndex] = (unsigned char)tValue;
+      }
+      tIndex++;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
+{
+   //---------------------------------------------------------------------------
+   // Locals
+
+   char* tToken=0;
+
+   int tIndex = *aIndexPtr;
+   int tNumOfDelimiters = strlen(aDelimiters);
+   bool tGoing=true;
+
+   //---------------------------------------------------------------------------
+   // Search for first occurrance of a non delimiter
+
+   tGoing=true;
+   while(tGoing)
+   {
+      // If not end of string
+      if (aString[tIndex]!=0)
+      {
+         // Compare current char with all delimiters
+         bool tDelimiter = false;
+         for(int i=0;i<tNumOfDelimiters;i++)
+         {
+            if (aString[tIndex]==aDelimiters[i]) 
+            {
+               tDelimiter=true;
+            }
+         }
+         // If current char is not a delimiter 
+         if (tDelimiter==false)
+         {
+            // Store token pointer and exit loop
+            tToken = &aString[tIndex];
+            tGoing=false;
+         }
+         // If current char is a delimiter 
+         else
+         {
+            // Advance to next char
+            tIndex++;
+         }
+      }
+      // Else end of string
+      else
+      {
+         // Exit loop
+         tGoing=false;
+      }
+	}
+
+   //---------------------------------------------------------------------------
+   // If no token then update state and return 0
+
+   if(tToken==0)
+   {
+      *aIndexPtr=tIndex;
+      return 0;
+   }
+
+   //---------------------------------------------------------------------------
+   // If the first char in the token is not a quote
+
+   if(tToken[0]!='\"')
+   {
+      //------------------------------------------------------------------------
+      // Search for next occurrance of a delimiter
+
+      tGoing=true;
+      while(tGoing)
+      {
+         // If not end of string
+         if (aString[tIndex]!=0)
+         {
+            // Compare current char with all delimiters
+            for(int i=0;i<tNumOfDelimiters;i++)
+            {
+               // If current char is a delimiter 
+               if (aString[tIndex]==aDelimiters[i]) 
+               {
+                  // Replace current char with end of string
+                  // This terminates the token
+                  aString[tIndex]=0;
+                  // Exit the loop
+                  tGoing=false;
+               }
+            }
+            // Advance to the next char
+            tIndex++;
+         }
+         // Else end of string
+         else
+         {
+            // Exit the loop
+            tGoing=false;
+         }
+	   }
+   }
+   //---------------------------------------------------------------------------
+   // Else the first char is a quote
+   else
+   {
+      // Bypass the quote
+      tIndex++;
+      tToken++;
+      //------------------------------------------------------------------------
+      // Search for next occurrance of quote
+      tGoing=true;
+      while(tGoing)
+      {
+         if (aString[tIndex]!=0)
+         {
+            if (aString[tIndex]=='\"') 
+            {
+               aString[tIndex]=0;
+               tGoing=false;
+            }
+            tIndex++;
+         }
+         else
+         {
+            tGoing=false;
+         }
+	   }
+   }
+
+   //---------------------------------------------------------------------------
+   // Update state and return token
+
+   *aIndexPtr=tIndex;
+   return tToken;
+}
+
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+// command response string
+
+void  CmdLineCmd::resetResponse ()
+{
+   mResponseValid=false;
+}
+//***************************************************************************
+void  CmdLineCmd::setResponse (char* aString)
+{
+   strcpy(mResponseString,aString);
+   mResponseValid=true;
+}
+//***************************************************************************
+char* CmdLineCmd::getResponse ()
+{
+   if (mResponseValid) return &mResponseString[0];
+   else                return 0; 
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+BaseCmdLineExec::BaseCmdLineExec()
+{
+   mExitFlag=false;
+}
+
+void BaseCmdLineExec::exit()
+{
+   // This can be used to cause and "EXIT" command for the executer
+   mExitFlag=true;;
+}
+
+//******************************************************************************
+}//namespace
+

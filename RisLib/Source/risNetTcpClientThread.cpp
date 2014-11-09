@@ -1,0 +1,335 @@
+/*==============================================================================
+==============================================================================*/
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+#include "prnPrint.h"
+
+#include "risNetTcpClientThread.h"
+
+namespace Ris
+{
+namespace Net
+{
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+BaseTcpClientThread::BaseTcpClientThread()
+{
+   mConnectionFlag=false;
+   mFlags=0;
+}
+
+TcpClientThreadWithQCallAndCallSource::TcpClientThreadWithQCallAndCallSource()
+{
+   mCallSource=0;
+}
+
+//******************************************************************************
+// Configure:
+
+void BaseTcpClientThread::configure(
+   char*                     aServerIpAddr,
+   int                       aServerIpPort,
+   BaseMessageParser*        aMessageParser,
+   int                       aFlags) 
+{
+   mConnectionFlag=false;
+   mFlags=aFlags;
+   mSocketAddress.set(aServerIpAddr,aServerIpPort);
+   mMessageParser = aMessageParser;
+}
+
+//******************************************************************************
+// Configure:
+
+void TcpClientThreadWithQCall::configure(
+   char*                     aServerIpAddr,
+   int                       aServerIpPort,
+   BaseMessageParser*        aMessageParser,
+   SessionQCall*             aSessionQCall,
+   RxMsgQCall*               aRxMsgQCall,
+   int                       aFlags) 
+{
+   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
+
+   BaseTcpClientThread::configure(
+      aServerIpAddr,
+      aServerIpPort,
+      aMessageParser,
+      aFlags);
+
+   mSessionQCall = *aSessionQCall;
+   mRxMsgQCall   = *aRxMsgQCall;
+}
+
+//******************************************************************************
+// Configure:
+
+void TcpClientThreadWithQCallAndCallSource::configure(
+   char*                     aServerIpAddr,
+   int                       aServerIpPort,
+   BaseMessageParser*        aMessageParser,
+   int                       aCallSource,
+   SessionQCall*             aSessionQCall,
+   RxMsgQCall*               aRxMsgQCall,
+   int                       aFlags) 
+{
+   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
+
+   BaseTcpClientThread::configure(
+      aServerIpAddr,
+      aServerIpPort,
+      aMessageParser,
+      aFlags);
+
+   mCallSource = aCallSource;
+
+   mSessionQCall = *aSessionQCall;
+   mRxMsgQCall   = *aRxMsgQCall;
+}
+
+//******************************************************************************
+// Configure:
+
+void TcpClientThreadWithCallback::configure(
+   char*                     aServerIpAddr,
+   int                       aServerIpPort,
+   BaseMessageParser*        aMessageParser,
+   MsgCallPointer*           aRxCallback,
+   SessionNotifyCallPointer* aSessionCallback,
+   int                       aFlags) 
+{
+   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
+
+   BaseTcpClientThread::configure(
+      aServerIpAddr,
+      aServerIpPort,
+      aMessageParser,
+      aFlags);
+
+   mRxCallback      = *aRxCallback;
+   mSessionCallback = *aSessionCallback;
+}
+
+//******************************************************************************
+// This sets base thread configuration members
+
+void BaseTcpClientThread::configureThread()
+{
+   // Set base class configuration members to defaults
+   BaseThread::configureThread();
+
+   // Set members for this thread
+   BaseThread::setThreadPriorityHigh();
+   BaseThread::setThreadName("TcpClient");
+}
+
+//******************************************************************************
+// Thread init function, base class overload.
+// It configures the socket.
+
+void BaseTcpClientThread::threadInitFunction()
+{
+   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadInitFunction BEGIN");
+
+   // Configure the socket
+   mSocket.configure(mSocketAddress,mMessageParser);
+
+   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadInitFunction END");
+}
+
+//******************************************************************************
+// Thread run function, base class overload.
+// It contains a while loop that manages the connection to the server
+// and receives messages.
+
+void BaseTcpClientThread::threadRunFunction()
+{
+   Prn::print(Prn::SocketRun,Prn::Run1, "TcpClientThread::threadRunFunction");
+   
+   //-----------------------------------------------------------
+   // Loop
+
+   mConnectionFlag=false;
+
+   bool going=true;
+
+   while(going)
+   {
+      //-----------------------------------------------------------
+      // If no connection
+      if (!mConnectionFlag)
+      {
+         // Try to connect
+         if (mSocket.doConnect())
+         {
+            // Connection was established
+            Prn::print(Prn::SocketRun,Prn::Run1, "Connected");
+            mConnectionFlag = true;
+
+            // process a session change because a
+            // new session has been established
+            processSessionChange(true);
+         }
+         else 
+         {
+            // Connection was not established
+            Prn::print(Prn::SocketRun,Prn::Run3, "Not Connected");
+
+            mConnectionFlag = false;
+
+            // Close socket
+            mSocket.doClose();
+            mSocket.reconfigure();
+
+            // Sleep
+            threadSleep(500);
+         }
+      }
+      //-----------------------------------------------------------
+      // If connection
+      else
+      {
+         // Try to receive a message with a blocking receive call
+         // If a message was received then process it.
+         // If a message was not received then the connection was lost.  
+         ByteContent* rxMsg=0;
+         if (mSocket.doRecvMsg(rxMsg))
+         {
+            // Message was correctly received
+            Prn::print(Prn::SocketRun,Prn::Run2, "Recv message %d",mSocket.mRxMsgCount);
+
+            // process the receive message
+            if (rxMsg)
+            {
+               processRxMsg(rxMsg);
+            }
+         }
+         else
+         {
+            // Message was not correctly received, so
+            // Connection was lost
+            Prn::print(Prn::SocketRun,Prn::Run1, "Recv failed, Connection lost");
+            mConnectionFlag = false;
+
+            // process a session change because a
+            // new session has been disestablished
+            processSessionChange(false);
+         }
+      }
+      //-----------------------------------------------------------
+      // If termination request, exit the loop
+      // This is set by shutdown, see below.
+      if (mTerminateFlag)
+      {
+         going=false;
+      }  
+   }         
+}
+
+//******************************************************************************
+// Thread exit function, base class overload.
+
+void BaseTcpClientThread::threadExitFunction()
+{
+   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadExitFunction");
+}
+//******************************************************************************
+// Shutdown, base class overload.
+// This sets the terminate request flag and closes the socket.
+//
+// If the while loop in the threadRunFunction is blocked on doRecvMsg then
+// closing the socket will cause doRecvMsg to return with false and 
+// then the terminate request flag will be polled and the the
+// threadRunFunction will exit.
+
+void BaseTcpClientThread::shutdownThread()
+{
+   BaseThreadWithTermFlag::mTerminateFlag = true;
+
+   mSocket.doClose();
+
+   BaseThreadWithTermFlag::waitForThreadTerminate();
+}
+//******************************************************************************
+
+void BaseTcpClientThread::sendMsg(ByteContent* aTxMsg)
+{
+   if (!aTxMsg) return;
+
+   if (mConnectionFlag)
+   {
+      mSocket.doSendMsg(aTxMsg);
+   }
+   else
+   {
+      DecreaseResource(aTxMsg);
+   }
+
+   Prn::print(Prn::SocketRun,Prn::Run2, "doSendMsg %d %d %d",mSocket.mStatus,mSocket.mError,mSocket.mTxMsgCount);
+}
+
+//******************************************************************************
+
+void TcpClientThreadWithQCall::processSessionChange(bool aEstablished)
+{
+   // Invoke the session qcall to notify that a session has
+   // been established or disestablished
+   // Create a new qcall, copied from the original, and invoke it.
+   mSessionQCall.invoke(aEstablished);
+}
+
+//******************************************************************************
+
+void TcpClientThreadWithQCallAndCallSource::processSessionChange(bool aEstablished)
+{
+   // Invoke the session qcall to notify that a session has
+   // been established or disestablished
+   // Create a new qcall, copied from the original, and invoke it.
+   mSessionQCall.invoke(mCallSource,aEstablished);
+}
+
+//******************************************************************************
+
+void TcpClientThreadWithCallback::processSessionChange(bool aEstablished)
+{
+   // Call the session callback to notify that a session has
+   // been established or disestablished
+   mSessionCallback(aEstablished);
+}
+
+//******************************************************************************
+
+void TcpClientThreadWithQCall::processRxMsg(Ris::ByteContent* aRxMsg)
+{
+   // Invoke the receive QCall
+   // Create a new qcall, copied from the original, and invoke it.
+   mRxMsgQCall.invoke(aRxMsg);
+}
+
+//******************************************************************************
+
+void TcpClientThreadWithQCallAndCallSource::processRxMsg(Ris::ByteContent* aRxMsg)
+{
+   // Invoke the receive QCall
+   // Create a new qcall, copied from the original, and invoke it.
+   mRxMsgQCall.invoke(mCallSource,aRxMsg);
+}
+
+//******************************************************************************
+
+void TcpClientThreadWithCallback::processRxMsg(Ris::ByteContent* aRxMsg)
+{
+   // Call the receive callback
+   mRxCallback(aRxMsg);
+}
+
+//******************************************************************************
+
+}//namespace
+}//namespace

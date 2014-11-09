@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\my_functions.cpp" />
+    <ClCompile Include="Source\prnPrint.cpp" />
+    <ClCompile Include="Source\prnPrintSettings.cpp" />
+    <ClCompile Include="Source\prnPrintThread.cpp" />
+    <ClCompile Include="Source\risByteContent.cpp" />
+    <ClCompile Include="Source\risByteMessage.cpp" />
+    <ClCompile Include="Source\risCmdLineCmd.cpp" />
+    <ClCompile Include="Source\risCmdLineConsole.cpp" />
+    <ClCompile Include="Source\risCmdLineFile.cpp" />
+    <ClCompile Include="Source\risCmdLineString.cpp" />
+    <ClCompile Include="Source\risCriticalSection_win.cpp" />
+    <ClCompile Include="Source\risFilterAlpha.cpp" />
+    <ClCompile Include="Source\risFilterFilters.cpp" />
+    <ClCompile Include="Source\risFilterStatistics.cpp" />
+    <ClCompile Include="Source\risLogic.cpp" />
+    <ClCompile Include="Source\risLut.cpp" />
+    <ClCompile Include="Source\risNanoTime.cpp" />
+    <ClCompile Include="Source\risNetSessionStateList.cpp" />
+    <ClCompile Include="Source\risNetTcpClientThread.cpp" />
+    <ClCompile Include="Source\risNetTcpMsgSocket.cpp" />
+    <ClCompile Include="Source\risNetTcpServerThread.cpp" />
+    <ClCompile Include="Source\risNetUdpMsgSocket.cpp" />
+    <ClCompile Include="Source\risNetUdpRxThread.cpp" />
+    <ClCompile Include="Source\risPortableCalls_win.cpp" />
+    <ClCompile Include="Source\risRemoteClientThread.cpp" />
+    <ClCompile Include="Source\risRemoteMsg.cpp" />
+    <ClCompile Include="Source\risRemoteServerThread.cpp" />
+    <ClCompile Include="Source\risRVector.cpp" />
+    <ClCompile Include="Source\risSockets_win.cpp" />
+    <ClCompile Include="Source\risStatistics.cpp" />
+    <ClCompile Include="Source\risThreadsCPSpecific.cpp" />
+    <ClCompile Include="Source\risThreadsProcess_win.cpp" />
+    <ClCompile Include="Source\risThreadsQCall.cpp" />
+    <ClCompile Include="Source\risThreadsScheduler.cpp" />
+    <ClCompile Include="Source\risThreadsTimer.cpp" />
+    <ClCompile Include="Source\risThreadsTimerThread.cpp" />
+    <ClCompile Include="Source\risThreadsTwoThread.cpp" />
+    <ClCompile Include="Source\risThreads_win.cpp" />
+    <ClCompile Include="Source\risTime.cpp" />
+    <ClCompile Include="Source\risTimeDuration.cpp" />
+    <ClCompile Include="Source\risTimeMarker.cpp" />
+    <ClCompile Include="Source\risTimerTester.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\my_functions.h" />
+    <ClInclude Include="Source\prnPrint.h" />
+    <ClInclude Include="Source\prnPrintSettings.h" />
+    <ClInclude Include="Source\prnPrintThread.h" />
+    <ClInclude Include="Source\risByteContent.h" />
+    <ClInclude Include="Source\risByteMessage.h" />
+    <ClInclude Include="Source\risCallPointer.h" />
+    <ClInclude Include="Source\risCmdLineCmd.h" />
+    <ClInclude Include="Source\risCmdLineConsole.h" />
+    <ClInclude Include="Source\risCmdLineFile.h" />
+    <ClInclude Include="Source\risCmdLineString.h" />
+    <ClInclude Include="Source\risContainers.h" />
+    <ClInclude Include="Source\risCriticalSection.h" />
+    <ClInclude Include="Source\risFilterAlpha.h" />
+    <ClInclude Include="Source\risFilterFilters.h" />
+    <ClInclude Include="Source\risFilterStatistics.h" />
+    <ClInclude Include="Source\risLogic.h" />
+    <ClInclude Include="Source\risLut.h" />
+    <ClInclude Include="Source\risNanoTime.h" />
+    <ClInclude Include="Source\risNetSessionStateList.h" />
+    <ClInclude Include="Source\risNetTcpClientThread.h" />
+    <ClInclude Include="Source\risNetTcpMsgSocket.h" />
+    <ClInclude Include="Source\risNetTcpServerThread.h" />
+    <ClInclude Include="Source\risNetUdpMsgSocket.h" />
+    <ClInclude Include="Source\risNetUdpRxThread.h" />
+    <ClInclude Include="Source\risPortableCalls.h" />
+    <ClInclude Include="Source\risPortableTypes.h" />
+    <ClInclude Include="Source\risRemoteClientThread.h" />
+    <ClInclude Include="Source\risRemoteMsg.h" />
+    <ClInclude Include="Source\risRemoteServerThread.h" />
+    <ClInclude Include="Source\risRVector.h" />
+    <ClInclude Include="Source\risSockets.h" />
+    <ClInclude Include="Source\risStatistics.h" />
+    <ClInclude Include="Source\risThreads.h" />
+    <ClInclude Include="Source\risThreadsCPSpecific.h" />
+    <ClInclude Include="Source\risThreadsProcess.h" />
+    <ClInclude Include="Source\risThreadsQCall.h" />
+    <ClInclude Include="Source\risThreadsQueue.h" />
+    <ClInclude Include="Source\risThreadsScheduler.h" />
+    <ClInclude Include="Source\risThreadsTimer.h" />
+    <ClInclude Include="Source\risThreadsTimerThread.h" />
+    <ClInclude Include="Source\risThreadsTwoThread.h" />
+    <ClInclude Include="Source\risTime.h" />
+    <ClInclude Include="Source\risTimeDuration.h" />
+    <ClInclude Include="Source\risTimeMarker.h" />
+    <ClInclude Include="Source\risTimerTester.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{740DD552-6B3B-4A1B-9B22-B6F516E458AB}</ProjectGuid>
+    <RootNamespace>RisLib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;ws2_32.lib</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

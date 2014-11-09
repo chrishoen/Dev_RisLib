@@ -143,7 +143,7 @@ class FIRTestFilter : public FIRFilter
 {
 public:
    // Initialize
-   void initialize(); 
+   void initialize();
 };
 
 //******************************************************************************
@@ -155,8 +155,8 @@ class IIRFilter
 {
 public:
    // Initialize
-   void initialize(int aYSize,int aXSize); 
-   void reset(); 
+   void initialize(int aBSize, int aASize);
+   void initialize(int aBSize, int aASize, double aBArray[], double aAArray[]);
    void show();
    // Valid
    bool mValid;
@@ -170,13 +170,17 @@ public:
    // Output value
    double mY;
 
+   // Sizes
+   int mBSize;
+   int mASize;
+
    // Value arrays
    ShiftRegister mYSR;
    ShiftRegister mXSR;
 
-   // Coefficient array
-   double mAArray[MaxFilterSize];
+   // Coefficient arrays
    double mBArray[MaxFilterSize];
+   double mAArray[MaxFilterSize];
 };
 
 //******************************************************************************
@@ -239,8 +243,39 @@ public:
    int mK;
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// TestSignal. This gives a sinusoidal test signal
+
+class TestSignal
+{
+public:
+   TestSignal();
+
+   // Initialize
+   void initialize(
+      double aBias,
+      double aAmplitude,
+      double aPhase,
+      double aFs,
+      double aF);
+
+   // Advance sinusoid
+   double advance();
+
+   // Members
+   double mBias;
+   double mAmplitude;
+   double mPhase;
+   double mFs;
+   double mF;
+   double mDT;
+   double mT;
+
+};
+
 }//namespace
 }//namespace
 #endif
-
 

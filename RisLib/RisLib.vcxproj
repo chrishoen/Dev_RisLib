@@ -55,6 +55,7 @@
     <ClCompile Include="Source\risTimerTester.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
     <ClInclude Include="Source\prnPrint.h" />
     <ClInclude Include="Source\prnPrintSettings.h" />

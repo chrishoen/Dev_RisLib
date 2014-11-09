@@ -9,6 +9,7 @@ Description:
 #include <stdlib.h>
 #include <stdio.h>
 #include "my_functions.h"
+#include "my_defs.h"
 
 #include <math.h>
 #include <string.h>
@@ -312,21 +313,24 @@ void FIRTestFilter::initialize()
 //******************************************************************************
 //******************************************************************************
 
-void IIRFilter::initialize(int aYSize,int aXSize)
+void IIRFilter::initialize(int aBSize, int aASize)
 {
-   for (int i=0;i<mXSR.mSize;i++) mBArray[i]=0.0;
-   for (int i=0;i<mYSR.mSize;i++) mAArray[i]=0.0;
-   mXSR.initialize(aXSize);
-   mYSR.initialize(aYSize);
-   reset();
+   mBSize = aBSize;
+   mASize = aASize;
+   for (int i = 0; i<aBSize; i++) mBArray[i] = 0.0;
+   for (int i = 0; i<aASize; i++) mAArray[i] = 0.0;
+   mXSR.initialize(aBSize);
+   mYSR.initialize(aASize);
 }
 
-//******************************************************************************
-
-void IIRFilter::reset() 
+void IIRFilter::initialize(int aBSize, int aASize, double aBArray[], double aAArray[])
 {
-   mXSR.reset();
-   mYSR.reset();
+   mBSize = aBSize;
+   mASize = aASize;
+   for (int i = 0; i<aBSize; i++) mBArray[i] = aBArray[i];
+   for (int i = 0; i<aASize; i++) mAArray[i] = aAArray[i];
+   mXSR.initialize(aBSize);
+   mYSR.initialize(aASize);
 }
 
 //******************************************************************************
@@ -509,6 +513,48 @@ void CharacterFilter1::show()
       mUX,
       mEV,
       mUV);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+//******************************************************************************
+TestSignal::TestSignal()
+{
+   mBias      = 0.0;
+   mAmplitude = 0.0;
+   mPhase     = 0.0;
+   mFs        = 0.0;
+   mF         = 0.0;
+   mDT        = 0.0;
+   mT         = 0.0;
+}
+
+//******************************************************************************
+void TestSignal::initialize(
+   double aBias,
+   double aAmplitude,
+   double aPhase,
+   double aFs,
+   double aF)
+{
+   mBias      = aBias;
+   mAmplitude = aAmplitude;
+   mPhase     = aPhase;
+   mFs        = aFs;
+   mF         = aF;
+   mDT        = 1 / mFs;
+   mT         = 0.0;
+}
+
+//******************************************************************************
+double TestSignal::advance()
+{
+   return mBias + sin(MY_2PI*mF*mT + mPhase);
 }
 
 }//namespace

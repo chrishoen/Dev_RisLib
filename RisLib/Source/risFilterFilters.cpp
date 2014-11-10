@@ -327,8 +327,9 @@ void IIRFilter::initialize(int aBSize, int aASize, double aBArray[], double aAAr
 {
    mBSize = aBSize;
    mASize = aASize;
-   for (int i = 0; i<aBSize; i++) mBArray[i] = aBArray[i];
-   for (int i = 0; i<aASize; i++) mAArray[i] = aAArray[i];
+   for (int i=0; i<aBSize; i++) mBArray[i] = aBArray[i];
+   for (int i=0; i<aASize; i++) mAArray[i] = aAArray[i];
+
    mXSR.initialize(aBSize);
    mYSR.initialize(aASize);
 }
@@ -337,26 +338,21 @@ void IIRFilter::initialize(int aBSize, int aASize, double aBArray[], double aAAr
 
 double IIRFilter::put(double aX)
 {
-   // Put input value into X shift register
+   // Store input value
    mX = aX;
+
+   // Put input value into X shift register
    mXSR.shiftRight(mX);
 
-   // Guard
-   if (!mXSR.mValid)
-   {
-      mY=0.0;
-      return 0.0;
-   }
-
-   // Valid
-   mValid=true;
-
-   // Advance Y shift register
+   // Advance Y shift register with zero at left end
    mYSR.shiftRight(0.0);
+
+   // Store valid
+   mValid = mXSR.mValid;
 
    // Calculate X sum
    double tXSum=0.0;
-   for (int i=0;i<mXSR.mSize;i++)
+   for (int i = 0; i<mXSR.mSize; i++)
    {
       tXSum += mXSR.get(i) * mBArray[i];
    }
@@ -368,13 +364,13 @@ double IIRFilter::put(double aX)
       tYSum += mYSR.get(i) * mAArray[i];
    }
 
-   // Calculate Y
+   // Calculate Y 
    mY = tXSum - tYSum;
 
-   // Put into Y shift register front
+   // Put Y into Y shift register left end
    mYSR.setLeft(mY);
 
-   // Return sum
+   // Return Y
    return mY;
 }
 
@@ -386,6 +382,7 @@ void IIRFilter::show()
       mXSR.mK,
       mX,
       mY);
+
 }
 
 //******************************************************************************
@@ -554,7 +551,12 @@ void TestSignal::initialize(
 //******************************************************************************
 double TestSignal::advance()
 {
-   return mBias + sin(MY_2PI*mF*mT + mPhase);
+   // Sinusoid
+   double tY = mBias + sin(MY_2PI*mF*mT + mPhase);
+   // Advance time
+   mT += mDT;
+   // Done
+   return tY;
 }
 
 }//namespace

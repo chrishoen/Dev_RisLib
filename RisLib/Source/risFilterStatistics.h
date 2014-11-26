@@ -84,6 +84,10 @@ namespace Filter
       double  mUXSum;        // Sum uncertainty (standard deviation)
       int     mPutCount;     // Put count
 
+      // Current min and max
+      double  mCurrentMinX;  // minimum
+      double  mCurrentMaxX;  // maximum
+
 
       // Members
       int mK;

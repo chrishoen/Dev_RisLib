@@ -94,6 +94,8 @@ namespace Filter
       mMaxX = 0.0;
       mEXSum = 0.0;
       mUXSum = 0.0;
+      mCurrentMinX = 0.0;
+      mCurrentMaxX = 0.0;
       mPutCount = 0;
       mK = 0;
    }
@@ -113,14 +115,14 @@ namespace Filter
       if (mFirstFlag)
       {
          mFirstFlag = false;
-         mMinX = mX;
-         mMaxX = mX;
+         mCurrentMinX = mX;
+         mCurrentMaxX = mX;
       }
       // Else, calculate min and max
       else
       {
-         if (mX < mMinX) mMinX = mX;
-         if (mX > mMaxX) mMaxX = mX;
+         if (mX < mCurrentMinX) mCurrentMinX = mX;
+         if (mX > mCurrentMaxX) mCurrentMaxX = mX;
       }
 
       //--------------------------------------------------------------------------- 
@@ -134,9 +136,13 @@ namespace Filter
 
       if (++mPutCount == mSize)
       {
-         // Calculate results
+         // Calculate results for mean and standard deviation
          mEX = mEXSum / mPutCount;
          mUX = mUXSum / mPutCount;
+
+         // Latch minimum and maximum
+         mMinX = mCurrentMinX;
+         mMaxX = mCurrentMaxX;
 
          // Reset sums and counts
          mEXSum = 0.0;;

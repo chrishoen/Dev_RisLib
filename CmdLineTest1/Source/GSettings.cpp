@@ -141,7 +141,7 @@ void GSettings::initialize()
    // Try opening settings file from current working directory
    if (tFileFound == 0)
    {
-      strcpy(tFilePath,Ris::portableGetCurrentWorkingDir());
+      strcpy(tFilePath,Ris::portableGetSettingsDir());
       strcat(tFilePath,"GSettings.txt");
       if (tCmdLineFile.open(tFilePath))
       {

@@ -60,6 +60,21 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+	char tBuffer[200];
+	tBuffer[0] = 0;
+
+    fgets(tBuffer, 200, stdin);
+    //gets(tBuffer);
+    int tBufferLength = strlen(tBuffer);
+    if (tBuffer[tBufferLength-1] == 10) tBuffer[tBufferLength-1] = 0;
+    printf("tBufferLast %d\n", (int)tBuffer[tBufferLength - 1]);
+    printf("tBuffer %d $$ %s\n", strlen(tBuffer), tBuffer);
+
+    for (int i = 0; i < strlen(tBuffer); i++)
+    {
+        printf("tBufferChar %d  %d\n", i, (int)tBuffer[i]);
+    }
+
 }
 
 //******************************************************************************

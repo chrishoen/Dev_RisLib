@@ -42,7 +42,7 @@ void CmdLineConsole::execute(BaseCmdLineExec* aExec)
    while(true)
    {
       // Read console input
-      fgets(tBuffer,200,stdin);
+      gets(tBuffer);
 
       // Test for toggle suppress print
       if (strcmp(tBuffer,"p")==0)

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CmdLineTest1", "CmdLineTest1\CmdLineTest1.vcxproj", "{73A309B2-0AF9-47EB-B5D1-A932203B9F9C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadTest", "ThreadTest\ThreadTest.vcxproj", "{A0AB985A-67BB-44DB-805C-7B0A4CA53170}"
@@ -28,6 +30,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Classes", "Classes\Classes.vcxproj", "{B3A1094D-9994-4EA8-BC7B-B9E31C94B8CA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CallPointer2", "CallPointer2\CallPointer2.vcxproj", "{253783D2-1554-41E5-A402-1C44FC5F22A1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RegHelper", "RegHelper\RegHelper.vcxproj", "{79C7CC88-F183-4BFD-93E4-C3A8FBB36DED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +95,10 @@ Global
 		{253783D2-1554-41E5-A402-1C44FC5F22A1}.Debug|Win32.Build.0 = Debug|Win32
 		{253783D2-1554-41E5-A402-1C44FC5F22A1}.Release|Win32.ActiveCfg = Release|Win32
 		{253783D2-1554-41E5-A402-1C44FC5F22A1}.Release|Win32.Build.0 = Release|Win32
+		{79C7CC88-F183-4BFD-93E4-C3A8FBB36DED}.Debug|Win32.ActiveCfg = Debug|Win32
+		{79C7CC88-F183-4BFD-93E4-C3A8FBB36DED}.Debug|Win32.Build.0 = Debug|Win32
+		{79C7CC88-F183-4BFD-93E4-C3A8FBB36DED}.Release|Win32.ActiveCfg = Release|Win32
+		{79C7CC88-F183-4BFD-93E4-C3A8FBB36DED}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

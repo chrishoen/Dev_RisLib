@@ -297,7 +297,7 @@ namespace Reg
     void writeBitsAtPos32(unsigned int* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned int aValue)
     {
         unsigned int tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
         unsigned tValue = (aValue << aBitPos);
         tValue &= tMask;
         *aPointer &= ~tMask;
@@ -307,7 +307,7 @@ namespace Reg
     void writeBitsAtPos16(unsigned short* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned short aValue)
     {
         unsigned short tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
         unsigned tValue = (aValue << aBitPos);
         tValue &= tMask;
         *aPointer &= ~tMask;
@@ -317,7 +317,7 @@ namespace Reg
     void writeBitsAtPos08(unsigned char* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned char aValue)
     {
         unsigned char tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
         unsigned tValue = (aValue << aBitPos);
         tValue &= tMask;
         *aPointer &= ~tMask;
@@ -333,7 +333,7 @@ namespace Reg
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
         unsigned int tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
         unsigned tValue = (aValue << aBitPos);
         tValue &= tMask;
         *tPointer &= ~tMask;
@@ -344,7 +344,7 @@ namespace Reg
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
         unsigned short tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
         unsigned tValue = (aValue << aBitPos);
         tValue &= tMask;
         *tPointer &= ~tMask;
@@ -355,7 +355,7 @@ namespace Reg
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
         unsigned char tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
         unsigned tValue = (aValue << aBitPos);
         tValue &= tMask;
         *tPointer &= ~tMask;
@@ -371,7 +371,7 @@ namespace Reg
     {
         unsigned int tValue = ((*aPointer) >> aBitPos);
         unsigned int tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << i);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
@@ -379,7 +379,7 @@ namespace Reg
     {
         unsigned short tValue = ((*aPointer) >> aBitPos);
         unsigned short tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << i);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
@@ -387,7 +387,7 @@ namespace Reg
     {
         unsigned char tValue = ((*aPointer) >> aBitPos);
         unsigned char tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << i);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
@@ -401,7 +401,7 @@ namespace Reg
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
         unsigned int tValue = ((*tPointer) >> aBitPos);
         unsigned int tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << i);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
@@ -410,7 +410,7 @@ namespace Reg
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
         unsigned short tValue = ((*tPointer) >> aBitPos);
         unsigned short tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << i);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
@@ -419,7 +419,7 @@ namespace Reg
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
         unsigned char tValue = ((*tPointer) >> aBitPos);
         unsigned char tMask = 0;
-        for (unsigned i = 0; i<aNumBits; i++) tMask |= (1 << i);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 

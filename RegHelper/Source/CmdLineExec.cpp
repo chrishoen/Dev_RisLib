@@ -65,7 +65,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-    unsigned int   tT32 = 0x00050000;
+    unsigned int   tT32 = 0x000D8000;
 
     printf("%08X %08X\n", Reg::readBitsAtPos32(&tT32, 16, 3), tT32);
 }

@@ -98,227 +98,135 @@ namespace Reg
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
-    // Write a bit at a pointer at a mask
+    // Write a bit at a pointer
 
-    inline void writeBitAtMask32(volatile unsigned int* aPointer, unsigned int aBitMask, unsigned int aValue)
+    inline void writeBit32(volatile unsigned int* aPointer, unsigned int aBitNum, bool aValue)
     {
-        if (aValue) *aPointer |= aBitMask;
-        else        *aPointer &= ~aBitMask;
+        unsigned int tMask = (1 << aBitNum);
+        if (aValue) *aPointer |= tMask;
+        else        *aPointer &= ~tMask;
     }
 
-    inline void writeBitAtMask16(volatile unsigned short* aPointer, unsigned short aBitMask, unsigned int aValue)
+    inline void writeBit16(volatile unsigned short* aPointer, unsigned int aBitNum, bool aValue)
     {
-        if (aValue) *aPointer |= aBitMask;
-        else        *aPointer &= ~aBitMask;
+        unsigned short tMask = (1 << aBitNum);
+        if (aValue) *aPointer |= tMask;
+        else        *aPointer &= ~tMask;
     }
 
-    inline void writeBitAtMask08(volatile unsigned char* aPointer, unsigned char aBitMask, unsigned int aValue)
+    inline void writeBit08(volatile unsigned char* aPointer, unsigned int aBitNum, bool aValue)
     {
-        if (aValue) *aPointer |= aBitMask;
-        else        *aPointer &= ~aBitMask;
+        unsigned char tMask = (1 << aBitNum);
+        if (aValue) *aPointer |= tMask;
+        else        *aPointer &= ~tMask;
     }
 
     //******************************************************************************
-    //******************************************************************************
-    //******************************************************************************
-    // Write a bit at an address at a mask
+    // Write a bit at an address
 
-    inline void writeBitAtMask32(unsigned int aAddress, unsigned int aBitMask, unsigned int aValue)
+    inline void writeBit32(unsigned int aAddress, unsigned int aBitNum, bool aValue)
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
-        if (aValue) *tPointer |= aBitMask;
-        else        *tPointer &= ~aBitMask;
+        unsigned int tMask = (1 << aBitNum);
+        if (aValue) *tPointer |= tMask;
+        else        *tPointer &= ~tMask;
     }
 
-    inline void writeBitAtMask16(unsigned int aAddress, unsigned short aBitMask, unsigned int aValue)
+    inline void writeBit16(unsigned int aAddress, unsigned int aBitNum, bool aValue)
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
-        if (aValue) *tPointer |= aBitMask;
-        else        *tPointer &= ~aBitMask;
+        unsigned short tMask = (1 << aBitNum);
+        if (aValue) *tPointer |= tMask;
+        else        *tPointer &= ~tMask;
     }
 
-    inline void writeBitAtMask08(unsigned int aAddress, unsigned char aBitMask, unsigned int aValue)
+    inline void writeBit08(unsigned int aAddress, unsigned int aBitNum, bool aValue)
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
-        if (aValue) *tPointer |= aBitMask;
-        else        *tPointer &= ~aBitMask;
+        unsigned char tMask = (1 << aBitNum);
+        if (aValue) *tPointer |= tMask;
+        else        *tPointer &= ~tMask;
     }
 
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
-    // Read a bit at a pointer at a mask
+    // Read a bit at a pointer
 
-    inline unsigned int readBitAtMask32(volatile unsigned int* aPointer, unsigned int aBitMask)
+    inline bool readBit32(volatile unsigned int* aPointer, unsigned int aBitNum)
     {
-        return *aPointer & aBitMask ? 1 : 0;
+        unsigned int tMask = (1 << aBitNum);
+        return (*aPointer & tMask)!=0;
     }
 
-    inline unsigned int readBitAtMask16(volatile unsigned short* aPointer, unsigned short aBitMask)
+    inline bool readBit16(volatile unsigned short* aPointer, unsigned int aBitNum)
     {
-        return *aPointer & aBitMask ? 1 : 0;
+        unsigned short tMask = (1 << aBitNum);
+        return (*aPointer & tMask)!=0;
     }
 
-    inline unsigned int readBitAtMask08(volatile unsigned char* aPointer, unsigned char aBitMask)
+    inline bool readBit08(volatile unsigned char* aPointer, unsigned int aBitNum)
     {
-        return *aPointer & aBitMask ? 1 : 0;
+        unsigned char tMask = (1 << aBitNum);
+        return (*aPointer & tMask)!=0;
     }
 
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
-    // Read a bit at an address at a mask
+    // Read a bit at an address
 
-    inline unsigned int readBitAtMask32(unsigned int aAddress, unsigned int aBitMask)
+    inline bool readBit32(unsigned int aAddress, unsigned int aBitNum)
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
-        return *tPointer & aBitMask ? 1 : 0;
+        unsigned int tMask = (1 << aBitNum);
+        return (*tPointer & tMask)!=0;
     }
 
-    inline unsigned int readBitAtMask16(unsigned int aAddress, unsigned short aBitMask)
+    inline bool readBit16(unsigned int aAddress, unsigned int aBitNum)
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
-        return *tPointer & aBitMask ? 1 : 0;
+        unsigned short tMask = (1 << aBitNum);
+        return (*tPointer & tMask)!=0;
     }
 
-    inline unsigned int readBitAtMask08(unsigned int aAddress, unsigned char aBitMask)
+    inline bool readBit08(unsigned int aAddress, unsigned int aBitNum)
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
-        return *tPointer & aBitMask ? 1 : 0;
+        unsigned char tMask = (1 << aBitNum);
+        return (*tPointer & tMask)!=0;
     }
 
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
-    // Write a bit at a pointer at a bit position
+    // Write bits at a pointer
 
-    inline void writeBit32(volatile unsigned int* aPointer, unsigned int aBitPos, unsigned int aValue)
-    {
-        unsigned int tValue = (1 << aBitPos);
-        if (aValue) *aPointer |= tValue;
-        else        *aPointer &= ~tValue;
-    }
-
-    inline void writeBit16(volatile unsigned short* aPointer, unsigned int aBitPos, unsigned int aValue)
-    {
-        unsigned short tValue = (1 << aBitPos);
-        if (aValue) *aPointer |= tValue;
-        else        *aPointer &= ~tValue;
-    }
-
-    inline void writeBit08(volatile unsigned char* aPointer, unsigned int aBitPos, unsigned int aValue)
-    {
-        unsigned char tValue = (1 << aBitPos);
-        if (aValue) *aPointer |= tValue;
-        else        *aPointer &= ~tValue;
-    }
-
-    //******************************************************************************
-    // Write a bit at an address at a bit position
-
-    inline void writeBit32(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
-    {
-        volatile unsigned int* tPointer = (unsigned int*)aAddress;
-        unsigned int tValue = (1 << aBitPos);
-        if (aValue) *tPointer |= tValue;
-        else        *tPointer &= ~tValue;
-    }
-
-    inline void writeBit16(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
-    {
-        volatile unsigned short* tPointer = (unsigned short*)aAddress;
-        unsigned short tValue = (1 << aBitPos);
-        if (aValue) *tPointer |= tValue;
-        else        *tPointer &= ~tValue;
-    }
-
-    inline void writeBit08(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
-    {
-        volatile unsigned char* tPointer = (unsigned char*)aAddress;
-        unsigned char tValue = (1 << aBitPos);
-        if (aValue) *tPointer |= tValue;
-        else        *tPointer &= ~tValue;
-    }
-
-    //******************************************************************************
-    //******************************************************************************
-    //******************************************************************************
-    // Read a bit at a pointer at a bit position
-
-    inline unsigned int readBit32(volatile unsigned int* aPointer, unsigned int aBitPos)
-    {
-        unsigned int tValue = (1 << aBitPos);
-        return *aPointer & tValue ? 1 : 0;
-    }
-
-    inline unsigned int readBit16(volatile unsigned short* aPointer, unsigned int aBitPos)
-    {
-        unsigned short tValue = (1 << aBitPos);
-        return *aPointer & tValue ? 1 : 0;
-    }
-
-    inline unsigned int readBit08(volatile unsigned char* aPointer, unsigned int aBitPos)
-    {
-        unsigned char tValue = (1 << aBitPos);
-        return *aPointer & tValue ? 1 : 0;
-    }
-
-    //******************************************************************************
-    //******************************************************************************
-    //******************************************************************************
-    // Read a bit at an address at a bit position
-
-    inline unsigned int readBit32(unsigned int aAddress, unsigned int aBitPos)
-    {
-        volatile unsigned int* tPointer = (unsigned int*)aAddress;
-        unsigned int tValue = (1 << aBitPos);
-        return *tPointer & tValue ? 1 : 0;
-    }
-
-    inline unsigned int readBit16(unsigned int aAddress, unsigned int aBitPos)
-    {
-        volatile unsigned short* tPointer = (unsigned short*)aAddress;
-        unsigned short tValue = (1 << aBitPos);
-        return *tPointer & tValue ? 1 : 0;
-    }
-
-    inline unsigned int readBit08(unsigned int aAddress, unsigned int aBitPos)
-    {
-        volatile unsigned char* tPointer = (unsigned char*)aAddress;
-        unsigned char tValue = (1 << aBitPos);
-        return *tPointer & tValue ? 1 : 0;
-    }
-
-    //******************************************************************************
-    //******************************************************************************
-    //******************************************************************************
-    // Write bits at a pointer at a bit position
-
-    void writeBits32(unsigned int* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned int aValue)
+    void writeBits32(unsigned int* aPointer, unsigned int aBitNum, unsigned int aNumBits, unsigned int aValue)
     {
         unsigned int tMask = 0;
-        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
-        unsigned tValue = (aValue << aBitPos);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitNum + i));
+        unsigned tValue = (aValue << aBitNum);
         tValue &= tMask;
         *aPointer &= ~tMask;
         *aPointer |= tValue;
     }
 
-    void writeBits16(unsigned short* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned short aValue)
+    void writeBits16(unsigned short* aPointer, unsigned int aBitNum, unsigned int aNumBits, unsigned short aValue)
     {
         unsigned short tMask = 0;
-        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
-        unsigned tValue = (aValue << aBitPos);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitNum + i));
+        unsigned tValue = (aValue << aBitNum);
         tValue &= tMask;
         *aPointer &= ~tMask;
         *aPointer |= tValue;
     }
 
-    void writeBits08(unsigned char* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned char aValue)
+    void writeBits08(unsigned char* aPointer, unsigned int aBitNum, unsigned int aNumBits, unsigned char aValue)
     {
         unsigned char tMask = 0;
-        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
-        unsigned tValue = (aValue << aBitPos);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitNum + i));
+        unsigned tValue = (aValue << aBitNum);
         tValue &= tMask;
         *aPointer &= ~tMask;
         *aPointer |= tValue;
@@ -327,36 +235,36 @@ namespace Reg
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
-    // Write bits at an address at a bit position
+    // Write bits at an address
 
-    void writeBits32(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned int aValue)
+    void writeBits32(unsigned int aAddress, unsigned int aBitNum, unsigned int aNumBits, unsigned int aValue)
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
         unsigned int tMask = 0;
-        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
-        unsigned tValue = (aValue << aBitPos);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitNum + i));
+        unsigned tValue = (aValue << aBitNum);
         tValue &= tMask;
         *tPointer &= ~tMask;
         *tPointer |= tValue;
     }
 
-    void writeBits16(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned short aValue)
+    void writeBits16(unsigned int aAddress, unsigned int aBitNum, unsigned int aNumBits, unsigned short aValue)
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
         unsigned short tMask = 0;
-        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
-        unsigned tValue = (aValue << aBitPos);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitNum + i));
+        unsigned tValue = (aValue << aBitNum);
         tValue &= tMask;
         *tPointer &= ~tMask;
         *tPointer |= tValue;
     }
 
-    void writeBits08(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned char aValue)
+    void writeBits08(unsigned int aAddress, unsigned int aBitNum, unsigned int aNumBits, unsigned char aValue)
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
         unsigned char tMask = 0;
-        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
-        unsigned tValue = (aValue << aBitPos);
+        for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitNum + i));
+        unsigned tValue = (aValue << aBitNum);
         tValue &= tMask;
         *tPointer &= ~tMask;
         *tPointer |= tValue;
@@ -365,27 +273,27 @@ namespace Reg
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
-    // Read bits at a pointer at a bit position
+    // Read bits at a pointer
 
-    unsigned int readBits32(unsigned int* aPointer, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned int readBits32(unsigned int* aPointer, unsigned int aBitNum, unsigned int aNumBits)
     {
-        unsigned int tValue = ((*aPointer) >> aBitPos);
+        unsigned int tValue = ((*aPointer) >> aBitNum);
         unsigned int tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
-    unsigned short readBits16(unsigned short* aPointer, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned short readBits16(unsigned short* aPointer, unsigned int aBitNum, unsigned int aNumBits)
     {
-        unsigned short tValue = ((*aPointer) >> aBitPos);
+        unsigned short tValue = ((*aPointer) >> aBitNum);
         unsigned short tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
-    unsigned int readBits08(unsigned char* aPointer, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned int readBits08(unsigned char* aPointer, unsigned int aBitNum, unsigned int aNumBits)
     {
-        unsigned char tValue = ((*aPointer) >> aBitPos);
+        unsigned char tValue = ((*aPointer) >> aBitNum);
         unsigned char tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
@@ -394,30 +302,30 @@ namespace Reg
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
-    // Read bits at an address at a bit position
+    // Read bits at an address
 
-    unsigned int readBits32(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned int readBits32(unsigned int aAddress, unsigned int aBitNum, unsigned int aNumBits)
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
-        unsigned int tValue = ((*tPointer) >> aBitPos);
+        unsigned int tValue = ((*tPointer) >> aBitNum);
         unsigned int tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
-    unsigned short readBits16(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned short readBits16(unsigned int aAddress, unsigned int aBitNum, unsigned int aNumBits)
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
-        unsigned short tValue = ((*tPointer) >> aBitPos);
+        unsigned short tValue = ((*tPointer) >> aBitNum);
         unsigned short tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;
     }
 
-    unsigned int readBits08(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned int readBits08(unsigned int aAddress, unsigned int aBitNum, unsigned int aNumBits)
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
-        unsigned char tValue = ((*tPointer) >> aBitPos);
+        unsigned char tValue = ((*tPointer) >> aBitNum);
         unsigned char tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << i);
         return tValue & tMask;

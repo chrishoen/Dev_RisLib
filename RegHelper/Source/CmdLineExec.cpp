@@ -31,17 +31,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-    unsigned int   tT32 = 0;
-    unsigned short tT16 = 0;
-    unsigned char  tT08 = 0;
-
-    Reg::writeBitAtMask32(&tT32, 1, 1);
-    Reg::writeBitAtMask16(&tT16, 2, 1);
-    Reg::writeBitAtMask08(&tT08, 4, 1);
-
-    printf("%d %08X\n", Reg::readBitAtMask32(&tT32, 1), tT32);
-    printf("%d %04X\n", Reg::readBitAtMask16(&tT16, 2), tT16);
-    printf("%d %02X\n", Reg::readBitAtMask08(&tT08, 4), tT08);
 }
 
 //******************************************************************************
@@ -52,9 +41,9 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
     unsigned short tT16 = 0;
     unsigned char  tT08 = 0;
 
-    Reg::writeBit32(&tT32, 0, 1);
-    Reg::writeBit16(&tT16, 1, 1);
-    Reg::writeBit08(&tT08, 2, 1);
+    Reg::writeBit32(&tT32, 0, true);
+    Reg::writeBit16(&tT16, 1, true);
+    Reg::writeBit08(&tT08, 2, true);
 
     printf("%d %08X\n", Reg::readBit32(&tT32, 0), tT32);
     printf("%d %04X\n", Reg::readBit16(&tT16, 1), tT16);

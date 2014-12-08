@@ -192,21 +192,21 @@ namespace Reg
     //******************************************************************************
     // Write a bit at a pointer at a bit position
 
-    inline void writeBitAtPos32(volatile unsigned int* aPointer, unsigned int aBitPos, unsigned int aValue)
+    inline void writeBit32(volatile unsigned int* aPointer, unsigned int aBitPos, unsigned int aValue)
     {
         unsigned int tValue = (1 << aBitPos);
         if (aValue) *aPointer |= tValue;
         else        *aPointer &= ~tValue;
     }
 
-    inline void writeBitAtPos16(volatile unsigned short* aPointer, unsigned int aBitPos, unsigned int aValue)
+    inline void writeBit16(volatile unsigned short* aPointer, unsigned int aBitPos, unsigned int aValue)
     {
         unsigned short tValue = (1 << aBitPos);
         if (aValue) *aPointer |= tValue;
         else        *aPointer &= ~tValue;
     }
 
-    inline void writeBitAtPos08(volatile unsigned char* aPointer, unsigned int aBitPos, unsigned int aValue)
+    inline void writeBit08(volatile unsigned char* aPointer, unsigned int aBitPos, unsigned int aValue)
     {
         unsigned char tValue = (1 << aBitPos);
         if (aValue) *aPointer |= tValue;
@@ -216,7 +216,7 @@ namespace Reg
     //******************************************************************************
     // Write a bit at an address at a bit position
 
-    inline void writeBitAtPos32(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
+    inline void writeBit32(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
         unsigned int tValue = (1 << aBitPos);
@@ -224,7 +224,7 @@ namespace Reg
         else        *tPointer &= ~tValue;
     }
 
-    inline void writeBitAtPos16(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
+    inline void writeBit16(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
         unsigned short tValue = (1 << aBitPos);
@@ -232,7 +232,7 @@ namespace Reg
         else        *tPointer &= ~tValue;
     }
 
-    inline void writeBitAtPos08(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
+    inline void writeBit08(unsigned int aAddress, unsigned int aBitPos, unsigned int aValue)
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
         unsigned char tValue = (1 << aBitPos);
@@ -245,19 +245,19 @@ namespace Reg
     //******************************************************************************
     // Read a bit at a pointer at a bit position
 
-    inline unsigned int readBitAtPos32(volatile unsigned int* aPointer, unsigned int aBitPos)
+    inline unsigned int readBit32(volatile unsigned int* aPointer, unsigned int aBitPos)
     {
         unsigned int tValue = (1 << aBitPos);
         return *aPointer & tValue ? 1 : 0;
     }
 
-    inline unsigned int readBitAtPos16(volatile unsigned short* aPointer, unsigned int aBitPos)
+    inline unsigned int readBit16(volatile unsigned short* aPointer, unsigned int aBitPos)
     {
         unsigned short tValue = (1 << aBitPos);
         return *aPointer & tValue ? 1 : 0;
     }
 
-    inline unsigned int readBitAtPos08(volatile unsigned char* aPointer, unsigned int aBitPos)
+    inline unsigned int readBit08(volatile unsigned char* aPointer, unsigned int aBitPos)
     {
         unsigned char tValue = (1 << aBitPos);
         return *aPointer & tValue ? 1 : 0;
@@ -268,21 +268,21 @@ namespace Reg
     //******************************************************************************
     // Read a bit at an address at a bit position
 
-    inline unsigned int readBitAtPos32(unsigned int aAddress, unsigned int aBitPos)
+    inline unsigned int readBit32(unsigned int aAddress, unsigned int aBitPos)
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
         unsigned int tValue = (1 << aBitPos);
         return *tPointer & tValue ? 1 : 0;
     }
 
-    inline unsigned int readBitAtPos16(unsigned int aAddress, unsigned int aBitPos)
+    inline unsigned int readBit16(unsigned int aAddress, unsigned int aBitPos)
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
         unsigned short tValue = (1 << aBitPos);
         return *tPointer & tValue ? 1 : 0;
     }
 
-    inline unsigned int readBitAtPos08(unsigned int aAddress, unsigned int aBitPos)
+    inline unsigned int readBit08(unsigned int aAddress, unsigned int aBitPos)
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
         unsigned char tValue = (1 << aBitPos);
@@ -294,7 +294,7 @@ namespace Reg
     //******************************************************************************
     // Write bits at a pointer at a bit position
 
-    void writeBitsAtPos32(unsigned int* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned int aValue)
+    void writeBits32(unsigned int* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned int aValue)
     {
         unsigned int tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
@@ -304,7 +304,7 @@ namespace Reg
         *aPointer |= tValue;
     }
 
-    void writeBitsAtPos16(unsigned short* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned short aValue)
+    void writeBits16(unsigned short* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned short aValue)
     {
         unsigned short tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
@@ -314,7 +314,7 @@ namespace Reg
         *aPointer |= tValue;
     }
 
-    void writeBitsAtPos08(unsigned char* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned char aValue)
+    void writeBits08(unsigned char* aPointer, unsigned int aBitPos, unsigned int aNumBits, unsigned char aValue)
     {
         unsigned char tMask = 0;
         for (unsigned int i = 0; i<aNumBits; i++) tMask |= (1 << (aBitPos + i));
@@ -329,7 +329,7 @@ namespace Reg
     //******************************************************************************
     // Write bits at an address at a bit position
 
-    void writeBitsAtPos32(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned int aValue)
+    void writeBits32(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned int aValue)
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
         unsigned int tMask = 0;
@@ -340,7 +340,7 @@ namespace Reg
         *tPointer |= tValue;
     }
 
-    void writeBitsAtPos16(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned short aValue)
+    void writeBits16(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned short aValue)
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
         unsigned short tMask = 0;
@@ -351,7 +351,7 @@ namespace Reg
         *tPointer |= tValue;
     }
 
-    void writeBitsAtPos08(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned char aValue)
+    void writeBits08(unsigned aAddress, unsigned int aBitPos, unsigned int aNumBits, unsigned char aValue)
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
         unsigned char tMask = 0;
@@ -367,7 +367,7 @@ namespace Reg
     //******************************************************************************
     // Read bits at a pointer at a bit position
 
-    unsigned int readBitsAtPos32(unsigned int* aPointer, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned int readBits32(unsigned int* aPointer, unsigned int aBitPos, unsigned int aNumBits)
     {
         unsigned int tValue = ((*aPointer) >> aBitPos);
         unsigned int tMask = 0;
@@ -375,7 +375,7 @@ namespace Reg
         return tValue & tMask;
     }
 
-    unsigned short readBitsAtPos16(unsigned short* aPointer, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned short readBits16(unsigned short* aPointer, unsigned int aBitPos, unsigned int aNumBits)
     {
         unsigned short tValue = ((*aPointer) >> aBitPos);
         unsigned short tMask = 0;
@@ -383,7 +383,7 @@ namespace Reg
         return tValue & tMask;
     }
 
-    unsigned int readBitsAtPos08(unsigned char* aPointer, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned int readBits08(unsigned char* aPointer, unsigned int aBitPos, unsigned int aNumBits)
     {
         unsigned char tValue = ((*aPointer) >> aBitPos);
         unsigned char tMask = 0;
@@ -396,7 +396,7 @@ namespace Reg
     //******************************************************************************
     // Read bits at an address at a bit position
 
-    unsigned int readBitsAtPos32(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned int readBits32(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
     {
         volatile unsigned int* tPointer = (unsigned int*)aAddress;
         unsigned int tValue = ((*tPointer) >> aBitPos);
@@ -405,7 +405,7 @@ namespace Reg
         return tValue & tMask;
     }
 
-    unsigned short readBitsAtPos16(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned short readBits16(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
     {
         volatile unsigned short* tPointer = (unsigned short*)aAddress;
         unsigned short tValue = ((*tPointer) >> aBitPos);
@@ -414,7 +414,7 @@ namespace Reg
         return tValue & tMask;
     }
 
-    unsigned int readBitsAtPos08(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
+    unsigned int readBits08(unsigned int aAddress, unsigned int aBitPos, unsigned int aNumBits)
     {
         volatile unsigned char* tPointer = (unsigned char*)aAddress;
         unsigned char tValue = ((*tPointer) >> aBitPos);

@@ -52,13 +52,13 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
     unsigned short tT16 = 0;
     unsigned char  tT08 = 0;
 
-    Reg::writeBitAtPos32(&tT32, 0, 1);
-    Reg::writeBitAtPos16(&tT16, 1, 1);
-    Reg::writeBitAtPos08(&tT08, 2, 1);
+    Reg::writeBit32(&tT32, 0, 1);
+    Reg::writeBit16(&tT16, 1, 1);
+    Reg::writeBit08(&tT08, 2, 1);
 
-    printf("%d %08X\n", Reg::readBitAtPos32(&tT32, 0), tT32);
-    printf("%d %04X\n", Reg::readBitAtPos16(&tT16, 1), tT16);
-    printf("%d %02X\n", Reg::readBitAtPos08(&tT08, 2), tT08);
+    printf("%d %08X\n", Reg::readBit32(&tT32, 0), tT32);
+    printf("%d %04X\n", Reg::readBit16(&tT16, 1), tT16);
+    printf("%d %02X\n", Reg::readBit08(&tT08, 2), tT08);
 }
 
 //******************************************************************************
@@ -67,7 +67,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
     unsigned int   tT32 = 0x000D8000;
 
-    printf("%08X %08X\n", Reg::readBitsAtPos32(&tT32, 16, 3), tT32);
+    printf("%08X %08X\n", Reg::readBits32(&tT32, 16, 3), tT32);
 }
 
 //******************************************************************************

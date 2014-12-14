@@ -11,6 +11,7 @@
 #include <string.h>
 
 #include "risPortableCalls.h"
+#include "my_functions.h"
 #include "prnPrint.h"
 
 #define  _RISCMDLINECONSOLE_CPP_
@@ -24,50 +25,50 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-CmdLineConsole::CmdLineConsole()
-{
-}
+// This enters a loop that reads console input and applies a command line 
+// executive to each line that is entered by a user. The loop terminates when
+// the user exits.
 
-CmdLineConsole::~CmdLineConsole()
-{
-}
-
-void CmdLineConsole::execute(BaseCmdLineExec* aExec)
+   void CmdLineConsole::execute (BaseCmdLineExec* aExec)
 {            
+   // Locals
+   char tCommandLine[200];
    CmdLineCmd  tCmd;
-   char tBuffer[200];
 
+   // Reset the executive
    aExec->reset();
 
    while(true)
    {
       // Read console input
-      fgets(tBuffer, 200, stdin);
-      int tBufferLength = strlen(tBuffer);
-      if (tBuffer[tBufferLength - 1] == 10) tBuffer[tBufferLength - 1] = 0;
+      fgets(tCommandLine, 200, stdin);
+
+      // Remove cr/lf at end of line
+      my_trimCRLF(tCommandLine);
 
       // Test for toggle suppress print
-      if (strcmp(tBuffer,"p")==0)
+      if (strcmp(tCommandLine,"p")==0)
       {
          Prn::toggleSuppressPrint();
       }
-      // Process buffer
+      // Process command line 
       else
       {
          // Special case, nickname
-         if (strcmp(tBuffer,"a")==0)
+         // Abort
+         if (strcmp(tCommandLine,"a")==0)
          {
-            strcpy(tBuffer,"ABORT");
+            return;
          }
          // Special case, nickname
-         if (strcmp(tBuffer,"e")==0)
+         // Exit
+         if (strcmp(tCommandLine,"e")==0)
          {
-            strcpy(tBuffer,"EXIT");
             return;
          }
 
          // Parse buffer to get command line command
-         tCmd.parseCmdLine(tBuffer);
+         tCmd.parseCmdLine(tCommandLine);
 
          // Test for valid command line command
          if (tCmd.mValidFlag)
@@ -80,7 +81,7 @@ void CmdLineConsole::execute(BaseCmdLineExec* aExec)
             // Not exit
             else
             {
-               // Have executive execute the command line command
+               // execute the command line command with the given executive
                aExec->execute(&tCmd);
 
                // Test for bad command
@@ -88,7 +89,7 @@ void CmdLineConsole::execute(BaseCmdLineExec* aExec)
                if(tCmd.isBadCmd()) printf("INVALID COMMAND\n");
             }
          }
-         // Not valid command line command
+         // Invalid command line command
          else
          {
             printf("INVALID COMMAND\n");
@@ -100,6 +101,7 @@ void CmdLineConsole::execute(BaseCmdLineExec* aExec)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Nickname
 
 void executeCmdLineConsole (BaseCmdLineExec* aExec)
 {
@@ -110,8 +112,7 @@ void executeCmdLineConsole (BaseCmdLineExec* aExec)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// RLR 05-79-36 combo
-//******************************************************************************
+// Console helper
 
 void setConsoleTitle(char* aTitle)
 {

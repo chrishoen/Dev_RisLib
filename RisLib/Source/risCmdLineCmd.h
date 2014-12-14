@@ -1,8 +1,6 @@
 #ifndef _RIS_CMDLINECMD_H_
 #define _RIS_CMDLINECMD_H_
 
-#include "risPortableTypes.h"
-
 /*==============================================================================
 
 Command line command.
@@ -20,22 +18,25 @@ namespace Ris
 // It is given a string of the form "command argument1 argumant2.." where
 // the arguments can hold values for primitive data types such as int,bool,char*,
 // double. An example command line command is the string "transmit true 101 1.1".
-// The provides parsing of the command line and methods to extract the command
+// This provides parsing of the command line and methods to extract the command
 // and the arguments.
 
 class  CmdLineCmd
 {
 public:
 
+   //---------------------------------------------------------------------------
+   // Constructor
+
    CmdLineCmd();
 
-   enum {MaxNumOfArgs=20};
-   enum {MaxArgSize=100};
-
-   char mDelimiters[10];
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Access methods
 
    //---------------------------------------------------------------------------
-   // Parse a command line string into the command
+   // Parse a command line string into the command object
 
    void    parseCmdLine  (char* aCommandLine);
 
@@ -49,7 +50,8 @@ public:
    double  argDouble     (int aArgIndex);
    char*   argString     (int aArgIndex);
 
-   // Tests argument aArgIndex against a string
+   // Tests argument aArgIndex against a string.
+   // It compares the argument with the string.
    bool    isArgString   (int aArgIndex,char* aString);
 
    // Copies an argument into a string
@@ -57,7 +59,7 @@ public:
 
    //---------------------------------------------------------------------------
    // Set defaults for arguments from the command line.
-   // Used if no arguments are entered.
+   // These are used as defaults if no arguments are entered.
 
    void setArgDefault(int argIndex, int    aValue);
    void setArgDefault(int argIndex, bool   aValue);
@@ -81,27 +83,34 @@ public:
    //***************************************************************************
    // Member variables
 
-   // command line string argument pointer
+   enum {MaxNumOfArgs=20};
+   enum {MaxArgSize=100};
+
+   // Argument delimiters
+   char mDelimiters[10];
+
+   // Command line string argument pointer
    // mArgPtr[0] is the command, mArgPtr[1] is the first argument ...
    char*  mArgPtr   [MaxNumOfArgs+1];      
-   // command line string argument storage
+   // Command line string argument storage
    // mArgPtr[n] points to mArgStore[n]
-   char  mArgStore   [MaxNumOfArgs+1][MaxArgSize];      
-   // true if corresponding argument exists
+   char   mArgStore   [MaxNumOfArgs+1][MaxArgSize];      
+   // True if corresponding argument exists
    bool   mArgFlag  [MaxNumOfArgs+1];  
-   // number of arguments
+   // Number of arguments
    int    mArgNum;                         
    // if number of arguments is zero then use defaults
    bool   mDefaultEnable;                         
-   // true if an isCmd returned true   
+   // True if an isCmd returned true   
    bool   mGoodCmd;                        
-   // true if struct is valid
+   // True if struct is valid
    bool   mValidFlag;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // command response string
+   // Command response string. This can be used to store a response to a 
+   // command.
 
    enum {ResponseStringSize=200};
    char  mResponseString[ResponseStringSize];
@@ -111,37 +120,6 @@ public:
    void  setResponse   (char* aString);
    char* getResponse   ();
 
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Command Line Executive base class.
-// This is a base class for classes that process command line arguments
-// Pointers to the base class are passed to command line executers (instances
-// of CmdLineProc or CmdLineFile) to process input from a console command line
-// or input from a command line file, which is a text file that contains a
-// sequence of command lines.
-
-class  BaseCmdLineExec
-{
-public:
-   // Constructor
-   BaseCmdLineExec();
-   virtual void reset (){};
-
-   // This is supplied by inheriting classes to execute single command lines.
-   virtual void execute(CmdLineCmd* aCmd)=0;
-
-   // This is supplied by inheriting classes to execute a command line 
-   // that starts with "Begin". It is used to begin a new section with a 
-   // new executive.
-   virtual BaseCmdLineExec* executeForBegin(CmdLineCmd* aCmd) {return 0;}
-
-   // This can be called to indicate to the executer to exit a sequence
-   // of commands, as if "EXIT" was the command.
-   void   exit();
-   bool   mExitFlag;
 };
 
 //******************************************************************************

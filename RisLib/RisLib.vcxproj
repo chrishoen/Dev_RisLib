@@ -19,6 +19,7 @@
     <ClCompile Include="Source\risByteMessage.cpp" />
     <ClCompile Include="Source\risCmdLineCmd.cpp" />
     <ClCompile Include="Source\risCmdLineConsole.cpp" />
+    <ClCompile Include="Source\risCmdLineExec.cpp" />
     <ClCompile Include="Source\risCmdLineFile.cpp" />
     <ClCompile Include="Source\risCmdLineString.cpp" />
     <ClCompile Include="Source\risCriticalSection_win.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="Source\risCallPointer.h" />
     <ClInclude Include="Source\risCmdLineCmd.h" />
     <ClInclude Include="Source\risCmdLineConsole.h" />
+    <ClInclude Include="Source\risCmdLineExec.h" />
     <ClInclude Include="Source\risCmdLineFile.h" />
     <ClInclude Include="Source\risCmdLineString.h" />
     <ClInclude Include="Source\risContainers.h" />

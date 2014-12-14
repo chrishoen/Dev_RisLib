@@ -12,7 +12,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "prnPrint.h"
+#include "my_functions.h"
 #include "risContainers.h"
 
 #include "risCmdLineFile.h"
@@ -25,10 +25,10 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Open the file
 
 bool CmdLineFile::open(char* aFilename)
 {            
-   // Open the file
    mFile = fopen(aFilename,"r");
 
    if (mFile==0)
@@ -42,6 +42,7 @@ bool CmdLineFile::open(char* aFilename)
 }
 
 //******************************************************************************
+// Close the file
 
 void CmdLineFile::close()
 {       
@@ -53,6 +54,8 @@ void CmdLineFile::close()
 }
 
 //******************************************************************************
+// Loop to read each line of the file. Process each line with the given command
+// line executive.
 
 void CmdLineFile::execute(BaseCmdLineExec* aExec)
 {
@@ -68,21 +71,30 @@ void CmdLineFile::execute(BaseCmdLineExec* aExec)
    // Locals
             
    CmdLineCmd       tCmd;
-   BaseCmdLineExec* tExec      = aExec;
-
-   Ris::Containers::Stack<BaseCmdLineExec*,10> tExecStack;
+   BaseCmdLineExec* tExec = aExec;
 
    char tCommandLine[200];
    int  tCommandLineLen=0;
    bool tCommentFlag=false;
 
    //---------------------------------------------------------------------------
-   // Loop to read each command line in the file
+   // Initialize the nested anchor, it is used for nested sections in the file,
+   // nested sections execute different executives.
+
+   // Set the executive anchor pointer
+   aExec->setAnchor(&mAnchor);
+
+   // Push initial executive onto the anchor executive stack
+   mAnchor.mExecStack.push(tExec);
+
+   //---------------------------------------------------------------------------
+   // Loop to read each command line in the file. If it contains a valid
+   // command then pass it to the current executive.
             
    bool tGoing=true;
    while(tGoing)
    {
-      // Read command line
+      // Read command line from the file
       if (fgets(tCommandLine,200,mFile)==0) break;
       mLineNumber++;
 
@@ -91,54 +103,44 @@ void CmdLineFile::execute(BaseCmdLineExec* aExec)
       if (tCommandLine[0]=='#') tCommentFlag=true;
       if (tCommandLine[0]=='/') tCommentFlag=true;
 
+      // Remove cr/lf at end of line
+      my_trimCRLF(tCommandLine);
+
       // Command line length
       tCommandLineLen=(int)strlen(tCommandLine);
 
-      // Remove cr/lf at end of line
-      if (tCommandLine[tCommandLineLen-1]==0xa)
-      {
-         tCommandLine[tCommandLineLen-1]=0;
-
-         if (tCommandLine[tCommandLineLen-2]==0xd)
-         {
-            tCommandLine[tCommandLineLen-2]=0;
-         }
-      }
-
-      // If the command line is not empty and not a comment
-      // then process it, else go on to the next line
+      // If the command line is not empty and not a comment then process
+      // it, else continue the loop and go on to the next line
       if(tCommandLineLen>2 && !tCommentFlag)
       {
-         // Put command line string to command line command
-         // for parsing
+         // Parse the command line into the command object
          tCmd.parseCmdLine(tCommandLine);
    
-         // Process the parsed command line
+         // If exit command then exit the loop
          if(tCmd.isCmd("EXIT"))
          {
-            // If exit then exit the loop
             tGoing=false; 
          }
-         else if(tCmd.isCmd("BEGIN"))
-         {
-            // Call executive to process the command
-            tExecStack.push(tExec);
-            tExec = tExec->executeForBegin(&tCmd);
-            if (tExec==0) tGoing=false;
-         }
-         else if(tCmd.isCmd("END"))
-         {
-            tExecStack.pop(tExec);
-         }
+         // If not an exit then process the parsed command line
          else
          {
-            // Call executive to process the command
+            // Call the executive to process the command
             tExec->execute(&tCmd);
 
+            // If the command set the exit flag then exit the loop
             if(tExec->mExitFlag)
             {
-               // If exit then exit the loop
                tGoing=false; 
+            }
+
+            // If the command pushed to the anchor stack 
+            else if (mAnchor.mPushFlag)
+            {
+               // If the command pushed a new executive onto the anchor
+               // stack because it entered a new nested section, then
+               // get the next executive from the top of the anchor stack
+               mAnchor.mPushFlag = false;
+               tExec = mAnchor.mExecStack.elementToPop();
             }
          }
       }

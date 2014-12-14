@@ -70,7 +70,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
     printf("tBufferLast %d\n", (int)tBuffer[tBufferLength - 1]);
     printf("tBuffer %d $$ %s\n", strlen(tBuffer), tBuffer);
 
-    for (int i = 0; i < strlen(tBuffer); i++)
+    for (int i = 0; i < (int)strlen(tBuffer); i++)
     {
         printf("tBufferChar %d  %d\n", i, (int)tBuffer[i]);
     }

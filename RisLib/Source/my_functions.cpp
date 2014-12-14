@@ -111,6 +111,27 @@ int my_irand(int aA,int aB)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Strings
+
+// Trim CRLF from the end of a string
+void my_trimCRLF(char* aString)
+{
+   // Remove cr/lf at end of line
+   unsigned tStringLen = strlen(aString);
+   if (aString[tStringLen-1]==0xa)
+   {
+      aString[tStringLen-1]=0;
+
+      if (aString[tStringLen-2]==0xd)
+      {
+         aString[tStringLen-2]=0;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Time conversions
 
 double my_time_from_string(char* aString)

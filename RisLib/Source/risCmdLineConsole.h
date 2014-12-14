@@ -1,32 +1,32 @@
 #ifndef _RISCMDLINECONSOLE_H_
 #define _RISCMDLINECONSOLE_H_
 /*==============================================================================
+
+Console command line processor
+
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
-#include "risCmdLineCmd.h"
+#include "risCmdLineExec.h"
 
 //******************************************************************************
 namespace Ris
 {
 
 //******************************************************************************
-// This executes a command line executive from console input.
+// This enters a loop that reads console input and applies a command line 
+// executive to each line that is entered by a user. The loop terminates when
+// the user exits.
 
 class  CmdLineConsole
 {
 public:
-   // Constructor
-   CmdLineConsole();
-  ~CmdLineConsole();
-
    // Execute command line executive from console input.
    // Returns when user exits
-   void execute   (BaseCmdLineExec* aExec);
+   void execute (BaseCmdLineExec* aExec);
 };
 
 // Nicknames

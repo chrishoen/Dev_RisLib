@@ -10,6 +10,9 @@ My math functions
 //******************************************************************************
 //******************************************************************************
 
+   //---------------------------------------------------------------------------
+   // Arithmentic
+
    // Min,Max
    double my_fmin (double aA,double aB);
    double my_fmax (double aA,double aB);
@@ -39,6 +42,15 @@ My math functions
    // Return random int A <= x <= B
    int    my_irand(int aA,int aB);
 
+   //---------------------------------------------------------------------------
+   // String
+
+   // Trim CRLF from the end of a string
+   void my_trimCRLF(char* aString);
+
+   //---------------------------------------------------------------------------
+   // Time
+
    // Return seconds from sec,min or hour
    //    1.0 == my_time_from_string("1.0")
    //    1.0 == my_time_from_string("1.0s")
@@ -48,6 +60,9 @@ My math functions
 
    // Return "01:02:03" from seconds
    char*  my_string_from_time(double aTime, char* aBuffer);
+
+   //---------------------------------------------------------------------------
+   // Index arithmetic
 
    // Index arithmetic for queues, wraps around
    inline int my_index_add(int aIndex, int aDelta, int aSize)

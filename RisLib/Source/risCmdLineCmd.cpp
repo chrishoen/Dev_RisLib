@@ -9,7 +9,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <ctype.h>
 #include <string.h>
 
 #include "risCmdLineCmd.h"
@@ -31,7 +30,7 @@ static char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr);
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Parse command line string into command and argument members
+// Constructor
 
 CmdLineCmd::CmdLineCmd()
 {
@@ -47,6 +46,8 @@ CmdLineCmd::CmdLineCmd()
    mResponseValid=false;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Parse command line string into command and argument members
 
@@ -64,6 +65,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    // Initialize members
 
    mGoodCmd=false;
+
    for (i=1;i<=MaxNumOfArgs;i++)
    {
       mArgFlag[i]=false;
@@ -273,10 +275,8 @@ void CmdLineCmd::copyArgString (int aArgIndex,char* aString)
    strcpy(aString,mArgPtr[aArgIndex]);
 }
 
-        //---------------------------------------------------------------------------
-        // Set defaults for arguments from the command line.
-        // Used if no arguments are entered.
-
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Set default argument
 
@@ -290,6 +290,8 @@ void CmdLineCmd::setArgDefault(int aArgIndex, int aValue)
    mArgNum = aArgIndex;
 }
 
+//******************************************************************************
+
 void CmdLineCmd::setArgDefault(int aArgIndex, bool aValue)
 {
    if (!mDefaultEnable) return;
@@ -300,6 +302,8 @@ void CmdLineCmd::setArgDefault(int aArgIndex, bool aValue)
    mArgNum = aArgIndex;
 }
 
+//******************************************************************************
+
 void CmdLineCmd::setArgDefault(int aArgIndex, double aValue)
 {
    if (!mDefaultEnable) return;
@@ -309,6 +313,8 @@ void CmdLineCmd::setArgDefault(int aArgIndex, double aValue)
    mArgFlag[aArgIndex] = true;
    mArgNum = aArgIndex;
 }
+
+//******************************************************************************
 
 void CmdLineCmd::setArgDefault(int aArgIndex, char* aValue)
 {
@@ -471,7 +477,7 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
 	   }
    }
 
-   //---------------------------------------------------------------------------
+   //------------------------------------------------------------------------
    // Update state and return token
 
    *aIndexPtr=tIndex;
@@ -481,7 +487,7 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-// command response string
+// Command response string
 
 void  CmdLineCmd::resetResponse ()
 {
@@ -498,21 +504,6 @@ char* CmdLineCmd::getResponse ()
 {
    if (mResponseValid) return &mResponseString[0];
    else                return 0; 
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-BaseCmdLineExec::BaseCmdLineExec()
-{
-   mExitFlag=false;
-}
-
-void BaseCmdLineExec::exit()
-{
-   // This can be used to cause and "EXIT" command for the executer
-   mExitFlag=true;;
 }
 
 //******************************************************************************

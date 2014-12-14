@@ -133,6 +133,9 @@
     <ClCompile Include="Source\risFilterStatistics.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risCmdLineExec.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -274,6 +277,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\my_defs.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risCmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

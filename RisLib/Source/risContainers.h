@@ -9,7 +9,6 @@ Containers, documentation is at end of file
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "risPortableTypes.h"
 
 //******************************************************************************
 namespace Ris

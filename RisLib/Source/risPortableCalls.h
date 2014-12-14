@@ -2,11 +2,9 @@
 #define _PORTABLECALLS_H_
 
 /*==============================================================================
-These types are intended to be portable across different
-software development environments.
+These calls are intended to be portable across different
+software development environments and operating systems.
 ==============================================================================*/
-
-#include "risPortableTypes.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -47,8 +45,8 @@ namespace Ris
    //---------------------------------------------------------------------------
    // Get system time, nanoseconds
 
-   Int64 portableGetHiResCounter();
-   Int64 portableGetHiResFrequency();
+   long long int portableGetHiResCounter();
+   long long int portableGetHiResFrequency();
 
    //---------------------------------------------------------------------------
    // strupr

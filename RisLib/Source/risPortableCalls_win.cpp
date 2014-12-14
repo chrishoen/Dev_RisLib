@@ -72,14 +72,14 @@ bool portableKbhit()
 
 //******************************************************************************
 
-Int64 portableGetHiResCounter()
+long long int portableGetHiResCounter()
 {
    LARGE_INTEGER tPerformanceCount;
    QueryPerformanceCounter(&tPerformanceCount);
    return tPerformanceCount.QuadPart;
 }
 
-Int64 portableGetHiResFrequency()
+long long int portableGetHiResFrequency()
 {
    LARGE_INTEGER tPerformanceFrequency;
    QueryPerformanceFrequency(&tPerformanceFrequency);

@@ -28,7 +28,7 @@ namespace Ris
    //    strcpy(tFilePath,Ris::portableGetSettingsDir());
    //    strcat(tFilePath,"GSettings.txt");
 
-   char* portableGetSettingsDir();
+   const char* portableGetSettingsDir();
 
    //---------------------------------------------------------------------------
    // This returns a pointer to the current working directory.

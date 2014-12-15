@@ -47,8 +47,8 @@ public:
    // Nested anchor, used for processing nested records.
 
    virtual void setAnchor  (CmdLineExecNestedAnchor* aAnchor);
-   void nestedPush (BaseCmdLineExec* aExec);
-   void nestedPop  ();
+   void nestedPush(BaseCmdLineExec* aNextExec);
+   void nestedPop();
 
    CmdLineExecNestedAnchor* mAnchor;
 
@@ -77,15 +77,17 @@ public:
    // Constructor
    CmdLineExecNestedAnchor();
 
-   // Push executive onto the stack
-   void nestedPush (BaseCmdLineExec* aExec);
-   // Pop executive from the stack
-   void nestedPop  ();
+   // Initialize 
+   void initialize(BaseCmdLineExec* aInitialExec);
+   // Push executive onto the stack and set current executive
+   void nestedPush(BaseCmdLineExec* aNextExec);
+   // Pop executive from the stack to set the current executive
+   void nestedPop();
 
-   // True if the previous execute pushed itself onto the stack
-   bool mPushFlag;
+   // True if there was a push or pop
+   bool mChangeFlag;
 
-   // Current command line executive
+   // Current executive
    BaseCmdLineExec* mExec;
 
    // Stack of nested executive pointers

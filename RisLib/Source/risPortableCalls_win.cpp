@@ -35,7 +35,7 @@ void portableSleep(int aTicks)
 //******************************************************************************
 //******************************************************************************
 
-char* portableGetSettingsDir()
+const char* portableGetSettingsDir()
 {
    return "C:\\Prime\\Settings\\";
 }

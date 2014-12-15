@@ -81,11 +81,14 @@ void CmdLineFile::execute(BaseCmdLineExec* aExec)
    // Initialize the nested anchor, it is used for nested sections in the file,
    // nested sections execute different executives.
 
+   // Initialize
+   mAnchor.initialize(aExec);
    // Set the executive anchor pointer
    aExec->setAnchor(&mAnchor);
 
-   // Push initial executive onto the anchor executive stack
-   mAnchor.mExecStack.push(tExec);
+   // Push initial executive onto the nested anchor executive stack
+// mAnchor.mExecStack.push(tExec);
+// mAnchor.mChangeFlag=false;
 
    //---------------------------------------------------------------------------
    // Loop to read each command line in the file. If it contains a valid
@@ -127,21 +130,24 @@ void CmdLineFile::execute(BaseCmdLineExec* aExec)
             // Call the executive to process the command
             tExec->execute(&tCmd);
 
+            // If the command pushed to the anchor stack 
+            if (mAnchor.mChangeFlag)
+            {
+                // If the command pushed a new executive onto the anchor
+                // stack because it entered a new nested section, or if it 
+                // popped an executive from the anchor stack because it is
+                // leaving a nested section then get the next executive from
+                // the anchor stack
+                mAnchor.mChangeFlag = false;
+                tExec = mAnchor.mExec;
+            }
+
             // If the command set the exit flag then exit the loop
             if(tExec->mExitFlag)
             {
                tGoing=false; 
             }
 
-            // If the command pushed to the anchor stack 
-            else if (mAnchor.mPushFlag)
-            {
-               // If the command pushed a new executive onto the anchor
-               // stack because it entered a new nested section, then
-               // get the next executive from the top of the anchor stack
-               mAnchor.mPushFlag = false;
-               tExec = mAnchor.mExecStack.elementToPop();
-            }
          }
       }
    }

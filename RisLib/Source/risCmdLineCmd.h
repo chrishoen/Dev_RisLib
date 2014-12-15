@@ -52,7 +52,7 @@ public:
 
    // Tests argument aArgIndex against a string.
    // It compares the argument with the string.
-   bool    isArgString   (int aArgIndex,char* aString);
+   bool    isArgString   (int aArgIndex,const char* aString);
 
    // Copies an argument into a string
    void    copyArgString (int aArgIndex,char* aString);
@@ -73,7 +73,7 @@ public:
    int     numArg   ();
 
    // Returns true if aString is equal to the command
-   bool    isCmd    (char* aString);
+   bool    isCmd    (const char* aString);
 
    // Returns true if no calls to isCmd returned true
    bool    isBadCmd ();

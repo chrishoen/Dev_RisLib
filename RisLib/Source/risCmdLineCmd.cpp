@@ -102,7 +102,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    // Loop through command line to extract argument pointers
    // First argument is at arg[1]
    tArgIndex = 1;
-   while(tToken = r_myStrtok(aCommandLine,mDelimiters,&tTokenIndex))
+   while((tToken = r_myStrtok(aCommandLine,mDelimiters,&tTokenIndex)))
    {
       // Store argument pointer
       strcpy(mArgPtr[tArgIndex],tToken);
@@ -124,7 +124,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
 //******************************************************************************
 // Compare arg[0] with a string
 
-bool CmdLineCmd::isCmd(char* aString)
+bool CmdLineCmd::isCmd(const char* aString)
 {
    // Guard 
    if (!mValidFlag) return false;
@@ -225,14 +225,15 @@ double CmdLineCmd::argDouble(int aArgIndex)
 //******************************************************************************
 // Return argument value
 
-char* rCmdEmptyString = "NULL";
+// char rCmdEmptyString[] = "NULL";
+const char* rCmdEmptyString = "NULL";
 
 char* CmdLineCmd::argString(int aArgIndex)
 {
-   char* tValue = rCmdEmptyString;
+   char* tValue = (char*)rCmdEmptyString;
 
    // Guard
-   if(!mArgFlag[aArgIndex]) return rCmdEmptyString;
+   if(!mArgFlag[aArgIndex]) return (char*)rCmdEmptyString;
 
    // Convert argument string
    tValue = mArgPtr[aArgIndex];
@@ -244,7 +245,7 @@ char* CmdLineCmd::argString(int aArgIndex)
 //******************************************************************************
 // Return argument value
 
-bool CmdLineCmd::isArgString (int aArgIndex,char* aStr)
+bool CmdLineCmd::isArgString (int aArgIndex,const char* aStr)
 {
    char tTemp[200];
 

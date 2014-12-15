@@ -50,19 +50,19 @@ void BaseCmdLineExec::setAnchor(CmdLineExecNestedAnchor* aAnchor)
 //******************************************************************************
 // Push the executive onto the nested executive stack
 
-void BaseCmdLineExec::nestedPush (BaseCmdLineExec* aExec)
+void BaseCmdLineExec::nestedPush(BaseCmdLineExec* aNextExec)
 {
    // Guard
    if (mAnchor == 0) return;
 
    // Push the executive onto the nested executive stack
-   mAnchor->nestedPush(aExec);
+   mAnchor->nestedPush(aNextExec);
 }
 
 //******************************************************************************
 // Pop the executive from the nested executive stack
 
-void BaseCmdLineExec::nestedPop  ()
+void BaseCmdLineExec::nestedPop()
 {
    // Guard
    if (mAnchor == 0) return;
@@ -78,18 +78,30 @@ void BaseCmdLineExec::nestedPop  ()
 
 CmdLineExecNestedAnchor::CmdLineExecNestedAnchor()
 {
-   mPushFlag = false;
+   mChangeFlag = false;
    mExec = 0;
 }
 
 //******************************************************************************
+// Initialize 
+void CmdLineExecNestedAnchor::initialize(BaseCmdLineExec* aInitialExec)
+{
+   mChangeFlag = false;
+   mExec = aInitialExec;
+}
+//******************************************************************************
 // Push the executive onto the nested executive stack
 
-void CmdLineExecNestedAnchor::nestedPush (BaseCmdLineExec* aExec)
+void CmdLineExecNestedAnchor::nestedPush(BaseCmdLineExec* aNextExec)
 {
-   mPushFlag = true;
-   mExec     = aExec;
+   // Push current executive onto the stack
    mExecStack.push(mExec);
+
+   // Set the current executive
+   mExec = aNextExec;
+
+   // Change
+   mChangeFlag = true;
 }
 
 //******************************************************************************
@@ -97,7 +109,11 @@ void CmdLineExecNestedAnchor::nestedPush (BaseCmdLineExec* aExec)
 
 void CmdLineExecNestedAnchor::nestedPop  ()
 {
+   // Pop from the stack to set the current executive 
    mExecStack.pop(mExec);
+
+   // Change
+   mChangeFlag = true;
 }
 
 //******************************************************************************

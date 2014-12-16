@@ -62,7 +62,7 @@ public:
    BaseMessageParser* mMessageParser;
 
    // Buffers
-   enum    {BUFFER_SIZE = 2000};
+   enum    {BUFFER_SIZE = 4096};
    char*                mRxBuffer;
    int                  mRxLength;
 

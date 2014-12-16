@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "prnPrint.h"
 #include "risPortableCalls.h"
 #include "risThreadsProcess.h"
@@ -28,7 +29,7 @@ int main(int argc,char** argv)
 
    //--------------------------------------------------------------------
    // Wait for keypressed
-   Ris::portableWaitForKbhit();
+   getchar();
 
    //--------------------------------------------------------------------
    // Shutdown threads

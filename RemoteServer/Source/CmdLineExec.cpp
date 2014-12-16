@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include "prnPrint.h"
 
+#include "my_functions.h"
 #include "risRemoteServerThread.h"
-
 #include "risPortableCalls.h"
 
 #include "CmdLineExec.h"
@@ -51,10 +51,11 @@ void CmdLineExec::executeCmdLine(Ris::CmdLineCmd* aCmd)
    while(tGoing)
    {
       // Wait for key pressed
-      Ris::portableWaitForKbhit();
+//    Ris::portableWaitForKbhit();
 
       // Get command line string
-      gets(tCmdLineStr);
+      fgets(tCmdLineStr,200,stdin);
+      my_trimCRLF(tCmdLineStr);
       Ris::portableStrupr(tCmdLineStr);
 
       // If string not empty

@@ -98,8 +98,8 @@ public:
    //------------------------------------------------
    // Header Content
 
-   Ris::Int32   mSyncWord1;
-   Ris::Int32   mSyncWord2;
+   Ris::Uint32  mSyncWord1;
+   Ris::Uint32  mSyncWord2;
    Ris::Int32   mMessageType;
    Ris::Int32   mMessageLength;
    Ris::Int32   mFamily;

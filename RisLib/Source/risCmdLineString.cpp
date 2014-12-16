@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "prnPrint.h"
 #include "risCmdLineString.h"
 
 namespace Ris
@@ -40,7 +41,7 @@ char* CmdLineString::execute (BaseCmdLineExec* aExec, char* aCmdLineString)
    // Test for bad command
    if(tCmd.isBadCmd())
    {
-      printf("executeCmdLineString INVALID COMMAND\n");
+      Prn::print(0,0,"INVALID COMMAND\n");
    }
 
    // return command response

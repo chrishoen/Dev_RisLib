@@ -155,7 +155,7 @@ void ServerThread::executeRemoteMsgRx(int aSessionIndex,Ris::ByteContent* aRxMsg
 //******************************************************************************
 void ServerThread::processRemotePrintStrMsgRx   (RemoteMsg::PrintStrMsg*  aRxMsg)
 {
-   Prn::print(0,0,"%s",aRxMsg->mPrintStr);
+   Prn::print(0,0,">>> %s",aRxMsg->mPrintStr);
    delete aRxMsg;
 }
 //******************************************************************************

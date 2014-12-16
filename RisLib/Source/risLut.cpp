@@ -9,7 +9,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "risLUT.h"
+#include "risLut.h"
 
 namespace Ris
 {

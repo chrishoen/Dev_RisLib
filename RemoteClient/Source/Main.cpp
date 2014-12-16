@@ -5,19 +5,16 @@
 #include "risRemoteClientThread.h"
 #include "CmdLineExec.h"
 
-#include "someThread1.h"
-#include "someThread2.h"
-#include "someTimerThread.h"
-using namespace Some;
-
-void amain_initialize(int argc,char** argv);
-void amain_finalize();
+void main_initialize(int argc,char** argv);
+void main_finalize();
 
 //******************************************************************************
 int main(int argc,char** argv)
 {
    //--------------------------------------------------------------------
    // Launch remote client thread
+
+   Ris::portableSleep(2000);
 
    CmdLineExec* tExec = new CmdLineExec;
    Ris::Remote::gClientThread = new Ris::Remote::RemoteClientThread;
@@ -27,19 +24,7 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Initialize
 
-   amain_initialize(argc,argv);
-
-   //--------------------------------------------------------------------
-   // Launch threads
-
-   gThread1 = new Thread1;
-   gThread1->launchThread();
-
-   gThread2 = new Thread2;
-   gThread2->launchThread();
-
-   gTimerThread = new TimerThread;
-   gTimerThread->launchThread();
+   main_initialize(argc,argv);
 
    //--------------------------------------------------------------------
    // Wait for keypressed
@@ -47,15 +32,6 @@ int main(int argc,char** argv)
 
    //--------------------------------------------------------------------
    // Shutdown threads
-
-   gThread2->shutdownThread();
-   delete gThread2;
-
-   gThread1->shutdownThread();
-   delete gThread1;
-
-   gTimerThread->shutdownThread();
-   delete gTimerThread;
 
    Ris::Remote::gClientThread->shutdownThread();
    delete Ris::Remote::gClientThread;
@@ -65,7 +41,7 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Exit
    
-   amain_finalize();
+   main_finalize();
 
    return 0;
 }
@@ -73,11 +49,8 @@ int main(int argc,char** argv)
 //******************************************************************************
 // Initialize
 
-void amain_initialize(int argc,char** argv)
+void main_initialize(int argc,char** argv)
 {
-
-   printf("ThreadTest*******************************************BEGIN\n");
-
    // Enter process
    Ris::Threads::enterProcessHigh();
 
@@ -102,14 +75,17 @@ void amain_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ProcRun,Prn::Run3,false);
    Prn::setFilter(Prn::ProcRun,Prn::Run4,false);
    Prn::setFilter(Prn::ProcPer,Prn::Per1,true);
+
+   Prn::print(0,0,"RemoteClient*****************************************BEGIN\n");
+
 }
 
 //******************************************************************************
 // Main finalize
 
-void amain_finalize()
+void main_finalize()
 {
-   printf("ThreadTest*******************************************END\n");
+   printf("RemoteClient*****************************************END\n");
 
    // Close print
    Prn::closePrint();

@@ -103,15 +103,9 @@
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\someThread1.cpp" />
-    <ClCompile Include="Source\someThread2.cpp" />
-    <ClCompile Include="Source\someTimerThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\someThread1.h" />
-    <ClInclude Include="Source\someThread2.h" />
-    <ClInclude Include="Source\someTimerThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

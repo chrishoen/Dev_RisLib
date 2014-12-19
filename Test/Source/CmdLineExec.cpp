@@ -30,6 +30,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,101);
+
+   Prn::print(0,0,"%8.3f",aCmd->argInt(1));
 }
 
 //******************************************************************************

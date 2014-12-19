@@ -223,16 +223,11 @@ public:
    //Some of these are passed to the CreateThread in launch
    //and some are used by threadFunction.
 
-   enum {MAX_THREAD_NAME_SIZE=40};
-
    int    mThreadStackSize;
    int    mThreadPriority;
    int    mThreadAffinityMask;
    int    mThreadIdealProcessor;
-   char   mThreadName[MAX_THREAD_NAME_SIZE];
    int    mThreadUseInitSem;
-
-   void setThreadName(char* aThreadName);
 
    //Initialization semaphore.
    //It is used to serialize thread initialization sections.

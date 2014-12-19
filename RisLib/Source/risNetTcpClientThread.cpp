@@ -126,7 +126,6 @@ void BaseTcpClientThread::configureThread()
 
    // Set members for this thread
    BaseThread::setThreadPriorityHigh();
-   BaseThread::setThreadName("TcpClient");
 }
 
 //******************************************************************************

@@ -75,9 +75,6 @@ void ServerThread::configureThread()
    // Set base class thread priority
    BaseThread::setThreadPriorityHigh();
 
-   // Set members for this thread
-   BaseThread::setThreadName("RemoteServerThread");
-
 // BaseThread::mThreadStackSize = 10*1000*1000;
 }
 

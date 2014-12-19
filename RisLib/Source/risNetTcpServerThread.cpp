@@ -143,8 +143,6 @@ void BaseTcpServerThread::configureThread()
 
    // Set members for this thread
    BaseThread::setThreadPriorityHigh();
-
-   BaseThread::setThreadName("TcpServer");
 }
 
 //******************************************************************************

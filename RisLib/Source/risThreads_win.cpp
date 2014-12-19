@@ -190,38 +190,6 @@ bool MutexSemaphore::get(int timeout)
 }
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-#define MS_VC_EXCEPTION 0x406D1388
-
-typedef struct tagTHREADNAME_INFO
-{
-   DWORD dwType; // Must be 0x1000.
-   LPCSTR szName; // Pointer to name (in user addr space).
-   DWORD dwThreadID; // Thread ID (-1=caller thread).
-   DWORD dwFlags; // Reserved for future use, must be zero.
-} THREADNAME_INFO;
-
-void SetThreadName( DWORD dwThreadID, LPCSTR szThreadName)
-{
-   return;
-   THREADNAME_INFO info;
-   info.dwType = 0x1000;
-   info.szName = szThreadName;
-   info.dwThreadID = dwThreadID;
-   info.dwFlags = 0;
-
-   __try
-   {
-      RaiseException( MS_VC_EXCEPTION, 0, sizeof(info)/sizeof(DWORD), (DWORD*)&info );
-   }
-   __except(EXCEPTION_CONTINUE_EXECUTION)
-   {
-   }
-}
-
-//******************************************************************************
 // This is a c-function that is used to execute the thread function of 
 // a base thread object. It is passed to CreateThread to indirectly call
 // the thread function because CreateThread can't use member function
@@ -254,7 +222,6 @@ BaseThread::BaseThread()
    mThreadIdealProcessor  = -1;
 
    mThreadStackSize = 0;
-   mThreadName[0]=0;
 }
 
 //******************************************************************************
@@ -278,19 +245,11 @@ void BaseThread::configureThread()
    mBaseImplementation->mHandle    = 0;
    mThreadPriority  = 0;
    mThreadStackSize = 0;
-   strncpy(mThreadName,"SomeThread",MAX_THREAD_NAME_SIZE);
 }
 
 void BaseThread::setThreadPriorityHigh()
 {
    mThreadPriority  = 7;
-}
-
-//******************************************************************************
-
-void BaseThread::setThreadName(char* aThreadName)
-{
-   strncpy(mThreadName,aThreadName,MAX_THREAD_NAME_SIZE);
 }
 
 //******************************************************************************
@@ -338,7 +297,6 @@ void BaseThread::launchThread()
    {
       if( SetThreadIdealProcessor(mBaseImplementation->mHandle,mThreadIdealProcessor) == -1 ) throw "Bad Ideal Processor";
    }
-   SetThreadName(-1,mThreadName);
 
    //---------------------------------------------------------------------------
    // Resume thread, this starts the thread function within the context of

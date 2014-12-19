@@ -67,8 +67,10 @@ void amain_initialize(int argc,char** argv)
    // Enter process
    Ris::Threads::enterProcessHigh();
 
-   // Initialize print filters
-   Prn::initializePrintFromSettings();
+   // Initialize print facility
+   Prn::resetPrint();
+   Prn::useSettingsFileDefault();
+   Prn::initializePrint();
 
    Prn::print(0,0,"ThreadTest*******************************************BEGIN");
 }
@@ -84,6 +86,6 @@ void amain_finalize()
    Ris::Threads::exitProcess();
 
    // Close print
-   Prn::closePrint();
+   Prn::finalizePrint();
 }
 

@@ -55,9 +55,11 @@ void main_initialize(int argc,char** argv)
    // Enter process
    Ris::Threads::enterProcessHigh();
 
-   // Initialize print filters
-   Prn::initializePrint(Prn::PrintModeRemote);
+   // Initialize print facility
+   Prn::resetPrint();
+   Prn::usePrintThread(true);
 
+   // Initialize print filters
    Prn::setFilter(Prn::SocketInit,Prn::Init1,false);
    Prn::setFilter(Prn::SocketInit,Prn::Init2,true);
    Prn::setFilter(Prn::SocketRun,Prn::Run1,false);
@@ -77,6 +79,8 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ProcRun,Prn::Run4,false);
    Prn::setFilter(Prn::ProcPer,Prn::Per1,true);
 
+   Prn::initializePrint();
+
    Prn::print(0,0,"RemoteClient*****************************************BEGIN\n");
 
 }
@@ -89,7 +93,7 @@ void main_finalize()
    printf("RemoteClient*****************************************END\n");
 
    // Close print
-   Prn::closePrint();
+   Prn::finalizePrint();
 
    // Exit process
    Ris::Threads::exitProcess();

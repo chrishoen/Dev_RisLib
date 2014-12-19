@@ -58,6 +58,7 @@
   <ItemGroup>
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
+    <ClInclude Include="Source\prnDefs.h" />
     <ClInclude Include="Source\prnPrint.h" />
     <ClInclude Include="Source\prnPrintSettings.h" />
     <ClInclude Include="Source\prnPrintThread.h" />

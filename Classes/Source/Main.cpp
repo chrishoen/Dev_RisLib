@@ -36,7 +36,7 @@ int main(int argc,char** argv)
 //******************************************************************************
 void amain_init()
 {
-   // Initialize print filters
+   // Initialize print facility
    Prn::initializePrint();
 
    Ris::setConsoleTitle("test");

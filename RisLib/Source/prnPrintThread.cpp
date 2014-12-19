@@ -18,7 +18,6 @@ WHAT:    program PrintBlock class
 namespace Prn
 {
 
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -42,11 +41,35 @@ PrintThread::PrintThread()
 };
 
 //******************************************************************************
+// This sets base thread configuration members
+
+void PrintThread::configure(RedirectCallPointer aRedirectCallPointer)
+{
+   mRedirectCallPointer = aRedirectCallPointer;
+}
+void PrintThread::configureThread()
+{
+   // Set base class configuration members to defaults
+   BaseThread::configureThread();
+
+   // Set base class thread priority
+   BaseThread::mThreadPriority  = 3;
+}
+
+//******************************************************************************
 
 void PrintThread::executeOnPrintBlock (Prn::PrintBlock* aPrintBlock)
 {
    // Print string
-   puts(aPrintBlock->mString);
+   if (!mRedirectCallPointer.isValid())
+   {
+      puts(aPrintBlock->mString);
+   }
+   else
+   {
+      mRedirectCallPointer(aPrintBlock->mString);
+   }
+
    // Delete
    delete aPrintBlock;
 };

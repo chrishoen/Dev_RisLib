@@ -49,9 +49,10 @@ int main(int argc,char** argv)
 void amainInit(int argc,char** argv)
 {
    //---------------------------------------------------------------------------
-   // Initialize print filters
+   // Initialize print facility
 
    Prn::initializePrint();
+
    Prn::setFilter(Prn::SocketInit,Prn::Init1,false);
    Prn::setFilter(Prn::SocketInit,Prn::Init2,true);
    Prn::setFilter(Prn::SocketRun,Prn::Run1,false);

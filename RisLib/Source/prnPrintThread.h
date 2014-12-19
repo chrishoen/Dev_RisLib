@@ -13,6 +13,7 @@ WHAT:    program PrintBlock class
 // imports
 //******************************************************************************
 #include "risThreadsQCall.h"
+#include "prnPrint.h"
 
 namespace Prn
 {
@@ -43,12 +44,24 @@ public:
    // Constructor
    PrintThread();
 
+   // Configure thread members
+   void configure(RedirectCallPointer aRedirectCallPointer);
+
+   // Base class overload
+   void configureThread();
+
    //--------------------------------------------------------------
    // QCall, PrintBlock:
 
    typedef Ris::Threads::QCall1<Prn::PrintBlock*> PrintBlockQCall;
    PrintBlockQCall mPrintBlockQCall;
    void executeOnPrintBlock (Prn::PrintBlock* aPrintBlock);
+
+   //--------------------------------------------------------------
+   // :
+
+   RedirectCallPointer  mRedirectCallPointer;
+
 };
 
 //******************************************************************************

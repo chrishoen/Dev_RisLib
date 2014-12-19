@@ -20,7 +20,7 @@ subtopic is enabled then the print is executed.
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
+#include "risCallPointer.h"
 #include "prnPrintSettings.h"
 
 namespace Prn
@@ -30,18 +30,23 @@ namespace Prn
 //******************************************************************************
 //******************************************************************************
 
+typedef Ris::CallPointer1<char*> RedirectCallPointer;
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Initializes the print service task and the filter table
 
-enum PrintMode
-{
-   PrintModeLocal,          // This prints to stdout directly
-   PrintModeLocalThreaded,  // This prints to stdout via the print thread
-   PrintModeRemote          // This prints via the remote server
-};
+void resetPrint              ();
+void usePrintThread          (bool                 aUsePrintThread);
+void useSettingsFileDefault  ();
+void useSettingsFileName     (char*                aSettingsFileName);
+void useSettingsFileSection  (char*                aSettingsFileSection);
+void useRedirectCallPointer  (RedirectCallPointer  aRedirectCallPointer);
+void initializePrint         ();
 
+
+#if 0
 void initializePrint(
    PrintMode aPrintMode=PrintModeLocalThreaded);
 
@@ -67,10 +72,10 @@ void initializePrintFromSettings(
 // the settings folder, and "Default",1
 void  initializePrintFromSettings(
    PrintMode aPrintMode=PrintModeLocalThreaded);
-
+#endif
 // Closes the print facility.
 
-void  closePrint();
+void  finalizePrint();
 
 //******************************************************************************
 //******************************************************************************

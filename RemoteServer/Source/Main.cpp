@@ -53,8 +53,10 @@ void amain_initialize(int argc,char** argv)
    // Enter process
    Ris::Threads::enterProcessHigh();
 
+   // Reset print facility
+   Prn::resetPrint();
+
    // Initialize print filters
-   Prn::initializePrint(Prn::PrintModeLocalThreaded);
    Prn::setFilter(Prn::SocketInit,Prn::Init1,false);
    Prn::setFilter(Prn::SocketInit,Prn::Init2,true);
    Prn::setFilter(Prn::SocketRun,Prn::Run1,false);
@@ -74,6 +76,9 @@ void amain_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ProcRun,Prn::Run4,false);
    Prn::setFilter(Prn::ProcPer,Prn::Per1,true);
 
+   // Initialize print facility
+   Prn::initializePrint();
+
    Prn::print(0,0,"RemoteServer*****************************************BEGIN");
 }
 
@@ -88,6 +93,6 @@ void amain_finalize()
    Ris::Threads::exitProcess();
 
    // Close print
-   Prn::closePrint();
+   Prn::finalizePrint();
 }
 

@@ -36,8 +36,8 @@ int main(int argc,char** argv)
 //******************************************************************************
 void amain_init()
 {
-   // Initialize print filters
-   Prn::initializePrint(Prn::PrintModeLocal);
+   // Initialize print facility
+   Prn::initializePrint();
 
    Ris::setConsoleTitle("test");
 }

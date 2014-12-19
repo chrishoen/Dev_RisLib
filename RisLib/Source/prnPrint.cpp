@@ -24,157 +24,121 @@ namespace Prn
 enum {MAX_PRINT_STRING_SIZE    = 400};
 
 //****************************************************************************
-// regional variables
+//****************************************************************************
+//****************************************************************************
+// Regional variables
 
-PrintMode rPrintMode=PrintModeLocalThreaded;
-FILE* rPrintFileFile=0;
-bool  rInitialized = false;
+enum {MaxNameSize=200};
+
+bool                 rUsePrintThread;
+bool                 rUseSettingsFile;
+char                 rSettingsFilePath    [MaxNameSize];
+char                 rSettingsFileSection [MaxNameSize];
+RedirectCallPointer  rRedirectCallPointer;
+bool                 rSuppressFlag;
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+void resetPrint()
+{
+   rUsePrintThread  = false;
+   rUseSettingsFile = false;
+   rSettingsFilePath[0]=0;
+   strcpy(rSettingsFileSection, "DEFAULT");
+   rRedirectCallPointer.clear();
+   rSuppressFlag=true;
+
+   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),MaxNameSize);
+   strncat(rSettingsFilePath,"prnPrintSettings.txt",MaxNameSize);
+}
 
 //****************************************************************************
 
-void suppressPrint()
+void usePrintThread (bool aUsePrintThread)
 {
-   gSettings.mSuppressFlag=true;
+   rUsePrintThread = aUsePrintThread;
 }
 
-void unsuppressPrint()
+//****************************************************************************
+void useSettingsFileDefault()
 {
-   gSettings.mSuppressFlag=false;
+   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),MaxNameSize);
+   strncat(rSettingsFilePath,"prnPrintSettings.txt",MaxNameSize);
+   rUseSettingsFile=true;
 }
 
-void toggleSuppressPrint()
+void useSettingsFileName(char* aSettingsFileName)
 {
-   gSettings.mSuppressFlag = !gSettings.mSuppressFlag;
+   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),MaxNameSize);
+   strncat(rSettingsFilePath,aSettingsFileName,MaxNameSize);
+   rUseSettingsFile=true;
+}
+
+void useSettingsFilePath(char* aSettingsFilePath)
+{
+   strncpy(rSettingsFilePath,aSettingsFilePath,MaxNameSize);
+   rUseSettingsFile=true;
 }
 
 //****************************************************************************
 
-void initializePrint(PrintMode aPrintMode)
+void useSettingsFileSection(char*aSettingsFileSection)
 {
-   //-----------------------------------------------------
-   // Guard
-
-	if (gSettings.mInitFlag) return;
-	gSettings.mInitFlag=true;
-
-   //-----------------------------------------------------
-   // Initialize variables
-   
-   rPrintMode = aPrintMode;
-   gSettings.mSuppressFlag = false;
-
-   //-----------------------------------------------------
-   // Launch print thread
-
-   switch (rPrintMode)
-   {
-      case PrintModeLocal : 
-            break;
-      case PrintModeLocalThreaded : 
-            gPrintThread.configureThread();
-            gPrintThread.launchThread();
-            break;
-      case PrintModeRemote : 
-         break;
-      default : 
-         break;
-   }   
+   strncpy(rSettingsFileSection, aSettingsFileSection, MaxNameSize);
 }
 
 //****************************************************************************
-// This initializes, settings are already initialized
 
-void initializePrintFromSettings(
-   char* aSettingsFileName,
-   char* aSection,
-   PrintMode aPrintMode)
+void useRedirectCallPointer(RedirectCallPointer  aRedirectCallPointer)
+{
+   rRedirectCallPointer = aRedirectCallPointer;
+}
+
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+void initializePrint()
 {
    //-----------------------------------------------------
-   // Guard
+   // Initialize settings
 
-	if (gSettings.mInitFlag) return;
-	gSettings.mInitFlag=true;
-
-   //-----------------------------------------------------
-   // Initialize variables
-   
-   rPrintMode = aPrintMode;
-   gSettings.mSuppressFlag = false;
-
-   //-----------------------------------------------------
-   // initialize settings
-
-   gSettings.initialize(aSettingsFileName,aSection);
-
-   //-----------------------------------------------------
-   // Launch print thread
-
-   switch (rPrintMode)
+   if (rUseSettingsFile)
    {
-      case PrintModeLocal : 
-            break;
-      case PrintModeLocalThreaded : 
-            gPrintThread.configureThread();
-            gPrintThread.launchThread();
-            break;
-      case PrintModeRemote : 
-         break;
-      default : 
-         break;
-   }   
-
-   //-----------------------------------------------------
-   // Open log files
-
-   if (gSettings.mLogFileEnable)
-   {
-      char tPrintFileName[200];
-      strcpy(tPrintFileName,gSettings.mLogFileName);
-      rPrintFileFile=fopen(tPrintFileName,"w");
-      if(rPrintFileFile<=0)
-      {
-         gSettings.mLogFileEnable=false;
-         printf("BAD PRINT LOG FILE NAME %s\n",gSettings.mLogFileName);
-      }
+      gSettings.initialize(rSettingsFilePath, rSettingsFileSection);
    }
 
    //-----------------------------------------------------
-   // Test print
+   // Launch print thread
 
-   print(Prn::PrintRun,Prn::Run1,"PrintRun,Run1");
-   print(Prn::PrintRun,Prn::Run2,"PrintRun,Run2");
-}
+   if (rUsePrintThread)
+   {
+      gPrintThread.configure(rRedirectCallPointer);
+      gPrintThread.launchThread();
+   }   
 
-//****************************************************************************
-// This initializes, settings are already initialized
-
-void initializePrintFromSettings(PrintMode aPrintMode)
-{
-   char tFilePath[200];
-   strcpy(tFilePath,Ris::portableGetSettingsDir());
-   strcat(tFilePath,"prnPrintSettings.txt");
-
-   initializePrintFromSettings(tFilePath,"Default",aPrintMode);
+   //-----------------------------------------------------
+   // Done
+   
+   rSuppressFlag = false;
 }
 
 //****************************************************************************
 
-void closePrint()
+void finalizePrint()
 {
    //-----------------------------------------------------
    // Shutdown print thread
 
-   switch (rPrintMode)
+   if (rUsePrintThread)
    {
-      case PrintModeLocal : 
-         break;
-      case PrintModeLocalThreaded : 
-         gPrintThread.shutdownThread();
-         break;
-      case PrintModeRemote : 
-         break;
-      default : 
-         break;
+      gPrintThread.shutdownThread();
    }   
 }
 
@@ -206,13 +170,13 @@ bool testForPrint(int aTopic,int aSubTopic)
 void print(int aTopic,int aSubTopic,const char* aFormat, ...)      
 {
    // If suppressed and the filter is not zero then exit
-   if (gSettings.mSuppressFlag)
+   if (rSuppressFlag && aTopic!=0)
    {
-      if (aTopic!=0) return;
+      return;
    }
 
    //-----------------------------------------------------
-   // filter
+   // If the print filter is not enabled then exit
 
    if (!testForPrint(aTopic,aSubTopic))
    {
@@ -228,35 +192,19 @@ void print(int aTopic,int aSubTopic,const char* aFormat, ...)
    PrintBlock* tPrintBlock = 0;
    Ris::RemoteMsg::PrintStrMsg* tPrintStrMsg = 0;
 
-   switch (rPrintMode)
+   // If non threaded
+   if (!rUsePrintThread)
    {
-      case PrintModeLocal : 
-      {
-         // Local print
-         tPrintStr = &tPrintBuffer[0];
-      }
-      break;
-      case PrintModeLocalThreaded :
-      {
-         //Local print via print thread
-         tPrintBlock = new PrintBlock;
-         tPrintStr = &tPrintBlock->mString[0];
-      }
-      break;
-      case PrintModeRemote : 
-      {
-         //Remote print via remote client thread
-         tPrintStrMsg = new Ris::RemoteMsg::PrintStrMsg;
-         tPrintStr = &tPrintStrMsg->mPrintStr[0];
-      }
-      break;
-      default : 
-      {
-         // Local print
-         tPrintStr = &tPrintBuffer[0];
-      }
-      break;
-   }   
+      // Print to local storage
+      tPrintStr = &tPrintBuffer[0];
+   }
+   // If threaded
+   else
+   {
+      // Print to new print block
+      tPrintBlock = new PrintBlock;
+      tPrintStr = &tPrintBlock->mString[0];
+   }
 
    //-----------------------------------------------------
    // Do a vsprintf with variable arg list into print string pointer
@@ -271,30 +219,64 @@ void print(int aTopic,int aSubTopic,const char* aFormat, ...)
    //-----------------------------------------------------
    // Print the string
 
-   switch (rPrintMode)
+   // If non threaded
+   if (!rUsePrintThread)
    {
-      case PrintModeLocal : 
+      // If no redirection call pointer 
+      if (!rRedirectCallPointer.isValid())
       {
-         // Local print
+         // Send to standard output
          puts(tPrintStr);
       }
-      break;
-      case PrintModeLocalThreaded :
+      // If redirection call pointer 
+      else
       {
-         //Local print via print thread
-         gPrintThread.mPrintBlockQCall(tPrintBlock);
+         // Send to redirection call pointer 
+         rRedirectCallPointer(tPrintStr);
       }
-      break;
-      case PrintModeRemote : 
-      {
-         //Remote print via remote client thread
-         Ris::Remote::gClientThread->sendMsgToRemote(tPrintStrMsg);
-      }
-      break;
-      default : 
-         break;
-   }   
+   }
+   // If threaded
+   else
+   {
+      // Send to print thread
+      gPrintThread.mPrintBlockQCall(tPrintBlock);
+   }
 }
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+void suppressPrint()
+{
+   rSuppressFlag=true;
+}
+
+void unsuppressPrint()
+{
+   rSuppressFlag=false;
+}
+
+void toggleSuppressPrint()
+{
+   rSuppressFlag = !rSuppressFlag;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Trick that initializes the regional variables
+
+class PrintResetClass
+{
+public:
+   PrintResetClass()
+   {
+      resetPrint();
+   }
+};
+
+PrintResetClass gPrintResetClass;
 
 } //namespace
 

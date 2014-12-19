@@ -54,8 +54,10 @@ void amain_initialize(int argc,char** argv)
    // Enter process
    Ris::Threads::enterProcessHigh();
 
-   // Initialize print filters
-   Prn::initializePrintFromSettings();
+   // Initialize print facility
+   Prn::resetPrint();
+   Prn::useSettingsFileDefault();
+   Prn::initializePrint();
 
    // Initialize global settings
    gGSettings.initialize();
@@ -74,6 +76,6 @@ void amain_finalize()
    Ris::Threads::exitProcess();
 
    // Close print
-   Prn::closePrint();
+   Prn::finalizePrint();
 }
 

@@ -55,6 +55,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0,0,"ABCDEFGH");
 }
 
 //******************************************************************************

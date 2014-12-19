@@ -462,13 +462,13 @@ int translateThreadPriority(int aThreadPriority)
 {
    switch(aThreadPriority)
    {
-      case 1: return THREAD_PRIORITY_IDLE;
-      case 2: return THREAD_PRIORITY_LOWEST;
-      case 3: return THREAD_PRIORITY_BELOW_NORMAL;
-      case 4: return THREAD_PRIORITY_NORMAL;
-      case 5: return THREAD_PRIORITY_ABOVE_NORMAL;
-      case 6: return THREAD_PRIORITY_HIGHEST;
       case 7: return THREAD_PRIORITY_TIME_CRITICAL;
+      case 6: return THREAD_PRIORITY_HIGHEST;
+      case 5: return THREAD_PRIORITY_ABOVE_NORMAL;
+      case 4: return THREAD_PRIORITY_NORMAL;
+      case 3: return THREAD_PRIORITY_BELOW_NORMAL;
+      case 2: return THREAD_PRIORITY_LOWEST;
+      case 1: return THREAD_PRIORITY_IDLE;
    }
    return THREAD_PRIORITY_NORMAL;
 }

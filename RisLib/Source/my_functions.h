@@ -48,6 +48,9 @@ My math functions
    // Trim CRLF from the end of a string
    void my_trimCRLF(char* aString);
 
+   // Return string "true" "false" for a bool
+   char* my_string_from_bool(bool aValue);
+
    //---------------------------------------------------------------------------
    // Time
 

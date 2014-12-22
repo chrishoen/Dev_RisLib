@@ -40,6 +40,8 @@ namespace Filter
       double mX;       // Input value
       double mEX;      // expectation (mean)
       double mUX;      // uncertainty (standard deviation)
+      double mMean;    // expectation (mean)
+      double mStdDev;  // uncertainty (standard deviation)
 
       // Alpha filters for expectation and uncertainty
       AlphaOne    mEXAlpha;    // Alpha filter for expectation (mean)
@@ -72,12 +74,14 @@ namespace Filter
       bool mFirstFlag;
 
       // Output values
-      bool    mNewFlag;      // True at the end of a period
+      bool    mEndOfPeriod;  // True at the end of a period
       double  mX;            // Input value
       double  mEX;           // expectation (mean)
       double  mUX;           // uncertainty (standard deviation)
       double  mMinX;         // minimum 
       double  mMaxX;         // maximum
+      double  mMean;         // expectation (mean)
+      double  mStdDev;       // uncertainty (standard deviation)
 
       // Sums for expectation and uncertainty
       double  mEXSum;        // Sum for expectation (mean)

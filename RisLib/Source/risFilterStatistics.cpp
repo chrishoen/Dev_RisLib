@@ -42,6 +42,8 @@ namespace Filter
       mX = 0.0;
       mEX = 0.0;
       mUX = 0.0;
+      mMean   = 0.0;
+      mStdDev = 0.0;
       mK = 0;
    }
 
@@ -60,6 +62,8 @@ namespace Filter
       mX = aX;
       mEX = mEXAlpha.mXX;
       mUX = mUXAlpha.mXX;
+      mMean   = mEX;
+      mStdDev = mUX;
 
       // Update
       mK++;
@@ -87,9 +91,11 @@ namespace Filter
       mSize = aSize;
       mFirstFlag = true;
       mX = 0.0;
-      mNewFlag = false;
+      mEndOfPeriod = false;
       mEX = 0.0;
       mUX = 0.0;
+      mMean   = 0.0;
+      mStdDev = 0.0;
       mMinX = 0.0;
       mMaxX = 0.0;
       mEXSum = 0.0;
@@ -139,6 +145,8 @@ namespace Filter
          // Calculate results for mean and standard deviation
          mEX = mEXSum / mPutCount;
          mUX = mUXSum / mPutCount;
+         mMean   = mEX;
+         mStdDev = mUX;
 
          // Latch minimum and maximum
          mMinX = mCurrentMinX;
@@ -150,13 +158,13 @@ namespace Filter
          mPutCount = 0;
 
          // Indicate end of period
-         mNewFlag   = true;
+         mEndOfPeriod = true;
          mFirstFlag = true;
       }
       else
       {
          // Indicate not end of period
-         mNewFlag = false;
+    	  mEndOfPeriod = false;
       }
 
       //--------------------------------------------------------------------------- 
@@ -170,7 +178,7 @@ namespace Filter
    {
       printf("%3d %d %8.3f %8.3f %8.3f  %8.3f\n",
          mK,
-         mNewFlag,
+         mEndOfPeriod,
          mEX,
          mUX,
          mMinX,

@@ -137,8 +137,6 @@ executed by the thread run function and then deleted.
 #include "risThreads.h"
 #include "risThreadsTimer.h"
 
-#pragma managed(push,off)
-
 namespace Ris
 {
 namespace Threads
@@ -992,8 +990,6 @@ public:
 
 }//namespace
 }//namespace
-
-#pragma managed(pop)
 
 #endif
 

@@ -9,8 +9,6 @@
 
 #include "prnPrint.h"
 
-#pragma unmanaged
-
 #include "risThreadsQCall.h"
 
 namespace Ris

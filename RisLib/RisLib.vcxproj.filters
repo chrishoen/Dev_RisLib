@@ -118,15 +118,6 @@
     <ClCompile Include="Source\risNanoTime.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risRemoteClientThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risRemoteMsg.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risRemoteServerThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risCmdLineConsole.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -262,15 +253,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNanoTime.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risRemoteClientThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risRemoteMsg.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risRemoteServerThread.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risFilterStatistics.h">

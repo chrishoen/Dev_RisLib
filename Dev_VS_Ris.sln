@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CmdLineTest1", "CmdLineTest1\CmdLineTest1.vcxproj", "{73A309B2-0AF9-47EB-B5D1-A932203B9F9C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadTest", "ThreadTest\ThreadTest.vcxproj", "{A0AB985A-67BB-44DB-805C-7B0A4CA53170}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RemoteServer", "RemoteServer\RemoteServer.vcxproj", "{DC96D198-3795-4AB0-9A96-9BDA279919FE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NanoTimeTest", "NanoTimeTest\NanoTimeTest.vcxproj", "{AE99F90E-2FA0-488C-B231-DA74E79B0E1F}"
 EndProject
@@ -24,8 +22,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CallPointer1", "CallPointer1\CallPointer1.vcxproj", "{CA583E80-2EA1-11E3-AA6E-0800200C9A66}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LutTest", "LutTest\LutTest.vcxproj", "{EAF0F775-3BAB-47E6-B741-EE0FE4F6AA65}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RemoteClient", "RemoteClient\RemoteClient.vcxproj", "{28E2E396-CCB0-4CEA-AC8A-BA8BCE19F855}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Classes", "Classes\Classes.vcxproj", "{B3A1094D-9994-4EA8-BC7B-B9E31C94B8CA}"
 EndProject
@@ -47,10 +43,6 @@ Global
 		{A0AB985A-67BB-44DB-805C-7B0A4CA53170}.Debug|Win32.Build.0 = Debug|Win32
 		{A0AB985A-67BB-44DB-805C-7B0A4CA53170}.Release|Win32.ActiveCfg = Release|Win32
 		{A0AB985A-67BB-44DB-805C-7B0A4CA53170}.Release|Win32.Build.0 = Release|Win32
-		{DC96D198-3795-4AB0-9A96-9BDA279919FE}.Debug|Win32.ActiveCfg = Debug|Win32
-		{DC96D198-3795-4AB0-9A96-9BDA279919FE}.Debug|Win32.Build.0 = Debug|Win32
-		{DC96D198-3795-4AB0-9A96-9BDA279919FE}.Release|Win32.ActiveCfg = Release|Win32
-		{DC96D198-3795-4AB0-9A96-9BDA279919FE}.Release|Win32.Build.0 = Release|Win32
 		{AE99F90E-2FA0-488C-B231-DA74E79B0E1F}.Debug|Win32.ActiveCfg = Debug|Win32
 		{AE99F90E-2FA0-488C-B231-DA74E79B0E1F}.Debug|Win32.Build.0 = Debug|Win32
 		{AE99F90E-2FA0-488C-B231-DA74E79B0E1F}.Release|Win32.ActiveCfg = Release|Win32
@@ -83,10 +75,6 @@ Global
 		{EAF0F775-3BAB-47E6-B741-EE0FE4F6AA65}.Debug|Win32.Build.0 = Debug|Win32
 		{EAF0F775-3BAB-47E6-B741-EE0FE4F6AA65}.Release|Win32.ActiveCfg = Release|Win32
 		{EAF0F775-3BAB-47E6-B741-EE0FE4F6AA65}.Release|Win32.Build.0 = Release|Win32
-		{28E2E396-CCB0-4CEA-AC8A-BA8BCE19F855}.Debug|Win32.ActiveCfg = Debug|Win32
-		{28E2E396-CCB0-4CEA-AC8A-BA8BCE19F855}.Debug|Win32.Build.0 = Debug|Win32
-		{28E2E396-CCB0-4CEA-AC8A-BA8BCE19F855}.Release|Win32.ActiveCfg = Release|Win32
-		{28E2E396-CCB0-4CEA-AC8A-BA8BCE19F855}.Release|Win32.Build.0 = Release|Win32
 		{B3A1094D-9994-4EA8-BC7B-B9E31C94B8CA}.Debug|Win32.ActiveCfg = Debug|Win32
 		{B3A1094D-9994-4EA8-BC7B-B9E31C94B8CA}.Debug|Win32.Build.0 = Debug|Win32
 		{B3A1094D-9994-4EA8-BC7B-B9E31C94B8CA}.Release|Win32.ActiveCfg = Release|Win32

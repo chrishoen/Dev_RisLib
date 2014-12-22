@@ -12,7 +12,6 @@ Print utility
 
 #include "risPortableCalls.h"
 #include "prnPrintThread.h"
-#include "risRemoteClientThread.h"
 
 #include "prnPrint.h"
 
@@ -190,7 +189,6 @@ void print(int aTopic,int aSubTopic,const char* aFormat, ...)
    char  tPrintBuffer[MAX_PRINT_STRING_SIZE];
    int   tPrintStrSize;
    PrintBlock* tPrintBlock = 0;
-   Ris::RemoteMsg::PrintStrMsg* tPrintStrMsg = 0;
 
    // If non threaded
    if (!rUsePrintThread)

@@ -21,6 +21,8 @@ namespace Ris
 // This provides parsing of the command line and methods to extract the command
 // and the arguments.
 
+class CmdLineExecNestedAnchor;
+
 class  CmdLineCmd
 {
 public:
@@ -120,6 +122,14 @@ public:
    void  setResponse   (char* aString);
    char* getResponse   ();
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Nested anchor, used for processing nested records. This is piggybacked 
+   // onto a command by a command line processor so that it can be used by a 
+   // command line executive.
+
+   CmdLineExecNestedAnchor* mNestedAnchor;
 };
 
 //******************************************************************************

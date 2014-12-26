@@ -25,7 +25,6 @@ namespace Ris
 BaseCmdLineExec::BaseCmdLineExec()
 {
    mExitFlag = false;
-   mAnchor   = 0;
 }
 
 //******************************************************************************
@@ -40,35 +39,27 @@ void BaseCmdLineExec::forceExit()
 }
 
 //******************************************************************************
-// Set the nested anchor
-
-void BaseCmdLineExec::setAnchor(CmdLineExecNestedAnchor* aAnchor)
-{
-   mAnchor = aAnchor;
-}
-
-//******************************************************************************
 // Push the executive onto the nested executive stack
 
-void BaseCmdLineExec::nestedPush(BaseCmdLineExec* aNextExec)
+void BaseCmdLineExec::nestedPush(CmdLineCmd* aCmd,BaseCmdLineExec* aNextExec)
 {
    // Guard
-   if (mAnchor == 0) return;
+   if (aCmd->mNestedAnchor == 0) return;
 
    // Push the executive onto the nested executive stack
-   mAnchor->nestedPush(aNextExec);
+   aCmd->mNestedAnchor->nestedPush(aNextExec);
 }
 
 //******************************************************************************
 // Pop the executive from the nested executive stack
 
-void BaseCmdLineExec::nestedPop()
+void BaseCmdLineExec::nestedPop(CmdLineCmd* aCmd)
 {
    // Guard
-   if (mAnchor == 0) return;
+   if (aCmd->mNestedAnchor == 0) return;
 
    // Pop the executive from the nested executive stack
-   mAnchor->nestedPop();
+   aCmd->mNestedAnchor->nestedPop();
 }
 
 //******************************************************************************

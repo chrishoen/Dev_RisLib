@@ -44,6 +44,8 @@ CmdLineCmd::CmdLineCmd()
    }
 
    mResponseValid=false;
+
+   mNestedAnchor = 0;
 }
 
 //******************************************************************************

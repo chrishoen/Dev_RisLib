@@ -81,14 +81,11 @@ void CmdLineFile::execute(BaseCmdLineExec* aExec)
    // Initialize the nested anchor, it is used for nested sections in the file,
    // nested sections execute different executives.
 
-   // Initialize
-   mAnchor.initialize(aExec);
-   // Set the executive anchor pointer
-   aExec->setAnchor(&mAnchor);
-
-   // Push initial executive onto the nested anchor executive stack
-// mAnchor.mExecStack.push(tExec);
-// mAnchor.mChangeFlag=false;
+   // Initialize to the initial executive
+   mNestedAnchor.initialize(aExec);
+   // Set the command nested anchor pointer.  This is piggybacked 
+   // onto the command so that it can be used by the executive.
+   tCmd.mNestedAnchor = &mNestedAnchor;
 
    //---------------------------------------------------------------------------
    // Loop to read each command line in the file. If it contains a valid
@@ -131,15 +128,15 @@ void CmdLineFile::execute(BaseCmdLineExec* aExec)
             tExec->execute(&tCmd);
 
             // If the command pushed to the anchor stack 
-            if (mAnchor.mChangeFlag)
+            if (mNestedAnchor.mChangeFlag)
             {
                 // If the command pushed a new executive onto the anchor
                 // stack because it entered a new nested section, or if it 
                 // popped an executive from the anchor stack because it is
                 // leaving a nested section then get the next executive from
                 // the anchor stack
-                mAnchor.mChangeFlag = false;
-                tExec = mAnchor.mExec;
+                mNestedAnchor.mChangeFlag = false;
+                tExec = mNestedAnchor.mExec;
             }
 
             // If the command set the exit flag then exit the loop

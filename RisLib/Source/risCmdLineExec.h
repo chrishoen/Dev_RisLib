@@ -44,13 +44,11 @@ public:
    virtual void execute(CmdLineCmd* aCmd)=0;
 
    //---------------------------------------------------------------------------
-   // Nested anchor, used for processing nested records.
+   // Nested anchor, used for processing nested records. The command contains
+   // a pointer to the nested anchor
 
-   virtual void setAnchor  (CmdLineExecNestedAnchor* aAnchor);
-   void nestedPush(BaseCmdLineExec* aNextExec);
-   void nestedPop();
-
-   CmdLineExecNestedAnchor* mAnchor;
+   void nestedPush (CmdLineCmd* aCmd, BaseCmdLineExec* aNextExec);
+   void nestedPop  (CmdLineCmd* aCmd);
 
    //---------------------------------------------------------------------------
    // This can be called to indicate to the command line processor to exit a

@@ -51,7 +51,7 @@ public:
 
    // Nested anchor. This is used to manage files that contain nested records,
    // which are processed by nested executives.
-   CmdLineExecNestedAnchor mAnchor;
+   CmdLineExecNestedAnchor mNestedAnchor;
 
 };
 

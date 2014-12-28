@@ -13,7 +13,7 @@ namespace Ris
 //******************************************************************************
 const Time Time::cZero(0,0);
 
-const Int64 Time::mConversionTable[8] =
+const long long Time::mConversionTable[8] =
    {2000000000,2000000,2000,2,2000000000,2000000,2000,2};
 
 //******************************************************************************
@@ -27,7 +27,7 @@ Time::Time()
 
 Time::Time(int aSeconds, int aHalfNanoseconds)
 {
-   mTimeInHalfNanoseconds = Ris::Int64(aSeconds) * mConversionTable[Seconds] + aHalfNanoseconds;
+   mTimeInHalfNanoseconds = long long(aSeconds) * mConversionTable[Seconds] + aHalfNanoseconds;
 }
 
 //******************************************************************************
@@ -57,21 +57,21 @@ Time::Time(
 
 //******************************************************************************
 
-void Time::setNanoseconds(Int64 aNanoseconds)
+void Time::setNanoseconds(long long aNanoseconds)
 {
    mTimeInHalfNanoseconds = aNanoseconds*2;
 }
 
 //******************************************************************************
 
-void Time::setNs(Int64 aNanoseconds)
+void Time::setNs(long long aNanoseconds)
 {
    mTimeInHalfNanoseconds = aNanoseconds*2;
 }
 
 //******************************************************************************
 
-Time Time::fromNanoseconds(Ris::Int64 aNanoseconds)
+Time Time::fromNanoseconds(long long aNanoseconds)
 {
    Time temp;
    temp.setNanoseconds(aNanoseconds);
@@ -80,7 +80,7 @@ Time Time::fromNanoseconds(Ris::Int64 aNanoseconds)
 
 //******************************************************************************
 
-Time Time::fromNs(Ris::Int64 aNanoseconds)
+Time Time::fromNs(long long aNanoseconds)
 {
    Time temp;
    temp.setNanoseconds(aNanoseconds);
@@ -92,34 +92,34 @@ Time Time::fromNs(Ris::Int64 aNanoseconds)
 Time Time::fromNs(double aNanoseconds)
 {
    Time temp;
-   temp.setNanoseconds(Ris::Int64(aNanoseconds));
+   temp.setNanoseconds(long long(aNanoseconds));
    return temp;
 }
 
 //******************************************************************************
 
-Int64 Time::inNanoseconds(void) const
+long long Time::inNanoseconds(void) const
 {
    return this->mTimeInHalfNanoseconds >> 1;
 }
 
 //******************************************************************************
 
-Int64 Time::inNs(void) const
+long long Time::inNs(void) const
 {
    return this->mTimeInHalfNanoseconds >> 1;
 }
 
 //******************************************************************************
 
-Int64 Time::inHalfNanoseconds(void) const
+long long Time::inHalfNanoseconds(void) const
 {
    return this->mTimeInHalfNanoseconds;
 }
 
 //******************************************************************************
 
-void Time::setHalfNanoseconds(Int64 aHalfNanoseconds)
+void Time::setHalfNanoseconds(long long aHalfNanoseconds)
 {
    mTimeInHalfNanoseconds = aHalfNanoseconds;
 }
@@ -129,7 +129,7 @@ void Time::setHalfNanoseconds(Int64 aHalfNanoseconds)
 void Time::inSecondsAndHalfNanoseconds(int& aSeconds, int& aHalfNanoseconds) const
 {
    aSeconds = (int) (this->mTimeInHalfNanoseconds / mConversionTable[Seconds]);
-   aHalfNanoseconds = (int) (this->mTimeInHalfNanoseconds - (((Int64) aSeconds) * mConversionTable[Seconds]));
+   aHalfNanoseconds = (int) (this->mTimeInHalfNanoseconds - (((long long) aSeconds) * mConversionTable[Seconds]));
 }
 
 //******************************************************************************
@@ -151,14 +151,14 @@ void Time::setSeconds(int aSeconds)
 void Time::convertToSecondsAndHalfNanoseconds(int& aSeconds, int& aHalfNanoseconds) const
 {
    aSeconds = (int) (this->mTimeInHalfNanoseconds / mConversionTable[Seconds]);
-   aHalfNanoseconds = (int) (this->mTimeInHalfNanoseconds - (((Int64) aSeconds) * mConversionTable[Seconds]));
+   aHalfNanoseconds = (int) (this->mTimeInHalfNanoseconds - (((long long) aSeconds) * mConversionTable[Seconds]));
 }
 
 //******************************************************************************
 
 void Time::convertFromSecondsAndHalfNanoseconds(int aSeconds, int aHalfNanoseconds)
 {
-   mTimeInHalfNanoseconds = Ris::Int64(aSeconds) * mConversionTable[Seconds] + aHalfNanoseconds;
+   mTimeInHalfNanoseconds = long long(aSeconds) * mConversionTable[Seconds] + aHalfNanoseconds;
 }
 
 //******************************************************************************
@@ -195,7 +195,7 @@ bool Time::isZero()
 
 Time Time::operator+(TimeDuration aRight) const
 {
-   Uint64 aRightInHalfNanoSeconds = Uint64(aRight.inNanoseconds()) << 1;
+   unsigned long long aRightInHalfNanoSeconds = unsigned long long(aRight.inNanoseconds()) << 1;
    return Time( mTimeInHalfNanoseconds + aRightInHalfNanoSeconds );
 }
 
@@ -203,20 +203,20 @@ Time Time::operator+(TimeDuration aRight) const
 
 Time operator+(TimeDuration aLeft, Time aRight) 
 {
-   return(Time( (Uint64(aLeft.inNanoseconds()) << 1) + aRight.mTimeInHalfNanoseconds));
+   return(Time( (unsigned long long(aLeft.inNanoseconds()) << 1) + aRight.mTimeInHalfNanoseconds));
 }
 
 //******************************************************************************
 
 Time Time::operator+=(TimeDuration aRight)
 {
-   mTimeInHalfNanoseconds += (Uint64(aRight.inNanoseconds()) << 1);
+   mTimeInHalfNanoseconds += (unsigned long long(aRight.inNanoseconds()) << 1);
    return *this;
 }
 
 //******************************************************************************
 
-void Time::addNanoseconds(Uint64 aNanoseconds)
+void Time::addNanoseconds(unsigned long long aNanoseconds)
 {
    mTimeInHalfNanoseconds += (aNanoseconds << 1);
 }
@@ -232,7 +232,7 @@ TimeDuration Time::operator-(Time aRight) const
 
 Time Time::operator-(TimeDuration aRight) const
 {
-   Int64 aRightInHalfNanoSeconds = Uint64(aRight.inNanoseconds()) << 1;
+   long long aRightInHalfNanoSeconds = unsigned long long(aRight.inNanoseconds()) << 1;
    return Time( mTimeInHalfNanoseconds - aRightInHalfNanoSeconds );
 }
 
@@ -240,7 +240,7 @@ Time Time::operator-(TimeDuration aRight) const
 
 Time Time::operator-=(TimeDuration aRight)
 {
-   Int64 aRightInHalfNanoSeconds = Uint64(aRight.inNanoseconds()) << 1;
+   long long aRightInHalfNanoSeconds = unsigned long long(aRight.inNanoseconds()) << 1;
    mTimeInHalfNanoseconds -= aRightInHalfNanoSeconds;
    return *this;
 }

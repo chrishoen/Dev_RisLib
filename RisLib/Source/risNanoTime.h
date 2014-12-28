@@ -2,7 +2,7 @@
 #define _RISTIMEREP_H_
 /*==============================================================================
 Nanosecond time representation and conversions.
-Time representation is Int64, with LSB of 1 nanosecond
+Time representation is long long, with LSB of 1 nanosecond
 ==============================================================================*/
 
 #include <time.h>
@@ -18,32 +18,32 @@ namespace NanoTime
    //---------------------------------------------------------------------------
    // Unit conversions
 
-   Int64  getNsFromSec  (double aTimeSec);
-   Int64  getNsFromMs   (int    aTimeMs);
-   Int64  getNsFromUs   (int    aTimeUs);
+   long long  getNsFromSec  (double aTimeSec);
+   long long  getNsFromMs   (int    aTimeMs);
+   long long  getNsFromUs   (int    aTimeUs);
 
-   double getSecFromNs  (Int64  aTimeNs);
-   int    getMsFromNs   (Int64  aTimeNs);
-   int    getUsFromNs   (Int64  aTimeNs);
+   double getSecFromNs  (long long  aTimeNs);
+   int    getMsFromNs   (long long  aTimeNs);
+   int    getUsFromNs   (long long  aTimeNs);
    
    //---------------------------------------------------------------------------
    // timespec conversions
 
-   void getNsFromTimespec (Int64&  aTimeNs, void* aTimespec);
-   void getTimespecFromNs (void* aTimespec, Int64 aTimeNs);
+   void getNsFromTimespec (long long&  aTimeNs, void* aTimespec);
+   void getTimespecFromNs (void* aTimespec, long long aTimeNs);
 
    //---------------------------------------------------------------------------
    // tm conversions
 
-   void getNsFromTm (Int64&  aTimeNs, struct tm* aTm);
-   void getTmFromNs (struct tm* aTm,  Int64      aTimeNs);
+   void getNsFromTm (long long&  aTimeNs, struct tm* aTm);
+   void getTmFromNs (struct tm* aTm,  long long      aTimeNs);
 
    //---------------------------------------------------------------------------
    // String conversions
 
-   char* asString1(Int64 aTimeNs,char* aString);
-   char* asString2(Int64 aTimeNs,char* aString);
-   char* asString3(Int64 aTimeNs,char* aString);
+   char* asString1(long long aTimeNs,char* aString);
+   char* asString2(long long aTimeNs,char* aString);
+   char* asString3(long long aTimeNs,char* aString);
 
 }//namespace
 }//namespace

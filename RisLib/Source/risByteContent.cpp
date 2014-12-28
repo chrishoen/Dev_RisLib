@@ -549,7 +549,7 @@ bool ByteBuffer::getFromBuffer (ByteContent* content)
 // pointer. 
 
 //******************************************************************************
-// Uint16
+// unsigned short
 
 bool ByteBuffer::put (void* pItem, int pItemSizeInBytes) 
 {
@@ -630,41 +630,43 @@ bool ByteBuffer::get (void* pItem, int pItemSizeInBytes)
 }
 
 
-bool ByteBuffer::putItem (Uint08  item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Uint08* item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (unsigned char  item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (unsigned char* item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Uint16  item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Uint16* item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (unsigned short  item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (unsigned short* item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Uint32  item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Uint32* item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (unsigned int  item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (unsigned int* item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Uint64  item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Uint64* item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (unsigned long long  item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (unsigned long long* item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Int08   item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Int08*  item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (char   item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (char*  item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Int16   item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Int16*  item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (short   item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (short*  item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Int32   item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Int32*  item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (int   item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (int*  item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Int64   item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Int64*  item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (long long   item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (long long*  item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Real32  item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Real32* item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (float  item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (float* item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (Real64  item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (Real64* item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (double
+  item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (double
+* item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (bool    flag) {Uint08 t = flag ? 1 : 0; return put(&t,sizeof(t));}
-bool ByteBuffer::getItem (bool*   flag) {Uint08 t; bool s = get(&t,sizeof(t));*flag = (t!=0);return s;}
+bool ByteBuffer::putItem (bool    flag) {unsigned char t = flag ? 1 : 0; return put(&t,sizeof(t));}
+bool ByteBuffer::getItem (bool*   flag) {unsigned char t; bool s = get(&t,sizeof(t));*flag = (t!=0);return s;}
 
-bool ByteBuffer::put24 (Uint32    item) {return put (&item, 3);}  // 24 bit
-bool ByteBuffer::get24 (Uint32*   item) {return get ( item, 3);}  // 24 bit
+bool ByteBuffer::put24 (unsigned int    item) {return put (&item, 3);}  // 24 bit
+bool ByteBuffer::get24 (unsigned int*   item) {return get ( item, 3);}  // 24 bit
 
 bool ByteBuffer::putEnum (int     item) {return put (&item, sizeof(item));}
 bool ByteBuffer::getEnum (int*    item) {return get ( item, sizeof(*item));}
@@ -870,7 +872,7 @@ bool ByteBuffer::putBitArray (bool* bitArray,int numOfBits,int offset)
 
    // copy the bit values into the byte buffer
    int    srcIndex   = 0;
-   Uint08 dstMask    = (1<<offset);
+   unsigned char dstMask    = (1<<offset);
    int    dstBytePos = 0;
 
    for (int bitIndex=0;bitIndex<numOfBits;bitIndex++)
@@ -925,7 +927,7 @@ bool ByteBuffer::getBitArray (bool* bitArray,int numOfBits,int offset)
 
 
    // copy the bit values into the byte buffer
-   Uint08 srcMask    = (1<<offset);
+   unsigned char srcMask    = (1<<offset);
    int    srcBytePos = 0;
 
    for (int dstIndex=0;dstIndex<numOfBits;dstIndex++)
@@ -952,7 +954,7 @@ bool ByteBuffer::getBitArray (bool* bitArray,int numOfBits,int offset)
 //******************************************************************************
 // bit values
 
-bool ByteBuffer::putBitValues (Uint32* bitValues,int numOfBits,int offset) 
+bool ByteBuffer::putBitValues (unsigned int* bitValues,int numOfBits,int offset) 
 {
    // guard
    if(bitValues==0)
@@ -973,8 +975,8 @@ bool ByteBuffer::putBitValues (Uint32* bitValues,int numOfBits,int offset)
 
 
    // copy the bit values into the byte buffer
-   Uint32 srcMask = (1<<(numOfBits-1));
-   Uint08 dstMask = (1<<offset);
+   unsigned int srcMask = (1<<(numOfBits-1));
+   unsigned char dstMask = (1<<offset);
    int dstBytePos = 0;
 
    for (int bitIndex=0;bitIndex<numOfBits;bitIndex++)
@@ -1008,7 +1010,7 @@ bool ByteBuffer::putBitValues (Uint32* bitValues,int numOfBits,int offset)
 
 //---------------------------------------------
 
-bool ByteBuffer::getBitValues (Uint32* bitValues,int numOfBits,int offset) 
+bool ByteBuffer::getBitValues (unsigned int* bitValues,int numOfBits,int offset) 
 {
    // guard
    if(bitValues==0)
@@ -1029,8 +1031,8 @@ bool ByteBuffer::getBitValues (Uint32* bitValues,int numOfBits,int offset)
 
 
    // copy the bit values into the byte buffer
-   Uint32 dstMask = (1<<(numOfBits-1));
-   Uint08 srcMask = (1<<offset);
+   unsigned int dstMask = (1<<(numOfBits-1));
+   unsigned char srcMask = (1<<offset);
    int srcBytePos = 0;
 
    for (int bitIndex=0;bitIndex<numOfBits;bitIndex++)
@@ -1067,10 +1069,10 @@ bool ByteBuffer::getBitValues (Uint32* bitValues,int numOfBits,int offset)
 //******************************************************************************
 // Helpers
 
-void ByteBuffer::convertBitArrayTo    (bool* bitArray,Uint16& x)
+void ByteBuffer::convertBitArrayTo    (bool* bitArray,unsigned short& x)
 {
    x=0;
-   Uint16 mask=1;
+   unsigned short mask=1;
    for (int i=0;i<16;i++)
    {
       if (bitArray[i])
@@ -1082,9 +1084,9 @@ void ByteBuffer::convertBitArrayTo    (bool* bitArray,Uint16& x)
 
 }
 
-void ByteBuffer::convertBitArrayFrom    (bool* bitArray,Uint16& x)
+void ByteBuffer::convertBitArrayFrom    (bool* bitArray,unsigned short& x)
 {
-   Uint16 mask=1;
+   unsigned short mask=1;
    for (int i=0;i<16;i++)
    {
       bitArray[i] = (x & mask)!=0;
@@ -1093,10 +1095,10 @@ void ByteBuffer::convertBitArrayFrom    (bool* bitArray,Uint16& x)
 
 }
 
-void ByteBuffer::convertBitArrayTo    (bool* bitArray,Uint32& x)
+void ByteBuffer::convertBitArrayTo    (bool* bitArray,unsigned int& x)
 {
    x=0;
-   Uint32 mask=1;
+   unsigned int mask=1;
    for (int i=0;i<32;i++)
    {
       if (bitArray[i])
@@ -1108,9 +1110,9 @@ void ByteBuffer::convertBitArrayTo    (bool* bitArray,Uint32& x)
 
 }
 
-void ByteBuffer::convertBitArrayFrom    (bool* bitArray,Uint32& x)
+void ByteBuffer::convertBitArrayFrom    (bool* bitArray,unsigned int& x)
 {
-   Uint32 mask=1;
+   unsigned int mask=1;
    for (int i=0;i<32;i++)
    {
       bitArray[i] = (x & mask)!=0;
@@ -1126,7 +1128,7 @@ void ByteBuffer::convertBitArrayFrom    (bool* bitArray,Uint32& x)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (Uint08* item) 
+bool ByteBuffer::copy (unsigned char* item) 
 {
    if(item==0)
    {
@@ -1146,7 +1148,7 @@ bool ByteBuffer::copy (Uint08* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (Uint16* item) 
+bool ByteBuffer::copy (unsigned short* item) 
 {
    if(item==0)
    {
@@ -1165,27 +1167,7 @@ bool ByteBuffer::copy (Uint16* item)
 }
 //--------------------------------------
 
-bool ByteBuffer::copy (Uint32* item) 
-{
-   if(item==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   if (mCopyDirection==COPY_TO)
-   {
-      return putItem(*item);
-   }
-   else
-   {
-      return getItem(item);  
-   }
-}
-
-//--------------------------------------
-
-bool ByteBuffer::copy (Uint64* item) 
+bool ByteBuffer::copy (unsigned int* item) 
 {
    if(item==0)
    {
@@ -1205,7 +1187,7 @@ bool ByteBuffer::copy (Uint64* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (Int08* item) 
+bool ByteBuffer::copy (unsigned long long* item) 
 {
    if(item==0)
    {
@@ -1225,7 +1207,7 @@ bool ByteBuffer::copy (Int08* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (Int16* item) 
+bool ByteBuffer::copy (char* item) 
 {
    if(item==0)
    {
@@ -1245,7 +1227,7 @@ bool ByteBuffer::copy (Int16* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (Int32* item) 
+bool ByteBuffer::copy (short* item) 
 {
    if(item==0)
    {
@@ -1265,7 +1247,7 @@ bool ByteBuffer::copy (Int32* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (Int64* item) 
+bool ByteBuffer::copy (int* item) 
 {
    if(item==0)
    {
@@ -1285,7 +1267,7 @@ bool ByteBuffer::copy (Int64* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (Real32* item) 
+bool ByteBuffer::copy (long long* item) 
 {
    if(item==0)
    {
@@ -1305,7 +1287,28 @@ bool ByteBuffer::copy (Real32* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (Real64* item) 
+bool ByteBuffer::copy (float* item) 
+{
+   if(item==0)
+   {
+      mError=ByteErrorCode::BAD_POINTER;
+      return false;
+   }
+
+   if (mCopyDirection==COPY_TO)
+   {
+      return putItem(*item);
+   }
+   else
+   {
+      return getItem(item);  
+   }
+}
+
+//--------------------------------------
+
+bool ByteBuffer::copy (double
+* item) 
 {
    if(item==0)
    {
@@ -1345,7 +1348,7 @@ bool ByteBuffer::copy (bool* flag)
 
 //--------------------------------------
 
-bool ByteBuffer::copy24 (Uint32* item) 
+bool ByteBuffer::copy24 (unsigned int* item) 
 {
    if(item==0)
    {
@@ -1445,7 +1448,7 @@ bool ByteBuffer::copyFString2 (char* string,int fixedSize)
 
 //--------------------------------------
 
-bool ByteBuffer::copyZString (Uint08* string,int upperBound) 
+bool ByteBuffer::copyZString (unsigned char* string,int upperBound) 
 {
    if(string==0)
    {
@@ -1465,7 +1468,7 @@ bool ByteBuffer::copyZString (Uint08* string,int upperBound)
 
 //--------------------------------------
 
-bool ByteBuffer::copyFString (Uint08* string,int fixedSize) 
+bool ByteBuffer::copyFString (unsigned char* string,int fixedSize) 
 {
    if(string==0)
    {
@@ -1485,7 +1488,7 @@ bool ByteBuffer::copyFString (Uint08* string,int fixedSize)
 
 //--------------------------------------
 
-bool ByteBuffer::copyFString2 (Uint08* string,int fixedSize) 
+bool ByteBuffer::copyFString2 (unsigned char* string,int fixedSize) 
 {
    if(string==0)
    {
@@ -1519,7 +1522,7 @@ bool ByteBuffer::copyBitArray (bool* bitArray,int numOfBits,int offset)
 
 //--------------------------------------
 
-bool ByteBuffer::copyBitValues (Uint32* bitValues,int numOfBits,int offset) 
+bool ByteBuffer::copyBitValues (unsigned int* bitValues,int numOfBits,int offset) 
 {
    if (mCopyDirection==COPY_TO)
    {
@@ -1537,11 +1540,11 @@ bool ByteBuffer::copyBitValues (int* bitValues,int numOfBits,int offset)
 {
    if (mCopyDirection==COPY_TO)
    {
-      return putBitValues((Uint32*)bitValues,numOfBits,offset);
+      return putBitValues((unsigned int*)bitValues,numOfBits,offset);
    }
    else
    {
-      return getBitValues((Uint32*)bitValues,numOfBits,offset);  
+      return getBitValues((unsigned int*)bitValues,numOfBits,offset);  
    }
 }
 
@@ -1572,7 +1575,7 @@ bool ByteBuffer::copy (ByteContent* content)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Uint08* item) 
+bool ByteBuffer::copy (int index, unsigned char* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
@@ -1580,22 +1583,14 @@ bool ByteBuffer::copy (int index, Uint08* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Uint16* item) 
+bool ByteBuffer::copy (int index, unsigned short* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
 }
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Uint32* item) 
-{
-   if (!setPosition(index)) return false;
-   return copy(item);
-}
-
-//--------------------------------------
-
-bool ByteBuffer::copy (int index, Uint64* item) 
+bool ByteBuffer::copy (int index, unsigned int* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
@@ -1603,7 +1598,7 @@ bool ByteBuffer::copy (int index, Uint64* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Int08* item) 
+bool ByteBuffer::copy (int index, unsigned long long* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
@@ -1611,7 +1606,7 @@ bool ByteBuffer::copy (int index, Int08* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Int16* item) 
+bool ByteBuffer::copy (int index, char* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
@@ -1619,7 +1614,7 @@ bool ByteBuffer::copy (int index, Int16* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Int32* item) 
+bool ByteBuffer::copy (int index, short* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
@@ -1627,7 +1622,7 @@ bool ByteBuffer::copy (int index, Int32* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Int64* item) 
+bool ByteBuffer::copy (int index, int* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
@@ -1635,7 +1630,7 @@ bool ByteBuffer::copy (int index, Int64* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Real32* item) 
+bool ByteBuffer::copy (int index, long long* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
@@ -1643,7 +1638,16 @@ bool ByteBuffer::copy (int index, Real32* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, Real64* item) 
+bool ByteBuffer::copy (int index, float* item) 
+{
+   if (!setPosition(index)) return false;
+   return copy(item);
+}
+
+//--------------------------------------
+
+bool ByteBuffer::copy (int index, double
+* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);
@@ -1659,7 +1663,7 @@ bool ByteBuffer::copy (int index, bool* flag)
 
 //--------------------------------------
 
-bool ByteBuffer::copy24 (int index, Uint32* item) 
+bool ByteBuffer::copy24 (int index, unsigned int* item) 
 {
    if (!setPosition(index)) return false;
    return copy24(item);
@@ -1699,7 +1703,7 @@ bool ByteBuffer::copyFString2 (int index, char* string,int fixedSize)
 
 //--------------------------------------
 
-bool ByteBuffer::copyZString (int index, Uint08* string,int upperBound) 
+bool ByteBuffer::copyZString (int index, unsigned char* string,int upperBound) 
 {
    if (!setPosition(index)) return false;
    return copyZString(string,upperBound);
@@ -1707,7 +1711,7 @@ bool ByteBuffer::copyZString (int index, Uint08* string,int upperBound)
 
 //--------------------------------------
 
-bool ByteBuffer::copyFString (int index, Uint08* string,int fixedSize) 
+bool ByteBuffer::copyFString (int index, unsigned char* string,int fixedSize) 
 {
    if (!setPosition(index)) return false;
    return copyFString(string,fixedSize);
@@ -1715,7 +1719,7 @@ bool ByteBuffer::copyFString (int index, Uint08* string,int fixedSize)
 
 //--------------------------------------
 
-bool ByteBuffer::copyFString2 (int index, Uint08* string,int fixedSize) 
+bool ByteBuffer::copyFString2 (int index, unsigned char* string,int fixedSize) 
 {
    if (!setPosition(index)) return false;
    return copyFString2(string,fixedSize);
@@ -1731,7 +1735,7 @@ bool ByteBuffer::copyBitArray (int index, bool* bitArray,int numOfBits,int offse
 
 //--------------------------------------
 
-bool ByteBuffer::copyBitValues (int index, Uint32* bitValues,int numOfBits,int offset) 
+bool ByteBuffer::copyBitValues (int index, unsigned int* bitValues,int numOfBits,int offset) 
 {
    if (!setPosition(index)) return false;
    return copyBitValues(bitValues,numOfBits,offset);

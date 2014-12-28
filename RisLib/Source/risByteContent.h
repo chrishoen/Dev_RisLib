@@ -247,29 +247,30 @@ public:
    // item from the byte buffer, based on the value of the
    // buffer copy direction flag.
 
-   bool copy (Uint08* item);
-   bool copy (Uint16* item);
-   bool copy (Uint32* item);
-   bool copy (Uint64* item);
-   bool copy (Int08*  item);
-   bool copy (Int16*  item);
-   bool copy (Int32*  item);
-   bool copy (Int64*  item);
-   bool copy (Real32* item);
-   bool copy (Real64* item);
+   bool copy (unsigned char* item);
+   bool copy (unsigned short* item);
+   bool copy (unsigned int* item);
+   bool copy (unsigned long long* item);
+   bool copy (char*  item);
+   bool copy (short*  item);
+   bool copy (int*  item);
+   bool copy (long long*  item);
+   bool copy (float* item);
+   bool copy (double
+* item);
    bool copy (bool* item);
    bool copy (ByteContent* content);
 
-   bool copy24        (Uint32* item);
+   bool copy24        (unsigned int* item);
    bool copyEnum      (int*    item);
    bool copyZString   (char*   string,int upperBound);
    bool copyFString   (char*   string,int fixedSize);
    bool copyFString2  (char*   string,int fixedSize);
-   bool copyZString   (Uint08* string,int upperBound);
-   bool copyFString   (Uint08* string,int fixedSize);
-   bool copyFString2  (Uint08* string,int fixedSize);
+   bool copyZString   (unsigned char* string,int upperBound);
+   bool copyFString   (unsigned char* string,int fixedSize);
+   bool copyFString2  (unsigned char* string,int fixedSize);
    bool copyBitArray  (bool*   bitArray, int numOfBits,int offset=0);
-   bool copyBitValues (Uint32* bitValues,int numOfBits,int offset=7);
+   bool copyBitValues (unsigned int* bitValues,int numOfBits,int offset=7);
    bool copyBitValues (int*    bitValues,int numOfBits,int offset=7);
 
    //-------------------------------------------------------------
@@ -277,36 +278,37 @@ public:
    //
    // These do the same as the above, but at a fixed buffer index.
 
-   bool copy (int index, Uint08* item);
-   bool copy (int index, Uint16* item);
-   bool copy (int index, Uint32* item);
-   bool copy (int index, Uint64* item);
-   bool copy (int index, Int08*  item);
-   bool copy (int index, Int16*  item);
-   bool copy (int index, Int32*  item);
-   bool copy (int index, Int64*  item);
-   bool copy (int index, Real32* item);
-   bool copy (int index, Real64* item);
+   bool copy (int index, unsigned char* item);
+   bool copy (int index, unsigned short* item);
+   bool copy (int index, unsigned int* item);
+   bool copy (int index, unsigned long long* item);
+   bool copy (int index, char*  item);
+   bool copy (int index, short*  item);
+   bool copy (int index, int*  item);
+   bool copy (int index, long long*  item);
+   bool copy (int index, float* item);
+   bool copy (int index, double
+* item);
    bool copy (int index, bool* item);
    bool copy (int index, ByteContent* content);
 
-   bool copy24        (int index, Uint32* item);
+   bool copy24        (int index, unsigned int* item);
    bool copyEnum      (int index, int*    item);
    bool copyZString   (int index, char*   string,int upperBound);
    bool copyFString   (int index, char*   string,int fixedSize);
    bool copyFString2  (int index, char*   string,int fixedSize);
-   bool copyZString   (int index, Uint08* string,int upperBound);
-   bool copyFString   (int index, Uint08* string,int fixedSize);
-   bool copyFString2  (int index, Uint08* string,int fixedSize);
+   bool copyZString   (int index, unsigned char* string,int upperBound);
+   bool copyFString   (int index, unsigned char* string,int fixedSize);
+   bool copyFString2  (int index, unsigned char* string,int fixedSize);
    bool copyBitArray  (int index, bool*   bitArray, int numOfBits,int offset=0);
-   bool copyBitValues (int index, Uint32* bitValues,int numOfBits,int offset=7);
+   bool copyBitValues (int index, unsigned int* bitValues,int numOfBits,int offset=7);
    bool copyBitValues (int index, int*    bitValues,int numOfBits,int offset=7);
 
    // helpers
-   static void convertBitArrayTo    (bool* bitArray,Uint16& x);
-   static void convertBitArrayFrom  (bool* bitArray,Uint16& x);
-   static void convertBitArrayTo    (bool* bitArray,Uint32& x);
-   static void convertBitArrayFrom  (bool* bitArray,Uint32& x);
+   static void convertBitArrayTo    (bool* bitArray,unsigned short& x);
+   static void convertBitArrayFrom  (bool* bitArray,unsigned short& x);
+   static void convertBitArrayTo    (bool* bitArray,unsigned int& x);
+   static void convertBitArrayFrom  (bool* bitArray,unsigned int& x);
 
    //ZString is a null terminated string with an upper bound
    //FString is a fixed size string
@@ -340,31 +342,33 @@ public:
    bool put (void* pItem, int pItemSizeInBytes);
    bool get (void* pItem, int pItemSizeInBytes);
 
-   bool putItem (Uint08  item);
-   bool putItem (Uint16  item);
-   bool putItem (Uint32  item);
-   bool putItem (Uint64  item);
+   bool putItem (unsigned char  item);
+   bool putItem (unsigned short  item);
+   bool putItem (unsigned int  item);
+   bool putItem (unsigned long long  item);
 
-   bool putItem (Int08   item);
-   bool putItem (Int16   item);
-   bool putItem (Int32   item);
-   bool putItem (Int64   item);
+   bool putItem (char   item);
+   bool putItem (short   item);
+   bool putItem (int   item);
+   bool putItem (long long   item);
 
-   bool putItem (Real32  item);
-   bool putItem (Real64  item);
+   bool putItem (float  item);
+   bool putItem (double
+  item);
 
-   bool getItem (Uint08* item);
-   bool getItem (Uint16* item);
-   bool getItem (Uint32* item);
-   bool getItem (Uint64* item);
+   bool getItem (unsigned char* item);
+   bool getItem (unsigned short* item);
+   bool getItem (unsigned int* item);
+   bool getItem (unsigned long long* item);
 
-   bool getItem (Int08*  item);
-   bool getItem (Int16*  item);
-   bool getItem (Int32*  item);
-   bool getItem (Int64*  item);
+   bool getItem (char*  item);
+   bool getItem (short*  item);
+   bool getItem (int*  item);
+   bool getItem (long long*  item);
 
-   bool getItem (Real32* item);
-   bool getItem (Real64* item);
+   bool getItem (float* item);
+   bool getItem (double
+* item);
 
    //-------------------------------------------------------------
    // put and get operations for some other types.
@@ -372,8 +376,8 @@ public:
    bool putItem (bool  item);
    bool getItem (bool* item);
 
-   bool put24   (Uint32  item);
-   bool get24   (Uint32* item);
+   bool put24   (unsigned int  item);
+   bool get24   (unsigned int* item);
 
    bool putEnum (int  item);
    bool getEnum (int* item);
@@ -388,8 +392,8 @@ public:
    bool putBitArray  (bool*   bitArray, int numOfBits,int offset=0);
    bool getBitArray  (bool*   bitArray, int numOfBits,int offset=0);
 
-   bool putBitValues (Uint32* bitValues,int numOfBits,int offset=7);
-   bool getBitValues (Uint32* bitValues,int numOfBits,int offset=7);
+   bool putBitValues (unsigned int* bitValues,int numOfBits,int offset=7);
+   bool getBitValues (unsigned int* bitValues,int numOfBits,int offset=7);
 
 protected:
 
@@ -477,8 +481,8 @@ template <unsigned cByteSize> class ByteBlock : public ByteContent
 public:
    ByteBlock() : mNumOfBytes(0){}
 
-   Int32  mNumOfBytes;
-   Uint08 mBytes[cByteSize];
+   int  mNumOfBytes;
+   unsigned char mBytes[cByteSize];
 
    void copyToFrom (ByteBuffer* aBuffer)
    {
@@ -489,7 +493,7 @@ public:
    void put (void* aBytes,int aNumOfBytes)
    {
       if (aNumOfBytes>cByteSize) aNumOfBytes=cByteSize;
-      Uint08* tBytes = (Uint08*)aBytes;
+      unsigned char* tBytes = (unsigned char*)aBytes;
       for (int i=0;i<aNumOfBytes;i++) mBytes[i]=tBytes[i];
       mNumOfBytes = aNumOfBytes;
    }
@@ -497,7 +501,7 @@ public:
    void get (void* aBytes,int* aNumOfBytes=0)
    {
       if (mNumOfBytes>cByteSize) mNumOfBytes=0;
-      Uint08* tBytes = (Uint08*)aBytes;
+      unsigned char* tBytes = (unsigned char*)aBytes;
       for (int i=0;i<mNumOfBytes;i++) tBytes[i]=mBytes[i];
       if (aNumOfBytes) *aNumOfBytes = mNumOfBytes;
    }
@@ -511,7 +515,7 @@ template <unsigned StringSize> class FString : public ByteContent
 public:
    FString() {mPtr=(char*)&mBytes[0];}
 
-   Uint08 mBytes[StringSize];
+   unsigned char mBytes[StringSize];
 
    void copyToFrom (ByteBuffer* aBuffer)
    {

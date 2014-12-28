@@ -25,7 +25,7 @@ enum Units
    Units_Ns    // Nanoseconds
 };
 
-Int64 rNsPerUnit[4] = {1000*1000*1000,1000*1000,1000,1};
+long long rNsPerUnit[4] = {1000*1000*1000,1000*1000,1000,1};
 
 //******************************************************************************
 //******************************************************************************
@@ -43,37 +43,37 @@ struct my_timespec {
 // Unit conversions
 
 // Nanoseconds from seconds
-Int64  getNsFromSec  (double aTimeSec)
+long long  getNsFromSec  (double aTimeSec)
 {
-   return (Int64)(aTimeSec*rNsPerUnit[Units_Sec]);
+   return (long long)(aTimeSec*rNsPerUnit[Units_Sec]);
 }
 
 // Nanoseconds from milliseconds
-Int64  getNsFromMs   (int    aTimeMs)
+long long  getNsFromMs   (int    aTimeMs)
 {
-   return (Int64)(aTimeMs*rNsPerUnit[Units_Ms]);
+   return (long long)(aTimeMs*rNsPerUnit[Units_Ms]);
 }
 
 // Nanoseconds from microseconds
-Int64  getNsFromUs   (int    aTimeUs)
+long long  getNsFromUs   (int    aTimeUs)
 {
-   return (Int64)(aTimeUs*rNsPerUnit[Units_Us]);
+   return (long long)(aTimeUs*rNsPerUnit[Units_Us]);
 }
 
 // Seconds from nanoseconds
-double getSecFromNs  (Int64  aTimeNs)
+double getSecFromNs  (long long  aTimeNs)
 {
    return (double)(aTimeNs/rNsPerUnit[Units_Sec]);
 }
 
 // Milliseconds from nanoseconds
-int    getMsFromNs   (Int64  aTimeNs)
+int    getMsFromNs   (long long  aTimeNs)
 {
    return (int)(aTimeNs/rNsPerUnit[Units_Ms]);
 }
 
 // Microseconds from nanoseconds
-int    getUsFromNs   (Int64  aTimeNs)
+int    getUsFromNs   (long long  aTimeNs)
 {
    return (int)(aTimeNs/rNsPerUnit[Units_Us]);
 }
@@ -83,14 +83,14 @@ int    getUsFromNs   (Int64  aTimeNs)
 //******************************************************************************
 // timespec conversions
 
-void getNsFromTimespec (Int64&  aTimeNs, void* aTimespec)
+void getNsFromTimespec (long long&  aTimeNs, void* aTimespec)
 {
    my_timespec tTimespec;
    memcpy((void*)&tTimespec,aTimespec,sizeof(my_timespec));
-   aTimeNs = (Int64)(tTimespec.tv_sec)*rNsPerUnit[Units_Sec] + (Int64)tTimespec.tv_nsec;
+   aTimeNs = (long long)(tTimespec.tv_sec)*rNsPerUnit[Units_Sec] + (long long)tTimespec.tv_nsec;
 }
 
-void getTimespecFromNs (void* aTimespec, Int64 aTimeNs)
+void getTimespecFromNs (void* aTimespec, long long aTimeNs)
 {
    my_timespec* tTimespec = (my_timespec*)aTimespec;
    tTimespec->tv_sec   = (int)(aTimeNs / rNsPerUnit[Units_Sec]);
@@ -103,7 +103,7 @@ void getTimespecFromNs (void* aTimespec, Int64 aTimeNs)
 //******************************************************************************
 // tm conversions
 
-void getNsFromTm (Int64&  aTimeNs, struct tm* aTm)
+void getNsFromTm (long long&  aTimeNs, struct tm* aTm)
 {
    my_timespec tTimespec;
    tTimespec.tv_sec  = mktime(aTm);
@@ -112,7 +112,7 @@ void getNsFromTm (Int64&  aTimeNs, struct tm* aTm)
    getNsFromTimespec(aTimeNs,&tTimespec);
 }
 
-void getTmFromNs (struct tm* aTm,  Int64 aTimeNs)
+void getTmFromNs (struct tm* aTm,  long long aTimeNs)
 {
    my_timespec tTimespec;
    getTimespecFromNs(&tTimespec,aTimeNs);

@@ -157,7 +157,7 @@ void TimeDuration::setNanoseconds(double pTimeInNanoseconds)
 
 //******************************************************************************
 
-void TimeDuration::setNanoseconds(Int64 pTimeInNanoseconds)
+void TimeDuration::setNanoseconds(long long pTimeInNanoseconds)
 {
    mTimeDurationInNanoseconds = double(pTimeInNanoseconds);
 }
@@ -222,7 +222,7 @@ void TimeDuration::fromString(char* aString)
 
 //******************************************************************************
 
-void TimeDuration::setNs(Int64 pTimeInNanoseconds)
+void TimeDuration::setNs(long long pTimeInNanoseconds)
 {
    mTimeDurationInNanoseconds = double(pTimeInNanoseconds);
 }

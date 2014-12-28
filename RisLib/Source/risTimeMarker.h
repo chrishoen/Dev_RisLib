@@ -46,8 +46,8 @@ public:
    //------------------------------------------------
    // Content
 
-   Ris::Int64 mBegin;
-   Ris::Int64 mEnd;
+   long long mBegin;
+   long long mEnd;
    double     mPerformanceFrequency;
 
    // Content

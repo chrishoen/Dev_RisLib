@@ -41,7 +41,7 @@ void Ris::TimeMarker::doBegin()
 double Ris::TimeMarker::elapsedTimeInSeconds()
 {
    double delta;
-   Int64 tEnd = portableGetHiResCounter();
+   long long tEnd = portableGetHiResCounter();
 
    delta = ((double)(tEnd-mBegin))/mPerformanceFrequency ;
    return delta;
@@ -52,7 +52,7 @@ double Ris::TimeMarker::elapsedTimeInSeconds()
 double Ris::TimeMarker::elapsedTimeInMilliseconds()
 {
    double delta;
-   Int64 tEnd = portableGetHiResCounter();
+   long long tEnd = portableGetHiResCounter();
 
    delta = ((double)(tEnd-mBegin))/mPerformanceFrequency ;
    return delta*1000.0;
@@ -63,7 +63,7 @@ double Ris::TimeMarker::elapsedTimeInMilliseconds()
 double Ris::TimeMarker::elapsedTimeInMicroseconds()
 {
    double delta;
-   Int64 tEnd = portableGetHiResCounter();
+   long long tEnd = portableGetHiResCounter();
 
    delta = ((double)(tEnd-mBegin))/mPerformanceFrequency ;
    return delta*1000000.0;

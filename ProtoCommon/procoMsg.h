@@ -95,21 +95,21 @@ public:
    //------------------------------------------------
    // Header Content
 
-   Ris::Int32   mSyncWord1;
-   Ris::Int32   mSyncWord2;
-   Ris::Int32   mMessageType;
-   Ris::Int32   mMessageLength;
-   Ris::Int32   mFamily;
-   Ris::Int32   mSourceId;
-   Ris::Int32   mDestinationId;
+   int   mSyncWord1;
+   int   mSyncWord2;
+   int   mMessageType;
+   int   mMessageLength;
+   int   mFamily;
+   int   mSourceId;
+   int   mDestinationId;
 
    // Header Content
    //------------------------------------------------
 
    enum {Length = 28};
 
-   Ris::Int32   mSyncWord3;
-   Ris::Int32   mSyncWord4;
+   int   mSyncWord3;
+   int   mSyncWord4;
 
    //--------------------------------------------------------------------------
    // If the byte buffer is configured for put operations then this puts the
@@ -262,10 +262,10 @@ public:
    //------------------------------------------------
    // Content
 
-   Ris::Int32 mCode1;
-   Ris::Int32 mCode2;
+   int mCode1;
+   int mCode2;
    enum {DataSize=1000-8};
-   Ris::Uint08 mData[DataSize];
+   unsigned char mData[DataSize];
 
    // Content
    //------------------------------------------------
@@ -283,7 +283,7 @@ public:
    //------------------------------------------------
    // Content
 
-   Ris::Int32 mCode1;
+   int mCode1;
 
    // Content
    //------------------------------------------------
@@ -303,14 +303,14 @@ public:
    //------------------------------------------------
    // Content
 
-   Ris::Int32    mCode1;
-   Ris::Int32    mCode2;
-   Ris::Int32    mCode3;
-   Ris::Int32    mCode4;
+   int    mCode1;
+   int    mCode2;
+   int    mCode3;
+   int    mCode4;
 
    enum {MaxWords=1000};
-   Ris::Int32  mNumOfWords;
-   Ris::Int32  mWords[MaxWords];
+   int  mNumOfWords;
+   int  mWords[MaxWords];
 
    Ris::TimeMarker  mTimeMarker;
 
@@ -332,14 +332,14 @@ public:
    //------------------------------------------------
    // Content
 
-   Ris::Int32   mCode1;
-   Ris::Int32   mCode2;
-   Ris::Int32   mCode3;
-   Ris::Int32   mCode4;
+   int   mCode1;
+   int   mCode2;
+   int   mCode3;
+   int   mCode4;
 
    enum {MaxWords=1000};
-   Ris::Int32   mNumOfWords;
-   Ris::Int32   mWords[MaxWords];
+   int   mNumOfWords;
+   int   mWords[MaxWords];
 
    Ris::TimeMarker  mTimeMarker;
 

@@ -1,7 +1,7 @@
 #ifndef _RISTIME_H_
 #define _RISTIME_H_
 /*==============================================================================
-Time class with internal representation of Int64 mTimeInHalfNanoseconds.
+Time class with internal representation of long long mTimeInHalfNanoseconds.
 Time zero corresponds to 00:00:00 1 Jan 1970.
 ==============================================================================*/
 
@@ -44,15 +44,15 @@ public:
    //---------------------------------------------------------------------------
    // Conversions
 
-   void setNanoseconds(Int64 aNanoseconds);
-   void setNs(Int64 aNanoseconds);
-   static Time fromNanoseconds(Ris::Int64 aNanoseconds);
-   static Time fromNs(Ris::Int64 aNanoseconds);
+   void setNanoseconds(long long aNanoseconds);
+   void setNs(long long aNanoseconds);
+   static Time fromNanoseconds(long long aNanoseconds);
+   static Time fromNs(long long aNanoseconds);
    static Time fromNs(double aNanoseconds);
-   Int64 inNanoseconds(void) const;
-   Int64 inNs(void) const;
-   Int64 inHalfNanoseconds(void) const;
-   void setHalfNanoseconds(Int64 aHalfNanoseconds);
+   long long inNanoseconds(void) const;
+   long long inNs(void) const;
+   long long inHalfNanoseconds(void) const;
+   void setHalfNanoseconds(long long aHalfNanoseconds);
    void inSecondsAndHalfNanoseconds(int& aSeconds, int& aHalfNanoseconds) const;
    void setSecondsAndHalfNanoseconds(int aSeconds, int aHalfNanoseconds);
    void setSeconds(int aSeconds);
@@ -72,7 +72,7 @@ public:
    Time operator+(TimeDuration aRight) const;
    friend Time operator+(TimeDuration aLeft, Time aRight);
    Time operator+=(TimeDuration aRight);
-   void addNanoseconds(Ris::Uint64 aNanoseconds);
+   void addNanoseconds(unsigned long long aNanoseconds);
 
    TimeDuration operator-(Time aRight) const;
    Time operator-(TimeDuration aRight) const;
@@ -130,13 +130,13 @@ private:
    //---------------------------------------------------------------------------
    // Members
 
-   Int64 mTimeInHalfNanoseconds;
+   long long mTimeInHalfNanoseconds;
 
-   static const Ris::Int64 mConversionTable[8];
+   static const long long mConversionTable[8];
 
    enum Units {Sec, Ms, Us , Ns, Seconds,  Milliseconds, Microseconds, Nanoseconds};
 
-   explicit Time(Int64 aTimeInHalfNanoseconds)
+   explicit Time(long long aTimeInHalfNanoseconds)
    {
       mTimeInHalfNanoseconds = aTimeInHalfNanoseconds;
    } 

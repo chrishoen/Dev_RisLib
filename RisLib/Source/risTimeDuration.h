@@ -39,9 +39,9 @@ public:
    void setMilliseconds(double pTimeInMilliSeconds);
    void setMicroseconds(double pTimeInMicroSeconds);
    void setNanoseconds(double pTimeInNanoseconds);
-   void setNanoseconds(Ris::Int64 pTimeInNanoseconds);
+   void setNanoseconds(long long pTimeInNanoseconds);
    void setNs(double pTimeInNanoseconds);
-   void setNs(Ris::Int64 pTimeInNanoseconds);
+   void setNs(long long pTimeInNanoseconds);
 
    char* asString   (char* aString);
    void  fromString (char* aString);

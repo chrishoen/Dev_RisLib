@@ -167,8 +167,8 @@ void Header::headerReCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::MessageContent* p
    }
    else
    {
-      Ris::Int32   tSyncWord3;
-      Ris::Int32   tSyncWord4;
+      int   tSyncWord3;
+      int   tSyncWord4;
 
       aBuffer->copy(& tSyncWord3 );
       aBuffer->copy(& tSyncWord4 );

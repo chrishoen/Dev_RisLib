@@ -122,8 +122,8 @@ void CmdLineExec::executeMarker1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeMarker2(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Int64 tFreq  = Ris::portableGetHiResFrequency();
-   Ris::Int64 tCount = Ris::portableGetHiResCounter();
+   long long tFreq  = Ris::portableGetHiResFrequency();
+   long long tCount = Ris::portableGetHiResCounter();
    Prn::print(0,0,"%lld",tFreq);
    Prn::print(0,0,"%lld",tCount);
 }

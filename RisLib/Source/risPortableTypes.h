@@ -13,7 +13,7 @@ typedef char                     Int08;
 typedef unsigned char            Uint08;
 typedef short                    Int16;
 typedef unsigned short           Uint16;
-typedef long                     Int32;
+typedef int                      Int32;
 typedef unsigned int             Uint32;
 typedef long long int            Int64;
 typedef unsigned long long       Uint64;

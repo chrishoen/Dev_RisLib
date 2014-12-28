@@ -81,8 +81,6 @@ public:
 
    bool isMySection(Ris::CmdLineCmd* aCmd);
    bool mSectionFlag;
-
-   int  mAppNumber;
 };
 
 //******************************************************************************

@@ -7,6 +7,7 @@ ServerThread.cpp
 //******************************************************************************
 
 #include "prnPrint.h"
+#include "procoSettings.h"
 
 #define  _PROCOSERVERTHREAD_CPP_
 #include "procoServerThread.h"
@@ -44,20 +45,20 @@ ServerThread::~ServerThread()
 //******************************************************************************
 // This sets configuration members
 
-void ServerThread::configure(int aMyApplicationId, int aPortNumber)
+void ServerThread::configure()
 {
    Prn::print(Prn::ThreadInit,0, "ServerThread::configure");
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
-   mMessageParser->configure(aMyApplicationId);
+   mMessageParser->configure(gSettings.mMyAppNumber);
 
    //--------------------------------------------------------------------------- 
    // Configure child thread, server
 
    mTcpServerThread->configure(
       "0.0.0.0",
-      aPortNumber,
+      gSettings.mTcpServerPort,
       MaxSessions,
       mMessageParser,
       &mSessionQCall,

@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "prnPrint.h"
 
+#include "procoSettings.h"
+#include "procoDefs.h"
 #include "procoMsg.h"
 
 #include "procoNetworkThread.h"
@@ -16,7 +18,6 @@ using namespace ProtoComm;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   mRole=0;
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -25,25 +26,25 @@ void CmdLineExec::reset()
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("SHUTDOWN"  ))  seqShutdown (aCmd);
-   if(aCmd->isCmd("TX"        ))  seqTx       (aCmd);
-   if(aCmd->isCmd("G1"        ))  seqGo1      (aCmd);
+   if(aCmd->isCmd("SHUTDOWN"  ))  executeOnShutdown (aCmd);
+   if(aCmd->isCmd("TX"        ))  executeOnTx       (aCmd);
+   if(aCmd->isCmd("G1"        ))  executeOnGo1      (aCmd);
 }
 //******************************************************************************
-void CmdLineExec::seqShutdown (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
 {
    gNetworkThread->shutdownThread();
 }
 //******************************************************************************
 
-void CmdLineExec::seqTx (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 {
    gNetworkThread->sendTestMsg();
 }
 
 //******************************************************************************
 
-void CmdLineExec::seqGo1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnGo1(Ris::CmdLineCmd* aCmd)
 {
    int tN = aCmd->argInt(1);
    if(tN==0) tN=4;

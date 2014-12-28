@@ -4,7 +4,7 @@
 #include "risCmdLineExec.h"
 
 //******************************************************************************
-// specific command line sequencer
+// specific command line executeOnuencer
 //******************************************************************************
 class CmdLineExec : public Ris::BaseCmdLineExec
 {
@@ -15,11 +15,9 @@ public:
   void reset();
   void execute      (Ris::CmdLineCmd* aCmd);
 
-  void seqShutdown  (Ris::CmdLineCmd* aCmd);
-  void seqTx        (Ris::CmdLineCmd* aCmd);
-  void seqGo1       (Ris::CmdLineCmd* aCmd);
-
-  int mRole;
+  void executeOnShutdown  (Ris::CmdLineCmd* aCmd);
+  void executeOnTx        (Ris::CmdLineCmd* aCmd);
+  void executeOnGo1       (Ris::CmdLineCmd* aCmd);
 
 };
 //******************************************************************************

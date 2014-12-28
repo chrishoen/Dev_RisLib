@@ -5,6 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 #include "prnPrint.h"
+#include "procoSettings.h"
 
 #define  _PROCOCLIENTTHREAD_CPP_
 #include "procoClientThread.h"
@@ -43,20 +44,20 @@ ClientThread::~ClientThread()
 //******************************************************************************
 // This sets configuration members
 
-void ClientThread::configure(int aMyApplicationId, int aPortNumber)
+void ClientThread::configure()
 {
    Prn::print(Prn::ThreadInit,0, "ClientThread::configure");
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
-   mMessageParser->configure(aMyApplicationId);
+   mMessageParser->configure(gSettings.mMyAppNumber);
 
    //---------------------------------------------------------------------------
    // Configure child thread, client
 
    mTcpClientThread->configure(
       "127.0.0.1",
-      aPortNumber,
+      gSettings.mTcpServerPort,
       mMessageParser,
       &mSessionQCall,
       &mRxMsgQCall);
@@ -114,7 +115,7 @@ void ClientThread::executeSession (bool aConnected)
    }
    else
    {
-      Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::notifyForSession NOT CONNECTED");
+      Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::notifyForSession DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;

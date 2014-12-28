@@ -23,7 +23,6 @@ int main(int argc,char** argv)
       ProtoComm::gSettings.initialize(argv[1]);
       ProtoComm::gSettings.show();
    }
-   return 0;
       
    //--------------------------------------------------------------------
    // Launch threads
@@ -31,15 +30,13 @@ int main(int argc,char** argv)
    switch (ProtoComm::gSettings.mMyAppRole)
    {
       case ProtoComm::AR_TcpServer:
-         Ris::setConsoleTitle("ProtoComm Server");
          ProtoComm::gServerThread = new ProtoComm::ServerThread;
-         ProtoComm::gServerThread->configure(101,55001);
+         ProtoComm::gServerThread->configure();
          ProtoComm::gServerThread->launchThread();
          break;
       case ProtoComm::AR_TcpClient:
-         Ris::setConsoleTitle("ProtoComm Client");
          ProtoComm::gClientThread = new ProtoComm::ClientThread;
-         ProtoComm::gClientThread->configure(102,55001);
+         ProtoComm::gClientThread->configure();
          ProtoComm::gClientThread->launchThread();
          break;
    }

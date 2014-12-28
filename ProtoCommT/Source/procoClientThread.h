@@ -59,7 +59,7 @@ public:
    //--------------------------------------------------------------
    // Configure:
 
-   void configure(int aMyApplicationId, int aPortNumber);
+   void configure();
 
 
    //--------------------------------------------------------------

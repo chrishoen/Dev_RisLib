@@ -26,7 +26,6 @@ int main(int argc,char** argv)
       ProtoComm::gSettings.initialize(argv[1]);
       ProtoComm::gSettings.show();
    }
-   return 0;
       
    //--------------------------------------------------------------------
    // Launch threads

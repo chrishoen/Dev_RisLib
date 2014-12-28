@@ -62,7 +62,7 @@ public:
    //--------------------------------------------------------------
    // Configure:
 
-   void configure(int aMyApplicationId, int aPortNumber);
+   void configure();
 
    //--------------------------------------------------------------
    // Thread base class overloads:

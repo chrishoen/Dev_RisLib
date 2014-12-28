@@ -15,15 +15,11 @@ public:
   void reset();
   void execute      (Ris::CmdLineCmd* aCmd);
 
-  void seqShutdown  (Ris::CmdLineCmd* aCmd);
-  void seqTx        (Ris::CmdLineCmd* aCmd);
-  void seqGo1       (Ris::CmdLineCmd* aCmd);
-  void seqTest1     (Ris::CmdLineCmd* aCmd);
-  void seqPeriodic  (Ris::CmdLineCmd* aCmd);
-
-  enum{SERVER_E=1,CLIENT_E=2};
-  int mRole;
-
+  void executeOnShutdown  (Ris::CmdLineCmd* aCmd);
+  void executeOnTx        (Ris::CmdLineCmd* aCmd);
+  void executeOnGo1       (Ris::CmdLineCmd* aCmd);
+  void executeOnTest1     (Ris::CmdLineCmd* aCmd);
+  void executeOnPeriodic  (Ris::CmdLineCmd* aCmd);
 };
 //******************************************************************************
 #endif

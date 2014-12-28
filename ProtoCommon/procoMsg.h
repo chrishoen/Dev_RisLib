@@ -207,6 +207,26 @@ public:
 };
 
 //******************************************************************************
+// This is a message parser creator. It defines a method that creates a new
+// message parser. It is used by transmitters and receivers to create new
+// instances of message parsers.
+
+class MessageParserCreator : public  Ris::BaseMessageParserCreator
+{
+public:
+   // Constructor
+   MessageParserCreator();
+
+   // Members
+   void configure(int aSourceId);
+   int  mSourceId;
+
+   // Base class overload, creates a new message parser and sets some of its 
+   // member variables.
+   Ris::BaseMessageParser* createNew();
+};
+
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Base message class.

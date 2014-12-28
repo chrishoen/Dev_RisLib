@@ -214,7 +214,7 @@ Ris::ByteContent* MessageParser::createMessage(int aMessageType)
 
 //******************************************************************************
 
-void  MessageParser::processBeforeSend(Ris::ByteContent* aMsg)
+void MessageParser::processBeforeSend(Ris::ByteContent* aMsg)
 {
    BaseMsg* tx = (BaseMsg*)aMsg;
 
@@ -222,6 +222,31 @@ void  MessageParser::processBeforeSend(Ris::ByteContent* aMsg)
    {
       tx->mHeader.mSourceId=mSourceId;
    }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// MessageParser creator
+
+MessageParserCreator::MessageParserCreator()
+{
+   mSourceId = 0;
+}
+
+void MessageParserCreator::configure(int aSourceId)
+{
+   mSourceId = aSourceId;
+}
+
+Ris::BaseMessageParser* MessageParserCreator::createNew()
+{
+   // New message parser
+   MessageParser* tMessageParser = new MessageParser();
+   // Configure 
+   tMessageParser->configure(mSourceId);
+   // Return base message parser pointer
+   return (Ris::BaseMessageParser*)tMessageParser;
 }
 
 //******************************************************************************

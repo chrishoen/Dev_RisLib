@@ -68,6 +68,19 @@ public:
    // Configures a byte buffer endianess
    void configureByteBuffer(ByteBuffer* aBuffer);
 };
+
+//******************************************************************************
+// This is an abstract base class for a message parser creator. It defines
+// a method that inheriting classes overload to create new message parsers.
+// It is used by transmitters and receivers to create new instances of message
+// parsers.
+
+class  BaseMessageParserCreator
+{
+public:
+   virtual BaseMessageParser* createNew() = 0;
+};
+
 //******************************************************************************
 // This is a base class for messages that use ByteContent. It supplies some
 // member variables that are used for message identification. 

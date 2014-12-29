@@ -18,116 +18,36 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 
-BaseUdpRxThread::BaseUdpRxThread()
+UdpRxThread::UdpRxThread()
 {
-   mMulticastFlag=false;
 }
 
 //******************************************************************************
 // Configure:
 
-void BaseUdpRxThread::configure(
-   char*                     aLocalIpAddr,
-   int                       aLocalIpPort,
-   BaseMessageParser*        aMessageParser)
-{
-   mRxSocketAddress.set(aLocalIpAddr,aLocalIpPort);
-   mMessageParser = aMessageParser;
-}
-
-//******************************************************************************
-// Configure:
-
-void BaseUdpRxThread::configureForMulticast(
-      char*                     aMulticastGroup,
-      char*                     aLocalIpAddr,
-      int                       aLocalIpPort,
-      Ris::BaseMessageParser*   aMessageParser) 
-{
-   mMulticastGroup.set(aMulticastGroup);
-   mRxSocketAddress.set(aLocalIpAddr,aLocalIpPort);
-   mMessageParser = aMessageParser;
-   mMulticastFlag = true;
-}
-
-
-//******************************************************************************
-// Configure:
-
-void UdpRxThreadWithQCall::configure(
-   char*                     aLocalIpAddr,
-   int                       aLocalIpPort,
-   BaseMessageParser*        aMessageParser,
-   RxMsgQCall*               aRxMsgQCall)
+void UdpRxThread::configure(
+   char*                      aLocalIpAddr,
+   int                        aLocalIpPort,
+   BaseMessageParserCreator*  aMessageParserCreator,
+   RxMsgQCall*                aRxMsgQCall)
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::configure");
 
-   BaseUdpRxThread::configure(
-      aLocalIpAddr,
-      aLocalIpPort,
-      aMessageParser);
+   mRxSocketAddress.set(aLocalIpAddr,aLocalIpPort);
+   mMessageParserCreator = aMessageParserCreator;
 
    mRxMsgQCall = *aRxMsgQCall;
-}
-
-//******************************************************************************
-// Configure:
-
-void UdpRxThreadWithQCall::configureForMulticast(
-   char*                     aMulticastGroup,
-   char*                     aLocalIpAddr,
-   int                       aLocalIpPort,
-   BaseMessageParser*        aMessageParser,
-   RxMsgQCall*               aRxMsgQCall)
-{
-   Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::configureForMulticast");
-
-   BaseUdpRxThread::configureForMulticast(
-      aMulticastGroup,
-      aLocalIpAddr,
-      aLocalIpPort,
-      aMessageParser);
-
-   mRxMsgQCall = *aRxMsgQCall;
-}
-
-//******************************************************************************
-// Configure:
-
-void UdpRxThreadWithCallback::configure(
-   char*                     aLocalIpAddr,
-   int                       aLocalIpPort,
-   BaseMessageParser*        aMessageParser,
-   MsgCallPointer*           aRxCallback)
-{
-   Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::configure");
-
-   BaseUdpRxThread::configure(
-      aLocalIpAddr,
-      aLocalIpPort,
-      aMessageParser);
-
-   mRxCallback = *aRxCallback;
 }
 
 //******************************************************************************
 // Thread init function, base class overload.
 // It configures the socket.
 
-void BaseUdpRxThread::threadInitFunction()
+void UdpRxThread::threadInitFunction()
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::threadInitFunction BEGIN");
 
-   // Configure the socket
-   if (!mMulticastFlag)
-   {
-      mRxSocket.configure(mRxSocketAddress,mMessageParser);
-   }
-   else
-   {
-      mRxSocket.configureForMulticast(mMulticastGroup,mRxSocketAddress,mMessageParser);
-   }
-
+   mRxSocket.configure(mRxSocketAddress,mMessageParserCreator);
 
    Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::threadInitFunction END");
 }
@@ -137,7 +57,7 @@ void BaseUdpRxThread::threadInitFunction()
 // It contains a while loop that manages the connection to the server
 // and receives messages.
 
-void  BaseUdpRxThread::threadRunFunction()
+void  UdpRxThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun,Prn::Run1, "UdpRxMsgThread::threadRunFunction");
    
@@ -179,7 +99,7 @@ void  BaseUdpRxThread::threadRunFunction()
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void BaseUdpRxThread::threadExitFunction()
+void UdpRxThread::threadExitFunction()
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::threadExitFunction");
 }
@@ -189,10 +109,10 @@ void BaseUdpRxThread::threadExitFunction()
 //
 // If the while loop in the threadRunFunction is blocked on doRecvMsg then
 // closing the socket will cause doRecvMsg to return with false and 
-// then the terminate request flag will be polled and the the
-// threadRunFunction will exit.
+// then the terminate request flag will be polled and the threadRunFunction 
+// will exit.
 
-void BaseUdpRxThread::shutdownThread()
+void UdpRxThread::shutdownThread()
 {
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
@@ -203,19 +123,11 @@ void BaseUdpRxThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpRxThreadWithQCall::processRxMsg(Ris::ByteContent* aRxMsg)
+void UdpRxThread::processRxMsg(Ris::ByteContent* aRxMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
    mRxMsgQCall.invoke(aRxMsg);
-}
-
-//******************************************************************************
-
-void UdpRxThreadWithCallback::processRxMsg(Ris::ByteContent* aRxMsg)
-{
-   // Call the receive callback
-   mRxCallback(aRxMsg);
 }
 
 //******************************************************************************

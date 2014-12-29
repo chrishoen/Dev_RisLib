@@ -36,7 +36,6 @@ NetworkThread::NetworkThread()
    mStatusCount2=0;
 
    mUdpRxThread = new Ris::Net::UdpRxThread;
-   mMessageParser = new ProtoComm::MessageParser;
 
    // Initialize QCalls
    mRxMsgQCall.bind   (this,&NetworkThread::executeRxMsg);
@@ -47,7 +46,6 @@ NetworkThread::NetworkThread()
 NetworkThread::~NetworkThread()
 {
    delete mUdpRxThread;
-   delete mMessageParser;
 }
 
 //******************************************************************************
@@ -59,7 +57,8 @@ void NetworkThread::configure()
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
-   mMessageParser->configure(gSettings.mMyAppNumber);
+   mMessageParserCreator.configure(gSettings.mMyAppNumber);
+
 #if 1
    //---------------------------------------------------------------------------
    // Configure receive socket thread
@@ -67,7 +66,7 @@ void NetworkThread::configure()
    mUdpRxThread->configure(
       "127.0.0.1",
       gSettings.mMyUdpPort,
-      mMessageParser,
+      &mMessageParserCreator,
       &mRxMsgQCall);
 
 
@@ -82,7 +81,7 @@ void NetworkThread::configure()
 
    mTxSocket.configure(
       tSocketAddress,
-      mMessageParser);
+      &mMessageParserCreator);
 
 #endif
 
@@ -182,9 +181,7 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aRxMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run1, "NetworkThread::processRxMsg_TestMsg %d",aRxMsg->mCode1);
-
-   delete aRxMsg;
+   Prn::print(Prn::ThreadRun, Prn::Run1, "NetworkThread::processRxMsg_TestMsg %d %d", aRxMsg->mCode1, aRxMsg->mHeader.mSourceId);
 }
 
 //******************************************************************************

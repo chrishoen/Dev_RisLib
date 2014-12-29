@@ -38,14 +38,8 @@ public:
 
    // These do socket and bind calls
    void configure(
-      Sockets::SocketAddress aLocal,
-      BaseMessageParser*     aMessageParser);
-
-   // These do socket and bind calls for IGMPv2 multicast
-   void configureForMulticast(
-      Sockets::IpAddress     aGroup,
-      Sockets::SocketAddress aLocal,
-      BaseMessageParser*     aMessageParser);
+      Sockets::SocketAddress    aLocal,
+      BaseMessageParserCreator* aMessageParserCreator);
 
    // This receives a message from the socket via blocking recvfrom calls.
    // It returns true if successful.
@@ -91,8 +85,8 @@ public:
 
    // These create and configure the socket
    void configure(
-      Sockets::SocketAddress aRemote,
-      BaseMessageParser*     aMessageParser);
+      Sockets::SocketAddress      aRemote,
+      BaseMessageParserCreator*   aMessageParserCreator);
 
    // This sends a message over the socket via a blocking send call.
    // It returns true if successful.

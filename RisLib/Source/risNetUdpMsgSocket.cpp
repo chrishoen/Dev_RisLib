@@ -34,6 +34,7 @@ UdpRxMsgSocket::UdpRxMsgSocket()
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
+   delete mMessageParser;
    free(mRxBuffer);
 }
 
@@ -41,23 +42,13 @@ UdpRxMsgSocket::~UdpRxMsgSocket()
 // configure the socket
 
 void UdpRxMsgSocket::configure(
-   Sockets::SocketAddress aLocal,
-   BaseMessageParser*     aMessageParser)
+   Sockets::SocketAddress      aLocal,
+   BaseMessageParserCreator*   aMessageParserCreator)
 {
    mRxMsgCount=0;
 
-   mLocal  = aLocal;
-   mMessageParser = aMessageParser;
-
-
-   if (mLocal.mIpAddr.isMulticast())
-   {
-      Sockets::IpAddress     tGroup(aLocal.mIpAddr);
-      Sockets::SocketAddress tLocal("0.0.0.0",aLocal.mPort);
-      configureForMulticast(tGroup,tLocal,aMessageParser);
-      return;
-   }
-   
+   mLocal         = aLocal;
+   mMessageParser = aMessageParserCreator->createNew();
 
    doSocket();
    doBind();
@@ -73,45 +64,6 @@ void UdpRxMsgSocket::configure(
       Prn::print(Prn::SocketInit,Prn::Init2, "UdpRxMsgSocket     $ %16s : %d $ %d %d",
          aLocal.mIpAddr.mString,
          aLocal.mPort,
-         mStatus,
-         mError);
-   }
-
-   mValidFlag=mStatus==0;
-}
-
-//******************************************************************************
-// configure the socket
-
-void UdpRxMsgSocket::configureForMulticast(
-   Sockets::IpAddress     aGroup,
-   Sockets::SocketAddress aLocal,
-   BaseMessageParser*     aMessageParser)
-{
-   mRxMsgCount=0;
-
-   mLocal = aLocal;
-
-   mMessageParser = aMessageParser;
-
-   doSocket();
-   setOptionReuseAddr();
-   doBind();
-   setOptionMulticast(aGroup,aLocal.mIpAddr);
-
-   if (mStatus==0)
-   {
-      Prn::print(Prn::SocketInit,Prn::Init2, "UdpRxMsgSocket     $ %16s %16s : %d",
-         aGroup.mString,
-         mLocal.mIpAddr.mString,
-         mLocal.mPort);
-   }
-   else
-   {
-      Prn::print(Prn::SocketInit,Prn::Init2, "UdpRxMsgSocket     $ %16s %16s : %d $ %d %d",
-         aGroup.mString,
-         mLocal.mIpAddr.mString,
-         mLocal.mPort,
          mStatus,
          mError);
    }
@@ -212,6 +164,7 @@ UdpTxMsgSocket::UdpTxMsgSocket()
 
 UdpTxMsgSocket::~UdpTxMsgSocket()
 {
+   delete mMessageParser;
    free(mTxBuffer);
 }
 
@@ -219,13 +172,13 @@ UdpTxMsgSocket::~UdpTxMsgSocket()
 // Configure the socket. Use with the next doSendMsg.
 
 void UdpTxMsgSocket::configure(
-   Sockets::SocketAddress aRemote,
-   BaseMessageParser*     aMessageParser)
+   Sockets::SocketAddress     aRemote,
+   BaseMessageParserCreator*  aMessageParserCreator)
 {
    mTxMsgCount=0;
 
-   mRemote  = aRemote;
-   mMessageParser = aMessageParser;
+   mRemote        = aRemote;
+   mMessageParser = aMessageParserCreator->createNew();
 
    doSocket();
 
@@ -257,26 +210,29 @@ bool UdpTxMsgSocket::doSendMsg(
    // Guard
    if (!mValidFlag) return false;
 
-   // mutex
-   mTxMutex.get();
+   // Process message before send
+   mMessageParser->processBeforeSend(aTxMsg);
 
-   // byte buffer, constructor takes address and size
+   // Create byte buffer, constructor takes address and size
    ByteBuffer buffer(mTxBuffer,BUFFER_SIZE);  
 
-   // copy transmit message to buffer
+   // Copy transmit message to buffer
    buffer.putToBuffer(aTxMsg);
 
-   // delete the message
+   // Delete the message
    DecreaseResource(aTxMsg);
 
-   // transmit the buffer
+   // Mutex
+   mTxMutex.get();
+
+   // Transmit the buffer
    int length=buffer.getLength();
    doSendTo(mRemote,buffer.getBaseAddress(),length);
 
    mTxLength=length;
    mTxMsgCount++;
 
-   // mutex
+   // Mutex
    mTxMutex.put();
 
    return true;

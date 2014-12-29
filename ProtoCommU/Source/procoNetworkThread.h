@@ -65,7 +65,7 @@ public:
    Ris::Net::UdpRxThread*  mUdpRxThread;
 
    // Message parser used by mUdpRxThread
-   ProtoComm::MessageParser* mMessageParser;
+   ProtoComm::MessageParserCreator mMessageParserCreator;
 
    //--------------------------------------------------------------
    // QCall:

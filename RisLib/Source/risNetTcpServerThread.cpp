@@ -59,7 +59,7 @@ void TcpServerHubSocket::reconfigure()
 //******************************************************************************
 //******************************************************************************
 
-BaseTcpServerThread::BaseTcpServerThread()
+TcpServerThread::TcpServerThread()
 {
    mNumSessions=0;
    mMaxSessions=0;
@@ -70,23 +70,7 @@ BaseTcpServerThread::BaseTcpServerThread()
 //******************************************************************************
 // Configure:
 
-void BaseTcpServerThread::configure(
-   char*                     aServerIpAddr,
-   int                       aServerIpPort,
-   int                       aMaxSessions, 
-   BaseMessageParser*        aMessageParser, 
-   int                       aFlags)
-{
-   mSocketAddress.set(aServerIpAddr,aServerIpPort);
-   mMaxSessions   = aMaxSessions;
-   mMessageParser = aMessageParser;
-   mFlags=aFlags;
-}
-
-//******************************************************************************
-// Configure:
-
-void TcpServerThreadWithQCall::configure(
+void TcpServerThread::configure(
    char*                     aServerIpAddr,
    int                       aServerIpPort,
    int                       aMaxSessions, 
@@ -97,46 +81,20 @@ void TcpServerThreadWithQCall::configure(
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
 
-   BaseTcpServerThread::configure(
-      aServerIpAddr,
-      aServerIpPort,
-      aMaxSessions, 
-      aMessageParser,
-      aFlags);
+   mSocketAddress.set(aServerIpAddr,aServerIpPort);
+   mMaxSessions   = aMaxSessions;
+   mMessageParser = aMessageParser;
+   mFlags=aFlags;
 
    mSessionQCall = *aSessionQCall;
    mRxMsgQCall   = *aRxMsgQCall;
 }
 
-//******************************************************************************
-// Configure:
-
-void TcpServerThreadWithCallback::configure(
-   char*                     aServerIpAddr,
-   int                       aServerIpPort,
-   int                       aMaxSessions, 
-   BaseMessageParser*        aMessageParser, 
-   MsgCallPointer*           aRxCallback,
-   SessionNotifyCallPointer* aSessionCallback,
-   int                       aFlags)
-{
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpServerThread::configure");
-
-   BaseTcpServerThread::configure(
-      aServerIpAddr,
-      aServerIpPort,
-      aMaxSessions, 
-      aMessageParser,
-      aFlags);
-
-   mRxCallback      = *aRxCallback;
-   mSessionCallback = *aSessionCallback;
-}
 
 //******************************************************************************
 // This sets base thread configuration members
 
-void BaseTcpServerThread::configureThread()
+void TcpServerThread::configureThread()
 {
    // Set base class configuration members to defaults
    BaseThread::configureThread();
@@ -149,7 +107,7 @@ void BaseTcpServerThread::configureThread()
 // Thread init function, base class overload.
 // It configures the sockets.
 
-void BaseTcpServerThread::threadInitFunction()
+void TcpServerThread::threadInitFunction()
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "TcpServerThread::threadInitFunction BEGIN");
 
@@ -170,7 +128,7 @@ void BaseTcpServerThread::threadInitFunction()
 // It contains a while loop that does a select call to manage the hub socket
 // and the set of node sockets.
 
-void BaseTcpServerThread::threadRunFunction()
+void TcpServerThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun,Prn::Run1, "TcpServerThread::threadRunFunction");
    
@@ -358,7 +316,7 @@ void BaseTcpServerThread::threadRunFunction()
 // Thread exit function, base class overload.
 // It closes all open sockets.
 
-void BaseTcpServerThread::threadExitFunction()
+void TcpServerThread::threadExitFunction()
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "TcpServerThread::threadExitFunction");
 
@@ -374,7 +332,7 @@ void BaseTcpServerThread::threadExitFunction()
 
 //******************************************************************************
 
-void BaseTcpServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
+void TcpServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
 {
    if (!aTxMsg) return;
 
@@ -398,8 +356,10 @@ void BaseTcpServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void TcpServerThreadWithQCall::processSessionChange(int aSessionIndex,bool aEstablished)
+void TcpServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
 {
    // Invoke the session qcall to notify that a session has
    // been established or disestablished
@@ -408,42 +368,15 @@ void TcpServerThreadWithQCall::processSessionChange(int aSessionIndex,bool aEsta
 }
 
 //******************************************************************************
-
-void TcpServerThreadWithCallback::processSessionChange(int aSessionIndex,bool aEstablished)
-{
-   // Call the session callback to notify that a session has
-   // been established or disestablished
-   if (mSessionCallback.isValid())
-   {
-      mSessionCallback(aSessionIndex,aEstablished);
-   } 
-}
-
+//******************************************************************************
 //******************************************************************************
 
-void TcpServerThreadWithQCall::processRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
+void TcpServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
    mRxMsgQCall.invoke(aSessionIndex,aRxMsg);
 }
-
-//******************************************************************************
-
-void TcpServerThreadWithCallback::processRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
-{
-   // Call the receive callback
-   if (mRxCallback.isValid())
-   {
-      mRxCallback(aSessionIndex,aRxMsg);
-   }
-   else
-   {
-      delete aRxMsg;
-   }
-}
-
-//******************************************************************************
 
 }//namespace
 }//namespace

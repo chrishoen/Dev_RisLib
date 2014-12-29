@@ -9,17 +9,17 @@ execution context for a tcp client that connects to a tcp server.
 
 There is a base class and three classes that provide different interfaces.
 
-1) BaseTcpClientThread   provides the tcp client thread functionality
+1) TcpClientThread   provides the tcp client thread functionality
 
-2) TcpClientThreadWithQCall : public BaseTcpClientThread provides a tcp client
+2) TcpClientThreadWithQCall : public TcpClientThread provides a tcp client
    thread with a QCall (deferred procedure call) interface
 
-3) TcpClientThreadWithQCallAndCallSource : public BaseTcpClientThread provides 
+3) TcpClientThreadWithQCallAndCallSource : public TcpClientThread provides 
    a tcp client thread with a QCall (deferred procedure call) interface
    and a call source identifier that is passed in at configure
    and returned as the first QCall argument.
 
-3) TcpClientThreadWithCallback : public BaseTcpClientThread provides a tcp
+3) TcpClientThreadWithCallback : public TcpClientThread provides a tcp
    client thread with a callback interface
 
 Threads that want to perform Tcp client activity maintain instances of 
@@ -70,23 +70,30 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-class  BaseTcpClientThread : public Ris::Threads::BaseThreadWithTermFlag
+class TcpClientThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
-   BaseTcpClientThread();
+   TcpClientThread();
 
    //--------------------------------------------------------------
    // Configure:
 
-   // aServerIpAddr    is the server ip address
-   // aServerIpPort    is the server ip port
-   // aMessageParser   is the message parser to be used on receive messages
+   // aServerIpAddr     is the server ip address
+   // aServerIpPort     is the server ip port
+   // aMessageParser    is the message parser to be used on receive messages
+   // aRxMsgQCall         is a qcall for receive messages
+   // aSessionQCallChange is a qcall for session changes
+
+   typedef Ris::Threads::QCall1<bool>              SessionQCall;
+   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
 
    void configure(
-      char*                     aServerIpAddr,
-      int                       aServerIpPort,
-      Ris::BaseMessageParser*   aMessageParser,
-      int                       aFlags=0); 
+      char*                   aServerIpAddr,
+      int                     aServerIpPort,
+      Ris::BaseMessageParser* aMessageParser,
+      SessionQCall*           aSessionQCall,
+      RxMsgQCall*             aRxMsgQCall,
+      int                     aFlags=0); 
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -101,16 +108,31 @@ public:
    void shutdownThread(); 
 
    //--------------------------------------------------------------
-   // Process, supplied by inheritors
+   // Process:
    
-   // This is called by the threadRunFunction when a new session is
-   // established or an existing session is disestablished. It notifies
-   // the user of this thread that a session has changed.
-   virtual void processSessionChange  (bool aEstablished)=0;
+   // This is called by the TcpClientThread threadRunFunction 
+   // when a new session is established or an existing session is 
+   // disestablished. It notifies the user of this thread that a
+   // session has changed.
+   //
+   // It invokes the mSessionQCall that is passed in at configure.
+   void processSessionChange  (bool aEstablished);
 
-   // This is called by the threadRunFunction to process a received
-   // message.
-   virtual void processRxMsg          (Ris::ByteContent* aRxMsg)=0;
+   // This is called by the TcpClientThread threadRunFunction 
+   // to process a received message.
+   //
+   // It invokes the mRxMsgQCall that is passed in at configure.
+   void processRxMsg          (Ris::ByteContent* aRxMsg);
+
+   //--------------------------------------------------------------
+   // QCall:
+
+   // This is a qcall that is called when a session is
+   // established or disestablished.
+   SessionQCall mSessionQCall;
+
+   // This is a qcall that is called when a message is received
+   RxMsgQCall   mRxMsgQCall;
 
    //--------------------------------------------------------------
    // Transmit message:
@@ -140,218 +162,6 @@ public:
    bool mConnectionFlag;
 
    int  mFlags;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Tcp client thread with a QCall interface. 
-//
-// This interfaces to an owner thread that is based on a call queue. The owner
-// configures with QCalls that are invoked when a session changes or when a 
-// message is received.
-
-class  TcpClientThreadWithQCall : public BaseTcpClientThread
-{
-public:
-
-   //--------------------------------------------------------------
-   // Configure:
-
-   // aServerIpAddr     is the server ip address
-   // aServerIpPort     is the server ip port
-   // aMessageParser    is the message parser to be used on receive messages
-   // aRxMsgQCall         is a qcall for receive messages
-   // aSessionQCallChange is a qcall for session changes
-
-   typedef Ris::Threads::QCall1<bool>              SessionQCall;
-   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
-
-   void configure(
-      char*                   aServerIpAddr,
-      int                     aServerIpPort,
-      Ris::BaseMessageParser* aMessageParser,
-      SessionQCall*           aSessionQCall,
-      RxMsgQCall*             aRxMsgQCall,
-      int                     aFlags=0); 
-
-   //--------------------------------------------------------------
-   // Process:
-   
-   // This is called by the BaseTcpClientThread threadRunFunction 
-   // when a new session is established or an existing session is 
-   // disestablished. It notifies the user of this thread that a
-   // session has changed.
-   //
-   // It invokes the mSessionQCall that is passed in at configure.
-   void processSessionChange  (bool aEstablished);
-
-   // This is called by the BaseTcpClientThread threadRunFunction 
-   // to process a received message.
-   //
-   // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg          (Ris::ByteContent* aRxMsg);
-
-   //--------------------------------------------------------------
-   // QCall:
-
-   // This is a qcall that is called when a session is
-   // established or disestablished.
-   SessionQCall mSessionQCall;
-
-   // This is a qcall that is called when a message is received
-   RxMsgQCall   mRxMsgQCall;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Tcp client thread with a QCall interface and a call source identifier. 
-//
-// This interfaces to an owner thread that is based on a call queue. The owner
-// configures with QCalls that are invoked when a session changes or when a 
-// message is received. 
-//
-// It also supplies a CallSource identifier that is  passed to the thread at 
-// configure and returned with  each qcall invokation. It is used by an owning
-// thread that contains multiple instances of this threadand has a common
-// QCall execute member function that is invoked by the multiple instances.
-// The CallSource is used to identify which of the multiple instances
-// invoked the QCall.
- 
-
-class  TcpClientThreadWithQCallAndCallSource : public BaseTcpClientThread
-{
-public:
-   TcpClientThreadWithQCallAndCallSource();
-
-   //--------------------------------------------------------------
-   // Configure:
-
-   // aServerIpAddr       is the server ip address
-   // aServerIpPort       is the server ip port
-   // aMessageParser      is the message parser to be used on receive messages
-   // aCallSource         is an identifier that is passed to the QCalls
-   // aRxMsgQCall         is a qcall for receive messages
-   // aSessionQCallChange is a qcall for session changes
-
-   typedef Ris::Threads::QCall2<int,bool>              SessionQCall;
-   typedef Ris::Threads::QCall2<int,Ris::ByteContent*> RxMsgQCall;
-
-   void configure(
-      char*                   aServerIpAddr,
-      int                     aServerIpPort,
-      Ris::BaseMessageParser* aMessageParser,
-      int                     aCallSource,
-      SessionQCall*           aSessionQCall,
-      RxMsgQCall*             aRxMsgQCall,
-      int                     aFlags=0); 
-
-   //--------------------------------------------------------------
-   // Process:
-   
-   // This is called by the BaseTcpClientThread threadRunFunction 
-   // when a new session is established or an existing session is 
-   // disestablished. It notifies the user of this thread that a
-   // session has changed.
-   //
-   // It invokes the mSessionQCall that is passed in at configure.
-   void processSessionChange  (bool aEstablished);
-
-   // This is called by the BaseTcpClientThread threadRunFunction 
-   // to process a received message.
-   //
-   // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg          (Ris::ByteContent* aRxMsg);
-
-   //--------------------------------------------------------------
-   // QCall:
-
-   // This is a qcall that is called when a session is
-   // established or disestablished.
-   SessionQCall mSessionQCall;
-
-   // This is a qcall that is called when a message is received
-   RxMsgQCall   mRxMsgQCall;
-
-   // This is set at configure and passed to each QCall. It is used
-   // by owner threads to identify which instance of this class
-   // invoked the QCall.
-   int mCallSource;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Tcp client thread with a callback interface.
-//
-// This interfaces to an owner thread that is based on callbacks. The owner
-// configures with CallPointers that are called when a session changes or
-// when a message is received.
-
-class  TcpClientThreadWithCallback : public BaseTcpClientThread
-{
-public:
-   
-   //--------------------------------------------------------------
-   // Definitions:
-
-   // CallPointer definition for function with signature:
-   // void processSession(bool aEstablish);
-   typedef CallPointer1<bool> SessionNotifyCallPointer;
-
-   // CallPointer definition for function with signature:
-   // void processRxMsg(Ris::ByteContent* aMsg).
-   typedef Ris::CallPointer1<Ris::ByteContent*> MsgCallPointer;
-
-   //--------------------------------------------------------------
-   // Configure:
-
-   // aServerIpAddr    is the server ip address
-   // aServerIpPort    is the server ip port
-   // aMessageParser   is the message parser to be used on receive messages
-   // aRxCallback      is called when a message is received
-   // aSessionCallback is called when the session changes connection state
-
-   void configure(
-      char*                     aServerIpAddr,
-      int                       aServerIpPort,
-      Ris::BaseMessageParser*   aMessageParser, 
-      MsgCallPointer*           aRxCallback,
-      SessionNotifyCallPointer* aSessionCallback,
-      int                       aFlags=0); 
-
-   //--------------------------------------------------------------
-   // Process:
-   
-   // This is called by the BaseTcpClientThread threadRunFunction 
-   // when a new session is established or an existing session is 
-   // disestablished. It notifies the user of this thread that a
-   // session has changed.
-   //
-   // It calls the mSessionCallback that is passed in at configure.
-
-   void processSessionChange  (bool aEstablished);
-
-   // This is called by the BaseTcpClientThread threadRunFunction 
-   // to process a received message.
-   //
-   // It calls the mRxCallback that is passed in at configure.
-
-   void processRxMsg          (Ris::ByteContent* aRxMsg);
-
-   //--------------------------------------------------------------
-   // Callbacks:
-
-   // This is a callback that is called when a session is
-   // established or disestablished.
-   // It uses a CallPointer for a function with signature:
-   // void function(bool aConnected);
-
-   SessionNotifyCallPointer mSessionCallback;
-
-   // This is a callback that is called when a message is received
-   MsgCallPointer mRxCallback;
 };
 
 //******************************************************************************

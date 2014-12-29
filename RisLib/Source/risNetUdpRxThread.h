@@ -10,12 +10,12 @@ execution context for a udp socket that receives udp datagrams.
 
 There is a base class and three classes that provide different interfaces.
 
-1) BaseUdpRxThread   provides the udp receiver thread functionality
+1) UdpRxThread   provides the udp receiver thread functionality
 
-2) UdpRxThreadWithQCall : public BaseUdpRxThread provides a udp receiver
+2) UdpRxThreadWithQCall : public UdpRxThread provides a udp receiver
    thread with a QCall (queued function call) interface
 
-3) UdpRxThreadWithCallback : public BaseUdpRxThread provides a udp
+3) UdpRxThreadWithCallback : public UdpRxThread provides a udp
    receiver thread with a callback interface
 
 Threads that want to perform Udp receiver activity maintain instances of 
@@ -57,36 +57,10 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-class  BaseUdpRxThread : public Ris::Threads::BaseThreadWithTermFlag
+class UdpRxThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
-   BaseUdpRxThread();
-
-   //--------------------------------------------------------------
-   // Configure:
-
-   // aLocalIpAddr    is the ip address of the local interface bound to
-   // aLocalIpPort    is the ip port    of the local interface bound to
-   // aMessageParser  is the message parser to be used on receive messages
-
-   void configure(
-      char*                     aLocalIpAddr,
-      int                       aLocalIpPort,
-      Ris::BaseMessageParser*   aMessageParser); 
-
-   //--------------------------------------------------------------
-   // ConfigureForMulticast:
-
-   // aMulticastGroup is the ip address of multicast group
-   // aLocalIpAddr    is the ip address of the local interface bound to
-   // aLocalIpPort    is the ip port    of the local interface bound to
-   // aMessageParser  is the message parser to be used on receive messages
-
-   void configureForMulticast(
-      char*                     aMulticastGroup,
-      char*                     aLocalIpAddr,
-      int                       aLocalIpPort,
-      Ris::BaseMessageParser*   aMessageParser); 
+   UdpRxThread();
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -98,43 +72,6 @@ public:
    void threadRunFunction(); 
    void threadExitFunction(); 
    void shutdownThread(); 
-
-   //--------------------------------------------------------------
-   // Process, supplied by inheritors
-   
-   // This is called by the threadRunFunction to process a received
-   // message.
-   virtual void processRxMsg (Ris::ByteContent* aRxMsg)=0;
-
-   //--------------------------------------------------------------
-   // Sockets:
-
-   // Socket instance
-   UdpRxMsgSocket mRxSocket;
-
-   // Socket address that socket instance connects to
-   Sockets::SocketAddress mRxSocketAddress;
-
-   // Ip address of optional multicast group
-   Sockets::IpAddress mMulticastGroup;
-   bool               mMulticastFlag;
-
-   // Message parser for a stream socket
-   BaseMessageParser* mMessageParser;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Udp receiver thread with a QCall interface. 
-//
-// This interfaces to an owner thread that is based on a call queue. The owner
-// configures with QCalls that are invoked when a session changes or when a 
-// message is received.
-
-class  UdpRxThreadWithQCall : public BaseUdpRxThread
-{
-public:
 
    //--------------------------------------------------------------
    // Configure:
@@ -153,24 +90,9 @@ public:
       RxMsgQCall*             aRxMsgQCall);
 
    //--------------------------------------------------------------
-   // ConfigureForMulticast:
-
-   // aMulticastGroup is the ip address of multicast group
-   // aLocalIpAddr    is the ip address of the local interface bound to
-   // aLocalIpPort    is the ip port    of the local interface bound to
-   // aMessageParser  is the message parser to be used on receive messages
-
-   void configureForMulticast(
-      char*                     aMulticastGroup,
-      char*                     aLocalIpAddr,
-      int                       aLocalIpPort,
-      Ris::BaseMessageParser*   aMessageParser, 
-      RxMsgQCall*               aRxMsgQCall);
-
-   //--------------------------------------------------------------
    // Process:
    
-   // This is called by the BaseUdpRxThread threadRunFunction 
+   // This is called by the UdpRxThread threadRunFunction 
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
@@ -181,57 +103,18 @@ public:
 
    // This is a dpc that is called when a message is received
    RxMsgQCall   mRxMsgQCall;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Udp receiver thread with a callback interface.
-//
-// This interfaces to an owner thread that is based on callbacks. The owner
-// configures with CallPointers that are called when a session changes or
-// when a message is received.
-
-class  UdpRxThreadWithCallback : public BaseUdpRxThread
-{
-public:
-   
-   //--------------------------------------------------------------
-   // Definitions:
-
-   // CallPointer definition for function with signature:
-   // void processRxMsg(Ris::ByteContent* aMsg).
-   typedef Ris::CallPointer1<Ris::ByteContent*> MsgCallPointer;
 
    //--------------------------------------------------------------
-   // Configure:
+   // Sockets:
 
-   // aLocalIpAddr    is the ip address of the local interface bound to
-   // aLocalIpPort    is the ip port    of the local interface bound to
-   // aMessageParser  is the message parser to be used on receive messages
-   // aRxCallback      is called when a message is received
+   // Socket instance
+   UdpRxMsgSocket mRxSocket;
 
-   void configure(
-      char*                     aLocalIpAddr,
-      int                       aLocalIpPort,
-      Ris::BaseMessageParser*   aMessageParser, 
-      MsgCallPointer*           aRxCallback);
+   // Socket address that socket instance connects to
+   Sockets::SocketAddress mRxSocketAddress;
 
-   //--------------------------------------------------------------
-   // Process:
-   
-   // This is called by the BaseUdpRxThread threadRunFunction 
-   // to process a received message.
-   //
-   // It calls the mRxCallback that is passed in at configure.
-
-   void processRxMsg (Ris::ByteContent* aRxMsg);
-
-   //--------------------------------------------------------------
-   // Callbacks:
-
-   // This is a callback that is called when a message is received
-   MsgCallPointer mRxCallback;
+   // Message parser for a stream socket
+   BaseMessageParser* mMessageParser;
 };
 
 //******************************************************************************

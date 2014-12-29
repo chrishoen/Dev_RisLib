@@ -19,7 +19,7 @@ namespace ProtoComm
 
 ClientThread::ClientThread()
 {
-   mTcpClientThread = new Ris::Net::TcpClientThreadWithQCall;
+   mTcpClientThread = new Ris::Net::TcpClientThread;
    mMessageParser = new ProtoComm::MessageParser;
    mConnectionFlag=false;
    mPeriodicEnable=false;

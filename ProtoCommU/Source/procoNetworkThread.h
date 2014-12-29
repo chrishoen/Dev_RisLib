@@ -62,7 +62,7 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::UdpRxThreadWithQCall*  mUdpRxThread;
+   Ris::Net::UdpRxThread*  mUdpRxThread;
 
    // Message parser used by mUdpRxThread
    ProtoComm::MessageParser* mMessageParser;
@@ -71,7 +71,7 @@ public:
    // QCall:
 
    // QCalls registered to mUdpRxThread
-   Ris::Net::UdpRxThreadWithQCall::RxMsgQCall    mRxMsgQCall;
+   Ris::Net::UdpRxThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

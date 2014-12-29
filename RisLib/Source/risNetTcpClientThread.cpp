@@ -18,108 +18,38 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 
-BaseTcpClientThread::BaseTcpClientThread()
+TcpClientThread::TcpClientThread()
 {
    mConnectionFlag=false;
    mFlags=0;
 }
 
-TcpClientThreadWithQCallAndCallSource::TcpClientThreadWithQCallAndCallSource()
-{
-   mCallSource=0;
-}
-
 //******************************************************************************
 // Configure:
 
-void BaseTcpClientThread::configure(
+void TcpClientThread::configure(
    char*                     aServerIpAddr,
    int                       aServerIpPort,
    BaseMessageParser*        aMessageParser,
+   SessionQCall*             aSessionQCall,
+   RxMsgQCall*               aRxMsgQCall,
    int                       aFlags) 
 {
+   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
+
    mConnectionFlag=false;
    mFlags=aFlags;
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
    mMessageParser = aMessageParser;
-}
-
-//******************************************************************************
-// Configure:
-
-void TcpClientThreadWithQCall::configure(
-   char*                     aServerIpAddr,
-   int                       aServerIpPort,
-   BaseMessageParser*        aMessageParser,
-   SessionQCall*             aSessionQCall,
-   RxMsgQCall*               aRxMsgQCall,
-   int                       aFlags) 
-{
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
-
-   BaseTcpClientThread::configure(
-      aServerIpAddr,
-      aServerIpPort,
-      aMessageParser,
-      aFlags);
 
    mSessionQCall = *aSessionQCall;
    mRxMsgQCall   = *aRxMsgQCall;
-}
-
-//******************************************************************************
-// Configure:
-
-void TcpClientThreadWithQCallAndCallSource::configure(
-   char*                     aServerIpAddr,
-   int                       aServerIpPort,
-   BaseMessageParser*        aMessageParser,
-   int                       aCallSource,
-   SessionQCall*             aSessionQCall,
-   RxMsgQCall*               aRxMsgQCall,
-   int                       aFlags) 
-{
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
-
-   BaseTcpClientThread::configure(
-      aServerIpAddr,
-      aServerIpPort,
-      aMessageParser,
-      aFlags);
-
-   mCallSource = aCallSource;
-
-   mSessionQCall = *aSessionQCall;
-   mRxMsgQCall   = *aRxMsgQCall;
-}
-
-//******************************************************************************
-// Configure:
-
-void TcpClientThreadWithCallback::configure(
-   char*                     aServerIpAddr,
-   int                       aServerIpPort,
-   BaseMessageParser*        aMessageParser,
-   MsgCallPointer*           aRxCallback,
-   SessionNotifyCallPointer* aSessionCallback,
-   int                       aFlags) 
-{
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
-
-   BaseTcpClientThread::configure(
-      aServerIpAddr,
-      aServerIpPort,
-      aMessageParser,
-      aFlags);
-
-   mRxCallback      = *aRxCallback;
-   mSessionCallback = *aSessionCallback;
 }
 
 //******************************************************************************
 // This sets base thread configuration members
 
-void BaseTcpClientThread::configureThread()
+void TcpClientThread::configureThread()
 {
    // Set base class configuration members to defaults
    BaseThread::configureThread();
@@ -132,7 +62,7 @@ void BaseTcpClientThread::configureThread()
 // Thread init function, base class overload.
 // It configures the socket.
 
-void BaseTcpClientThread::threadInitFunction()
+void TcpClientThread::threadInitFunction()
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadInitFunction BEGIN");
 
@@ -147,7 +77,7 @@ void BaseTcpClientThread::threadInitFunction()
 // It contains a while loop that manages the connection to the server
 // and receives messages.
 
-void BaseTcpClientThread::threadRunFunction()
+void TcpClientThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun,Prn::Run1, "TcpClientThread::threadRunFunction");
    
@@ -234,7 +164,7 @@ void BaseTcpClientThread::threadRunFunction()
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void BaseTcpClientThread::threadExitFunction()
+void TcpClientThread::threadExitFunction()
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadExitFunction");
 }
@@ -247,7 +177,7 @@ void BaseTcpClientThread::threadExitFunction()
 // then the terminate request flag will be polled and the the
 // threadRunFunction will exit.
 
-void BaseTcpClientThread::shutdownThread()
+void TcpClientThread::shutdownThread()
 {
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
@@ -257,7 +187,7 @@ void BaseTcpClientThread::shutdownThread()
 }
 //******************************************************************************
 
-void BaseTcpClientThread::sendMsg(ByteContent* aTxMsg)
+void TcpClientThread::sendMsg(ByteContent* aTxMsg)
 {
    if (!aTxMsg) return;
 
@@ -274,8 +204,10 @@ void BaseTcpClientThread::sendMsg(ByteContent* aTxMsg)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void TcpClientThreadWithQCall::processSessionChange(bool aEstablished)
+void TcpClientThread::processSessionChange(bool aEstablished)
 {
    // Invoke the session qcall to notify that a session has
    // been established or disestablished
@@ -284,48 +216,14 @@ void TcpClientThreadWithQCall::processSessionChange(bool aEstablished)
 }
 
 //******************************************************************************
-
-void TcpClientThreadWithQCallAndCallSource::processSessionChange(bool aEstablished)
-{
-   // Invoke the session qcall to notify that a session has
-   // been established or disestablished
-   // Create a new qcall, copied from the original, and invoke it.
-   mSessionQCall.invoke(mCallSource,aEstablished);
-}
-
+//******************************************************************************
 //******************************************************************************
 
-void TcpClientThreadWithCallback::processSessionChange(bool aEstablished)
-{
-   // Call the session callback to notify that a session has
-   // been established or disestablished
-   mSessionCallback(aEstablished);
-}
-
-//******************************************************************************
-
-void TcpClientThreadWithQCall::processRxMsg(Ris::ByteContent* aRxMsg)
+void TcpClientThread::processRxMsg(Ris::ByteContent* aRxMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
    mRxMsgQCall.invoke(aRxMsg);
-}
-
-//******************************************************************************
-
-void TcpClientThreadWithQCallAndCallSource::processRxMsg(Ris::ByteContent* aRxMsg)
-{
-   // Invoke the receive QCall
-   // Create a new qcall, copied from the original, and invoke it.
-   mRxMsgQCall.invoke(mCallSource,aRxMsg);
-}
-
-//******************************************************************************
-
-void TcpClientThreadWithCallback::processRxMsg(Ris::ByteContent* aRxMsg)
-{
-   // Call the receive callback
-   mRxCallback(aRxMsg);
 }
 
 //******************************************************************************

@@ -79,7 +79,7 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::TcpClientThreadWithQCall*  mTcpClientThread;
+   Ris::Net::TcpClientThread*  mTcpClientThread;
 
    // Message parser used by mTcpClientThread
    ProtoComm::MessageParser* mMessageParser;
@@ -88,8 +88,8 @@ public:
    // QCall:
 
    // QCalls registered to mTcpClientThread
-   Ris::Net::TcpClientThreadWithQCall::SessionQCall  mSessionQCall;
-   Ris::Net::TcpClientThreadWithQCall::RxMsgQCall    mRxMsgQCall;
+   Ris::Net::TcpClientThread::SessionQCall  mSessionQCall;
+   Ris::Net::TcpClientThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

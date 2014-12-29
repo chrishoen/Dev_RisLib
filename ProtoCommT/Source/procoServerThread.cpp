@@ -26,7 +26,7 @@ ServerThread::ServerThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mTcpServerThread  = new Ris::Net::TcpServerThreadWithQCall;
+   mTcpServerThread  = new Ris::Net::TcpServerThread;
    mMessageParser    = new ProtoComm::MessageParser;
 
    // Initialize QCalls

@@ -51,7 +51,7 @@ namespace ProtoComm
 //
 //******************************************************************************
 
-class  ServerThread : public Ris::Threads::BaseQCallThread
+class ServerThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
@@ -81,7 +81,7 @@ public:
    // Tcp server thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::TcpServerThreadWithQCall* mTcpServerThread;
+   Ris::Net::TcpServerThread* mTcpServerThread;
 
    // Maximum number of sessions for mTcpServerThread
    enum {MaxSessions=10};
@@ -93,8 +93,8 @@ public:
    // QCall:
 
    // QCalls registered to mTcpServerThread
-   Ris::Net::TcpServerThreadWithQCall::SessionQCall  mSessionQCall;
-   Ris::Net::TcpServerThreadWithQCall::RxMsgQCall    mRxMsgQCall;
+   Ris::Net::TcpServerThread::SessionQCall  mSessionQCall;
+   Ris::Net::TcpServerThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

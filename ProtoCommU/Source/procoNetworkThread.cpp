@@ -35,7 +35,7 @@ NetworkThread::NetworkThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpRxThread = new Ris::Net::UdpRxThreadWithQCall;
+   mUdpRxThread = new Ris::Net::UdpRxThread;
    mMessageParser = new ProtoComm::MessageParser;
 
    // Initialize QCalls

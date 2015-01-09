@@ -249,7 +249,7 @@ void RMatrix::initialize(
 
 double& RMatrix::e (int aRow,int aCol)
 {
-   int tIndex = (aRow-1)*mRows + (aCol-1);
+   int tIndex = (aRow-1)*mCols + (aCol-1);
    return mValues[tIndex];
 }
 

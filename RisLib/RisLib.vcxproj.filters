@@ -127,6 +127,9 @@
     <ClCompile Include="Source\risCmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risRTable.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -265,6 +268,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\prnDefs.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risRTable.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

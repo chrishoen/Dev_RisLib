@@ -36,6 +36,7 @@
     <ClCompile Include="Source\risNetUdpMsgSocket.cpp" />
     <ClCompile Include="Source\risNetUdpRxThread.cpp" />
     <ClCompile Include="Source\risPortableCalls_win.cpp" />
+    <ClCompile Include="Source\risRTable.cpp" />
     <ClCompile Include="Source\risRVector.cpp" />
     <ClCompile Include="Source\risSockets_win.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="Source\risNetUdpRxThread.h" />
     <ClInclude Include="Source\risPortableCalls.h" />
     <ClInclude Include="Source\risPortableTypes.h" />
+    <ClInclude Include="Source\risRTable.h" />
     <ClInclude Include="Source\risRVector.h" />
     <ClInclude Include="Source\risSockets.h" />
     <ClInclude Include="Source\risStatistics.h" />

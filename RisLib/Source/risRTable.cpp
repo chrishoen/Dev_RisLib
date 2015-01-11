@@ -65,6 +65,11 @@ double& RTable1D::e (int aRow)
    return mValues[aRow];
 }
 
+double& RTable1D::operator() (int aRow)
+{
+   return mValues[aRow];
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -209,6 +214,12 @@ void RTable2D::initialize(
 //******************************************************************************
 
 double& RTable2D::e (int aRow,int aCol)
+{
+   int tIndex = (aRow)*mCols + (aCol);
+   return mValues[tIndex];
+}
+
+double& RTable2D::operator() (int aRow,int aCol)
 {
    int tIndex = (aRow)*mCols + (aCol);
    return mValues[tIndex];

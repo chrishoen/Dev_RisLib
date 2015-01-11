@@ -39,6 +39,7 @@ public:
 
    // Access components
    double& e(int aRow);
+   double& operator()(int aRow);
    void show(char* aLabel=0);
 
    //---------------------------------------------------------------------------
@@ -84,6 +85,7 @@ public:
 
    // Access components
    double& e(int aRow,int aCol);
+   double& operator()(int aRow,int aCol);
    void show(char* aLabel=0);
 
    //---------------------------------------------------------------------------

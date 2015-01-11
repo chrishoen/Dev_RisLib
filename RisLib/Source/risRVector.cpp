@@ -97,6 +97,11 @@ double& RVector::e (int aRow)
    return mValues[aRow-1];
 }
 
+double& RVector::operator() (int aRow)
+{
+   return mValues[aRow-1];
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -248,6 +253,12 @@ void RMatrix::initialize(
 //******************************************************************************
 
 double& RMatrix::e (int aRow,int aCol)
+{
+   int tIndex = (aRow-1)*mCols + (aCol-1);
+   return mValues[tIndex];
+}
+
+double& RMatrix::operator() (int aRow,int aCol)
 {
    int tIndex = (aRow-1)*mCols + (aCol-1);
    return mValues[tIndex];

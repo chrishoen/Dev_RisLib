@@ -68,7 +68,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
 
    mGoodCmd=false;
 
-   for (i=1;i<=MaxNumOfArgs;i++)
+   for (i=0;i<=MaxNumOfArgs;i++)
    {
       mArgFlag[i]=false;
    }
@@ -100,6 +100,8 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
 
    // Store command in arg[0]
    strcpy(mArgPtr[0],tToken);
+   // Set arg[0] valid flag
+   mArgFlag[0] = true;
 
    // Loop through command line to extract argument pointers
    // First argument is at arg[1]

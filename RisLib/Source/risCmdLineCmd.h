@@ -85,26 +85,26 @@ public:
    //***************************************************************************
    // Member variables
 
-   enum {MaxNumOfArgs=20};
-   enum {MaxArgSize=100};
+   enum {MaxNumOfArgs =  20};
+   enum {MaxArgSize   = 100};
 
    // Argument delimiters
    char mDelimiters[10];
 
    // Command line string argument pointer
    // mArgPtr[0] is the command, mArgPtr[1] is the first argument ...
-   char*  mArgPtr   [MaxNumOfArgs+1];      
+   char*  mArgPtr   [MaxNumOfArgs+1];
    // Command line string argument storage
    // mArgPtr[n] points to mArgStore[n]
-   char   mArgStore   [MaxNumOfArgs+1][MaxArgSize];      
+   char   mArgStore [MaxNumOfArgs+1][MaxArgSize];
    // True if corresponding argument exists
-   bool   mArgFlag  [MaxNumOfArgs+1];  
+   bool   mArgFlag  [MaxNumOfArgs+1];
    // Number of arguments
-   int    mArgNum;                         
+   int    mArgNum;
    // if number of arguments is zero then use defaults
-   bool   mDefaultEnable;                         
+   bool   mDefaultEnable;
    // True if an isCmd returned true   
-   bool   mGoodCmd;                        
+   bool   mGoodCmd;
    // True if struct is valid
    bool   mValidFlag;
 

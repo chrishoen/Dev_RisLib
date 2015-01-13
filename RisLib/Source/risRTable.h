@@ -57,6 +57,8 @@ public:
    int  mAlloc;
    // Current index into mValues
    int  mIndex;
+   // True if all values freqd in correctly
+   bool mValidFlag;
 };
 
 //******************************************************************************
@@ -103,6 +105,8 @@ public:
    int  mAlloc;
    // Current index into mValues
    int  mIndex;
+   // True if all values freqd in correctly
+   bool mValidFlag;
 };
 
 //******************************************************************************

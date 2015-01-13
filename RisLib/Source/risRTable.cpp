@@ -32,6 +32,7 @@ RTable1D::RTable1D()
    mFirstCmd = true;
    mAlloc = 0;
    mIndex = 0;
+   mValidFlag = false;
 }
 
 RTable1D::~RTable1D()
@@ -54,6 +55,7 @@ void RTable1D::initialize(
    mInitialized = true;
    mAlloc = tAlloc;
    mIndex = 0;
+   mValidFlag = false;
 }
 
 //******************************************************************************
@@ -76,6 +78,12 @@ double& RTable1D::operator() (int aRow)
 
 void RTable1D::show(char* aLabel)
 {
+   if (!mValidFlag)
+   {
+      printf("Table1D %s NOT VALID", aLabel);
+      return;
+   }
+
    char tLabel[30];
 
    if (aLabel==0)
@@ -159,6 +167,8 @@ void RTable1D::execute(Ris::CmdLineCmd* aCmd)
       // If values array if full then done
       if (mIndex == mAlloc)
       {
+         // Set valid
+         mValidFlag = true;
          // Pop this executive off of the nested executive stack
          nestedPop(aCmd);
          return;
@@ -183,6 +193,7 @@ RTable2D::RTable2D()
    mFirstCmd = true;
    mAlloc = 0;
    mIndex = 0;
+   mValidFlag = false;
 }
 
 RTable2D::~RTable2D()
@@ -207,6 +218,7 @@ void RTable2D::initialize(
    mInitialized = true;
    mAlloc = tAlloc;
    mIndex = 0;
+   mValidFlag = false;
 }
 
 //******************************************************************************
@@ -231,6 +243,12 @@ double& RTable2D::operator() (int aRow,int aCol)
 
 void RTable2D::show(char* aLabel)
 {
+   if (!mValidFlag)
+   {
+      printf("Table2D %s NOT VALID", aLabel);
+      return;
+   }
+
    char tLabel[30];
 
    if (aLabel==0)
@@ -247,7 +265,7 @@ void RTable2D::show(char* aLabel)
       printf("%s ",tLabel);
       for (int j=0;j<mCols;j++)
       {
-         printf("%10.8f ",e(i,j));
+         printf("%12.8f ",e(i,j));
       }
       printf("\n");
    }
@@ -323,6 +341,8 @@ void RTable2D::execute(Ris::CmdLineCmd* aCmd)
       // If values array if full then done
       if (mIndex == mAlloc)
       {
+         // Set valid
+         mValidFlag = true;
          // Pop this executive off of the nested executive stack
          nestedPop(aCmd);
          return;

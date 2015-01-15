@@ -35,7 +35,7 @@ namespace Net
 //
 //******************************************************************************
 
-class   SessionStateList
+class SessionStateList
 {
 public:
    SessionStateList();

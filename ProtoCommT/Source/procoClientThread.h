@@ -82,7 +82,7 @@ public:
    Ris::Net::TcpClientThread*  mTcpClientThread;
 
    // Message parser used by mTcpClientThread
-   ProtoComm::MessageParser* mMessageParser;
+   ProtoComm::MessageParserCreator mMessageParserCreator;
 
    //--------------------------------------------------------------
    // QCall:

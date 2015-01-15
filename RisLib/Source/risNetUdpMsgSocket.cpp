@@ -34,7 +34,7 @@ UdpRxMsgSocket::UdpRxMsgSocket()
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
-   delete mMessageParser;
+   if (mMessageParser) delete mMessageParser;
    free(mRxBuffer);
 }
 
@@ -164,7 +164,7 @@ UdpTxMsgSocket::UdpTxMsgSocket()
 
 UdpTxMsgSocket::~UdpTxMsgSocket()
 {
-   delete mMessageParser;
+   if (mMessageParser) delete mMessageParser;
    free(mTxBuffer);
 }
 

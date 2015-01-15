@@ -28,7 +28,8 @@ TcpMsgSocket::TcpMsgSocket()
    mTxMsgCount=0;
    mRxMsgCount=0;
    mValidFlag=false;
-   mMessageParser=0;
+   mRxMessageParser=0;
+   mTxMessageParser=0;
 }
 //******************************************************************************
 TcpMsgSocket::~TcpMsgSocket()
@@ -39,14 +40,18 @@ TcpMsgSocket::~TcpMsgSocket()
 //******************************************************************************
 // Configure the socket
 
-void TcpMsgSocket::configure(Sockets::SocketAddress aSocketAddress,BaseMessageParser* aMessageParser)
+void TcpMsgSocket::configure(
+   Sockets::SocketAddress    aSocketAddress,
+   BaseMessageParserCreator* aMessageParserCreator)
 {
    mTxMsgCount=0;
    mRxMsgCount=0;
 
    reset();
    mRemote = aSocketAddress;
-   registerMessageParser(aMessageParser);
+
+   if (mRxMessageParser==0) mRxMessageParser = aMessageParserCreator->createNew();
+   if (mTxMessageParser==0) mTxMessageParser = aMessageParserCreator->createNew();
 
    doSocket();
    setOptionKeepAlive();
@@ -68,10 +73,14 @@ void TcpMsgSocket::configure(Sockets::SocketAddress aSocketAddress,BaseMessagePa
    }
 
 }
-void TcpMsgSocket::registerMessageParser(BaseMessageParser* aMessageParser)
+
+void TcpMsgSocket::configure(
+   BaseMessageParserCreator* aMessageParserCreator)
 {
-   mMessageParser = aMessageParser;
+   if (mRxMessageParser == 0) mRxMessageParser = aMessageParserCreator->createNew();
+   if (mTxMessageParser == 0) mTxMessageParser = aMessageParserCreator->createNew();
 }
+
 //******************************************************************************
 // Reconfigure the socket
 
@@ -97,11 +106,11 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aTxMsg)
    mTxMutex.get();
 
    // Message parser processing
-   mMessageParser->processBeforeSend(aTxMsg);
+   mTxMessageParser->processBeforeSend(aTxMsg);
 
    // Byte buffer, constructor takes address and size
    ByteBuffer tBuffer(mTxBuffer,BufferSize);  
-   mMessageParser->configureByteBuffer(&tBuffer);
+   mTxMessageParser->configureByteBuffer(&tBuffer);
 
    // Copy transmit message to buffer
    tBuffer.putToBuffer(aTxMsg);
@@ -140,10 +149,10 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
 
    // Byte buffer, constructor takes address and size
    ByteBuffer tBuffer(mRxBuffer,BufferSize);  
-   mMessageParser->configureByteBuffer(&tBuffer);
+   mRxMessageParser->configureByteBuffer(&tBuffer);
 
    // Header length
-   int tHeaderLength = mMessageParser->getHeaderLength();
+   int tHeaderLength = mRxMessageParser->getHeaderLength();
 
    //-------------------------------------------------------------------------
    // Read the message header into the receive buffer
@@ -167,7 +176,7 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    // and validate the header
 
    MessageHeaderParms tHeaderParms;
-   mMessageParser->getMessageHeaderParms(&tBuffer,&tHeaderParms);
+   mRxMessageParser->getMessageHeaderParms(&tBuffer,&tHeaderParms);
 
    if (!tHeaderParms.isValid())
    {
@@ -205,7 +214,7 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    // object and return it.
 
    tBuffer.rewind();
-   aRxMsg = mMessageParser->makeFromByteBuffer(&tBuffer);
+   aRxMsg = mRxMessageParser->makeFromByteBuffer(&tBuffer);
 
    // Test for errors and return.
    // If the pointer is zero then message is bad

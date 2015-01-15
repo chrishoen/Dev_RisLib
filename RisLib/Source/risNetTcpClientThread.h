@@ -88,12 +88,12 @@ public:
    typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
 
    void configure(
-      char*                   aServerIpAddr,
-      int                     aServerIpPort,
-      Ris::BaseMessageParser* aMessageParser,
-      SessionQCall*           aSessionQCall,
-      RxMsgQCall*             aRxMsgQCall,
-      int                     aFlags=0); 
+      char*                          aServerIpAddr,
+      int                            aServerIpPort,
+      Ris::BaseMessageParserCreator* aMessageParser,
+      SessionQCall*                  aSessionQCall,
+      RxMsgQCall*                    aRxMsgQCall,
+      int                            aFlags=0); 
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -151,8 +151,9 @@ public:
    // Socket address that socket instance connects to
    Sockets::SocketAddress mSocketAddress;
 
-   // Message parser for a stream socket
-   BaseMessageParser* mMessageParser;
+   // Message parser creator, this is used by the socket to
+   // create an instance of a message parser
+   BaseMessageParserCreator* mMessageParserCreator;
 
    //--------------------------------------------------------------
    // State:

@@ -28,19 +28,19 @@ TcpClientThread::TcpClientThread()
 // Configure:
 
 void TcpClientThread::configure(
-   char*                     aServerIpAddr,
-   int                       aServerIpPort,
-   BaseMessageParser*        aMessageParser,
-   SessionQCall*             aSessionQCall,
-   RxMsgQCall*               aRxMsgQCall,
-   int                       aFlags) 
+   char*                      aServerIpAddr,
+   int                        aServerIpPort,
+   BaseMessageParserCreator*  aMessageParserCreator,
+   SessionQCall*              aSessionQCall,
+   RxMsgQCall*                aRxMsgQCall,
+   int                        aFlags) 
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
 
    mConnectionFlag=false;
    mFlags=aFlags;
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
-   mMessageParser = aMessageParser;
+   mMessageParserCreator = aMessageParserCreator;
 
    mSessionQCall = *aSessionQCall;
    mRxMsgQCall   = *aRxMsgQCall;
@@ -67,7 +67,7 @@ void TcpClientThread::threadInitFunction()
    Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadInitFunction BEGIN");
 
    // Configure the socket
-   mSocket.configure(mSocketAddress,mMessageParser);
+   mSocket.configure(mSocketAddress,mMessageParserCreator);
 
    Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadInitFunction END");
 }

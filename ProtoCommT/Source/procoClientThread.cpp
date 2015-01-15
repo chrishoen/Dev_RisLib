@@ -20,7 +20,6 @@ namespace ProtoComm
 ClientThread::ClientThread()
 {
    mTcpClientThread = new Ris::Net::TcpClientThread;
-   mMessageParser = new ProtoComm::MessageParser;
    mConnectionFlag=false;
    mPeriodicEnable=false;
    mPeriodicCount=0;
@@ -38,7 +37,6 @@ ClientThread::ClientThread()
 ClientThread::~ClientThread()
 {
    delete mTcpClientThread;
-   delete mMessageParser;
 }
 
 //******************************************************************************
@@ -50,7 +48,7 @@ void ClientThread::configure()
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
-   mMessageParser->configure(gSettings.mMyAppNumber);
+   mMessageParserCreator.configure(gSettings.mMyAppNumber);
 
    //---------------------------------------------------------------------------
    // Configure child thread, client
@@ -58,7 +56,7 @@ void ClientThread::configure()
    mTcpClientThread->configure(
       "127.0.0.1",
       gSettings.mTcpServerPort,
-      mMessageParser,
+      &mMessageParserCreator,
       &mSessionQCall,
       &mRxMsgQCall);
 }

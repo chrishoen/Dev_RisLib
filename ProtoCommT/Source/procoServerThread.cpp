@@ -27,7 +27,6 @@ ServerThread::ServerThread()
    mStatusCount2=0;
 
    mTcpServerThread  = new Ris::Net::TcpServerThread;
-   mMessageParser    = new ProtoComm::MessageParser;
 
    // Initialize QCalls
    mSessionQCall.bind (this,&ServerThread::executeSession);
@@ -39,7 +38,6 @@ ServerThread::ServerThread()
 ServerThread::~ServerThread()
 {
    delete mTcpServerThread;
-   delete mMessageParser;
 }
 
 //******************************************************************************
@@ -51,7 +49,7 @@ void ServerThread::configure()
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
-   mMessageParser->configure(gSettings.mMyAppNumber);
+   mMessageParserCreator.configure(gSettings.mMyAppNumber);
 
    //--------------------------------------------------------------------------- 
    // Configure child thread, server
@@ -60,7 +58,7 @@ void ServerThread::configure()
       "0.0.0.0",
       gSettings.mTcpServerPort,
       MaxSessions,
-      mMessageParser,
+      &mMessageParserCreator,
       &mSessionQCall,
       &mRxMsgQCall);
 }
@@ -234,12 +232,17 @@ void ServerThread::sendMsg(int aSessionIndex,ProtoComm::BaseMsg* aTxMsg)
 
 //******************************************************************************
 // This sends a test message via the tcp client thread
-void ServerThread::sendTestMsg()
+void ServerThread::sendTestMsg(int aAppNumber)
 {
+   // Get session index
+   int tSessionIndex = mSessionStateList.getIndex(aAppNumber);
+   if (tSessionIndex == Ris::Net::SessionStateList::InvalidValue) return;
+
+   // Send message on socket at the session index
    ProtoComm::TestMsg* msg = new ProtoComm::TestMsg;
    msg->mCode1=201;
 
-   mTcpServerThread->sendMsg(0,msg);
+   mTcpServerThread->sendMsg(tSessionIndex,msg);
 }
 
 }//namespace

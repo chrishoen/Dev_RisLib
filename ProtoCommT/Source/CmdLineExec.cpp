@@ -51,10 +51,12 @@ void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,201);
+
    switch (ProtoComm::gSettings.mMyAppRole)
    {
       case ProtoComm::AR_TcpServer:
-         gServerThread->sendTestMsg();
+         gServerThread->sendTestMsg(aCmd->argInt(1));
          break;
       case ProtoComm::AR_TcpClient:
          gClientThread->sendTestMsg();

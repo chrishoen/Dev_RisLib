@@ -47,7 +47,13 @@ public:
    // Socket:
 
    // These do socket and bind calls
-   void configure(Sockets::SocketAddress aSocketAddress,BaseMessageParser* aMessageParser);
+   void configure(
+      Sockets::SocketAddress    aSocketAddress,
+      BaseMessageParserCreator* aMessageParserCreator);
+
+   void configure(
+      BaseMessageParserCreator* aMessageParserCreator);
+
    void reconfigure(); 
 
    // This sends a message over the socket via a blocking send call.
@@ -59,13 +65,16 @@ public:
    // It returns true if successful.
    bool doRecvMsg (ByteContent*& aRxMsg);
 
-   // This is a message parser that is used to get details about 
+   // These are message parsers that are used to get details about 
    // a message from a message header that is contained in a
-   // byte buffer. It allows the doRecvMsg method to receive and extract a
-   // message from a byte buffer without the having the message code
-   // visible to it.
-   void registerMessageParser(BaseMessageParser* aMessageParser);
-   BaseMessageParser* mMessageParser;
+   // byte buffer. The receive message parser allows the doRecvMsg
+   // method to receive and extract a message from a byte buffer 
+   // without the having the message code visible to it. The transmit
+   // message parser allows the doSendMsg method to set header data
+   // before the message is sent.
+
+   BaseMessageParser* mRxMessageParser;
+   BaseMessageParser* mTxMessageParser;
 
    // Buffers
    enum    {BufferSize = 4096};

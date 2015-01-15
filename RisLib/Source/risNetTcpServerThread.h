@@ -115,13 +115,13 @@ public:
    typedef Ris::Threads::QCall2<int,Ris::ByteContent*> RxMsgQCall;
 
    void configure(
-      char*              aServerIpAddr,
-      int                aServerIpPort,
-      int                aMaxSessions, 
-      BaseMessageParser* aMessageParser,
-      SessionQCall*      aSessionQCall,
-      RxMsgQCall*        aRxMsgQCall,
-      int                aFlags=0);
+      char*                     aServerIpAddr,
+      int                       aServerIpPort,
+      int                       aMaxSessions, 
+      BaseMessageParserCreator* aMessageParserCreator,
+      SessionQCall*             aSessionQCall,
+      RxMsgQCall*               aRxMsgQCall,
+      int                       aFlags=0);
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -178,7 +178,7 @@ public:
    TcpServerHubSocket mHubSocket;
 
    // Maximum possible number of sessions
-   enum {MaxSessions=100};
+   enum {MaxSessions=20};
    // Maximum configured number of sessions
    // 0 < mMaxSessions <= MaxSessions
    int mMaxSessions; 
@@ -191,8 +191,8 @@ public:
    // Socket address that the hub socket binds to
    Sockets::SocketAddress mSocketAddress;
 
-   // Message parser for node sockets
-   BaseMessageParser* mMessageParser;
+   // Message parser creator for node sockets.
+   BaseMessageParserCreator* mMessageParserCreator;
 
    //--------------------------------------------------------------
    // State:

@@ -87,7 +87,7 @@ public:
    enum {MaxSessions=10};
 
    // Message parser used by mTcpServerThread
-   ProtoComm::MessageParser* mMessageParser;
+   ProtoComm::MessageParserCreator mMessageParserCreator;
 
    //--------------------------------------------------------------
    // QCall:
@@ -124,7 +124,7 @@ public:
    // Send a message via mTcpServerThread:
 
    void sendMsg (int aSessionIndex,ProtoComm::BaseMsg* aTxMsg);
-   void sendTestMsg ();
+   void sendTestMsg (int aAppNumber);
 };
 //******************************************************************************
 // Global instance

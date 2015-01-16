@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "my_functions.h"
 #include "prnPrint.h"
 
 #include "CmdLineExec.h"
@@ -48,7 +49,11 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,0,"ABCDEFGH");
+   aCmd->setArgDefault(1,"abcdefg");
+
+   Prn::print(0,0,"%s %s",
+      my_string_from_bool(aCmd->isArgString(1, "abcdefg")),
+      aCmd->argString(1));
 }
 
 //******************************************************************************

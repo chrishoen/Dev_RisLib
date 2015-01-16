@@ -85,7 +85,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    //---------------------------------------------------------------------------
    // Convert command line to upper case
 
-   r_myStrupr(aCommandLine);
+// r_myStrupr(aCommandLine);
 
    //---------------------------------------------------------------------------
    // Parse command line into command and argument members
@@ -134,12 +134,17 @@ bool CmdLineCmd::isCmd(const char* aString)
    if (!mValidFlag) return false;
 
    // Copy to temp and convert to upper case
-   char tString[200];
-   strcpy(tString,aString);
+   char tArg0[40];
+   strncpy(tArg0,mArgPtr[0],40);
+   r_myStrupr(tArg0);
+
+   // Copy to temp and convert to upper case
+   char tString[40];
+   strncpy(tString,aString,40);
    r_myStrupr(tString);
 
    // Compare mCommand and aString 
-   if ((strcmp(mArgPtr[0],tString)==0))
+   if ((strcmp(tArg0,tString)==0))
    {
       // Set good command
       mGoodCmd=true;
@@ -249,19 +254,26 @@ char* CmdLineCmd::argString(int aArgIndex)
 //******************************************************************************
 // Return argument value
 
-bool CmdLineCmd::isArgString (int aArgIndex,const char* aStr)
+bool CmdLineCmd::isArgString (int aArgIndex,const char* aString)
 {
-   char tTemp[200];
+   // Guard 
+   if (!mValidFlag) return false;
 
    // Guard
-   if(!mArgFlag[aArgIndex]) return 0;
+   if(!mArgFlag[aArgIndex]) return false;
 
-   // Copy to tTemp and convert to upper case
-   strcpy(tTemp,aStr);
-   r_myStrupr(tTemp);
+   // Copy to temp and convert to upper case
+   char tArgN[100];
+   strncpy(tArgN,mArgPtr[aArgIndex],40);
+   r_myStrupr(tArgN);
+
+   // Copy to temp and convert to upper case
+   char tString[100];
+   strncpy(tString,aString,40);
+   r_myStrupr(tString);
 
    // Compare aString with argument string   
-   return (strcmp(mArgPtr[aArgIndex],tTemp)==0);
+   return (strcmp(tArgN,tString)==0);
 }
 
 //******************************************************************************
@@ -326,7 +338,7 @@ void CmdLineCmd::setArgDefault(int aArgIndex, char* aValue)
    if (!mDefaultEnable) return;
 
    strcpy(mArgPtr[aArgIndex],aValue);
-   r_myStrupr(mArgPtr[aArgIndex]);
+// r_myStrupr(mArgPtr[aArgIndex]);
 
    mArgFlag[aArgIndex] = true;
    mArgNum = aArgIndex;

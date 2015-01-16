@@ -43,6 +43,31 @@ const char* portableGetSettingsDir()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+static char rCurrentProgramDir[200];
+
+void portableCallsInitialize(int argc, char** argv)
+{
+   strncpy(rCurrentProgramDir, argv[0],200);
+
+   int tIndex = strlen(rCurrentProgramDir);
+   while(--tIndex > 0)
+   {
+      if (rCurrentProgramDir[tIndex] == '\\')
+      {
+         rCurrentProgramDir[tIndex]=0;
+         return;
+      }
+   }
+
+}
+
+char* portableGetCurrentProgramDir()
+{
+   return rCurrentProgramDir;
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 static char rCurrentWorkingDir[200];
 char* portableGetCurrentWorkingDir()
 {

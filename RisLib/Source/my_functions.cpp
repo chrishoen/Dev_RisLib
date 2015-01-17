@@ -191,3 +191,139 @@ char*  my_string_from_time(double aTime, char* aBuffer)
    sprintf(aBuffer,"%02d:%02d:%02d",tHourInDay,tMinInHour,tSecInMin);
    return aBuffer;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// File operations
+
+bool my_copy_file(char* aSourcePath, char* aDestinPath)
+{
+
+   //--------------------------------------------------------------
+   // Open source file
+
+   FILE* tSourceFile = fopen(aSourcePath,"rb");
+   if (tSourceFile == 0) return false;
+
+   // Get source file size
+   fseek(tSourceFile,0, SEEK_END);
+   int tSourceSize = ftell(tSourceFile);
+   rewind(tSourceFile);
+
+   //--------------------------------------------------------------
+   // Open destination file
+
+   FILE* tDestinFile = fopen(aDestinPath,"wb");
+   if (tDestinFile == 0) return false;
+
+   //--------------------------------------------------------------
+   // Copy source file to destination file
+
+   char* tBuffer = (char*)malloc(1024);
+   int  tReadResult  = 0;
+   int  tWriteResult = 0;
+   int  tReadCount   = 0;
+   int  tWriteCount  = 0;
+
+   // Loop 
+   bool tGoing=true;
+   while (tGoing)
+   {
+      // Read into buffer from source file
+      tReadResult  = fread(tBuffer,1,1024,tSourceFile);
+      tReadCount += tReadResult;
+
+      // Guard
+      if (ferror(tSourceFile)) return false;
+
+      // Write buffer to destination file
+      tWriteResult = fwrite(tBuffer,1,tReadResult,tDestinFile);
+      tWriteCount += tWriteResult;
+
+      // Guard
+      if (ferror(tDestinFile)) return false;
+
+      // Done 
+      if (tWriteCount >= tSourceSize) tGoing=false;
+   }
+
+
+   //--------------------------------------------------------------
+   // Done
+
+   // Close files
+   fclose(tSourceFile);
+   fclose(tDestinFile);
+   // Free
+   free((void*)tBuffer);
+
+   return true;
+}
+
+bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes)
+{
+   bool tSameFlag = true;
+   bool tGoing    = true;
+
+   //--------------------------------------------------------------
+   // Open files
+
+   FILE* tFile1File = fopen(aFile1Path,"rb");
+   if (tFile1File == 0) return false;
+
+   FILE* tFile2File = fopen(aFile2Path,"rb");
+   if (tFile2File == 0) return false;
+
+   //--------------------------------------------------------------
+   // Allocate memory
+
+   char* tBuffer1 = (char*)malloc(aNumOfBytes);
+   char* tBuffer2 = (char*)malloc(aNumOfBytes);
+
+   //--------------------------------------------------------------
+   // Read from files
+
+   int tReadResult1  = fread(tBuffer1,1,aNumOfBytes,tFile1File);
+   int tReadResult2  = fread(tBuffer2,1,aNumOfBytes,tFile2File);
+
+   //--------------------------------------------------------------
+   // Compare read sizes
+
+   if (tReadResult1 != tReadResult1)
+   {
+      tSameFlag = false;
+      tGoing = false;
+   }
+
+   //--------------------------------------------------------------
+   // Compare file content
+
+   if (tGoing)
+   {
+      for (int i = 0; i < tReadResult1; i++)
+      {
+         if (tBuffer1[i] != tBuffer2[i]) 
+         {
+            tSameFlag = false;
+            tGoing = false;
+            break;
+         }
+      }
+   }
+
+   //--------------------------------------------------------------
+   // Done
+
+   // Close files
+   fclose(tFile1File);
+   fclose(tFile2File);
+
+   // Free
+   free((void*)tBuffer1);
+   free((void*)tBuffer2);
+
+   return tSameFlag;
+}
+
+

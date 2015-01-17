@@ -86,5 +86,13 @@ My math functions
       return aIndex;
 
    }
+
+   //---------------------------------------------------------------------------
+   // File operations
+
+   bool my_copy_file(char* aSourcePath, char* aDestinPath);
+
+   bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes);
+
 #endif
 

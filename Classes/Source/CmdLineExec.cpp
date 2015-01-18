@@ -87,19 +87,29 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,501);
+   Prn::print(0, 0, "");
 
-   gClass3.mMyInterface3->interfaceCall3(aCmd->argInt(1));
+   Prn::print(0, 0, "new Class3B");
+   Class3B* t3B = new Class3B;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "new Class3A");
+   Class3A* t3A = new Class3A;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "delete Class3B");
+   delete t3B;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "delete Class3A");
+   delete t3A;
+   Prn::print(0, 0, "");
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,601);
-
-   BaseInterface3* tFace = new Interface3<Class3>(&gClass3,&Class3::myCall);
-   tFace->interfaceCall3(aCmd->argInt(1));
 }
 
 //******************************************************************************

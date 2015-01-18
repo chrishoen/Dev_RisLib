@@ -11,6 +11,7 @@ QCall test thread class.
 //******************************************************************************
 //******************************************************************************
 #include "risThreadsQCallThread.h"
+#include "risThreadsQCall.h"
 #include "risTimerTester.h"
 
 namespace Some

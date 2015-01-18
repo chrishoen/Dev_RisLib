@@ -10,6 +10,7 @@
 #include "prnPrint.h"
 
 #include "risThreadsQCallThread.h"
+#include "risThreadsQCall.h"
 
 namespace Ris
 {

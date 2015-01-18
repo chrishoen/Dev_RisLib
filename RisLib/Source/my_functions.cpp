@@ -290,7 +290,7 @@ bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes)
    //--------------------------------------------------------------
    // Compare read sizes
 
-   if (tReadResult1 != tReadResult1)
+   if (tReadResult1 != tReadResult2)
    {
       tSameFlag = false;
       tGoing = false;

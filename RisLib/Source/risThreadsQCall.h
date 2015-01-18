@@ -132,6 +132,7 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 #include "risCallPointer.h"
+#include "risThreadsQCallThread.h"
 
 namespace Ris
 {

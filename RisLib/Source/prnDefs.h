@@ -5,6 +5,7 @@
 // imports
 //******************************************************************************
 #include "risThreadsQCallThread.h"
+#include "risThreadsQCall.h"
 
 namespace Prn
 {

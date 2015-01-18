@@ -1,5 +1,5 @@
-#ifndef _RISTHREADSQCALL_H_
-#define _RISTHREADSQCALL_H_
+#ifndef _RISTHREADSQCALLTHREAD_H_
+#define _RISTHREADSQCALLTHREAD_H_
 
 /*==============================================================================
 

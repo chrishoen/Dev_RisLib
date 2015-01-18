@@ -15,7 +15,7 @@ the thread base classes, which is normally the case.
 //******************************************************************************
 
 #include "risPortableTypes.h"
-#include "risThreadsQCall.h"
+#include "risThreadsQCallThread.h"
 #include "risLogic.h"
 
 namespace Ris

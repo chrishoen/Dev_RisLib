@@ -10,7 +10,7 @@ ProtoComm client thread class.
 //******************************************************************************
 #include "risContainers.h"
 #include "risNetTcpClientThread.h"
-#include "risThreadsQCall.h"
+#include "risThreadsQCallThread.h"
 
 #include "procoMsg.h"
 

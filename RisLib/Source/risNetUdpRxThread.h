@@ -33,7 +33,7 @@ or callbacks in their configure calls.
 #include "risContainers.h"
 #include "risSockets.h"
 #include "risThreads.h"
-#include "risThreadsQCall.h"
+#include "risThreadsQCallThread.h"
 
 #include "risNetUdpMsgSocket.h"
 

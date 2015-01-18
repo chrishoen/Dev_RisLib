@@ -24,7 +24,7 @@ ProtoComm client thread class.
 #include "risTimeMarker.h"
 #include "risNetUdpRxThread.h"
 #include "risNetUdpMsgSocket.h"
-#include "risThreadsQCall.h"
+#include "risThreadsQCallThread.h"
 
 #include "procoMsg.h"
 

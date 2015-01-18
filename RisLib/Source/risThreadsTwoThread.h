@@ -45,7 +45,7 @@ provides a semi-serialized thread of execution.
 //******************************************************************************
 
 #include "risPortableTypes.h"
-#include "risThreadsQCall.h"
+#include "risThreadsQCallThread.h"
 #include "risThreadsCPSpecific.h"
 #include "risLogic.h"
 

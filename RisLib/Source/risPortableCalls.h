@@ -16,11 +16,6 @@ namespace Ris
 //******************************************************************************
 
    //---------------------------------------------------------------------------
-   // initialize this package with main arguments
-
-   void portableCallsInitialize(int argc,char** argv);
-
-   //---------------------------------------------------------------------------
    // Ticks are in milliseconds
 
    void portableSleep(int aTicks);
@@ -39,12 +34,6 @@ namespace Ris
    // This returns a pointer to the current working directory.
 
    char* portableGetCurrentWorkingDir();
-
-   //---------------------------------------------------------------------------
-   // This returns a pointer to the directory where the current program
-   // executable exists.
-
-   char* portableGetCurrentProgramDir();
 
    //---------------------------------------------------------------------------
    // Wait for key pressed

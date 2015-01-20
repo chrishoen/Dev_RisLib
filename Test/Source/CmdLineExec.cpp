@@ -60,7 +60,9 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,0,"ABCDEFGH");
+   aCmd->setArgDefault(1,"true");
+
+   Prn::print(0,0,"Go4 %s",my_string_from_bool(aCmd->argBool(1)));
 }
 
 //******************************************************************************

@@ -60,14 +60,43 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,"true");
+   aCmd->setArgDefault(1,0);
+   aCmd->setArgDefault(2,1);
 
-   Prn::print(0,0,"Go4 %s",my_string_from_bool(aCmd->argBool(1)));
+   int tIndex = aCmd->argInt(1);
+   int tDelta = aCmd->argInt(2);
+   int tSize  = 5;
+
+   Prn::print(0,0,"");
+   Prn::print(0,0,"index %d",tIndex);
+   Prn::print(0,0,"delta %d",tDelta);
+   Prn::print(0,0,"");
+
+   tIndex = my_index_add(tIndex,tDelta,tSize);
+
+   Prn::print(0,0,"index %d",tIndex);
+   Prn::print(0,0,"");
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,0);
+   aCmd->setArgDefault(2,1);
+
+   int tIndex = aCmd->argInt(1);
+   int tDelta = aCmd->argInt(2);
+   int tSize  = 5;
+
+   Prn::print(0,0,"");
+   Prn::print(0,0,"index %d",tIndex);
+   Prn::print(0,0,"delta %d",tDelta);
+   Prn::print(0,0,"");
+
+   tIndex = my_index_sub(tIndex,tDelta,tSize);
+
+   Prn::print(0,0,"index %d",tIndex);
+   Prn::print(0,0,"");
 }
 

@@ -70,8 +70,6 @@ My math functions
    // Index arithmetic for queues, wraps around
    inline int my_index_add(int aIndex, int aDelta, int aSize)
    {
-      return (aSize + aIndex + aDelta) % aSize;
-
       aIndex += aDelta;
       if (aIndex >= aSize) aIndex -= aSize;
       return aIndex;
@@ -79,8 +77,6 @@ My math functions
    }
    inline int my_index_sub(int aIndex, int aDelta, int aSize)
    {
-      return (aSize + aIndex - aDelta) % aSize;
-
       aIndex -= aDelta;
       if (aIndex < 0 ) aIndex += aSize;
       return aIndex;

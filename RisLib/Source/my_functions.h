@@ -84,6 +84,13 @@ My math functions
    }
 
    //---------------------------------------------------------------------------
+   // File functions
+
+   void my_strupr(char* aString);
+
+   void my_strncpy(char* aDestin,const char* aSource,unsigned int aSize);
+
+   //---------------------------------------------------------------------------
    // File operations
 
    bool my_copy_file(char* aSourcePath, char* aDestinPath);

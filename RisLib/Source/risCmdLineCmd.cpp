@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "my_functions.h"
 #include "risCmdLineCmd.h"
 
 namespace Ris
@@ -135,12 +136,12 @@ bool CmdLineCmd::isCmd(const char* aString)
 
    // Copy to temp and convert to upper case
    char tArg0[40];
-   strncpy(tArg0,mArgPtr[0],40);
+   my_strncpy(tArg0,mArgPtr[0],40);
    r_myStrupr(tArg0);
 
    // Copy to temp and convert to upper case
    char tString[40];
-   strncpy(tString,aString,40);
+   my_strncpy(tString,aString,40);
    r_myStrupr(tString);
 
    // Compare mCommand and aString 
@@ -214,7 +215,7 @@ bool CmdLineCmd::argBool(int aArgIndex)
 
    // Copy to temp and convert to upper case
    char tArgN[40];
-   strncpy(tArgN,mArgPtr[aArgIndex],40);
+   my_strncpy(tArgN,mArgPtr[aArgIndex],40);
    r_myStrupr(tArgN);
 
    // Copy to temp and convert to upper case
@@ -275,12 +276,12 @@ bool CmdLineCmd::isArgString (int aArgIndex,const char* aString)
 
    // Copy to temp and convert to upper case
    char tArgN[40];
-   strncpy(tArgN,mArgPtr[aArgIndex],40);
+   my_strncpy(tArgN,mArgPtr[aArgIndex],40);
    r_myStrupr(tArgN);
 
    // Copy to temp and convert to upper case
    char tString[40];
-   strncpy(tString,aString,40);
+   my_strncpy(tString,aString,40);
    r_myStrupr(tString);
 
    // Compare aString with argument string   

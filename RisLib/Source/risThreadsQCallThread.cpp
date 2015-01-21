@@ -50,8 +50,6 @@ void BaseQCallThread::threadTimerInitFunction()
    // Guard
    if (mCreateThreadTimerFlag == false) return;
 
-   Prn::print(Prn::ThreadInit,0, "BaseQCallThread::threadTimerInitFunction %d",mTimerPeriod);
- 
    // Set timer for periodic
    mThreadTimerCall.bind (this,&BaseQCallThread::threadExecuteOnTimer);
    mThreadTimer.setPeriodic(mThreadTimerCall,mTimerPeriod);

@@ -135,13 +135,13 @@ bool CmdLineCmd::isCmd(const char* aString)
    if (!mValidFlag) return false;
 
    // Copy to temp and convert to upper case
-   char tArg0[40];
-   my_strncpy(tArg0,mArgPtr[0],40);
+   char tArg0[80];
+   my_strncpy(tArg0,mArgPtr[0],80);
    r_myStrupr(tArg0);
 
    // Copy to temp and convert to upper case
-   char tString[40];
-   my_strncpy(tString,aString,40);
+   char tString[80];
+   my_strncpy(tString,aString,80);
    r_myStrupr(tString);
 
    // Compare mCommand and aString 
@@ -214,12 +214,12 @@ bool CmdLineCmd::argBool(int aArgIndex)
    // Test for true,false
 
    // Copy to temp and convert to upper case
-   char tArgN[40];
-   my_strncpy(tArgN,mArgPtr[aArgIndex],40);
+   char tArgN[80];
+   my_strncpy(tArgN,mArgPtr[aArgIndex],80);
    r_myStrupr(tArgN);
 
    // Copy to temp and convert to upper case
-   char tString[40];
+   char tString[80];
    strcpy(tString,"TRUE");
 
    // Compare aString with argument string   
@@ -275,13 +275,13 @@ bool CmdLineCmd::isArgString (int aArgIndex,const char* aString)
    if(!mArgFlag[aArgIndex]) return false;
 
    // Copy to temp and convert to upper case
-   char tArgN[40];
-   my_strncpy(tArgN,mArgPtr[aArgIndex],40);
+   char tArgN[80];
+   my_strncpy(tArgN,mArgPtr[aArgIndex],80);
    r_myStrupr(tArgN);
 
    // Copy to temp and convert to upper case
-   char tString[40];
-   my_strncpy(tString,aString,40);
+   char tString[80];
+   my_strncpy(tString,aString,80);
    r_myStrupr(tString);
 
    // Compare aString with argument string   

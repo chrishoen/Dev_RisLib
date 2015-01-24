@@ -21,6 +21,8 @@ subtopic is enabled then the print is executed.
 //******************************************************************************
 
 #include "risCallPointer.h"
+#include "risThreadsQCallThread.h"
+#include "risThreadsQCall.h"
 #include "prnPrintSettings.h"
 
 namespace Prn
@@ -30,7 +32,8 @@ namespace Prn
 //******************************************************************************
 //******************************************************************************
 
-typedef Ris::CallPointer1<char*> RedirectCallPointer;
+typedef Ris::CallPointer1<char*>    RedirectCallPointer;
+typedef Ris::Threads::QCall1<char*> RedirectQCall;
 
 //******************************************************************************
 //******************************************************************************
@@ -43,6 +46,7 @@ void useSettingsFileDefault  ();
 void useSettingsFileName     (char*                aSettingsFileName);
 void useSettingsFileSection  (char*                aSettingsFileSection);
 void useRedirectCallPointer  (RedirectCallPointer  aRedirectCallPointer);
+void useRedirectQCall        (RedirectQCall        aRedirectQCall);
 void initializePrint         ();
 
 

@@ -34,6 +34,9 @@ bool                 rUseSettingsFile;
 char                 rSettingsFilePath    [MaxNameSize];
 char                 rSettingsFileSection [MaxNameSize];
 RedirectCallPointer  rRedirectCallPointer;
+RedirectQCall        rRedirectQCall;
+bool                 rUseRedirectCallPointer;
+bool                 rUseRedirectQCall;
 bool                 rSuppressFlag;
 
 //****************************************************************************
@@ -50,6 +53,8 @@ void resetPrint()
    rSettingsFilePath[0]=0;
    strcpy(rSettingsFileSection, "DEFAULT");
    rRedirectCallPointer.clear();
+   rUseRedirectCallPointer = false;
+   rUseRedirectQCall = false;
    rSuppressFlag=true;
 
    strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),MaxNameSize);
@@ -95,7 +100,16 @@ void useSettingsFileSection(char*aSettingsFileSection)
 
 void useRedirectCallPointer(RedirectCallPointer  aRedirectCallPointer)
 {
+   rUseRedirectCallPointer = true;
    rRedirectCallPointer = aRedirectCallPointer;
+}
+
+//****************************************************************************
+
+void useRedirectQCall(RedirectQCall  aRedirectQCall)
+{
+   rUseRedirectQCall = true;
+   rRedirectQCall = aRedirectQCall;
 }
 
 
@@ -220,17 +234,23 @@ void print(int aTopic,int aSubTopic,const char* aFormat, ...)
    // If non threaded
    if (!rUsePrintThread)
    {
-      // If no redirection call pointer 
-      if (!rRedirectCallPointer.isValid())
-      {
-         // Send to standard output
-         puts(tPrintStr);
-      }
       // If redirection call pointer 
-      else
+      if (rUseRedirectCallPointer)
       {
          // Send to redirection call pointer 
          rRedirectCallPointer(tPrintStr);
+      }
+      // If redirection qcall 
+      else if (rUseRedirectQCall)
+      {
+         // Send to redirection call pointer 
+         rRedirectQCall(tPrintStr);
+      }
+      // If no redirection
+      else 
+      {
+         // Send to standard output
+         puts(tPrintStr);
       }
    }
    // If threaded

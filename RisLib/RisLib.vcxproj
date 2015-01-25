@@ -22,6 +22,7 @@
     <ClCompile Include="Source\risCmdLineExec.cpp" />
     <ClCompile Include="Source\risCmdLineFile.cpp" />
     <ClCompile Include="Source\risCmdLineString.cpp" />
+    <ClCompile Include="Source\risCmdLineTables.cpp" />
     <ClCompile Include="Source\risCriticalSection_win.cpp" />
     <ClCompile Include="Source\risFilterAlpha.cpp" />
     <ClCompile Include="Source\risFilterFilters.cpp" />
@@ -37,7 +38,6 @@
     <ClCompile Include="Source\risNetUdpRxThread.cpp" />
     <ClCompile Include="Source\risPointerStack.cpp" />
     <ClCompile Include="Source\risPortableCalls_win.cpp" />
-    <ClCompile Include="Source\risRTable.cpp" />
     <ClCompile Include="Source\risRVector.cpp" />
     <ClCompile Include="Source\risSockets_win.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
@@ -70,6 +70,7 @@
     <ClInclude Include="Source\risCmdLineExec.h" />
     <ClInclude Include="Source\risCmdLineFile.h" />
     <ClInclude Include="Source\risCmdLineString.h" />
+    <ClInclude Include="Source\risCmdLineTables.h" />
     <ClInclude Include="Source\risContainers.h" />
     <ClInclude Include="Source\risCriticalSection.h" />
     <ClInclude Include="Source\risFilterAlpha.h" />
@@ -87,7 +88,6 @@
     <ClInclude Include="Source\risPointerStack.h" />
     <ClInclude Include="Source\risPortableCalls.h" />
     <ClInclude Include="Source\risPortableTypes.h" />
-    <ClInclude Include="Source\risRTable.h" />
     <ClInclude Include="Source\risRVector.h" />
     <ClInclude Include="Source\risSockets.h" />
     <ClInclude Include="Source\risStatistics.h" />

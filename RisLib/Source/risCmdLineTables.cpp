@@ -12,10 +12,11 @@ Description:
 #include <string.h>
 #include "my_functions.h"
 
-#include "risRTable.h"
+#include "risCmdLineTables.h"
 
 namespace Ris
 {
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -23,7 +24,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 
-RTable1D::RTable1D()
+CmdLineDoubleTable1D::CmdLineDoubleTable1D()
 {
    mRows   = 0;
    mValues = 0;
@@ -35,7 +36,7 @@ RTable1D::RTable1D()
    mValidFlag = false;
 }
 
-RTable1D::~RTable1D()
+CmdLineDoubleTable1D::~CmdLineDoubleTable1D()
 {
    if (mValues) delete mValues;
 }
@@ -44,7 +45,7 @@ RTable1D::~RTable1D()
 //******************************************************************************
 //******************************************************************************
 
-void RTable1D::initialize(
+void CmdLineDoubleTable1D::initialize(
    int     aRows)
 {
    mRows   = aRows;
@@ -62,12 +63,12 @@ void RTable1D::initialize(
 //******************************************************************************
 //******************************************************************************
 
-double& RTable1D::e (int aRow)
+double& CmdLineDoubleTable1D::e (int aRow)
 {
    return mValues[aRow];
 }
 
-double& RTable1D::operator() (int aRow)
+double& CmdLineDoubleTable1D::operator() (int aRow)
 {
    return mValues[aRow];
 }
@@ -76,11 +77,11 @@ double& RTable1D::operator() (int aRow)
 //******************************************************************************
 //******************************************************************************
 
-void RTable1D::show(char* aLabel)
+void CmdLineDoubleTable1D::show(char* aLabel)
 {
    if (!mValidFlag)
    {
-      printf("Table1D %s NOT VALID", aLabel);
+      printf("Table1D %s NOT VALID\n", aLabel);
       return;
    }
 
@@ -88,7 +89,7 @@ void RTable1D::show(char* aLabel)
 
    if (aLabel==0)
    {
-      strcpy(tLabel,"RTable1D");
+      strcpy(tLabel,"CmdLineDoubleTable1D");
    }
    else
    {
@@ -117,7 +118,7 @@ void RTable1D::show(char* aLabel)
 // Arg3    is at arg[3]
 
 
-void RTable1D::execute(Ris::CmdLineCmd* aCmd)
+void CmdLineDoubleTable1D::execute(Ris::CmdLineCmd* aCmd)
 {
    // Argument variables
    int tNumUsableArg = 0;
@@ -183,7 +184,7 @@ void RTable1D::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-RTable2D::RTable2D()
+CmdLineDoubleTable2D::CmdLineDoubleTable2D()
 {
    mRows   = 0;
    mCols   = 0;
@@ -196,7 +197,7 @@ RTable2D::RTable2D()
    mValidFlag = false;
 }
 
-RTable2D::~RTable2D()
+CmdLineDoubleTable2D::~CmdLineDoubleTable2D()
 {
    if (mValues) delete mValues;
 }
@@ -205,7 +206,7 @@ RTable2D::~RTable2D()
 //******************************************************************************
 //******************************************************************************
 
-void RTable2D::initialize(
+void CmdLineDoubleTable2D::initialize(
    int     aRows,
    int     aCols)
 {
@@ -225,13 +226,13 @@ void RTable2D::initialize(
 //******************************************************************************
 //******************************************************************************
 
-double& RTable2D::e (int aRow,int aCol)
+double& CmdLineDoubleTable2D::e (int aRow,int aCol)
 {
    int tIndex = (aRow)*mCols + (aCol);
    return mValues[tIndex];
 }
 
-double& RTable2D::operator() (int aRow,int aCol)
+double& CmdLineDoubleTable2D::operator() (int aRow,int aCol)
 {
    int tIndex = (aRow)*mCols + (aCol);
    return mValues[tIndex];
@@ -241,11 +242,11 @@ double& RTable2D::operator() (int aRow,int aCol)
 //******************************************************************************
 //******************************************************************************
 
-void RTable2D::show(char* aLabel)
+void CmdLineDoubleTable2D::show(char* aLabel)
 {
    if (!mValidFlag)
    {
-      printf("Table2D %s NOT VALID", aLabel);
+      printf("Table2D %s NOT VALID\n", aLabel);
       return;
    }
 
@@ -253,7 +254,7 @@ void RTable2D::show(char* aLabel)
 
    if (aLabel==0)
    {
-      strcpy(tLabel,"RTable2D");
+      strcpy(tLabel,"CmdLineDoubleTable2D");
    }
    else
    {
@@ -290,7 +291,7 @@ void RTable2D::show(char* aLabel)
 // Arg3    is at arg[3]
 
 
-void RTable2D::execute(Ris::CmdLineCmd* aCmd)
+void CmdLineDoubleTable2D::execute(Ris::CmdLineCmd* aCmd)
 {
    // Argument variables
    int tNumUsableArg = 0;
@@ -340,6 +341,175 @@ void RTable2D::execute(Ris::CmdLineCmd* aCmd)
       mValues[mIndex++] = aCmd->argDouble(tArgOffset + i);
       // If values array if full then done
       if (mIndex == mAlloc)
+      {
+         // Set valid
+         mValidFlag = true;
+         // Pop this executive off of the nested executive stack
+         nestedPop(aCmd);
+         return;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+CmdLineStringTable::CmdLineStringTable()
+{
+   mRows   = 0;
+   mStringStore = 0;
+
+   mInitialized = false;
+   mFirstCmd = true;
+   mAlloc = 0;
+   mIndex = 0;
+   mValidFlag = false;
+}
+
+CmdLineStringTable::~CmdLineStringTable()
+{
+   if (mStringStore) delete mStringStore;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineStringTable::initialize(
+   int     aRows,
+   int     aStringSize)
+{
+   mRows       = aRows;
+   mStringSize = aStringSize;
+   int tAlloc = mRows*mStringSize;
+   mStringStore = new char[tAlloc];
+   mStringPtr   = new char*[mRows];
+
+   for (int i = 0; i < mRows; i++)
+   {
+      mStringPtr[i] = mStringStore + i*mStringSize;
+      my_strncpy(mStringPtr[i], "NULL",10);
+   }
+
+   mInitialized = true;
+   mAlloc = tAlloc;
+   mIndex = 0;
+   mValidFlag = false;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+char* CmdLineStringTable::e (int aRow)
+{
+   return mStringPtr[aRow];
+}
+
+char* CmdLineStringTable::operator() (int aRow)
+{
+   return mStringPtr[aRow];
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineStringTable::show(char* aLabel)
+{
+   if (!mValidFlag)
+   {
+      printf("CmdLineStringTable %s NOT VALID\n", aLabel);
+      return;
+   }
+
+   char tLabel[30];
+
+   if (aLabel==0)
+   {
+      strcpy(tLabel,"CmdLineStringTable");
+   }
+   else
+   {
+      strncpy(tLabel,aLabel,30);
+   }
+
+   for (int i=0;i<mRows;i++) printf("%s  %d  %s\n", tLabel,i, e(i));
+   printf("\n");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Execute, overload used to read from a command line file. This is called
+// for each line in the corresponding table section of the file. It parses 
+// the file command line to read table values
+//
+// For each command line, such as:
+//
+// "Command Arg1 Arg2 Arg3"
+// 
+// The number of arguments is 3
+// Command is at arg[0]
+// Arg1    is at arg[1]
+// Arg2    is at arg[2]
+// Arg3    is at arg[3]
+
+
+void CmdLineStringTable::execute(Ris::CmdLineCmd* aCmd)
+{
+   // Argument variables
+   int tNumUsableArg = 0;
+   int tArgOffset    = 0;
+
+   // If this is the first command line for the table
+   if (mFirstCmd)
+   {
+      mFirstCmd = false;
+      // If already initialized in parent code,
+      // size is already specified
+      if (mInitialized)
+      {
+         // Start using available arguments
+         tNumUsableArg = aCmd->numArg();
+         tArgOffset    = 1;
+      }
+      // If not already initialized in parent code,
+      // size is specified by first argument
+      else
+      {
+         // Initialize
+         int tRows       = aCmd->argInt(1);
+         int tStringSize = aCmd->argInt(2);
+         initialize(tRows,tStringSize);
+         // Start using available arguments
+         tNumUsableArg = aCmd->numArg() - 1;
+         tArgOffset    = 2;
+      }
+      // Push this executive onto the nested executive stack
+      nestedPush(aCmd, this);
+   }
+   // If this is not the first command line for the table
+   else
+   {
+      // Use all available arguments, including arg[0],
+      // beacuse there will be no command in arg[0] for this
+      // command line
+      tNumUsableArg = aCmd->numArg() + 1;
+      tArgOffset = 0;
+   }
+
+   // Read values from arguments into values array
+   for (int i = 0; i < tNumUsableArg; i++)
+   {
+      // Copy argument
+      aCmd->copyArgString(tArgOffset + i,mStringPtr[mIndex++],mStringSize);
+      // If values array if full then done
+      if (mIndex == mRows)
       {
          // Set valid
          mValidFlag = true;

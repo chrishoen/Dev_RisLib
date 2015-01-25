@@ -15,23 +15,24 @@ classes. They encapsulate 1 or 2 dimensional tables of doubles.
 
 namespace Ris
 {
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
-class RTable1D : public Ris::BaseCmdLineExec
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Table, 1 dimensional, indexed by 0..R-1
+  
+class CmdLineDoubleTable1D : public Ris::BaseCmdLineExec
 {
 public:
    //---------------------------------------------------------------------------
-   // Table, 1 dimensional, indexed by 0..R-1
 
    // Vector components
    double* mValues;
-   int mRows;
+   int     mRows;
 
    // Constructor
-   RTable1D();
-   ~RTable1D();
+   CmdLineDoubleTable1D();
+  ~CmdLineDoubleTable1D();
 
    // Initialize and allocate memory for the table
    void initialize(
@@ -64,21 +65,19 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Table, 2 dimensional, indexed by 0..R-1,0..C-1
 
-class RTable2D : public Ris::BaseCmdLineExec
+class CmdLineDoubleTable2D : public Ris::BaseCmdLineExec
 {
 public:
-   //---------------------------------------------------------------------------
-   // Table, 2 dimensional, indexed by 0..R-1,0..C-1
-
    // Matrix components
    double* mValues;
-   int mRows;
-   int mCols;
+   int     mRows;
+   int     mCols;
 
    // Constructor
-   RTable2D();
-  ~RTable2D();
+   CmdLineDoubleTable2D();
+  ~CmdLineDoubleTable2D();
 
    // Initialize and allocate memory for the table
    void initialize(
@@ -88,6 +87,55 @@ public:
    // Access components
    double& e(int aRow,int aCol);
    double& operator()(int aRow,int aCol);
+   void show(char* aLabel=0);
+
+   //---------------------------------------------------------------------------
+   // Execute, overload used to read from a command line file. This is called
+   // for each line in the corresponding table section of the file. It parses 
+   // the file command line to read table values
+
+   void execute(Ris::CmdLineCmd* aCmd);
+
+   // True if initialized
+   bool mInitialized;
+   // True if this is the first command line
+   bool mFirstCmd;
+   // Number of doubles allocated in mValues
+   int  mAlloc;
+   // Current index into mValues
+   int  mIndex;
+   // True if all values freqd in correctly
+   bool mValidFlag;
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Table, 1 dimensional, indexed by 0..R-1
+
+class CmdLineStringTable : public Ris::BaseCmdLineExec
+{
+public:
+   //---------------------------------------------------------------------------
+
+   // String table components
+   char*  mStringStore;
+   char** mStringPtr;
+   int    mRows;
+   int    mStringSize;
+
+   // Constructor
+   CmdLineStringTable();
+  ~CmdLineStringTable();
+
+   // Initialize and allocate memory for the table
+   void initialize(
+      int     aRows,
+      int     aStringSize);
+
+   // Access components
+   char* e(int aRow);
+   char* operator()(int aRow);
    void show(char* aLabel=0);
 
    //---------------------------------------------------------------------------

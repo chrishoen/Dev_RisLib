@@ -291,7 +291,7 @@ bool CmdLineCmd::isArgString (int aArgIndex,const char* aString)
 //******************************************************************************
 // Return argument value
 
-void CmdLineCmd::copyArgString (int aArgIndex,char* aString)
+void CmdLineCmd::copyArgString (int aArgIndex,char* aString,int aMaxSize)
 {
    // Guard
    if(!mArgFlag[aArgIndex])
@@ -301,7 +301,7 @@ void CmdLineCmd::copyArgString (int aArgIndex,char* aString)
    }
 
    // Copy argument to string
-   strcpy(aString,mArgPtr[aArgIndex]);
+   my_strncpy(aString,mArgPtr[aArgIndex],aMaxSize);
 }
 
 //******************************************************************************

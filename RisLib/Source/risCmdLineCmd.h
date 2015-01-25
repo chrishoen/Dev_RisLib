@@ -57,7 +57,7 @@ public:
    bool    isArgString   (int aArgIndex,const char* aString);
 
    // Copies an argument into a string
-   void    copyArgString (int aArgIndex,char* aString);
+   void    copyArgString (int aArgIndex,char* aString,int aMaxSize);
 
    //---------------------------------------------------------------------------
    // Set defaults for arguments from the command line.

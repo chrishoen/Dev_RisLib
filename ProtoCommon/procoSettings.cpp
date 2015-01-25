@@ -114,19 +114,19 @@ void ProtoCommSettings::execute(Ris::CmdLineCmd* aCmd)
 
 void ProtoCommSettings::executeOnTcpServer(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->copyArgString(1, mTcpServerIPAddress);
+   aCmd->copyArgString(1, mTcpServerIPAddress,MaxStringSize);
    mTcpServerPort = aCmd->argInt(2);
 }
 
 void ProtoCommSettings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->copyArgString(1, mMyUdpIPAddress);
+   aCmd->copyArgString(1, mMyUdpIPAddress,MaxStringSize);
    mMyUdpPort = aCmd->argInt(2);
 }
 
 void ProtoCommSettings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->copyArgString(1, mOtherUdpIPAddress);
+   aCmd->copyArgString(1, mOtherUdpIPAddress,MaxStringSize);
    mOtherUdpPort = aCmd->argInt(2);
 }
 

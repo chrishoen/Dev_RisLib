@@ -29,11 +29,16 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+static int rArray[] = {
+   1,
+   2,
+   3,
+   4,
+};
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,101);
-
-   Prn::print(0,0,"%8.3f",aCmd->argInt(1));
+   Prn::print(0,0,"%d",rArray[3]);
 }
 
 //******************************************************************************

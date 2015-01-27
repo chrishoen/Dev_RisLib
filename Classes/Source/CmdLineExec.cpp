@@ -9,6 +9,7 @@
 #include "someClass1.h"
 #include "someClass2.h"
 #include "someClass3.h"
+#include "someClass4.h"
 
 #include "CmdLineExec.h"
 
@@ -110,6 +111,8 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
+   gClass4A.show();
+   getClass4A().show();
 }
 
 //******************************************************************************

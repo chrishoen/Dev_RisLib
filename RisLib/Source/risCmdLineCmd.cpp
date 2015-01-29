@@ -187,7 +187,28 @@ int CmdLineCmd::argInt(int aArgIndex)
    if(!mArgFlag[aArgIndex]) return 0;
 
    // Convert argument string
-   sscanf(mArgPtr[aArgIndex],    "%d",    &tValue);
+   sscanf(mArgPtr[aArgIndex],    "%d", &tValue);
+   if (tValue==0)
+   {
+      sscanf(mArgPtr[aArgIndex], "%x", &tValue);
+   }
+
+   // Return argument value
+   return tValue;
+}
+
+//******************************************************************************
+// Return argument value
+
+unsigned int CmdLineCmd::argUnsigned(int aArgIndex)
+{
+   unsigned int tValue=0;
+
+   // Guard
+   if(!mArgFlag[aArgIndex]) return 0;
+
+   // Convert argument string
+   sscanf(mArgPtr[aArgIndex],    "%d", &tValue);
    if (tValue==0)
    {
       sscanf(mArgPtr[aArgIndex], "%x", &tValue);
@@ -310,6 +331,19 @@ void CmdLineCmd::copyArgString (int aArgIndex,char* aString,int aMaxSize)
 // Set default argument
 
 void CmdLineCmd::setArgDefault(int aArgIndex, int aValue)
+{
+   if (!mDefaultEnable) return;
+
+   sprintf(mArgPtr[aArgIndex],"%d",aValue);
+
+   mArgFlag[aArgIndex] = true;
+   mArgNum = aArgIndex;
+}
+
+//******************************************************************************
+// Set default argument
+
+void CmdLineCmd::setArgDefaultUnsigned(int aArgIndex, unsigned int aValue)
 {
    if (!mDefaultEnable) return;
 

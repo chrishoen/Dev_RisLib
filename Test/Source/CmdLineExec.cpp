@@ -29,16 +29,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-static int rArray[] = {
-   1,
-   2,
-   3,
-   4,
-};
-
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,0,"%d",rArray[3]);
+   aCmd->setArgDefaultUnsigned(1,0xffffffff);
+   aCmd->setArgDefaultUnsigned(1,4294967295);
+
+   unsigned int tN = aCmd->argUnsigned(1);
+
+   Prn::print(0,0,"%08X",tN);
 }
 
 //******************************************************************************

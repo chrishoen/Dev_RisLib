@@ -47,10 +47,11 @@ public:
    // These are given the argument index, such that argInt(1) returns the
    // first argument as an integer and argInt(2) returns the second argument.
 
-   int     argInt        (int aArgIndex);
-   bool    argBool       (int aArgIndex);
-   double  argDouble     (int aArgIndex);
-   char*   argString     (int aArgIndex);
+   int      argInt        (int aArgIndex);
+   unsigned argUnsigned   (int aArgIndex);
+   bool     argBool       (int aArgIndex);
+   double   argDouble     (int aArgIndex);
+   char*    argString     (int aArgIndex);
 
    // Tests argument aArgIndex against a string.
    // It compares the argument with the string.
@@ -63,10 +64,11 @@ public:
    // Set defaults for arguments from the command line.
    // These are used as defaults if no arguments are entered.
 
-   void setArgDefault(int argIndex, int    aValue);
-   void setArgDefault(int argIndex, bool   aValue);
-   void setArgDefault(int argIndex, double aValue);
-   void setArgDefault(int argIndex, char*  aString);
+   void setArgDefault         (int argIndex, int      aValue);
+   void setArgDefaultUnsigned (int argIndex, unsigned aValue);
+   void setArgDefault         (int argIndex, bool     aValue);
+   void setArgDefault         (int argIndex, double   aValue);
+   void setArgDefault         (int argIndex, char*    aString);
 
    //---------------------------------------------------------------------------
    // Command extraction

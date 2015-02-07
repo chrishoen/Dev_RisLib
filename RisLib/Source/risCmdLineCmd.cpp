@@ -37,7 +37,8 @@ CmdLineCmd::CmdLineCmd()
 {
    mGoodCmd=false;
    mDefaultEnable=false;
-   strcpy(mDelimiters," ,\t");
+// strcpy(mDelimiters," ,\t");
+   strcpy(mDelimiters," \t");
 
    for (int i=0;i<MaxNumOfArgs;i++)
    {

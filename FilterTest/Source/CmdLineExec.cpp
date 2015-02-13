@@ -41,6 +41,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO14"   ))  executeGo14 (aCmd);
    if(aCmd->isCmd("GO15"   ))  executeGo15 (aCmd);
    if(aCmd->isCmd("GO16"   ))  executeGo16 (aCmd);
+   if(aCmd->isCmd("GO21"   ))  executeGo21 (aCmd);
+   if(aCmd->isCmd("GO22"   ))  executeGo22 (aCmd);
 
    if(aCmd->isCmd("STEP"   ))  mStepFlag=true;
    if(aCmd->isCmd("RAMP"   ))  mStepFlag=false;
@@ -407,5 +409,101 @@ void CmdLineExec::executeGo15(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo16(Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
+{
+   Ris::Filter::PeriodicStatistics tF;
+   tF.initialize(40);
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(1.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(2.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(1.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(2.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(1.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(2.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
+{
+   Ris::Filter::PeriodicStatistics tF;
+   tF.initialize(20);
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(0.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(1.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(2.0);
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      if (i==0) tF.put(1.0);
+      else      tF.put(0.0);   
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
+   for (int i = 0; i<20; i++)
+   {
+      if (i==19) tF.put(1.0);
+      else       tF.put(0.0);   
+      tF.show();
+   }
+   Prn::print(0, 0, "");
+
 }
 

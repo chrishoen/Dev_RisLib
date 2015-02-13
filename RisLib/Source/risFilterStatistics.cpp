@@ -90,25 +90,25 @@ namespace Filter
    {
       mSize = aSize;
       mFirstFlag = true;
-      mX = 0.0;
+      mX = 0.0f;
       mEndOfPeriod = false;
-      mEX = 0.0;
-      mUX = 0.0;
-      mMean   = 0.0;
-      mStdDev = 0.0;
-      mMinX = 0.0;
-      mMaxX = 0.0;
-      mEXSum = 0.0;
-      mUXSum = 0.0;
-      mCurrentMinX = 0.0;
-      mCurrentMaxX = 0.0;
+      mEX = 0.0f;
+      mUX = 0.0f;
+      mMean   = 0.0f;
+      mStdDev = 0.0f;
+      mMinX = 0.0f;
+      mMaxX = 0.0f;
+      mEXSum = 0.0f;
+      mUXSum = 0.0f;
+      mCurrentMinX = 0.0f;
+      mCurrentMaxX = 0.0f;
       mPutCount = 0;
       mK = 0;
    }
    
    //******************************************************************************
 
-   void PeriodicStatistics::put(double aX)
+   void PeriodicStatistics::put(float aX)
    {
       //--------------------------------------------------------------------------- 
       // Store current input
@@ -173,18 +173,38 @@ namespace Filter
    }
 
    //******************************************************************************
-
    void PeriodicStatistics::show()
    {
-      printf("%3d %d %8.3f %8.3f %8.3f  %8.3f\n",
+      if (mEndOfPeriod)
+      {
+         printf("%3d %8.3f $$ %8.3f %8.3f %8.3f  %8.3f\n",
+            mK,
+            mX,
+            mEX,
+            mUX,
+            mMinX,
+            mMaxX);
+      }
+      else
+      {
+         printf("%3d %8.3f\n",
+            mK,
+            mX);
+      }
+   }
+#if 0
+   void PeriodicStatistics::show()
+   {
+      printf("%3d %d %8.3f $$ %8.3f %8.3f %8.3f  %8.3f\n",
          mK,
          mEndOfPeriod,
+         mX,
          mEX,
          mUX,
          mMinX,
          mMaxX);
    }
-
+#endif
 }//namespace
 }//namespace
 

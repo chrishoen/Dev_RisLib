@@ -67,30 +67,30 @@ namespace Filter
       void show();
 
       // Put input value
-      void put(double aX);
+      void put(float aX);
 
       // Members
       int mSize;
       bool mFirstFlag;
 
       // Output values
-      bool    mEndOfPeriod;  // True at the end of a period
-      double  mX;            // Input value
-      double  mEX;           // expectation (mean)
-      double  mUX;           // uncertainty (standard deviation)
-      double  mMinX;         // minimum 
-      double  mMaxX;         // maximum
-      double  mMean;         // expectation (mean)
-      double  mStdDev;       // uncertainty (standard deviation)
+      bool   mEndOfPeriod;  // True at the end of a period
+      float  mX;            // Input value
+      float  mEX;           // expectation (mean)
+      float  mUX;           // uncertainty (standard deviation)
+      float  mMinX;         // minimum 
+      float  mMaxX;         // maximum
+      float  mMean;         // expectation (mean)
+      float  mStdDev;       // uncertainty (standard deviation)
 
       // Sums for expectation and uncertainty
-      double  mEXSum;        // Sum for expectation (mean)
-      double  mUXSum;        // Sum uncertainty (standard deviation)
-      int     mPutCount;     // Put count
+      float  mEXSum;        // Sum for expectation (mean)
+      float  mUXSum;        // Sum uncertainty (standard deviation)
+      int    mPutCount;     // Put count
 
       // Current min and max
-      double  mCurrentMinX;  // minimum
-      double  mCurrentMaxX;  // maximum
+      float  mCurrentMinX;  // minimum
+      float  mCurrentMaxX;  // maximum
 
 
       // Members

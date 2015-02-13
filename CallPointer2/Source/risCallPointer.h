@@ -7,7 +7,6 @@
 // Refactored by Chris Hoen 2014 to be consistent with RisLib
 // Renamed FastDelegate to CallPointer
 // Changed namespace fastdelegate to Ris
-// Added isValid() from !empty()
 //*****************************************************************************
 //*****************************************************************************
 //*****************************************************************************
@@ -626,8 +625,6 @@ public:
 	{ return m_pthis==0 && m_pFunction==0; }
 	inline bool empty() const		// Is it bound to anything?
 	{ return m_pthis==0 && m_pFunction==0; }
-	inline bool isValid() const		// Is it bound to anything?
-	{ return !empty(); }
 public:
 	DelegateMemento & operator = (const DelegateMemento &right)  {
 		SetMementoFrom(right); 
@@ -938,7 +935,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }
@@ -1025,7 +1022,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }
@@ -1112,7 +1109,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }
@@ -1199,7 +1196,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }
@@ -1286,7 +1283,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }
@@ -1373,7 +1370,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }
@@ -1460,7 +1457,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }
@@ -1547,7 +1544,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }
@@ -1634,7 +1631,7 @@ public:
 	inline bool empty() const	{
 			return !m_Closure; }
 	inline bool isValid() const	{
-			return !empty(); }
+			return m_Closure; }
 	void clear() { m_Closure.clear();}
 	// Conversion to and from the DelegateMemento storage class
 	const DelegateMemento & GetMemento() { return m_Closure; }

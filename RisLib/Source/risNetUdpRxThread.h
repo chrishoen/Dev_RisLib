@@ -61,6 +61,8 @@ namespace Net
 class UdpRxThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
+   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
+
    UdpRxThread();
 
    //--------------------------------------------------------------
@@ -88,7 +90,8 @@ public:
       char*                           aLocalIpAddr,
       int                             aLocalIpPort,
       Ris::BaseMessageParserCreator*  aMessageParserCreator,
-      RxMsgQCall*                     aRxMsgQCall);
+      RxMsgQCall*                     aRxMsgQCall,
+      int                             aThreadPriority=0);
 
    //--------------------------------------------------------------
    // Process:

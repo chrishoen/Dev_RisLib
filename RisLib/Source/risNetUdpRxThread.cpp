@@ -29,8 +29,7 @@ void UdpRxThread::configure(
    char*                      aLocalIpAddr,
    int                        aLocalIpPort,
    BaseMessageParserCreator*  aMessageParserCreator,
-   RxMsgQCall*                aRxMsgQCall,
-   int                        aThreadPriority)
+   RxMsgQCall*                aRxMsgQCall)
 {
    Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::configure");
 
@@ -38,8 +37,6 @@ void UdpRxThread::configure(
    mMessageParserCreator = aMessageParserCreator;
 
    mRxMsgQCall = *aRxMsgQCall;
-
-   BaseClass::mThreadPriority = aThreadPriority;
 }
 
 //******************************************************************************

@@ -89,8 +89,7 @@ public:
       char*                           aLocalIpAddr,
       int                             aLocalIpPort,
       Ris::BaseMessageParserCreator*  aMessageParserCreator,
-      RxMsgQCall*                     aRxMsgQCall,
-      int                             aThreadPriority=0);
+      RxMsgQCall*                     aRxMsgQCall);
 
    //--------------------------------------------------------------
    // Process:

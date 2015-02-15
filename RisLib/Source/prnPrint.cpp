@@ -34,9 +34,7 @@ bool                 rUseSettingsFile;
 char                 rSettingsFilePath    [MaxNameSize];
 char                 rSettingsFileSection [MaxNameSize];
 RedirectCallPointer  rRedirectCallPointer;
-RedirectQCall        rRedirectQCall;
 bool                 rUseRedirectCallPointer;
-bool                 rUseRedirectQCall;
 bool                 rSuppressFlag;
 
 //****************************************************************************
@@ -54,7 +52,6 @@ void resetPrint()
    strcpy(rSettingsFileSection, "DEFAULT");
    rRedirectCallPointer.clear();
    rUseRedirectCallPointer = false;
-   rUseRedirectQCall = false;
    rSuppressFlag=true;
 
    strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),MaxNameSize);
@@ -103,15 +100,6 @@ void useRedirectCallPointer(RedirectCallPointer  aRedirectCallPointer)
    rUseRedirectCallPointer = true;
    rRedirectCallPointer = aRedirectCallPointer;
 }
-
-//****************************************************************************
-
-void useRedirectQCall(RedirectQCall  aRedirectQCall)
-{
-   rUseRedirectQCall = true;
-   rRedirectQCall = aRedirectQCall;
-}
-
 
 //****************************************************************************
 //****************************************************************************
@@ -239,12 +227,6 @@ void print(int aTopic,int aSubTopic,const char* aFormat, ...)
       {
          // Send to redirection call pointer 
          rRedirectCallPointer(tPrintStr);
-      }
-      // If redirection qcall 
-      else if (rUseRedirectQCall)
-      {
-         // Send to redirection call pointer 
-         rRedirectQCall(tPrintStr);
       }
       // If no redirection
       else 

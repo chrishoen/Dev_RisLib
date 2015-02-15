@@ -33,7 +33,6 @@ namespace Prn
 //******************************************************************************
 
 typedef Ris::CallPointer1<char*>    RedirectCallPointer;
-typedef Ris::Threads::QCall1<char*> RedirectQCall;
 
 //******************************************************************************
 //******************************************************************************
@@ -46,7 +45,6 @@ void useSettingsFileDefault  ();
 void useSettingsFileName     (char*                aSettingsFileName);
 void useSettingsFileSection  (char*                aSettingsFileSection);
 void useRedirectCallPointer  (RedirectCallPointer  aRedirectCallPointer);
-void useRedirectQCall        (RedirectQCall        aRedirectQCall);
 void initializePrint         ();
 
 

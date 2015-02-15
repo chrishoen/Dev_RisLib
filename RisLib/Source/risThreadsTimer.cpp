@@ -33,6 +33,7 @@ public:
    {
       mTimer = 0;
       mFirstFlag=true;
+      mThreadPriority=0;
    }
 
    void configure(int aTimerPeriod, ThreadTimer* aTimer)
@@ -100,22 +101,26 @@ ThreadTimer::~ThreadTimer()
 
 //******************************************************************************
 
-void ThreadTimer::setPeriodic (TimerCall aTimerCall,int aTimerPeriod)
+void ThreadTimer::startTimer(
+   TimerCall aTimerCall,
+   int       aTimerPeriod,
+   int       aTimerThreadPriority)
 {
-   mTimerCall    = aTimerCall;
-   mTimerPeriod  = aTimerPeriod;
+   mTimerCall     = aTimerCall;
+   mTimerPeriod   = aTimerPeriod;
+   mTimerThreadPriority = aTimerThreadPriority;
 
    // Create, configure, launch timer thread  
    mSpecific->mTimerThread = new TimerTimerThread();
    mSpecific->mTimerThread->configure(mTimerPeriod,this);
    mSpecific->mTimerThread->configureThread();
+
+   if (mTimerThreadPriority)
+   {
+      mSpecific->mTimerThread->mThreadPriority = mTimerThreadPriority;
+   }
+
    mSpecific->mTimerThread->launchThread();
-}
-
-//******************************************************************************
-
-void ThreadTimer::setOneShot (TimerCall aTimerCall,int aTimerPeriod)
-{
 }
 
 //******************************************************************************

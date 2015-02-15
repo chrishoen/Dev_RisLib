@@ -31,22 +31,26 @@ public:
    ThreadTimer();
   ~ThreadTimer();
 
-   // Executes a timer call periodically, in milliseconds
-   void setPeriodic (TimerCall aTimerCall,int aTimerPeriod);
-
-   // Executes a timer call once, in milliseconds
-   void setOneShot  (TimerCall aTimerCall,int aTimerDuration);
+   // Executes a timer call periodically, in milliseconds,
+   // with a thread priority (zero means use default)
+   void startTimer(
+      TimerCall aTimerCall,
+      int       aTimerPeriod,
+      int       aTimerThreadPriority);
 
    void cancel();
 
    //---------------------------------------------------------------------------
-   // members
+   // Members
 
    // Pointer to function to execute periodically
    TimerCall  mTimerCall;
 
    // Period, in milliseconds
    int        mTimerPeriod;
+
+   // Timer thread priority
+   int        mTimerThreadPriority;
 
    // Current time count, incremented on every timer event.
    // Counts the number of timer events that have occurred

@@ -254,6 +254,7 @@ public:
    ThreadTimer  mThreadTimer;
    TimerCall    mThreadTimerCall;
    bool         mCreateThreadTimerFlag;
+   int          mThreadTimerThreadPriority;
 
    // This is directly executed by the timer. It calls
    // inheritor executeOnTimer and is protected by the

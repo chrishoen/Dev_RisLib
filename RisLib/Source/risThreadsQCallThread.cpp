@@ -33,6 +33,7 @@ BaseQCallThread::BaseQCallThread() :
    mTimerCompletionDownCounter = 0;
    mTimerCompletionCode = 0;
    mCreateThreadTimerFlag = true;
+   mThreadTimerThreadPriority = 0;
 
    // Synchronization
    mSynchronizedExecutionMutex=0;
@@ -49,9 +50,11 @@ void BaseQCallThread::threadTimerInitFunction()
    // Guard
    if (mCreateThreadTimerFlag == false) return;
 
-   // Set timer for periodic
+   // Bind timer callback
    mThreadTimerCall.bind (this,&BaseQCallThread::threadExecuteOnTimer);
-   mThreadTimer.setPeriodic(mThreadTimerCall,mTimerPeriod);
+
+   // Start timer
+   mThreadTimer.startTimer(mThreadTimerCall,mTimerPeriod,mThreadTimerThreadPriority);
 }
 
 //******************************************************************************

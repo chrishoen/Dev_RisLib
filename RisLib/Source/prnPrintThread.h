@@ -13,7 +13,6 @@ WHAT:    program PrintBlock class
 // imports
 //******************************************************************************
 #include "risThreadsQCallThread.h"
-#include "risThreadsQCall.h"
 #include "prnPrint.h"
 
 namespace Prn

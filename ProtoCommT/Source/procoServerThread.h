@@ -14,7 +14,6 @@ ProtoComm server thread class.
 #include "risNetTcpServerThread.h"
 #include "risNetSessionStateList.h"
 #include "risThreadsQCallThread.h"
-#include "risThreadsQCall.h"
 
 #include "procoMsg.h"
 

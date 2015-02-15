@@ -25,7 +25,6 @@ ProtoComm client thread class.
 #include "risNetUdpRxThread.h"
 #include "risNetUdpMsgSocket.h"
 #include "risThreadsQCallThread.h"
-#include "risThreadsQCall.h"
 
 #include "procoMsg.h"
 

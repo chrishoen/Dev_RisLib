@@ -137,8 +137,6 @@ executed by the thread run function and then deleted.
 #include "risThreads.h"
 #include "risThreadsTimer.h"
 
-#include "risThreadsQCall.h"
-
 namespace Ris
 {
 namespace Threads
@@ -162,6 +160,8 @@ namespace Threads
 // BaseQCallThread supplies a shutdownThread that invokes a mTerminateQCall that
 // sets an mTerminateFlag. The threadRunFunction polls the mTerminateFlag
 // and exits the thread if it is true.
+
+class BaseQCall;
 
 class  BaseBaseQCallThread
 {
@@ -306,6 +306,9 @@ public:
 //******************************************************************************
 }//namespace
 }//namespace
+
+// Put this include here for obscure compiler reasons
+#include "risThreadsQCall.h"
 
 #endif
 

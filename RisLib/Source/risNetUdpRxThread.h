@@ -34,8 +34,6 @@ or callbacks in their configure calls.
 #include "risSockets.h"
 #include "risThreads.h"
 #include "risThreadsQCallThread.h"
-#include "risThreadsQCall.h"
-
 #include "risNetUdpMsgSocket.h"
 
 namespace Ris

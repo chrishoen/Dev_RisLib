@@ -22,7 +22,6 @@ subtopic is enabled then the print is executed.
 
 #include "risCallPointer.h"
 #include "risThreadsQCallThread.h"
-#include "risThreadsQCall.h"
 #include "prnPrintSettings.h"
 
 namespace Prn

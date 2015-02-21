@@ -212,6 +212,7 @@ public:
 
    // Call this in the configureThread
    void setThreadPriorityHigh();
+   void setThreadPriority(int aThreadPriority);
 
    //This waits forever for the threads' handle.
    //It returns when the thread terminates.

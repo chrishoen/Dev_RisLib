@@ -252,6 +252,11 @@ void BaseThread::setThreadPriorityHigh()
    mThreadPriority  = 7;
 }
 
+void BaseThread::setThreadPriority(int aThreadPriority)
+{
+   mThreadPriority  = aThreadPriority;
+}
+
 //******************************************************************************
 
 void BaseThread::launchThread()

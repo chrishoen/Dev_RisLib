@@ -72,6 +72,7 @@
     <ClInclude Include="Source\risCmdLineString.h" />
     <ClInclude Include="Source\risCmdLineTables.h" />
     <ClInclude Include="Source\risContainers.h" />
+    <ClInclude Include="Source\risContainers2.h" />
     <ClInclude Include="Source\risCriticalSection.h" />
     <ClInclude Include="Source\risFilterAlpha.h" />
     <ClInclude Include="Source\risFilterFilters.h" />

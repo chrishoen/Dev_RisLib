@@ -32,7 +32,7 @@ BaseQCallThread::BaseQCallThread() :
    mTimerPeriod = 1000;
    mTimerCompletionDownCounter = 0;
    mTimerCompletionCode = 0;
-   mCreateThreadTimerFlag = true;
+   mThreadTimerCreateFlag = true;
    mThreadTimerThreadPriority = 0;
 
    // Synchronization
@@ -48,7 +48,7 @@ BaseQCallThread::~BaseQCallThread()
 void BaseQCallThread::threadTimerInitFunction()
 {
    // Guard
-   if (mCreateThreadTimerFlag == false) return;
+   if (mThreadTimerCreateFlag == false) return;
 
    // Bind timer callback
    mThreadTimerCall.bind (this,&BaseQCallThread::threadExecuteOnTimer);

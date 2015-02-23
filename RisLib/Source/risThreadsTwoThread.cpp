@@ -48,7 +48,7 @@ void BaseTwoThread::configureThreads()
    // Defaults
    mLongThread->configureThread();
    // Thread timer, none, there is only one timer for the thread pair 
-   mLongThread->mCreateThreadTimerFlag = false;
+   mLongThread->mThreadTimerCreateFlag = false;
 }
 
 //******************************************************************************

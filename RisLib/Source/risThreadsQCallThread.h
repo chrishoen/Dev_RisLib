@@ -253,7 +253,7 @@ public:
    // not in the execution context of this thread.
    ThreadTimer  mThreadTimer;
    TimerCall    mThreadTimerCall;
-   bool         mCreateThreadTimerFlag;
+   bool         mThreadTimerCreateFlag;
    int          mThreadTimerThreadPriority;
 
    // This is directly executed by the timer. It calls

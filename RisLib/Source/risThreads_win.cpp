@@ -243,7 +243,7 @@ void* BaseThread::getHandlePtr()
 void BaseThread::configureThread()
 {
    mBaseImplementation->mHandle    = 0;
-   mThreadPriority  = 0;
+// mThreadPriority  = 0;
    mThreadStackSize = 0;
 }
 

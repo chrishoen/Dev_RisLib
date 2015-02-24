@@ -24,50 +24,46 @@ namespace Threads
 //******************************************************************************
 // class definition for implementation specific timer thread
 
-class  TimerTimerThread : public Ris::Threads::BaseTimerThread
+class TimerTimerThread : public Ris::Threads::BaseTimerThread
 {
 public:
    typedef Ris::Threads::BaseTimerThread BaseClass;
 
-   TimerTimerThread()
+   TimerTimerThread(TimerCall aTimerCall,int aTimerPeriod,int aThreadPriority)
    {
-      mTimer = 0;
       mFirstFlag=true;
-      mThreadPriority=0;
-   }
-
-   void configure(int aTimerPeriod, ThreadTimer* aTimer)
-   {
-      BaseClass::mTimerPeriod = aTimerPeriod;
-      mTimer = aTimer;
+      mTimerCall                 = aTimerCall;
+      BaseClass::mTimerPeriod    = aTimerPeriod;
+      BaseClass::mThreadPriority = aThreadPriority;
    }
 
    //--------------------------------------------------------------
-   // Thread base class overloads:
+   // Base class overloads:
 
    void executeOnTimer(int aTimerCount)
    {
-      if (mTimer==0) return;
-
-      if (!mFirstFlag)
+      // Ignore first occurrence
+      if (mFirstFlag)
       {
-         // Invoke user timer call
-         mTimer->mTimerCall(aTimerCount);
+         mFirstFlag=false;
+         return;
       }
-      mFirstFlag=false;
+
+      // Invoke owner timer call
+      mTimerCall(aTimerCount);
    }
 
    //--------------------------------------------------------------
-   // Timer member
-   ThreadTimer* mTimer;
+   // Members
 
-   bool mFirstFlag;
+   TimerCall  mTimerCall;
+   bool       mFirstFlag;
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// class definition for implementation specific
+// Class definition for implementation specific
 
 class ThreadTimer::Specific
 {
@@ -92,7 +88,6 @@ ThreadTimer::ThreadTimer()
    mSpecific = new Specific;
 }
 
-
 ThreadTimer::~ThreadTimer()
 {
    cancel();
@@ -104,22 +99,14 @@ ThreadTimer::~ThreadTimer()
 void ThreadTimer::startTimer(
    TimerCall aTimerCall,
    int       aTimerPeriod,
-   int       aTimerThreadPriority)
+   int       aThreadPriority)
 {
-   mTimerCall     = aTimerCall;
-   mTimerPeriod   = aTimerPeriod;
-   mTimerThreadPriority = aTimerThreadPriority;
+   mTimerCall      = aTimerCall;
+   mTimerPeriod    = aTimerPeriod;
+   mThreadPriority = aThreadPriority;
 
-   // Create, configure, launch timer thread  
-   mSpecific->mTimerThread = new TimerTimerThread();
-   mSpecific->mTimerThread->configure(mTimerPeriod,this);
-   mSpecific->mTimerThread->configureThread();
-
-   if (mTimerThreadPriority)
-   {
-      mSpecific->mTimerThread->mThreadPriority = mTimerThreadPriority;
-   }
-
+   // Create and launch timer thread  
+   mSpecific->mTimerThread = new TimerTimerThread(mTimerCall,mTimerPeriod,mThreadPriority);
    mSpecific->mTimerThread->launchThread();
 }
 

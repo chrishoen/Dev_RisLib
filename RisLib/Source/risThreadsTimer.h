@@ -19,13 +19,13 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 // The Timer class provides a timer that can be used to call a function
-// periodically. It is passed a function pointer and a timer period.
-
+// periodically. It is passed a function pointer, a timer period, and a
+// thread priority fro the timer execution.
 
 // Call pointer for function to be called periodically
 typedef CallPointer1<int> TimerCall;
 
-class  ThreadTimer
+class ThreadTimer
 {
 public:
    ThreadTimer();
@@ -36,7 +36,7 @@ public:
    void startTimer(
       TimerCall aTimerCall,
       int       aTimerPeriod,
-      int       aTimerThreadPriority);
+      int       aThreadPriority);
 
    void cancel();
 
@@ -50,7 +50,7 @@ public:
    int        mTimerPeriod;
 
    // Timer thread priority
-   int        mTimerThreadPriority;
+   int        mThreadPriority;
 
    // Current time count, incremented on every timer event.
    // Counts the number of timer events that have occurred
@@ -58,7 +58,7 @@ public:
    int        mCurrentTimeCount;
 
 protected:
-   // Platform specific implementation
+   // Specific implementation of member timer
    class Specific;
    Specific* mSpecific;
 };

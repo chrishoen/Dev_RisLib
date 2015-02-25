@@ -126,12 +126,10 @@ public:
    //--------------------------------------------------------------
    // Thread base class overloads:
 
-   // configure sets configuration members.
    // threadInitFunction sets up the hub socket.
    // threadRunFunction does a select call to process accepts on the hub socket
    // and recvs on the node sockets.
 
-   void configureThread(); 
    void threadInitFunction(); 
    void threadRunFunction(); 
    void threadExitFunction(); 

@@ -26,6 +26,11 @@ BaseTwoThread::BaseTwoThread()
    mShortThread = new CPSpecificQCallThread;
    mLongThread  = new BaseQCallThread;
 
+   mShortThread->mThreadPriority = get_default_short_thread_priority();
+   mShortThread->mTimerThreadPriority = get_default_short_timer_thread_priority();
+   mLongThread->mThreadPriority = get_default_long_thread_priority();
+
+
    // Default exception codes
    mTimerCompletionAbortException   = 666;
    mTimerCompletionTimeoutException = 667;

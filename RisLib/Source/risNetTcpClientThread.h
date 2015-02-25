@@ -98,10 +98,9 @@ public:
    //--------------------------------------------------------------
    // Thread base class overloads:
 
-   // configure sets configuration members.
    // threadInitFunction sets up the socket.
    // threadRunFunction does a while loop that does connect and recv calls
-   void configureThread(); 
+   // threadExitFunction shuts down the socket.
    void threadInitFunction(); 
    void threadRunFunction(); 
    void threadExitFunction(); 

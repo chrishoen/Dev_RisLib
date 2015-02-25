@@ -23,7 +23,7 @@ class BaseTimerThread
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
+#include "ris_priorities.h"
 
 namespace Ris
 {
@@ -301,15 +301,6 @@ protected:
    // Termination semaphore
    BinarySemaphore   mTerminateSem;
 };
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This returns an implementation dependent thread prioity. The input is a 
-// priority 1..7, the higher the number the higher the thread priority.
-
-int translateThreadPriority(int aThreadPriority);
 
 //******************************************************************************
 //******************************************************************************

@@ -7,6 +7,7 @@
 
 #include "prnPrint.h"
 
+#include "ris_priorities.h"
 #include "risNetTcpClientThread.h"
 
 namespace Ris
@@ -20,6 +21,8 @@ namespace Net
 
 TcpClientThread::TcpClientThread()
 {
+   mThreadPriority = get_default_tcp_client_thread_priority();
+
    mConnectionFlag=false;
    mFlags=0;
 }
@@ -44,18 +47,6 @@ void TcpClientThread::configure(
 
    mSessionQCall = *aSessionQCall;
    mRxMsgQCall   = *aRxMsgQCall;
-}
-
-//******************************************************************************
-// This sets base thread configuration members
-
-void TcpClientThread::configureThread()
-{
-   // Set base class configuration members to defaults
-   BaseThread::configureThread();
-
-   // Set members for this thread
-   BaseThread::setThreadPriorityHigh();
 }
 
 //******************************************************************************

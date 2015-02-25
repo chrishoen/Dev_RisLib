@@ -7,6 +7,7 @@
 
 #include "prnPrint.h"
 
+#include "ris_priorities.h"
 #include "risNetUdpRxThread.h"
 
 namespace Ris
@@ -20,6 +21,7 @@ namespace Net
 
 UdpRxThread::UdpRxThread()
 {
+   mThreadPriority = get_default_udp_rx_thread_priority();
 }
 
 //******************************************************************************

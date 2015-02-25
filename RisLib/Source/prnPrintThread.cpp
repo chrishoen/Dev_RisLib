@@ -53,7 +53,7 @@ void PrintThread::configureThread()
    BaseThread::configureThread();
 
    // Set base class thread priority
-   BaseThread::mThreadPriority  = 3;
+// BaseThread::mThreadPriority  = 3;
 }
 
 //******************************************************************************

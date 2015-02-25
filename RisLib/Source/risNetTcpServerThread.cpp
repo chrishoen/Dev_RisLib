@@ -7,6 +7,7 @@
 
 #include "prnPrint.h"
 
+#include "ris_priorities.h"
 #include "risNetTcpServerThread.h"
 
 namespace Ris
@@ -61,6 +62,8 @@ void TcpServerHubSocket::reconfigure()
 
 TcpServerThread::TcpServerThread()
 {
+   mThreadPriority = get_default_tcp_server_thread_priority();
+
    mNumSessions=0;
    mMaxSessions=0;
    mListenFlag=false;
@@ -88,19 +91,6 @@ void TcpServerThread::configure(
 
    mSessionQCall = *aSessionQCall;
    mRxMsgQCall   = *aRxMsgQCall;
-}
-
-
-//******************************************************************************
-// This sets base thread configuration members
-
-void TcpServerThread::configureThread()
-{
-   // Set base class configuration members to defaults
-   BaseThread::configureThread();
-
-   // Set members for this thread
-   BaseThread::setThreadPriorityHigh();
 }
 
 //******************************************************************************

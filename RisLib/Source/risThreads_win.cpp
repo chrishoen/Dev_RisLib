@@ -15,6 +15,7 @@
 #endif
 
 #include "my_functions.h"
+#include "ris_priorities.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -217,7 +218,7 @@ BaseThread::BaseThread()
 {
    mBaseImplementation = new BaseImplementation;
    mBaseImplementation->mHandle    = 0;
-   mThreadPriority  = 0;
+   mThreadPriority = get_default_thread_priority();
    mThreadAffinityMask    = 0;
    mThreadIdealProcessor  = -1;
 
@@ -242,19 +243,18 @@ void* BaseThread::getHandlePtr()
 
 void BaseThread::configureThread()
 {
-   mBaseImplementation->mHandle    = 0;
-// mThreadPriority  = 0;
+   mBaseImplementation->mHandle = 0;
    mThreadStackSize = 0;
 }
 
 void BaseThread::setThreadPriorityHigh()
 {
-   mThreadPriority  = 7;
+   mThreadPriority = get_default_high_thread_priority();
 }
 
 void BaseThread::setThreadPriority(int aThreadPriority)
 {
-   mThreadPriority  = aThreadPriority;
+   mThreadPriority = aThreadPriority;
 }
 
 //******************************************************************************
@@ -285,15 +285,13 @@ void BaseThread::launchThread()
    //---------------------------------------------------------------------------
    // Set thread parameters
 
-   if (mThreadPriority != 0)
+   if( SetThreadPriority(mBaseImplementation->mHandle,mThreadPriority) == 0 )
    {
-      if( SetThreadPriority(mBaseImplementation->mHandle,translateThreadPriority(mThreadPriority)) == 0 )
-      {
-         char tStr[100];
-         sprintf(tStr, "Bad Thread Priority %d %d",*((int*)&mBaseImplementation->mHandle),(int)GetLastError());
-         halt(tStr);
-      }
+      char tStr[100];
+      sprintf(tStr, "Bad Thread Priority %d %d %d",mThreadPriority,*((int*)&mBaseImplementation->mHandle),(int)GetLastError());
+      halt(tStr);
    }
+
    if (mThreadAffinityMask != 0)
    {
       if( SetThreadAffinityMask(mBaseImplementation->mHandle,mThreadAffinityMask) == -1 ) throw "Bad Thread Affinity";
@@ -457,25 +455,6 @@ void BaseThreadWithTermSem::shutdownThread()
 int countsPerOneSecond()
 {
    return 1000;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-int translateThreadPriority(int aThreadPriority)
-{
-   switch(aThreadPriority)
-   {
-      case 7: return THREAD_PRIORITY_TIME_CRITICAL;
-      case 6: return THREAD_PRIORITY_HIGHEST;
-      case 5: return THREAD_PRIORITY_ABOVE_NORMAL;
-      case 4: return THREAD_PRIORITY_NORMAL;
-      case 3: return THREAD_PRIORITY_BELOW_NORMAL;
-      case 2: return THREAD_PRIORITY_LOWEST;
-      case 1: return THREAD_PRIORITY_IDLE;
-   }
-   return THREAD_PRIORITY_NORMAL;
 }
 
 //******************************************************************************

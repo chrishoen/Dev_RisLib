@@ -9,6 +9,7 @@
 
 #include "prnPrint.h"
 
+#include "ris_priorities.h"
 #include "risThreadsQCallThread.h"
 
 namespace Ris
@@ -33,7 +34,9 @@ BaseQCallThread::BaseQCallThread() :
    mTimerCompletionDownCounter = 0;
    mTimerCompletionCode = 0;
    mThreadTimerCreateFlag = true;
-   mThreadTimerThreadPriority = 0;
+
+   mThreadPriority = get_default_qcall_thread_priority();
+   mTimerThreadPriority = get_default_qcall_timer_thread_priority();
 
    // Synchronization
    mSynchronizedExecutionMutex=0;
@@ -54,7 +57,7 @@ void BaseQCallThread::threadTimerInitFunction()
    mThreadTimerCall.bind (this,&BaseQCallThread::threadExecuteOnTimer);
 
    // Start timer
-   mThreadTimer.startTimer(mThreadTimerCall,mTimerPeriod,mThreadTimerThreadPriority);
+   mThreadTimer.startTimer(mThreadTimerCall,mTimerPeriod,mTimerThreadPriority);
 }
 
 //******************************************************************************

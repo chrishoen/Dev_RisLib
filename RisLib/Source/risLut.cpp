@@ -29,12 +29,6 @@ void Lut1D::initialize(
    mLastX  = aFirstX + aDeltaX*(aRows-1);
    mDeltaX = aDeltaX;
    mVTable = aVTable;
-
-   Prn::print(0,0,"mRows       %4d",mRows);
-   Prn::print(0,0,"mFirstX   %6.2f",mFirstX);
-   Prn::print(0,0,"mLastX    %6.2f",mLastX);
-   Prn::print(0,0,"mDeltaX   %6.2f",mDeltaX);
-   Prn::print(0,0,"");
 }
 
 //******************************************************************************
@@ -57,15 +51,6 @@ double Lut1D::lookup (double aX)
    tV2 = mVTable[tRow+1];
    tM  = (tV2 - tV1)/(tX2 - tX1);
    tV  = tV1 + tM*(tX - tX1);
-
-   Prn::print(0,0,"aX        %6.2f",aX);
-   Prn::print(0,0,"tRow      %4d",  tRow);
-   Prn::print(0,0,"tX1       %6.2f",tX1);
-   Prn::print(0,0,"tX        %6.2f",tX);
-   Prn::print(0,0,"tX2       %6.2f",tX2);
-   Prn::print(0,0,"tV1       %6.2f",tV1);
-   Prn::print(0,0,"tV        %6.2f",tV);
-   Prn::print(0,0,"tV2       %6.2f",tV2);
 
    return tV;
 }
@@ -181,18 +166,6 @@ double Lut2D::lookup (double aX,double aY)
    tVdenom = (tX2 - tX1)*(tY2 - tY1);
 
    tV = tVnumer/tVdenom;
-
-   Prn::print(0,0,"aX        %6.2f",aX);
-   Prn::print(0,0,"aY        %6.2f",aY);
-   Prn::print(0,0,"tRow      %4d",  tRow);
-   Prn::print(0,0,"tCol      %4d",  tCol);
-   Prn::print(0,0,"tX1       %6.2f",tX1);
-   Prn::print(0,0,"tX        %6.2f",tX);
-   Prn::print(0,0,"tX2       %6.2f",tX2);
-   Prn::print(0,0,"tY1       %6.2f",tY1);
-   Prn::print(0,0,"tY        %6.2f",tY);
-   Prn::print(0,0,"tY2       %6.2f",tY2);
-   Prn::print(0,0,"tV        %6.2f",tV);
 
    return tV;
 }

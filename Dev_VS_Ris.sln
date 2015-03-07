@@ -33,6 +33,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoCommU", "ProtoCommU\Pr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoCommT", "ProtoCommT\ProtoCommT.vcxproj", "{787F40DF-748E-4176-8496-877545D33F6D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TimerThreadTest", "TimerThreadTest\TimerThreadTest.vcxproj", "{605B9FE7-D32A-4F54-BF14-C5D226492F05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -99,6 +101,10 @@ Global
 		{787F40DF-748E-4176-8496-877545D33F6D}.Debug|Win32.Build.0 = Debug|Win32
 		{787F40DF-748E-4176-8496-877545D33F6D}.Release|Win32.ActiveCfg = Release|Win32
 		{787F40DF-748E-4176-8496-877545D33F6D}.Release|Win32.Build.0 = Release|Win32
+		{605B9FE7-D32A-4F54-BF14-C5D226492F05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{605B9FE7-D32A-4F54-BF14-C5D226492F05}.Debug|Win32.Build.0 = Debug|Win32
+		{605B9FE7-D32A-4F54-BF14-C5D226492F05}.Release|Win32.ActiveCfg = Release|Win32
+		{605B9FE7-D32A-4F54-BF14-C5D226492F05}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

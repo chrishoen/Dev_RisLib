@@ -28,7 +28,6 @@ public:
    TimerThread();
 
    // Base class overloads
-   void configureThread();
    void executeOnTimer(int aTimeCount);
 
    //--------------------------------------------------------------

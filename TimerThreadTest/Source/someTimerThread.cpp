@@ -24,25 +24,16 @@ TimerThread::TimerThread()
    // Set base class thread priority
    BaseClass::setThreadPriorityHigh();
 
-   int tFrequency = 1;
+   int tFrequency = 100;
    int tPeriod = 1000 / tFrequency;
 
    // Set timer period
    BaseClass::mTimerPeriod = tPeriod;
 
    mTimeMarker.initialize(5*tFrequency);
-   mTimerMode=1;
-   return;
-
 
    // Members
    mTPFlag = false;
-
-
-   mTimerMode=2;
-   BaseClass::mTimerPeriod = 1000;
-   mTimerTester.startTest(1000,1000,10);
-
 }
 
 //******************************************************************************
@@ -50,21 +41,6 @@ TimerThread::TimerThread()
 //******************************************************************************
 
 void TimerThread::executeOnTimer(int aTimeCount)
-{
-   if (mTimerMode == 1)
-   {
-      executeOnTimer1(aTimeCount);
-   }
-   if (mTimerMode == 2)
-   {
-      executeOnTimer2(aTimeCount);
-   }
-}
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void TimerThread::executeOnTimer1(int aTimeCount)
 {
    mTimeMarker.doStop();
    mTimeMarker.doStart();
@@ -89,12 +65,4 @@ void TimerThread::executeOnTimer1(int aTimeCount)
    }
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void TimerThread::executeOnTimer2(int aTimeCount)
-{
-   mTimerTester.executeOnTimer();
-}
 }//namespace

@@ -24,7 +24,7 @@ TimerThread::TimerThread()
    // Set base class thread priority
    BaseClass::setThreadPriorityHigh();
 
-   int tFrequency = 100;
+   int tFrequency = 1000;
    int tPeriod = 1000 / tFrequency;
 
    // Set timer period

@@ -56,6 +56,9 @@ void CmdLineExec::executeTest5(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1000);
    aCmd->setArgDefault(2,10);
+
+   gTimerThread->mTimerMode=2;
+   gTimerThread->mTimerTester.startTest(1000,aCmd->argInt(1),aCmd->argInt(2));
 }
 
 //******************************************************************************

@@ -16,12 +16,18 @@
     <ClCompile Include="Source\someTimerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\uviewTimeMarker_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someTimerThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\uviewTimeMarker.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -36,7 +36,6 @@ public:
    //This is an infinite loop that sleeps for the timer period
    //and periodically calls the inheritor executeOnTimer.
 
-   void configureThread ();
    void threadRunFunction  ();
    void shutdownThread();
    

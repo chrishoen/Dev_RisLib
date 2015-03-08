@@ -24,14 +24,6 @@ BaseTimerThread::BaseTimerThread()
    mTimerCount  = 0;
 }
 
-void BaseTimerThread::configureThread()
-{
-   // Defaults
-   BaseClass::configureThread();
-   // Thread priority
-   BaseClass::setThreadPriorityHigh();
-}   
-
 //******************************************************************************
 
 void BaseTimerThread::threadRunFunction()

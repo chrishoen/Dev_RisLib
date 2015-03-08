@@ -69,10 +69,10 @@ void amain_finalize()
 {
    Prn::print(0,0,"ThreadTest*******************************************END");
 
-   // Exit process
-   Ris::Threads::exitProcess();
-
    // Close print
    Prn::finalizePrint();
+
+   // Exit process
+   Ris::Threads::exitProcess();
 }
 

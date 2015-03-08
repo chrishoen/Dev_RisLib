@@ -5,6 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 #include <windows.h> 
+#include <stdio.h> 
 
 #include "risThreadsProcess.h"
 
@@ -20,7 +21,8 @@ namespace Threads
 void enterProcessHigh()
 {
    // Set process priority class
-   SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+   int status = SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+   printf("SetPriorityClass %d\n", status);
 
    // Set process timer resolution to one millisecond
    timeBeginPeriod(1);

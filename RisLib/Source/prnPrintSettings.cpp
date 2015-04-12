@@ -179,6 +179,8 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterTopic(aCmd,"SocketInit",SocketInit);
       tryFilterTopic(aCmd,"SocketRun",SocketRun);
       tryFilterTopic(aCmd,"SocketPer",SocketPer);
+      tryFilterTopic(aCmd,"SerialInit",SerialInit);
+      tryFilterTopic(aCmd,"SerialRun",SerialRun);
       tryFilterTopic(aCmd,"FileInit",FileInit);
       tryFilterTopic(aCmd,"FileRun",FileRun);
       tryFilterTopic(aCmd,"FilePer",FilePer);

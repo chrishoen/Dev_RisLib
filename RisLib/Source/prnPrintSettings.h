@@ -118,6 +118,8 @@ public:
       SocketInit,
       SocketRun,
       SocketPer,
+      SerialInit,
+      SerialRun,
       FileInit,
       FileRun,
       FilePer,

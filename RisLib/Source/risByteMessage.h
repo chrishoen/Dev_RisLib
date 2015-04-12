@@ -15,6 +15,24 @@ namespace Ris
 {
 
 //******************************************************************************
+// This is a base class for messages that use ByteContent. It supplies some
+// member variables that are used for message identification. 
+
+class  MessageContent : public ByteContent
+{
+public:
+   MessageContent()
+   {
+      mFamily=0;
+      mMessageType=0;
+   }
+   
+   // Message Type Identifiers
+   int mFamily;
+   int mMessageType;
+};
+
+//******************************************************************************
 // This is an abstract base class for a message parser. It can be used
 // by code that receives messages into byte buffers such that the message
 // classes don't have to be visible to the receiving code. Inheriting classes
@@ -76,37 +94,52 @@ public:
 };
 
 //******************************************************************************
-// This is a base class for messages that use ByteContent. It supplies some
-// member variables that are used for message identification. 
+// This is an abstract base class for a message parser. It can be used
+// by code that receives messages into byte buffers such that the message
+// classes don't have to be visible to the receiving code. Inheriting classes
+// provide all of the details that are needed by receiving code to receive and
+// extract messages, as opposed to having the message classes being visible
+// to the receiving code.
 
-class  MessageContent : public ByteContent
+class  BaseMessageFramer
 {
 public:
-   MessageContent()
-   {
-      mFamily=0;
-      mMessageType=0;
-   }
-   
-   // Message Type Identifiers
-   int mFamily;
-   int mMessageType;
+   BaseMessageFramer();
+   void reset();
+
+   enum{T_RxFrameInitial = 0};
+   enum{T_RxMessage = 1};
+   enum{T_RxFrameFinal = 2};
+
+   int mState;
+
+   bool isState_RxFrameInitial() { return mState == T_RxFrameInitial; }
+   bool isState_RxMessage() { return mState == T_RxMessage; }
+   bool isState_RxFrameFinal() { return mState == T_RxFrameFinal; }
+
+   enum{MaxNumOfFrameBytes = 4};
+
+   char mFrameInitialBytes[MaxNumOfFrameBytes];
+   char mFrameFinalBytes[MaxNumOfFrameBytes];
+   int  mNumOfFrameInitialBytes;
+   int  mNumOfFrameFinalBytes;
+   int  mFrameInitialIndex;
+   int  mFrameFinalIndex;
+
+   void putRxByte(char* aByte);
+
 };
 
 //******************************************************************************
-// This is a base class for files that use ByteContent. It supplies some
-// member variables that are used for file identification. 
+// This is an abstract base class for a message parser creator. It defines
+// a method that inheriting classes overload to create new message parsers.
+// It is used by transmitters and receivers to create new instances of message
+// parsers.
 
-class  FileContent : public ByteContent
+class  BaseMessageFramerCreator
 {
 public:
-   FileContent()
-   {
-      mFileType=0;
-   }
-   
-   // Identifiers
-   int mFileType;
+   virtual BaseMessageFramer* createNew() = 0;
 };
 
 }//namespace

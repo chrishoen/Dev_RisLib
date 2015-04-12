@@ -82,6 +82,24 @@ void BaseMessageParser::configureByteBuffer(ByteBuffer* aBuffer)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+BaseMessageFramer::BaseMessageFramer()
+{
+   reset();
+}
+
+void BaseMessageFramer::reset()
+{
+   mState = T_RxFrameInitial;
+   mNumOfFrameInitialBytes = 0;
+   mNumOfFrameFinalBytes = 0;
+   mFrameInitialIndex = 0;
+   mFrameFinalIndex = 0;
+}
+
+//******************************************************************************
 }//namespace
 
 

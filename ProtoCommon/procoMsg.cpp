@@ -193,16 +193,17 @@ int  MessageParser::getHeaderLength()
 
 //******************************************************************************
 
-void MessageParser::getMessageHeaderParms(Ris::ByteBuffer* aBuffer,Ris::MessageHeaderParms* aParms)
+bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 {
    Header tHeader;   
    aBuffer->get(&tHeader);
 
-   aParms->mHeaderLength   = Header::Length;;
-   aParms->mMessageLength  = tHeader.mMessageLength;
-   aParms->mMessageType    = tHeader.mMessageType;
-   aParms->mPayloadLength  = tHeader.mMessageLength - Header::Length;
-   aParms->mValidFlag      = tHeader.validateContent();
+   mHeaderLength    = Header::Length;;
+   mMessageLength   = tHeader.mMessageLength;
+   mMessageType     = tHeader.mMessageType;
+   mPayloadLength   = tHeader.mMessageLength - Header::Length;
+   mHeaderValidFlag = tHeader.validateContent();
+   return mHeaderValidFlag;
 }
 
 //******************************************************************************

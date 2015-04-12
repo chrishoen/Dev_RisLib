@@ -192,7 +192,7 @@ public:
    int  getHeaderLength();
 
    // Extract message header parameters from a buffer and validate them
-   void getMessageHeaderParms(Ris::ByteBuffer* aBuffer,Ris::MessageHeaderParms* aParms);
+   bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer);
 
    // create a new message based on a message type
    Ris::ByteContent* createMessage(int aMessageType);

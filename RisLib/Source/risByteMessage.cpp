@@ -10,21 +10,13 @@
 namespace Ris
 {
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-MessageHeaderParms::MessageHeaderParms()
+BaseMessageParser::BaseMessageParser()
 {
    mHeaderLength=0;
    mMessageLength=0;
    mMessageType=0;
    mPayloadLength=0;
-   mValidFlag=false;
-};
-
-BaseMessageParser::BaseMessageParser()
-{
+   mHeaderValidFlag=false;
    mNetworkOrder=false;
 }
 
@@ -46,32 +38,23 @@ BaseMessageParser::BaseMessageParser()
 
 ByteContent* BaseMessageParser::makeFromByteBuffer(ByteBuffer* aBuffer)
 {
-   ByteContent* message = 0;
-
-   // set buffer direction for get
-   aBuffer->setCopyFrom();
-
-   // save the original buffer position
-   char* originalPosition = aBuffer->getPosition();
-
-   // call the inheritor's overload to extract the
-   // message header from the buffer
-   MessageHeaderParms tHeaderParms;
-   getMessageHeaderParms(aBuffer,&tHeaderParms);
-   
-   // call the inheritor's overload to validate the message header
-   if (!tHeaderParms.mValidFlag)
+   // Guard
+   if (!mHeaderValidFlag)
    {
       return 0;
    }
 
-   // call the inheritor's overload to get the message type
-   // from the message header
-   int messageType = tHeaderParms.mMessageType;
+   ByteContent* message = 0;
 
+   // Set buffer direction for get
+   aBuffer->setCopyFrom();
+
+   // Save the original buffer position
+   char* originalPosition = aBuffer->getPosition();
+   
    // call the inheritor's overload to create a new message
    // based on the message type
-   message = createMessage(messageType);
+   message = createMessage(mMessageType);
 
    // guard
    if (!message)

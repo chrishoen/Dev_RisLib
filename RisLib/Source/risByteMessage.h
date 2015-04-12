@@ -15,23 +15,6 @@ namespace Ris
 {
 
 //******************************************************************************
-// This class contains general parameters that describe message characteristics.
-
-class  MessageHeaderParms
-{
-public:
-   MessageHeaderParms();
-
-   int  mHeaderLength;
-   int  mMessageLength;
-   int  mMessageType;
-   int  mPayloadLength;
-
-   bool mValidFlag;
-   bool isValid(){return mValidFlag;}
-};
-
-//******************************************************************************
 // This is an abstract base class for a message parser. It can be used
 // by code that receives messages into byte buffers such that the message
 // classes don't have to be visible to the receiving code. Inheriting classes
@@ -48,7 +31,14 @@ public:
    virtual int getHeaderLength()=0;
 
    // Extract message header parameters from a buffer and validate them
-   virtual void getMessageHeaderParms(Ris::ByteBuffer* aBuffer,MessageHeaderParms* aParms)=0;
+   // Returns true if the header is valid
+   virtual bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)=0;
+
+   int  mHeaderLength;
+   int  mMessageLength;
+   int  mMessageType;
+   int  mPayloadLength;
+   bool mHeaderValidFlag;
 
    // create a new message based on a message type
    virtual Ris::ByteContent* createMessage(int aMessageType)=0;

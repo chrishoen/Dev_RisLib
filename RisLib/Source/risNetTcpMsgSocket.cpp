@@ -175,10 +175,10 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    // Copy from the receive buffer into the message parser object
    // and validate the header
 
-   MessageHeaderParms tHeaderParms;
-   mRxMessageParser->getMessageHeaderParms(&tBuffer,&tHeaderParms);
+   mRxMessageParser->extractMessageHeaderParms(&tBuffer);
 
-   if (!tHeaderParms.isValid())
+   // If the header is not valid then error
+   if (!mRxMessageParser->mHeaderValidFlag)
    {
       Prn::print(Prn::SocketRun,0, "ERROR doRecv1 INVALID HEADER");
       for (int i=0;i<40;i++) 
@@ -191,7 +191,7 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    //-------------------------------------------------------------------------
    // Read the message payload into the receive buffer
 
-   int tPayloadLength = tHeaderParms.mPayloadLength;
+   int tPayloadLength = mRxMessageParser->mPayloadLength;
 
    tRet=doRecv(&mRxBuffer[tHeaderLength],tPayloadLength,tStatus);
    Prn::print(Prn::SocketRun,Prn::Run4, "doRecv2 %d %d %d",mStatus,mError,tPayloadLength);
@@ -206,7 +206,7 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    }
 
    // Set the buffer length
-   tBuffer.setLength(tHeaderParms.mMessageLength);
+   tBuffer.setLength(mRxMessageParser->mMessageLength);
 
    //--------------------------------------------------------------
    // At this point the buffer contains the complete message.

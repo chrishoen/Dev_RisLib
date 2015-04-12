@@ -116,10 +116,10 @@ bool UdpRxMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    // Copy from the receive buffer into the message parser object
    // and validate the header
 
-   MessageHeaderParms tHeaderParms;
-   mMessageParser->getMessageHeaderParms(&tBuffer,&tHeaderParms);
+   mMessageParser->extractMessageHeaderParms(&tBuffer);
 
-   if (!tHeaderParms.isValid())
+   // If the header is not valid then error
+   if (!mMessageParser->mHeaderValidFlag)
    {
       Prn::print(Prn::SocketRun,0, "ERROR doRecv1 INVALID HEADER");
       return false;

@@ -124,20 +124,6 @@ public:
    virtual void copyToFrom (Ris::ByteBuffer* aBuffer);
 
    //--------------------------------------------------------------------------
-   // This returns true if the buffer length is large enough
-   // to contain a header
-   //--------------------------------------------------------------------------
-
-   static bool validateBuffer(Ris::ByteBuffer* aBuffer);
-
-   //--------------------------------------------------------------------------
-   // This returns true if the header contains valid
-   // values for some of its members
-   //--------------------------------------------------------------------------
-
-   bool validateContent();
-
-   //--------------------------------------------------------------------------
    // For variable content messages, the message length cannot be known until
    // the entire message has been written to a byte buffer. Therefore, the 
    // message header cannot be written to a byte buffer until the entire

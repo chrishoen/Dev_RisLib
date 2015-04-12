@@ -41,27 +41,6 @@ void Header::copyToFrom(Ris::ByteBuffer* aBuffer)
    aBuffer->copy(& mDestinationId );
 }
 
-bool Header::validateBuffer(Ris::ByteBuffer* aBuffer)
-{
-   bool error =
-      aBuffer->getError() ||
-      aBuffer->getLength() < Length ||
-      aBuffer->getLength() > MsgBufferSize;
-
-   return !error;
-}
-
-bool Header::validateContent()
-{
-   bool error =
-      mSyncWord1 != 0xaaaaaaaa ||
-      mSyncWord2 != 0xbbbbbbbb ||
-      mMessageLength < Length  ||
-      mMessageLength > MsgBufferSize;
-
-   return !error;
-}
-
 //------------------------------------------------------------------------------
 // These are called explicitly by inheriting messages at the
 // beginning and end of their copyToFrom's to manage the headers.
@@ -195,14 +174,27 @@ int  MessageParser::getHeaderLength()
 
 bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 {
+   // Extract header from buffer
    Header tHeader;   
    aBuffer->get(&tHeader);
 
+   // Set header parameters
    mHeaderLength    = Header::Length;;
    mMessageLength   = tHeader.mMessageLength;
    mMessageType     = tHeader.mMessageType;
    mPayloadLength   = tHeader.mMessageLength - Header::Length;
-   mHeaderValidFlag = tHeader.validateContent();
+
+   // Test for error
+   bool tError =
+      tHeader.mSyncWord1 != 0xaaaaaaaa ||
+      tHeader.mSyncWord2 != 0xbbbbbbbb ||
+      tHeader.mMessageLength < Header::Length  ||
+      tHeader.mMessageLength > MsgBufferSize;
+
+   // If no error then valid
+   mHeaderValidFlag = !tError;
+
+   // Return valid flag
    return mHeaderValidFlag;
 }
 

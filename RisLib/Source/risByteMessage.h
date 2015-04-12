@@ -34,6 +34,10 @@ public:
    // Returns true if the header is valid
    virtual bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)=0;
 
+   // Message header parameters, these are common to all message headers.
+   // They are extracted from an actual received message header. In some
+   // form, all message headers contain these parameters.
+
    int  mHeaderLength;
    int  mMessageLength;
    int  mMessageType;

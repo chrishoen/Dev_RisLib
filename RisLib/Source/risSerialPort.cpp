@@ -12,14 +12,13 @@
 
 namespace Ris
 {
+namespace Serial
+{
 
 //******************************************************************************
 
-SerialPort::SerialPort(int aPortNumber,char* aPortSetup)
+SerialPort::SerialPort()
 {
-   mPortNumber = aPortNumber;
-   strcpy(mPortSetup,aPortSetup);
-   mValidFlag=false;
 }
 
 SerialPort::~SerialPort(void)
@@ -29,8 +28,12 @@ SerialPort::~SerialPort(void)
 
 //******************************************************************************
 
-void SerialPort::initialize()
+void SerialPort::initialize(int aPortNumber,char* aPortSetup)
 {
+   mPortNumber = aPortNumber;
+   strcpy(mPortSetup,aPortSetup);
+   mValidFlag=false;
+
    Prn::print(Prn::SerialInit,Prn::Init1,"SerialPort::SerialPort BEGIN");
 
    if (mValidFlag)
@@ -175,7 +178,7 @@ bool SerialPort::isValid()
 //******************************************************************************
 // Send fixed number of bytes
 
-int SerialPort::send(char const *aData, int aSize)
+int SerialPort::doSend(char const *aData, int aSize)
 {
    DWORD tNumWritten;
 
@@ -195,10 +198,10 @@ int SerialPort::send(char const *aData, int aSize)
 //******************************************************************************
 // Send null terminated string
 
-int SerialPort::send(char const *aData)
+int SerialPort::doSend(char const *aData)
 {
    int tSize = (int)strlen(aData);
-   return send(aData,tSize);   
+   return doSend(aData,tSize);   
 }
 
 //******************************************************************************
@@ -318,5 +321,6 @@ void SerialPort::purge()
 
 }
 
+}//namespace
 }//namespace
 

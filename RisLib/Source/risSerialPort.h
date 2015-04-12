@@ -9,6 +9,8 @@
 
 namespace Ris
 {
+namespace Serial
+{
 
 //******************************************************************************
 class SerialPort 
@@ -18,11 +20,11 @@ public:
    // Constructor creates object, doesn't open serial port
    // SerialPort* example = new SerialPort(1,"9600,N,8,1");
 
-   SerialPort(int aPortNumber,char* aPortSetup);
+   SerialPort();
   ~SerialPort(void);
 
    // Open/Close serial port
-   void initialize();
+   void initialize(int aPortNumber,char* aPortSetup);
    void close();
 
    // True if open and valid
@@ -36,9 +38,9 @@ public:
 
    //---------------------------------------------------------------------------
    // Send data, fixed size
-   int  send(char const *aData, int aSize);
+   int  doSend(char const *aData, int aSize);
    // Send data, null terminated
-   int  send(char const *aData);
+   int  doSend(char const *aData);
 
    //---------------------------------------------------------------------------
    // Receive data, fixed size
@@ -64,5 +66,6 @@ public:
    bool mValidFlag;
 };
 //******************************************************************************
+}//namespace
 }//namespace
 #endif

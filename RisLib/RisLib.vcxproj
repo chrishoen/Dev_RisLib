@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\my_functions.cpp" />
+    <ClCompile Include="Source\risSerialMsgPort.cpp" />
     <ClCompile Include="Source\risSerialPort.cpp" />
     <ClCompile Include="Source\ris_priorities_win.cpp" />
     <ClCompile Include="Source\prnPrint.cpp" />
@@ -60,6 +61,7 @@
   <ItemGroup>
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
+    <ClInclude Include="Source\risSerialMsgPort.h" />
     <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\ris_priorities.h" />
     <ClInclude Include="Source\prnDefs.h" />

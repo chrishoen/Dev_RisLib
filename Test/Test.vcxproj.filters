@@ -13,9 +13,18 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\DAS_IF.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DAS_COMM.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SCP_TYPES.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

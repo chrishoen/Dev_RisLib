@@ -43,9 +43,12 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,101.5);
+   aCmd->setArgDefault(1,1000);
 
-   Prn::print(0,0,"%8.3f",aCmd->argDouble(1));
+   int tTimeout = aCmd->argInt(1);
+   int tTimeout10 = tTimeout/100;
+
+   Prn::print(0,0,"%5d %5d",tTimeout,tTimeout10);
 }
 
 //******************************************************************************

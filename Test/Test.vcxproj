@@ -102,12 +102,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\das_command.cpp" />
     <ClCompile Include="Source\DAS_IF.c" />
     <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\DAS_COMM.h" />
+    <ClInclude Include="Source\das_command.h" />
     <ClInclude Include="Source\SCP_TYPES.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

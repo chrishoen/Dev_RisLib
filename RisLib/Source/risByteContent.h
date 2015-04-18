@@ -248,6 +248,7 @@ public:
    // buffer copy direction flag.
 
    bool copy (unsigned char* item);
+   bool copy (signed char* item);
    bool copy (unsigned short* item);
    bool copy (unsigned int* item);
    bool copy (unsigned long long* item);
@@ -279,6 +280,7 @@ public:
    // These do the same as the above, but at a fixed buffer index.
 
    bool copy (int index, unsigned char* item);
+   bool copy (int index, signed char* item);
    bool copy (int index, unsigned short* item);
    bool copy (int index, unsigned int* item);
    bool copy (int index, unsigned long long* item);
@@ -343,6 +345,7 @@ public:
    bool get (void* pItem, int pItemSizeInBytes);
 
    bool putItem (unsigned char  item);
+   bool putItem (signed char  item);
    bool putItem (unsigned short  item);
    bool putItem (unsigned int  item);
    bool putItem (unsigned long long  item);
@@ -357,6 +360,7 @@ public:
   item);
 
    bool getItem (unsigned char* item);
+   bool getItem (signed char* item);
    bool getItem (unsigned short* item);
    bool getItem (unsigned int* item);
    bool getItem (unsigned long long* item);

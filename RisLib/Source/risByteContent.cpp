@@ -633,9 +633,6 @@ bool ByteBuffer::get (void* pItem, int pItemSizeInBytes)
 bool ByteBuffer::putItem (unsigned char  item) {return put (&item, sizeof(item));}
 bool ByteBuffer::getItem (unsigned char* item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (signed char  item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (signed char* item) {return get ( item, sizeof(*item));}
-
 bool ByteBuffer::putItem (unsigned short  item) {return put (&item, sizeof(item));}
 bool ByteBuffer::getItem (unsigned short* item) {return get ( item, sizeof(*item));}
 
@@ -1132,26 +1129,6 @@ void ByteBuffer::convertBitArrayFrom    (bool* bitArray,unsigned int& x)
 //--------------------------------------
 
 bool ByteBuffer::copy (unsigned char* item) 
-{
-   if(item==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   if (mCopyDirection==COPY_TO)
-   {
-      return putItem(*item);
-   }
-   else
-   {
-      return getItem(item);  
-   }
-}
-
-//--------------------------------------
-
-bool ByteBuffer::copy (signed char* item) 
 {
    if(item==0)
    {

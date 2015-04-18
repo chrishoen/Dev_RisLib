@@ -10,7 +10,7 @@
     <ClCompile Include="Source\CmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Main.cpp">
+    <ClCompile Include="..\LutTest\Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

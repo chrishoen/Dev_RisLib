@@ -657,10 +657,8 @@ bool ByteBuffer::getItem (long long*  item) {return get ( item, sizeof(*item));}
 bool ByteBuffer::putItem (float  item) {return put (&item, sizeof(item));}
 bool ByteBuffer::getItem (float* item) {return get ( item, sizeof(*item));}
 
-bool ByteBuffer::putItem (double
-  item) {return put (&item, sizeof(item));}
-bool ByteBuffer::getItem (double
-* item) {return get ( item, sizeof(*item));}
+bool ByteBuffer::putItem (double  item) {return put (&item, sizeof(item));}
+bool ByteBuffer::getItem (double* item) {return get ( item, sizeof(*item));}
 
 bool ByteBuffer::putItem (bool    flag) {unsigned char t = flag ? 1 : 0; return put(&t,sizeof(t));}
 bool ByteBuffer::getItem (bool*   flag) {unsigned char t; bool s = get(&t,sizeof(t));*flag = (t!=0);return s;}
@@ -1307,8 +1305,7 @@ bool ByteBuffer::copy (float* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (double
-* item) 
+bool ByteBuffer::copy (double* item) 
 {
    if(item==0)
    {
@@ -1646,8 +1643,7 @@ bool ByteBuffer::copy (int index, float* item)
 
 //--------------------------------------
 
-bool ByteBuffer::copy (int index, double
-* item) 
+bool ByteBuffer::copy (int index, double* item) 
 {
    if (!setPosition(index)) return false;
    return copy(item);

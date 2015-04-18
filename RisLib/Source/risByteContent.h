@@ -256,8 +256,7 @@ public:
    bool copy (int*  item);
    bool copy (long long*  item);
    bool copy (float* item);
-   bool copy (double
-* item);
+   bool copy (double* item);
    bool copy (bool* item);
    bool copy (ByteContent* content);
 
@@ -287,8 +286,7 @@ public:
    bool copy (int index, int*  item);
    bool copy (int index, long long*  item);
    bool copy (int index, float* item);
-   bool copy (int index, double
-* item);
+   bool copy (int index, double* item);
    bool copy (int index, bool* item);
    bool copy (int index, ByteContent* content);
 
@@ -353,8 +351,7 @@ public:
    bool putItem (long long   item);
 
    bool putItem (float  item);
-   bool putItem (double
-  item);
+   bool putItem (double  item);
 
    bool getItem (unsigned char* item);
    bool getItem (unsigned short* item);
@@ -367,8 +364,7 @@ public:
    bool getItem (long long*  item);
 
    bool getItem (float* item);
-   bool getItem (double
-* item);
+   bool getItem (double* item);
 
    //-------------------------------------------------------------
    // put and get operations for some other types.

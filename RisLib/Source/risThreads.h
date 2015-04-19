@@ -200,9 +200,8 @@ public:
    // Exceptions should throw a char*.
    virtual void threadExceptionFunction(char* aStr);
 
-   // This abstract virtual is overloaded by inheritors
-   // to shutdown the thread
-   virtual void shutdownThread()=0;
+   // This virtual is overloaded by inheritors to shutdown the thread
+   virtual void shutdownThread() {}
 
    // Here are some standard thread calls
 

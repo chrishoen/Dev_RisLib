@@ -124,8 +124,23 @@ void CmdLineFile::execute(BaseCmdLineExec* aExec)
          // If not an exit then process the parsed command line
          else
          {
-            // Call the executive to process the command
-            tExec->execute(&tCmd);
+            // If tExec is not zero
+            if (tExec != 0)
+            {
+               // Call the executive to process the command
+               tExec->execute(&tCmd);
+            }
+            // Else tExec is not valid, there was a prior unrecognized Begin 
+            // and zero was nestedPushed
+            else
+            {
+               if (tCmd.isCmd("END"))
+               {
+                  // Pop the executive from the nested executive stack
+                  // This will balance the unrecognized Begin
+                  mNestedAnchor.nestedPop();
+               }
+            }
 
             // If the command pushed to the anchor stack 
             if (mNestedAnchor.mChangeFlag)
@@ -140,9 +155,12 @@ void CmdLineFile::execute(BaseCmdLineExec* aExec)
             }
 
             // If the command set the exit flag then exit the loop
-            if(tExec->mExitFlag)
+            if (tExec)
             {
-               tGoing=false; 
+               if (tExec->mExitFlag)
+               {
+                  tGoing = false;
+               }
             }
 
          }

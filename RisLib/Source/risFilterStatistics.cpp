@@ -56,7 +56,7 @@ namespace Filter
       // This will result in the mean
       mEXAlpha.put(aX);
       // This will result in the standard deviation
-      mUXAlpha.put(abs(aX - mEXAlpha.mXX));
+      mUXAlpha.put(fabs(aX - mEXAlpha.mXX));
 
       // Update output values
       mX = aX;
@@ -135,7 +135,7 @@ namespace Filter
       // Update sums
 
       mEXSum += aX;
-      mUXSum += abs(aX - mEX);
+      mUXSum += (float)fabs(aX - mEX);
 
       //--------------------------------------------------------------------------- 
       // If at the end of the period

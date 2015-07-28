@@ -83,7 +83,7 @@ void MovingAverage::put(double aX)
       mE = mESum/double(mSize);
 
       double tEU = mUSum/double(mSize);
-      mU = sqrt(abs(tEU*tEU - mE*mE));
+      mU = sqrt(fabs(tEU*tEU - mE*mE));
       mValid=true;
    }
    else

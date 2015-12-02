@@ -47,9 +47,9 @@ public:
 int main(int argc,char** argv)
 {
 
-   printf("sizeof BaseCallPtr   %d\n", sizeof(Ris::BaseCallPtr));
-   printf("sizeof CallPointer0  %d\n", sizeof(Ris::CallPointer0));
-   printf("sizeof CPRT4         %d\n\n", sizeof(CPRT4));
+   printf("sizeof BaseCallPtr   %d\n", (int)sizeof(Ris::BaseCallPtr));
+   printf("sizeof CallPointer0  %d\n", (int)sizeof(Ris::CallPointer0));
+   printf("sizeof CPRT4         %d\n\n", (int)sizeof(CPRT4));
 
    MyClass* tMyClass = new MyClass;
 

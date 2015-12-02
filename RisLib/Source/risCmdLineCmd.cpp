@@ -423,7 +423,7 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
    char* tToken=0;
 
    int tIndex = *aIndexPtr;
-   int tNumOfDelimiters = strlen(aDelimiters);
+   int tNumOfDelimiters = (int)strlen(aDelimiters);
    bool tGoing=true;
 
    //---------------------------------------------------------------------------

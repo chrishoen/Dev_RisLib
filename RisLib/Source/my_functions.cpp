@@ -117,14 +117,18 @@ int my_irand(int aA,int aB)
 void my_trimCRLF(char* aString)
 {
    // Remove cr/lf at end of line
-   unsigned tStringLen = strlen(aString);
-   if (aString[tStringLen-1]==0xa)
-   {
-      aString[tStringLen-1]=0;
+   unsigned tStringLen = (unsigned)strlen(aString);
 
-      if (aString[tStringLen-2]==0xd)
+   if (tStringLen >= 2)
+   {
+      if (aString[tStringLen - 1] == 0xa)
       {
-         aString[tStringLen-2]=0;
+         aString[tStringLen - 1] = 0;
+
+         if (aString[tStringLen - 2] == 0xd)
+         {
+            aString[tStringLen - 2] = 0;
+         }
       }
    }
 }
@@ -142,7 +146,7 @@ char* my_string_from_bool(bool aValue)
 
 double my_time_from_string(char* aString)
 {
-   int tLength = strlen(aString);
+   int tLength = (int)strlen(aString);
    char tString[40];
    double tTime=0.0;
 
@@ -264,14 +268,14 @@ bool my_copy_file(char* aSourcePath, char* aDestinPath)
    while (tGoing)
    {
       // Read into buffer from source file
-      tReadResult  = fread(tBuffer,1,1024,tSourceFile);
+      tReadResult  = (int)fread(tBuffer,1,1024,tSourceFile);
       tReadCount += tReadResult;
 
       // Guard
       if (ferror(tSourceFile)) return false;
 
       // Write buffer to destination file
-      tWriteResult = fwrite(tBuffer,1,tReadResult,tDestinFile);
+      tWriteResult = (int)fwrite(tBuffer,1,tReadResult,tDestinFile);
       tWriteCount += tWriteResult;
 
       // Guard
@@ -317,8 +321,8 @@ bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes)
    //--------------------------------------------------------------
    // Read from files
 
-   int tReadResult1  = fread(tBuffer1,1,aNumOfBytes,tFile1File);
-   int tReadResult2  = fread(tBuffer2,1,aNumOfBytes,tFile2File);
+   int tReadResult1  = (int)fread(tBuffer1,1,aNumOfBytes,tFile1File);
+   int tReadResult2  = (int)fread(tBuffer2,1,aNumOfBytes,tFile2File);
 
    //--------------------------------------------------------------
    // Compare read sizes

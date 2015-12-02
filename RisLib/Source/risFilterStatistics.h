@@ -83,9 +83,13 @@ namespace Filter
       float  mMean;         // expectation (mean)
       float  mStdDev;       // uncertainty (standard deviation)
 
+
+      float  mEXSquare;     // expectation of X squared
+      float  mVariance;     // variance
+
       // Sums for expectation and uncertainty
-      float  mEXSum;        // Sum for expectation (mean)
-      float  mUXSum;        // Sum uncertainty (standard deviation)
+      float  mXSum;         // Sum of X
+      float  mXSquareSum;   // Sum of X squared
       int    mPutCount;     // Put count
 
       // Current min and max

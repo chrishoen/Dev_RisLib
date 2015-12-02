@@ -98,8 +98,8 @@ namespace Filter
       mStdDev = 0.0f;
       mMinX = 0.0f;
       mMaxX = 0.0f;
-      mEXSum = 0.0f;
-      mUXSum = 0.0f;
+      mXSum = 0.0f;
+      mXSquareSum = 0.0f;
       mCurrentMinX = 0.0f;
       mCurrentMaxX = 0.0f;
       mPutCount = 0;
@@ -134,8 +134,8 @@ namespace Filter
       //--------------------------------------------------------------------------- 
       // Update sums
 
-      mEXSum += aX;
-      mUXSum += (float)fabs(aX - mEX);
+      mXSum += aX;
+      mXSquareSum += aX*aX;
 
       //--------------------------------------------------------------------------- 
       // If at the end of the period
@@ -143,8 +143,26 @@ namespace Filter
       if (++mPutCount == mSize)
       {
          // Calculate results for mean and standard deviation
-         mEX = mEXSum / mPutCount;
-         mUX = mUXSum / mPutCount;
+
+         // Expectation (mean) of X
+         mEX = mXSum / mPutCount;
+         // Expectation of X squared
+         mEXSquare = mXSquareSum / mPutCount;
+
+         // Variance of X
+         mVariance = mEXSquare - mEX*mEX;
+
+         // Uncertainty (stddev) of X
+         if (mVariance > 0.0f)
+         {
+            mUX = sqrtf(mVariance);
+         }
+         else
+         {
+            mUX = 0.0f;
+         }
+
+         // Store
          mMean   = mEX;
          mStdDev = mUX;
 
@@ -153,8 +171,8 @@ namespace Filter
          mMaxX = mCurrentMaxX;
 
          // Reset sums and counts
-         mEXSum = 0.0;;
-         mUXSum = 0.0;
+         mXSum = 0.0;;
+         mXSquareSum = 0.0;
          mPutCount = 0;
 
          // Indicate end of period

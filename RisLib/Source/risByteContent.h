@@ -21,8 +21,6 @@ medium. All copies are done in network order.
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
-
 namespace Ris
 {
 
@@ -195,12 +193,7 @@ public:
    // copyData copies bytes to/from a byte buffer,
    // based on the byte buffer copy direction.
 
-   bool putData  (void* data,int size);
-   bool getData  (void* data,int size);
    bool copyData (void* data,int size);
-
-   // This does the same, but at a fixed buffer index
-   bool copyData (int index,void* data,int size);
 
    //-------------------------------------------------------------
    // copy does either a put or a get.
@@ -220,89 +213,19 @@ public:
    bool copy (float* item);
    bool copy (double* item);
    bool copy (bool* item);
-   bool copy (ByteContent* content);
 
    bool copyEnum      (int*    item);
-   bool copyZString   (char*   string,int upperBound);
-   bool copyFString   (char*   string,int fixedSize);
-   bool copyFString2  (char*   string,int fixedSize);
    bool copyZString   (unsigned char* string,int upperBound);
    bool copyFString   (unsigned char* string,int fixedSize);
-   bool copyFString2  (unsigned char* string,int fixedSize);
+   bool copyZString   (char*   string,int upperBound);
+   bool copyFString   (char*   string,int fixedSize);
 
    //ZString is a null terminated string with an upper bound
    //FString is a fixed size string
 
-   //-------------------------------------------------------------
-   // explicit put operations for byte content.
-   // these put byte content to a byte buffer
-
-   bool put           (ByteContent* content);
+   bool copy          (ByteContent* content);
    bool putToBuffer   (ByteContent* content);
-
-   // explicit get operations for byte content.
-   // these get byte content from a byte buffer
-
-   bool get           (ByteContent* content);
    bool getFromBuffer (ByteContent* content);
-
-   //-------------------------------------------------------------
-   // put and get operations for primitive data types.
-   //
-   // put copies an item into the buffer in network order at the
-   // current value of the buffer working pointer and advances the
-   // pointer. 
-   //
-   // get copies an item out of the buffer in host order at the
-   // current value of the buffer working pointer and advances the
-   // pointer. 
-
-   bool put (void* pItem, int pItemSizeInBytes);
-   bool get (void* pItem, int pItemSizeInBytes);
-
-   bool putItem (unsigned char  item);
-   bool putItem (unsigned short  item);
-   bool putItem (unsigned int  item);
-   bool putItem (unsigned long long  item);
-
-   bool putItem (char   item);
-   bool putItem (short   item);
-   bool putItem (int   item);
-   bool putItem (long long   item);
-
-   bool putItem (float  item);
-   bool putItem (double  item);
-
-   bool getItem (unsigned char* item);
-   bool getItem (unsigned short* item);
-   bool getItem (unsigned int* item);
-   bool getItem (unsigned long long* item);
-
-   bool getItem (char*  item);
-   bool getItem (short*  item);
-   bool getItem (int*  item);
-   bool getItem (long long*  item);
-
-   bool getItem (float* item);
-   bool getItem (double* item);
-
-   //-------------------------------------------------------------
-   // put and get operations for some other types.
-
-   bool putItem (bool  item);
-   bool getItem (bool* item);
-
-   bool putEnum (int  item);
-   bool getEnum (int* item);
-
-   bool putZString (char* string,int upperBound);
-   bool getZString (char* string,int upperBound);
-
-   bool putFString (char* string,int fixedSize);
-   bool getFString (char* string,int fixedSize);
-   bool getFString2(char* string,int fixedSize);
-
-protected:
 
    //-------------------------------------------------------------
    // pointer members.
@@ -422,11 +345,12 @@ template <unsigned StringSize> class FString : public ByteContent
 public:
    FString() {mPtr=(char*)&mBytes[0];}
 
-   unsigned char mBytes[StringSize];
+   unsigned char mBytes[StringSize+1];
 
    void copyToFrom (ByteBuffer* aBuffer)
    {
       aBuffer->copyData((void*)&mBytes[0],StringSize);
+      mBytes[StringSize] = 0;
    }
 
    char* mPtr;

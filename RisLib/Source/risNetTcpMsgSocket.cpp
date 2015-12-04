@@ -109,7 +109,8 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aTxMsg)
    mTxMessageParser->processBeforeSend(aTxMsg);
 
    // Byte buffer, constructor takes address and size
-   ByteBuffer tBuffer(mTxBuffer,BufferSize);  
+   ByteBuffer tBuffer(mTxBuffer,BufferSize);
+
    mTxMessageParser->configureByteBuffer(&tBuffer);
 
    // Copy transmit message to buffer

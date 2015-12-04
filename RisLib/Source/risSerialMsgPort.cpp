@@ -84,10 +84,12 @@ bool SerialMsgPort::doSendMsg(ByteContent* aTxMsg)
 
    // Byte buffer, constructor takes address and size
    ByteBuffer tBuffer(mTxBuffer,BufferSize);  
+   tBuffer.setCopyTo();
+
    mTxMessageParser->configureByteBuffer(&tBuffer);
 
    // Copy transmit message to buffer
-   tBuffer.putToBuffer(aTxMsg);
+   tBuffer.copy(aTxMsg);
 
    // Delete the message
    delete aTxMsg;

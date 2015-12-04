@@ -176,7 +176,7 @@ bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 {
    // Extract header from buffer
    Header tHeader;   
-   aBuffer->get(&tHeader);
+   aBuffer->getFromBuffer(&tHeader);
 
    // Set header parameters
    mHeaderLength    = Header::Length;;
@@ -256,19 +256,18 @@ BaseMsg::BaseMsg ()
 BaseMsg* BaseMsg::cloneMessage()
 {
    // Create a new message based on message type
-   BaseMsg* msg = createMessage(mMessageType);
+   BaseMsg* tMsg = createMessage(mMessageType);
 
    // Byte buffer
-   Ris::ByteBuffer buffer(MsgBufferSize);  
+   Ris::ByteBuffer tBuffer(MsgBufferSize);  
 
    // Copy this message to buffer
-   buffer.putToBuffer(this);
+   tBuffer.putToBuffer(this);
 
    // Copy buffer to new message
-   buffer.rewind();
-   buffer.getFromBuffer(msg);
+   tBuffer.getFromBuffer(tMsg);
 
-   return msg;
+   return tMsg;
 }
 
 //******************************************************************************
@@ -429,17 +428,19 @@ DataMsg::DataMsg()
 {
    mMessageType = MsgIdT::Data;
 
-   mUChar  = 0x11;
-   mUShort = 0x1234;
-   mUInt   = 0x12345678;
-   mUInt64 = 0x1112131415161718;
-   mChar   = 0x11;
-   mShort  = 0x1234;
-   mInt    = 0x12345678;
-   mInt64  = 0x1112131415161718;
-   mFloat  = 12.34f;
-   mDouble = 56.78;
-   mBool   = true;
+   mUChar  = 0;
+   mUShort = 0;
+   mUInt   = 0;
+   mUInt64 = 0;
+   mChar   = 0;
+   mShort  = 0;
+   mInt    = 0;
+   mInt64  = 0;
+   mFloat  = 0.0f;
+   mDouble = 0.0;
+   mBool   = false;
+
+   mZString[0]=0;
 }
 
 void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
@@ -458,7 +459,47 @@ void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
    aBuffer->copy( &mDouble );
    aBuffer->copy( &mBool   );
 
+   aBuffer->copyZString( mZString, MyStringSize  );
+
+// mFString.copyToFrom(aBuffer);
+   aBuffer->copy(&mFString);
+
    mHeader.headerReCopyToFrom(aBuffer, this);
+}
+
+void DataMsg::initialize()
+{
+   mUChar  = 0x11;
+   mUShort = 0x1234;
+   mUInt   = 0x12345678;
+   mUInt64 = 0x1112131415161718;
+   mChar   = 0x11;
+   mShort  = 0x1234;
+   mInt    = 0x12345678;
+   mInt64  = 0x1112131415161718;
+   mFloat  = 12.34f;
+   mDouble = 56.78;
+   mBool   = true;
+
+   strcpy(mZString, "abcdef");
+   strcpy(mFString.mPtr, "ABCDEFG");
+}
+
+void DataMsg::show()
+{
+   printf("UChar    %hhX\n",  mUChar   );
+   printf("UShort   %hX\n",   mUShort  );
+   printf("UInt     %X\n",    mUInt    );
+   printf("Unit64   %llX\n",  mUInt64  );
+   printf("Char     %hhX\n",  mChar    );
+   printf("Short    %hX\n",   mShort   );
+   printf("Int      %X\n",    mInt     );
+   printf("Int64    %llX\n",  mInt64   );
+   printf("Float    %5.2f\n", mFloat   );
+   printf("Double   %5.2f\n", mDouble  );
+   printf("Bool     %d\n",    mBool    );
+   printf("ZString  %s\n",    mZString );
+   printf("FString  %s\n",    mFString.mPtr );
 }
 
 }//namespace

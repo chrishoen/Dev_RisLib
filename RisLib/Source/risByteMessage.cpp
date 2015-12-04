@@ -64,7 +64,7 @@ ByteContent* BaseMessageParser::makeFromByteBuffer(ByteBuffer* aBuffer)
 
    // copy data from the buffer into the new message object
    aBuffer->setPosition(originalPosition);
-   aBuffer->get(message);
+   aBuffer->getFromBuffer(message);
    return message;
 }
 

@@ -361,20 +361,28 @@ public:
    //------------------------------------------------
    // Content
 
-   unsigned char           mUChar;
-   unsigned short          mUShort;
-   unsigned int            mUInt;
-   unsigned long long      mUInt64;
-   char                    mChar;
-   short                   mShort;
-   int                     mInt;
-   long long               mInt64;
-   float                   mFloat;
-   double                  mDouble;
-   bool                    mBool;
+   unsigned char              mUChar;
+   unsigned short             mUShort;
+   unsigned int               mUInt;
+   unsigned long long         mUInt64;
+   char                       mChar;
+   short                      mShort;
+   int                        mInt;
+   long long                  mInt64;
+   float                      mFloat;
+   double                     mDouble;
+   bool                       mBool;
+
+   enum {MyStringSize = 8};
+   char                       mZString[MyStringSize];
+
+   Ris::FString<MyStringSize> mFString;
 
    // Content
    //------------------------------------------------
+
+   void initialize();
+   void show();
 
 };
 

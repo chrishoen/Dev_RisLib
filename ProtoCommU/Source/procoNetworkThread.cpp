@@ -184,17 +184,7 @@ void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 {
    Prn::print(Prn::ThreadRun, Prn::Run1, "NetworkThread::processRxMsg_DataMsg");
 
-   Prn::print(Prn::ThreadRun, Prn::Run1, "UChar    %hhX",  aRxMsg->mUChar  );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "UShort   %hX",   aRxMsg->mUShort );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "UInt     %X",    aRxMsg->mUInt   );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Unit64   %llX",  aRxMsg->mUInt64 );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Char     %hhX",  aRxMsg->mChar   );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Short    %hX",   aRxMsg->mShort  );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Int      %X",    aRxMsg->mInt    );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Int64    %llX",  aRxMsg->mInt64  );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Float    %5.2f", aRxMsg->mFloat  );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Double   %5.2f", aRxMsg->mDouble );
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Bool     %d",    aRxMsg->mBool   );
+   aRxMsg->show();
 
    delete aRxMsg;
 

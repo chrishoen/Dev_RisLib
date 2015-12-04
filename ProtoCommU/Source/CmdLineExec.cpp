@@ -59,6 +59,7 @@ void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
+   tTxMsg->initialize();
 
    gNetworkThread->sendMsg(tTxMsg);
 }

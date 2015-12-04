@@ -86,6 +86,7 @@ bool UdpRxMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
 
    // Byte buffer, constructor takes address and size
    ByteBuffer tBuffer(mRxBuffer,BUFFER_SIZE);  
+   tBuffer.setCopyFrom();
 
    //-------------------------------------------------------------------------
    // Read the message into the receive buffer
@@ -121,7 +122,7 @@ bool UdpRxMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    // If the header is not valid then error
    if (!mMessageParser->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketRun,0, "ERROR doRecv1 INVALID HEADER");
+      Prn::print(Prn::SocketRun,0, "ERROR doRecv1 INVALID HEADER ");
       return false;
    }
 
@@ -214,10 +215,10 @@ bool UdpTxMsgSocket::doSendMsg(
    mMessageParser->processBeforeSend(aTxMsg);
 
    // Create byte buffer, constructor takes address and size
-   ByteBuffer buffer(mTxBuffer,BUFFER_SIZE);  
+   ByteBuffer tBuffer(mTxBuffer,BUFFER_SIZE);
 
    // Copy transmit message to buffer
-   buffer.putToBuffer(aTxMsg);
+   tBuffer.putToBuffer(aTxMsg);
 
    // Delete the message
    delete aTxMsg;
@@ -226,8 +227,8 @@ bool UdpTxMsgSocket::doSendMsg(
    mTxMutex.get();
 
    // Transmit the buffer
-   int length=buffer.getLength();
-   doSendTo(mRemote,buffer.getBaseAddress(),length);
+   int length=tBuffer.getLength();
+   doSendTo(mRemote,tBuffer.getBaseAddress(),length);
 
    mTxLength=length;
    mTxMsgCount++;
@@ -273,17 +274,17 @@ bool UdpTxMsgSocket::doSendMsg(
    mTxMutex.get();
 
    // byte buffer, constructor takes address and size
-   ByteBuffer buffer(mTxBuffer,BUFFER_SIZE);  
+   ByteBuffer tBuffer(mTxBuffer,BUFFER_SIZE);  
 
    // copy transmit message to buffer
-   buffer.putToBuffer(aTxMsg);
+   tBuffer.putToBuffer(aTxMsg);
 
    // delete the message
    delete aTxMsg;
 
    // transmit the buffer
-   int length=buffer.getLength();
-   doSendTo(aRemote,buffer.getBaseAddress(),length);
+   int length=tBuffer.getLength();
+   doSendTo(aRemote,tBuffer.getBaseAddress(),length);
 
    mTxLength=length;
    mTxMsgCount++;

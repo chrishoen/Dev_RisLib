@@ -380,8 +380,6 @@ void StatusRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
       aBuffer->copy     (& mWords[i] );
    }
 
-   aBuffer->copyData    (& mTimeMarker,sizeof(mTimeMarker) );
-
    mHeader.headerReCopyToFrom(aBuffer,this);
 }
 
@@ -416,8 +414,6 @@ void StatusResponseMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
    {
       aBuffer->copy     (& mWords[i] );
    }
-
-   aBuffer->copyData    (& mTimeMarker,sizeof(mTimeMarker) );
 
    mHeader.headerReCopyToFrom(aBuffer,this);
 }

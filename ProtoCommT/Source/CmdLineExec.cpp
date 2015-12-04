@@ -93,10 +93,6 @@ void CmdLineExec::executeOnGo1(Ris::CmdLineCmd* aCmd)
    {
       ProtoComm::StatusRequestMsg* tTxMsg1 = new ProtoComm::StatusRequestMsg;
    
-      Ris::TimeMarker  tTimeMarker;
-      tTimeMarker.doBegin();
-      tTxMsg1->mTimeMarker=tTimeMarker;
-   
       switch (ProtoComm::gSettings.mMyAppRole)
       {
          case ProtoComm::AR_TcpServer:

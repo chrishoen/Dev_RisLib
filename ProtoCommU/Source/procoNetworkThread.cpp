@@ -192,7 +192,6 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::StatusResponseMsg* tTxMsg = new ProtoComm::StatusResponseMsg;
-      tTxMsg->mTimeMarker=aRxMsg->mTimeMarker;
       sendMsg(tTxMsg);
    }
 
@@ -206,11 +205,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
 {
-   Ris::TimeMarker  tTimeMarker;
-   tTimeMarker = aRxMsg->mTimeMarker;
-   tTimeMarker.doEnd();
-
-   Prn::print(Prn::ThreadRun,Prn::Run1, "NetworkThread::processRxMsg_StatusResponseMsg %s",tTimeMarker.mString);
+   Prn::print(Prn::ThreadRun,Prn::Run1, "NetworkThread::processRxMsg_StatusResponseMsg");
    delete aRxMsg;
 }
 
@@ -242,7 +237,6 @@ void NetworkThread::sendMsg (ProtoComm::BaseMsg* aTxMsg)
 
 void NetworkThread::sendTestMsg()
 {
-   mTimeMarker.doBegin();
    ProtoComm::TestMsg* msg = new ProtoComm::TestMsg;
    msg->mCode1=201;
  

@@ -36,10 +36,6 @@ StatusRequest
 #include "risByteContent.h"
 #include "risByteMessage.h"
 
-#include "risTime.h"
-#include "risCallPointer.h"
-#include "risTimeMarker.h"
-
 namespace ProtoComm
 {
 
@@ -318,8 +314,6 @@ public:
    int  mNumOfWords;
    int  mWords[MaxWords];
 
-   Ris::TimeMarker  mTimeMarker;
-
    // Content
    //------------------------------------------------
 
@@ -347,22 +341,10 @@ public:
    int   mNumOfWords;
    int   mWords[MaxWords];
 
-   Ris::TimeMarker  mTimeMarker;
-
    // Content
    //------------------------------------------------
 
 };
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// CallPointers:
-
-// CallPointer definition for function with signature:
-// void function(Pipeline::BasePipelineWorkCompletionMsg* msg).
-typedef Ris::CallPointer1<BaseMsg*> BaseMsgCallPointer;
-
 
 }//namespace
 #endif

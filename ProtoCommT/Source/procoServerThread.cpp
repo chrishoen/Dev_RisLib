@@ -201,7 +201,6 @@ void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusRequestMsg* a
    if (false)
    {
       ProtoComm::StatusResponseMsg* tTxMsg = new ProtoComm::StatusResponseMsg;
-      tTxMsg->mTimeMarker=aRxMsg->mTimeMarker;
       sendMsg(aSessionIndex,tTxMsg);
    }
 
@@ -215,11 +214,7 @@ void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusRequestMsg* a
 
 void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusResponseMsg* aRxMsg)
 {
-   Ris::TimeMarker  tTimeMarker;
-   tTimeMarker = aRxMsg->mTimeMarker;
-   tTimeMarker.doEnd();
-
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread::processRxMsg_StatusResponseMsg %s",tTimeMarker.mString);
+   Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread::processRxMsg_StatusResponseMsg");
    delete aRxMsg;
 }
 

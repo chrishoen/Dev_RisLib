@@ -176,7 +176,6 @@ void ClientThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::StatusResponseMsg* tTxMsg = new ProtoComm::StatusResponseMsg;
-      tTxMsg->mTimeMarker=aRxMsg->mTimeMarker;
       sendMsg(tTxMsg);
    }
 

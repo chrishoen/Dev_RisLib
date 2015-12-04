@@ -53,10 +53,6 @@ void CmdLineExec::executeOnGo1(Ris::CmdLineCmd* aCmd)
    {
       ProtoComm::StatusRequestMsg* tTxMsg1 = new ProtoComm::StatusRequestMsg;
    
-      Ris::TimeMarker  tTimeMarker;
-      tTimeMarker.doBegin();
-      tTxMsg1->mTimeMarker=tTimeMarker;
-   
       gNetworkThread->sendMsg(tTxMsg1);
       gNetworkThread->threadSleep(10);
    }

@@ -72,7 +72,7 @@ class  ByteBuffer
 {
 public:
    //-------------------------------------------------------------
-   // structors.
+   // Constructors.
 
    // no memory allocated or assigned
    //
@@ -80,41 +80,22 @@ public:
    // its associated destructor does not do a memory free  operation.
    ByteBuffer ();
 
-   // assigns pre-allocated memory
+   // Assigns pre-allocated memory
    //
-   // this constructor          does not do a memory alloc operation.
-   // its associated destructor does not do a memory free  operation.
+   // This constructor           does not do a memory alloc operation.
+   // It's associated destructor does not do a memory free  operation.
    ByteBuffer (char* address,int size);
 
-   // allocates memory of given size  
+   // Allocates memory of given size  
    // 
-   // this constructor          does do a memory alloc operation.
-   // its associated destructor does do a memory free  operation.
+   // This constructor           does do a memory alloc operation.
+   // It's associated destructor does do a memory free  operation.
    // If fill zero is true then all bytes are set to zero.
    ByteBuffer (int size,bool fillZero=false);
 
-   // copy constructor and assignemnt operator.
-   // these are set up so that multiple byte buffer objects can
-   // point to the same buffer.
-   // they copy all members of a source object to a destination
-   // object, with the exception of the memory flag, which is
-   // cleared to indicate no memory allocation. this is done so
-   // that a new byte buffer object can point into the same buffer
-   // as an original byte buffer object, but they don't both try to
-   // delete the buffer in their destructors.
-
-   ByteBuffer (const ByteBuffer& buffer);
-   ByteBuffer& operator= (const ByteBuffer& buffer);
-
-   // deallocates any allocated memory.
+   // Deallocates any allocated memory.
   ~ByteBuffer ();
    
-   //-------------------------------------------------------------
-   // copy the content of a byte buffer.
-   // allocates memory of max size of a source buffer
-   // and copies contents of source buffer into it.
-   void copyByteBuffer (ByteBuffer* source);
-
    //-------------------------------------------------------------
    // simple memory management.
    // if allocated then destructor frees it
@@ -241,7 +222,6 @@ public:
    bool copy (bool* item);
    bool copy (ByteContent* content);
 
-   bool copy24        (unsigned int* item);
    bool copyEnum      (int*    item);
    bool copyZString   (char*   string,int upperBound);
    bool copyFString   (char*   string,int fixedSize);
@@ -249,9 +229,6 @@ public:
    bool copyZString   (unsigned char* string,int upperBound);
    bool copyFString   (unsigned char* string,int fixedSize);
    bool copyFString2  (unsigned char* string,int fixedSize);
-   bool copyBitArray  (bool*   bitArray, int numOfBits,int offset=0);
-   bool copyBitValues (unsigned int* bitValues,int numOfBits,int offset=7);
-   bool copyBitValues (int*    bitValues,int numOfBits,int offset=7);
 
    //-------------------------------------------------------------
    // More copies
@@ -271,7 +248,6 @@ public:
    bool copy (int index, bool* item);
    bool copy (int index, ByteContent* content);
 
-   bool copy24        (int index, unsigned int* item);
    bool copyEnum      (int index, int*    item);
    bool copyZString   (int index, char*   string,int upperBound);
    bool copyFString   (int index, char*   string,int fixedSize);
@@ -279,24 +255,13 @@ public:
    bool copyZString   (int index, unsigned char* string,int upperBound);
    bool copyFString   (int index, unsigned char* string,int fixedSize);
    bool copyFString2  (int index, unsigned char* string,int fixedSize);
-   bool copyBitArray  (int index, bool*   bitArray, int numOfBits,int offset=0);
-   bool copyBitValues (int index, unsigned int* bitValues,int numOfBits,int offset=7);
-   bool copyBitValues (int index, int*    bitValues,int numOfBits,int offset=7);
-
-   // helpers
-   static void convertBitArrayTo    (bool* bitArray,unsigned short& x);
-   static void convertBitArrayFrom  (bool* bitArray,unsigned short& x);
-   static void convertBitArrayTo    (bool* bitArray,unsigned int& x);
-   static void convertBitArrayFrom  (bool* bitArray,unsigned int& x);
 
    //ZString is a null terminated string with an upper bound
    //FString is a fixed size string
-   //BitArray is a fixed size array of booleans packed into bits
 
    //-------------------------------------------------------------
    // explicit put operations for byte content.
    // these put byte content to a byte buffer
-
 
    bool put           (ByteContent* content);
    bool putToBuffer   (ByteContent* content);
@@ -353,9 +318,6 @@ public:
    bool putItem (bool  item);
    bool getItem (bool* item);
 
-   bool put24   (unsigned int  item);
-   bool get24   (unsigned int* item);
-
    bool putEnum (int  item);
    bool getEnum (int* item);
 
@@ -365,12 +327,6 @@ public:
    bool putFString (char* string,int fixedSize);
    bool getFString (char* string,int fixedSize);
    bool getFString2(char* string,int fixedSize);
-
-   bool putBitArray  (bool*   bitArray, int numOfBits,int offset=0);
-   bool getBitArray  (bool*   bitArray, int numOfBits,int offset=0);
-
-   bool putBitValues (unsigned int* bitValues,int numOfBits,int offset=7);
-   bool getBitValues (unsigned int* bitValues,int numOfBits,int offset=7);
 
 protected:
 

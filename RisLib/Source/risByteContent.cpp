@@ -34,7 +34,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// structors
+// Constructors
 
 ByteBuffer::ByteBuffer ()
 {
@@ -73,31 +73,6 @@ ByteBuffer::ByteBuffer (int size,bool fillZero)
    }
 }
 
-ByteBuffer::ByteBuffer (const ByteBuffer& buffer)
-{
-   mBasePtr       = buffer.mBasePtr;
-   mWorkingPtr    = buffer.mWorkingPtr;
-   mWorkingLength = buffer.mWorkingLength;
-   mMaxLength     = buffer.mMaxLength;
-   mMemAllocCode  = 0;
-   mCopyDirection = buffer.mCopyDirection;
-   mError         = buffer.mError;
-   mByteSwapping  = buffer.mByteSwapping;
-}
-
-ByteBuffer& ByteBuffer::operator= (const ByteBuffer& buffer)
-{
-   mBasePtr       = buffer.mBasePtr;
-   mWorkingPtr    = buffer.mWorkingPtr;
-   mWorkingLength = buffer.mWorkingLength;
-   mMaxLength     = buffer.mMaxLength;
-   mMemAllocCode  = 0;
-   mCopyDirection = buffer.mCopyDirection;
-   mError         = buffer.mError;
-   mByteSwapping  = buffer.mByteSwapping;
-   return *this;
-}
-
 ByteBuffer::~ByteBuffer ()
 {
   if(mMemAllocCode)
@@ -106,22 +81,8 @@ ByteBuffer::~ByteBuffer ()
   }
 }
 
-void ByteBuffer::copyByteBuffer (ByteBuffer* source)
-{
-   memAlloc(source->mMaxLength);
-   mCopyDirection=source->mCopyDirection;
-   mError=0;
-   mByteSwapping  = source->mByteSwapping;
-   for (int i=0;i<source->mWorkingLength;i++)
-   {
-      mBasePtr[i]=source->mBasePtr[i];
-   }
-   mWorkingLength=source->mWorkingLength;
-   mWorkingPtr=mBasePtr + mWorkingLength;
-}
-
 //******************************************************************************
-// buffer base address
+// Buffer base address
 
 void ByteBuffer::setBaseAddress (char* address,int size)
 {
@@ -143,7 +104,7 @@ char* ByteBuffer::getBaseAddress ()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// memory management
+// Memory management
 
 void ByteBuffer::memAlloc (int size)
 {
@@ -643,9 +604,6 @@ bool ByteBuffer::getItem (double* item) {return get ( item, sizeof(*item));}
 bool ByteBuffer::putItem (bool    flag) {unsigned char t = flag ? 1 : 0; return put(&t,sizeof(t));}
 bool ByteBuffer::getItem (bool*   flag) {unsigned char t; bool s = get(&t,sizeof(t));*flag = (t!=0);return s;}
 
-bool ByteBuffer::put24 (unsigned int    item) {return put (&item, 3);}  // 24 bit
-bool ByteBuffer::get24 (unsigned int*   item) {return get ( item, 3);}  // 24 bit
-
 bool ByteBuffer::putEnum (int     item) {return put (&item, sizeof(item));}
 bool ByteBuffer::getEnum (int*    item) {return get ( item, sizeof(*item));}
 
@@ -823,280 +781,6 @@ bool ByteBuffer::getFString2(char* string,int fixedSize)
    mWorkingPtr += itemWorkingLength;
 
    return true;
-}
-
-//******************************************************************************
-// bit array
-
-bool ByteBuffer::putBitArray (bool* bitArray,int numOfBits,int offset) 
-{
-   // guard
-   if(bitArray==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   // itemWorkingLength
-   int itemWorkingLength = (numOfBits+offset)/8;
-
-   // guard
-   if(mWorkingPtr > mBasePtr + mMaxLength - itemWorkingLength)
-   {
-      mError=ByteErrorCode::BUFF_OVERFLOW;
-      return false;
-   }
-
-
-   // copy the bit values into the byte buffer
-   int    srcIndex   = 0;
-   unsigned char dstMask    = (1<<offset);
-   int    dstBytePos = 0;
-
-   for (int bitIndex=0;bitIndex<numOfBits;bitIndex++)
-   {
-      if (bitArray[srcIndex])
-      {
-         mWorkingPtr[dstBytePos] |=  (dstMask);
-      }
-      else
-      {
-         mWorkingPtr[dstBytePos] &= ~(dstMask);
-      }
-      srcIndex++;
-      if (dstMask != 0x80)
-      {
-         dstMask <<=1;
-      }
-      else
-      {
-         dstMask = 1;
-         dstBytePos++;
-      }
-   }
-
-   // adjust members
-   mWorkingPtr    += itemWorkingLength;
-   mWorkingLength += itemWorkingLength;
-
-   return true;
-}
-
-//---------------------------------------------
-
-bool ByteBuffer::getBitArray (bool* bitArray,int numOfBits,int offset) 
-{
-   // guard
-   if(bitArray==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   // itemWorkingLength
-   int itemWorkingLength = (numOfBits+offset)/8;
-
-   // guard
-   if(mWorkingPtr > mBasePtr + mMaxLength - itemWorkingLength)
-   {
-      mError=ByteErrorCode::BUFF_OVERFLOW;
-      return false;
-   }
-
-
-   // copy the bit values into the byte buffer
-   unsigned char srcMask    = (1<<offset);
-   int    srcBytePos = 0;
-
-   for (int dstIndex=0;dstIndex<numOfBits;dstIndex++)
-   {
-      bitArray[dstIndex] = ((mWorkingPtr[srcBytePos] & srcMask)!=0);
-      if (srcMask != 0x80)
-      {
-         srcMask <<=1;
-      }
-      else
-      {
-         srcMask = 1;
-         srcBytePos++;
-      }
-   }
-
-   // adjust members
-   mWorkingPtr    += itemWorkingLength;
-   mWorkingLength += itemWorkingLength;
-
-   return true;
-}
-
-//******************************************************************************
-// bit values
-
-bool ByteBuffer::putBitValues (unsigned int* bitValues,int numOfBits,int offset) 
-{
-   // guard
-   if(bitValues==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   // itemWorkingLength is the length of the fixed size string 
-   int itemWorkingLength = (numOfBits+(7-offset))/8;
-
-   // guard
-   if(mWorkingPtr > mBasePtr + mMaxLength - itemWorkingLength)
-   {
-      mError=ByteErrorCode::BUFF_OVERFLOW;
-      return false;
-   }
-
-
-   // copy the bit values into the byte buffer
-   unsigned int srcMask = (1<<(numOfBits-1));
-   unsigned char dstMask = (1<<offset);
-   int dstBytePos = 0;
-
-   for (int bitIndex=0;bitIndex<numOfBits;bitIndex++)
-   {
-      if ((*bitValues & srcMask)!=0)
-      {
-         mWorkingPtr[dstBytePos] |=  (dstMask);
-      }
-      else
-      {
-         mWorkingPtr[dstBytePos] &= ~(dstMask);
-      }
-      srcMask >>=1;
-      if (dstMask != 1)
-      {
-         dstMask >>=1;
-      }
-      else
-      {
-         dstMask = 1<<7;
-         dstBytePos++;
-      }
-   }
-
-   // adjust members
-   mWorkingPtr    += itemWorkingLength;
-   mWorkingLength += itemWorkingLength;
-
-   return true;
-}
-
-//---------------------------------------------
-
-bool ByteBuffer::getBitValues (unsigned int* bitValues,int numOfBits,int offset) 
-{
-   // guard
-   if(bitValues==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   // itemWorkingLength is the length of the fixed size string 
-   int itemWorkingLength = (numOfBits+(7-offset))/8;
-
-   // guard
-   if(mWorkingPtr > mBasePtr + mMaxLength - itemWorkingLength)
-   {
-      mError=ByteErrorCode::BUFF_OVERFLOW;
-      return false;
-   }
-
-
-   // copy the bit values into the byte buffer
-   unsigned int dstMask = (1<<(numOfBits-1));
-   unsigned char srcMask = (1<<offset);
-   int srcBytePos = 0;
-
-   for (int bitIndex=0;bitIndex<numOfBits;bitIndex++)
-   {
-      if ((mWorkingPtr[srcBytePos] & srcMask)!=0)
-      {
-         *bitValues  |=  (dstMask);
-      }
-      else
-      {
-          *bitValues &= ~(dstMask);
-      }
-      dstMask >>=1;
-      if (srcMask != 1)
-      {
-         srcMask >>=1;
-      }
-      else
-      {
-         srcMask = 1<<7;
-         srcBytePos++;
-      }
-   }
-
-   // adjust members
-   mWorkingPtr    += itemWorkingLength;
-   mWorkingLength += itemWorkingLength;
-
-   return true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Helpers
-
-void ByteBuffer::convertBitArrayTo    (bool* bitArray,unsigned short& x)
-{
-   x=0;
-   unsigned short mask=1;
-   for (int i=0;i<16;i++)
-   {
-      if (bitArray[i])
-      {
-         x |= mask;
-      }
-      mask <<= 1;
-   }
-
-}
-
-void ByteBuffer::convertBitArrayFrom    (bool* bitArray,unsigned short& x)
-{
-   unsigned short mask=1;
-   for (int i=0;i<16;i++)
-   {
-      bitArray[i] = (x & mask)!=0;
-      mask <<= 1;
-   }
-
-}
-
-void ByteBuffer::convertBitArrayTo    (bool* bitArray,unsigned int& x)
-{
-   x=0;
-   unsigned int mask=1;
-   for (int i=0;i<32;i++)
-   {
-      if (bitArray[i])
-      {
-         x |= mask;
-      }
-      mask <<= 1;
-   }
-
-}
-
-void ByteBuffer::convertBitArrayFrom    (bool* bitArray,unsigned int& x)
-{
-   unsigned int mask=1;
-   for (int i=0;i<32;i++)
-   {
-      bitArray[i] = (x & mask)!=0;
-      mask <<= 1;
-   }
-
 }
 
 //******************************************************************************
@@ -1325,26 +1009,6 @@ bool ByteBuffer::copy (bool* flag)
 
 //--------------------------------------
 
-bool ByteBuffer::copy24 (unsigned int* item) 
-{
-   if(item==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   if (mCopyDirection==COPY_TO)
-   {
-      return put24(*item);
-   }
-   else
-   {
-      return get24(item);  
-   }
-}
-
-//--------------------------------------
-
 bool ByteBuffer::copyEnum (int* item) 
 {
    if(item==0)
@@ -1485,48 +1149,6 @@ bool ByteBuffer::copyFString2 (unsigned char* string,int fixedSize)
 
 //--------------------------------------
 
-bool ByteBuffer::copyBitArray (bool* bitArray,int numOfBits,int offset) 
-{
-   if (mCopyDirection==COPY_TO)
-   {
-      return putBitArray(bitArray,numOfBits,offset);
-   }
-   else
-   {
-      return getBitArray(bitArray,numOfBits,offset);  
-   }
-}
-
-//--------------------------------------
-
-bool ByteBuffer::copyBitValues (unsigned int* bitValues,int numOfBits,int offset) 
-{
-   if (mCopyDirection==COPY_TO)
-   {
-      return putBitValues(bitValues,numOfBits,offset);
-   }
-   else
-   {
-      return getBitValues(bitValues,numOfBits,offset);  
-   }
-}
-
-//--------------------------------------
-
-bool ByteBuffer::copyBitValues (int* bitValues,int numOfBits,int offset) 
-{
-   if (mCopyDirection==COPY_TO)
-   {
-      return putBitValues((unsigned int*)bitValues,numOfBits,offset);
-   }
-   else
-   {
-      return getBitValues((unsigned int*)bitValues,numOfBits,offset);  
-   }
-}
-
-//--------------------------------------
-
 bool ByteBuffer::copy (ByteContent* content) 
 {
    if(content==0)
@@ -1639,14 +1261,6 @@ bool ByteBuffer::copy (int index, bool* flag)
 
 //--------------------------------------
 
-bool ByteBuffer::copy24 (int index, unsigned int* item) 
-{
-   if (!setPosition(index)) return false;
-   return copy24(item);
-}
-
-//--------------------------------------
-
 bool ByteBuffer::copyEnum (int index, int* item) 
 {
    if (!setPosition(index)) return false;
@@ -1699,30 +1313,6 @@ bool ByteBuffer::copyFString2 (int index, unsigned char* string,int fixedSize)
 {
    if (!setPosition(index)) return false;
    return copyFString2(string,fixedSize);
-}
-
-//--------------------------------------
-
-bool ByteBuffer::copyBitArray (int index, bool* bitArray,int numOfBits,int offset) 
-{
-   if (!setPosition(index)) return false;
-   return copyBitArray(bitArray,numOfBits,offset);
-}
-
-//--------------------------------------
-
-bool ByteBuffer::copyBitValues (int index, unsigned int* bitValues,int numOfBits,int offset) 
-{
-   if (!setPosition(index)) return false;
-   return copyBitValues(bitValues,numOfBits,offset);
-}
-
-//--------------------------------------
-
-bool ByteBuffer::copyBitValues (int index, int* bitValues,int numOfBits,int offset) 
-{
-   if (!setPosition(index)) return false;
-   return copyBitValues(bitValues,numOfBits,offset);
 }
 
 //--------------------------------------

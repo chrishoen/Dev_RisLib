@@ -116,7 +116,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aTxMsg)
    tBuffer.putToBuffer(aTxMsg);
 
    // Delete the message
-   DecreaseResource(aTxMsg);
+   delete aTxMsg;
 
    // Transmit the buffer
    int tLength=tBuffer.getLength();

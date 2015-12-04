@@ -38,8 +38,6 @@ class ByteBuffer;
 class ByteContent
 {
 public:
-   ByteContent();
-
    // This is supplied by each particular inheriting class to copy itself
    // to/from a byte buffer.
    //
@@ -52,24 +50,7 @@ public:
    // end up calling this member function, which does the actual copy
 
    virtual void copyToFrom (ByteBuffer* aBuffer) {}
-
-   // This is a resource counter that is used to keep track of deletions
-   // when copies of an inheritor are used. The constructor sets the
-   // resource counter to one, increase increases it, the macro
-   // decreases it and if it is zero then deletes it.
-
-   int mResourceCount;
-
-   void setResource(int aN);
-   void increaseResource(int aN=1);
 };
-
-//******************************************************************************
-// This macro decreases the resource count and deletes when zero.
-#define DecreaseResource(aX) \
-{ \
-   if (--aX->mResourceCount==0) delete aX; \
-}
 
 //******************************************************************************
 //******************************************************************************

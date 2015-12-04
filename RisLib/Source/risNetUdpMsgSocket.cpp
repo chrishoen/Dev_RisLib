@@ -220,7 +220,7 @@ bool UdpTxMsgSocket::doSendMsg(
    buffer.putToBuffer(aTxMsg);
 
    // Delete the message
-   DecreaseResource(aTxMsg);
+   delete aTxMsg;
 
    // Mutex
    mTxMutex.get();
@@ -279,7 +279,7 @@ bool UdpTxMsgSocket::doSendMsg(
    buffer.putToBuffer(aTxMsg);
 
    // delete the message
-   DecreaseResource(aTxMsg);
+   delete aTxMsg;
 
    // transmit the buffer
    int length=buffer.getLength();

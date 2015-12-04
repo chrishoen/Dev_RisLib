@@ -341,7 +341,7 @@ void TcpServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
    else
    {
       Prn::print(Prn::SocketRun,0, "ERROR doSendMsg FAIL session invalid %d",aSessionIndex);
-      DecreaseResource(aTxMsg);
+      delete aTxMsg;
    }
 }
 

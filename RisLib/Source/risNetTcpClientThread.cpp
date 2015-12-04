@@ -188,7 +188,7 @@ void TcpClientThread::sendMsg(ByteContent* aTxMsg)
    }
    else
    {
-      DecreaseResource(aTxMsg);
+      delete aTxMsg;
    }
 
    Prn::print(Prn::SocketRun,Prn::Run2, "doSendMsg %d %d %d",mSocket.mStatus,mSocket.mError,mSocket.mTxMsgCount);

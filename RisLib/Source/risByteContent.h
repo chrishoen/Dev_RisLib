@@ -230,32 +230,6 @@ public:
    bool copyFString   (unsigned char* string,int fixedSize);
    bool copyFString2  (unsigned char* string,int fixedSize);
 
-   //-------------------------------------------------------------
-   // More copies
-   //
-   // These do the same as the above, but at a fixed buffer index.
-
-   bool copy (int index, unsigned char* item);
-   bool copy (int index, unsigned short* item);
-   bool copy (int index, unsigned int* item);
-   bool copy (int index, unsigned long long* item);
-   bool copy (int index, char*  item);
-   bool copy (int index, short*  item);
-   bool copy (int index, int*  item);
-   bool copy (int index, long long*  item);
-   bool copy (int index, float* item);
-   bool copy (int index, double* item);
-   bool copy (int index, bool* item);
-   bool copy (int index, ByteContent* content);
-
-   bool copyEnum      (int index, int*    item);
-   bool copyZString   (int index, char*   string,int upperBound);
-   bool copyFString   (int index, char*   string,int fixedSize);
-   bool copyFString2  (int index, char*   string,int fixedSize);
-   bool copyZString   (int index, unsigned char* string,int upperBound);
-   bool copyFString   (int index, unsigned char* string,int fixedSize);
-   bool copyFString2  (int index, unsigned char* string,int fixedSize);
-
    //ZString is a null terminated string with an upper bound
    //FString is a fixed size string
 

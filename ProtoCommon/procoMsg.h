@@ -54,11 +54,12 @@ namespace MsgIdT
 
    enum Enum
    {
-      Unspecified                     =    0,
-      Test                            =    1,
-      FirstMessage                    =    2,
-      StatusRequest                   =   21, 
-      StatusResponse                  =   22, 
+      Unspecified                =  0,
+      Test                       =  1,
+      FirstMessage               =  2,
+      StatusRequest              =  3,
+      StatusResponse             =  4,
+      Data                       =  5,
    };
 
    //--------------------------------------------------------------------------
@@ -68,12 +69,13 @@ namespace MsgIdT
    {
       switch (x)
       {
-         case Unspecified                  : return "Unspecified";                   break;
-         case Test                         : return "Test";                          break;
-         case FirstMessage                 : return "FirstMessage";                  break;
-         case StatusRequest                : return "StatusRequest";                 break;
-         case StatusResponse               : return "StatusResponse";                break;
-         default                           : return "BadValue";                      break;
+         case Unspecified       : return "Unspecified";             break;
+         case Test              : return "Test";                    break;
+         case FirstMessage      : return "FirstMessage";            break;
+         case StatusRequest     : return "StatusRequest";           break;
+         case StatusResponse    : return "StatusResponse";          break;
+         case Data              : return "Data";                    break;
+         default                : return "BadValue";                break;
       }
    };
 }//namespace
@@ -327,7 +329,7 @@ class StatusResponseMsg : public BaseMsg
 {
 public:
    StatusResponseMsg();
-   void copyToFrom (Ris::ByteBuffer* aBuffer);
+   void copyToFrom(Ris::ByteBuffer* aBuffer);
 
    //------------------------------------------------
    // Content
@@ -337,9 +339,39 @@ public:
    int   mCode3;
    int   mCode4;
 
-   enum {MaxWords=1000};
+   enum { MaxWords = 1000 };
    int   mNumOfWords;
    int   mWords[MaxWords];
+
+   // Content
+   //------------------------------------------------
+
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+class DataMsg : public BaseMsg
+{
+public:
+   DataMsg();
+   void copyToFrom(Ris::ByteBuffer* aBuffer);
+
+   //------------------------------------------------
+   // Content
+
+   unsigned char           mUChar;
+   unsigned short          mUShort;
+   unsigned int            mUInt;
+   unsigned long long      mUInt64;
+   char                    mChar;
+   short                   mShort;
+   int                     mInt;
+   long long               mInt64;
+   float                   mFloat;
+   double                  mDouble;
+   bool                    mBool;
 
    // Content
    //------------------------------------------------

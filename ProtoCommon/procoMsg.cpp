@@ -300,8 +300,11 @@ BaseMsg* BaseMsg::createMessage(int aMessageType)
       case MsgIdT::StatusRequest :
          message = new StatusRequestMsg;
          break;
-      case MsgIdT::StatusResponse :
+      case MsgIdT::StatusResponse:
          message = new StatusResponseMsg;
+         break;
+      case MsgIdT::Data:
+         message = new DataMsg;
          break;
       default :
          return 0;
@@ -356,10 +359,10 @@ StatusRequestMsg::StatusRequestMsg ()
 {
    mMessageType = MsgIdT::StatusRequest;
 
-   mCode1 = 0;
-   mCode2 = 0;
-   mCode3 = 0;
-   mCode4 = 0;
+   mCode1 = 101;
+   mCode2 = 102;
+   mCode3 = 103;
+   mCode4 = 104;
 
    mNumOfWords=0;
    mNumOfWords=MaxWords;
@@ -387,35 +390,75 @@ void StatusRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 
-StatusResponseMsg::StatusResponseMsg ()
+StatusResponseMsg::StatusResponseMsg()
 {
    mMessageType = MsgIdT::StatusResponse;
 
-   mCode1 = 0;
-   mCode2 = 0;
-   mCode3 = 0;
-   mCode4 = 0;
+   mCode1 = 201;
+   mCode2 = 202;
+   mCode3 = 203;
+   mCode4 = 204;
 
-   mNumOfWords=0;
-   mNumOfWords=MaxWords;
-} 
+   mNumOfWords = 0;
+   mNumOfWords = MaxWords;
+}
 
-void StatusResponseMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
+void StatusResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 {
-   mHeader.headerCopyToFrom(aBuffer,this);
+   mHeader.headerCopyToFrom(aBuffer, this);
 
-   aBuffer->copy        (& mCode1  );
-   aBuffer->copy        (& mCode2  );
-   aBuffer->copy        (& mCode3  );
-   aBuffer->copy        (& mCode4  );
+   aBuffer->copy(&mCode1);
+   aBuffer->copy(&mCode2);
+   aBuffer->copy(&mCode3);
+   aBuffer->copy(&mCode4);
 
-   aBuffer->copy        (& mNumOfWords  );
-   for (int i=0;i<mNumOfWords;i++)
+   aBuffer->copy(&mNumOfWords);
+   for (int i = 0; i<mNumOfWords; i++)
    {
-      aBuffer->copy     (& mWords[i] );
+      aBuffer->copy(&mWords[i]);
    }
 
-   mHeader.headerReCopyToFrom(aBuffer,this);
+   mHeader.headerReCopyToFrom(aBuffer, this);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+DataMsg::DataMsg()
+{
+   mMessageType = MsgIdT::Data;
+
+   mUChar  = 0x11;
+   mUShort = 0x1234;
+   mUInt   = 0x12345678;
+   mUInt64 = 0x1112131415161718;
+   mChar   = 0x11;
+   mShort  = 0x1234;
+   mInt    = 0x12345678;
+   mInt64  = 0x1112131415161718;
+   mFloat  = 12.34f;
+   mDouble = 56.78;
+   mBool   = true;
+}
+
+void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
+{
+   mHeader.headerCopyToFrom(aBuffer, this);
+
+   aBuffer->copy( &mUChar  );
+   aBuffer->copy( &mUShort );
+   aBuffer->copy( &mUInt   );
+   aBuffer->copy( &mUInt64 );
+   aBuffer->copy( &mChar   );
+   aBuffer->copy( &mShort  );
+   aBuffer->copy( &mInt    );
+   aBuffer->copy( &mInt64  );
+   aBuffer->copy( &mFloat  );
+   aBuffer->copy( &mDouble );
+   aBuffer->copy( &mBool   );
+
+   mHeader.headerReCopyToFrom(aBuffer, this);
 }
 
 }//namespace

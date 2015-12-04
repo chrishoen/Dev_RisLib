@@ -59,7 +59,6 @@ void NetworkThread::configure()
    // Configure message parser
    mMessageParserCreator.configure(gSettings.mMyAppNumber);
 
-#if 1
    //---------------------------------------------------------------------------
    // Configure receive socket thread
 
@@ -83,44 +82,6 @@ void NetworkThread::configure()
       tSocketAddress,
       &mMessageParserCreator);
 
-#endif
-
-#if 0
-   if (aRole==1)
-   {
-      mUdpRxThread->configure("0.0.0.0",50131,mMessageParser,&mRxMsgQCall);
-      mTxSocket.configure(Ris::Sockets::SocketAddress("192.168.240.30",50132),mMessageParser);
-   }
-   if (aRole==2)
-   {
-      mUdpRxThread->configure("0.0.0.0",50132,mMessageParser,&mRxMsgQCall);
-      mTxSocket.configure(Ris::Sockets::SocketAddress("192.168.240.10",50131),mMessageParser);
-   }
-#endif
- 
-#if 0
-   if (aRole==1)
-   {
-      mUdpRxThread->configure("0.0.0.0",50131,mMessageParser,&mRxMsgQCall);
-      mTxSocket.configure(Ris::Sockets::SocketAddress("235.2.3.5",50132),mMessageParser);
-   }
-   if (aRole==2)
-   {
-      mUdpRxThread->configureForMulticast("235.2.3.5","0.0.0.0",50132,mMessageParser,&mRxMsgQCall);
-      mTxSocket.configure(Ris::Sockets::SocketAddress("192.168.240.30",50132),mMessageParser);
-   }
-#endif
-
-#if 0
-   if (aRole==1)
-   {
-      mTxSocket.configure(Ris::Sockets::SocketAddress("236.2.3.6",50132),mMessageParser);
-   }
-   if (aRole==2)
-   {
-      mUdpRxThread->configure("236.2.3.6",50132,mMessageParser,&mRxMsgQCall);
-   }
-#endif
 }
 
 //******************************************************************************
@@ -166,8 +127,11 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aRxMsg)
       case ProtoComm::MsgIdT::StatusRequest :
          processRxMsg((ProtoComm::StatusRequestMsg*)tRxMsg);
          break;
-      case ProtoComm::MsgIdT::StatusResponse :
+      case ProtoComm::MsgIdT::StatusResponse:
          processRxMsg((ProtoComm::StatusResponseMsg*)tRxMsg);
+         break;
+      case ProtoComm::MsgIdT::Data:
+         processRxMsg((ProtoComm::DataMsg*)tRxMsg);
          break;
       default :
          Prn::print(Prn::ThreadRun,Prn::Run1, "NetworkThread::executeServerRxMsg ??? %d",tRxMsg->mMessageType);
@@ -196,6 +160,10 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
    }
 
    Prn::print(Prn::ThreadRun,Prn::Run1, "NetworkThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Code1      %d", aRxMsg->mCode1);
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Code2      %d", aRxMsg->mCode2);
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Code3      %d", aRxMsg->mCode3);
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Code4      %d", aRxMsg->mCode4);
 
    delete aRxMsg;
 }
@@ -205,8 +173,33 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run1, "NetworkThread::processRxMsg_StatusResponseMsg");
+   Prn::print(Prn::ThreadRun, Prn::Run1, "NetworkThread::processRxMsg_StatusResponseMsg");
    delete aRxMsg;
+}
+
+//******************************************************************************
+// Rx message handler - DataMsg
+
+void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
+{
+   Prn::print(Prn::ThreadRun, Prn::Run1, "NetworkThread::processRxMsg_DataMsg");
+
+   Prn::print(Prn::ThreadRun, Prn::Run1, "UChar    %hhX",  aRxMsg->mUChar  );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "UShort   %hX",   aRxMsg->mUShort );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "UInt     %X",    aRxMsg->mUInt   );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Unit64   %llX",  aRxMsg->mUInt64 );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Char     %hhX",  aRxMsg->mChar   );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Short    %hX",   aRxMsg->mShort  );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Int      %X",    aRxMsg->mInt    );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Int64    %llX",  aRxMsg->mInt64  );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Float    %5.2f", aRxMsg->mFloat  );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Double   %5.2f", aRxMsg->mDouble );
+   Prn::print(Prn::ThreadRun, Prn::Run1, "Bool     %d",    aRxMsg->mBool   );
+
+   delete aRxMsg;
+
+
+
 }
 
 //******************************************************************************

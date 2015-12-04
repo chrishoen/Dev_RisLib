@@ -1,6 +1,5 @@
-rem start "U1" C:\Prime\DevelopWin\Debug\ProtoCommU.exe 1 2
-rem start "U2" C:\Prime\DevelopWin\Debug\ProtoCommU.exe 2 1
-start "U1" C:\Prime\DevelopWin\Debug\ProtoCommU.exe UDP1
-start "U2" C:\Prime\DevelopWin\Debug\ProtoCommU.exe UDP2
+start "UDP1" C:\Prime\DevelopMine\Dev_VS_Ris\x64\Debug\ProtoCommU.exe UdpPeer1
+start "UDP2" C:\Prime\DevelopMine\Dev_VS_Ris\x64\Debug\ProtoCommU.exe UdpPeer2
+
 
 

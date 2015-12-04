@@ -85,7 +85,8 @@ public:
 
    void processRxMsg (ProtoComm::TestMsg*  aRxMsg);
    void processRxMsg (ProtoComm::StatusRequestMsg* aRxMsg);
-   void processRxMsg (ProtoComm::StatusResponseMsg* aRxMsg);
+   void processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg);
+   void processRxMsg(ProtoComm::DataMsg* aRxMsg);
 
    int  mStatusCount1;
    int  mStatusCount2;

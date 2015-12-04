@@ -1324,25 +1324,6 @@ bool ByteBuffer::copy (int index, ByteContent* content)
 }
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-void swapBytes4(void* pItem) 
-{
-   // temp pointer
-   char* data = (char*)pItem;
-   char  temp[4];
-
-   for (int byteIndex = 0; byteIndex < 4; byteIndex++)
-   {
-      temp[byteIndex] = data[byteIndex];
-   }
-
-   for (int byteIndex = 0; byteIndex < 4; byteIndex++)
-   {
-      data[byteIndex] = temp[4 - byteIndex - 1];
-   }
-}
-//******************************************************************************
 }//namespace
 
 

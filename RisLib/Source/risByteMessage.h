@@ -93,55 +93,6 @@ public:
    virtual BaseMessageParser* createNew() = 0;
 };
 
-//******************************************************************************
-// This is an abstract base class for a message parser. It can be used
-// by code that receives messages into byte buffers such that the message
-// classes don't have to be visible to the receiving code. Inheriting classes
-// provide all of the details that are needed by receiving code to receive and
-// extract messages, as opposed to having the message classes being visible
-// to the receiving code.
-
-class  BaseMessageFramer
-{
-public:
-   BaseMessageFramer();
-   void reset();
-
-   enum{T_RxFrameInitial = 0};
-   enum{T_RxMessage = 1};
-   enum{T_RxFrameFinal = 2};
-
-   int mState;
-
-   bool isState_RxFrameInitial() { return mState == T_RxFrameInitial; }
-   bool isState_RxMessage() { return mState == T_RxMessage; }
-   bool isState_RxFrameFinal() { return mState == T_RxFrameFinal; }
-
-   enum{MaxNumOfFrameBytes = 4};
-
-   char mFrameInitialBytes[MaxNumOfFrameBytes];
-   char mFrameFinalBytes[MaxNumOfFrameBytes];
-   int  mNumOfFrameInitialBytes;
-   int  mNumOfFrameFinalBytes;
-   int  mFrameInitialIndex;
-   int  mFrameFinalIndex;
-
-   void putRxByte(char* aByte);
-
-};
-
-//******************************************************************************
-// This is an abstract base class for a message parser creator. It defines
-// a method that inheriting classes overload to create new message parsers.
-// It is used by transmitters and receivers to create new instances of message
-// parsers.
-
-class  BaseMessageFramerCreator
-{
-public:
-   virtual BaseMessageFramer* createNew() = 0;
-};
-
 }//namespace
 #endif
 

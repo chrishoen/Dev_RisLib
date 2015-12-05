@@ -318,19 +318,39 @@ BaseMsg* BaseMsg::createMessage(int aMessageType)
 TestMsg::TestMsg ()
 {
    mMessageType = MsgIdT::Test;
-   mCode1 = 0;
-   mCode2 = 0;
+   mCode1 = 901;
+   mCode2 = 902;
+   mCode3 = 903;
+   mCode4 = 904;
 } 
 
 void TestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
    mHeader.headerCopyToFrom(aBuffer,this);
 
-   aBuffer->copy( & mCode1 );
-   aBuffer->copyFString(mData,DataSize);
-   aBuffer->copy( & mCode2 );
+   aBuffer->copy( &mCode1 );
+   aBuffer->copy( &mCode2 );
+   aBuffer->copy( &mCode3 );
+   aBuffer->copy( &mCode4 );
 
    mHeader.headerReCopyToFrom(aBuffer,this);
+}
+
+void TestMsg::initialize()
+{
+   mCode1 = 901;
+   mCode2 = 902;
+   mCode3 = 903;
+   mCode4 = 904;
+}
+
+void TestMsg::show()
+{
+   printf("%d\n",  mCode1   );
+   printf("%d\n",  mCode1   );
+   printf("%d\n",  mCode2   );
+   printf("%d\n",  mCode3   );
+   printf("\n");
 }
 
 //******************************************************************************
@@ -424,6 +444,43 @@ void StatusResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 
+DataRecord::DataRecord ()
+{
+   mX1 = 0;
+   mX2 = 0;
+   mX3 = 0;
+   mX4 = 0;
+} 
+
+void DataRecord::copyToFrom (Ris::ByteBuffer* aBuffer)
+{
+   aBuffer->copy( &mX1 );
+   aBuffer->copy( &mX2 );
+   aBuffer->copy( &mX3 );
+   aBuffer->copy( &mX4 );
+}
+
+void DataRecord::initialize()
+{
+   mX1 = 701;
+   mX2 = 702;
+   mX3 = 703;
+   mX4 = 704;
+}
+
+void DataRecord::show()
+{
+   printf("%d\n",  mX1   );
+   printf("%d\n",  mX2   );
+   printf("%d\n",  mX3   );
+   printf("%d\n",  mX4   );
+   printf("\n");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 DataMsg::DataMsg()
 {
    mMessageType = MsgIdT::Data;
@@ -461,11 +518,17 @@ void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 
    aBuffer->copyZString( mZString, MyStringSize  );
 
-// mFString.copyToFrom(aBuffer);
-   aBuffer->copy(&mFString);
+   mFString.copyToFrom(aBuffer);
+   aBuffer->copy( &mFString);
+
+   aBuffer->copy( &mDataRecord);
 
    mHeader.headerReCopyToFrom(aBuffer, this);
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void DataMsg::initialize()
 {
@@ -483,6 +546,8 @@ void DataMsg::initialize()
 
    strcpy(mZString, "abcdef");
    strcpy(mFString.mPtr, "ABCDEFG");
+
+   mDataRecord.initialize();
 }
 
 void DataMsg::show()
@@ -500,6 +565,8 @@ void DataMsg::show()
    printf("Bool     %d\n",    mBool    );
    printf("ZString  %s\n",    mZString );
    printf("FString  %s\n",    mFString.mPtr );
+   mDataRecord.show();
+   printf("\n");
 }
 
 }//namespace

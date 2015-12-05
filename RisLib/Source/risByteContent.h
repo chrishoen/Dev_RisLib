@@ -39,13 +39,6 @@ public:
    // This is supplied by each particular inheriting class to copy itself
    // to/from a byte buffer.
    //
-   // The following functions
-   //
-   //   ByteContent::put  (ByteContent* content);
-   //   ByteContent::get  (ByteContent* content);
-   //   ByteContent::copy (ByteContent* content);
-   //
-   // end up calling this member function, which does the actual copy
 
    virtual void copyToFrom (ByteBuffer* aBuffer) {}
 };
@@ -69,63 +62,77 @@ public:
 class  ByteBuffer
 {
 public:
-   //-------------------------------------------------------------
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
    // Constructors.
 
-   // no memory allocated or assigned
-   //
-   // this constructor          does not do a memory alloc operation.
-   // its associated destructor does not do a memory free  operation.
+   // Default constructor        does not do a memory alloc operation.
    ByteBuffer ();
 
-   // Assigns pre-allocated memory
-   //
-   // This constructor           does not do a memory alloc operation.
-   // It's associated destructor does not do a memory free  operation.
-   ByteBuffer (char* address,int size);
-
-   // Allocates memory of given size  
-   // 
+   // Allocates heap memory of given size  
    // This constructor           does do a memory alloc operation.
    // It's associated destructor does do a memory free  operation.
-   // If fill zero is true then all bytes are set to zero.
-   ByteBuffer (int size,bool fillZero=false);
+   ByteBuffer (int aSize);
+
+   // Assigns pre-allocated memory
+   // This constructor           does not do a memory alloc operation.
+   // It's associated destructor does not do a memory free  operation.
+   ByteBuffer (char* aAddress,int aSize);
+
+   // Copy constructor and assignemnt operator.
+   // These are set up so that multiple byte buffer objects can
+   // point to the same buffer.
+   // They copy all members of a source object to a destination
+   // object, with the exception of the memory flag, which is
+   // cleared to indicate no memory allocation. This is done so
+   // that a new byte buffer object can point into the same buffer
+   // as an original byte buffer object, but they don't both try to
+   // delete the buffer in their destructors.
+
+   ByteBuffer (const ByteBuffer& buffer);
+   ByteBuffer& operator= (const ByteBuffer& buffer);
 
    // Deallocates any allocated memory.
   ~ByteBuffer ();
    
-   //-------------------------------------------------------------
-   // simple memory management.
-   // if allocated then destructor frees it
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Buffer management.
 
-   void  memAlloc (int size);
+   //---------------------------------------------------------------------------
+   // Heap memory, if allocated then destructor frees it
+
+   void  memAlloc (int aSize);
    void  memFree  ();
 
-   //-------------------------------------------------------------
-   // buffer maximum size
+   //---------------------------------------------------------------------------
+   // Buffer maximum size
+
    int getMaxLength();
 
-   //-------------------------------------------------------------
-   // buffer base address.
+   //---------------------------------------------------------------------------
+   // Buffer base address.
 
-   void  setBaseAddress (char* address,int size);
+   void  setBaseAddress (char* aAddress,int aSize);
    char* getBaseAddress ();
 
-   //-------------------------------------------------------------
-   // buffer length. This is the number of bytes that have
+   //---------------------------------------------------------------------------
+   // Buffer length. This is the number of bytes that have
    // actually been put into the buffer, the actual data length.
 
-   void setLength(int value);
+   void setLength(int aValue);
    int  getLength();
 
-   //-------------------------------------------------------------
-   // error codes.
+   //---------------------------------------------------------------------------
+   // Error codes.
 
-   void setError(int value);
+   void setError(int aValue);
    int  getError();
 
-   //-------------------------------------------------------------
-   // pointer operations.
+   //---------------------------------------------------------------------------
+   // Pointer operations.
    // reset sets the working pointer to the base address and
    // sets the length to zero.
    // rewind sets the working pointer to the base address
@@ -135,29 +142,24 @@ public:
 
    void  reset();
    void  rewind();
-   void  forward     (int byteSize=1);
-   void  advance     (int byteSize=1);
-   void  fillZero    (int byteSize=1);
+   void  forward     (int aByteSize=1);
+   void  advance     (int aByteSize=1);
+   void  fillZero    (int aByteSize=1);
 
-   //-------------------------------------------------------------
-   // Show
+   //---------------------------------------------------------------------------
+   // Buffer position.
 
-   void  show();
+   // These set the buffer working pointer.
+   bool  setPosition (char* aAddress);
+   bool  setPosition (int   aIndex);
 
-   //-------------------------------------------------------------
-   // buffer position.
-
-   // these set the buffer working pointer.
-   bool  setPosition (char* address);
-   bool  setPosition (int index);
-
-   // these get the buffer working pointer.
+   // These get the buffer working pointer.
    char* getPosition ();
    char* getPositionC();
    void* getPositionV();
 
-   //-------------------------------------------------------------
-   // copy direction.
+   //---------------------------------------------------------------------------
+   // Copy direction.
    //
    // this determines the direction of copy operations
    // copy to does a put, copy from does a get.
@@ -168,7 +170,7 @@ public:
    bool isCopyTo ();
    bool isCopyFrom ();
 
-   //-------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // This sets the network order of the buffer and whether or not
    // byte swapping happens.
    //
@@ -185,50 +187,58 @@ public:
 
    void setNetworkOrder (bool aNetworkOrder);
 
-   //-------------------------------------------------------------
-   // explicit copy operations for raw byte data.
-   // these copy bytes to/from a byte buffer.
-   // putData  copies bytes to   a byte buffer.
-   // getData  copies bytes from a byte buffer.
-   // copyData copies bytes to/from a byte buffer,
-   // based on the byte buffer copy direction.
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Copy operations
 
-   bool copyData (void* data,int size);
-
-   //-------------------------------------------------------------
-   // copy does either a put or a get.
+   //---------------------------------------------------------------------------
+   // copy does either a copy to the buffer or a copy from the buffer
    //
    // These either put an item to the byte buffer or get an
    // item from the byte buffer, based on the value of the
    // buffer copy direction flag.
 
-   bool copy (unsigned char* item);
-   bool copy (unsigned short* item);
-   bool copy (unsigned int* item);
-   bool copy (unsigned long long* item);
-   bool copy (char*  item);
-   bool copy (short*  item);
-   bool copy (int*  item);
-   bool copy (long long*  item);
-   bool copy (float* item);
-   bool copy (double* item);
-   bool copy (bool* item);
+   bool copy (unsigned char*      aValue);
+   bool copy (unsigned short*     aValue);
+   bool copy (unsigned int*       aValue);
+   bool copy (unsigned long long* aValue);
+   bool copy (char*               aValue);
+   bool copy (short*              aValue);
+   bool copy (int*                aValue);
+   bool copy (long long*          aValue);
+   bool copy (float*              aValue);
+   bool copy (double*             aValue);
+   bool copy (bool*               aValue);
 
-   bool copyEnum      (int*    item);
-   bool copyZString   (unsigned char* string,int upperBound);
-   bool copyFString   (unsigned char* string,int fixedSize);
-   bool copyZString   (char*   string,int upperBound);
-   bool copyFString   (char*   string,int fixedSize);
+   bool copyEnum      (int*           aValue);
+   bool copyZString   (unsigned char* aString,int aUpperBound);
+   bool copyFString   (unsigned char* aString,int aSize);
+   bool copyZString   (char*          aString,int aUpperBound);
+   bool copyFString   (char*          aString,int aSize);
 
    //ZString is a null terminated string with an upper bound
    //FString is a fixed size string
+
+   //---------------------------------------------------------------------------
+   // Copy an object that inherits from ByteContent to/from a byte buffer.
 
    bool copy          (ByteContent* content);
    bool putToBuffer   (ByteContent* content);
    bool getFromBuffer (ByteContent* content);
 
-   //-------------------------------------------------------------
-   // pointer members.
+   //---------------------------------------------------------------------------
+   // Copy raw byte data.
+
+   bool copyData (void* aData,int aSize);
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Members
+
+   //---------------------------------------------------------------------------
+   // Pointer members.
    // The base pointer contains the address of the beginning of the
    // buffer. The working pointer contains the address in the buffer
    // to which the next put or get operation will operate. The
@@ -241,10 +251,9 @@ public:
    int   mWorkingLength;
    int   mMaxLength;
 
-   //-------------------------------------------------------------
-   // copy direction.
-   // this determines the direction of copy operations
-   // copy to does a put, copy from does a get.
+   //---------------------------------------------------------------------------
+   // Copy direction. This specifies the direction of copy operations.
+   // Copy to does a put, copy from does a get.
 
    enum CopyDirection
    {
@@ -254,29 +263,28 @@ public:
 
    CopyDirection mCopyDirection;
 
-   //-------------------------------------------------------------
-   // Here is a general purpose error code.
+   //---------------------------------------------------------------------------
+   // General purpose error code.
+
    int mError;
 
-   //-------------------------------------------------------------
-   // byte swapping.
-   //
-   // this determines if copy operations do byte swapping.
-   // the default for little endian machines is to do
-   // byte swapping and the default for big endian machines 
-   // is to not do byte swapping. These can be used to
-   // override the default.
+   //---------------------------------------------------------------------------
+   // Byte swapping. This determines if copy operations do byte swapping. The 
+   // default for little endian machines is to not do byte swapping and the
+   // default for big endian machines is to do byte swapping.
 
    bool mByteSwapping;
 
-   //-------------------------------------------------------------
-   // Memory allocation code,
-   // determines if the destructor does a memFree.
+   //---------------------------------------------------------------------------
+   // Memory allocation code, itdetermines if the destructor does a memFree.
 
    int mMemAllocCode;
 };
+
 //******************************************************************************
-//  Here are some error codes.
+//******************************************************************************
+//******************************************************************************
+//  Error codes.
 
 namespace ByteErrorCode
 {
@@ -285,24 +293,26 @@ namespace ByteErrorCode
 }
 
 //******************************************************************************
+//******************************************************************************
 // This is a class that provides message byte padding.
 
-template <unsigned byteSize> class BytePadding : public ByteContent
+template <unsigned cByteSize> class BytePadding : public ByteContent
 {
 public:
    void copyToFrom (ByteBuffer* buffer)
    {
       if (buffer->isCopyTo())
       {
-         buffer->fillZero(byteSize);
+         buffer->fillZero(cByteSize);
       }
       else
       {
-         buffer->forward(byteSize);
+         buffer->forward(cByteSize);
       }
    }
 };
 
+//******************************************************************************
 //******************************************************************************
 // This is a byte block class that inherits from ByteContent.
 
@@ -338,21 +348,21 @@ public:
 };
 
 //******************************************************************************
+//******************************************************************************
 // This is a fixed size string class that inherits from ByteContent.
 
-template <unsigned StringSize> class FString : public ByteContent
+template <unsigned cStringSize> class FString : public ByteContent
 {
 public:
    FString() {mPtr=(char*)&mBytes[0];}
 
-   unsigned char mBytes[StringSize+1];
-
    void copyToFrom (ByteBuffer* aBuffer)
    {
-      aBuffer->copyData((void*)&mBytes[0],StringSize);
-      mBytes[StringSize] = 0;
+      aBuffer->copyData((void*)&mBytes[0],cStringSize);
+      mBytes[cStringSize] = 0;
    }
 
+   unsigned char mBytes[cStringSize+1];
    char* mPtr;
 };
 

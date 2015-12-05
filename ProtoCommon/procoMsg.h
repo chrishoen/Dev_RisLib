@@ -268,11 +268,14 @@ public:
 
    int mCode1;
    int mCode2;
-   enum {DataSize=1000-8};
-   unsigned char mData[DataSize];
+   int mCode3;
+   int mCode4;
 
    // Content
    //------------------------------------------------
+
+   void initialize();
+   void show();
 
 };
 
@@ -352,6 +355,27 @@ public:
 //******************************************************************************
 //******************************************************************************
 
+class DataRecord : public Ris::ByteContent
+{
+public:
+   DataRecord();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
+
+   //------------------------------------------------
+   // Content
+
+   int mX1;
+   int mX2;
+   int mX3;
+   int mX4;
+
+   // Content
+   //------------------------------------------------
+
+   void initialize();
+   void show();
+};
+
 class DataMsg : public BaseMsg
 {
 public:
@@ -377,6 +401,8 @@ public:
    char                       mZString[MyStringSize];
 
    Ris::FString<MyStringSize> mFString;
+
+   DataRecord                 mDataRecord;
 
    // Content
    //------------------------------------------------

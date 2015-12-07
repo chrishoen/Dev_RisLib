@@ -132,16 +132,16 @@ void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
    // Calls corresponding specfic message handler method.
    switch (tRxMsg->mMessageType)
    {
-      case ProtoComm::MsgIdT::Test :
+      case ProtoComm::MsgIdT::cTest :
          processRxMsg(aSessionIndex,(ProtoComm::TestMsg*)tRxMsg);
          break;
-      case ProtoComm::MsgIdT::FirstMessage :
+      case ProtoComm::MsgIdT::cFirstMessage :
          processRxMsg(aSessionIndex,(ProtoComm::FirstMessageMsg*)tRxMsg);
          break;
-      case ProtoComm::MsgIdT::StatusRequest :
+      case ProtoComm::MsgIdT::cStatusRequest :
          processRxMsg(aSessionIndex,(ProtoComm::StatusRequestMsg*)tRxMsg);
          break;
-      case ProtoComm::MsgIdT::StatusResponse :
+      case ProtoComm::MsgIdT::cStatusResponse :
          processRxMsg(aSessionIndex,(ProtoComm::StatusResponseMsg*)tRxMsg);
          break;
       default :

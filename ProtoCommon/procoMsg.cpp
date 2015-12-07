@@ -226,7 +226,26 @@ bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 
 Ris::ByteContent* MessageParser::createMessage(int aMessageType)
 {
-   return BaseMsg::createMessage(aMessageType);
+   return MessageCreator::createMessage(aMessageType);
+}
+
+//******************************************************************************
+
+BaseMsg* MessageParser::cloneMessage (BaseMsg* aMsg)
+{
+   // Create a new message based on message type
+   BaseMsg* tMsg = MessageCreator::createMessage(aMsg->mMessageType);
+
+   // Byte buffer
+   Ris::ByteBuffer tBuffer(MsgBufferSize);  
+
+   // Copy message to clone to buffer
+   tBuffer.putToBuffer(aMsg);
+
+   // Copy buffer to new message
+   tBuffer.getFromBuffer(tMsg);
+
+   return tMsg;
 }
 
 //******************************************************************************
@@ -275,25 +294,6 @@ BaseMsg::BaseMsg ()
 }
 
 //******************************************************************************
-
-BaseMsg* BaseMsg::cloneMessage()
-{
-   // Create a new message based on message type
-   BaseMsg* tMsg = createMessage(mMessageType);
-
-   // Byte buffer
-   Ris::ByteBuffer tBuffer(MsgBufferSize);  
-
-   // Copy this message to buffer
-   tBuffer.putToBuffer(this);
-
-   // Copy buffer to new message
-   tBuffer.getFromBuffer(tMsg);
-
-   return tMsg;
-}
-
-//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
@@ -307,7 +307,7 @@ const char* BaseMsg::getNameOf ()
 //******************************************************************************
 // This creates a new message, based on a message type
 
-BaseMsg* BaseMsg::createMessage(int aMessageType)
+BaseMsg* MessageCreator::createMessage(int aMessageType)
 {
    BaseMsg* message = 0;
 

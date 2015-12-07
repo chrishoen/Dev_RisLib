@@ -163,6 +163,8 @@ public:
 // into byte buffers and then extracts them into message objects that live
 // on the heap.
 
+class BaseMsg;
+
 class MessageParser : public Ris::BaseMessageParser
 {
 public:
@@ -180,8 +182,11 @@ public:
    // Extract message header parameters from a buffer and validate them
    bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer);
 
-   // create a new message based on a message type
+   // Create a new message based on a message type
    Ris::ByteContent* createMessage(int aMessageType);
+
+   // Clone a new message from an existing message
+   BaseMsg* cloneMessage(BaseMsg* aMsg);
 
    // Preprocess a message before it is sent
    void processBeforeSend(Ris::ByteContent* msg);
@@ -231,17 +236,7 @@ public:
    Header mHeader;
 
    //--------------------------------------------------------------------------
-   // create a new message based on a message type
-
-   static BaseMsg* createMessage(int aMessageType);
-
-   //--------------------------------------------------------------------------
-   // clone a new message from an existing message
-
-   BaseMsg* cloneMessage();
-
-   //--------------------------------------------------------------------------
-   // support
+   // Support
 
    const char* getNameOf ();
 };
@@ -250,6 +245,20 @@ public:
 // Use this for a buffer size for these messages
 
 enum {MsgBufferSize = 20000};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This encalsulates message creation
+
+class MessageCreator
+{
+public:
+   //--------------------------------------------------------------------------
+   // Create a new message based on a message type
+
+   static BaseMsg* createMessage(int aMessageType);
+};
 
 //******************************************************************************
 //******************************************************************************

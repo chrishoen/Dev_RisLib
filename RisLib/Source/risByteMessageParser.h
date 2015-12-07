@@ -1,5 +1,5 @@
-#ifndef _RISBYTEMESSAGE_H_
-#define _RISBYTEMESSAGE_H_
+#ifndef _RISBYTEMESSAGEPARSER_H_
+#define _RISBYTEMESSAGEPARSER_H_
 /*==============================================================================
 ByteContent support classes for messages.
 ==============================================================================*/
@@ -8,29 +8,10 @@ ByteContent support classes for messages.
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
 #include "risByteContent.h"
 
 namespace Ris
 {
-
-//******************************************************************************
-// This is a base class for messages that use ByteContent. It supplies some
-// member variables that are used for message identification. 
-
-class  MessageContent : public ByteContent
-{
-public:
-   MessageContent()
-   {
-      mFamily=0;
-      mMessageType=0;
-   }
-   
-   // Message Type Identifiers
-   int mFamily;
-   int mMessageType;
-};
 
 //******************************************************************************
 // This is an abstract base class for a message parser. It can be used

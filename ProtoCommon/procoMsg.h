@@ -34,7 +34,7 @@ StatusRequest
 //******************************************************************************
 //******************************************************************************
 #include "risByteContent.h"
-#include "risByteMessage.h"
+#include "risByteMessageParser.h"
 
 namespace ProtoComm
 {
@@ -80,14 +80,15 @@ namespace MsgIdT
    };
 }//namespace
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This encapsualtes a message header.
+ //******************************************************************************
+ //******************************************************************************
+ //******************************************************************************
+ // This encapsualtes the message header.
 
 class Header : public Ris::ByteContent
 {
 public:
+   // Constructor
    Header();
 
    //------------------------------------------------
@@ -95,19 +96,16 @@ public:
 
    int   mSyncWord1;
    int   mSyncWord2;
-   int   mMessageType;
+   int   mMessageIdentifier;
    int   mMessageLength;
-   int   mFamily;
    int   mSourceId;
    int   mDestinationId;
 
    // Header Content
    //------------------------------------------------
 
-   enum {Length = 28};
-
-   int   mSyncWord3;
-   int   mSyncWord4;
+   // Header length
+   static const int cLength = 24;
 
    //--------------------------------------------------------------------------
    // If the byte buffer is configured for put operations then this puts the
@@ -119,7 +117,7 @@ public:
    // Copy To and Copy From are symmetrical.
    //--------------------------------------------------------------------------
 
-   virtual void copyToFrom (Ris::ByteBuffer* aBuffer);
+   void copyToFrom(Ris::ByteBuffer* aBuffer);
 
    //--------------------------------------------------------------------------
    // For variable content messages, the message length cannot be known until
@@ -139,23 +137,27 @@ public:
    // headerCopyToFrom stores the buffer pointer and advances past where the
    // header will be written and headerReCopyToFrom "puts" the header at the
    // stored position. Both functions are passed a byte buffer pointer to
-   // where the copy is to take place. Both are also passed a MessageContent
-   // pointer to where they can get MessageContent::mFamily and mMessageType
+   // where the copy is to take place. Both are also passed a ByteContent
+   // pointer to where they can get and mMessageType
    // which they transfer into and out of the headers.
    //--------------------------------------------------------------------------
 
-   virtual void   headerCopyToFrom    (Ris::ByteBuffer* aBuffer,Ris::MessageContent* parent);
-   virtual void   headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::MessageContent* parent);
-
+   void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteContent* aParent);
+   void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteContent* aParent);
    //---------------------------------------------------------------------------
-   // This is set by headerCopyToFrom and used by headerReCopyToFrom,
-   // for "put" operations. It contains the byte buffer position of
+   // These are set by headerCopyToFrom and used by headerReCopyToFrom,
+   // for "put" operations.Theyt contain the buffer position and length of
    // where the headerReCopyToFrom will take place, which should be
    // where headerCopyToFrom was told to do the copy.
 
-   Ris::ByteBuffer  mOriginalBuffer;
+   int mInitialPosition;
+   int mInitialLength;
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This encapsualtes a message header.
 //******************************************************************************
 // This is a message parser that can be used by code that receives messages
 // into byte buffers and then extracts them into message objects that live
@@ -189,7 +191,6 @@ public:
 
    int mSourceId;
 };
-
 //******************************************************************************
 // This is a message parser creator. It defines a method that creates a new
 // message parser. It is used by transmitters and receivers to create new
@@ -216,12 +217,11 @@ public:
 // Base message class.
 // All particular messages for this message set inherit from this.
 
-class BaseMsg : public Ris::MessageContent
+class BaseMsg : public Ris::ByteContent
 {
 public:
    //--------------------------------------------------------------------------
-   // The constructor sets default MessageContent information
-   //--------------------------------------------------------------------------
+   // Constructor
 
    BaseMsg();
 
@@ -247,9 +247,9 @@ public:
 };
 
 //******************************************************************************
-// use this for a buffer size for these messages
+// Use this for a buffer size for these messages
 
-   enum {MsgBufferSize = 200000};
+enum {MsgBufferSize = 20000};
 
 //******************************************************************************
 //******************************************************************************
@@ -399,8 +399,6 @@ public:
 
    enum {MyStringSize = 8};
    char                       mZString[MyStringSize];
-
-   Ris::FString<MyStringSize> mFString;
 
    DataRecord                 mDataRecord;
 

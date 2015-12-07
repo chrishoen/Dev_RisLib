@@ -33,6 +33,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoCommT", "ProtoCommT\Pr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TimerThreadTest", "TimerThreadTest\TimerThreadTest.vcxproj", "{605B9FE7-D32A-4F54-BF14-C5D226492F05}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scratch_CS", "Scratch_CS", "{2F24DFA8-3DBB-481F-A4BD-B2EE350B94BE}"
+	ProjectSection(SolutionItems) = preProject
+		Scratch_CS\ByteContent_Main.cs = Scratch_CS\ByteContent_Main.cs
+		Scratch_CS\ByteContent_RType.cs = Scratch_CS\ByteContent_RType.cs
+		Scratch_CS\ByteContent_VType.cs = Scratch_CS\ByteContent_VType.cs
+		Scratch_CS\ByteMessageParser.cs = Scratch_CS\ByteMessageParser.cs
+		Scratch_CS\MyCommandLineExec.cs = Scratch_CS\MyCommandLineExec.cs
+		Scratch_CS\ProcoMsg_Main.cs = Scratch_CS\ProcoMsg_Main.cs
+		Scratch_CS\ProcoMsg_Message.cs = Scratch_CS\ProcoMsg_Message.cs
+		Scratch_CS\ProcoRecord.cs = Scratch_CS\ProcoRecord.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

@@ -13,7 +13,7 @@ Tcp message socket class.
 
 #include "risPortableTypes.h"
 #include "risByteContent.h"
-#include "risByteMessage.h"
+#include "risByteMessageParser.h"
 #include "risContainers.h"
 #include "risSockets.h"
 #include "risThreads.h"

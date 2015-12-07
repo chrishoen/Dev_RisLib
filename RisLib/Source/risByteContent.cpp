@@ -38,66 +38,41 @@ namespace Ris
 
 ByteBuffer::ByteBuffer ()
 {
-   mBasePtr=0;
-   mWorkingPtr=mBasePtr;
-   mWorkingLength=0;
-   mMaxLength=0;
-   mMemAllocCode=0;
-   mCopyDirection=COPY_TO;
-   mError=0;
-   mByteSwapping=gByteBuffer_DoByteSwapping;
+   mBaseBytes     = 0;
+   mWorkingIndex  = 0;
+   mWorkingLength = 0;
+   mMaxLength     = 0;
+   mMemAllocCode  = 0;
+   mCopyDirection = cCopyTo;
+   mError         = 0;
+   mByteSwapping  = gByteBuffer_DoByteSwapping;
 }
 
 ByteBuffer::ByteBuffer (int aSize)
 {
    memAlloc(aSize);
-   mCopyDirection=COPY_TO;
-   mError=0;
+   mCopyDirection = cCopyTo;
+   mError = 0;
    mByteSwapping=gByteBuffer_DoByteSwapping;
 }
 
 ByteBuffer::ByteBuffer (char* aAddress,int aSize)
 {
-   mBasePtr=aAddress;
-   mWorkingPtr=mBasePtr;
-   mWorkingLength=0;
-   mMaxLength=aSize;
-   mMemAllocCode=0;
-   mCopyDirection=COPY_TO;
-   mError=0;
-   mByteSwapping=gByteBuffer_DoByteSwapping;
-}
-
-ByteBuffer::ByteBuffer (const ByteBuffer& buffer)
-{
-   mBasePtr       = buffer.mBasePtr;
-   mWorkingPtr    = buffer.mWorkingPtr;
-   mWorkingLength = buffer.mWorkingLength;
-   mMaxLength     = buffer.mMaxLength;
+   mBaseBytes     = aAddress;
+   mWorkingIndex  = 0;
+   mWorkingLength = 0;
+   mMaxLength     = aSize;
    mMemAllocCode  = 0;
-   mCopyDirection = buffer.mCopyDirection;
-   mError         = buffer.mError;
-   mByteSwapping  = buffer.mByteSwapping;
-}
-
-ByteBuffer& ByteBuffer::operator= (const ByteBuffer& buffer)
-{
-   mBasePtr       = buffer.mBasePtr;
-   mWorkingPtr    = buffer.mWorkingPtr;
-   mWorkingLength = buffer.mWorkingLength;
-   mMaxLength     = buffer.mMaxLength;
-   mMemAllocCode  = 0;
-   mCopyDirection = buffer.mCopyDirection;
-   mError         = buffer.mError;
-   mByteSwapping  = buffer.mByteSwapping;
-   return *this;
+   mCopyDirection = cCopyTo;
+   mError         = 0;
+   mByteSwapping  = gByteBuffer_DoByteSwapping;
 }
 
 ByteBuffer::~ByteBuffer ()
 {
    if(mMemAllocCode)
    {
-      free((void*)mBasePtr);
+      free((void*)mBaseBytes);
    }
 }
 
@@ -108,12 +83,12 @@ ByteBuffer::~ByteBuffer ()
 
 void ByteBuffer::memAlloc (int aSize)
 {
-   mBasePtr = (char*) malloc(aSize);
+   mBaseBytes = (char*) malloc(aSize);
 
-   mWorkingPtr=mBasePtr;
-   mWorkingLength=0;
-   mMaxLength=aSize;
-   mMemAllocCode=1;
+   mWorkingIndex  = 0;
+   mWorkingLength = 0;
+   mMaxLength     = aSize;
+   mMemAllocCode  = 1;
 }
 
 //******************************************************************************
@@ -122,49 +97,133 @@ void ByteBuffer::memFree ()
 {
    if(mMemAllocCode)
    {
-      free((void*)mBasePtr);
+      free((void*)mBaseBytes);
    }
 
-   mBasePtr=0;
-   mWorkingPtr=0;
-   mMemAllocCode=0;
-   mWorkingLength=0;
-   mMaxLength=0;
+   mBaseBytes     = 0;
+   mWorkingIndex  = 0;
+   mWorkingLength = 0;
+   mMaxLength     = 0;
+   mMemAllocCode  = 0;
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Pointer operations 
 
-int ByteBuffer::getMaxLength()
+void ByteBuffer::reset ()
 {
-   return mMaxLength;
+   mWorkingIndex  = 0;
+   mWorkingLength = 0;
 }
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Buffer base address
 
-void ByteBuffer::setBaseAddress (char* aAddress,int aSize)
+void ByteBuffer::rewind ()
 {
-   memFree();
-
-   mBasePtr=aAddress;
-   mWorkingPtr=mBasePtr;
-   mWorkingLength=0;
-   mMaxLength=aSize;
-   mMemAllocCode=0;
-   mError=0;
+   mWorkingIndex = 0;
 }
 
+//******************************************************************************
+
+void ByteBuffer::forward (int aSize)
+{
+   if (aSize + mWorkingIndex > mMaxLength) return;
+
+   if (mCopyDirection==cCopyTo)
+   {
+      mWorkingIndex  += aSize;
+      mWorkingLength += aSize;
+   }
+   else
+   {
+      mWorkingIndex    += aSize;
+   }
+}
+
+//******************************************************************************
+
+void ByteBuffer::advance (int aSize)
+{
+   if (aSize + mWorkingIndex > mMaxLength) return;
+
+   mWorkingIndex  += aSize;
+   mWorkingLength += aSize;
+}
+
+//******************************************************************************
+
+void ByteBuffer::fillZero (int aSize)
+{
+   if (aSize + mWorkingIndex > mMaxLength) return;
+
+   if (mCopyDirection==cCopyTo)
+   {
+      for (int i=0; i<aSize; i++)
+      {
+         mBaseBytes[mWorkingIndex + i] = 0;
+      }
+
+      mWorkingIndex  += aSize;
+      mWorkingLength += aSize;
+   }
+   else
+   {
+      mWorkingIndex  += aSize;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Buffer position
+
+// Get the address of the start of the buffer.
 char* ByteBuffer::getBaseAddress ()
 {
-   return mBasePtr;
+   return mBaseBytes;
+}
+
+// Set the buffer working index.
+void ByteBuffer::setPosition (int aIndex)
+{
+   // Set index
+   mWorkingIndex = aIndex;
+
+   // Guard
+   if (mWorkingIndex > mMaxLength - 1)
+   {
+      mWorkingIndex = mMaxLength - 1;
+   }
+}
+
+// Get the buffer working index.
+int ByteBuffer::getPosition ()
+{
+   return mWorkingIndex;
+}
+
+// Get the buffer address at the working index.
+char* ByteBuffer::getPositionC ()
+{
+   return &mBaseBytes[mWorkingIndex];
+}
+
+void* ByteBuffer::getPositionV ()
+{
+   return (void*)&mBaseBytes[mWorkingIndex];
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Access some members
+
+int ByteBuffer::getMaxLength()
+{
+   return mMaxLength;
+}
 
 void ByteBuffer::setLength(int aValue)
 {
@@ -186,131 +245,24 @@ void ByteBuffer::setError(int aValue)
    mError=aValue;
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Pointer operations 
-
-void ByteBuffer::reset ()
-{
-   mWorkingPtr=mBasePtr;
-   mWorkingLength=0;
-}
-
-//******************************************************************************
-
-void ByteBuffer::rewind ()
-{
-   mWorkingPtr=mBasePtr;
-}
-
-//******************************************************************************
-
-void ByteBuffer::forward (int aSize)
-{
-   if (aSize + mWorkingPtr - mBasePtr > mMaxLength) return;
-
-   if (mCopyDirection==COPY_TO)
-   {
-      mWorkingPtr    += aSize;
-      mWorkingLength += aSize;
-   }
-   else
-   {
-      mWorkingPtr    += aSize;
-   }
-}
-
-//******************************************************************************
-
-void ByteBuffer::advance (int aSize)
-{
-   if (aSize + mWorkingPtr - mBasePtr > mMaxLength) return;
-
-   mWorkingPtr    += aSize;
-   mWorkingLength += aSize;
-}
-
-//******************************************************************************
-
-void ByteBuffer::fillZero (int aSize)
-{
-   if (aSize + mWorkingPtr - mBasePtr > mMaxLength) return;
-
-   if (mCopyDirection==COPY_TO)
-   {
-      for (int i=0;i<aSize;i++)
-      {
-         mWorkingPtr[i] = 0;
-      }
-
-      mWorkingPtr    += aSize;
-      mWorkingLength += aSize;
-   }
-   else
-   {
-      mWorkingPtr    += aSize;
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Buffer position
-
-bool ByteBuffer::setPosition (char* aAddress)
-{
-   mWorkingPtr=aAddress;
-   return true;
-}
-
-bool ByteBuffer::setPosition (int aIndex)
-{
-   if (aIndex>=mMaxLength) return false;
-
-   mWorkingPtr=&mBasePtr[aIndex];
-
-   return true;
-}
-
-char* ByteBuffer::getPosition ()
-{
-   return mWorkingPtr;
-}
-
-char* ByteBuffer::getPositionC ()
-{
-   return mWorkingPtr;
-}
-
-void* ByteBuffer::getPositionV ()
-{
-   return (void*)mWorkingPtr;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Copy direction
-
 void ByteBuffer::setCopyTo()
 {
-   mCopyDirection=COPY_TO;
+   mCopyDirection=cCopyTo;
 }
 
 void ByteBuffer::setCopyFrom ()
 {
-   mCopyDirection=COPY_FROM;
+   mCopyDirection=cCopyFrom;
 }
 
 bool ByteBuffer::isCopyTo()
 {
-   return mCopyDirection==COPY_TO;
+   return mCopyDirection==cCopyTo;
 }
 
 bool ByteBuffer::isCopyFrom ()
 {
-   return mCopyDirection==COPY_FROM;
+   return mCopyDirection==cCopyFrom;
 }
 
 void ByteBuffer::setNetworkOrder (bool aNetworkOrder)
@@ -330,55 +282,66 @@ void ByteBuffer::setNetworkOrder (bool aNetworkOrder)
 //******************************************************************************
 // Copy operations
 
-static bool BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
+static void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
 {
    //---------------------------------------------------------------------------
    // Guard
 
-   if (aValue == 0)
+   if (aSize == 0)
    {
-      aBuffer->mError = ByteErrorCode::BAD_POINTER;
-      return false;
+      return;
    }
 
-
-   // Guard
-   if (aBuffer->mWorkingPtr > aBuffer->mBasePtr + aBuffer->mMaxLength - aSize)
+   if (aBuffer->isCopyTo())
    {
-      aBuffer->mError = ByteErrorCode::BUFF_OVERFLOW;
-      return false;
+      if (aSize + aBuffer->mWorkingIndex > aBuffer->mMaxLength)
+      {
+         aBuffer->setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
+   }
+   else
+   {
+      if (aSize + aBuffer->mWorkingIndex > aBuffer->mWorkingLength)
+      {
+         aBuffer->setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
    }
 
    //---------------------------------------------------------------------------
    // Copy value to byte buffer
 
-   if (aBuffer->mCopyDirection == ByteBuffer::COPY_TO)
+   if (aBuffer->isCopyTo())
    {
       // Source pointer
       char* tSource = (char*)aValue;
 
+      // Destination Buffer pointer
+      char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
+
       if (aBuffer->mByteSwapping)
       {
          // Copy bytes to buffer, swapping bytes
-         for (int byteIndex = 0; byteIndex < aSize; byteIndex++)
+         for (int i = 0; i < aSize; i++)
          {
-            aBuffer->mWorkingPtr[byteIndex] = tSource[aSize - byteIndex - 1];
+            tBytes[i] = tSource[aSize - i - 1];
          }
       }
       else
       {
          // Copy bytes to buffer, not swapping bytes
-         for (int byteIndex = 0; byteIndex < aSize; byteIndex++)
+         char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
+
+         for (int i = 0; i < aSize; i++)
          {
-            aBuffer->mWorkingPtr[byteIndex] = tSource[byteIndex];
+            tBytes[i] = tSource[i];
          }
       }
 
       // Adjust buffer members
-      aBuffer->mWorkingPtr    += aSize;
+      aBuffer->mWorkingIndex  += aSize;
       aBuffer->mWorkingLength += aSize;
-
-      return true;
    }
    //---------------------------------------------------------------------------
    else
@@ -386,27 +349,30 @@ static bool BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
       // Destination pointer
       char* tDestin = (char*)aValue;
 
+      // Source Buffer pointer
+      char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
+      int   tWorkingIndex = aBuffer->mWorkingIndex;
+
       // Copy bytes from buffer, swapping bytes
+
       if (aBuffer->mByteSwapping)
       {
-         for (int byteIndex = 0; byteIndex < aSize; byteIndex++)
+         for (int i = 0; i < aSize; i++)
          {
-            tDestin[byteIndex] = aBuffer->mWorkingPtr[aSize - byteIndex - 1];
+            tDestin[i] = tBytes[aSize - i - 1];
          }
       }
       else
       {
          // Copy bytes from buffer, not swapping bytes
-         for (int byteIndex = 0; byteIndex < aSize; byteIndex++)
+         for (int i = 0; i < aSize; i++)
          {
-            tDestin[byteIndex] = aBuffer->mWorkingPtr[byteIndex];
+            tDestin[i] = tBytes[i];
          }
       }
 
       // adjust members
-      aBuffer->mWorkingPtr += aSize;
-
-      return true;
+      aBuffer->mWorkingIndex += aSize;
    }
 }
 
@@ -415,65 +381,48 @@ static bool BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
 //******************************************************************************
 // Copy operations for value types
 
-bool ByteBuffer::copy (unsigned char*      aValue) { return BB_copyValue(this, aValue, 1); }
-bool ByteBuffer::copy (unsigned short*     aValue) { return BB_copyValue(this, aValue, 2); }
-bool ByteBuffer::copy (unsigned int*       aValue) { return BB_copyValue(this, aValue, 4); }
-bool ByteBuffer::copy (unsigned long long* aValue) { return BB_copyValue(this, aValue, 8); }
-bool ByteBuffer::copy (char*               aValue) { return BB_copyValue(this, aValue, 1); }
-bool ByteBuffer::copy (short*              aValue) { return BB_copyValue(this, aValue, 2); }
-bool ByteBuffer::copy (int*                aValue) { return BB_copyValue(this, aValue, 4); }
-bool ByteBuffer::copy (long long*          aValue) { return BB_copyValue(this, aValue, 8); }
-bool ByteBuffer::copy (float*              aValue) { return BB_copyValue(this, aValue, 4); }
-bool ByteBuffer::copy (double*             aValue) { return BB_copyValue(this, aValue, 8); }
+void ByteBuffer::copy (unsigned char*      aValue) { BB_copyValue(this, aValue, 1); }
+void ByteBuffer::copy (unsigned short*     aValue) { BB_copyValue(this, aValue, 2); }
+void ByteBuffer::copy (unsigned int*       aValue) { BB_copyValue(this, aValue, 4); }
+void ByteBuffer::copy (unsigned long long* aValue) { BB_copyValue(this, aValue, 8); }
+void ByteBuffer::copy (char*               aValue) { BB_copyValue(this, aValue, 1); }
+void ByteBuffer::copy (short*              aValue) { BB_copyValue(this, aValue, 2); }
+void ByteBuffer::copy (int*                aValue) { BB_copyValue(this, aValue, 4); }
+void ByteBuffer::copy (long long*          aValue) { BB_copyValue(this, aValue, 8); }
+void ByteBuffer::copy (float*              aValue) { BB_copyValue(this, aValue, 4); }
+void ByteBuffer::copy (double*             aValue) { BB_copyValue(this, aValue, 8); }
 
-bool ByteBuffer::copy (bool*               aValue)
+void ByteBuffer::copy (bool*               aValue)
 {
-   if (mCopyDirection == ByteBuffer::COPY_TO)
+   if (isCopyTo())
    {
       // Copy boolean value to one byte in the buffer
       unsigned char tFlag = aValue ? 1 : 0;
-      return BB_copyValue(this, &tFlag, 1);
+      BB_copyValue(this, &tFlag, 1);
    }
    else
    {
       // Copy boolean value from one byte in the buffer
       unsigned char tFlag = 0;
-      if (BB_copyValue(this, &tFlag, 1))
-      {
-         *aValue = (tFlag != 0);
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+      BB_copyValue(this, &tFlag, 1);
+      *aValue = (tFlag != 0);
    }
-   return false;
 }
 
-bool ByteBuffer::copyEnum (int* aValue) { return BB_copyValue(this, aValue, 4); }
+void ByteBuffer::copyEnum (int* aValue) { BB_copyValue(this, aValue, 4); }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Copy operations for null terminated string type
 
-bool ByteBuffer::copyZString (char* aString,int aUpperBound) 
+void ByteBuffer::copyZString (char* aString,int aUpperBound) 
 {
-   //--------------------------------------------------------------------------
-   // Guard
-
-   if(aString==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
    //--------------------------------------------------------------------------
    // Get string length
 
    int tSize = 0;
-   if (mCopyDirection == COPY_TO)
+   if (isCopyTo())
    {
       // tSize is the length of the string to copy to the buffer
       // plus the null character
@@ -489,7 +438,7 @@ bool ByteBuffer::copyZString (char* aString,int aUpperBound)
       // plus the null character
       while (1)
       {
-         if (mWorkingPtr[tSize++] == 0) break;
+         if (mBaseBytes[mWorkingIndex + tSize++] == 0) break;
          if (tSize == aUpperBound)  break;
       }
    }
@@ -497,147 +446,82 @@ bool ByteBuffer::copyZString (char* aString,int aUpperBound)
    //--------------------------------------------------------------------------
    // Guard
 
-   if(mWorkingPtr > mBasePtr + mMaxLength - tSize)
+   if (isCopyTo())
    {
-      mError=ByteErrorCode::BUFF_OVERFLOW;
-      return false;
+      if (tSize + mWorkingIndex > mMaxLength)
+      {
+         setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
+   }
+   else
+   {
+      if (tSize + mWorkingIndex > mWorkingLength)
+      {
+         setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
    }
 
    //--------------------------------------------------------------------------
    // Copy
 
-   if (mCopyDirection == COPY_TO)
+   if (mCopyDirection == cCopyTo)
    {
       // Copy the string to the buffer, without the null character
-      memcpy(mWorkingPtr, aString, tSize - 1);
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(tWorkingPtr, aString, tSize - 1);
 
       // copy the null character to the buffer
-      mWorkingPtr[tSize - 1] = 0;
+      tWorkingPtr[tSize - 1] = 0;
 
       // Adjust buffer members
-      mWorkingPtr += tSize;
+      mWorkingIndex  += tSize;
       mWorkingLength += tSize;
    }
    else
    {
       // Copy the string from the buffer, without the null character
-      memcpy(aString, mWorkingPtr, tSize - 1);
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(aString, tWorkingPtr, tSize - 1);
 
       // Copy the null character to the buffer
       aString[tSize - 1] = 0;
 
       // Adjust buffer members
-      mWorkingPtr += tSize;
+      mWorkingIndex += tSize;
    }
-
-   return true;
 }
 
-bool ByteBuffer::copyZString(unsigned char* aString, int aUpperBound) { return copyZString((char*)aString, aUpperBound); }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Copy operations for fixed size string type
-
-bool ByteBuffer::copyFString (char* aString,int aSize) 
-{
-   //--------------------------------------------------------------------------
-   // Guard
-
-   if(aString==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   //--------------------------------------------------------------------------
-   // Guard
-
-   if(mWorkingPtr > mBasePtr + mMaxLength - aSize)
-   {
-      mError=ByteErrorCode::BUFF_OVERFLOW;
-      return false;
-   }
-
-   //--------------------------------------------------------------------------
-   // Copy
-
-   if (mCopyDirection == COPY_TO)
-   {
-      // Copy the string to the buffer
-      memcpy(mWorkingPtr, aString, aSize);
-
-      // Adjust buffer members
-      mWorkingPtr    += aSize;
-      mWorkingLength += aSize;
-   }
-   else
-   {
-      // Copy the string from the buffer, without the null character
-      memcpy(aString, mWorkingPtr, aSize);
-      aString[aSize] = 0;
-
-      // Adjust buffer members
-      mWorkingPtr += aSize;
-   }
-
-   return true;
-}
-
-bool ByteBuffer::copyFString(unsigned char* aString, int aSize) { return copyFString((char*)aString, aSize); }
+void ByteBuffer::copyZString(unsigned char* aString, int aUpperBound) { copyZString((char*)aString, aUpperBound); }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Copy for object that inherits from ByteContent
 
-bool ByteBuffer::copy (ByteContent* content) 
+void ByteBuffer::copy (ByteContent* aContent) 
 {
-   if(content==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   content->copyToFrom(this);
-
-   return true;
+   // Call ByteContent overload to copy to/from the buffer
+   aContent->copyToFrom(this);
 }
 
-bool ByteBuffer::putToBuffer (ByteContent* content) 
+void ByteBuffer::putToBuffer (ByteContent* aContent) 
 {
-   // guard
-   if(content==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   // set copy direction
+   // Set copy direction
    setCopyTo();
 
-   // call ByteContent supplied member function to do the put
-   content->copyToFrom(this);
-
-   return true;
+   // Call ByteContent overload to copy to the buffer
+   aContent->copyToFrom(this);
 }
 
-bool ByteBuffer::getFromBuffer (ByteContent* content) 
+void ByteBuffer::getFromBuffer (ByteContent* aContent) 
 {
-   if(content==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
-   // set copy direction
+   // Set copy direction
    setCopyFrom();
 
-   // call ByteContent supplied member function to do the get
-   content->copyToFrom(this);
-
-   return true;
+   // Call ByteContent overload to copy to the buffer
+   aContent->copyToFrom(this);
 }
 
 
@@ -646,41 +530,46 @@ bool ByteBuffer::getFromBuffer (ByteContent* content)
 //******************************************************************************
 // Copy raw data
 
-bool ByteBuffer::copyData (void* aData,int aSize) 
+void ByteBuffer::copyData (void* aData,int aSize) 
 {
-   // guard
-   if(aData==0)
-   {
-      mError=ByteErrorCode::BAD_POINTER;
-      return false;
-   }
-
+   //--------------------------------------------------------------------------
    // Guard
-   if(mWorkingPtr > mBasePtr + mMaxLength - aSize)
-   {
-      mError=ByteErrorCode::BUFF_OVERFLOW;
-      return false;
-   }
 
-   if (mCopyDirection==COPY_TO)
+   if (isCopyTo())
+   {
+      if (aSize + mWorkingIndex > mMaxLength)
+      {
+         setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
+   }
+   else
+   {
+      if (aSize + mWorkingIndex > mWorkingLength)
+      {
+         setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
+   }
+   if (mCopyDirection==cCopyTo)
    {
       // Copy the data to the buffer
-      memcpy(mWorkingPtr,aData,aSize);
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(tWorkingPtr,aData,aSize);
 
       // Adjust members
-      mWorkingPtr    += aSize;
+      mWorkingIndex  += aSize;
       mWorkingLength += aSize;
    }
    else
    {
       // Copy the fixed size data
-      memcpy(aData,mWorkingPtr,aSize);
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(aData,tWorkingPtr,aSize);
 
       // Adjust members
-      mWorkingPtr += aSize;
+      mWorkingIndex += aSize;
    }
-
-   return true;
 }
 
 //******************************************************************************

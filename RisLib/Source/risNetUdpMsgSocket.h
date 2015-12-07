@@ -14,7 +14,7 @@ UdpTxMsgSocket -- udp transmit socket
 
 #include "risPortableTypes.h"
 #include "risByteContent.h"
-#include "risByteMessage.h"
+#include "risByteMessageParser.h"
 #include "risSockets.h"
 #include "risThreads.h"
 

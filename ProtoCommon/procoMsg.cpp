@@ -12,51 +12,73 @@
 
 namespace ProtoComm
 {
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-Header::Header()
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   Header::Header()
 {
-   mSyncWord1      = 0xaaaaaaaa;
-   mSyncWord2      = 0xbbbbbbbb;
-   mMessageType    = 0;
-   mMessageLength  = 0;
-   mFamily         = 0;
-   mSourceId       = 0;
-   mDestinationId  = 0;
+   mSyncWord1         = 0x11111111;
+   mSyncWord2         = 0x22222222;
+   mMessageIdentifier = 0;
+   mMessageLength     = 0;
+   mSourceId          = 0;
+   mDestinationId     = 0;
 
-   mSyncWord3      = 0xcccccccc;
-   mSyncWord4      = 0xdddddddd;
+   mInitialPosition   = 0;
+   mInitialLength     = 0;
 }
 
-void Header::copyToFrom(Ris::ByteBuffer* aBuffer)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//--------------------------------------------------------------------------
+// If the byte buffer is configured for put operations then this puts the
+// contents of the object into the byte buffer (it does a copy to, it
+// copies the object to the byte buffer).
+// If the byte buffer is configured for get operations then this gets the
+// contents of the object from the byte buffer (it does a copy from, it
+// copies the object from the byte buffer).
+// Copy To and Copy From are symmetrical.
+//--------------------------------------------------------------------------
+
+void Header::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
-   aBuffer->copy(& mSyncWord1     );
-   aBuffer->copy(& mSyncWord2     );
-   aBuffer->copy(& mMessageType   );
-   aBuffer->copy(& mMessageLength );
-   aBuffer->copy(& mFamily        );
-   aBuffer->copy(& mSourceId      );
-   aBuffer->copy(& mDestinationId );
+   aBuffer->copy( &mSyncWord1         );
+   aBuffer->copy( &mSyncWord2         );
+   aBuffer->copy( &mMessageIdentifier );
+   aBuffer->copy( &mMessageLength     );
+   aBuffer->copy( &mSourceId          );
+   aBuffer->copy( &mDestinationId     );
 }
 
-//------------------------------------------------------------------------------
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//--------------------------------------------------------------------------
+// For variable content messages, the message length cannot be known until
+// the entire message has been written to a byte buffer. Therefore, the 
+// message header cannot be written to a byte buffer until the entire
+// message has been written and the length is known.
+//
+// The procedure to write a message to a byte buffer is to skip over the 
+// buffer segment where the header is located, write the message payload
+// to the buffer, set the header message length based on the now known
+// payload length, and write the header to the buffer.
+//
 // These are called explicitly by inheriting messages at the
 // beginning and end of their copyToFrom's to manage the headers.
 // For "get" operations, headerCopyToFrom "gets" the header and
 // headerReCopyToFrom does nothing. For "put" operations,
-// headerCopyToFrom does nothing except store the buffer pointer and
-// headerReCopyToFrom "puts" the header at the stored position. Both
-// functions are passed a byte buffer pointer to where the copy is
-// to take place. Both are also passed a MessageContent pointer to
-// where they can get MessageContent::mFamily and mMessageType which
-// they transfer into and out of the headers.
-//------------------------------------------------------------------------------
+// headerCopyToFrom stores the buffer pointer and advances past where the
+// header will be written and headerReCopyToFrom "puts" the header at the
+// stored position. Both functions are passed a byte buffer pointer to
+// where the copy is to take place. Both are also passed a MessageByte
+// pointer to where they can get and mMessageType
+// which they transfer into and out of the headers.
+//--------------------------------------------------------------------------
 
-void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::MessageContent* parent)
+void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteContent* aParent)
 {
-
    //---------------------------------------------------------------------
    // Instances of this class are members of parent message classes.
    // A call to this function should be the first line of code in a
@@ -90,10 +112,13 @@ void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::MessageContent* par
 
    if (aBuffer->isCopyTo())
    {
-      // Store the buffer object for later use.
-      mOriginalBuffer = *aBuffer;
+      // Store the buffer parameters for later use by the
+      // headerReCopyToFrom
+      mInitialPosition = aBuffer->getPosition();
+      mInitialLength   = aBuffer->getLength();
+
       // Advance the buffer position to point past the header.
-      aBuffer->forward(Header::Length);
+      aBuffer->forward(cLength);
    }
 
    //---------------------------------------------------------------------
@@ -108,25 +133,15 @@ void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::MessageContent* par
       // Copy the buffer content into the header object.
       copyToFrom(aBuffer);
       // Set the message content type.
-      parent->mMessageType = mMessageType;
-      parent->mFamily      = mFamily;
+      aParent->mMessageType = mMessageIdentifier;
    }
 }
 
-//------------------------------------------------------------------------------
-// These are called explicitly by inheriting messages at the
-// beginning and end of their copyToFrom's to manage the headers.
-// For "get" operations, headerCopyToFrom "gets" the header and
-// headerReCopyToFrom does nothing. For "put" operations,
-// headerCopyToFrom does nothing except store the buffer pointer and
-// headerReCopyToFrom "puts" the header at the stored position. Both
-// functions are passed a byte buffer pointer to where the copy is
-// to take place. Both are also passed a MessageContent pointer to
-// where they can get MessageContent::mFamily and mMessageType which
-// they transfer into and out of the headers.
-//------------------------------------------------------------------------------
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void Header::headerReCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::MessageContent* parent)
+void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteContent* aParent)
 {
    // If this is a put operation then this actually copies the header into
    // the buffer.
@@ -135,22 +150,31 @@ void Header::headerReCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::MessageContent* p
 
    if (aBuffer->isCopyTo())
    {
-      aBuffer->copy(& mSyncWord3 );
-      aBuffer->copy(& mSyncWord4 );
+      // Store the buffer parameters for later use by the
+      // headerReCopyToFrom
+      int tFinalPosition = aBuffer->getPosition();
+      int tFinalLength   = aBuffer->getLength();
 
-      mMessageType   = parent->mMessageType;
-      mFamily        = parent->mFamily;
-      mMessageLength = aBuffer->getLength();
+      // Get message parameters from parent
+      mMessageIdentifier = aParent->mMessageType;
+      mMessageLength     = aBuffer->getLength();
 
-      copyToFrom(&mOriginalBuffer);
+      // Restore buffer parameters
+      // to the initial position
+      aBuffer->setPosition (mInitialPosition);
+      aBuffer->setLength   (mInitialPosition);
+
+      // Copy the adjusted header into the buffer'
+      // at the original position
+      copyToFrom( aBuffer );
+
+      // Restore buffer parameters
+      // to the final position
+      aBuffer->setPosition (tFinalPosition);
+      aBuffer->setLength   (tFinalPosition);
    }
    else
    {
-      int   tSyncWord3;
-      int   tSyncWord4;
-
-      aBuffer->copy(& tSyncWord3 );
-      aBuffer->copy(& tSyncWord4 );
    }
 }
 
@@ -167,7 +191,7 @@ void  MessageParser::configure(int aSourceId)
 
 int  MessageParser::getHeaderLength()
 {
-   return Header::Length;
+   return Header::cLength;
 }
 
 //******************************************************************************
@@ -179,16 +203,16 @@ bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
    aBuffer->getFromBuffer(&tHeader);
 
    // Set header parameters
-   mHeaderLength    = Header::Length;;
+   mHeaderLength    = Header::cLength;
    mMessageLength   = tHeader.mMessageLength;
-   mMessageType     = tHeader.mMessageType;
-   mPayloadLength   = tHeader.mMessageLength - Header::Length;
+   mMessageType     = tHeader.mMessageIdentifier;
+   mPayloadLength   = tHeader.mMessageLength - Header::cLength;
 
    // Test for error
    bool tError =
-      tHeader.mSyncWord1 != 0xaaaaaaaa ||
-      tHeader.mSyncWord2 != 0xbbbbbbbb ||
-      tHeader.mMessageLength < Header::Length  ||
+      tHeader.mSyncWord1 != 0x11111111 ||
+      tHeader.mSyncWord2 != 0x22222222 ||
+      tHeader.mMessageLength < Header::cLength  ||
       tHeader.mMessageLength > MsgBufferSize;
 
    // If no error then valid
@@ -248,7 +272,6 @@ Ris::BaseMessageParser* MessageParserCreator::createNew()
 
 BaseMsg::BaseMsg ()
 {
-   mFamily=MsgIdT::Family;
 }
 
 //******************************************************************************
@@ -515,12 +538,7 @@ void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
    aBuffer->copy( &mFloat  );
    aBuffer->copy( &mDouble );
    aBuffer->copy( &mBool   );
-
    aBuffer->copyZString( mZString, MyStringSize  );
-
-   mFString.copyToFrom(aBuffer);
-   aBuffer->copy( &mFString);
-
    aBuffer->copy( &mDataRecord);
 
    mHeader.headerReCopyToFrom(aBuffer, this);
@@ -543,9 +561,7 @@ void DataMsg::initialize()
    mFloat  = 12.34f;
    mDouble = 56.78;
    mBool   = true;
-
    strcpy(mZString, "abcdef");
-   strcpy(mFString.mPtr, "ABCDEFG");
 
    mDataRecord.initialize();
 }
@@ -564,7 +580,6 @@ void DataMsg::show()
    printf("Double   %5.2f\n", mDouble  );
    printf("Bool     %d\n",    mBool    );
    printf("ZString  %s\n",    mZString );
-   printf("FString  %s\n",    mFString.mPtr );
    mDataRecord.show();
    printf("\n");
 }

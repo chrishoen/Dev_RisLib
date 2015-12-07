@@ -19,9 +19,6 @@
     <ClCompile Include="Source\risByteContent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risByteMessage.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risCmdLineCmd.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -142,7 +139,7 @@
     <ClCompile Include="Source\risSerialPort.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risSerialMsgPort.cpp">
+    <ClCompile Include="Source\risByteMessageParser.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,9 +154,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteContent.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risByteMessage.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risCallPointer.h">
@@ -303,7 +297,7 @@
     <ClInclude Include="Source\risSerialPort.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risSerialMsgPort.h">
+    <ClInclude Include="Source\risByteMessageParser.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

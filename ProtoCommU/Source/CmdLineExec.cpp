@@ -26,7 +26,7 @@ void CmdLineExec::reset()
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("SHUTDOWN"  ))  executeOnShutdown (aCmd);
+   if (aCmd->isCmd("SHUTDOWN" ))  executeOnShutdown (aCmd);
    if (aCmd->isCmd("GO1"      ))  executeOnGo1(aCmd);
    if (aCmd->isCmd("GO2"      ))  executeOnGo2(aCmd);
    if (aCmd->isCmd("GO3"      ))  executeOnGo3(aCmd);
@@ -68,10 +68,13 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 
    tBuffer.putToBuffer((Ris::ByteContent*)tTxMsg);
    tBuffer.rewind();
+// printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
    Ris::BaseMessageParser* tMessageParser = new ProtoComm::MessageParser;
 
    tMessageParser->extractMessageHeaderParms(&tBuffer);
+
+   // printf("Buffer2 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
    // If the header is not valid then error
    if (!tMessageParser->mHeaderValidFlag)
@@ -82,7 +85,6 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 
    tBuffer.rewind();
    tRxMsg = (ProtoComm::DataMsg*)tMessageParser->makeFromByteBuffer(&tBuffer);
-
    tRxMsg->show();
 
    delete tTxMsg;
@@ -100,9 +102,13 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
    tTxMsg->initialize();
 
    tBuffer.putToBuffer((Ris::ByteContent*)tTxMsg);
+   printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
+
    tBuffer.rewind();
+   printf("Buffer2 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
    tBuffer.getFromBuffer((Ris::ByteContent*)tRxMsg);
+   printf("Buffer3 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
    tRxMsg->show();
 

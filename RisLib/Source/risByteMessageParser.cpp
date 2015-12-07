@@ -5,7 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteMessage.h"
+#include "risByteMessageParser.h"
 
 namespace Ris
 {
@@ -44,28 +44,23 @@ ByteContent* BaseMessageParser::makeFromByteBuffer(ByteBuffer* aBuffer)
       return 0;
    }
 
-   ByteContent* message = 0;
-
    // Set buffer direction for get
    aBuffer->setCopyFrom();
 
-   // Save the original buffer position
-   char* originalPosition = aBuffer->getPosition();
-   
-   // call the inheritor's overload to create a new message
+   // Call the inheritor's overload to create a new message
    // based on the message type
-   message = createMessage(mMessageType);
+   ByteContent* tMsg = createMessage(mMessageType);
 
-   // guard
-   if (!message)
+   // Guard
+   if (!tMsg)
    {
       return 0;
    }
 
    // copy data from the buffer into the new message object
-   aBuffer->setPosition(originalPosition);
-   aBuffer->getFromBuffer(message);
-   return message;
+   aBuffer->getFromBuffer(tMsg);
+
+   return tMsg;
 }
 
 //******************************************************************************

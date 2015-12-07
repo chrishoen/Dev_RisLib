@@ -39,36 +39,44 @@ StatusRequest
 namespace ProtoComm
 {
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Message Types
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Message Definitions
 
-namespace MsgIdT
-{
-   // Message family identifier
-   enum{Family=105};
-
-   //--------------------------------------------------------------------------
-   // Specific values:
-
-   enum Enum
+   namespace MsgDefT
    {
-      Unspecified                =  0,
-      Test                       =  1,
-      FirstMessage               =  2,
-      StatusRequest              =  3,
-      StatusResponse             =  4,
-      Data                       =  5,
-   };
+      //******************************************************************************
+      // Use this for a buffer size for these messages
 
-   //--------------------------------------------------------------------------
-   // Support:
+      static const int cMsgBufferSize = 20000;
 
-   inline char const * const asString(int x)
+   }//namespace
+
+    //******************************************************************************
+    //******************************************************************************
+    //******************************************************************************
+    // Message Types
+
+   namespace MsgIdT
    {
-      switch (x)
+      //--------------------------------------------------------------------------
+      // Specific values:
+
+      static const int   Unspecified    = 0;
+      static const int   Test           = 1;
+      static const int   FirstMessage   = 2;
+      static const int   StatusRequest  = 3;
+      static const int   StatusResponse = 4;
+      static const int   Data           = 5;
+
+      //--------------------------------------------------------------------------
+      // Support:
+
+      inline char const * const asString(int x)
       {
+         switch (x)
+         {
          case Unspecified       : return "Unspecified";             break;
          case Test              : return "Test";                    break;
          case FirstMessage      : return "FirstMessage";            break;
@@ -76,11 +84,11 @@ namespace MsgIdT
          case StatusResponse    : return "StatusResponse";          break;
          case Data              : return "Data";                    break;
          default                : return "BadValue";                break;
-      }
-   };
-}//namespace
+         }
+      };
+   }//namespace
 
- //******************************************************************************
+    //******************************************************************************
  //******************************************************************************
  //******************************************************************************
  // This encapsualtes the message header.
@@ -240,11 +248,6 @@ public:
 
    const char* getNameOf ();
 };
-
-//******************************************************************************
-// Use this for a buffer size for these messages
-
-enum {MsgBufferSize = 20000};
 
 //******************************************************************************
 //******************************************************************************

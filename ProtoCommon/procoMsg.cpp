@@ -213,7 +213,7 @@ bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
       tHeader.mSyncWord1 != 0x11111111 ||
       tHeader.mSyncWord2 != 0x22222222 ||
       tHeader.mMessageLength < Header::cLength  ||
-      tHeader.mMessageLength > MsgBufferSize;
+      tHeader.mMessageLength > MsgDefT::cMsgBufferSize;
 
    // If no error then valid
    mHeaderValidFlag = !tError;
@@ -237,7 +237,7 @@ BaseMsg* MessageParser::cloneMessage (BaseMsg* aMsg)
    BaseMsg* tMsg = MessageCreator::createMessage(aMsg->mMessageType);
 
    // Byte buffer
-   Ris::ByteBuffer tBuffer(MsgBufferSize);  
+   Ris::ByteBuffer tBuffer(MsgDefT::cMsgBufferSize);  
 
    // Copy message to clone to buffer
    tBuffer.putToBuffer(aMsg);

@@ -196,6 +196,13 @@ int  MessageParser::getHeaderLength()
 
 //******************************************************************************
 
+int  MessageParser::getMaxBufferSize()
+{
+   return MsgDefT::cMsgBufferSize;
+}
+
+//******************************************************************************
+
 bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 {
    // Extract header from buffer
@@ -291,15 +298,6 @@ Ris::BaseMessageParser* MessageParserCreator::createNew()
 
 BaseMsg::BaseMsg ()
 {
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-const char* BaseMsg::getNameOf ()
-{
-   return MsgIdT::asString(mMessageType);
 }
 
 //******************************************************************************

@@ -61,7 +61,7 @@ namespace ProtoComm
    namespace MsgIdT
    {
       //--------------------------------------------------------------------------
-      // Specific values:
+      // Specific Message Types:
 
       static const int   cUnspecified    = 0;
       static const int   cTest           = 1;
@@ -70,25 +70,9 @@ namespace ProtoComm
       static const int   cStatusResponse = 4;
       static const int   cData           = 5;
 
-      //--------------------------------------------------------------------------
-      // Support:
-
-      inline char const * const asString(int x)
-      {
-         switch (x)
-         {
-         case cUnspecified       : return "Unspecified";             break;
-         case cTest              : return "Test";                    break;
-         case cFirstMessage      : return "FirstMessage";            break;
-         case cStatusRequest     : return "StatusRequest";           break;
-         case cStatusResponse    : return "StatusResponse";          break;
-         case cData              : return "Data";                    break;
-         default                : return "BadValue";                break;
-         }
-      };
    }//namespace
 
-    //******************************************************************************
+ //******************************************************************************
  //******************************************************************************
  //******************************************************************************
  // This encapsualtes the message header.
@@ -187,6 +171,9 @@ public:
    // Return a contant header length
    int  getHeaderLength();
 
+   // Return a contant max buffer size
+   int getMaxBufferSize();
+
    // Extract message header parameters from a buffer and validate them
    bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer);
 
@@ -243,10 +230,6 @@ public:
 
    Header mHeader;
 
-   //--------------------------------------------------------------------------
-   // Support
-
-   const char* getNameOf ();
 };
 
 //******************************************************************************

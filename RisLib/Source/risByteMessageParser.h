@@ -29,6 +29,9 @@ public:
    // Return a contant header length
    virtual int getHeaderLength()=0;
 
+   // Return a contant max buffer size
+   virtual int getMaxBufferSize()=0;
+
    // Extract message header parameters from a buffer and validate them
    // Returns true if the header is valid
    virtual bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)=0;

@@ -257,8 +257,12 @@ public:
    void copy (bool*               aValue);
 
    void copyEnum      (int*           aValue);
+
    void copyZString   (unsigned char* aString,int aUpperBound);
    void copyZString   (char*          aString,int aUpperBound);
+
+   void copyLString   (unsigned char* aString);
+   void copyLString   (char*          aString);
 
    //ZString is a null terminated string with an upper bound
 

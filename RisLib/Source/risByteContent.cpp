@@ -466,7 +466,7 @@ void ByteBuffer::copyZString (char* aString,int aUpperBound)
    //--------------------------------------------------------------------------
    // Copy
 
-   if (mCopyDirection == cCopyTo)
+   if (isCopyTo())
    {
       // Copy the string to the buffer, without the null character
       char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
@@ -494,6 +494,61 @@ void ByteBuffer::copyZString (char* aString,int aUpperBound)
 }
 
 void ByteBuffer::copyZString(unsigned char* aString, int aUpperBound) { copyZString((char*)aString, aUpperBound); }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy operations for null terminated string type
+
+void ByteBuffer::copyLString (char* aString) 
+{
+   if (isCopyTo())
+   {
+      //-----------------------------------------------------------------------
+      // Get string length
+
+      int tSize = (int)strlen(aString);
+
+      //-----------------------------------------------------------------------
+      // Guard
+      if (tSize + mWorkingIndex > mMaxLength)
+      {
+         setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
+
+      // Copy string size to two bytes in the buffer
+      unsigned short tUSize = (unsigned short)tSize;
+      copy( &tUSize);
+
+      // Copy the string to the buffer, without the null character
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(tWorkingPtr, aString, tSize);
+
+      // Adjust buffer members
+      mWorkingIndex  += tSize;
+      mWorkingLength += tSize;
+   }
+   else
+   {
+      // Copy string size from two bytes in the buffer
+      unsigned short tUSize = 0;
+      copy( &tUSize);
+      int tSize = (int )tUSize;
+
+      // Copy the string from the buffer, there is no null character
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(aString, tWorkingPtr, tSize);
+
+      // Set the string terminating character
+      aString[tSize] = 0;
+
+      // Adjust buffer members
+      mWorkingIndex  += tSize;
+   }
+}
+
+void ByteBuffer::copyLString(unsigned char* aString) { copyLString((char*)aString); }
 
 //******************************************************************************
 //******************************************************************************

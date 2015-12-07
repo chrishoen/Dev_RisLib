@@ -411,6 +411,7 @@ public:
 
    enum {MyStringSize = 8};
    char                       mZString[MyStringSize];
+   char                       mLString[100];
 
    DataRecord                 mDataRecord;
 

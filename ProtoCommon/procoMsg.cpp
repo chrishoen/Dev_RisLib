@@ -521,6 +521,7 @@ DataMsg::DataMsg()
    mBool   = false;
 
    mZString[0]=0;
+   mLString[0]=0;
 }
 
 void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
@@ -539,6 +540,7 @@ void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
    aBuffer->copy( &mDouble );
    aBuffer->copy( &mBool   );
    aBuffer->copyZString( mZString, MyStringSize  );
+   aBuffer->copyLString( mLString );
    aBuffer->copy( &mDataRecord);
 
    mHeader.headerReCopyToFrom(aBuffer, this);
@@ -562,6 +564,7 @@ void DataMsg::initialize()
    mDouble = 56.78;
    mBool   = true;
    strcpy(mZString, "abcdef");
+   strcpy(mLString, "01234567");
 
    mDataRecord.initialize();
 }
@@ -580,6 +583,7 @@ void DataMsg::show()
    printf("Double   %5.2f\n", mDouble  );
    printf("Bool     %d\n",    mBool    );
    printf("ZString  %s\n",    mZString );
+   printf("LString  %s\n",    mLString );
    mDataRecord.show();
    printf("\n");
 }

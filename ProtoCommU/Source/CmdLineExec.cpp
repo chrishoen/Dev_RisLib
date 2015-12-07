@@ -131,14 +131,7 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
-   int tN = aCmd->argInt(1);
-   if (tN == 0) tN = 4;
-
-   for (int i = 0; i<tN; i++)
-   {
-      ProtoComm::StatusRequestMsg* tTxMsg = new ProtoComm::StatusRequestMsg;
-
-      gNetworkThread->sendMsg(tTxMsg);
-      gNetworkThread->threadSleep(10);
-   }
+   char tString[100];
+   strcpy(tString,"01234567");
+   printf("%d\n",(int)strlen(tString));
 }

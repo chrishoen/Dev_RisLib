@@ -63,12 +63,12 @@ namespace ProtoComm
       //--------------------------------------------------------------------------
       // Specific values:
 
-      static const int   Unspecified    = 0;
-      static const int   Test           = 1;
-      static const int   FirstMessage   = 2;
-      static const int   StatusRequest  = 3;
-      static const int   StatusResponse = 4;
-      static const int   Data           = 5;
+      static const int   cUnspecified    = 0;
+      static const int   cTest           = 1;
+      static const int   cFirstMessage   = 2;
+      static const int   cStatusRequest  = 3;
+      static const int   cStatusResponse = 4;
+      static const int   cData           = 5;
 
       //--------------------------------------------------------------------------
       // Support:
@@ -77,12 +77,12 @@ namespace ProtoComm
       {
          switch (x)
          {
-         case Unspecified       : return "Unspecified";             break;
-         case Test              : return "Test";                    break;
-         case FirstMessage      : return "FirstMessage";            break;
-         case StatusRequest     : return "StatusRequest";           break;
-         case StatusResponse    : return "StatusResponse";          break;
-         case Data              : return "Data";                    break;
+         case cUnspecified       : return "Unspecified";             break;
+         case cTest              : return "Test";                    break;
+         case cFirstMessage      : return "FirstMessage";            break;
+         case cStatusRequest     : return "StatusRequest";           break;
+         case cStatusResponse    : return "StatusResponse";          break;
+         case cData              : return "Data";                    break;
          default                : return "BadValue";                break;
          }
       };

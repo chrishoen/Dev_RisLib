@@ -313,19 +313,19 @@ BaseMsg* MessageCreator::createMessage(int aMessageType)
 
    switch (aMessageType)
    {
-      case MsgIdT::Test :
+      case MsgIdT::cTest :
          message = new TestMsg;
          break;
-      case MsgIdT::FirstMessage :
+      case MsgIdT::cFirstMessage :
          message = new FirstMessageMsg;
          break;
-      case MsgIdT::StatusRequest :
+      case MsgIdT::cStatusRequest :
          message = new StatusRequestMsg;
          break;
-      case MsgIdT::StatusResponse:
+      case MsgIdT::cStatusResponse:
          message = new StatusResponseMsg;
          break;
-      case MsgIdT::Data:
+      case MsgIdT::cData:
          message = new DataMsg;
          break;
       default :
@@ -340,7 +340,7 @@ BaseMsg* MessageCreator::createMessage(int aMessageType)
 
 TestMsg::TestMsg ()
 {
-   mMessageType = MsgIdT::Test;
+   mMessageType = MsgIdT::cTest;
    mCode1 = 901;
    mCode2 = 902;
    mCode3 = 903;
@@ -380,7 +380,7 @@ void TestMsg::show()
 
 FirstMessageMsg::FirstMessageMsg ()
 {
-   mMessageType = MsgIdT::FirstMessage;
+   mMessageType = MsgIdT::cFirstMessage;
    mCode1 = 0;
 } 
 
@@ -399,7 +399,7 @@ void FirstMessageMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 
 StatusRequestMsg::StatusRequestMsg ()
 {
-   mMessageType = MsgIdT::StatusRequest;
+   mMessageType = MsgIdT::cStatusRequest;
 
    mCode1 = 101;
    mCode2 = 102;
@@ -434,7 +434,7 @@ void StatusRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 
 StatusResponseMsg::StatusResponseMsg()
 {
-   mMessageType = MsgIdT::StatusResponse;
+   mMessageType = MsgIdT::cStatusResponse;
 
    mCode1 = 201;
    mCode2 = 202;
@@ -506,7 +506,7 @@ void DataRecord::show()
 
 DataMsg::DataMsg()
 {
-   mMessageType = MsgIdT::Data;
+   mMessageType = MsgIdT::cData;
 
    mUChar  = 0;
    mUShort = 0;

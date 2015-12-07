@@ -121,16 +121,16 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aRxMsg)
    // Calls corresponding specfic message handler method.
    switch (tRxMsg->mMessageType)
    {
-      case ProtoComm::MsgIdT::Test :
+      case ProtoComm::MsgIdT::cTest :
          processRxMsg((ProtoComm::TestMsg*)tRxMsg);
          break;
-      case ProtoComm::MsgIdT::StatusRequest :
+      case ProtoComm::MsgIdT::cStatusRequest :
          processRxMsg((ProtoComm::StatusRequestMsg*)tRxMsg);
          break;
-      case ProtoComm::MsgIdT::StatusResponse:
+      case ProtoComm::MsgIdT::cStatusResponse:
          processRxMsg((ProtoComm::StatusResponseMsg*)tRxMsg);
          break;
-      case ProtoComm::MsgIdT::Data:
+      case ProtoComm::MsgIdT::cData:
          processRxMsg((ProtoComm::DataMsg*)tRxMsg);
          break;
       default :

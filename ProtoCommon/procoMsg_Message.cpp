@@ -249,7 +249,7 @@ namespace ProtoComm
       aBuffer->copy( &mFloat  );
       aBuffer->copy( &mDouble );
       aBuffer->copy( &mBool   );
-      aBuffer->copyZString( mZString, MyStringSize  );
+      aBuffer->copyZString( mZString, cStringSize );
       aBuffer->copyLString( mLString );
       aBuffer->copy( &mDataRecord);
 

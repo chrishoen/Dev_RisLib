@@ -218,8 +218,9 @@ namespace ProtoComm
       double                     mDouble;
       bool                       mBool;
 
-      enum {MyStringSize = 8};
-      char                       mZString[MyStringSize];
+      static const int cStringSize = 18;
+
+      char                       mZString[cStringSize];
       char                       mLString[100];
 
       DataRecord                 mDataRecord;

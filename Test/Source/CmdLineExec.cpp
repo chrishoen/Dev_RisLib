@@ -86,23 +86,31 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+class MyClass1
+{
+public:
+
+   MyClass1()
+   {
+      mX1[0] = 101;
+      mX2[0] = 102;
+   }
+
+   enum {MaxSize = 100};
+   int  mX1[MaxSize];
+
+   static const int cMaxSize = 100;
+   int  mX2[cMaxSize];
+
+   void myCall(int aX)
+   {
+      const int* tPtr1 = &cMaxSize;
+      int* tPtr2 = (int*)&cMaxSize;
+   }
+
+};
+
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,0);
-   aCmd->setArgDefault(2,1);
-
-   int tIndex = aCmd->argInt(1);
-   int tDelta = aCmd->argInt(2);
-   int tSize  = 5;
-
-   Prn::print(0,0,"");
-   Prn::print(0,0,"index %d",tIndex);
-   Prn::print(0,0,"delta %d",tDelta);
-   Prn::print(0,0,"");
-
-   tIndex = my_index_sub(tIndex,tDelta,tSize);
-
-   Prn::print(0,0,"index %d",tIndex);
-   Prn::print(0,0,"");
 }
 

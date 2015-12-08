@@ -16,6 +16,7 @@ public:
   void execute      (Ris::CmdLineCmd* aCmd);
 
   void executeOnShutdown  (Ris::CmdLineCmd* aCmd);
+  void executeOnTx        (Ris::CmdLineCmd* aCmd);
   void executeOnGo1       (Ris::CmdLineCmd* aCmd);
   void executeOnGo2       (Ris::CmdLineCmd* aCmd);
   void executeOnGo3       (Ris::CmdLineCmd* aCmd);

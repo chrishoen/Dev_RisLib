@@ -180,8 +180,6 @@ namespace ProtoComm
    class DataRecord : public Ris::ByteContent
    {
    public:
-      DataRecord();
-      void copyToFrom (Ris::ByteBuffer* aBuffer);
 
       //------------------------------------------------
       // Content
@@ -194,6 +192,9 @@ namespace ProtoComm
       // Content
       //------------------------------------------------
 
+      DataRecord();
+      void copyToFrom (Ris::ByteBuffer* aBuffer);
+
       void initialize();
       void show();
    };
@@ -201,8 +202,6 @@ namespace ProtoComm
    class DataMsg : public BaseMsg
    {
    public:
-      DataMsg();
-      void copyToFrom(Ris::ByteBuffer* aBuffer);
 
       //------------------------------------------------
       // Content
@@ -227,6 +226,9 @@ namespace ProtoComm
 
       // Content
       //------------------------------------------------
+
+      DataMsg();
+      void copyToFrom(Ris::ByteBuffer* aBuffer);
 
       void initialize();
       void show();

@@ -29,6 +29,18 @@ namespace ProtoComm
       mInitialLength     = 0;
    }
 
+   void Header::reset()
+   {
+      mSyncWord1         = 0;
+      mSyncWord2         = 0;
+      mMessageIdentifier = 0;
+      mMessageLength     = 0;
+      mSourceId          = 0;
+      mDestinationId     = 0;
+      mInitialPosition   = 0;
+      mInitialLength     = 0;
+   }
+
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -207,7 +219,8 @@ namespace ProtoComm
    bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
    {
       // Extract header from buffer
-      Header tHeader;   
+      Header tHeader;
+      tHeader.reset();
       aBuffer->getFromBuffer(&tHeader);
 
       // Set header parameters
@@ -215,6 +228,8 @@ namespace ProtoComm
       mMessageLength   = tHeader.mMessageLength;
       mMessageType     = tHeader.mMessageIdentifier;
       mPayloadLength   = tHeader.mMessageLength - Header::cLength;
+
+      printf("MessageLength %d\n",mMessageLength);
 
       // Test for error
       bool tError =

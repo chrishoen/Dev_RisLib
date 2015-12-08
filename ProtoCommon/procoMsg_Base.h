@@ -63,6 +63,7 @@ namespace ProtoComm
    public:
       // Constructor
       Header();
+      void reset();
 
       //------------------------------------------------
       // Header Content
@@ -117,6 +118,7 @@ namespace ProtoComm
 
       void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteContent* aParent);
       void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteContent* aParent);
+
       //---------------------------------------------------------------------------
       // These are set by headerCopyToFrom and used by headerReCopyToFrom,
       // for "put" operations.Theyt contain the buffer position and length of
@@ -125,6 +127,7 @@ namespace ProtoComm
 
       int mInitialPosition;
       int mInitialLength;
+
    };
 
    //******************************************************************************

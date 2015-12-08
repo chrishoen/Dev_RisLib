@@ -55,12 +55,14 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
          ProtoComm::TestMsg* tTxMsg = new ProtoComm::TestMsg;
          tTxMsg->initialize();
          gNetworkThread->sendMsg(tTxMsg);
+         break;
       }
       case 5:
       {
          ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
          tTxMsg->initialize();
          gNetworkThread->sendMsg(tTxMsg);
+         break;
       }
    }
 }

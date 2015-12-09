@@ -244,27 +244,20 @@ public:
    // item from the byte buffer, based on the value of the
    // buffer copy direction flag.
 
-   void copy (unsigned char*      aValue);
-   void copy (unsigned short*     aValue);
-   void copy (unsigned int*       aValue);
-   void copy (unsigned long long* aValue);
-   void copy (char*               aValue);
-   void copy (short*              aValue);
-   void copy (int*                aValue);
-   void copy (long long*          aValue);
-   void copy (float*              aValue);
-   void copy (double*             aValue);
-   void copy (bool*               aValue);
+   void copy  (unsigned char*      aValue);
+   void copy  (unsigned short*     aValue);
+   void copy  (unsigned int*       aValue);
+   void copy  (unsigned long long* aValue);
+   void copy  (char*               aValue);
+   void copy  (short*              aValue);
+   void copy  (int*                aValue);
+   void copy  (long long*          aValue);
+   void copy  (float*              aValue);
+   void copy  (double*             aValue);
+   void copy  (bool*               aValue);
 
-   void copyEnum      (int*           aValue);
-
-   void copyZString   (unsigned char* aString,int aUpperBound);
-   void copyZString   (char*          aString,int aUpperBound);
-
-   void copyLString   (unsigned char* aString);
-   void copyLString   (char*          aString);
-
-   //ZString is a null terminated string with an upper bound
+   void copyS (unsigned char*      aString);
+   void copyS (char*               aString);
 
    //---------------------------------------------------------------------------
    // Copy an object that inherits from ByteContent to/from a byte buffer.
@@ -272,32 +265,6 @@ public:
    void copy          (ByteContent* content);
    void putToBuffer   (ByteContent* content);
    void getFromBuffer (ByteContent* content);
-
-   //---------------------------------------------------------------------------
-   // Copy raw byte data.
-
-   void copyData (void* aData,int aSize);
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is a class that provides message byte padding.
-
-template <unsigned cByteSize> class BytePadding : public ByteContent
-{
-public:
-   void copyToFrom (ByteBuffer* buffer)
-   {
-      if (buffer->isCopyTo())
-      {
-         buffer->fillZero(cByteSize);
-      }
-      else
-      {
-         buffer->forward(cByteSize);
-      }
-   }
 };
 
 //******************************************************************************

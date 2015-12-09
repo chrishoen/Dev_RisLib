@@ -230,8 +230,8 @@ namespace ProtoComm
       mDouble = 0.0;
       mBool   = false;
 
-      mZString[0]=0;
-      mLString[0]=0;
+      mString1[0]=0;
+      mString2[0]=0;
    }
 
    void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
@@ -249,9 +249,9 @@ namespace ProtoComm
       aBuffer->copy( &mFloat  );
       aBuffer->copy( &mDouble );
       aBuffer->copy( &mBool   );
-      aBuffer->copyZString( mZString, cStringSize );
-      aBuffer->copyLString( mLString );
-      aBuffer->copy( &mDataRecord);
+      aBuffer->copy( &mDataRecord );
+      aBuffer->copyS( mString1 );
+      aBuffer->copyS( mString2 );
 
       mHeader.headerReCopyToFrom(aBuffer, this);
    }
@@ -273,8 +273,8 @@ namespace ProtoComm
       mFloat  = 12.34f;
       mDouble = 56.78;
       mBool   = true;
-      strcpy(mZString, "abcdef");
-      strcpy(mLString, "01234567");
+      strcpy(mString1, "abcdef");
+      strcpy(mString2, "01234567");
 
       mDataRecord.initialize();
    }
@@ -292,8 +292,8 @@ namespace ProtoComm
       printf("Float    %5.2f\n", mFloat   );
       printf("Double   %5.2f\n", mDouble  );
       printf("Bool     %d\n",    mBool    );
-      printf("ZString  %s\n",    mZString );
-      printf("LString  %s\n",    mLString );
+      printf("String1  %s\n",    mString1 );
+      printf("String2  %s\n",    mString2 );
       mDataRecord.show();
       printf("\n");
    }

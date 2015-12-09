@@ -206,24 +206,22 @@ namespace ProtoComm
       //------------------------------------------------
       // Content
 
-      unsigned char              mUChar;
-      unsigned short             mUShort;
-      unsigned int               mUInt;
-      unsigned long long         mUInt64;
-      char                       mChar;
-      short                      mShort;
-      int                        mInt;
-      long long                  mInt64;
-      float                      mFloat;
-      double                     mDouble;
-      bool                       mBool;
+      unsigned char       mUChar;
+      unsigned short      mUShort;
+      unsigned int        mUInt;
+      unsigned long long  mUInt64;
+      char                mChar;
+      short               mShort;
+      int                 mInt;
+      long long           mInt64;
+      float               mFloat;
+      double              mDouble;
+      bool                mBool;
 
-      static const int cStringSize = 18;
+      char                mString1[100];
+      char                mString2[100];
 
-      char                       mZString[cStringSize];
-      char                       mLString[100];
-
-      DataRecord                 mDataRecord;
+      DataRecord          mDataRecord;
 
       // Content
       //------------------------------------------------

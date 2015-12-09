@@ -409,98 +409,14 @@ void ByteBuffer::copy (bool*               aValue)
    }
 }
 
-void ByteBuffer::copyEnum (int* aValue) { BB_copyValue(this, aValue, 4); }
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy operations for null terminated string type
+// Copy operations for null terminated string type. The string is stored in
+// the buffer as a two byte unsigned short followed by the string bytes,
+// excluding the null termination zero at the end of the string.
 
-void ByteBuffer::copyZString (char* aString,int aUpperBound) 
-{
-   //--------------------------------------------------------------------------
-   // Get string length
-
-   int tSize = 0;
-   if (isCopyTo())
-   {
-      // tSize is the length of the string to copy to the buffer
-      // plus the null character
-      while (1)
-      {
-         if (aString[tSize++] == 0) break;
-         if (tSize == aUpperBound)  break;
-      }
-   }
-   else
-   {
-      // tSize is the length of the string to copy from the buffer
-      // plus the null character
-      while (1)
-      {
-         if (mBaseBytes[mWorkingIndex + tSize++] == 0) break;
-         if (tSize == aUpperBound)  break;
-      }
-   }
-
-   //--------------------------------------------------------------------------
-   // Guard
-
-   if (isCopyTo())
-   {
-      if (tSize + mWorkingIndex > mMaxLength)
-      {
-         setError(ByteBuffer::cBufferOverflow);
-         return;
-      }
-   }
-   else
-   {
-      if (tSize + mWorkingIndex > mWorkingLength)
-      {
-         setError(ByteBuffer::cBufferOverflow);
-         return;
-      }
-   }
-
-   //--------------------------------------------------------------------------
-   // Copy
-
-   if (isCopyTo())
-   {
-      // Copy the string to the buffer, without the null character
-      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
-      memcpy(tWorkingPtr, aString, tSize - 1);
-
-      // copy the null character to the buffer
-      tWorkingPtr[tSize - 1] = 0;
-
-      // Adjust buffer members
-      mWorkingIndex  += tSize;
-      mWorkingLength += tSize;
-   }
-   else
-   {
-      // Copy the string from the buffer, without the null character
-      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
-      memcpy(aString, tWorkingPtr, tSize - 1);
-
-      // Copy the null character to the buffer
-      aString[tSize - 1] = 0;
-
-      // Adjust buffer members
-      mWorkingIndex += tSize;
-   }
-}
-
-void ByteBuffer::copyZString(unsigned char* aString, int aUpperBound) { copyZString((char*)aString, aUpperBound); }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Copy operations for null terminated string type
-
-void ByteBuffer::copyLString (char* aString) 
+void ByteBuffer::copyS (char* aString) 
 {
    if (isCopyTo())
    {
@@ -548,7 +464,7 @@ void ByteBuffer::copyLString (char* aString)
    }
 }
 
-void ByteBuffer::copyLString(unsigned char* aString) { copyLString((char*)aString); }
+void ByteBuffer::copyS(unsigned char* aStringPtr) { copyS((char*)aStringPtr); }
 
 //******************************************************************************
 //******************************************************************************
@@ -577,54 +493,6 @@ void ByteBuffer::getFromBuffer (ByteContent* aContent)
 
    // Call ByteContent overload to copy to the buffer
    aContent->copyToFrom(this);
-}
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Copy raw data
-
-void ByteBuffer::copyData (void* aData,int aSize) 
-{
-   //--------------------------------------------------------------------------
-   // Guard
-
-   if (isCopyTo())
-   {
-      if (aSize + mWorkingIndex > mMaxLength)
-      {
-         setError(ByteBuffer::cBufferOverflow);
-         return;
-      }
-   }
-   else
-   {
-      if (aSize + mWorkingIndex > mWorkingLength)
-      {
-         setError(ByteBuffer::cBufferOverflow);
-         return;
-      }
-   }
-   if (mCopyDirection==cCopyTo)
-   {
-      // Copy the data to the buffer
-      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
-      memcpy(tWorkingPtr,aData,aSize);
-
-      // Adjust members
-      mWorkingIndex  += aSize;
-      mWorkingLength += aSize;
-   }
-   else
-   {
-      // Copy the fixed size data
-      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
-      memcpy(aData,tWorkingPtr,aSize);
-
-      // Adjust members
-      mWorkingIndex += aSize;
-   }
 }
 
 //******************************************************************************

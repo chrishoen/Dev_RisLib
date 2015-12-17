@@ -20,7 +20,7 @@ Print utility
 namespace Prn
 {
 
-void createPrintView();
+HANDLE rCreatePrintView(int aConsole);
 
 //****************************************************************************
 //****************************************************************************
@@ -38,6 +38,7 @@ void createPrintView();
    bool    rSuppressFlag;
 
    Ris::Net::UdpTxStringSocket rConsoleSocket[cMaxConsoles];
+   HANDLE                      rConsoleHandle[cMaxConsoles];
 
 
 //****************************************************************************
@@ -57,6 +58,11 @@ void resetPrint()
 
    strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
    strncat(rSettingsFilePath,"prnPrintSettings.txt",cMaxNameSize);
+
+   for (int i=0;i<cMaxConsoles;i++)
+   {
+      rConsoleHandle[i]=0;
+   }
 }
 
 //****************************************************************************
@@ -116,11 +122,7 @@ void initializePrint()
    for (int i = 1; i < rNumOfConsoles; i++)
    {
       rConsoleSocket[i].configure(Ris::Net::PortDef::cPrintView + i - 1);
-   }
-
-   if (rNumOfConsoles > 1)
-   {
-      createPrintView();
+      rConsoleHandle[i] = rCreatePrintView(i);
    }
 }
 
@@ -133,6 +135,10 @@ void finalizePrint()
 
    for (int i = 1; i < rNumOfConsoles; i++)
    {
+      if (rConsoleHandle[i] != 0)
+      {
+         TerminateProcess(rConsoleHandle[i], 0);
+      }
       rConsoleSocket[i].doClose();
    }
 }
@@ -226,9 +232,8 @@ void toggleSuppressPrint()
 //****************************************************************************
 //****************************************************************************
 
-void createPrintView()
+HANDLE rCreatePrintView(int aConsole)
 {
-   printf( "CreateProcess BEGIN\n" );
    STARTUPINFO si;
    PROCESS_INFORMATION pi;
 
@@ -236,8 +241,9 @@ void createPrintView()
    si.cb = sizeof(si);
    ZeroMemory( &pi, sizeof(pi) );
 
-   LPSTR tTitle = "PRINTVIEW";
-   si.lpTitle = tTitle;
+   char tConsoleTitle[50];
+   sprintf(tConsoleTitle,"PRINTVIEW%d",aConsole);
+   si.lpTitle = tConsoleTitle;
 
    // Start the child process. 
    if( !CreateProcess(
@@ -254,9 +260,9 @@ void createPrintView()
       ) 
    {
       printf( "CreateProcess failed (%d).\n", GetLastError() );
-      return;
+      return 0;
    }
-   printf( "CreateProcess END\n" );
+   return pi.hProcess;
 }
 
 //******************************************************************************

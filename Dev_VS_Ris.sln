@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scratch_CS", "Scratch_CS", 
 		Scratch_CS\ProcoRecord.cs = Scratch_CS\ProcoRecord.cs
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PrintTest", "PrintTest\PrintTest.vcxproj", "{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -173,6 +175,14 @@ Global
 		{605B9FE7-D32A-4F54-BF14-C5D226492F05}.Release|Win32.Build.0 = Release|Win32
 		{605B9FE7-D32A-4F54-BF14-C5D226492F05}.Release|x64.ActiveCfg = Release|x64
 		{605B9FE7-D32A-4F54-BF14-C5D226492F05}.Release|x64.Build.0 = Release|x64
+		{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}.Debug|Win32.Build.0 = Debug|Win32
+		{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}.Debug|x64.ActiveCfg = Debug|x64
+		{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}.Debug|x64.Build.0 = Debug|x64
+		{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}.Release|Win32.ActiveCfg = Release|Win32
+		{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}.Release|Win32.Build.0 = Release|Win32
+		{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}.Release|x64.ActiveCfg = Release|x64
+		{3B01EFC6-2EFA-4A28-BC3D-171204CE509A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

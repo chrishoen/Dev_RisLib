@@ -43,7 +43,10 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,"Go1");
+   Prn::print(Prn::ProcRun1,"Go1 Prn::ProcRun1");
+   Prn::print(Prn::ProcRun2,"Go1 Prn::ProcRun2");
+   Prn::print(Prn::ProcRun3,"Go1 Prn::ProcRun3");
+   Prn::print(Prn::ProcRun4,"Go1 Prn::ProcRun4");
 }
 
 //******************************************************************************

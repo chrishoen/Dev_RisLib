@@ -6,6 +6,7 @@ Print utility
 //******************************************************************************
 //******************************************************************************
 
+#include <windows.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -18,6 +19,8 @@ Print utility
 
 namespace Prn
 {
+
+void createPrintView();
 
 //****************************************************************************
 //****************************************************************************
@@ -113,6 +116,11 @@ void initializePrint()
    for (int i = 1; i < rNumOfConsoles; i++)
    {
       rConsoleSocket[i].configure(Ris::Net::PortDef::cPrintView + i - 1);
+   }
+
+   if (rNumOfConsoles > 1)
+   {
+      createPrintView();
    }
 }
 
@@ -212,6 +220,43 @@ void unsuppressPrint()
 void toggleSuppressPrint()
 {
    rSuppressFlag = !rSuppressFlag;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+void createPrintView()
+{
+   printf( "CreateProcess BEGIN\n" );
+   STARTUPINFO si;
+   PROCESS_INFORMATION pi;
+
+   ZeroMemory( &si, sizeof(si) );
+   si.cb = sizeof(si);
+   ZeroMemory( &pi, sizeof(pi) );
+
+   LPSTR tTitle = "PRINTVIEW";
+   si.lpTitle = tTitle;
+
+   // Start the child process. 
+   if( !CreateProcess(
+      "C:\\Prime\\DevelopMine\\Dev_VS_Ris\\x64\\Debug\\PrintView.exe",           // Module name
+      NULL,           // Command line
+      NULL,           // Process handle not inheritable
+      NULL,           // Thread handle not inheritable
+      FALSE,          // Set handle inheritance to FALSE
+      CREATE_NEW_CONSOLE, // Creation flags
+      NULL,           // Use parent's environment block
+      NULL,           // Use parent's starting directory 
+      &si,            // Pointer to STARTUPINFO structure
+      &pi )           // Pointer to PROCESS_INFORMATION structure
+      ) 
+   {
+      printf( "CreateProcess failed (%d).\n", GetLastError() );
+      return;
+   }
+   printf( "CreateProcess END\n" );
 }
 
 //******************************************************************************

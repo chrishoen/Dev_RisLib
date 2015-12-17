@@ -51,7 +51,7 @@ void Thread1::configureThread()
 void Thread1::executeOnTimer(int aTimerCount)
 {
    mTimerTester.executeOnTimer();
-   if (mTPFlag) Prn::print(Prn::ThreadRun,Prn::Per1,"Timer %04d",aTimerCount);
+   if (mTPFlag) Prn::print(Prn::ThreadRun4,"Timer %04d",aTimerCount);
 }
 
 //******************************************************************************
@@ -89,9 +89,9 @@ void Thread1::executeF102(int aN)
 
 void Thread1::executeTest1(int aN)
 {
-   Prn::print(0,0,"Thread1::executeTest1 BEGIN");
+   Prn::print(0,"Thread1::executeTest1 BEGIN");
    threadWaitForTimerCompletion(4);
-   Prn::print(0,0,"Thread1::executeTest1 END");
+   Prn::print(0,"Thread1::executeTest1 END");
 }
 
 //******************************************************************************
@@ -102,9 +102,9 @@ void Thread1::executeTest2(int aN)
 {
    try
    {
-      Prn::print(0,0,"Thread1::executeTest2 BEGIN");
+      Prn::print(0,"Thread1::executeTest2 BEGIN");
       threadWaitForTimerCompletion(20);
-      Prn::print(0,0,"Thread1::executeTest2 END");
+      Prn::print(0,"Thread1::executeTest2 END");
    }
    catch(int aStatus)
    {
@@ -120,12 +120,12 @@ void Thread1::executeTest3(int aN)
 {
    try
    {
-      Prn::print(0,0,"Thread1::executeTest3 BEGIN");
+      Prn::print(0,"Thread1::executeTest3 BEGIN");
       for (int i=0;i<20;i++)
       {
          threadWaitForTimerCompletion(1);
       }
-      Prn::print(0,0,"Thread1::executeTest3 END");
+      Prn::print(0,"Thread1::executeTest3 END");
    }
    catch(int aStatus)
    {

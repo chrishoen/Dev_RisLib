@@ -49,12 +49,12 @@ void TimerThread::executeOnTimer(int aTimeCount)
    {
       int tPrioriyClass = GetPriorityClass(GetCurrentProcess());
       int tThreadPriority = BaseThread::getThreadPriority();
-      Prn::print(Prn::ThreadRun, Prn::Run1, "TimerThread::executeOnTimer THREAD %08X %d", tPrioriyClass, tThreadPriority);
+      Prn::print(Prn::ThreadRun1, "TimerThread::executeOnTimer THREAD %08X %d", tPrioriyClass, tThreadPriority);
    }
 
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      Prn::print(Prn::ThreadRun, Prn::Run1, " %10d %10d  %10.3f  %10.3f  %10.3f  %10.3f",
+      Prn::print(Prn::ThreadRun1, " %10d %10d  %10.3f  %10.3f  %10.3f  %10.3f",
          aTimeCount,
          mTimeMarker.mChangeCount,
          mTimeMarker.mStatistics.mMean/1000.0,

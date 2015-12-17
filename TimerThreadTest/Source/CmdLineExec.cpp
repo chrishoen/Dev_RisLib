@@ -68,7 +68,7 @@ void CmdLineExec::executeMarker1(Ris::CmdLineCmd* aCmd)
    tMarker.doBegin();
    Ris::portableSleep(1000);
    tMarker.doEnd();
-   Prn::print(0,0,"%s",tMarker.asString2());
+   Prn::print(0,"%s",tMarker.asString2());
 }
 
 //******************************************************************************
@@ -79,8 +79,8 @@ void CmdLineExec::executeMarker2(Ris::CmdLineCmd* aCmd)
 {
    long long tFreq  = Ris::portableGetHiResFrequency();
    long long tCount = Ris::portableGetHiResCounter();
-   Prn::print(0,0,"%lld",tFreq);
-   Prn::print(0,0,"%lld",tCount);
+   Prn::print(0,"%lld",tFreq);
+   Prn::print(0,"%lld",tCount);
 }
 //******************************************************************************
 //******************************************************************************
@@ -88,13 +88,13 @@ void CmdLineExec::executeMarker2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeMarker3(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,0,"executeMarker3");
+   Prn::print(0,"executeMarker3");
    UView::TimeMarker tMarker;
    tMarker.doStart();
    Ris::portableSleep(1000);
    tMarker.doStop();
-   Prn::print(0,0,"ScaleFactorUS     %8.3f",tMarker.mScaleFactorUS);
-   Prn::print(0,0,"TimeDifferenceUS  %8.3f",tMarker.mTimeDifferenceUS);
+   Prn::print(0,"ScaleFactorUS     %8.3f",tMarker.mScaleFactorUS);
+   Prn::print(0,"TimeDifferenceUS  %8.3f",tMarker.mTimeDifferenceUS);
 }
 
 

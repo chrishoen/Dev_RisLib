@@ -33,14 +33,12 @@ void PrintSettings::reset()
    mLogFileEnable=false;
    mAppNumber=0;;
 
-   // all disabled
-   for(int row=0;row<FILTER_TABLE_SIZE;row++)
+   // All disabled, except entry zero
+   for(int i=0;i<cFilterTableSize;i++)
    {
-      mFilterTable[row] = 0;
+      mFilterTable[i] = false;
    }
-
-   // enable (0,0)
-   setFilter(0,0,true);
+   mFilterTable[0] = true;
 
    mSectionFlag=true;
    mSection[0]=0;
@@ -71,17 +69,9 @@ bool PrintSettings::isMySection(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 // set filters
 
-void PrintSettings::setFilter(int aTopic, int aSubTopic, bool aEnablePrint)
+void PrintSettings::setFilter(int aFilter, bool aEnablePrint)
 {
-   if (aEnablePrint)
-   {
-      mFilterTable[aTopic] |= aSubTopic;
-   }
-   else
-   {
-      mFilterTable[aTopic] &= (~aSubTopic);
-   }
-
+   mFilterTable[aFilter] = aEnablePrint;
 }   	
 
 //******************************************************************************
@@ -91,27 +81,16 @@ void PrintSettings::setFilter(int aTopic, int aSubTopic, bool aEnablePrint)
 
 void PrintSettings::tryFilterStart()
 {
-   mFilterTopic = -1;
-   mFilterSubTopic = 0;
+   mFilterTry = -1;
 }
 
 //******************************************************************************
 
-void PrintSettings::tryFilterTopic(Ris::CmdLineCmd* aCmd,char* aTopicStr,int aTopic)
+void PrintSettings::tryFilterString (Ris::CmdLineCmd* aCmd,char* aFilterString,int aFilter)
 {
-   if (aCmd->isArgString(1,aTopicStr))
+   if (aCmd->isArgString(1,aFilterString))
    {
-      mFilterTopic=aTopic;
-   }
-}
-
-//******************************************************************************
-
-void PrintSettings::tryFilterSubTopic(Ris::CmdLineCmd* aCmd,char* aSubTopicStr,int aSubTopic)
-{
-   if (aCmd->isArgString(2,aSubTopicStr))
-   {
-      mFilterSubTopic=aSubTopic;
+      mFilterTry=aFilter;
    }
 }
 
@@ -119,10 +98,9 @@ void PrintSettings::tryFilterSubTopic(Ris::CmdLineCmd* aCmd,char* aSubTopicStr,i
 
 void PrintSettings::tryFilterSet(Ris::CmdLineCmd* aCmd)
 {
-   if (mFilterTopic<0)    return;
-   if (mFilterSubTopic==0) return;
-
-   setFilter(mFilterTopic,mFilterSubTopic,aCmd->argBool(3));
+   if (mFilterTry<0)    return;
+   
+   setFilter(mFilterTry,aCmd->argBool(2));
 }
 
 //******************************************************************************
@@ -163,80 +141,89 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("RESET"      ))  reset();
 
    //---------------------------------------------------------------------------
-   // Detect a Topic and store
-
-   //---------------------------------------------------------------------------
-   // Detect a filter and store, argument 1
-   // For command "Filter Topic Subtopic"
+   // Detect a filter and store
+   // For command "Filter String Enable"
 
    if(aCmd->isCmd("FILTER")) 
    {
       tryFilterStart();
 
-      tryFilterTopic(aCmd,"PrintInit",PrintInit);
-      tryFilterTopic(aCmd,"PrintRun",PrintRun);
-      tryFilterTopic(aCmd,"PrintPer",PrintPer);
-      tryFilterTopic(aCmd,"SocketInit",SocketInit);
-      tryFilterTopic(aCmd,"SocketRun",SocketRun);
-      tryFilterTopic(aCmd,"SocketPer",SocketPer);
-      tryFilterTopic(aCmd,"SerialInit",SerialInit);
-      tryFilterTopic(aCmd,"SerialRun",SerialRun);
-      tryFilterTopic(aCmd,"FileInit",FileInit);
-      tryFilterTopic(aCmd,"FileRun",FileRun);
-      tryFilterTopic(aCmd,"FilePer",FilePer);
-      tryFilterTopic(aCmd,"ThreadInit",ThreadInit);
-      tryFilterTopic(aCmd,"ThreadRun",ThreadRun);
-      tryFilterTopic(aCmd,"ThreadPer",ThreadPer);
-      tryFilterTopic(aCmd,"ProcInit",ProcInit);
-      tryFilterTopic(aCmd,"ProcRun",ProcRun);
-      tryFilterTopic(aCmd,"ProcPer",ProcPer);
-      tryFilterTopic(aCmd,"Example1Init",Example1Init);
-      tryFilterTopic(aCmd,"Example1Run",Example1Run);
-      tryFilterTopic(aCmd,"Example1Per",Example1Per);
-      tryFilterTopic(aCmd,"QCallThreadInit",QCallThreadInit);
-      tryFilterTopic(aCmd,"CommInit",CommInit);
-      tryFilterTopic(aCmd,"CommRun",CommRun);
+      tryFilterString (aCmd, "PrintInit1",   PrintInit1   );
+      tryFilterString (aCmd, "PrintInit2",   PrintInit2   );
+      tryFilterString (aCmd, "PrintInit3",   PrintInit3   );
+      tryFilterString (aCmd, "PrintInit4",   PrintInit4   );
+      tryFilterString (aCmd, "PrintRun1",    PrintRun1    );
+      tryFilterString (aCmd, "PrintRun2",    PrintRun2    );
+      tryFilterString (aCmd, "PrintRun3",    PrintRun3    );
+      tryFilterString (aCmd, "PrintRun4",    PrintRun4    );
+      tryFilterString (aCmd, "SocketInit1",  SocketInit1  );
+      tryFilterString (aCmd, "SocketInit2",  SocketInit2  );
+      tryFilterString (aCmd, "SocketInit3",  SocketInit3  );
+      tryFilterString (aCmd, "SocketInit4",  SocketInit4  );
+      tryFilterString (aCmd, "SocketRun1",   SocketRun1   );
+      tryFilterString (aCmd, "SocketRun2",   SocketRun2   );
+      tryFilterString (aCmd, "SocketRun3",   SocketRun3   );
+      tryFilterString (aCmd, "SocketRun4",   SocketRun4   );
+      tryFilterString (aCmd, "SerialInit1",  SerialInit1  );
+      tryFilterString (aCmd, "SerialInit2",  SerialInit2  );
+      tryFilterString (aCmd, "SerialInit3",  SerialInit3  );
+      tryFilterString (aCmd, "SerialInit4",  SerialInit4  );
+      tryFilterString (aCmd, "SerialRun1",   SerialRun1   );
+      tryFilterString (aCmd, "SerialRun2",   SerialRun2   );
+      tryFilterString (aCmd, "SerialRun3",   SerialRun3   );
+      tryFilterString (aCmd, "SerialRun4",   SerialRun4   );
+      tryFilterString (aCmd, "FileInit1",    FileInit1    );
+      tryFilterString (aCmd, "FileInit2",    FileInit2    );
+      tryFilterString (aCmd, "FileInit3",    FileInit3    );
+      tryFilterString (aCmd, "FileInit4",    FileInit4    );
+      tryFilterString (aCmd, "FileRun1",     FileRun1     );
+      tryFilterString (aCmd, "FileRun2",     FileRun2     );
+      tryFilterString (aCmd, "FileRun3",     FileRun3     );
+      tryFilterString (aCmd, "FileRun4",     FileRun4     );
+      tryFilterString (aCmd, "ThreadInit1",  ThreadInit1  );
+      tryFilterString (aCmd, "ThreadInit2",  ThreadInit2  );
+      tryFilterString (aCmd, "ThreadInit3",  ThreadInit3  );
+      tryFilterString (aCmd, "ThreadInit4",  ThreadInit4  );
+      tryFilterString (aCmd, "ThreadRun1",   ThreadRun1   );
+      tryFilterString (aCmd, "ThreadRun2",   ThreadRun2   );
+      tryFilterString (aCmd, "ThreadRun3",   ThreadRun3   );
+      tryFilterString (aCmd, "ThreadRun4",   ThreadRun4   );
+      tryFilterString (aCmd, "ProcInit1",    ProcInit1    );
+      tryFilterString (aCmd, "ProcInit2",    ProcInit2    );
+      tryFilterString (aCmd, "ProcInit3",    ProcInit3    );
+      tryFilterString (aCmd, "ProcInit4",    ProcInit4    );
+      tryFilterString (aCmd, "ProcRun1",     ProcRun1     );
+      tryFilterString (aCmd, "ProcRun2",     ProcRun2     );
+      tryFilterString (aCmd, "ProcRun3",     ProcRun3     );
+      tryFilterString (aCmd, "ProcRun4",     ProcRun4     );
+      tryFilterString (aCmd, "ExampleInit1", ExampleInit1 );
+      tryFilterString (aCmd, "ExampleInit2", ExampleInit2 );
+      tryFilterString (aCmd, "ExampleInit3", ExampleInit3 );
+      tryFilterString (aCmd, "ExampleInit4", ExampleInit4 );
+      tryFilterString (aCmd, "ExampleRun1",  ExampleRun1  );
+      tryFilterString (aCmd, "ExampleRun2",  ExampleRun2  );
+      tryFilterString (aCmd, "ExampleRun3",  ExampleRun3  );
+      tryFilterString (aCmd, "ExampleRun4",  ExampleRun4  );
+      tryFilterString (aCmd, "QCallInit1",   QCallInit1   );
+      tryFilterString (aCmd, "QCallInit2",   QCallInit2   );
+      tryFilterString (aCmd, "QCallInit3",   QCallInit3   );
+      tryFilterString (aCmd, "QCallInit4",   QCallInit4   );
+      tryFilterString (aCmd, "QCallRun1",    QCallRun1    );
+      tryFilterString (aCmd, "QCallRun2",    QCallRun2    );
+      tryFilterString (aCmd, "QCallRun3",    QCallRun3    );
+      tryFilterString (aCmd, "QCallRun4",    QCallRun4    );
+      tryFilterString (aCmd, "CommInit1",    CommInit1    );
+      tryFilterString (aCmd, "CommInit2",    CommInit2    );
+      tryFilterString (aCmd, "CommInit3",    CommInit3    );
+      tryFilterString (aCmd, "CommInit4",    CommInit4    );
+      tryFilterString (aCmd, "CommRun1",     CommRun1     );
+      tryFilterString (aCmd, "CommRun2",     CommRun2     );
+      tryFilterString (aCmd, "CommRun3",     CommRun3     );
+      tryFilterString (aCmd, "CommRun4",     CommRun4     );
 
-      tryFilterTopic(aCmd,"Msg",Msg);
-
-      // Detect a filter subtopic and store
-      // For command "Filter Topic Subtopic"
-
-      tryFilterSubTopic(aCmd,"Any",Any);
-      tryFilterSubTopic(aCmd,"Init1",Init1);
-      tryFilterSubTopic(aCmd,"Init2",Init2);
-      tryFilterSubTopic(aCmd,"Init3",Init3);
-      tryFilterSubTopic(aCmd,"Init4",Init4);
-      tryFilterSubTopic(aCmd,"Run1",Run1);
-      tryFilterSubTopic(aCmd,"Run2",Run2);
-      tryFilterSubTopic(aCmd,"Run3",Run3);
-      tryFilterSubTopic(aCmd,"Run4",Run4);
-      tryFilterSubTopic(aCmd,"Per1",Per1);
-      tryFilterSubTopic(aCmd,"Per2",Per2);
-      tryFilterSubTopic(aCmd,"Per3",Per3);
-      tryFilterSubTopic(aCmd,"Per4",Per4);
-      tryFilterSubTopic(aCmd,"Tx1", Tx1);
-      tryFilterSubTopic(aCmd,"Tx2", Tx2);
-      tryFilterSubTopic(aCmd,"Tx3", Tx3);
-      tryFilterSubTopic(aCmd,"Tx4", Tx4);
-      tryFilterSubTopic(aCmd,"Rx1", Rx1);
-      tryFilterSubTopic(aCmd,"Rx2", Rx2);
-      tryFilterSubTopic(aCmd,"Rx3", Rx3);
-      tryFilterSubTopic(aCmd,"Rx4", Rx4);
-      tryFilterSubTopic(aCmd,"Show1",Show1);
-      tryFilterSubTopic(aCmd,"Show2",Show2);
-      tryFilterSubTopic(aCmd,"Show3",Show3);
-      tryFilterSubTopic(aCmd,"Show4",Show4);
-      tryFilterSubTopic(aCmd,"Spare1",Spare1);
-      tryFilterSubTopic(aCmd,"Spare2",Spare2);
-      tryFilterSubTopic(aCmd,"Spare3",Spare3);
-      tryFilterSubTopic(aCmd,"Spare4",Spare4);
-
-      // Set the filter for stored topic and subtopic
-      // For command "Filter Topic Subtopic"
+      // Set the stored try filter
       tryFilterSet(aCmd);
    }
-
 }
 
 

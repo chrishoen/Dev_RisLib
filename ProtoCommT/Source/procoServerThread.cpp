@@ -45,7 +45,7 @@ ServerThread::~ServerThread()
 
 void ServerThread::configure()
 {
-   Prn::print(Prn::ThreadInit,0, "ServerThread::configure");
+   Prn::print(Prn::ThreadInit1, "ServerThread::configure");
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
@@ -81,7 +81,7 @@ void ServerThread::configureThread()
 
 void ServerThread::launchThread()
 {
-   Prn::print(Prn::ThreadInit,0, "ServerThread::launch");
+   Prn::print(Prn::ThreadInit1, "ServerThread::launch");
 
    // Launch child thread
    mTcpServerThread->launchThread(); 
@@ -95,7 +95,7 @@ void ServerThread::launchThread()
 
 void  ServerThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit,0, "ServerThread::threadExitFunction");
+   Prn::print(Prn::ThreadInit1, "ServerThread::threadExitFunction");
 
    // Shutdown child thread
    mTcpServerThread->shutdownThread(); 
@@ -109,8 +109,8 @@ void  ServerThread::threadExitFunction()
 
 void ServerThread::executeSession (int aSessionIndex,bool aConnected)
 {
-   if (aConnected) Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread CLIENT  CONNECTED     %d",aSessionIndex);
-   else            Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread CLIENT  DISCONNECTED  %d",aSessionIndex);
+   if (aConnected) Prn::print(Prn::ThreadRun1, "ServerThread CLIENT  CONNECTED     %d",aSessionIndex);
+   else            Prn::print(Prn::ThreadRun1, "ServerThread CLIENT  DISCONNECTED  %d",aSessionIndex);
 
    if(!aConnected)
    {
@@ -145,7 +145,7 @@ void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
          processRxMsg(aSessionIndex,(ProtoComm::StatusResponseMsg*)tRxMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread::processRxMsg %d",tRxMsg->mMessageType);
+         Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg %d",tRxMsg->mMessageType);
          delete aRxMsg;
          break;
    }
@@ -156,7 +156,7 @@ void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
 
 void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::TestMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread::processRxMsg_TestMsg");
+   Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg_TestMsg");
    delete aRxMsg;
 }
 
@@ -169,7 +169,7 @@ void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::TestMsg* aRxMsg)
 
 void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::FirstMessageMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread::processRxMsg_FirstMessageMsg %d %d",aSessionIndex,aRxMsg->mHeader.mSourceId);
+   Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg_FirstMessageMsg %d %d",aSessionIndex,aRxMsg->mHeader.mSourceId);
 
    //--------------------------------------------------------------
    // Process message:
@@ -189,7 +189,7 @@ void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::FirstMessageMsg* aR
 
 void ServerThread::executeOnTimer(int aTimerCount)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run2, "ServerThread::executeOnTimer %d",mPeriodicCount++);
+   Prn::print(Prn::ThreadRun2, "ServerThread::executeOnTimer %d",mPeriodicCount++);
    while(mPeriodicEnable) BaseClass::threadSleep(100);
 }
 
@@ -204,7 +204,7 @@ void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusRequestMsg* a
       sendMsg(aSessionIndex,tTxMsg);
    }
 
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
+   Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
 
    delete aRxMsg;
 }
@@ -214,7 +214,7 @@ void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusRequestMsg* a
 
 void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusResponseMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ServerThread::processRxMsg_StatusResponseMsg");
+   Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg_StatusResponseMsg");
    delete aRxMsg;
 }
 

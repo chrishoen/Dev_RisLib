@@ -62,7 +62,7 @@ void amain_initialize(int argc,char** argv)
    // Initialize global settings
    gGSettings.initialize();
 
-   Prn::print(0,0,"CmdLineTest*******************************************BEGIN");
+   Prn::print(0,"CmdLineTest*******************************************BEGIN");
 }
 
 //******************************************************************************
@@ -70,7 +70,7 @@ void amain_initialize(int argc,char** argv)
 
 void amain_finalize()
 {
-   Prn::print(0,0,"CmdLineTest*******************************************END");
+   Prn::print(0,"CmdLineTest*******************************************END");
 
    // Exit process
    Ris::Threads::exitProcess();

@@ -40,8 +40,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
   time(&tTimet);
   tTm = localtime(&tTimet);
 
-  Prn::print(0,0,"time1 %s",asctime(tTm));
-  Prn::print(0,0,"time1 %lld",tTimet);
+  Prn::print(0,"time1 %s",asctime(tTm));
+  Prn::print(0,"time1 %lld",tTimet);
 }
 
 //******************************************************************************
@@ -55,7 +55,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,0,"ABCDEFGH");
+   Prn::print(0,"ABCDEFGH");
 }
 
 //******************************************************************************

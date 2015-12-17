@@ -59,13 +59,13 @@ void TcpMsgSocket::configure(
 
    if (mStatus==0)
    {
-      Prn::print(Prn::SocketInit,Prn::Init2, "TcpMsgSocket       $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "TcpMsgSocket       $ %16s : %d",
          aSocketAddress.mIpAddr.mString,
          aSocketAddress.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit,Prn::Init2, "TcpMsgSocket       $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "TcpMsgSocket       $ %16s : %d $ %d %d",
          aSocketAddress.mIpAddr.mString,
          aSocketAddress.mPort,
          mStatus,
@@ -131,7 +131,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aTxMsg)
 
    if (!tRet)
    {
-      Prn::print(Prn::SocketRun,0, "ERROR TcpMsgSocket::doSendMsg FAIL");
+      Prn::print(Prn::SocketRun1, "ERROR TcpMsgSocket::doSendMsg FAIL");
    }
 
    return true;
@@ -159,7 +159,7 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    // Read the message header into the receive buffer
 
    tRet = doRecv(mRxBuffer,tHeaderLength,tStatus);
-   Prn::print(Prn::SocketRun,Prn::Run4, "doRecv1 %d %d",mStatus,mError);
+   Prn::print(Prn::SocketRun4, "doRecv1 %d %d",mStatus,mError);
 
    // Guard
    // If bad status then return false.
@@ -181,7 +181,7 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    // If the header is not valid then error
    if (!mRxMessageParser->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketRun,0, "ERROR doRecv1 INVALID HEADER");
+      Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER");
       for (int i=0;i<40;i++) 
       {
          Prn::print(0,0, "%02d %02x",i,0xff&(unsigned)mRxBuffer[i]);
@@ -195,14 +195,14 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    int tPayloadLength = mRxMessageParser->mPayloadLength;
 
    tRet=doRecv(&mRxBuffer[tHeaderLength],tPayloadLength,tStatus);
-   Prn::print(Prn::SocketRun,Prn::Run4, "doRecv2 %d %d %d",mStatus,mError,tPayloadLength);
+   Prn::print(Prn::SocketRun4, "doRecv2 %d %d %d",mStatus,mError,tPayloadLength);
 
    // Guard
    // If bad status then return false.
 
    if (!tRet || tStatus<=0)
    {
-      Prn::print(Prn::SocketRun,0, "ERROR doRecv2 INVALID RECV");
+      Prn::print(Prn::SocketRun1, "ERROR doRecv2 INVALID RECV");
       return false;
    }
 
@@ -222,7 +222,7 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    if (aRxMsg==0)
    {
       tStatus=tBuffer.getError();
-      Prn::print(Prn::SocketRun,0, "ERROR doRecv3 bad message %d",tStatus);
+      Prn::print(Prn::SocketRun1, "ERROR doRecv3 bad message %d",tStatus);
       return false;
    }
 

@@ -72,7 +72,7 @@ void amain_initialize(int argc,char** argv)
    Prn::useSettingsFileDefault();
    Prn::initializePrint();
 
-   Prn::print(0,0,"ThreadTest*******************************************BEGIN");
+   Prn::print(0,"ThreadTest*******************************************BEGIN");
 }
 
 //******************************************************************************
@@ -80,7 +80,7 @@ void amain_initialize(int argc,char** argv)
 
 void amain_finalize()
 {
-   Prn::print(0,0,"ThreadTest*******************************************END");
+   Prn::print(0,"ThreadTest*******************************************END");
 
    // Exit process
    Ris::Threads::exitProcess();

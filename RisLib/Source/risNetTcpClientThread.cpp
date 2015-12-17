@@ -38,7 +38,7 @@ void TcpClientThread::configure(
    RxMsgQCall*                aRxMsgQCall,
    int                        aFlags) 
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
+   Prn::print(Prn::SocketInit1, "TcpClientThread::configure");
 
    mConnectionFlag=false;
    mFlags=aFlags;
@@ -55,12 +55,12 @@ void TcpClientThread::configure(
 
 void TcpClientThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction BEGIN");
 
    // Configure the socket
    mSocket.configure(mSocketAddress,mMessageParserCreator);
 
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadInitFunction END");
+   Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -70,7 +70,7 @@ void TcpClientThread::threadInitFunction()
 
 void TcpClientThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketRun,Prn::Run1, "TcpClientThread::threadRunFunction");
+   Prn::print(Prn::SocketRun1, "TcpClientThread::threadRunFunction");
    
    //-----------------------------------------------------------
    // Loop
@@ -89,7 +89,7 @@ void TcpClientThread::threadRunFunction()
          if (mSocket.doConnect())
          {
             // Connection was established
-            Prn::print(Prn::SocketRun,Prn::Run1, "Connected");
+            Prn::print(Prn::SocketRun1, "Connected");
             mConnectionFlag = true;
 
             // process a session change because a
@@ -99,7 +99,7 @@ void TcpClientThread::threadRunFunction()
          else 
          {
             // Connection was not established
-            Prn::print(Prn::SocketRun,Prn::Run3, "Not Connected");
+            Prn::print(Prn::SocketRun3, "Not Connected");
 
             mConnectionFlag = false;
 
@@ -122,7 +122,7 @@ void TcpClientThread::threadRunFunction()
          if (mSocket.doRecvMsg(rxMsg))
          {
             // Message was correctly received
-            Prn::print(Prn::SocketRun,Prn::Run2, "Recv message %d",mSocket.mRxMsgCount);
+            Prn::print(Prn::SocketRun2, "Recv message %d",mSocket.mRxMsgCount);
 
             // process the receive message
             if (rxMsg)
@@ -134,7 +134,7 @@ void TcpClientThread::threadRunFunction()
          {
             // Message was not correctly received, so
             // Connection was lost
-            Prn::print(Prn::SocketRun,Prn::Run1, "Recv failed, Connection lost");
+            Prn::print(Prn::SocketRun1, "Recv failed, Connection lost");
             mConnectionFlag = false;
 
             // process a session change because a
@@ -157,7 +157,7 @@ void TcpClientThread::threadRunFunction()
 
 void TcpClientThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::threadExitFunction");
+   Prn::print(Prn::SocketInit1, "TcpClientThread::threadExitFunction");
 }
 //******************************************************************************
 // Shutdown, base class overload.
@@ -191,7 +191,7 @@ void TcpClientThread::sendMsg(ByteContent* aTxMsg)
       delete aTxMsg;
    }
 
-   Prn::print(Prn::SocketRun,Prn::Run2, "doSendMsg %d %d %d",mSocket.mStatus,mSocket.mError,mSocket.mTxMsgCount);
+   Prn::print(Prn::SocketRun2, "doSendMsg %d %d %d",mSocket.mStatus,mSocket.mError,mSocket.mTxMsgCount);
 }
 
 //******************************************************************************

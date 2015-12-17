@@ -71,7 +71,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
       &tT[0][0]);
 
    double tV=tLut.lookup(tX,tY);
-   Prn::print(0,0,"%6.2f",tV);
+   Prn::print(0,"%6.2f",tV);
 }
 
 //******************************************************************************
@@ -79,8 +79,8 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
 
-   Prn::print(0,0,"\x1B[37m\x1B[41m");
-   Prn::print(0,0,"ABCDEFGH");
+   Prn::print(0,"\x1B[37m\x1B[41m");
+   Prn::print(0,"ABCDEFGH");
 }
 
 //******************************************************************************

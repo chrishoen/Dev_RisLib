@@ -44,7 +44,7 @@ ClientThread::~ClientThread()
 
 void ClientThread::configure()
 {
-   Prn::print(Prn::ThreadInit,0, "ClientThread::configure");
+   Prn::print(Prn::ThreadInit1, "ClientThread::configure");
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
@@ -76,7 +76,7 @@ void ClientThread::configureThread()
 
 void ClientThread::launchThread()
 {
-   Prn::print(Prn::ThreadInit,0, "ClientThread::launch");
+   Prn::print(Prn::ThreadInit1, "ClientThread::launch");
 
    // Launch child thread
    mTcpClientThread->launchThread(); 
@@ -89,7 +89,7 @@ void ClientThread::launchThread()
 // Thread exit function, base class overload.
 void  ClientThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit,0, "ClientThread::threadExitFunction");
+   Prn::print(Prn::ThreadInit1, "ClientThread::threadExitFunction");
 
    // Shutdown the tcp client thread
    mTcpClientThread->shutdownThread();
@@ -104,7 +104,7 @@ void ClientThread::executeSession (bool aConnected)
 {
    if (aConnected)
    {
-      Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::notifyForSession CONNECTED");
+      Prn::print(Prn::ThreadRun1, "ClientThread::notifyForSession CONNECTED");
 
       // Transmit a FirstMessage to the server to inform it of who this 
       // client is.
@@ -113,7 +113,7 @@ void ClientThread::executeSession (bool aConnected)
    }
    else
    {
-      Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::notifyForSession DISCONNECTED");
+      Prn::print(Prn::ThreadRun1, "ClientThread::notifyForSession DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;
@@ -143,7 +143,7 @@ void ClientThread::executeRxMsg(Ris::ByteContent* aRxMsg)
          processRxMsg((ProtoComm::StatusResponseMsg*)tRxMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::processRxMsg %d",tRxMsg->mMessageType);
+         Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg %d",tRxMsg->mMessageType);
          delete aRxMsg;
          break;
    }
@@ -154,7 +154,7 @@ void ClientThread::executeRxMsg(Ris::ByteContent* aRxMsg)
 
 void ClientThread::processRxMsg(ProtoComm::TestMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::processRxMsg_TestMsg");
+   Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg_TestMsg");
    delete aRxMsg;
 }
 
@@ -164,7 +164,7 @@ void ClientThread::processRxMsg(ProtoComm::TestMsg* aRxMsg)
 void ClientThread::executeOnTimer(int aTimerCount)
 {
    if (!mPeriodicEnable) return;
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::executeOnTimer %d",mPeriodicCount++);
+   Prn::print(Prn::ThreadRun1, "ClientThread::executeOnTimer %d",mPeriodicCount++);
 }
 
 //******************************************************************************
@@ -179,7 +179,7 @@ void ClientThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
       sendMsg(tTxMsg);
    }
 
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
+   Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
 
    delete aRxMsg;
 }
@@ -189,7 +189,7 @@ void ClientThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
 
 void ClientThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run1, "ClientThread::processRxMsg_StatusResponseMsg");
+   Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg_StatusResponseMsg");
    delete aRxMsg;
 }
 

@@ -97,12 +97,12 @@ void CmdLineExec::executeOnGo1(Ris::CmdLineCmd* aCmd)
       {
          case ProtoComm::AR_TcpServer:
             gServerThread->sendMsg(0,tTxMsg1);
-          //Prn::print(0,0,"sendMsg %d",i);
+          //Prn::print(0,"sendMsg %d",i);
             gServerThread->threadSleep(10);
             break;
          case ProtoComm::AR_TcpClient:
             gClientThread->sendMsg(tTxMsg1);
-          //Prn::print(0,0,"sendMsg %d",i);
+          //Prn::print(0,"sendMsg %d",i);
             gClientThread->threadSleep(10);
             break;
       }

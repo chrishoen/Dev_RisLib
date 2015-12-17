@@ -50,19 +50,16 @@ public:
       char* aSettingsFileName,
       char* aSection);
 
-   // Shows the filter settings
-   void show();
-
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    // Filter table
  
-   enum {FILTER_TABLE_SIZE     = 100};
+   static const int cFilterTableSize = 200;
 
-   unsigned int mFilterTable[FILTER_TABLE_SIZE];
+   bool mFilterTable[cFilterTableSize];
 
-   void setFilter(int aTopic, int aSubTopic, bool aEnablePrint);
+   void setFilter(int aFilter, bool aEnablePrint);
 
    //--------------------------------------------------------------------------
    // Section
@@ -76,12 +73,10 @@ public:
    int  mAppNumber;
 
    void tryFilterStart    ();
-   void tryFilterTopic    (Ris::CmdLineCmd* aCmd,char* aTopicStr,int aTopic);
-   void tryFilterSubTopic (Ris::CmdLineCmd* aCmd,char* aSubTopicStr,int aSubTopic);
+   void tryFilterString   (Ris::CmdLineCmd* aCmd,char* aFilterString,int aFilter);
    void tryFilterSet      (Ris::CmdLineCmd* aCmd);
 
-   int mFilterTopic;
-   int mFilterSubTopic;
+   int mFilterTry;
 
    //--------------------------------------------------------------------------
    // Print control
@@ -105,74 +100,84 @@ public:
 //**********************************************************************
 //**********************************************************************
 // Filter constants
-//**********************************************************************
-//**********************************************************************
-//**********************************************************************
-// Topics
 
    enum
    {
-      PrintInit,
-      PrintRun,
-      PrintPer,
-      SocketInit,
-      SocketRun,
-      SocketPer,
-      SerialInit,
-      SerialRun,
-      FileInit,
-      FileRun,
-      FilePer,
-      ThreadInit,
-      ThreadRun,
-      ThreadPer,
-      ProcInit,
-      ProcRun,
-      ProcPer,
-      Example1Init,
-      Example1Run,
-      Example1Per,
-      QCallThreadInit,
-      CommInit,
-      CommRun,
-      Msg,
+      FilterZero,
+      PrintInit1,
+      PrintInit2,
+      PrintInit3,
+      PrintInit4,
+      PrintRun1,
+      PrintRun2,
+      PrintRun3,
+      PrintRun4,
+      SocketInit1,
+      SocketInit2,
+      SocketInit3,
+      SocketInit4,
+      SocketRun1,
+      SocketRun2,
+      SocketRun3,
+      SocketRun4,
+      SerialInit1,
+      SerialInit2,
+      SerialInit3,
+      SerialInit4,
+      SerialRun1,
+      SerialRun2,
+      SerialRun3,
+      SerialRun4,
+      FileInit1,
+      FileInit2,
+      FileInit3,
+      FileInit4,
+      FileRun1,
+      FileRun2,
+      FileRun3,
+      FileRun4,
+      ThreadInit1,
+      ThreadInit2,
+      ThreadInit3,
+      ThreadInit4,
+      ThreadRun1,
+      ThreadRun2,
+      ThreadRun3,
+      ThreadRun4,
+      ProcInit1,
+      ProcInit2,
+      ProcInit3,
+      ProcInit4,
+      ProcRun1,
+      ProcRun2,
+      ProcRun3,
+      ProcRun4,
+      ExampleInit1,
+      ExampleInit2,
+      ExampleInit3,
+      ExampleInit4,
+      ExampleRun1,
+      ExampleRun2,
+      ExampleRun3,
+      ExampleRun4,
+      QCallInit1,
+      QCallInit2,
+      QCallInit3,
+      QCallInit4,
+      QCallRun1,
+      QCallRun2,
+      QCallRun3,
+      QCallRun4,
+      CommInit1,
+      CommInit2,
+      CommInit3,
+      CommInit4,
+      CommRun1,
+      CommRun2,
+      CommRun3,
+      CommRun4,
    };
 
-//**********************************************************************
-// SubTopics
-
-   enum
-   { 
-      Any    =    1,
-      Init1  = 1<<1,
-      Init2  = 1<<2,
-      Init3  = 1<<3,
-      Init4  = 1<<4,
-      Run1   = 1<<5,
-      Run2   = 1<<6,
-      Run3   = 1<<7,
-      Run4   = 1<<8,
-      Per1   = 1<<9,
-      Per2   = 1<<10,
-      Per3   = 1<<11,
-      Per4   = 1<<12,
-      Tx1    = 1<<13,
-      Tx2    = 1<<14,
-      Tx3    = 1<<15,
-      Tx4    = 1<<16,
-      Rx1    = 1<<17,
-      Rx2    = 1<<18,
-      Rx3    = 1<<19,
-      Rx4    = 1<<20,
-      Show1  = 1<<21,
-      Show2  = 1<<22,
-      Show3  = 1<<23,
-      Show4  = 1<<24,
-      Spare1 = 1<<25,
-      Spare2 = 1<<26,
-      Spare3 = 1<<27,
-      Spare4 = 1<<28,
-   };
 
 //******************************************************************************
 //******************************************************************************

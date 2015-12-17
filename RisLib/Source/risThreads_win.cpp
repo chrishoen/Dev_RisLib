@@ -390,7 +390,7 @@ void BaseThread::threadExitFunction()
 
 void BaseThread::threadExceptionFunction(char* aStr)
 {
-   Prn::print(0,0,"BaseThread::threadExceptionFunction %s",aStr);
+   Prn::print(0,"BaseThread::threadExceptionFunction %s",aStr);
 }
 
 //******************************************************************************

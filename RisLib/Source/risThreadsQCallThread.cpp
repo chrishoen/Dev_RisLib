@@ -158,7 +158,7 @@ void BaseQCallThread::threadRunFunction()
    // Exit the loop on a thread terminate.
    while (true)
    {
-      Prn::print(Prn::ThreadRun,Prn::Run3, "BaseQCallThread::threadRunFunction");
+      Prn::print(Prn::ThreadRun3, "BaseQCallThread::threadRunFunction");
 
       //----------------------------------------------------------
       //----------------------------------------------------------
@@ -221,7 +221,7 @@ void BaseQCallThread::threadRunFunction()
 
 void BaseQCallThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit,0, "BaseQCallThread::threadExitFunction");
+   Prn::print(Prn::ThreadInit1, "BaseQCallThread::threadExitFunction");
 
    // Empty the call queue
    while(mCallQue.isGet())
@@ -237,7 +237,7 @@ void BaseQCallThread::threadExitFunction()
 
 void BaseQCallThread::shutdownThread()
 {
-   Prn::print(Prn::ThreadInit,0, "BaseQCallThread::shutdownThread");
+   Prn::print(Prn::ThreadInit1, "BaseQCallThread::shutdownThread");
 
    // Set termination flag
    mTerminateFlag=true;
@@ -268,7 +268,7 @@ void BaseQCallThread::putQCallToThread(BaseQCall* aQCall)
    }
    else 
    {
-      Prn::print(0,0, "ERROR CallQue FULL");
+      Prn::print(0,"ERROR CallQue FULL");
       delete aQCall;
    }
    mCallMutex.unlock();

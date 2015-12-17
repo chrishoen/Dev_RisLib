@@ -27,7 +27,7 @@ Class4A::Class4A()
 
 void Class4A::show()
 {
-   Prn::print(0,0,"Class4A mCode1  %5d",mCode1);
+   Prn::print(0,"Class4A mCode1  %5d",mCode1);
 }
 
 void Class4A::constMethod() const

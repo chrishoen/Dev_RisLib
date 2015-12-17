@@ -65,7 +65,7 @@ void TimerTester::executeOnTimer (void)
       mExecutionCount=0; 
       if (++mIterationCount==mNumOfIterations) mEnableFlag=false;
 
-      Prn::print(0,0,"TIMER TESTER   %5d   %8.2f   %8.2f   %8.2f    %8.2f",
+      Prn::print(0,"TIMER TESTER   %5d   %8.2f   %8.2f   %8.2f    %8.2f",
          mIterationCount,
          mStatistics.mMin,
          mStatistics.mMax,

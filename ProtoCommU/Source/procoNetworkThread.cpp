@@ -53,7 +53,7 @@ NetworkThread::~NetworkThread()
 
 void NetworkThread::configure()
 {
-   Prn::print(Prn::ThreadInit,Prn::Init1, "NetworkThread::configure");
+   Prn::print(Prn::ThreadInit1, "NetworkThread::configure");
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
@@ -88,7 +88,7 @@ void NetworkThread::configure()
 
 void NetworkThread::launchThread()
 {
-   Prn::print(Prn::ThreadInit,Prn::Init1, "NetworkThread::launch");
+   Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
 
    // Launch child thread
    mUdpRxThread->launchThread(); 
@@ -101,7 +101,7 @@ void NetworkThread::launchThread()
 // Thread exit function, base class overload.
 void  NetworkThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit,Prn::Init1, "NetworkThread::threadExitFunction");
+   Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
    // Shutdown the tcp client thread
    mUdpRxThread->shutdownThread();
@@ -134,7 +134,7 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aRxMsg)
          processRxMsg((ProtoComm::DataMsg*)tRxMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun,Prn::Run1, "NetworkThread::executeServerRxMsg ??? %d",tRxMsg->mMessageType);
+         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",tRxMsg->mMessageType);
          delete tRxMsg;
          break;
    }
@@ -145,7 +145,7 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aRxMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 {
-   Prn::print(Prn::ThreadRun, Prn::Run1, "NetworkThread::processRxMsg_TestMsg %d %d", aRxMsg->mCode1, aRxMsg->mHeader.mSourceId);
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_TestMsg %d %d", aRxMsg->mCode1, aRxMsg->mHeader.mSourceId);
 }
 
 //******************************************************************************
@@ -159,11 +159,11 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
       sendMsg(tTxMsg);
    }
 
-   Prn::print(Prn::ThreadRun,Prn::Run1, "NetworkThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Code1      %d", aRxMsg->mCode1);
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Code2      %d", aRxMsg->mCode2);
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Code3      %d", aRxMsg->mCode3);
-   Prn::print(Prn::ThreadRun, Prn::Run1, "Code4      %d", aRxMsg->mCode4);
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
+   Prn::print(Prn::ThreadRun1, "Code1      %d", aRxMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "Code2      %d", aRxMsg->mCode2);
+   Prn::print(Prn::ThreadRun1, "Code3      %d", aRxMsg->mCode3);
+   Prn::print(Prn::ThreadRun1, "Code4      %d", aRxMsg->mCode4);
 
    delete aRxMsg;
 }
@@ -173,7 +173,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun, Prn::Run1, "NetworkThread::processRxMsg_StatusResponseMsg");
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusResponseMsg");
    delete aRxMsg;
 }
 
@@ -182,7 +182,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun, Prn::Run1, "NetworkThread::processRxMsg_DataMsg");
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_DataMsg");
 
    aRxMsg->show();
 
@@ -197,7 +197,7 @@ void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 
 void NetworkThread::executeOnTimer(int aTimerCount)
 {
-   Prn::print(Prn::ThreadRun,Prn::Run2, "NetworkThread::executeRxMsg");
+   Prn::print(Prn::ThreadRun2, "NetworkThread::executeRxMsg");
 
    return;
 

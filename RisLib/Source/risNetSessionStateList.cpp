@@ -88,20 +88,20 @@ bool SessionStateList::isValidIndex(int aIndex)
 
 void SessionStateList::show(char* aLabel)
 {
-   Prn::print(0,0,"############################# %s BEGIN",aLabel);
+   Prn::print(0,"############################# %s BEGIN",aLabel);
 
-   Prn::print(0,0,"mNumSessions %d",mNumSessions);
+   Prn::print(0,"mNumSessions %d",mNumSessions);
 
    for (int index=0;index<MaxSessions;index++)
    {
       int ident = mIdent[index];
       if (ident!=InvalidValue)
       {
-         Prn::print(0,0,"index,ident %d %d",index,ident);
+         Prn::print(0,"index,ident %d %d",index,ident);
       }
    }
 
-   Prn::print(0,0,"############################# %s END",aLabel);
+   Prn::print(0,"############################# %s END",aLabel);
 }
 
 }//namespace

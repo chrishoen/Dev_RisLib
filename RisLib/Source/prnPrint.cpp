@@ -18,24 +18,22 @@ Print utility
 namespace Prn
 {
 
-// constants
-
-enum {MAX_PRINT_STRING_SIZE    = 400};
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
 // Regional variables
 
-enum {MaxNameSize=200};
+   static const int cMaxPrintStringSize = 400;
+   static const int cMaxNameSize = 200;
 
-bool                 rUsePrintThread;
-bool                 rUseSettingsFile;
-char                 rSettingsFilePath    [MaxNameSize];
-char                 rSettingsFileSection [MaxNameSize];
-RedirectCallPointer  rRedirectCallPointer;
-bool                 rUseRedirectCallPointer;
-bool                 rSuppressFlag;
+   bool                 rUsePrintThread;
+   bool                 rUseSettingsFile;
+   char                 rSettingsFilePath    [cMaxNameSize];
+   char                 rSettingsFileSection [cMaxNameSize];
+   RedirectCallPointer  rRedirectCallPointer;
+   bool                 rUseRedirectCallPointer;
+   bool                 rSuppressFlag;
 
 //****************************************************************************
 //****************************************************************************
@@ -54,8 +52,8 @@ void resetPrint()
    rUseRedirectCallPointer = false;
    rSuppressFlag=true;
 
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),MaxNameSize);
-   strncat(rSettingsFilePath,"prnPrintSettings.txt",MaxNameSize);
+   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
+   strncat(rSettingsFilePath,"prnPrintSettings.txt",cMaxNameSize);
 }
 
 //****************************************************************************
@@ -68,21 +66,21 @@ void usePrintThread (bool aUsePrintThread)
 //****************************************************************************
 void useSettingsFileDefault()
 {
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),MaxNameSize);
-   strncat(rSettingsFilePath,"prnPrintSettings.txt",MaxNameSize);
+   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
+   strncat(rSettingsFilePath,"prnPrintSettings.txt",cMaxNameSize);
    rUseSettingsFile=true;
 }
 
 void useSettingsFileName(char* aSettingsFileName)
 {
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),MaxNameSize);
-   strncat(rSettingsFilePath,aSettingsFileName,MaxNameSize);
+   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
+   strncat(rSettingsFilePath,aSettingsFileName,cMaxNameSize);
    rUseSettingsFile=true;
 }
 
 void useSettingsFilePath(char* aSettingsFilePath)
 {
-   strncpy(rSettingsFilePath,aSettingsFilePath,MaxNameSize);
+   strncpy(rSettingsFilePath,aSettingsFilePath,cMaxNameSize);
    rUseSettingsFile=true;
 }
 
@@ -90,7 +88,7 @@ void useSettingsFilePath(char* aSettingsFilePath)
 
 void useSettingsFileSection(char*aSettingsFileSection)
 {
-   strncpy(rSettingsFileSection, aSettingsFileSection, MaxNameSize);
+   strncpy(rSettingsFileSection, aSettingsFileSection, cMaxNameSize);
 }
 
 //****************************************************************************
@@ -144,34 +142,26 @@ void finalizePrint()
 }
 
 //****************************************************************************
-void setFilter(int aTopic, int aSubTopic, bool aEnablePrint)
+void setFilter(int aFilter, bool aEnablePrint)
 {
-   gSettings.setFilter(aTopic,aSubTopic,aEnablePrint);
+   gSettings.setFilter(aFilter,aEnablePrint);
 }   	
 
 //****************************************************************************
-bool testForPrint(int aTopic,int aSubTopic)
+bool testForPrint(int aFilter)
 {
-    //-----------------------------------------------------
-   // filter
-   
-   if (aTopic==0 && aSubTopic==0) return true;
+   // Filter table entry zero is always true
+   if (aFilter==0) return true;
   
-   // lookup filter table value for any
-   if (aSubTopic==0)
-   {
-      return gSettings.mFilterTable[aTopic]!=0;
-   }
-
-   // lookup filter table value
-   return (gSettings.mFilterTable[aTopic] & aSubTopic)!=0;
+   // Lookup filter table entry
+   return gSettings.mFilterTable[aFilter];
 }
 
 //****************************************************************************
-void print(int aTopic,int aSubTopic,const char* aFormat, ...)      
+void print(int aFilter,const char* aFormat, ...)      
 {
    // If suppressed and the filter is not zero then exit
-   if (rSuppressFlag && aTopic!=0)
+   if (rSuppressFlag && aFilter!=0)
    {
       return;
    }
@@ -179,7 +169,7 @@ void print(int aTopic,int aSubTopic,const char* aFormat, ...)
    //-----------------------------------------------------
    // If the print filter is not enabled then exit
 
-   if (!testForPrint(aTopic,aSubTopic))
+   if (!testForPrint(aFilter))
    {
       return;
    }
@@ -188,7 +178,7 @@ void print(int aTopic,int aSubTopic,const char* aFormat, ...)
    // Print string pointer
 
    char* tPrintStr=0;
-   char  tPrintBuffer[MAX_PRINT_STRING_SIZE];
+   char  tPrintBuffer[cMaxPrintStringSize];
    int   tPrintStrSize;
    PrintBlock* tPrintBlock = 0;
 
@@ -211,7 +201,7 @@ void print(int aTopic,int aSubTopic,const char* aFormat, ...)
    
    va_list  ArgPtr;
    va_start(ArgPtr,aFormat);
-   tPrintStrSize = vsnprintf(tPrintStr,MAX_PRINT_STRING_SIZE,aFormat,ArgPtr);
+   tPrintStrSize = vsnprintf(tPrintStr,cMaxPrintStringSize,aFormat,ArgPtr);
    va_end (ArgPtr);
 
    tPrintStr[tPrintStrSize++]=0;

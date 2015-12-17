@@ -32,13 +32,13 @@ void TcpServerHubSocket::configure(Sockets::SocketAddress aSocketAddress)
 
    if (mStatus==0)
    {
-      Prn::print(Prn::SocketInit,Prn::Init2, "TcpServerHubSocket $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "TcpServerHubSocket $ %16s : %d",
          mLocal.mIpAddr.mString,
          mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit,Prn::Init2, "TcpServerHubSocket $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "TcpServerHubSocket $ %16s : %d $ %d %d",
          mLocal.mIpAddr.mString,
          mLocal.mPort,
          mStatus,
@@ -82,7 +82,7 @@ void TcpServerThread::configure(
    RxMsgQCall*               aRxMsgQCall,
    int                       aFlags)
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpClientThread::configure");
+   Prn::print(Prn::SocketInit1, "TcpClientThread::configure");
 
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
    mMaxSessions = aMaxSessions;
@@ -99,7 +99,7 @@ void TcpServerThread::configure(
 
 void TcpServerThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpServerThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction BEGIN");
 
    // Configure the hub socket
    mHubSocket.configure(mSocketAddress);
@@ -110,7 +110,7 @@ void TcpServerThread::threadInitFunction()
       mNodeSocket[sessionIndex].configure(mMessageParserCreator);
    }
 
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpServerThread::threadInitFunction END");
+   Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -120,7 +120,7 @@ void TcpServerThread::threadInitFunction()
 
 void TcpServerThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketRun,Prn::Run1, "TcpServerThread::threadRunFunction");
+   Prn::print(Prn::SocketRun1, "TcpServerThread::threadRunFunction");
    
    //-------------------------------------------------------------------------
    // Loop
@@ -128,7 +128,7 @@ void TcpServerThread::threadRunFunction()
    // Do a nonblocking listen to put the hub socket in listen mode
    mHubSocket.doListen();
    mListenFlag=true;
-   Prn::print(Prn::SocketRun,Prn::Run1, "doListen %d %d",mHubSocket.mStatus,mHubSocket.mError);
+   Prn::print(Prn::SocketRun1, "doListen %d %d",mHubSocket.mStatus,mHubSocket.mError);
 
    bool going=true;
 
@@ -212,7 +212,7 @@ void TcpServerThread::threadRunFunction()
                   // new session has been established
                   processSessionChange(sessionIndex,true);
 
-                  Prn::print(Prn::SocketRun,Prn::Run1, "doAccept %d",sessionIndex);
+                  Prn::print(Prn::SocketRun1, "doAccept %d",sessionIndex);
 
                   // Test if the number of sessions has reached the maximum
                   if (mNumSessions==mMaxSessions)
@@ -221,7 +221,7 @@ void TcpServerThread::threadRunFunction()
                      // Close the hub socket and set the listening state false.
                      // This will cause any client connect calls to be refused.
                      // The hub socket will be reopened when one of the sessions is closed.
-                     Prn::print(Prn::SocketRun,Prn::Run1, "Session limit was reached, closing listener %d",mNumSessions);
+                     Prn::print(Prn::SocketRun1, "Session limit was reached, closing listener %d",mNumSessions);
                      mHubSocket.doClose();
                      mListenFlag=false;
                   }
@@ -229,7 +229,7 @@ void TcpServerThread::threadRunFunction()
                else
                {
                   // The accept call failed
-                  Prn::print(Prn::SocketRun,0, "ERROR doAccept FAILED %d %d %d",mHubSocket.mStatus,mHubSocket.mError,sessionIndex);
+                  Prn::print(Prn::SocketRun1, "ERROR doAccept FAILED %d %d %d",mHubSocket.mStatus,mHubSocket.mError,sessionIndex);
                   mSessionAllocator.push(sessionIndex); 
                }
          }
@@ -253,7 +253,7 @@ void TcpServerThread::threadRunFunction()
                   if (mNodeSocket[sessionIndex].doRecvMsg (rxMsg))
                   {
                      // A valid message was received 
-                     Prn::print(Prn::SocketRun,Prn::Run2, "Recv message %d %d",
+                     Prn::print(Prn::SocketRun2, "Recv message %d %d",
                         sessionIndex,
                         mNodeSocket[sessionIndex].mRxMsgCount);
 
@@ -267,7 +267,7 @@ void TcpServerThread::threadRunFunction()
                   {
                      // The receive failed, so the connection was shutdown by the client.
                      // Therefore, disestablish the session.  
-                     Prn::print(Prn::SocketRun,Prn::Run1, "Recv failed, closing session %d",sessionIndex);
+                     Prn::print(Prn::SocketRun1, "Recv failed, closing session %d",sessionIndex);
                      // Reset the socket
                      mNodeSocket[sessionIndex].doClose();
                      mNodeSocket[sessionIndex].reset();
@@ -287,7 +287,7 @@ void TcpServerThread::threadRunFunction()
                         mHubSocket.reconfigure();
                         mHubSocket.doListen();
                         mListenFlag=true;
-                        Prn::print(Prn::SocketRun,Prn::Run1, "opening listener, doListen %d %d",mHubSocket.mStatus,mHubSocket.mError);
+                        Prn::print(Prn::SocketRun1, "opening listener, doListen %d %d",mHubSocket.mStatus,mHubSocket.mError);
                      } 
                   }   
                }
@@ -297,7 +297,7 @@ void TcpServerThread::threadRunFunction()
       // Test if the select call failed
       else if (retVal<0)
       {
-         Prn::print(Prn::SocketRun,0, "ERROR TcpServerThread::threadRunFunction select fail %d",retVal);
+         Prn::print(Prn::SocketRun1, "ERROR TcpServerThread::threadRunFunction select fail %d",retVal);
       }
    }
 }
@@ -308,7 +308,7 @@ void TcpServerThread::threadRunFunction()
 
 void TcpServerThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "TcpServerThread::threadExitFunction");
+   Prn::print(Prn::SocketInit1, "TcpServerThread::threadExitFunction");
 
    mHubSocket.doClose();
    for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
@@ -333,14 +333,14 @@ void TcpServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
       mNodeSocket[aSessionIndex].doSendMsg(aTxMsg);
       mNodeSocket[aSessionIndex].mTxMsgCount++;
 
-      Prn::print(Prn::SocketRun,Prn::Run2, "doSendMsg %d %d %d",
+      Prn::print(Prn::SocketRun2, "doSendMsg %d %d %d",
          mNodeSocket[aSessionIndex].mStatus,
          mNodeSocket[aSessionIndex].mError,
          mNodeSocket[aSessionIndex].mTxMsgCount);
    }
    else
    {
-      Prn::print(Prn::SocketRun,0, "ERROR doSendMsg FAIL session invalid %d",aSessionIndex);
+      Prn::print(Prn::SocketRun1, "ERROR doSendMsg FAIL session invalid %d",aSessionIndex);
       delete aTxMsg;
    }
 }

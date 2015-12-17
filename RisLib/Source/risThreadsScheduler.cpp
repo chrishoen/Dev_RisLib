@@ -544,15 +544,15 @@ void Scheduler::removeFront()
 
 void Scheduler::show()
 {
-   Prn::print(0,0,"mScheduleTime %8.1f",mScheduleTime);
-   Prn::print(0,0,"mNumOfElements %d",mNumOfElements);
-   Prn::print(0,0,"mFrontIndex    %d",mFrontIndex);
-   Prn::print(0,0,"mBackIndex     %d",mBackIndex);
+   Prn::print(0,"mScheduleTime %8.1f",mScheduleTime);
+   Prn::print(0,"mNumOfElements %d",mNumOfElements);
+   Prn::print(0,"mFrontIndex    %d",mFrontIndex);
+   Prn::print(0,"mBackIndex     %d",mBackIndex);
    return;
-   Prn::print(0,0,"");
+   Prn::print(0,"");
    for(int i=0;i<mNumOfElements;i++)
    {
-      Prn::print(0,0,"mNeighborIndex    %d  %d  %d",
+      Prn::print(0,"mNeighborIndex    %d  %d  %d",
          i,
          mFrontNeighborIndex[i],
          mBackNeighborIndex[i]);

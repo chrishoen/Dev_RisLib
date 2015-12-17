@@ -60,7 +60,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<70;i++)
    {
@@ -68,7 +68,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
       else           tF.put(i*1.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 }
 
 //******************************************************************************
@@ -83,7 +83,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<70;i++)
    {
@@ -91,7 +91,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
       else           tF.put(i*1.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 }
 
 //******************************************************************************
@@ -106,7 +106,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<70;i++)
    {
@@ -114,7 +114,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
       else           tF.put(i*1.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 }
 
 //******************************************************************************
@@ -129,14 +129,14 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<20;i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
 }
 
@@ -154,7 +154,7 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
    for (int i=0;i<4;i++)
    {
-      Prn::print(0,0,"%3d %8.3f",i,tF.get(i));
+      Prn::print(0,"%3d %8.3f",i,tF.get(i));
    }
 }
 
@@ -176,21 +176,21 @@ void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<8;i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<8;i++)
    {
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
 }
 
@@ -206,21 +206,21 @@ void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<8;i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<8;i++)
    {
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
 }
 
@@ -238,14 +238,14 @@ void CmdLineExec::executeGo9(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<20;i++)
    {
       tF.put(i*1.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
 }
 
@@ -261,7 +261,7 @@ void CmdLineExec::executeGo10(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
@@ -282,14 +282,14 @@ void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<20;i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0,0,"");
+   Prn::print(0,"");
 
    for (int i=0;i<20;i++)
    {
@@ -310,7 +310,7 @@ void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
@@ -331,42 +331,42 @@ void CmdLineExec::executeGo13(Ris::CmdLineCmd* aCmd)
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(2.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(2.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(2.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 }
 
 
@@ -380,7 +380,7 @@ void CmdLineExec::executeGo14(Ris::CmdLineCmd* aCmd)
    for (int i = 0; i<16; i++)
    {
       tF.shiftRight(11.0 + i*1.0);
-      Prn::print(0, 0, "%3d %8.3f %8.3f", i, tF.getLeft(), tF.getRight());
+      Prn::print(0,"%3d %8.3f %8.3f", i, tF.getLeft(), tF.getRight());
    }
 
 }
@@ -400,7 +400,7 @@ void CmdLineExec::executeGo15(Ris::CmdLineCmd* aCmd)
    for (int i = 0; i<16; i++)
    {
       tF.shiftRight(11.0 + i*1.0);
-      Prn::print(0, 0, "%3d %8.3f %8.3f", i, tF.getLeft(), tF.getRight());
+      Prn::print(0,"%3d %8.3f %8.3f", i, tF.getLeft(), tF.getRight());
    }
 
 }
@@ -423,42 +423,42 @@ void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(2.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(2.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(2.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 }
 
 //******************************************************************************
@@ -473,21 +473,21 @@ void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
       tF.put(0.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(1.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
       tF.put(2.0);
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
@@ -495,7 +495,7 @@ void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
       else      tF.put(0.0);   
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
@@ -503,7 +503,7 @@ void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
       else       tF.put(0.0);   
       tF.show();
    }
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
 }
 

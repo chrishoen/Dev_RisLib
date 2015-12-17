@@ -34,7 +34,7 @@ void SerialPort::initialize(int aPortNumber,char* aPortSetup)
    strcpy(mPortSetup,aPortSetup);
    mValidFlag=false;
 
-   Prn::print(Prn::SerialInit,Prn::Init1,"SerialPort::SerialPort BEGIN");
+   Prn::print(Prn::SerialInit1,"SerialPort::SerialPort BEGIN");
 
    if (mValidFlag)
    {
@@ -56,7 +56,7 @@ void SerialPort::initialize(int aPortNumber,char* aPortSetup)
 
    if (mHandle==INVALID_HANDLE_VALUE)
    {
-      Prn::print(Prn::SerialRun,0,"serial_create_error_1 %d", GetLastError());
+      Prn::print(Prn::SerialRun1,"serial_create_error_1 %d", GetLastError());
       return;
    }
 
@@ -70,7 +70,7 @@ void SerialPort::initialize(int aPortNumber,char* aPortSetup)
 
    if (GetLastError() != ERROR_SUCCESS)
    {
-      Prn::print(Prn::SerialRun,0,"serial_create_error_2 %d", GetLastError());
+      Prn::print(Prn::SerialRun1,"serial_create_error_2 %d", GetLastError());
       CloseHandle(mHandle);
       mHandle=INVALID_HANDLE_VALUE;
       return;
@@ -109,13 +109,13 @@ void SerialPort::initialize(int aPortNumber,char* aPortSetup)
       else
       {
          // Failed, continue to retry
-         Prn::print(Prn::SerialInit,Prn::Init1,"serial_create_retry %d", GetLastError());
+         Prn::print(Prn::SerialInit1,"serial_create_retry %d", GetLastError());
          purge();
          Sleep(100);
          // Retry failed, abort initialization
          if(count++ == 10)
          {
-            Prn::print(Prn::SerialRun,0,"serial_create_error_3 %d", GetLastError());
+            Prn::print(Prn::SerialRun1,"serial_create_error_3 %d", GetLastError());
             CloseHandle(mHandle);
             mHandle=INVALID_HANDLE_VALUE;
             return;
@@ -136,7 +136,7 @@ void SerialPort::initialize(int aPortNumber,char* aPortSetup)
 
    if(!SetCommTimeouts(mHandle, &tComTimeout))
    {
-      Prn::print(Prn::SerialRun,0,"serial_create_error_4 %d", GetLastError());
+      Prn::print(Prn::SerialRun1,"serial_create_error_4 %d", GetLastError());
       CloseHandle(mHandle);
       mHandle=INVALID_HANDLE_VALUE;
       return;
@@ -153,7 +153,7 @@ void SerialPort::initialize(int aPortNumber,char* aPortSetup)
  
    mValidFlag=true;
 
-   Prn::print(Prn::SerialInit,Prn::Init1,"SerialPort::SerialPort END");
+   Prn::print(Prn::SerialInit1,"SerialPort::SerialPort END");
 }
 
 //******************************************************************************
@@ -190,7 +190,7 @@ int SerialPort::doSend(char const *aData, int aSize)
    }
    else
    {
-      Prn::print(Prn::SerialInit,Prn::Init1, "Write Failed, %d", GetLastError());
+      Prn::print(Prn::SerialInit1, "Write Failed, %d", GetLastError());
       return RetCodeError;
    }
 }
@@ -226,7 +226,7 @@ int SerialPort::receiveData(char *aData, int aSize, int aTimeout)
    if (GetLastError() != ERROR_SUCCESS)
    {
      // Error in communications
-     Prn::print(Prn::SerialRun,0,"serial_receive_error_1 %d", GetLastError());
+     Prn::print(Prn::SerialRun1,"serial_receive_error_1 %d", GetLastError());
 
      // If the read was aborted then clear hardware error
      if (GetLastError()==ERROR_OPERATION_ABORTED)

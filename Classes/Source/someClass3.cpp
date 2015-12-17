@@ -19,23 +19,23 @@ namespace Some
 
 Class3B::Class3B()
 {
-   Prn::print(0, 0, "Class3B::Class3B");
+   Prn::print(0,"Class3B::Class3B");
 }
 
 Class3B::~Class3B()
 {
-   Prn::print(0, 0, "Class3B::~Class3B");
+   Prn::print(0,"Class3B::~Class3B");
 }
 
 void* Class3B::operator new(size_t sz)
 {
-   Prn::print(0, 0, "Class3B::new");
+   Prn::print(0,"Class3B::new");
    return ::operator new(sz);
 }
   
 void Class3B::operator delete(void* ptr)
 {
-   Prn::print(0, 0, "Class3B::delete");
+   Prn::print(0,"Class3B::delete");
    ::operator delete(ptr);
 }
 //******************************************************************************
@@ -44,12 +44,12 @@ void Class3B::operator delete(void* ptr)
 
    Class3A::Class3A()
 {
-   Prn::print(0, 0, "Class3A::Class3A");
+   Prn::print(0,"Class3A::Class3A");
 }
 
 Class3A::~Class3A()
 {
-   Prn::print(0, 0, "Class3A::~Class3A");
+   Prn::print(0,"Class3A::~Class3A");
 }
 
    

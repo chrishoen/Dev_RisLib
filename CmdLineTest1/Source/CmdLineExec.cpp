@@ -51,13 +51,13 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,0,"GO2GO2GO2GO2");
+   Prn::print(0,"GO2GO2GO2GO2");
    return;
 
    int    tCount = 0;
    while(!Ris::portableKbhit())
    {
-      Prn::print(0,0,"count   %d",tCount++);
+      Prn::print(0,"count   %d",tCount++);
       Ris::portableSleep(500);
    }
 }
@@ -66,13 +66,13 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,0,"PRINT1");
-   Prn::print(0,0,"PRINT2");
+   Prn::print(0,"PRINT1");
+   Prn::print(0,"PRINT2");
 
-   Prn::print(Prn::ProcRun,Prn::Run1,"Prn::ProcRun,Prn::Run1");
-   Prn::print(Prn::ProcRun,Prn::Run2,"Prn::ProcRun,Prn::Run2");
-   Prn::print(Prn::ProcRun,Prn::Run3,"Prn::ProcRun,Prn::Run3");
-   Prn::print(Prn::ProcRun,Prn::Run4,"Prn::ProcRun,Prn::Run4");
+   Prn::print(Prn::ProcRun1,"Prn::ProcRun1");
+   Prn::print(Prn::ProcRun2,"Prn::ProcRun2");
+   Prn::print(Prn::ProcRun3,"Prn::ProcRun3");
+   Prn::print(Prn::ProcRun4,"Prn::ProcRun4");
 }
 
 //******************************************************************************

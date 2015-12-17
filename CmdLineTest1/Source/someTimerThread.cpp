@@ -40,7 +40,7 @@ void TimerThread::configureThread()
 //******************************************************************************
 void TimerThread::executeOnTimer(int aTimeCount)
 {
-   if (mTPFlag) Prn::print(Prn::ThreadRun,Prn::Per1,"TTTimer %04d",aTimeCount);
+   if (mTPFlag) Prn::print(Prn::ThreadRun4,"TTTimer %04d",aTimeCount);
 }
 
 }//namespace

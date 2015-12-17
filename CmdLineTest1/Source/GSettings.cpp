@@ -30,8 +30,8 @@ Settings_01::Settings_01()
 
 void Settings_01::show()
 {
-   Prn::print(0,0,"Settings_01 N1        %d",mN1);
-   Prn::print(0,0,"Settings_01 N2        %d",mN2);
+   Prn::print(0,"Settings_01 N1        %d",mN1);
+   Prn::print(0,"Settings_01 N2        %d",mN2);
 }
 
 //******************************************************************************
@@ -58,8 +58,8 @@ Settings_1::Settings_1()
 
 void Settings_1::show()
 {
-   Prn::print(0,0,"Settings_1 N1         %d",mN1);
-   Prn::print(0,0,"Settings_1 N2         %d",mN2);
+   Prn::print(0,"Settings_1 N1         %d",mN1);
+   Prn::print(0,"Settings_1 N2         %d",mN2);
    mS_01.show();
 }
 
@@ -96,8 +96,8 @@ GSettings::GSettings()
 
 void GSettings::show()
 {
-   Prn::print(0,0,"GSettings N1 %d",mN1);
-   Prn::print(0,0,"GSettings N2 %d",mN2);
+   Prn::print(0,"GSettings N1 %d",mN1);
+   Prn::print(0,"GSettings N2 %d",mN2);
    mS_1.show();
 }
 
@@ -168,11 +168,11 @@ void GSettings::initialize()
       tCmdLineFile.execute(this);
       tCmdLineFile.close();
 
-	   Prn::print(0,0,"GSettings::initialize PASS %d",tFileFound);
+	   Prn::print(0,"GSettings::initialize PASS %d",tFileFound);
    }
    else
    {
-	   Prn::print(0,0,"GSettings::initialize FAIL");
+	   Prn::print(0,"GSettings::initialize FAIL");
    }
 }
 

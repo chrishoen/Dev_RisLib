@@ -27,7 +27,7 @@ Class2::Class2() :
 
 void Class2::myCall(int aX)
 {
-   Prn::print(0,0,"Class2::myCall %d",aX);
+   Prn::print(0,"Class2::myCall %d",aX);
 }
 
 //******************************************************************************

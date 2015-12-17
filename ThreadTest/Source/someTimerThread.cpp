@@ -43,7 +43,7 @@ void TimerThread::configureThread()
 void TimerThread::executeOnTimer(int aTimeCount)
 {
    mTimerTester.executeOnTimer();
-   if (mTPFlag) Prn::print(0,0,"TTTimer %04d",aTimeCount);
+   if (mTPFlag) Prn::print(0,"TTTimer %04d",aTimeCount);
 }
 
 }//namespace

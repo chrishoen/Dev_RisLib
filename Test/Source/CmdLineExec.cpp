@@ -36,7 +36,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
    unsigned int tN = aCmd->argUnsigned(1);
 
-   Prn::print(0,0,"%08X",tN);
+   Prn::print(0,"%08X",tN);
 }
 
 //******************************************************************************
@@ -48,7 +48,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    int tTimeout = aCmd->argInt(1);
    int tTimeout10 = tTimeout/100;
 
-   Prn::print(0,0,"%5d %5d",tTimeout,tTimeout10);
+   Prn::print(0,"%5d %5d",tTimeout,tTimeout10);
 }
 
 //******************************************************************************
@@ -57,7 +57,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,"abcdefg");
 
-   Prn::print(0,0,"%s %s",
+   Prn::print(0,"%s %s",
       my_string_from_bool(aCmd->isArgString(1, "abcdefg")),
       aCmd->argString(1));
 }
@@ -73,15 +73,15 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    int tDelta = aCmd->argInt(2);
    int tSize  = 5;
 
-   Prn::print(0,0,"");
-   Prn::print(0,0,"index %d",tIndex);
-   Prn::print(0,0,"delta %d",tDelta);
-   Prn::print(0,0,"");
+   Prn::print(0,"");
+   Prn::print(0,"index %d",tIndex);
+   Prn::print(0,"delta %d",tDelta);
+   Prn::print(0,"");
 
    tIndex = my_index_add(tIndex,tDelta,tSize);
 
-   Prn::print(0,0,"index %d",tIndex);
-   Prn::print(0,0,"");
+   Prn::print(0,"index %d",tIndex);
+   Prn::print(0,"");
 }
 
 //******************************************************************************

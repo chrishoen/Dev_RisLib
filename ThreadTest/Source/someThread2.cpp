@@ -56,23 +56,23 @@ void Thread2::executeOnTimer(int aCurrentTimeCount)
 
 void Thread2::executeC101(int aN)
 {
-   Prn::print(0,0,"Thread2::executeC101 %d",aN);
+   Prn::print(0,"Thread2::executeC101 %d",aN);
 }
 
 //******************************************************************************
 
 void Thread2::executeC102(int aN)
 {
-   Prn::print(0,0,"Thread2::executeC102 %d",aN);
+   Prn::print(0,"Thread2::executeC102 %d",aN);
 }
 
 //******************************************************************************
 
 void Thread2::executeTest1(int aN)
 {
-   Prn::print(0,0,"Thread1::executeTest1 BEGIN %d",aN);
+   Prn::print(0,"Thread1::executeTest1 BEGIN %d",aN);
    BaseClass::threadSleep(1000*aN);
-   Prn::print(0,0,"Thread1::executeTest1 END %d",aN);
+   Prn::print(0,"Thread1::executeTest1 END %d",aN);
 }
 
 }//namespace

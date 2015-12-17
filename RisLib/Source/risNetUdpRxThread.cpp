@@ -33,7 +33,7 @@ void UdpRxThread::configure(
    BaseMessageParserCreator*  aMessageParserCreator,
    RxMsgQCall*                aRxMsgQCall)
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::configure");
+   Prn::print(Prn::SocketInit1, "UdpRxThread::configure");
 
    mRxSocketAddress.set(aLocalIpAddr,aLocalIpPort);
    mMessageParserCreator = aMessageParserCreator;
@@ -47,11 +47,11 @@ void UdpRxThread::configure(
 
 void UdpRxThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInit1, "UdpRxThread::threadInitFunction BEGIN");
 
    mRxSocket.configure(mRxSocketAddress,mMessageParserCreator);
 
-   Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::threadInitFunction END");
+   Prn::print(Prn::SocketInit1, "UdpRxThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -61,7 +61,7 @@ void UdpRxThread::threadInitFunction()
 
 void  UdpRxThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketRun,Prn::Run1, "UdpRxMsgThread::threadRunFunction");
+   Prn::print(Prn::SocketRun1, "UdpRxMsgThread::threadRunFunction");
    
    //-----------------------------------------------------------
    // Loop
@@ -77,7 +77,7 @@ void  UdpRxThread::threadRunFunction()
       if (mRxSocket.doRecvMsg(rxMsg))
       {
          // Message was correctly received
-         Prn::print(Prn::SocketRun,Prn::Run1, "Recv message %d",mRxSocket.mRxMsgCount);
+         Prn::print(Prn::SocketRun1, "Recv message %d",mRxSocket.mRxMsgCount);
 
          // Call the receive method
          processRxMsg(rxMsg);
@@ -86,7 +86,7 @@ void  UdpRxThread::threadRunFunction()
       {
          // Message was not correctly received, so
          // Connection was lost
-         Prn::print(Prn::SocketRun,Prn::Run1, "Recv failed, Connection lost");
+         Prn::print(Prn::SocketRun1, "Recv failed, Connection lost");
       }
       //-----------------------------------------------------------
       // If termination request, exit the loop
@@ -103,7 +103,7 @@ void  UdpRxThread::threadRunFunction()
 
 void UdpRxThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit,Prn::Init1, "UdpRxThread::threadExitFunction");
+   Prn::print(Prn::SocketInit1, "UdpRxThread::threadExitFunction");
 }
 //******************************************************************************
 // Shutdown, base class overload.

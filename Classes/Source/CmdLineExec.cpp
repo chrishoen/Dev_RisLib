@@ -44,7 +44,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::myCall(int aX)
 {
-   Prn::print(0,0,"CmdLineExec::myCall %d",aX);
+   Prn::print(0,"CmdLineExec::myCall %d",aX);
 }
 
 //******************************************************************************
@@ -91,23 +91,23 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
-   Prn::print(0, 0, "new Class3B");
+   Prn::print(0,"new Class3B");
    Class3B* t3B = new Class3B;
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
-   Prn::print(0, 0, "new Class3A");
+   Prn::print(0,"new Class3A");
    Class3A* t3A = new Class3A;
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
-   Prn::print(0, 0, "delete Class3B");
+   Prn::print(0,"delete Class3B");
    delete t3B;
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 
-   Prn::print(0, 0, "delete Class3A");
+   Prn::print(0,"delete Class3A");
    delete t3A;
-   Prn::print(0, 0, "");
+   Prn::print(0,"");
 }
 
 //******************************************************************************
@@ -123,11 +123,11 @@ void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
    typedef void (CmdLineExec::*VoidMethod)();
    typedef void (*VoidFunction)();
 
-   Prn::print(0,0,"int          %d",sizeof(int));
-   Prn::print(0,0,"double       %d",sizeof(double));
-   Prn::print(0,0,"void*        %d",sizeof(void*));
-   Prn::print(0,0,"VoidMethod   %d",sizeof(VoidMethod));
-   Prn::print(0,0,"VoidFunction %d",sizeof(VoidFunction));
+   Prn::print(0,"int          %d",sizeof(int));
+   Prn::print(0,"double       %d",sizeof(double));
+   Prn::print(0,"void*        %d",sizeof(void*));
+   Prn::print(0,"VoidMethod   %d",sizeof(VoidMethod));
+   Prn::print(0,"VoidFunction %d",sizeof(VoidFunction));
 
 
 }

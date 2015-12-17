@@ -58,7 +58,7 @@ void PlantThread::executeOnTimer(int aCurrentTimeCount)
 
 void PlantThread::executeCommand(int aId,int aParm1,int aParm2)
 {
-   Prn::print(0,0,"PlantThread::executeCommand             %04d",aId);
+   Prn::print(0,"PlantThread::executeCommand             %04d",aId);
 
    switch(aId)
    {

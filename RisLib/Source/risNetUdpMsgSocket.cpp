@@ -55,13 +55,13 @@ void UdpRxMsgSocket::configure(
 
    if (mStatus==0)
    {
-      Prn::print(Prn::SocketInit,Prn::Init2, "UdpRxMsgSocket     $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d",
          aLocal.mIpAddr.mString,
          aLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit,Prn::Init2, "UdpRxMsgSocket     $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d $ %d %d",
          aLocal.mIpAddr.mString,
          aLocal.mPort,
          mStatus,
@@ -122,7 +122,7 @@ bool UdpRxMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    // If the header is not valid then error
    if (!mMessageParser->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketRun,0, "ERROR doRecv1 INVALID HEADER ");
+      Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER ");
       return false;
    }
 
@@ -185,13 +185,13 @@ void UdpTxMsgSocket::configure(
 
    if (mStatus==0)
    {
-      Prn::print(Prn::SocketInit,Prn::Init2, "UdpTxMsgSocket     $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d",
          aRemote.mIpAddr.mString,
          aRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit,Prn::Init2, "UdpTxMsgSocket     $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d $ %d %d",
          aRemote.mIpAddr.mString,
          aRemote.mPort,
          mStatus,
@@ -251,7 +251,7 @@ void UdpTxMsgSocket::configure(
 
    doSocket();
 
-   Prn::print(Prn::SocketInit,Prn::Init1, "UdpTxMsgSocket:: %s %s %d %d",
+   Prn::print(Prn::SocketInit1, "UdpTxMsgSocket:: %s %s %d %d",
       mRemote.mIpAddr.mString,
       mStatus,
       mError);

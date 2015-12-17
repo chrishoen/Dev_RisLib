@@ -37,21 +37,6 @@ typedef Ris::CallPointer1<char*>    RedirectCallPointer;
 //******************************************************************************
 //******************************************************************************
 // Initializes the print service task and the filter table
-
-void resetPrint              ();
-void usePrintThread          (bool                 aUsePrintThread);
-void useSettingsFileDefault  ();
-void useSettingsFileName     (char*                aSettingsFileName);
-void useSettingsFileSection  (char*                aSettingsFileSection);
-void useRedirectCallPointer  (RedirectCallPointer  aRedirectCallPointer);
-void initializePrint         ();
-
-
-#if 0
-void initializePrint(
-   PrintMode aPrintMode=PrintModeLocalThreaded);
-
-// Initializes the print service task and the filter table
 // from an already initialized print settings global object
 // Print control initializes the settings object and then
 // calls this
@@ -63,17 +48,17 @@ void initializePrint(
 // command line, such as "Begin CmdFile Default", where "Begin" is the 
 // command ,"CmdFile" is  first argument and denotes the section and
 // "Default" is the second argument and denotes the section mode.
+//
+// Initializes the print service task and the filter table
 
-void initializePrintFromSettings(
-   char* aSettingsFileName,
-   char* aSection,
-   PrintMode aPrintMode=PrintModeLocalThreaded);
+void resetPrint              ();
+void usePrintThread          (bool                 aUsePrintThread);
+void useSettingsFileDefault  ();
+void useSettingsFileName     (char*                aSettingsFileName);
+void useSettingsFileSection  (char*                aSettingsFileSection);
+void useRedirectCallPointer  (RedirectCallPointer  aRedirectCallPointer);
+void initializePrint         ();
 
-// This reads the settings from the settings file from 
-// the settings folder, and "Default",1
-void  initializePrintFromSettings(
-   PrintMode aPrintMode=PrintModeLocalThreaded);
-#endif
 // Closes the print facility.
 
 void  finalizePrint();
@@ -81,33 +66,26 @@ void  finalizePrint();
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// supress any prints that do not have a filter,subfilter of 0,0
+// Suppress any prints that do not have a filter,subfilter of 0,0
 
-void  suppressPrint();
-void  unsuppressPrint();
-void  toggleSuppressPrint();
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//
-// Filtering:
-//
-//    1) If not enabled then the print is not executed.
-//
-//    2) ElseIf Topic and SubTopic are enabled then the print is executed.
-//
-
-void  print   (int aTopic,int aSubTopic,const char* aFormat, ...);
+void suppressPrint();
+void unsuppressPrint();
+void toggleSuppressPrint();
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// access the filter table
+// Filtered print, if the corresponding entry in the filter table is true
+// then the print is executed.
 
-// sets the filter table for a topic and subtopic.
+void print (int aFilter, const char* aFormat, ...);
 
-void  setFilter(int aTopic, int aSubTopic, bool aEnablePrint);
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set a filter in the filter table.
+
+void  setFilter(int aFilter, bool aEnablePrint);
 
 }//namespace
 #endif

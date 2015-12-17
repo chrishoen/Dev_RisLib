@@ -8,8 +8,15 @@
 //******************************************************************************
 int main(int argc,char** argv)
 {
+   int tPort = Ris::Net::PortDef::cPrintView;
+
+   if (argc > 1)
+   {
+      tPort = atoi(argv[1]);
+   }
+
    Ris::Net::UdpRxStringSocket tSocket;
-   tSocket.configure(Ris::Net::PortDef::cPrintView);
+   tSocket.configure(tPort);
 
    while (tSocket.doRecvString())
    {

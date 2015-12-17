@@ -241,14 +241,18 @@ HANDLE rCreatePrintView(int aConsole)
    si.cb = sizeof(si);
    ZeroMemory( &pi, sizeof(pi) );
 
+   char tCommandLine[200];
+   sprintf(tCommandLine,"C:\\Prime\\DevelopMine\\Dev_VS_Ris\\x64\\Debug\\PrintView.exe  %d",
+      Ris::Net::PortDef::cPrintView + aConsole - 1);
+
    char tConsoleTitle[50];
    sprintf(tConsoleTitle,"PRINTVIEW%d",aConsole);
    si.lpTitle = tConsoleTitle;
 
    // Start the child process. 
    if( !CreateProcess(
-      "C:\\Prime\\DevelopMine\\Dev_VS_Ris\\x64\\Debug\\PrintView.exe",           // Module name
-      NULL,           // Command line
+      NULL,           // Module name  
+      tCommandLine,   // Command Line
       NULL,           // Process handle not inheritable
       NULL,           // Thread handle not inheritable
       FALSE,          // Set handle inheritance to FALSE

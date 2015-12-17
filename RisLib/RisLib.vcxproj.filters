@@ -139,6 +139,9 @@
     <ClCompile Include="Source\risByteMessageParser.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risNetUdpStringSocket.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -292,6 +295,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteMessageParser.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpStringSocket.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

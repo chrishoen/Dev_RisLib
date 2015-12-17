@@ -36,7 +36,8 @@ void PrintSettings::reset()
    // All disabled, except entry zero
    for(int i=0;i<cFilterTableSize;i++)
    {
-      mFilterTable[i] = false;
+      mFilterTable  [i] = false;
+      mConsoleTable [i] = 0;
    }
    mFilterTable[0] = true;
 
@@ -69,9 +70,10 @@ bool PrintSettings::isMySection(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 // set filters
 
-void PrintSettings::setFilter(int aFilter, bool aEnablePrint)
+void PrintSettings::setFilter(int aFilter, bool aEnablePrint, int aConsole)
 {
-   mFilterTable[aFilter] = aEnablePrint;
+   mFilterTable  [aFilter] = aEnablePrint;
+   mConsoleTable [aFilter] = aConsole;
 }   	
 
 //******************************************************************************
@@ -100,7 +102,14 @@ void PrintSettings::tryFilterSet(Ris::CmdLineCmd* aCmd)
 {
    if (mFilterTry<0)    return;
    
-   setFilter(mFilterTry,aCmd->argBool(2));
+   if (aCmd->numArg() == 2)
+   {
+      setFilter(mFilterTry, aCmd->argBool(2));
+   }
+   else
+   {
+      setFilter(mFilterTry, aCmd->argBool(2), aCmd->argInt(3));
+   }
 }
 
 //******************************************************************************

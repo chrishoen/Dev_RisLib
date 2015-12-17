@@ -47,8 +47,9 @@ namespace Prn
 
 void resetPrint              ();
 void useSettingsFileDefault  ();
-void useSettingsFileName     (char*                aSettingsFileName);
-void useSettingsFileSection  (char*                aSettingsFileSection);
+void useSettingsFileName     (char* aSettingsFileName);
+void useSettingsFileSection  (char* aSettingsFileSection);
+void useConsoles             (int   aNumOfConsoles);
 void initializePrint         ();
 
 // Closes the print facility.
@@ -77,7 +78,7 @@ void print (int aFilter, const char* aFormat, ...);
 //******************************************************************************
 // Set a filter in the filter table.
 
-void  setFilter(int aFilter, bool aEnablePrint);
+void  setFilter(int aFilter, bool aEnablePrint, int aConsole = 0);
 
 }//namespace
 #endif

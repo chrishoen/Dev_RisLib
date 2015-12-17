@@ -11,7 +11,6 @@ The filters are initialized from the command line file PrintSettings.txt
 //**********************************************************************
 //**********************************************************************
 
-#include "risPortableTypes.h"
 #include "risCmdLineFile.h"
 
 namespace Prn
@@ -25,7 +24,7 @@ namespace Prn
 // Each application reads its own print settings from a common settings
 // file. 
 
-class  PrintSettings : public Ris::BaseCmdLineExec
+class PrintSettings : public Ris::BaseCmdLineExec
 {
 public:
 
@@ -57,9 +56,10 @@ public:
  
    static const int cFilterTableSize = 200;
 
-   bool mFilterTable[cFilterTableSize];
+   bool mFilterTable  [cFilterTableSize];
+   int  mConsoleTable [cFilterTableSize];
 
-   void setFilter(int aFilter, bool aEnablePrint);
+   void setFilter(int aFilter, bool aEnablePrint, int aConsole = 0);
 
    //--------------------------------------------------------------------------
    // Section

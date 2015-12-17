@@ -6,7 +6,8 @@
 
 #include "CmdLineExec.h"
 
-#include "risPortableCalls.h"
+#include "risNetPortDef.h"
+#include "risNetUdpStringSocket.h"
 
 #include "someTimerThread.h"
 
@@ -65,6 +66,12 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   Ris::Net::UdpTxStringSocket tSocket;
+   tSocket.configure(Ris::Net::PortDef::cPrintView);
+
+   tSocket.doSendString("ABCDEFG");
+   tSocket.doClose();
+
 }
 
 

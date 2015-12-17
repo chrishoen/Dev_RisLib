@@ -29,7 +29,6 @@ namespace Prn
    bool                 rUseSettingsFile;
    char                 rSettingsFilePath    [cMaxNameSize];
    char                 rSettingsFileSection [cMaxNameSize];
-   RedirectCallPointer  rRedirectCallPointer;
    bool                 rUseRedirectCallPointer;
    bool                 rSuppressFlag;
 
@@ -45,7 +44,6 @@ void resetPrint()
    rUseSettingsFile = false;
    rSettingsFilePath[0]=0;
    strcpy(rSettingsFileSection, "DEFAULT");
-   rRedirectCallPointer.clear();
    rUseRedirectCallPointer = false;
    rSuppressFlag=true;
 
@@ -79,14 +77,6 @@ void useSettingsFilePath(char* aSettingsFilePath)
 void useSettingsFileSection(char*aSettingsFileSection)
 {
    strncpy(rSettingsFileSection, aSettingsFileSection, cMaxNameSize);
-}
-
-//****************************************************************************
-
-void useRedirectCallPointer(RedirectCallPointer  aRedirectCallPointer)
-{
-   rUseRedirectCallPointer = true;
-   rRedirectCallPointer = aRedirectCallPointer;
 }
 
 //****************************************************************************
@@ -168,18 +158,8 @@ void print(int aFilter, const char* aFormat, ...)
    //-----------------------------------------------------
    // Print the string
 
-   // If redirection call pointer 
-   if (rUseRedirectCallPointer)
-   {
-      // Send to redirection call pointer 
-      rRedirectCallPointer(tPrintStr);
-   }
-   // If no redirection
-   else
-   {
-      // Send to standard output
-      puts(tPrintStr);
-   }
+   puts(tPrintStr);
+
 }
 
 //****************************************************************************

@@ -30,12 +30,6 @@ namespace Prn
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-typedef Ris::CallPointer1<char*>    RedirectCallPointer;
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Initializes the print service task and the filter table
 // from an already initialized print settings global object
 // Print control initializes the settings object and then
@@ -55,7 +49,6 @@ void resetPrint              ();
 void useSettingsFileDefault  ();
 void useSettingsFileName     (char*                aSettingsFileName);
 void useSettingsFileSection  (char*                aSettingsFileSection);
-void useRedirectCallPointer  (RedirectCallPointer  aRedirectCallPointer);
 void initializePrint         ();
 
 // Closes the print facility.

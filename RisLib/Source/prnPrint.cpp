@@ -37,8 +37,9 @@ HANDLE rCreatePrintView(int aConsole);
    int     rNumOfConsoles;
    bool    rSuppressFlag;
 
-   Ris::Net::UdpTxStringSocket rConsoleSocket[cMaxConsoles];
-   HANDLE                      rConsoleHandle[cMaxConsoles];
+   Ris::Net::UdpTxStringSocket rConsoleSocket [cMaxConsoles];
+   int                         rConsolePort   [cMaxConsoles];
+   HANDLE                      rConsoleHandle [cMaxConsoles];
 
 
 //****************************************************************************
@@ -61,7 +62,8 @@ void resetPrint()
 
    for (int i=0;i<cMaxConsoles;i++)
    {
-      rConsoleHandle[i]=0;
+      rConsolePort   [i] = Ris::Net::PortDef::cPrintView + i - 1;
+      rConsoleHandle [i] = 0;
    }
 }
 
@@ -121,7 +123,7 @@ void initializePrint()
 
    for (int i = 1; i < rNumOfConsoles; i++)
    {
-      rConsoleSocket[i].configure(Ris::Net::PortDef::cPrintView + i - 1);
+      rConsoleSocket[i].configure(rConsolePort[i]);
       rConsoleHandle[i] = rCreatePrintView(i);
    }
 }
@@ -242,8 +244,7 @@ HANDLE rCreatePrintView(int aConsole)
    ZeroMemory( &pi, sizeof(pi) );
 
    char tCommandLine[200];
-   sprintf(tCommandLine,"C:\\Prime\\DevelopMine\\Dev_VS_Ris\\x64\\Debug\\PrintView.exe  %d",
-      Ris::Net::PortDef::cPrintView + aConsole - 1);
+   sprintf(tCommandLine,"C:\\Prime\\DevelopMine\\Dev_VS_Ris\\x64\\Debug\\PrintView.exe  %d",rConsolePort[aConsole]);
 
    char tConsoleTitle[50];
    sprintf(tConsoleTitle,"PRINTVIEW%d",aConsole);

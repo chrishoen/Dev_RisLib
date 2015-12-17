@@ -300,5 +300,8 @@
     <ClInclude Include="Source\risNetUdpStringSocket.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\risNetPortDef.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

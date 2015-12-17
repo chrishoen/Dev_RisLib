@@ -68,6 +68,7 @@
   <ItemGroup>
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
+    <ClInclude Include="Source\risNetPortDef.h" />
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
     <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\ris_priorities.h" />

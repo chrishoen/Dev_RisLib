@@ -2,43 +2,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "prnPrint.h"
-#include "risCmdLineConsole.h"
-#include "CmdLineExec.h"
-
-void amain_init();
-
+#include "risNetPortDef.h"
+#include "risNetUdpStringSocket.h"
 
 //******************************************************************************
 int main(int argc,char** argv)
 {
-   //--------------------------------------------------------------------
-   // Begin program
+   Ris::Net::UdpRxStringSocket tSocket;
+   tSocket.configure(Ris::Net::PortDef::cPrintView);
 
-   amain_init();
-
-   Prn::print(0,"amain***************************************************BEGIN");
-   
-   //--------------------------------------------------------------------
-   // Start user command line executive,
-   // Wait for user to exit
-
-   CmdLineExec* exec = new CmdLineExec;
-   Ris::gCmdLineConsole.execute(exec);
-   delete exec;
-
-   //--------------------------------------------------------------------
-   // End program
-
-   Prn::print(0,"amain*****************************************************END");
+   while (tSocket.doRecvString())
+   {
+      puts(tSocket.mRxString);
+   }
    return 0;
-}
-//******************************************************************************
-void amain_init()
-{
-   // Initialize print facility
-   Prn::initializePrint();
-
-   Ris::setConsoleTitle("test");
 }
 

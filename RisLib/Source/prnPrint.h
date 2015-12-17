@@ -52,7 +52,6 @@ typedef Ris::CallPointer1<char*>    RedirectCallPointer;
 // Initializes the print service task and the filter table
 
 void resetPrint              ();
-void usePrintThread          (bool                 aUsePrintThread);
 void useSettingsFileDefault  ();
 void useSettingsFileName     (char*                aSettingsFileName);
 void useSettingsFileSection  (char*                aSettingsFileSection);

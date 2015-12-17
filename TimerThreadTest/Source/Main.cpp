@@ -56,7 +56,6 @@ void amain_initialize(int argc,char** argv)
    // Initialize print facility
    Prn::resetPrint();
    Prn::useSettingsFileDefault();
-   Prn::usePrintThread (true);
    Prn::initializePrint();
 
    Prn::print(0,"ThreadTest*******************************************BEGIN");

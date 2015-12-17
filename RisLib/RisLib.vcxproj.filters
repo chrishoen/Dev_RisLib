@@ -103,9 +103,6 @@
     <ClCompile Include="Source\risTimeMarker.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\prnPrintThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risThreadsCPSpecific.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -253,9 +250,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsProcess.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\prnPrintThread.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsCPSpecific.h">

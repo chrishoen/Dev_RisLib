@@ -24,7 +24,6 @@
     <ClCompile Include="Source\ris_priorities_win.cpp" />
     <ClCompile Include="Source\prnPrint.cpp" />
     <ClCompile Include="Source\prnPrintSettings.cpp" />
-    <ClCompile Include="Source\prnPrintThread.cpp" />
     <ClCompile Include="Source\risByteContent.cpp" />
     <ClCompile Include="Source\risByteMessageParser.cpp" />
     <ClCompile Include="Source\risCmdLineCmd.cpp" />
@@ -73,7 +72,6 @@
     <ClInclude Include="Source\prnDefs.h" />
     <ClInclude Include="Source\prnPrint.h" />
     <ClInclude Include="Source\prnPrintSettings.h" />
-    <ClInclude Include="Source\prnPrintThread.h" />
     <ClInclude Include="Source\risByteContent.h" />
     <ClInclude Include="Source\risByteMessageParser.h" />
     <ClInclude Include="Source\risCallPointer.h" />

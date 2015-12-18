@@ -9,12 +9,10 @@
 #define  _PRNPRINTSETTINGS_CPP_
 #include "prnPrintSettings.h"
 
-#include "prnPrint.h"
-
 namespace Prn
 {
 
-PrintSettings*  ptrPrintSettings() {return &gSettings;}
+
 //******************************************************************************
 
 PrintSettings::PrintSettings()
@@ -23,7 +21,7 @@ PrintSettings::PrintSettings()
 }
 
 //******************************************************************************
-// Initialize varibles to defaults
+// Initialize variables to defaults
 
 void PrintSettings::reset()
 {

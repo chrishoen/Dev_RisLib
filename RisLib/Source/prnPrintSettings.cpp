@@ -227,6 +227,14 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "CommRun2",     CommRun2     );
       tryFilterString (aCmd, "CommRun3",     CommRun3     );
       tryFilterString (aCmd, "CommRun4",     CommRun4     );
+      tryFilterString (aCmd, "MsgTx1",       MsgTx1       );
+      tryFilterString (aCmd, "MsgTx2",       MsgTx2       );
+      tryFilterString (aCmd, "MsgTx3",       MsgTx3       );
+      tryFilterString (aCmd, "MsgTx4",       MsgTx4       );
+      tryFilterString (aCmd, "MsgRx1",       MsgRx1       );
+      tryFilterString (aCmd, "MsgRx2",       MsgRx2       );
+      tryFilterString (aCmd, "MsgRx3",       MsgRx3       );
+      tryFilterString (aCmd, "MsgRx4",       MsgRx4       );
       tryFilterString (aCmd, "ViewInit1",    ViewInit1    );
       tryFilterString (aCmd, "ViewInit2",    ViewInit2    );
       tryFilterString (aCmd, "ViewInit3",    ViewInit3    );

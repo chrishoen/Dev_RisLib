@@ -164,9 +164,6 @@ namespace ProtoComm
       // Create a new message based on a message type
       Ris::ByteContent* createMessage(int aMessageType);
 
-      // Clone a new message from an existing message
-      BaseMsg* cloneMessage(BaseMsg* aMsg);
-
       // Preprocess a message before it is sent
       void processBeforeSend(Ris::ByteContent* msg);
 
@@ -213,6 +210,11 @@ namespace ProtoComm
       // Message Header 
 
       Header mHeader;
+
+      //---------------------------------------------------------------------------
+      // Clone a new message from an existing message
+
+      BaseMsg* cloneMessage();
 
    };
 

@@ -254,25 +254,6 @@ namespace ProtoComm
 
    //******************************************************************************
 
-   BaseMsg* MessageParser::cloneMessage (BaseMsg* aMsg)
-   {
-      // Create a new message based on message type
-      BaseMsg* tMsg = MessageCreator::createMessage(aMsg->mMessageType);
-
-      // Byte buffer
-      Ris::ByteBuffer tBuffer(MsgDefT::cMsgBufferSize);  
-
-      // Copy message to clone to buffer
-      tBuffer.putToBuffer(aMsg);
-
-      // Copy buffer to new message
-      tBuffer.getFromBuffer(tMsg);
-
-      return tMsg;
-   }
-
-   //******************************************************************************
-
    void MessageParser::processBeforeSend(Ris::ByteContent* aMsg)
    {
       BaseMsg* tx = (BaseMsg*)aMsg;
@@ -314,6 +295,25 @@ namespace ProtoComm
 
    BaseMsg::BaseMsg ()
    {
+   }
+
+   //******************************************************************************
+
+   BaseMsg* BaseMsg::cloneMessage ()
+   {
+      // Create a new message based on message type
+      BaseMsg* tMsg = MessageCreator::createMessage(this->mMessageType);
+
+      // Byte buffer
+      Ris::ByteBuffer tBuffer(MsgDefT::cMsgBufferSize);  
+
+      // Copy message to clone to buffer
+      tBuffer.putToBuffer(this);
+
+      // Copy buffer to new message
+      tBuffer.getFromBuffer(tMsg);
+
+      return tMsg;
    }
 
 }//namespace

@@ -157,23 +157,9 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void myFunction1(char* aString)
-{
-   char* tString = aString;
-   printf("%s\n",tString);
-}
-
-void myFunction2(char& aString)
-{
-   char* tString = &aString;
-   printf("%s\n",tString);
-}
 
 void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
-   char tString[100];
-   strcpy(tString,"01234567");
-   myFunction1(tString);
-
-   myFunction2( tString[0] );
+   ProtoComm::StatusRequestMsg* tTxMsg = new ProtoComm::StatusRequestMsg;
+   gNetworkThread->sendMsg(tTxMsg->cloneMessage());
 }

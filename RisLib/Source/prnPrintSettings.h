@@ -20,9 +20,8 @@ namespace Prn
 //**********************************************************************
 //**********************************************************************
 // PrintSettings class, inherits from BaseCmdLineExec to process
-// command lines from a command line file.
-// Each application reads its own print settings from a common settings
-// file. 
+// command lines from a command line file. Each application reads its
+// own print settings from a common settings file. 
 
 class PrintSettings : public Ris::BaseCmdLineExec
 {

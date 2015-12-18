@@ -45,9 +45,7 @@ HANDLE rCreatePrintView(int aConsole);
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+// Initialize settings to defaults
 
 void resetPrint()
 {
@@ -68,6 +66,10 @@ void resetPrint()
 }
 
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Override defaults
+
 void useSettingsFileDefault()
 {
    strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
@@ -102,6 +104,7 @@ void useConsoles(int aNumOfConsoles)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Initialize
 
 void initializePrint()
 {
@@ -129,11 +132,13 @@ void initializePrint()
 }
 
 //****************************************************************************
-
+//****************************************************************************
+//****************************************************************************
+// Finalize
 void finalizePrint()
 {
    //-----------------------------------------------------
-   // Console sockets
+   // Terminate PrintView processes that were created 
 
    for (int i = 1; i < rNumOfConsoles; i++)
    {
@@ -146,44 +151,34 @@ void finalizePrint()
 }
 
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Set filter table entry
+
 void setFilter(int aFilter, bool aEnablePrint, int aConsole)
 {
    gSettings.setFilter(aFilter,aEnablePrint, aConsole);
 }   	
 
 //****************************************************************************
-bool testForPrint(int aFilter)
-{
-   // Filter table entry zero is always true
-   if (aFilter==0) return true;
-  
-   // Lookup filter table entry
-   return gSettings.mFilterTable[aFilter];
-}
-
 //****************************************************************************
+//****************************************************************************
+// Print
+
 void print(int aFilter, const char* aFormat, ...)
 {
    //-----------------------------------------------------
-   // Guard for suppressed
+   // Guard for print not enabled
+
+   // Test filter table entry
+   if (gSettings.mFilterTable[aFilter] == false) return;
 
    // Get the console index assigned to the filter
    int tConsole = gSettings.mConsoleTable[aFilter];
 
    // If suppressed and the filter is not zero and
    // the console is zero then exit
-   if (rSuppressFlag && aFilter != 0 && tConsole == 0)
-   {
-      return;
-   }
-
-   //-----------------------------------------------------
-   // If the print filter is not enabled then exit
-
-   if (!testForPrint(aFilter))
-   {
-      return;
-   }
+   if (rSuppressFlag && aFilter != 0 && tConsole == 0) return;
 
    //-----------------------------------------------------
    // Print string pointer
@@ -219,6 +214,7 @@ void print(int aFilter, const char* aFormat, ...)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Suppress
 
 void suppressPrint()
 {
@@ -238,6 +234,7 @@ void toggleSuppressPrint()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Launch a new process for a PrintView console application
 
 HANDLE rCreatePrintView(int aConsole)
 {
@@ -249,7 +246,6 @@ HANDLE rCreatePrintView(int aConsole)
    ZeroMemory( &pi, sizeof(pi) );
 
    char tCommandLine[200];
-// sprintf(tCommandLine,"C:\\Prime\\DevelopMine\\Dev_VS_Ris\\x64\\Debug\\PrintView.exe  %d",rConsolePort[aConsole]);
    sprintf(tCommandLine,"C:\\MyLib\\Bin\\PrintView.exe  %d",rConsolePort[aConsole]);
 
    char tConsoleTitle[50];
@@ -279,7 +275,7 @@ HANDLE rCreatePrintView(int aConsole)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Trick that initializes the regional variables
+// Initialize the regional variables when program is loaded
 
 class PrintResetClass
 {

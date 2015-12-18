@@ -2,83 +2,84 @@
 #define _PRNPRINT_H_
 
 /*==============================================================================
-This unit provides a function that is similar to printf which can
-be filtered. The way that it is used is that there can be many prints
-located throughout an application, with all them being called, but only
-those ones that are enabled actually printing, the ones that are
-filtered just immediately return.
-The prints are sent to a single low priority background task for
-output. The filtering uses a filter table that is set at program
-initialization or modified on the fly. 
+This unit provides a function that is similar to printf which can be filtered. 
+The way that it is used is that there can be many prints located throughout an
+application, with all them being called, but only those ones that are enabled 
+actually printing, the ones that are filtered just immediately return.
 
-When a print is executed it is passed a filter topic and subtopic.
-If the value of the filter table at the specified topic and
-subtopic is enabled then the print is executed.
+When a print is executed it is passed a filter index. If the value of the 
+filter table at the specified index is enabled then the print is executed.
 
+This unit supports multiple consoles, with the default being one console, the
+console application console, with a console index of zero. If more than one
+consoles are specified then PrintView console applications are launched and
+prints are sent to them vai udp sockets. Console indices for a specific
+filter index are stored in the filter table.
 ==============================================================================*/
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risCallPointer.h"
-#include "risThreadsQCallThread.h"
 #include "prnPrintSettings.h"
 
 namespace Prn
 {
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initializes the print facility.
+   //
+   // The Reset method is called to reset settings to deafults.
+   // The Settings methods are called to override defaults.
+   // The Initialize method does the initialization.
+   // The Finalize method shuts down any PrintView processes that were launched.
+   //
+   // aSettingsFileName is read from the default settings directory. 
+   // aSettingsFilePath is read from an absolute filepath. 
+   //
+   // aSettingsFileSection is the settings file section that each application
+   // extracts its settings from.
+   //
+   // aNumOfConsoles specifies the number of consoles to use. If it is greater
+   // than one then additional PrintView console applications are launched
+   // and prints are redirected to them via sockets.
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Initializes the print service task and the filter table
-// from an already initialized print settings global object
-// Print control initializes the settings object and then
-// calls this
+   void resetPrint              ();
+   void useSettingsFileDefault  ();
+   void useSettingsFileName     (char* aSettingsFileName);
+   void useSettingsFilePath     (char* aSettingsFilePath);
+   void useSettingsFileSection  (char* aSettingsFileSection);
+   void useConsoles             (int   aNumOfConsoles = 1);
+   void initializePrint         ();
+   void finalizePrint           ();
 
-// Initialize.
-// aSettingsFileName is the settings filename. aSection is the settings
-// file section that each application extracts its settings from. 
-// aSectionMode specifies the section mode. Each section begins with a 
-// command line, such as "Begin CmdFile Default", where "Begin" is the 
-// command ,"CmdFile" is  first argument and denotes the section and
-// "Default" is the second argument and denotes the section mode.
-//
-// Initializes the print service task and the filter table
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Suppress any prints that do not have a filter of zero.
 
-void resetPrint              ();
-void useSettingsFileDefault  ();
-void useSettingsFileName     (char* aSettingsFileName);
-void useSettingsFileSection  (char* aSettingsFileSection);
-void useConsoles             (int   aNumOfConsoles);
-void initializePrint         ();
+   void suppressPrint       ();
+   void unsuppressPrint     ();
+   void toggleSuppressPrint ();
 
-// Closes the print facility.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Filtered print, if the corresponding entry in the filter table is true
+   // then the print is executed.
 
-void  finalizePrint();
+   void print (int aFilter, const char* aFormat, ...);
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Suppress any prints that do not have a filter,subfilter of 0,0
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Set a filter in the filter table.
+   //
+   // aFilter is the index of the filter.
+   // aEnablePrint is the value stored in the table at the filter index.
+   // aConsole is the console index stored in the table at the filter index.
 
-void suppressPrint();
-void unsuppressPrint();
-void toggleSuppressPrint();
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Filtered print, if the corresponding entry in the filter table is true
-// then the print is executed.
-
-void print (int aFilter, const char* aFormat, ...);
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set a filter in the filter table.
-
-void  setFilter(int aFilter, bool aEnablePrint, int aConsole = 0);
+   void  setFilter(int aFilter, bool aEnablePrint, int aConsole = 0);
 
 }//namespace
 #endif

@@ -54,8 +54,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(Prn::ThreadRun3,"Go2 Prn::ThreadRun3");
-   Prn::print(Prn::ThreadRun4,"Go2 Prn::ThreadRun4");
+   Prn::print(Prn::ViewRun3,"Go2 Prn::ViewRun3");
+   Prn::print(Prn::ViewRun4,"Go2 Prn::ViewRun4");
 }
 
 //******************************************************************************

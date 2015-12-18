@@ -229,6 +229,14 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "CommRun2",     CommRun2     );
       tryFilterString (aCmd, "CommRun3",     CommRun3     );
       tryFilterString (aCmd, "CommRun4",     CommRun4     );
+      tryFilterString (aCmd, "ViewInit1",    ViewInit1    );
+      tryFilterString (aCmd, "ViewInit2",    ViewInit2    );
+      tryFilterString (aCmd, "ViewInit3",    ViewInit3    );
+      tryFilterString (aCmd, "ViewInit4",    ViewInit4    );
+      tryFilterString (aCmd, "ViewRun1",     ViewRun1     );
+      tryFilterString (aCmd, "ViewRun2",     ViewRun2     );
+      tryFilterString (aCmd, "ViewRun3",     ViewRun3     );
+      tryFilterString (aCmd, "ViewRun4",     ViewRun4     );
 
       // Set the stored try filter
       tryFilterSet(aCmd);

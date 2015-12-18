@@ -1,4 +1,4 @@
-start "PRINTVIEW" C:\Prime\DevelopMine\Dev_VS_Ris\x64\Debug\PrintView.exe
+start "PRINTVIEW" C:\MyLib\Bin\PrintView.exe
 
 
 

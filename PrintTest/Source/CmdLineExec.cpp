@@ -62,6 +62,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0,"Go3 ZERO");
 }
 
 //******************************************************************************

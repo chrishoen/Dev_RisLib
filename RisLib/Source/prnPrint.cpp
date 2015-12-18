@@ -62,7 +62,7 @@ void resetPrint()
 
    for (int i=0;i<cMaxConsoles;i++)
    {
-      rConsolePort   [i] = Ris::Net::PortDef::cPrintView + i - 1;
+      rConsolePort   [i] = Ris::Net::PortDef::cPrintView + i;
       rConsoleHandle [i] = 0;
    }
 }
@@ -164,8 +164,15 @@ bool testForPrint(int aFilter)
 //****************************************************************************
 void print(int aFilter, const char* aFormat, ...)
 {
-   // If suppressed and the filter is not zero then exit
-   if (rSuppressFlag && aFilter != 0)
+   //-----------------------------------------------------
+   // Guard for suppressed
+
+   // Get the console index assigned to the filter
+   int tConsole = gSettings.mConsoleTable[aFilter];
+
+   // If suppressed and the filter is not zero and
+   // the console is zero then exit
+   if (rSuppressFlag && aFilter != 0 && tConsole == 0)
    {
       return;
    }
@@ -198,8 +205,6 @@ void print(int aFilter, const char* aFormat, ...)
 
    //-----------------------------------------------------
    // Print the string
-
-   int tConsole = gSettings.mConsoleTable[aFilter];
 
    if (tConsole == 0)
    {
@@ -244,7 +249,8 @@ HANDLE rCreatePrintView(int aConsole)
    ZeroMemory( &pi, sizeof(pi) );
 
    char tCommandLine[200];
-   sprintf(tCommandLine,"C:\\Prime\\DevelopMine\\Dev_VS_Ris\\x64\\Debug\\PrintView.exe  %d",rConsolePort[aConsole]);
+// sprintf(tCommandLine,"C:\\Prime\\DevelopMine\\Dev_VS_Ris\\x64\\Debug\\PrintView.exe  %d",rConsolePort[aConsole]);
+   sprintf(tCommandLine,"C:\\MyLib\\Bin\\PrintView.exe  %d",rConsolePort[aConsole]);
 
    char tConsoleTitle[50];
    sprintf(tConsoleTitle,"PRINTVIEW%d",aConsole);

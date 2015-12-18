@@ -176,6 +176,14 @@ public:
       CommRun2,
       CommRun3,
       CommRun4,
+      ViewInit1,
+      ViewInit2,
+      ViewInit3,
+      ViewInit4,
+      ViewRun1,
+      ViewRun2,
+      ViewRun3,
+      ViewRun4,
    };
 
 

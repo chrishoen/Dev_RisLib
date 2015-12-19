@@ -116,6 +116,7 @@ namespace GreenRecord
        int mCode2;
        int mCode3;
        int mCode4;
+       Data1Record mRecord1;
 
        //***********************************************************************
        // Constructor

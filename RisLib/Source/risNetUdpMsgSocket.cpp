@@ -22,12 +22,11 @@ namespace Net
 
 UdpRxMsgSocket::UdpRxMsgSocket()
 {
-   mRxBuffer = (char*)malloc(BUFFER_SIZE);
-   mRxLength=0;
-   mRxMsgCount=0;
-   mValidFlag=false;
-
-   mMessageParser=0;
+   mRxBuffer      = (char*)malloc(MessageSocketDefT::cBufferSize);
+   mRxLength      = 0;
+   mRxMsgCount    = 0;
+   mValidFlag     = false;
+   mMessageParser = 0;
 }
 
 //******************************************************************************
@@ -42,12 +41,13 @@ UdpRxMsgSocket::~UdpRxMsgSocket()
 // configure the socket
 
 void UdpRxMsgSocket::configure(
-   Sockets::SocketAddress      aLocal,
+   char*                       aLocalIpAddr,
+   int                         aLocalIpPort,
    BaseMessageParserCreator*   aMessageParserCreator)
 {
    mRxMsgCount=0;
 
-   mLocal         = aLocal;
+   mLocal.set(aLocalIpAddr,aLocalIpPort);
    mMessageParser = aMessageParserCreator->createNew();
 
    doSocket();
@@ -56,14 +56,14 @@ void UdpRxMsgSocket::configure(
    if (mStatus==0)
    {
       Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d",
-         aLocal.mIpAddr.mString,
-         aLocal.mPort);
+         mLocal.mIpAddr.mString,
+         mLocal.mPort);
    }
    else
    {
       Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d $ %d %d",
-         aLocal.mIpAddr.mString,
-         aLocal.mPort,
+         mLocal.mIpAddr.mString,
+         mLocal.mPort,
          mStatus,
          mError);
    }
@@ -85,13 +85,13 @@ bool UdpRxMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
    if (!mValidFlag) return false;
 
    // Byte buffer, constructor takes address and size
-   ByteBuffer tBuffer(mRxBuffer,BUFFER_SIZE);  
+   ByteBuffer tBuffer(mRxBuffer,MessageSocketDefT::cBufferSize);  
    tBuffer.setCopyFrom();
 
    //-------------------------------------------------------------------------
    // Read the message into the receive buffer
    
-   doRecvFrom  (mFromAddress,mRxBuffer,mRxLength,BUFFER_SIZE);
+   doRecvFrom  (mFromAddress,mRxBuffer,mRxLength,MessageSocketDefT::cBufferSize);
 
    // Guard
    // If bad status then return false.
@@ -153,11 +153,8 @@ bool UdpRxMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
 
 UdpTxMsgSocket::UdpTxMsgSocket()
 {
-   mTxBuffer = (char*)malloc(BUFFER_SIZE);
-   mTxLength=0;
-   mTxMsgCount=0;
+   mTxCount=0;
    mValidFlag=false;
-
    mMessageParser=0;
 }
 
@@ -166,19 +163,19 @@ UdpTxMsgSocket::UdpTxMsgSocket()
 UdpTxMsgSocket::~UdpTxMsgSocket()
 {
    if (mMessageParser) delete mMessageParser;
-   free(mTxBuffer);
 }
 
 //******************************************************************************
 // Configure the socket. Use with the next doSendMsg.
 
 void UdpTxMsgSocket::configure(
-   Sockets::SocketAddress     aRemote,
+   char*                      aRemoteIpAddr,
+   int                        aRemoteIpPort,
    BaseMessageParserCreator*  aMessageParserCreator)
 {
-   mTxMsgCount=0;
+   mTxCount=0;
 
-   mRemote        = aRemote;
+   mRemote.set(aRemoteIpAddr,aRemoteIpPort);
    mMessageParser = aMessageParserCreator->createNew();
 
    doSocket();
@@ -186,14 +183,14 @@ void UdpTxMsgSocket::configure(
    if (mStatus==0)
    {
       Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d",
-         aRemote.mIpAddr.mString,
-         aRemote.mPort);
+         mRemote.mIpAddr.mString,
+         mRemote.mPort);
    }
    else
    {
       Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d $ %d %d",
-         aRemote.mIpAddr.mString,
-         aRemote.mPort,
+         mRemote.mIpAddr.mString,
+         mRemote.mPort,
          mStatus,
          mError);
    }
@@ -214,8 +211,8 @@ bool UdpTxMsgSocket::doSendMsg(
    // Process message before send
    mMessageParser->processBeforeSend(aTxMsg);
 
-   // Create byte buffer, constructor takes address and size
-   ByteBuffer tBuffer(mTxBuffer,BUFFER_SIZE);
+   // Create byte buffer, constructor takes size
+   ByteBuffer tBuffer(MessageSocketDefT::cBufferSize);
 
    // Copy transmit message to buffer
    tBuffer.putToBuffer(aTxMsg);
@@ -227,11 +224,10 @@ bool UdpTxMsgSocket::doSendMsg(
    mTxMutex.get();
 
    // Transmit the buffer
-   int length=tBuffer.getLength();
-   doSendTo(mRemote,tBuffer.getBaseAddress(),length);
+   int tLength=tBuffer.getLength();
+   doSendTo(mRemote,tBuffer.getBaseAddress(),tLength);
 
-   mTxLength=length;
-   mTxMsgCount++;
+   mTxCount++;
 
    // Mutex
    mTxMutex.put();
@@ -245,7 +241,7 @@ bool UdpTxMsgSocket::doSendMsg(
 void UdpTxMsgSocket::configure(
    BaseMessageParser*     aMessageParser)
 {
-   mTxMsgCount=0;
+   mTxCount=0;
 
    mMessageParser = aMessageParser;
 
@@ -270,24 +266,23 @@ bool UdpTxMsgSocket::doSendMsg(
    // Guard
    if (!mValidFlag) return false;
 
-   // mutex
-   mTxMutex.get();
+   // Byte buffer, constructor takes size
+   ByteBuffer tBuffer(MessageSocketDefT::cBufferSize);  
 
-   // byte buffer, constructor takes address and size
-   ByteBuffer tBuffer(mTxBuffer,BUFFER_SIZE);  
-
-   // copy transmit message to buffer
+   // Copy transmit message to buffer
    tBuffer.putToBuffer(aTxMsg);
 
-   // delete the message
+   // Delete the message
    delete aTxMsg;
 
-   // transmit the buffer
-   int length=tBuffer.getLength();
-   doSendTo(aRemote,tBuffer.getBaseAddress(),length);
+   // Mutex
+   mTxMutex.get();
 
-   mTxLength=length;
-   mTxMsgCount++;
+   // Transmit the buffer
+   int tLength=tBuffer.getLength();
+   doSendTo(aRemote,tBuffer.getBaseAddress(),tLength);
+
+   mTxCount++;
 
    // mutex
    mTxMutex.put();

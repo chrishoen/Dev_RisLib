@@ -22,120 +22,132 @@ namespace Ris
 {
 namespace Net
 {
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Message Socket Definitions
 
-//******************************************************************************
-// Udp receive message socket.
-// Messages are based on the ByteContent message encapsulation scheme.
+   class MessageSocketDefT
+   {
+   public:
+      //************************************************************************
+      // Use this for a buffer size for these sockets
 
-class  UdpRxMsgSocket : public Sockets::BaseUdpSocket
-{
-public:
-   UdpRxMsgSocket(); 
-  ~UdpRxMsgSocket(); 
+      static const int cBufferSize = 20000;
 
-   //--------------------------------------------------------------
-   // Socket:
+   };
 
-   // These do socket and bind calls
-   void configure(
-      Sockets::SocketAddress    aLocal,
-      BaseMessageParserCreator* aMessageParserCreator);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Udp receive message socket.
+   // Messages are based on the ByteContent message encapsulation scheme.
 
-   // This receives a message from the socket via blocking recvfrom calls.
-   // It returns true if successful.
-   // The recvfrom address is stored in mFromAddress.
-   bool doRecvMsg (ByteContent*& aRxMsg);
+   class  UdpRxMsgSocket : public Sockets::BaseUdpSocket
+   {
+   public:
+      UdpRxMsgSocket(); 
+     ~UdpRxMsgSocket(); 
 
-   Sockets::SocketAddress mFromAddress;
+     //------------------------------------------------------------------------
+     // Socket:
 
-   // This is a message parser that is used to get details about 
-   // a message from a message header that is contained in a
-   // byte buffer. It allows the doRecvMsg method to receive and extract a
-   // message from a byte buffer without the having the message code
-   // visible to it.
-   BaseMessageParser* mMessageParser;
+      // These do socket and bind calls
+      void configure(
+         char*                     aLocalIpAddr,
+         int                       aLocalIpPort,
+         BaseMessageParserCreator* aMessageParserCreator);
 
-   // Buffers
-   enum    {BUFFER_SIZE = 20000};
-   char*                mRxBuffer;
-   int                  mRxLength;
+      // This receives a message from the socket via blocking recvfrom calls.
+      // It returns true if successful.
+      // The recvfrom address is stored in mFromAddress.
+      bool doRecvMsg (ByteContent*& aRxMsg);
 
-   //--------------------------------------------------------------
-   // State:
+      Sockets::SocketAddress mFromAddress;
 
-   // General purpose valid flag
-   bool mValidFlag;
+      // This is a message parser that is used to get details about 
+      // a message from a message header that is contained in a
+      // byte buffer. It allows the doRecvMsg method to receive and extract a
+      // message from a byte buffer without the having the message code
+      // visible to it.
+      BaseMessageParser* mMessageParser;
 
-   // Metrics
-   int mRxMsgCount;
-};
+      // Buffer
+      char*  mRxBuffer;
+      int    mRxLength;
 
-//******************************************************************************
-// Udp transmit message socket.
-// Messages are based on the ByteContent message encapsulation scheme.
+      //------------------------------------------------------------------------
+      // State:
 
-class  UdpTxMsgSocket : public Sockets::BaseUdpSocket
-{
-public:
-   UdpTxMsgSocket(); 
-  ~UdpTxMsgSocket(); 
+      // General purpose valid flag
+      bool mValidFlag;
 
-   //--------------------------------------------------------------
-   // Socket, these two should be used together
+      // Metrics
+      int mRxMsgCount;
+   };
 
-   // These create and configure the socket
-   void configure(
-      Sockets::SocketAddress      aRemote,
-      BaseMessageParserCreator*   aMessageParserCreator);
+   //***************************************************************************
+   // Udp transmit message socket.
+   // Messages are based on the ByteContent message encapsulation scheme.
 
-   // This sends a message over the socket via a blocking send call.
-   // It returns true if successful.
-   // It is protected by the transmit mutex.
-   bool doSendMsg(
-      ByteContent*  aTxMsg);
+   class  UdpTxMsgSocket : public Sockets::BaseUdpSocket
+   {
+   public:
+      UdpTxMsgSocket(); 
+     ~UdpTxMsgSocket(); 
 
-   //--------------------------------------------------------------
-   // Socket, these two should be used together
+     //------------------------------------------------------------------------
+     // Socket, these two should be used together
 
-   void configure(
-      BaseMessageParser* aMessageParser);
+      // These create and configure the socket
+      void configure(
+         char*                       aRemoteIpAddr,
+         int                         aRemoteIpPort,
+         BaseMessageParserCreator*   aMessageParserCreator);
 
-   // This sends a message over the socket via a blocking sendto call.
-   // It returns true if successful.
-   // It is protected by the transmit mutex.
-   bool doSendMsg(
-      Sockets::SocketAddress aRemote,
-      ByteContent*           aTxMsg);
+      // This sends a message over the socket via a blocking send call.
+      // It returns true if successful.
+      // It is protected by the transmit mutex.
+      bool doSendMsg(
+         ByteContent*  aTxMsg);
 
-   //--------------------------------------------------------------
+      //------------------------------------------------------------------------
+      // Socket, these two should be used together
 
-   // This is a message parser that is used to get details about 
-   // a message from a message header that is contained in a
-   // byte buffer. It allows the doRecvMsg method to receive and extract a
-   // message from a byte buffer without the having the message code
-   // visible to it.
-   BaseMessageParser* mMessageParser;
+      void configure(
+         BaseMessageParser* aMessageParser);
 
-   // Buffers
-   enum    {BUFFER_SIZE = 20000};
-   char*                mTxBuffer;
-   int                  mTxLength;
+      // This sends a message over the socket via a blocking sendto call.
+      // It returns true if successful.
+      // It is protected by the transmit mutex.
 
-   //--------------------------------------------------------------
-   // Mutex:
+      bool doSendMsg(
+         Sockets::SocketAddress aRemote,
+         ByteContent*           aTxMsg);
 
-   // Transmit mutex is used by doSendMsg for mutual exclusion.
-   Threads::MutexSemaphore  mTxMutex;
+      //------------------------------------------------------------------------
+      // This is a message parser that is used to get details about 
+      // a message from a message header that is contained in a
+      // byte buffer. It allows the doRecvMsg method to receive and extract a
+      // message from a byte buffer without the having the message code
+      // visible to it.
 
-   //--------------------------------------------------------------
-   // State:
+      BaseMessageParser* mMessageParser;
 
-   // General purpose valid flag
-   bool mValidFlag;
+      //------------------------------------------------------------------------
+      // Transmit mutex is used by doSendMsg for mutual exclusion.
 
-   // Metrics
-   int mTxMsgCount;
-};
+      Threads::MutexSemaphore  mTxMutex;
+
+      //------------------------------------------------------------------------
+      // State:
+
+      // General purpose valid flag
+      bool mValidFlag;
+
+      // Metrics
+      int mTxCount;
+   };
 }//namespace
 }//namespace
 #endif

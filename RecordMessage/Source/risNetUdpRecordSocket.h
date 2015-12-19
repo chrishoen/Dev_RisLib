@@ -25,7 +25,7 @@ namespace Net
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Message Definitions
+   // Record Socket Definitions
 
    class RecordSocketDefT
    {
@@ -36,8 +36,8 @@ namespace Net
       static const int cMsgBufferSize = 20000;
 
    };
-   
-    //***************************************************************************
+
+   //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // This encapsualtes the message header.
@@ -133,33 +133,35 @@ namespace Net
       UdpRxRecordSocket(); 
      ~UdpRxRecordSocket(); 
 
-      //--------------------------------------------------------------
-      // Socket:
+     //------------------------------------------------------------------------
+     // Socket:
 
       // These do socket and bind calls
       void configure(
-         Sockets::SocketAddress    aLocal,
-         BaseRecordCopier* aRecordCopierCreator);
+         char*             aLocalIpAddr,
+         int               aLocalIpPort,
+         BaseRecordCopier* aRecordCopier);
 
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
       // The recvfrom address is stored in mFromAddress.
-      bool doRecvMsg (ByteRecord*& aRxMsg);
+
+      bool doRecvMsg (ByteRecord*& aRecord);
 
       Sockets::SocketAddress mFromAddress;
 
-      // This is a message parser that is used to get details about 
-      // a message from a message header that is contained in a
-      // byte buffer. It allows the doRecvMsg method to receive and extract a
-      // message from a byte buffer without the having the message code
-      // visible to it.
+      // This is a record copier that is used to copy a record from a
+      // byte buffer.It allows the doRecvMsg method to receive and
+      // extract a record from a byte buffer without the having the
+      // record type visible to it.
+
       BaseRecordCopier* mRecordCopier;
 
-      // Buffers
-      char*                mRxBuffer;
-      int                  mRxLength;
+      // Receive buffer
+      char* mRxBuffer;
+      int   mRxLength;
 
-      //--------------------------------------------------------------
+      //------------------------------------------------------------------------
       // State:
 
       // General purpose valid flag
@@ -169,9 +171,9 @@ namespace Net
       int mRxCount;
    };
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Udp transmit message socket.
    // Messages are based on the ByteContent message encapsulation scheme.
 
@@ -179,42 +181,35 @@ namespace Net
    {
    public:
       UdpTxRecordSocket(); 
-     ~UdpTxRecordSocket(); 
 
-      //--------------------------------------------------------------
-      // Socket, these two should be used together
+     //------------------------------------------------------------------------
+     // Socket, these two should be used together
 
       // These create and configure the socket
       void configure(
-         Sockets::SocketAddress      aRemote,
-         BaseRecordCopier*   aRecordCopier);
+         char*             aRemoteIpAddr,
+         int               aRemoteIpPort,
+         BaseRecordCopier* aRecordCopier);
 
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
       // It is protected by the transmit mutex.
+
       bool doSendMsg(
          ByteRecord*  aTxMsg);
 
-      //--------------------------------------------------------------
+      //------------------------------------------------------------------------
+      // This is a record copier that is used to copy a record to a byte
+      // buffer. It allows the doSendMsg method to send a record to a byte 
+      // buffer without the having the record code visible to it.
 
-      // This is a message parser that is used to get details about 
-      // a message from a message header that is contained in a
-      // byte buffer. It allows the doRecvMsg method to receive and extract a
-      // message from a byte buffer without the having the message code
-      // visible to it.
       BaseRecordCopier* mRecordCopier;
 
-      // Buffers
-      char*                mTxBuffer;
-      int                  mTxLength;
-
-      //--------------------------------------------------------------
-      // Mutex:
-
+      //------------------------------------------------------------------------
       // Transmit mutex is used by doSendMsg for mutual exclusion.
       Threads::MutexSemaphore  mTxMutex;
 
-      //--------------------------------------------------------------
+      //------------------------------------------------------------------------
       // State:
 
       // General purpose valid flag

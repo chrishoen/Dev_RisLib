@@ -22,20 +22,22 @@ namespace Net
 UdpRxThread::UdpRxThread()
 {
    mThreadPriority = get_default_udp_rx_thread_priority();
+   mLocalIpAddress[0]=0;
+   mLocalIpPort=0;
 }
 
 //******************************************************************************
 // Configure:
 
 void UdpRxThread::configure(
-   char*                      aLocalIpAddr,
+   char*                      aLocalIpAddress,
    int                        aLocalIpPort,
    BaseMessageParserCreator*  aMessageParserCreator,
    RxMsgQCall*                aRxMsgQCall)
 {
-   Prn::print(Prn::SocketInit1, "UdpRxThread::configure");
+   strcpy(mLocalIpAddress,aLocalIpAddress);
+   mLocalIpPort = aLocalIpPort;
 
-   mRxSocketAddress.set(aLocalIpAddr,aLocalIpPort);
    mMessageParserCreator = aMessageParserCreator;
 
    mRxMsgQCall = *aRxMsgQCall;
@@ -49,7 +51,10 @@ void UdpRxThread::threadInitFunction()
 {
    Prn::print(Prn::SocketInit1, "UdpRxThread::threadInitFunction BEGIN");
 
-   mRxSocket.configure(mRxSocketAddress,mMessageParserCreator);
+   mRxSocket.configure(
+      mLocalIpAddress,
+      mLocalIpPort,
+      mMessageParserCreator);
 
    Prn::print(Prn::SocketInit1, "UdpRxThread::threadInitFunction END");
 }

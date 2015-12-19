@@ -18,6 +18,7 @@ namespace Net
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+
    RecordMsgHeader::RecordMsgHeader()
    {
       mSyncWord1         = 0x11111111;
@@ -212,37 +213,37 @@ namespace Net
       }
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
 
    UdpRxRecordSocket::UdpRxRecordSocket()
    {
       mRxBuffer = (char*)malloc(RecordSocketDefT::cMsgBufferSize);
-      mRxLength=0;
-      mRxCount=0;
-      mValidFlag=false;
-
-      mRecordCopier=0;
+      mRxLength     = 0;
+      mRxCount      = 0;
+      mValidFlag    = false;
+      mRecordCopier = 0;
    }
 
-   //******************************************************************************
+   //***************************************************************************
 
    UdpRxRecordSocket::~UdpRxRecordSocket()
    {
       free(mRxBuffer);
    }
 
-   //******************************************************************************
+   //***************************************************************************
    // Configure the socket
 
    void UdpRxRecordSocket::configure(
-      Sockets::SocketAddress aLocal,
-      BaseRecordCopier*      aRecordCopier)
+      char*             aLocalIpAddr,
+      int               aLocalIpPort,
+      BaseRecordCopier* aRecordCopier)
    {
       mRxCount=0;
 
-      mLocal         = aLocal;
+      mLocal.set(aLocalIpAddr,aLocalIpPort);
       mRecordCopier = aRecordCopier;
 
       doSocket();
@@ -251,14 +252,14 @@ namespace Net
       if (mStatus==0)
       {
          Prn::print(Prn::SocketInit2, "UdpRxRecordSocket     $ %16s : %d",
-            aLocal.mIpAddr.mString,
-            aLocal.mPort);
+            mLocal.mIpAddr.mString,
+            mLocal.mPort);
       }
       else
       {
          Prn::print(Prn::SocketInit2, "UdpRxRecordSocket     $ %16s : %d $ %d %d",
-            aLocal.mIpAddr.mString,
-            aLocal.mPort,
+            mLocal.mIpAddr.mString,
+            mLocal.mPort,
             mStatus,
             mError);
       }
@@ -266,13 +267,13 @@ namespace Net
       mValidFlag=mStatus==0;
    }
 
-   //******************************************************************************
+   //***************************************************************************
    // This receives a datagram from the socket into a byte buffer and then
    // extracts a message from the byte buffer
 
    bool UdpRxRecordSocket::doRecvMsg (ByteRecord*& aRecord)
    {
-      //-------------------------------------------------------------------------
+      //------------------------------------------------------------------------
       // Initialize
       aRecord=0;
 
@@ -283,7 +284,7 @@ namespace Net
       ByteBuffer tBuffer(mRxBuffer,RecordSocketDefT::cMsgBufferSize);  
       tBuffer.setCopyFrom();
 
-      //-------------------------------------------------------------------------
+      //------------------------------------------------------------------------
       // Read the message into the receive buffer
    
       doRecvFrom  (mFromAddress,mRxBuffer,mRxLength,RecordSocketDefT::cMsgBufferSize);
@@ -349,37 +350,28 @@ namespace Net
       return true;
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
 
    UdpTxRecordSocket::UdpTxRecordSocket()
    {
-      mTxBuffer = (char*)malloc(RecordSocketDefT::cMsgBufferSize);
-      mTxLength=0;
       mTxCount=0;
       mValidFlag=false;
-
       mRecordCopier=0;
    }
 
-   //******************************************************************************
-
-   UdpTxRecordSocket::~UdpTxRecordSocket()
-   {
-      free(mTxBuffer);
-   }
-
-   //******************************************************************************
+   //***************************************************************************
    // Configure the socket. Use with the next doSendMsg.
 
    void UdpTxRecordSocket::configure(
-      Sockets::SocketAddress     aRemote,
-      BaseRecordCopier*          aRecordCopier)
+      char*             aRemoteIpAddr,
+      int               aRemoteIpPort,
+      BaseRecordCopier* aRecordCopier)
    {
       mTxCount=0;
 
-      mRemote       = aRemote;
+      mRemote.set(aRemoteIpAddr,aRemoteIpPort);
       mRecordCopier = aRecordCopier;
 
       doSocket();
@@ -387,14 +379,14 @@ namespace Net
       if (mStatus==0)
       {
          Prn::print(Prn::SocketInit2, "UdpTxRecordSocket     $ %16s : %d",
-            aRemote.mIpAddr.mString,
-            aRemote.mPort);
+            mRemote.mIpAddr.mString,
+            mRemote.mPort);
       }
       else
       {
          Prn::print(Prn::SocketInit2, "UdpTxRecordSocket     $ %16s : %d $ %d %d",
-            aRemote.mIpAddr.mString,
-            aRemote.mPort,
+            mRemote.mIpAddr.mString,
+            mRemote.mPort,
             mStatus,
             mError);
       }
@@ -402,7 +394,7 @@ namespace Net
       mValidFlag=mStatus==0;
    }
 
-   //******************************************************************************
+   //***************************************************************************
    // This copies a message into a byte buffer and then sends the byte buffer 
    // out the socket. Use with the previous configure.
 
@@ -411,8 +403,8 @@ namespace Net
       // Guard
       if (!mValidFlag) return false;
 
-      // Create byte buffer, constructor takes address and size
-      ByteBuffer tBuffer(mTxBuffer,RecordSocketDefT::cMsgBufferSize);
+      // Create byte buffer, constructor takes size
+      ByteBuffer tBuffer(RecordSocketDefT::cMsgBufferSize);
 
       //------------------------------------------------------------------------
       // Instance of a header,set members
@@ -443,10 +435,9 @@ namespace Net
       mTxMutex.get();
 
       // Transmit the buffer
-      int tLength = tBuffer.getLength();
+      int tLength=tBuffer.getLength();
       doSendTo(mRemote,tBuffer.getBaseAddress(),tLength);
 
-      mTxLength=tLength;
       mTxCount++;
 
       // Mutex

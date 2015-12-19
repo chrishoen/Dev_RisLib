@@ -49,7 +49,7 @@ NetworkThread::~NetworkThread()
 }
 
 //******************************************************************************
-// This sets configuration members
+// This configures members
 
 void NetworkThread::configure()
 {
@@ -57,31 +57,25 @@ void NetworkThread::configure()
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
+
    mMessageParserCreator.configure(gSettings.mMyAppNumber);
 
    //---------------------------------------------------------------------------
    // Configure receive socket thread
 
    mUdpRxThread->configure(
-      "127.0.0.1",
+      gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       &mMessageParserCreator,
       &mRxMsgQCall);
 
-
    //---------------------------------------------------------------------------
    // Configure transmit socket
 
-   Ris::Sockets::SocketAddress tSocketAddress;
-
-   tSocketAddress.set(
-      "127.0.0.1",
-      gSettings.mOtherUdpPort);
-
    mTxSocket.configure(
-      tSocketAddress,
+      gSettings.mOtherUdpIPAddress,
+      gSettings.mOtherUdpPort,
       &mMessageParserCreator);
-
 }
 
 //******************************************************************************
@@ -187,9 +181,6 @@ void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
    aRxMsg->show();
 
    delete aRxMsg;
-
-
-
 }
 
 //******************************************************************************

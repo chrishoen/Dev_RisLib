@@ -85,7 +85,7 @@ public:
    typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
 
    void configure(
-      char*                           aLocalIpAddr,
+      char*                           aLocalIpAddress,
       int                             aLocalIpPort,
       Ris::BaseMessageParserCreator*  aMessageParserCreator,
       RxMsgQCall*                     aRxMsgQCall);
@@ -108,11 +108,12 @@ public:
    //--------------------------------------------------------------
    // Sockets:
 
+   // Socket address that socket instance connects to
+   char  mLocalIpAddress[40];
+   int   mLocalIpPort;
+
    // Socket instance
    UdpRxMsgSocket mRxSocket;
-
-   // Socket address that socket instance connects to
-   Sockets::SocketAddress mRxSocketAddress;
 
    // Message parser creator, this is used by the receive socket to
    // create an instance of a message parser

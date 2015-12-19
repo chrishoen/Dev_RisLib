@@ -230,7 +230,6 @@ namespace Net
 
    UdpRxRecordSocket::~UdpRxRecordSocket()
    {
-      if (mRecordCopier) delete mRecordCopier;
       free(mRxBuffer);
    }
 
@@ -332,10 +331,10 @@ namespace Net
       // object and return it.
 
       // Create a record based on the record type
-      aRecord = mRecordCopier->mCreateRecord(tHeader.mMessageIdentifier);
+      aRecord = mRecordCopier->createRecord(tHeader.mMessageIdentifier);
 
       // Copy from the buffer into the record
-      mRecordCopier->mCopyToFrom(&tBuffer, aRecord);
+      mRecordCopier->copyToFrom(&tBuffer, aRecord);
 
       // Test for errors and return.
       // If the pointer is zero then message is bad
@@ -368,7 +367,6 @@ namespace Net
 
    UdpTxRecordSocket::~UdpTxRecordSocket()
    {
-      if (mRecordCopier) delete mRecordCopier;
       free(mTxBuffer);
    }
 
@@ -430,7 +428,7 @@ namespace Net
       tHeader.headerCopyToFrom(&tBuffer,aRecord);
 
       // Copy record to buffer
-      mRecordCopier->mCopyToFrom(&tBuffer,aRecord);
+      mRecordCopier->copyToFrom(&tBuffer,aRecord);
       
       // ReCopy header to buffer
       tHeader.headerReCopyToFrom(&tBuffer,aRecord);

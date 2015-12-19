@@ -38,18 +38,19 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
+   RecordCopier tCopier;
 
    TestRecord* tTxRecord = new TestRecord;
    TestRecord* tRxRecord = new TestRecord;
    Helper::initialize(tTxRecord);
 
    tBuffer.setCopyTo();
-   RecordCopier::copyToFrom(&tBuffer,tTxRecord);
+   tCopier.copyToFrom(&tBuffer,tTxRecord);
    printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
    tBuffer.rewind();
    tBuffer.setCopyFrom();
-   RecordCopier::copyToFrom(&tBuffer,tRxRecord);
+   tCopier.copyToFrom(&tBuffer,tRxRecord);
    printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
    Helper::show(tRxRecord);
@@ -63,17 +64,18 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
+   RecordCopier tCopier;
 
    Data2Record* tTxRecord = new Data2Record;
    Data2Record* tRxRecord = new Data2Record;
    Helper::initialize(tTxRecord);
 
    tBuffer.setCopyTo();
-   RecordCopier::copyToFrom(&tBuffer,tTxRecord);
+   tCopier.copyToFrom(&tBuffer,tTxRecord);
 
    tBuffer.rewind();
    tBuffer.setCopyFrom();
-   RecordCopier::copyToFrom(&tBuffer,tRxRecord);
+   tCopier.copyToFrom(&tBuffer,tRxRecord);
    Helper::show(tRxRecord);
 
    delete tTxRecord;

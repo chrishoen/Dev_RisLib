@@ -25,12 +25,12 @@ public:
    //***********************************************************************
    // This creates a new record, based on a record type
 
-   Ris::ByteRecord* (*mCreateRecord)(int aRecordTYpe);
+   virtual Ris::ByteRecord* createRecord (int aRecordTYpe)=0;
 
    //***********************************************************************
    // This copies byte buffers to/from records
 
-   void (*mCopyToFrom)(Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aRecord);
+   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aRecord)=0;
 };
 
 }//namespace

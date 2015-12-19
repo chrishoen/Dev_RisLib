@@ -124,25 +124,23 @@ namespace GreenRecord
     {
     public:
 
-       RecordCopier();
-
        //***********************************************************************
        // This creates a new record, based on a record type
 
-       static Ris::ByteRecord* createRecord(int aRecordType);
+       Ris::ByteRecord* createRecord(int aRecordType);
 
        //***********************************************************************
        // This copies byte buffers to/from records
 
-       static void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aRecord);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aRecord);
 
        //***********************************************************************
        // These copy byte buffers to/from records
 
-       static void copyToFrom (Ris::ByteBuffer* aBuffer, TestRecord*   aRecord);
-       static void copyToFrom (Ris::ByteBuffer* aBuffer, StatusRecord* aRecord);
-       static void copyToFrom (Ris::ByteBuffer* aBuffer, Data1Record*  aRecord);
-       static void copyToFrom (Ris::ByteBuffer* aBuffer, Data2Record*  aRecord);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, TestRecord*   aRecord);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, StatusRecord* aRecord);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Data1Record*  aRecord);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Data2Record*  aRecord);
 
     };
 

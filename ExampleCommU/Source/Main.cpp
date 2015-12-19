@@ -1,12 +1,16 @@
 #include <stdlib.h>
-#include <stdio.h>
-
 #include "prnPrint.h"
+
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-void amain_init();
+#include "procoSettings.h"
+#include "procoDefs.h"
+#include "procoNetworkThread.h"
 
+#include "MainInit.h"
+
+using namespace ProtoComm;
 
 //******************************************************************************
 int main(int argc,char** argv)
@@ -14,10 +18,15 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Begin program
 
-   amain_init();
+   main_initialize(argc,argv);
 
-   Prn::print(0,"amain***************************************************BEGIN");
-   
+   //--------------------------------------------------------------------
+   // Launch threads
+
+   gNetworkThread = new NetworkThread;
+   gNetworkThread->configure();
+   gNetworkThread->launchThread();
+
    //--------------------------------------------------------------------
    // Start user command line executive,
    // Wait for user to exit
@@ -29,15 +38,10 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // End program
 
-   Prn::print(0,"amain*****************************************************END");
+   gNetworkThread->shutdownThread();
+   delete gNetworkThread;
+
+   main_finalize();
+
    return 0;
 }
-//******************************************************************************
-void amain_init()
-{
-   // Initialize print facility
-   Prn::initializePrint();
-
-   Ris::setConsoleTitle("test");
-}
-

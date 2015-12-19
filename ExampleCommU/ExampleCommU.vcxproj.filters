@@ -21,6 +21,18 @@
     <ClCompile Include="Source\risNetUdpRecordSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\examcoSettings.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\examcoDefs.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\examcoNetworkThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainInit.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -39,6 +51,18 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetUdpRecordSocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\examcoSettings.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\examcoDefs.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\examcoNetworkThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

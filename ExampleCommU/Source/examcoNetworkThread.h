@@ -1,8 +1,5 @@
-#ifndef _PROCONETWORKTHREAD_H_
-#define _PROCONETWORKTHREAD_H_
-
-/*==============================================================================
-==============================================================================*/
+#ifndef _EXAMCONETWORKTHREAD_H_
+#define _EXAMCONETWORKTHREAD_H_
 
 //******************************************************************************
 //******************************************************************************
@@ -10,10 +7,10 @@
 #include "risContainers.h"
 #include "risTimeMarker.h"
 #include "risNetUdpRxThread.h"
-#include "risNetUdpMsgSocket.h"
+#include "risNetUdpRecordSocket.h"
 #include "risThreadsQCallThread.h"
 
-#include "procoMsg.h"
+#include "examcoRecord.h"
 
 namespace ProtoComm
 {
@@ -94,7 +91,7 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _PROCONETWORKTHREAD_CPP_
+#ifdef _EXAMCONETWORKTHREAD_CPP_
          NetworkThread* gNetworkThread;
 #else
 extern   NetworkThread* gNetworkThread;

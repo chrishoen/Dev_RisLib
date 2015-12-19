@@ -6,10 +6,10 @@
 //******************************************************************************
 #include "risSockets.h"
 #include "prnPrint.h"
-#include "procoSettings.h"
+#include "examcoSettings.h"
 
-#define  _PROCONETWORKTHREAD_CPP_
-#include "procoNetworkThread.h"
+#define  _EXAMCONETWORKTHREAD_CPP_
+#include "examcoNetworkThread.h"
 
 
 namespace ProtoComm

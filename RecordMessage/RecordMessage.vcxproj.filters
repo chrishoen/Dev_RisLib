@@ -32,5 +32,6 @@
     <ClInclude Include="Source\greenHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\risByteRecordCopier.h" />
   </ItemGroup>
 </Project>

@@ -184,6 +184,7 @@
     <ClInclude Include="Source\greenHelper.h" />
     <ClInclude Include="Source\greenRecord.h" />
     <ClInclude Include="Source\risByteRecord.h" />
+    <ClInclude Include="Source\risByteRecordCopier.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

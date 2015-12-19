@@ -3,6 +3,7 @@
 
 #include "risByteBuffer.h"
 #include "risByteRecord.h"
+#include "risByteRecordCopier.h"
 
 namespace GreenRecord
 {
@@ -119,9 +120,11 @@ namespace GreenRecord
     //***************************************************************************
     //***************************************************************************
 
-    class RecordCopier
+    class RecordCopier : public Ris::BaseRecordCopier
     {
     public:
+
+       RecordCopier();
 
        //***********************************************************************
        // This creates a new record, based on a record type

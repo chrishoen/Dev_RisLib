@@ -107,8 +107,8 @@ namespace Net
       // which they transfer into and out of the headers.
       //------------------------------------------------------------------------
 
-      void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteContent* aParent);
-      void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteContent* aParent);
+      void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aParent);
+      void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aParent);
 
       //------------------------------------------------------------------------
       // These are set by headerCopyToFrom and used by headerReCopyToFrom,
@@ -165,7 +165,7 @@ namespace Net
       bool mValidFlag;
 
       // Metrics
-      int mRxMsgCount;
+      int mRxCount;
    };
 
    //******************************************************************************
@@ -220,7 +220,7 @@ namespace Net
       bool mValidFlag;
 
       // Metrics
-      int mTxMsgCount;
+      int mTxCount;
    };
 
 }//namespace

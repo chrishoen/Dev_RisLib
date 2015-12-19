@@ -111,7 +111,7 @@ namespace Net
    // which they transfer into and out of the headers.
    //---------------------------------------------------------------------------
 
-   void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteContent* aParent)
+   void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteRecord* aParent)
    {
       //------------------------------------------------------------------------
       // Instances of this class are members of parent message classes.
@@ -167,7 +167,7 @@ namespace Net
          // Copy the buffer content into the header object.
          copyToFrom(aBuffer);
          // Set the message content type.
-         aParent->mMessageType = mMessageIdentifier;
+         aParent->mRecordType = mMessageIdentifier;
       }
    }
 
@@ -175,7 +175,7 @@ namespace Net
    //***************************************************************************
    //***************************************************************************
 
-   void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteContent* aParent)
+   void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteRecord* aParent)
    {
       // If this is a put operation then this actually copies the header into
       // the buffer.
@@ -190,7 +190,7 @@ namespace Net
          int tFinalLength   = aBuffer->getLength();
 
          // Get message parameters from parent
-         mMessageIdentifier = aParent->mMessageType;
+         mMessageIdentifier = aParent->mRecordType;
          mMessageLength     = aBuffer->getLength();
 
          // Restore buffer parameters
@@ -220,7 +220,7 @@ namespace Net
    {
       mRxBuffer = (char*)malloc(RecordSocketDefT::cMsgBufferSize);
       mRxLength=0;
-      mRxMsgCount=0;
+      mRxCount=0;
       mValidFlag=false;
 
       mRecordCopier=0;
@@ -241,7 +241,7 @@ namespace Net
       Sockets::SocketAddress aLocal,
       BaseRecordCopier*      aRecordCopier)
    {
-      mRxMsgCount=0;
+      mRxCount=0;
 
       mLocal         = aLocal;
       mRecordCopier = aRecordCopier;
@@ -271,11 +271,11 @@ namespace Net
    // This receives a datagram from the socket into a byte buffer and then
    // extracts a message from the byte buffer
 
-   bool UdpRxRecordSocket::doRecvMsg (ByteRecord*& aRxMsg)
+   bool UdpRxRecordSocket::doRecvMsg (ByteRecord*& aRecord)
    {
       //-------------------------------------------------------------------------
       // Initialize
-      aRxMsg=0;
+      aRecord=0;
 
       // Guard
       if (!mValidFlag) return false;
@@ -330,20 +330,23 @@ namespace Net
       // At this point the buffer contains the complete message.
       // Extract the message from the byte buffer into a new message
       // object and return it.
-#if 0
-      tBuffer.rewind();
-      aRxMsg = mRecordCopier->makeFromByteBuffer(&tBuffer);
+
+      // Create a record based on the record type
+      aRecord = mRecordCopier->mCreateRecord(tHeader.mMessageIdentifier);
+
+      // Copy from the buffer into the record
+      mRecordCopier->mCopyToFrom(&tBuffer, aRecord);
 
       // Test for errors and return.
       // If the pointer is zero then message is bad
-      if (aRxMsg==0)
+      if (aRecord==0)
       {
          mStatus=tBuffer.getError();
       }
-   #endif
+
       // Returning true  means socket was not closed
       // Returning false means socket was closed
-      mRxMsgCount++;
+      mRxCount++;
       return true;
    }
 
@@ -355,7 +358,7 @@ namespace Net
    {
       mTxBuffer = (char*)malloc(RecordSocketDefT::cMsgBufferSize);
       mTxLength=0;
-      mTxMsgCount=0;
+      mTxCount=0;
       mValidFlag=false;
 
       mRecordCopier=0;
@@ -374,11 +377,11 @@ namespace Net
 
    void UdpTxRecordSocket::configure(
       Sockets::SocketAddress     aRemote,
-      BaseRecordCopier*  aRecordCopier)
+      BaseRecordCopier*          aRecordCopier)
    {
-      mTxMsgCount=0;
+      mTxCount=0;
 
-      mRemote        = aRemote;
+      mRemote       = aRemote;
       mRecordCopier = aRecordCopier;
 
       doSocket();
@@ -405,33 +408,48 @@ namespace Net
    // This copies a message into a byte buffer and then sends the byte buffer 
    // out the socket. Use with the previous configure.
 
-   bool UdpTxRecordSocket::doSendMsg(
-      ByteRecord* aTxMsg)
+   bool UdpTxRecordSocket::doSendMsg(ByteRecord* aRecord)
    {
       // Guard
       if (!mValidFlag) return false;
 
-      // Process message before send
-   // mRecordCopier->processBeforeSend(aTxMsg);
-
       // Create byte buffer, constructor takes address and size
       ByteBuffer tBuffer(mTxBuffer,RecordSocketDefT::cMsgBufferSize);
 
-      // Copy transmit message to buffer
-   // tBuffer.putToBuffer(aTxMsg);
+      //------------------------------------------------------------------------
+      // Instance of a header,set members
 
-      // Delete the message
-      delete aTxMsg;
+      Header tHeader;
+      tHeader.mMessageIdentifier = aRecord->mRecordType;
+
+      //------------------------------------------------------------------------
+      // Copy
+
+      // Copy header to buffer
+      tBuffer.setCopyTo();
+      tHeader.headerCopyToFrom(&tBuffer,aRecord);
+
+      // Copy record to buffer
+      mRecordCopier->mCopyToFrom(&tBuffer,aRecord);
+      
+      // ReCopy header to buffer
+      tHeader.headerReCopyToFrom(&tBuffer,aRecord);
+
+      // Delete the record
+      delete aRecord;
+
+      //------------------------------------------------------------------------
+      // Send buffer to socket
 
       // Mutex
       mTxMutex.get();
 
       // Transmit the buffer
-      int length=tBuffer.getLength();
-      doSendTo(mRemote,tBuffer.getBaseAddress(),length);
+      int tLength = tBuffer.getLength();
+      doSendTo(mRemote,tBuffer.getBaseAddress(),tLength);
 
-      mTxLength=length;
-      mTxMsgCount++;
+      mTxLength=tLength;
+      mTxCount++;
 
       // Mutex
       mTxMutex.put();

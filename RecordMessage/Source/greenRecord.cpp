@@ -71,6 +71,23 @@ namespace GreenRecord
       aBuffer->copy( &aRecord->mCode4 );
    }
 
+   void TestRecord::initialize()
+   {
+      mCode1 = 901;
+      mCode2 = 902;
+      mCode3 = 903;
+      mCode4 = 904;
+   }
+
+   void TestRecord::show()
+   {
+      printf("%d\n",  mCode1   );
+      printf("%d\n",  mCode1   );
+      printf("%d\n",  mCode2   );
+      printf("%d\n",  mCode3   );
+      printf("\n");
+   }
+
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************

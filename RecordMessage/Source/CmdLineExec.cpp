@@ -6,7 +6,12 @@
 #include "my_functions.h"
 #include "prnPrint.h"
 
+#include "risByteBuffer.h"
+#include "greenRecord.h"
+
 #include "CmdLineExec.h"
+
+using namespace GreenRecord;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
@@ -31,84 +36,44 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefaultUnsigned(1,0xffffffff);
-   aCmd->setArgDefaultUnsigned(1,4294967295);
+   Ris::ByteBuffer tBuffer(20000);
 
-   unsigned int tN = aCmd->argUnsigned(1);
+   TestRecord* tTxRecord = new TestRecord;
+   TestRecord* tRxRecord = new TestRecord;
+   tTxRecord->initialize();
 
-   Prn::print(0,"%08X",tN);
+   tBuffer.setCopyTo();
+   RecordCopier::copyToFrom(&tBuffer,tTxRecord);
+   printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
+
+   tBuffer.rewind();
+   tBuffer.setCopyFrom();
+   RecordCopier::copyToFrom(&tBuffer,tRxRecord);
+   printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
+
+   tRxRecord->show();
+
+   delete tTxRecord;
+   delete tRxRecord;
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1000);
-
-   int tTimeout = aCmd->argInt(1);
-   int tTimeout10 = tTimeout/100;
-
-   Prn::print(0,"%5d %5d",tTimeout,tTimeout10);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,"abcdefg");
-
-   Prn::print(0,"%s %s",
-      my_string_from_bool(aCmd->isArgString(1, "abcdefg")),
-      aCmd->argString(1));
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,0);
-   aCmd->setArgDefault(2,1);
-
-   int tIndex = aCmd->argInt(1);
-   int tDelta = aCmd->argInt(2);
-   int tSize  = 5;
-
-   Prn::print(0,"");
-   Prn::print(0,"index %d",tIndex);
-   Prn::print(0,"delta %d",tDelta);
-   Prn::print(0,"");
-
-   tIndex = my_index_add(tIndex,tDelta,tSize);
-
-   Prn::print(0,"index %d",tIndex);
-   Prn::print(0,"");
 }
-
-//******************************************************************************
-
-class MyClass1
-{
-public:
-
-   MyClass1()
-   {
-      mX1[0] = 101;
-      mX2[0] = 102;
-   }
-
-   enum {MaxSize = 100};
-   int  mX1[MaxSize];
-
-   static const int cMaxSize = 100;
-   int  mX2[cMaxSize];
-
-   void myCall(int aX)
-   {
-      const int* tPtr1 = &cMaxSize;
-      int* tPtr2 = (int*)&cMaxSize;
-   }
-
-};
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {

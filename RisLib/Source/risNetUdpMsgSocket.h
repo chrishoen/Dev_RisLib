@@ -147,6 +147,7 @@ namespace Net
 
       // Metrics
       int mTxCount;
+      int mTxLength;
    };
 }//namespace
 }//namespace

@@ -159,7 +159,6 @@ namespace Net
 
       // Receive buffer
       char* mRxBuffer;
-      int   mRxLength;
 
       //------------------------------------------------------------------------
       // State:
@@ -169,6 +168,7 @@ namespace Net
 
       // Metrics
       int mRxCount;
+      int mRxLength;
    };
 
    //***************************************************************************
@@ -216,6 +216,7 @@ namespace Net
 
       // Metrics
       int mTxCount;
+      int mTxLength;
    };
 
 }//namespace

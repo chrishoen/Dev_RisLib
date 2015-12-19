@@ -154,6 +154,7 @@ bool UdpRxMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
 UdpTxMsgSocket::UdpTxMsgSocket()
 {
    mTxCount=0;
+   mTxLength      = 0;
    mValidFlag=false;
    mMessageParser=0;
 }
@@ -224,8 +225,8 @@ bool UdpTxMsgSocket::doSendMsg(
    mTxMutex.get();
 
    // Transmit the buffer
-   int tLength=tBuffer.getLength();
-   doSendTo(mRemote,tBuffer.getBaseAddress(),tLength);
+   mTxLength=tBuffer.getLength();
+   doSendTo(mRemote,tBuffer.getBaseAddress(),mTxLength);
 
    mTxCount++;
 

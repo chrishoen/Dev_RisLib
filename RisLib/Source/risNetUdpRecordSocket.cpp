@@ -356,9 +356,10 @@ namespace Net
 
    UdpTxRecordSocket::UdpTxRecordSocket()
    {
-      mTxCount=0;
-      mValidFlag=false;
-      mRecordCopier=0;
+      mTxCount      = 0;
+      mTxLength     = 0;
+      mValidFlag    = false;
+      mRecordCopier = 0;
    }
 
    //***************************************************************************
@@ -435,8 +436,8 @@ namespace Net
       mTxMutex.get();
 
       // Transmit the buffer
-      int tLength=tBuffer.getLength();
-      doSendTo(mRemote,tBuffer.getBaseAddress(),tLength);
+      mTxLength=tBuffer.getLength();
+      doSendTo(mRemote,tBuffer.getBaseAddress(),mTxLength);
 
       mTxCount++;
 

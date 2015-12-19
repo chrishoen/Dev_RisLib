@@ -1,5 +1,5 @@
-#ifndef _RISNETUDPRXTHREAD_H_
-#define _RISNETUDPRXTHREAD_H_
+#ifndef _RISNETUDPMSGTHREAD_H_
+#define _RISNETUDPMSGTHREAD_H_
 
 /*==============================================================================
 
@@ -10,16 +10,16 @@ execution context for a udp socket that receives udp datagrams.
 
 There is a base class and three classes that provide different interfaces.
 
-1) UdpRxThread   provides the udp receiver thread functionality
+1) UdpMsgThread   provides the udp receiver thread functionality
 
-2) UdpRxThreadWithQCall : public UdpRxThread provides a udp receiver
+2) UdpMsgThreadWithQCall : public UdpMsgThread provides a udp receiver
    thread with a QCall (queued function call) interface
 
-3) UdpRxThreadWithCallback : public UdpRxThread provides a udp
+3) UdpMsgThreadWithCallback : public UdpMsgThread provides a udp
    receiver thread with a callback interface
 
 Threads that want to perform Udp receiver activity maintain instances of 
-UdpRxThreadWithQCall or UdpRxThreadWithCallback and pass in QCalls
+UdpMsgThreadWithQCall or UdpMsgThreadWithCallback and pass in QCalls
 or callbacks in their configure calls.
 
 ==============================================================================*/
@@ -56,12 +56,12 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-class UdpRxThread : public Ris::Threads::BaseThreadWithTermFlag
+class UdpMsgThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
    typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
 
-   UdpRxThread();
+   UdpMsgThread();
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -93,7 +93,7 @@ public:
    //--------------------------------------------------------------
    // Process:
    
-   // This is called by the UdpRxThread threadRunFunction 
+   // This is called by the UdpMsgThread threadRunFunction 
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.

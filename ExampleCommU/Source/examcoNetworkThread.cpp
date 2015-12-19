@@ -24,7 +24,7 @@ NetworkThread::NetworkThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpRxThread = new Ris::Net::UdpRxThread;
+   mUdpMsgThread = new Ris::Net::UdpMsgThread;
 
    // Initialize QCalls
    mRxMsgQCall.bind   (this,&NetworkThread::executeRxMsg);
@@ -34,7 +34,7 @@ NetworkThread::NetworkThread()
 
 NetworkThread::~NetworkThread()
 {
-   delete mUdpRxThread;
+   delete mUdpMsgThread;
 }
 
 //******************************************************************************
@@ -52,7 +52,7 @@ void NetworkThread::configure()
    //---------------------------------------------------------------------------
    // Configure receive socket thread
 
-   mUdpRxThread->configure(
+   mUdpMsgThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       &mMessageParserCreator,
@@ -74,7 +74,7 @@ void NetworkThread::launchThread()
    Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
 
    // Launch child thread
-   mUdpRxThread->launchThread(); 
+   mUdpMsgThread->launchThread(); 
    
    // Launch this thread
    BaseClass::launchThread();
@@ -87,7 +87,7 @@ void  NetworkThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
    // Shutdown the tcp client thread
-   mUdpRxThread->shutdownThread();
+   mUdpMsgThread->shutdownThread();
 
    // Base class exit
    BaseClass::threadExitFunction();

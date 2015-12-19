@@ -9,7 +9,7 @@
 //******************************************************************************
 #include "risContainers.h"
 #include "risTimeMarker.h"
-#include "risNetUdpRxThread.h"
+#include "risNetUdpMsgThread.h"
 #include "risNetUdpMsgSocket.h"
 #include "risThreadsQCallThread.h"
 
@@ -49,16 +49,16 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::UdpRxThread*  mUdpRxThread;
+   Ris::Net::UdpMsgThread*  mUdpMsgThread;
 
-   // Message parser used by mUdpRxThread
+   // Message parser used by mUdpMsgThread
    ProtoComm::MessageParserCreator mMessageParserCreator;
 
    //--------------------------------------------------------------
    // QCall:
 
-   // QCalls registered to mUdpRxThread
-   Ris::Net::UdpRxThread::RxMsgQCall    mRxMsgQCall;
+   // QCalls registered to mUdpMsgThread
+   Ris::Net::UdpMsgThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

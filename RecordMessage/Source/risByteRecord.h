@@ -1,5 +1,5 @@
-#ifndef _RISBYTECONTENT_H_
-#define _RISBYTECONTENT_H_
+#ifndef _RISBYTERECORD_H_
+#define _RISBYTERECORD_H_
 /*==============================================================================
 
 ByteContent and ByteBuffer classes.
@@ -17,8 +17,6 @@ medium. All copies are done in network order.
 
 ==============================================================================*/
 
-#include "risByteBuffer.h"
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -30,26 +28,20 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 // This is a base class for classes that can be copied to/from ByteBuffers.
-// Each inheriting class supplies a copyToFrom member function that can be
-// called by ByteBuffer put and get functions to copy it.
 
-class ByteContent
+class ByteRecord
 {
 public:
-   // This is supplied by each particular inheriting class to copy itself
-   // to/from a byte buffer.
-
-   virtual void copyToFrom(Ris::ByteBuffer* aBuffer) {}
-
    // General purpose identifier
-   int mMessageType;
+   int mRecordType;
 
    // Constructor
-   ByteContent()
+   ByteRecord()
    {
-      mMessageType = 0;
+      mRecordType = 0;
    }
 };
+
 //******************************************************************************
 }//namespace
 #endif

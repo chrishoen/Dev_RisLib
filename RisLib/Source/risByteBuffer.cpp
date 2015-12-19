@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "risByteContent.h"
+#include "risByteBuffer.h"
 
 namespace Ris
 {

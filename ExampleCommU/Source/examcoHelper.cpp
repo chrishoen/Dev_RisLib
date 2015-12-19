@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "prnPrint.h"
 #include "examcoHelper.h"
 
 namespace ExampleComm
@@ -16,11 +17,11 @@ namespace ExampleComm
 
    void Helper::show(TestRecord* aRecord)
    {
-      printf("%d\n",  aRecord->mCode1   );
-      printf("%d\n",  aRecord->mCode2   );
-      printf("%d\n",  aRecord->mCode3   );
-      printf("%d\n",  aRecord->mCode4   );
-      printf("\n");
+      Prn::print(Prn::ThreadRun3, "Code1      %d", aRecord->mCode1);
+      Prn::print(Prn::ThreadRun3, "Code2      %d", aRecord->mCode2);
+      Prn::print(Prn::ThreadRun3, "Code3      %d", aRecord->mCode3);
+      Prn::print(Prn::ThreadRun3, "Code4      %d", aRecord->mCode4);
+      Prn::print(Prn::ThreadRun3, "");
    }
 
    //****************************************************************************
@@ -35,11 +36,11 @@ namespace ExampleComm
 
    void Helper::show(StatusRecord* aRecord)
    {
-      printf("%d\n",  aRecord->mCode1   );
-      printf("%d\n",  aRecord->mCode2   );
-      printf("%d\n",  aRecord->mCode3   );
-      printf("%d\n",  aRecord->mCode4   );
-      printf("\n");
+      Prn::print(Prn::ThreadRun3, "Code1      %d", aRecord->mCode1);
+      Prn::print(Prn::ThreadRun3, "Code2      %d", aRecord->mCode2);
+      Prn::print(Prn::ThreadRun3, "Code3      %d", aRecord->mCode3);
+      Prn::print(Prn::ThreadRun3, "Code4      %d", aRecord->mCode4);
+      Prn::print(Prn::ThreadRun3, "");
    }
 
    //****************************************************************************
@@ -54,11 +55,11 @@ namespace ExampleComm
 
    void Helper::show(Data1Record* aRecord)
    {
-      printf("%d\n",  aRecord->mCode1   );
-      printf("%d\n",  aRecord->mCode2   );
-      printf("%d\n",  aRecord->mCode3   );
-      printf("%d\n",  aRecord->mCode4   );
-      printf("\n");
+      Prn::print(Prn::ThreadRun3, "Code1      %d", aRecord->mCode1);
+      Prn::print(Prn::ThreadRun3, "Code2      %d", aRecord->mCode2);
+      Prn::print(Prn::ThreadRun3, "Code3      %d", aRecord->mCode3);
+      Prn::print(Prn::ThreadRun3, "Code4      %d", aRecord->mCode4);
+      Prn::print(Prn::ThreadRun3, "");
    }
 
 
@@ -75,11 +76,11 @@ namespace ExampleComm
 
    void Helper::show(Data2Record* aRecord)
    {
-      printf("%d\n",  aRecord->mCode1   );
-      printf("%d\n",  aRecord->mCode2   );
-      printf("%d\n",  aRecord->mCode3   );
-      printf("%d\n",  aRecord->mCode4   );
+      Prn::print(Prn::ThreadRun3, "Code1      %d", aRecord->mCode1);
+      Prn::print(Prn::ThreadRun3, "Code2      %d", aRecord->mCode2);
+      Prn::print(Prn::ThreadRun3, "Code3      %d", aRecord->mCode3);
+      Prn::print(Prn::ThreadRun3, "Code4      %d", aRecord->mCode4);
       Helper::show(&aRecord->mRecord1);
-      printf("\n");
+      Prn::print(Prn::ThreadRun3, "");
    }
 }//namespace

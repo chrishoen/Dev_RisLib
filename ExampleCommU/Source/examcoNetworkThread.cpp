@@ -7,12 +7,13 @@
 #include "risSockets.h"
 #include "prnPrint.h"
 #include "examcoSettings.h"
+#include "examcoHelper.h"
 
 #define  _EXAMCONETWORKTHREAD_CPP_
 #include "examcoNetworkThread.h"
 
 
-namespace ProtoComm
+namespace ExampleComm
 {
 
 //******************************************************************************
@@ -24,17 +25,17 @@ NetworkThread::NetworkThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpMsgThread = new Ris::Net::UdpMsgThread;
+   mUdpRecordThread = new Ris::Net::UdpRecordThread;
 
    // Initialize QCalls
-   mRxMsgQCall.bind   (this,&NetworkThread::executeRxMsg);
+   mRxRecordQCall.bind   (this,&NetworkThread::executeRxRecord);
 }
 
 //******************************************************************************
 
 NetworkThread::~NetworkThread()
 {
-   delete mUdpMsgThread;
+   delete mUdpRecordThread;
 }
 
 //******************************************************************************
@@ -44,19 +45,14 @@ void NetworkThread::configure()
 {
    Prn::print(Prn::ThreadInit1, "NetworkThread::configure");
 
-   //--------------------------------------------------------------------------- 
-   // Configure message parser
-
-   mMessageParserCreator.configure(gSettings.mMyAppNumber);
-
    //---------------------------------------------------------------------------
    // Configure receive socket thread
 
-   mUdpMsgThread->configure(
+   mUdpRecordThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
-      &mMessageParserCreator,
-      &mRxMsgQCall);
+      &mRecordCopier,
+      &mRxRecordQCall);
 
    //---------------------------------------------------------------------------
    // Configure transmit socket
@@ -64,7 +60,7 @@ void NetworkThread::configure()
    mTxSocket.configure(
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mMessageParserCreator);
+      &mRecordCopier);
 }
 
 //******************************************************************************
@@ -74,7 +70,7 @@ void NetworkThread::launchThread()
    Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
 
    // Launch child thread
-   mUdpMsgThread->launchThread(); 
+   mUdpRecordThread->launchThread(); 
    
    // Launch this thread
    BaseClass::launchThread();
@@ -87,7 +83,7 @@ void  NetworkThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
    // Shutdown the tcp client thread
-   mUdpMsgThread->shutdownThread();
+   mUdpRecordThread->shutdownThread();
 
    // Base class exit
    BaseClass::threadExitFunction();
@@ -96,80 +92,77 @@ void  NetworkThread::threadExitFunction()
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeRxMsg(Ris::ByteContent* aRxMsg)
+void NetworkThread::executeRxRecord(Ris::ByteRecord* aRecord)
 {
-   ProtoComm::BaseMsg* tRxMsg = (ProtoComm::BaseMsg*)aRxMsg;
-
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
-   switch (tRxMsg->mMessageType)
+   switch (aRecord->mRecordType)
    {
-      case ProtoComm::MsgIdT::cTestMsg :
-         processRxMsg((ProtoComm::TestMsg*)tRxMsg);
+      case TypeIdT::cTestRecord :
+         processRxRecord((TestRecord*)aRecord);
          break;
-      case ProtoComm::MsgIdT::cStatusRequestMsg :
-         processRxMsg((ProtoComm::StatusRequestMsg*)tRxMsg);
+      case TypeIdT::cStatusRecord :
+         processRxRecord((StatusRecord*)aRecord);
          break;
-      case ProtoComm::MsgIdT::cStatusResponseMsg :
-         processRxMsg((ProtoComm::StatusResponseMsg*)tRxMsg);
+      case TypeIdT::cData1Record :
+         processRxRecord((Data1Record*)aRecord);
          break;
-      case ProtoComm::MsgIdT::cDataMsg :
-         processRxMsg((ProtoComm::DataMsg*)tRxMsg);
+      case TypeIdT::cData2Record :
+         processRxRecord((Data2Record*)aRecord);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",tRxMsg->mMessageType);
-         delete tRxMsg;
+         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxRecord ??? %d",aRecord->mRecordType);
+         delete aRecord;
          break;
    }
 }
 
 //******************************************************************************
-// Message handler for TestMsg.
+// Message handler
 
-void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
+void NetworkThread::processRxRecord(TestRecord*  aRecord)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_TestMsg %d %d", aRxMsg->mCode1, aRxMsg->mHeader.mSourceId);
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxRecord_TestRecord" );
+
+   Helper::show(aRecord);
+
+   delete aRecord;
 }
 
 //******************************************************************************
-// Rx message handler - StatusRequestMsg
+// Message handler
 
-void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
+void NetworkThread::processRxRecord(StatusRecord* aRecord)
 {
-   if (true)
-   {
-      ProtoComm::StatusResponseMsg* tTxMsg = new ProtoComm::StatusResponseMsg;
-      sendMsg(tTxMsg);
-   }
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxRecord_StatusRecord %d",mStatusCount1++);
 
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
-   Prn::print(Prn::ThreadRun1, "Code1      %d", aRxMsg->mCode1);
-   Prn::print(Prn::ThreadRun1, "Code2      %d", aRxMsg->mCode2);
-   Prn::print(Prn::ThreadRun1, "Code3      %d", aRxMsg->mCode3);
-   Prn::print(Prn::ThreadRun1, "Code4      %d", aRxMsg->mCode4);
+   Helper::show(aRecord);
 
-   delete aRxMsg;
+   delete aRecord;
 }
 
 //******************************************************************************
-// Rx message handler - StatusResponseMsg
+// Message handler
 
-void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
+void NetworkThread::processRxRecord(Data1Record* aRecord)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusResponseMsg");
-   delete aRxMsg;
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxRecord_Data1Record");
+
+   Helper::show(aRecord);
+
+   delete aRecord;
 }
 
 //******************************************************************************
-// Rx message handler - DataMsg
+// Message handler
 
-void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
+void NetworkThread::processRxRecord(Data2Record* aRecord)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_DataMsg");
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxRecord_Data2Record");
 
-   aRxMsg->show();
+   Helper::show(aRecord);
 
-   delete aRxMsg;
+   delete aRecord;
 }
 
 //******************************************************************************
@@ -177,33 +170,33 @@ void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 
 void NetworkThread::executeOnTimer(int aTimerCount)
 {
-   Prn::print(Prn::ThreadRun2, "NetworkThread::executeRxMsg");
+   Prn::print(Prn::ThreadRun2, "NetworkThread::executeRxRecord");
 
    return;
 
-   ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
+   TestRecord* tx = new TestRecord;
    tx->mCode1=101;
 
-   sendMsg(tx);
+   sendRecord(tx);
 }
 
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void NetworkThread::sendMsg (ProtoComm::BaseMsg* aTxMsg)
+void NetworkThread::sendRecord (Ris::ByteRecord* aRecord)
 {
-   mTxSocket.doSendMsg(aTxMsg);
+   mTxSocket.doSendRecord(aRecord);
 }
 
 //******************************************************************************
 // This sends a test message via the tcp client thread
 
-void NetworkThread::sendTestMsg()
+void NetworkThread::sendTestRecord()
 {
-   ProtoComm::TestMsg* msg = new ProtoComm::TestMsg;
+   TestRecord* msg = new TestRecord;
    msg->mCode1=201;
  
-   mTxSocket.doSendMsg(msg);
+   mTxSocket.doSendRecord(msg);
 }
 
 }//namespace

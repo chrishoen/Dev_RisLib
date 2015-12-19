@@ -4,13 +4,11 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "procoSettings.h"
-#include "procoDefs.h"
-#include "procoNetworkThread.h"
+#include "examcoNetworkThread.h"
 
 #include "MainInit.h"
 
-using namespace ProtoComm;
+using namespace ExampleComm;
 
 //******************************************************************************
 int main(int argc,char** argv)

@@ -6,13 +6,13 @@
 //******************************************************************************
 #include "risContainers.h"
 #include "risTimeMarker.h"
-#include "risNetUdpMsgThread.h"
 #include "risNetUdpRecordSocket.h"
+#include "risNetUdpRecordThread.h"
 #include "risThreadsQCallThread.h"
 
 #include "examcoRecord.h"
 
-namespace ProtoComm
+namespace ExampleComm
 {
 
 //******************************************************************************
@@ -46,31 +46,31 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::UdpMsgThread*  mUdpMsgThread;
+   Ris::Net::UdpRecordThread*  mUdpRecordThread;
 
-   // Message parser used by mUdpMsgThread
-   ProtoComm::MessageParserCreator mMessageParserCreator;
+   // Message parser used by mUdpRecordThread
+   RecordCopier mRecordCopier;
 
    //--------------------------------------------------------------
    // QCall:
 
-   // QCalls registered to mUdpMsgThread
-   Ris::Net::UdpMsgThread::RxMsgQCall    mRxMsgQCall;
+   // QCalls registered to mUdpRecordThread
+   Ris::Net::UdpRecordThread::RxRecordQCall    mRxRecordQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxMsg   (Ris::ByteContent* aRxMsg);
+   void executeRxRecord   (Ris::ByteRecord* aRxRecord);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    // Rx message handlers
 
-   void processRxMsg (ProtoComm::TestMsg*  aRxMsg);
-   void processRxMsg (ProtoComm::StatusRequestMsg* aRxMsg);
-   void processRxMsg (ProtoComm::StatusResponseMsg* aRxMsg);
-   void processRxMsg (ProtoComm::DataMsg* aRxMsg);
+   void processRxRecord (TestRecord*  aRecord);
+   void processRxRecord (StatusRecord* aRecord);
+   void processRxRecord (Data1Record* aRecord);
+   void processRxRecord (Data2Record* aRecord);
 
    int  mStatusCount1;
    int  mStatusCount2;
@@ -78,16 +78,13 @@ public:
    //--------------------------------------------------------------
    // Send a message
 
-   Ris::Net::UdpTxMsgSocket  mTxSocket;
+   Ris::Net::UdpTxRecordSocket  mTxSocket;
 
-   void sendMsg (ProtoComm::BaseMsg* aTxMsg);
-   void sendTestMsg();   
+   void sendRecord (Ris::ByteRecord* aRecord);
+   void sendTestRecord();   
 
-   //--------------------------------------------------------------
-   // State:
-
-   Ris::TimeMarker mTimeMarker;
 };
+
 //******************************************************************************
 // Global instance
 

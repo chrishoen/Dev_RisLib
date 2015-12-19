@@ -31,7 +31,7 @@ void main_initialize(int argc,char** argv)
 
    Prn::setFilter(Prn::ThreadRun1,true);
    Prn::setFilter(Prn::ThreadRun2,false);
-   Prn::setFilter(Prn::ThreadRun3,false);
+   Prn::setFilter(Prn::ThreadRun3,true);
    Prn::setFilter(Prn::ThreadRun4,false);
 
    Prn::print(0,"ProtoCommU*******************************************BEGIN");
@@ -41,8 +41,8 @@ void main_initialize(int argc,char** argv)
 
    if (argc > 1)
    {
-      ProtoComm::gSettings.initialize(argv[1]);
-      ProtoComm::gSettings.show();
+      ExampleComm::gSettings.initialize(argv[1]);
+      ExampleComm::gSettings.show();
    }
 
 }

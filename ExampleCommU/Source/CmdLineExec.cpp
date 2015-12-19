@@ -1,14 +1,15 @@
-#include <math.h>
+
+#include <windows.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "my_functions.h"
 #include "prnPrint.h"
 
-#include "risByteBuffer.h"
+#include "examcoSettings.h"
+#include "examcoDefs.h"
 #include "examcoRecord.h"
 #include "examcoHelper.h"
+#include "examcoNetworkThread.h"
 
 #include "CmdLineExec.h"
 
@@ -25,76 +26,87 @@ void CmdLineExec::reset()
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
-   if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
-   if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
-   if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
-   if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
+   if (aCmd->isCmd("SHUTDOWN" ))  executeOnShutdown (aCmd);
+   if (aCmd->isCmd("TX"       ))  executeOnTx  (aCmd);
+   if (aCmd->isCmd("GO1"      ))  executeOnGo1 (aCmd);
+   if (aCmd->isCmd("GO2"      ))  executeOnGo2 (aCmd);
+   if (aCmd->isCmd("GO3"      ))  executeOnGo3 (aCmd);
+   if (aCmd->isCmd("GO4"      ))  executeOnGo4 (aCmd);
+   if (aCmd->isCmd("GO5"      ))  executeOnGo5 (aCmd);
+   if (aCmd->isCmd("GO6"      ))  executeOnGo6 (aCmd);
+}
+//******************************************************************************
+
+void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
+{
+   gNetworkThread->shutdownThread();
 }
 
 //******************************************************************************
 
-void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 {
-   Ris::ByteBuffer tBuffer(20000);
-   RecordCopier tCopier;
+   aCmd->setArgDefault(1,1);
+   int tRecordType= aCmd->argInt(1);
 
-   TestRecord* tTxRecord = new TestRecord;
-   TestRecord* tRxRecord = new TestRecord;
-   Helper::initialize(tTxRecord);
-
-   tBuffer.setCopyTo();
-   tCopier.copyToFrom(&tBuffer,tTxRecord);
-   printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
-
-   tBuffer.rewind();
-   tBuffer.setCopyFrom();
-   tCopier.copyToFrom(&tBuffer,tRxRecord);
-   printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
-
-   Helper::show(tRxRecord);
-
-   delete tTxRecord;
-   delete tRxRecord;
+   switch (tRecordType)
+   {
+      case 1:
+      {
+         TestRecord* tRecord = new TestRecord;
+         Helper::initialize(tRecord);
+         gNetworkThread->sendRecord(tRecord);
+         break;
+      }
+      case 5:
+      {
+         Data1Record* tRecord = new Data1Record;
+         Helper::initialize(tRecord);
+         gNetworkThread->sendRecord(tRecord);
+         break;
+      }
+   }
 }
 
 //******************************************************************************
 
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 {
-   Ris::ByteBuffer tBuffer(20000);
-   RecordCopier tCopier;
-
-   Data2Record* tTxRecord = new Data2Record;
-   Data2Record* tRxRecord = new Data2Record;
-   Helper::initialize(tTxRecord);
-
-   tBuffer.setCopyTo();
-   tCopier.copyToFrom(&tBuffer,tTxRecord);
-
-   tBuffer.rewind();
-   tBuffer.setCopyFrom();
-   tCopier.copyToFrom(&tBuffer,tRxRecord);
-   Helper::show(tRxRecord);
-
-   delete tTxRecord;
-   delete tRxRecord;
+   gNetworkThread->sendTestRecord();
 }
 
 //******************************************************************************
 
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
+{
+   StatusRecord* tRecord = new StatusRecord;
+   Helper::initialize(tRecord);
+   gNetworkThread->sendRecord(tRecord);
+}
+
+
+//******************************************************************************
+
+void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 {
 }
 
 //******************************************************************************
 
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
 {
 }
 
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+//******************************************************************************
+
+void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 {
 }
 
+
+//******************************************************************************
+
+
+void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
+{
+}

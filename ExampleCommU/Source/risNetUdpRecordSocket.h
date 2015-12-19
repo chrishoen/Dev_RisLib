@@ -146,7 +146,7 @@ namespace Net
       // It returns true if successful.
       // The recvfrom address is stored in mFromAddress.
 
-      bool doRecvMsg (ByteRecord*& aRecord);
+      bool doRecvRecord (ByteRecord*& aRecord);
 
       Sockets::SocketAddress mFromAddress;
 
@@ -195,8 +195,7 @@ namespace Net
       // It returns true if successful.
       // It is protected by the transmit mutex.
 
-      bool doSendMsg(
-         ByteRecord*  aTxMsg);
+      bool doSendRecord(ByteRecord*  aRecord);
 
       //------------------------------------------------------------------------
       // This is a record copier that is used to copy a record to a byte

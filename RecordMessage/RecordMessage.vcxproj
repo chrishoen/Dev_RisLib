@@ -178,15 +178,11 @@
     <ClCompile Include="Source\examcoHelper.cpp" />
     <ClCompile Include="Source\examcoRecord.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\risNetUdpRecordSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\examcoHelper.h" />
     <ClInclude Include="Source\examcoRecord.h" />
-    <ClInclude Include="Source\risByteRecord.h" />
-    <ClInclude Include="Source\risByteRecordCopier.h" />
-    <ClInclude Include="Source\risNetUdpRecordSocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

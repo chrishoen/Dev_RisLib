@@ -7,7 +7,6 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risNetUdpRecordSocket.cpp" />
     <ClCompile Include="Source\examcoHelper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -24,11 +23,6 @@
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteRecord.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risByteRecordCopier.h" />
-    <ClInclude Include="Source\risNetUdpRecordSocket.h" />
     <ClInclude Include="Source\examcoHelper.h">
       <Filter>Source</Filter>
     </ClInclude>

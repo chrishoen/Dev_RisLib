@@ -182,8 +182,6 @@
     <ClCompile Include="Source\examcoSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\risNetUdpRecordSocket.cpp" />
-    <ClCompile Include="Source\risNetUdpRecordThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -193,10 +191,6 @@
     <ClInclude Include="Source\examcoRecord.h" />
     <ClInclude Include="Source\examcoSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\risByteRecord.h" />
-    <ClInclude Include="Source\risByteRecordCopier.h" />
-    <ClInclude Include="Source\risNetUdpRecordSocket.h" />
-    <ClInclude Include="Source\risNetUdpRecordThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

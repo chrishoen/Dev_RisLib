@@ -18,7 +18,7 @@ namespace Net
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   Header::Header()
+   RecordMsgHeader::RecordMsgHeader()
    {
       mSyncWord1         = 0x11111111;
       mSyncWord2         = 0x22222222;
@@ -32,7 +32,7 @@ namespace Net
       mHeaderValidFlag   = false;
    }
 
-   void Header::reset()
+   void RecordMsgHeader::reset()
    {
       mSyncWord1         = 0;
       mSyncWord2         = 0;
@@ -46,13 +46,13 @@ namespace Net
    }
 
 
-   bool Header::validate()
+   bool RecordMsgHeader::validate()
    {
       // Test for error
       bool tError =
          mSyncWord1 != 0x11111111 ||
          mSyncWord2 != 0x22222222 ||
-         mMessageLength < Header::cLength  ||
+         mMessageLength < RecordMsgHeader::cLength  ||
          mMessageLength > RecordSocketDefT::cMsgBufferSize;
 
       // If no error then valid
@@ -75,7 +75,7 @@ namespace Net
    // Copy To and Copy From are symmetrical.
    //---------------------------------------------------------------------------
 
-   void Header::copyToFrom (Ris::ByteBuffer* aBuffer)
+   void RecordMsgHeader::copyToFrom (Ris::ByteBuffer* aBuffer)
    {
       aBuffer->copy( &mSyncWord1         );
       aBuffer->copy( &mSyncWord2         );
@@ -111,7 +111,7 @@ namespace Net
    // which they transfer into and out of the headers.
    //---------------------------------------------------------------------------
 
-   void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteRecord* aParent)
+   void RecordMsgHeader::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteRecord* aParent)
    {
       //------------------------------------------------------------------------
       // Instances of this class are members of parent message classes.
@@ -175,7 +175,7 @@ namespace Net
    //***************************************************************************
    //***************************************************************************
 
-   void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteRecord* aParent)
+   void RecordMsgHeader::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteRecord* aParent)
    {
       // If this is a put operation then this actually copies the header into
       // the buffer.
@@ -312,7 +312,7 @@ namespace Net
       // Copy from the receive buffer into an instance of the header
       // and validate the header
 
-      Header tHeader;
+      RecordMsgHeader tHeader;
 
       tBuffer.setCopyFrom();
       tBuffer.getFromBuffer(&tHeader);
@@ -417,7 +417,7 @@ namespace Net
       //------------------------------------------------------------------------
       // Instance of a header,set members
 
-      Header tHeader;
+      RecordMsgHeader tHeader;
       tHeader.mMessageIdentifier = aRecord->mRecordType;
 
       //------------------------------------------------------------------------

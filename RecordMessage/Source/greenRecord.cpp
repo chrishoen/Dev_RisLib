@@ -15,16 +15,16 @@ namespace GreenRecord
 
       switch (aRecordType)
       {
-      case MsgIdT::cTestRecord :
+      case TypeIdT::cTestRecord :
          tRecord = new TestRecord;
          break;
-      case MsgIdT::cStatusRecord :
+      case TypeIdT::cStatusRecord :
          tRecord = new StatusRecord;
          break;
-      case MsgIdT::cData1Record :
+      case TypeIdT::cData1Record :
          tRecord = new Data1Record;
          break;
-      case MsgIdT::cData2Record :
+      case TypeIdT::cData2Record :
          tRecord = new Data2Record;
          break;
       default :
@@ -43,16 +43,16 @@ namespace GreenRecord
    {
       switch (aRecord->mRecordType)
       {
-      case MsgIdT::cTestRecord :
+      case TypeIdT::cTestRecord :
          copyToFrom(aBuffer,(TestRecord*)aRecord);
          break;
-      case MsgIdT::cStatusRecord :
+      case TypeIdT::cStatusRecord :
          copyToFrom(aBuffer,(StatusRecord*)aRecord);
          break;
-      case MsgIdT::cData1Record :
+      case TypeIdT::cData1Record :
          copyToFrom(aBuffer,(Data1Record*)aRecord);
          break;
-      case MsgIdT::cData2Record :
+      case TypeIdT::cData2Record :
          copyToFrom(aBuffer,(Data2Record*)aRecord);
          break;
       default :
@@ -67,7 +67,7 @@ namespace GreenRecord
 
    TestRecord::TestRecord()
    {
-      mRecordType     = MsgIdT::cTestRecord;
+      mRecordType     = TypeIdT::cTestRecord;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -90,7 +90,7 @@ namespace GreenRecord
 
    StatusRecord::StatusRecord()
    {
-      mRecordType     = MsgIdT::cStatusRecord;
+      mRecordType     = TypeIdT::cStatusRecord;
 
       mCode1           = 1002;
       mCode2           = 0;
@@ -113,7 +113,7 @@ namespace GreenRecord
 
    Data1Record::Data1Record()
    {
-      mRecordType     = MsgIdT::cData1Record;
+      mRecordType     = TypeIdT::cData1Record;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -136,7 +136,7 @@ namespace GreenRecord
 
    Data2Record::Data2Record()
    {
-      mRecordType     = MsgIdT::cData2Record;
+      mRecordType     = TypeIdT::cData2Record;
 
       mCode1           = 1001;
       mCode2           = 0;

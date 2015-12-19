@@ -27,25 +27,26 @@ namespace Net
    //***************************************************************************
    // Message Definitions
 
-   namespace RecordSocketDefT
+   class RecordSocketDefT
    {
+   public:
       //************************************************************************
-      // Use this for a buffer size for these messages
+      // Use this for a buffer size for these sockets
 
       static const int cMsgBufferSize = 20000;
 
-   }//namespace
+   };
    
     //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // This encapsualtes the message header.
 
-   class Header : public Ris::ByteContent
+   class RecordMsgHeader : public Ris::ByteContent
    {
    public:
       // Constructor
-      Header();
+      RecordMsgHeader();
       void reset();
 
       //------------------------------------------------------------------------

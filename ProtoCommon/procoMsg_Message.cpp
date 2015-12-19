@@ -23,19 +23,19 @@ namespace ProtoComm
 
       switch (aMessageType)
       {
-      case MsgIdT::cTest :
+      case MsgIdT::cTestMsg :
          message = new TestMsg;
          break;
-      case MsgIdT::cFirstMessage :
+      case MsgIdT::cFirstMessageMsg :
          message = new FirstMessageMsg;
          break;
-      case MsgIdT::cStatusRequest :
+      case MsgIdT::cStatusRequestMsg :
          message = new StatusRequestMsg;
          break;
-      case MsgIdT::cStatusResponse:
+      case MsgIdT::cStatusResponseMsg :
          message = new StatusResponseMsg;
          break;
-      case MsgIdT::cData:
+      case MsgIdT::cDataMsg :
          message = new DataMsg;
          break;
       default :
@@ -50,7 +50,7 @@ namespace ProtoComm
 
    TestMsg::TestMsg ()
    {
-      mMessageType = MsgIdT::cTest;
+      mMessageType = MsgIdT::cTestMsg;
       mCode1 = 901;
       mCode2 = 902;
       mCode3 = 903;
@@ -90,7 +90,7 @@ namespace ProtoComm
 
    FirstMessageMsg::FirstMessageMsg ()
    {
-      mMessageType = MsgIdT::cFirstMessage;
+      mMessageType = MsgIdT::cFirstMessageMsg;
       mCode1 = 0;
    } 
 
@@ -109,7 +109,7 @@ namespace ProtoComm
 
    StatusRequestMsg::StatusRequestMsg ()
    {
-      mMessageType = MsgIdT::cStatusRequest;
+      mMessageType = MsgIdT::cStatusRequestMsg;
 
       mCode1 = 101;
       mCode2 = 102;
@@ -144,7 +144,7 @@ namespace ProtoComm
 
    StatusResponseMsg::StatusResponseMsg()
    {
-      mMessageType = MsgIdT::cStatusResponse;
+      mMessageType = MsgIdT::cStatusResponseMsg;
 
       mCode1 = 201;
       mCode2 = 202;
@@ -216,7 +216,7 @@ namespace ProtoComm
 
    DataMsg::DataMsg()
    {
-      mMessageType = MsgIdT::cData;
+      mMessageType = MsgIdT::cDataMsg;
 
       mUChar  = 0;
       mUShort = 0;

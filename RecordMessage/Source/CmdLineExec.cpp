@@ -86,7 +86,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Ris::BaseRecordCopier* tCopier = new RecordCopier();
 }
 
 //******************************************************************************

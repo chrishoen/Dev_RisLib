@@ -45,19 +45,18 @@ namespace ProtoComm
    //******************************************************************************
    // Message Types
 
-   namespace MsgIdT
+   class MsgIdT
    {
-      //--------------------------------------------------------------------------
-      // Specific Message Types:
+   public:
 
-      static const int   cUnspecified    = 0;
-      static const int   cTest           = 1;
-      static const int   cFirstMessage   = 2;
-      static const int   cStatusRequest  = 3;
-      static const int   cStatusResponse = 4;
-      static const int   cData           = 5;
+      static const int   cUnspecifiedMsg    = 0;
+      static const int   cTestMsg           = 1;
+      static const int   cFirstMessageMsg   = 2;
+      static const int   cStatusRequestMsg  = 3;
+      static const int   cStatusResponseMsg = 4;
+      static const int   cDataMsg           = 5;
 
-   }//namespace
+   };
 
    //******************************************************************************
    //******************************************************************************

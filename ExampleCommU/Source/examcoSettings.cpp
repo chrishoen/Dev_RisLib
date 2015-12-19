@@ -41,7 +41,7 @@ void ExampleCommSettings::show()
    printf("ExampleCommSettings ******* %s\n", mSection);
 
    printf("MyAppNumber               %d\n", mMyAppNumber);
-   printf("MyAppRole                 %s\n", getAppRoleNameByEnum(mMyAppRole));
+   printf("MyAppRole                 %s\n", Defs::getAppRoleNameByEnum(mMyAppRole));
 
    printf("TcpServer  %-12s   %d\n",mTcpServerIPAddress,mTcpServerPort);
 
@@ -98,7 +98,7 @@ void ExampleCommSettings::execute(Ris::CmdLineCmd* aCmd)
    // Only process commands for the section specified in initialize.
 
    if(aCmd->isCmd("MyAppNumber"     ))   mMyAppNumber = aCmd->argInt(1);
-   if(aCmd->isCmd("MyAppRole"       ))   mMyAppRole   = getAppRoleEnumByName(aCmd->argString(1));
+   if(aCmd->isCmd("MyAppRole"       ))   mMyAppRole   = Defs::getAppRoleEnumByName(aCmd->argString(1));
 
    if(aCmd->isCmd("TcpServer"       ))   executeOnTcpServer (aCmd);
    if(aCmd->isCmd("MyUdp"           ))   executeOnMyUdp     (aCmd);

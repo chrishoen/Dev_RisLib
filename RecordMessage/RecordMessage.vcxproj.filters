@@ -13,6 +13,7 @@
     <ClCompile Include="Source\greenHelper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risNetUdpRecordSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -33,5 +34,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteRecordCopier.h" />
+    <ClInclude Include="Source\risNetUdpRecordSocket.h" />
   </ItemGroup>
 </Project>

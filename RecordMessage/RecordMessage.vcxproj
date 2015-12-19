@@ -178,6 +178,7 @@
     <ClCompile Include="Source\greenHelper.cpp" />
     <ClCompile Include="Source\greenRecord.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\risNetUdpRecordSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Source\greenRecord.h" />
     <ClInclude Include="Source\risByteRecord.h" />
     <ClInclude Include="Source\risByteRecordCopier.h" />
+    <ClInclude Include="Source\risNetUdpRecordSocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

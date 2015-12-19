@@ -140,7 +140,7 @@ bool ExampleCommSettings::initialize(char* aSection)
    char tFilePath[200];
 
    strcpy(tFilePath, Ris::portableGetSettingsDir());
-   strcat(tFilePath, "procoSettings.txt");
+   strcat(tFilePath, "examcoSettings.txt");
 
    // Copy arguments
    strcpy(mSection,aSection);

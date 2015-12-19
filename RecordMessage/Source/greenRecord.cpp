@@ -83,23 +83,6 @@ namespace GreenRecord
       aBuffer->copy( &aRecord->mCode4 );
    }
 
-   void TestRecord::initialize()
-   {
-      mCode1 = 901;
-      mCode2 = 902;
-      mCode3 = 903;
-      mCode4 = 904;
-   }
-
-   void TestRecord::show()
-   {
-      printf("%d\n",  mCode1   );
-      printf("%d\n",  mCode2   );
-      printf("%d\n",  mCode3   );
-      printf("%d\n",  mCode4   );
-      printf("\n");
-   }
-
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
@@ -146,23 +129,6 @@ namespace GreenRecord
       aBuffer->copy( &aRecord->mCode4 );
    }
 
-   void Data1Record::initialize()
-   {
-      mCode1 = 101;
-      mCode2 = 102;
-      mCode3 = 103;
-      mCode4 = 104;
-   }
-
-   void Data1Record::show()
-   {
-      printf("%d\n",  mCode1   );
-      printf("%d\n",  mCode2   );
-      printf("%d\n",  mCode3   );
-      printf("%d\n",  mCode4   );
-      printf("\n");
-   }
-
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
@@ -187,21 +153,4 @@ namespace GreenRecord
       RecordCopier::copyToFrom   (aBuffer, &aRecord->mRecord1 );
    }
 
-   void Data2Record::initialize()
-   {
-      mCode1 = 201;
-      mCode2 = 202;
-      mCode3 = 203;
-      mCode4 = 204;
-      mRecord1.initialize();
-   }
-
-   void Data2Record::show()
-   {
-      printf("%d\n",  mCode1   );
-      printf("%d\n",  mCode2   );
-      printf("%d\n",  mCode3   );
-      printf("%d\n",  mCode4   );
-      mRecord1.show();
-   }
 }

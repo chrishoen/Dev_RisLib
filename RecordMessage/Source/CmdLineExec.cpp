@@ -8,6 +8,7 @@
 
 #include "risByteBuffer.h"
 #include "greenRecord.h"
+#include "greenHelper.h"
 
 #include "CmdLineExec.h"
 
@@ -40,7 +41,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
    TestRecord* tTxRecord = new TestRecord;
    TestRecord* tRxRecord = new TestRecord;
-   tTxRecord->initialize();
+   Helper::initialize(tTxRecord);
 
    tBuffer.setCopyTo();
    RecordCopier::copyToFrom(&tBuffer,tTxRecord);
@@ -51,7 +52,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    RecordCopier::copyToFrom(&tBuffer,tRxRecord);
    printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
-   tRxRecord->show();
+   Helper::show(tRxRecord);
 
    delete tTxRecord;
    delete tRxRecord;
@@ -65,7 +66,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    Data2Record* tTxRecord = new Data2Record;
    Data2Record* tRxRecord = new Data2Record;
-   tTxRecord->initialize();
+   Helper::initialize(tTxRecord);
 
    tBuffer.setCopyTo();
    RecordCopier::copyToFrom(&tBuffer,tTxRecord);
@@ -73,8 +74,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    tBuffer.rewind();
    tBuffer.setCopyFrom();
    RecordCopier::copyToFrom(&tBuffer,tRxRecord);
-
-   tRxRecord->show();
+   Helper::show(tRxRecord);
 
    delete tTxRecord;
    delete tRxRecord;

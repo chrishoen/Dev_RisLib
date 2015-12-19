@@ -1,9 +1,9 @@
-#ifndef _GREENMHELPER_H_
-#define _GREENHELPER_H_
+#ifndef _EXAMCOMHELPER_H_
+#define _EXAMCOHELPER_H_
 
-#include "greenRecord.h"
+#include "examcoRecord.h"
 
-namespace GreenRecord
+namespace ExampleComm
 {
 
     //***************************************************************************

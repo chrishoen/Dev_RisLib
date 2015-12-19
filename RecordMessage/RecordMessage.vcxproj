@@ -175,15 +175,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\greenHelper.cpp" />
-    <ClCompile Include="Source\greenRecord.cpp" />
+    <ClCompile Include="Source\examcoHelper.cpp" />
+    <ClCompile Include="Source\examcoRecord.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\risNetUdpRecordSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\greenHelper.h" />
-    <ClInclude Include="Source\greenRecord.h" />
+    <ClInclude Include="Source\examcoHelper.h" />
+    <ClInclude Include="Source\examcoRecord.h" />
     <ClInclude Include="Source\risByteRecord.h" />
     <ClInclude Include="Source\risByteRecordCopier.h" />
     <ClInclude Include="Source\risNetUdpRecordSocket.h" />

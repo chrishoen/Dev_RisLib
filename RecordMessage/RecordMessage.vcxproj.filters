@@ -7,13 +7,13 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\greenRecord.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\greenHelper.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risNetUdpRecordSocket.cpp" />
+    <ClCompile Include="Source\examcoHelper.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\examcoRecord.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -24,16 +24,16 @@
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\greenRecord.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risByteRecord.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\greenHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteRecordCopier.h" />
     <ClInclude Include="Source\risNetUdpRecordSocket.h" />
+    <ClInclude Include="Source\examcoHelper.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\examcoRecord.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

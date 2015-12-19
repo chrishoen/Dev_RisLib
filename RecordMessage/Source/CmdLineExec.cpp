@@ -7,12 +7,12 @@
 #include "prnPrint.h"
 
 #include "risByteBuffer.h"
-#include "greenRecord.h"
-#include "greenHelper.h"
+#include "examcoRecord.h"
+#include "examcoHelper.h"
 
 #include "CmdLineExec.h"
 
-using namespace GreenRecord;
+using namespace ExampleComm;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()

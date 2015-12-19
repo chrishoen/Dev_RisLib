@@ -1,11 +1,11 @@
-#ifndef _GREENMSG_RECORD_H_
-#define _GREENMSG_RECORD_H_
+#ifndef _EXAMCOMSG_RECORD_H_
+#define _EXAMCOMSG_RECORD_H_
 
 #include "risByteBuffer.h"
 #include "risByteRecord.h"
 #include "risByteRecordCopier.h"
 
-namespace GreenRecord
+namespace ExampleComm
 {
 
     //***************************************************************************

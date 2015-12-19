@@ -61,6 +61,23 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   Ris::ByteBuffer tBuffer(20000);
+
+   Data2Record* tTxRecord = new Data2Record;
+   Data2Record* tRxRecord = new Data2Record;
+   tTxRecord->initialize();
+
+   tBuffer.setCopyTo();
+   RecordCopier::copyToFrom(&tBuffer,tTxRecord);
+
+   tBuffer.rewind();
+   tBuffer.setCopyFrom();
+   RecordCopier::copyToFrom(&tBuffer,tRxRecord);
+
+   tRxRecord->show();
+
+   delete tTxRecord;
+   delete tRxRecord;
 }
 
 //******************************************************************************

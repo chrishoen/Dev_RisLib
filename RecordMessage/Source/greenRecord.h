@@ -18,6 +18,8 @@ namespace GreenRecord
         static const int cUnspecified  = 0;
         static const int cTestRecord   = 1;
         static const int cStatusRecord = 2;
+        static const int cData1Record  = 3;
+        static const int cData2Record  = 4;
     };
 
     //***************************************************************************
@@ -74,6 +76,63 @@ namespace GreenRecord
     //***************************************************************************
     //***************************************************************************
 
+    class Data1Record : public Ris::ByteRecord
+    {
+    public:
+
+       //***********************************************************************
+       // Members
+
+       int mCode1;
+       int mCode2;
+       int mCode3;
+       int mCode4;
+
+       //***********************************************************************
+       // Constructor
+
+       Data1Record();
+
+       //***********************************************************************
+       // Helpers
+
+       void initialize();
+       void show();
+    };
+
+
+    //***************************************************************************
+    //***************************************************************************
+    //***************************************************************************
+
+    class Data2Record : public Ris::ByteRecord
+    {
+    public:
+
+       //***********************************************************************
+       // Members
+
+       int mCode1;
+       int mCode2;
+       int mCode3;
+       int mCode4;
+
+       //***********************************************************************
+       // Constructor
+
+       Data2Record();
+
+       //***********************************************************************
+       // Helpers
+
+       void initialize();
+       void show();
+    };
+
+    //***************************************************************************
+    //***************************************************************************
+    //***************************************************************************
+
     class RecordCopier
     {
     public:
@@ -93,6 +152,8 @@ namespace GreenRecord
 
        static void copyToFrom (Ris::ByteBuffer* aBuffer, TestRecord*   aRecord);
        static void copyToFrom (Ris::ByteBuffer* aBuffer, StatusRecord* aRecord);
+       static void copyToFrom (Ris::ByteBuffer* aBuffer, Data1Record*  aRecord);
+       static void copyToFrom (Ris::ByteBuffer* aBuffer, Data2Record*  aRecord);
 
     };
 

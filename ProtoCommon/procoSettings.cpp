@@ -38,7 +38,7 @@ ProtoCommSettings::ProtoCommSettings()
 
 void ProtoCommSettings::show()
 {
-   printf("ProtoCommSettings BEGIN************************************************ %s\n", mSection);
+   printf("ProtoCommSettings ******* %s\n", mSection);
 
    printf("MyAppNumber               %d\n", mMyAppNumber);
    printf("MyAppRole                 %s\n", getAppRoleNameByEnum(mMyAppRole));
@@ -48,7 +48,7 @@ void ProtoCommSettings::show()
    printf("MyUdp      %-12s   %d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp   %-12s   %d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
-   printf("ProtoCommSettings END************************************************** %s\n", mSection);
+   printf("ProtoCommSettings ******* %s\n", mSection);
 }
 
 //******************************************************************************

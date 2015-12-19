@@ -180,6 +180,7 @@
     <ClCompile Include="..\ProtoCommon\procoSettings.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\procoNetworkThread.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +190,7 @@
     <ClInclude Include="..\ProtoCommon\procoMsg_Message.h" />
     <ClInclude Include="..\ProtoCommon\procoSettings.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\procoNetworkThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

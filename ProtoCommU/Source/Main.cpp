@@ -8,7 +8,7 @@
 #include "procoDefs.h"
 #include "procoNetworkThread.h"
 
-void main_initialize(int argc,char** argv);
+#include "MainInit.h"
 
 using namespace ProtoComm;
 
@@ -20,13 +20,6 @@ int main(int argc,char** argv)
 
    main_initialize(argc,argv);
 
-
-   if (argc > 1)
-   {
-      ProtoComm::gSettings.initialize(argv[1]);
-      ProtoComm::gSettings.show();
-   }
-      
    //--------------------------------------------------------------------
    // Launch threads
 
@@ -48,29 +41,7 @@ int main(int argc,char** argv)
    gNetworkThread->shutdownThread();
    delete gNetworkThread;
 
+   main_finalize();
+
    return 0;
 }
-//******************************************************************************
-// main initialize
-
-void main_initialize(int argc,char** argv)
-{
-   //---------------------------------------------------------------------------
-   // Initialize print filters
-
-   Prn::initializePrint();
-
-   Prn::setFilter(Prn::SocketInit1,false);
-   Prn::setFilter(Prn::SocketInit2,true);
-   Prn::setFilter(Prn::SocketRun1,false);
-   Prn::setFilter(Prn::SocketRun2,false);
-   Prn::setFilter(Prn::SocketRun3,false);
-   Prn::setFilter(Prn::SocketRun4,false);
-
-   Prn::setFilter(Prn::ThreadRun1,true);
-   Prn::setFilter(Prn::ThreadRun2,false);
-   Prn::setFilter(Prn::ThreadRun3,false);
-   Prn::setFilter(Prn::ThreadRun4,false);
-}
-
-

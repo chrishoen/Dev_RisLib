@@ -229,8 +229,6 @@ namespace ProtoComm
       mMessageType     = tHeader.mMessageIdentifier;
       mPayloadLength   = tHeader.mMessageLength - Header::cLength;
 
-      printf("MessageLength %d\n",mMessageLength);
-
       // Test for error
       bool tError =
          tHeader.mSyncWord1 != 0x11111111 ||

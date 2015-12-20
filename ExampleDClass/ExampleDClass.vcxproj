@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{fac3ee1a-aab8-491a-874d-e7f5d16f0cd0}</ProjectGuid>
-    <RootNamespace>ExampleCommU</RootNamespace>
+    <ProjectGuid>{334c04c8-5c56-486e-b898-c8f1d6e1bf3b}</ProjectGuid>
+    <RootNamespace>Test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -175,22 +175,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\examcoDefs.cpp" />
-    <ClCompile Include="Source\examcoHelper.cpp" />
-    <ClCompile Include="Source\examcoNetworkThread.cpp" />
-    <ClCompile Include="Source\examcoRecord.cpp" />
-    <ClCompile Include="Source\examcoSettings.cpp" />
+    <ClCompile Include="Source\examcoDClass.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\examcoDefs.h" />
-    <ClInclude Include="Source\examcoHelper.h" />
-    <ClInclude Include="Source\examcoNetworkThread.h" />
-    <ClInclude Include="Source\examcoRecord.h" />
-    <ClInclude Include="Source\examcoSettings.h" />
-    <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\examcoDClass.h" />
+    <ClInclude Include="Source\risByteDClass.h" />
+    <ClInclude Include="Source\risByteDClassCopier.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

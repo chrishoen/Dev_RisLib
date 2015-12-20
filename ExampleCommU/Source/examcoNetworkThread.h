@@ -76,9 +76,7 @@ public:
    int  mStatusCount2;
 
    //--------------------------------------------------------------
-   // Send a message
-
-   Ris::Net::UdpTxRecordSocket  mTxSocket;
+   // Send a record
 
    void sendRecord (Ris::ByteRecord* aRecord);
    void sendTestRecord();   

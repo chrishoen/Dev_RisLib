@@ -24,6 +24,8 @@ UdpMsgThread::UdpMsgThread()
    mThreadPriority = get_default_udp_rx_thread_priority();
    mLocalIpAddress[0]=0;
    mLocalIpPort=0;
+   mRemoteIpAddress[0]=0;
+   mRemoteIpPort=0;
 }
 
 //******************************************************************************
@@ -32,11 +34,16 @@ UdpMsgThread::UdpMsgThread()
 void UdpMsgThread::configure(
    char*                      aLocalIpAddress,
    int                        aLocalIpPort,
+   char*                      aRemoteIpAddress,
+   int                        aRemoteIpPort,
    BaseMessageParserCreator*  aMessageParserCreator,
    RxMsgQCall*                aRxMsgQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);
    mLocalIpPort = aLocalIpPort;
+
+   strcpy(mRemoteIpAddress, aRemoteIpAddress);
+   mRemoteIpPort = aRemoteIpPort;
 
    mMessageParserCreator = aMessageParserCreator;
 
@@ -54,6 +61,11 @@ void UdpMsgThread::threadInitFunction()
    mRxSocket.configure(
       mLocalIpAddress,
       mLocalIpPort,
+      mMessageParserCreator);
+
+   mTxSocket.configure(
+      mRemoteIpAddress,
+      mRemoteIpPort,
       mMessageParserCreator);
 
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction END");
@@ -135,6 +147,14 @@ void UdpMsgThread::processRxMsg(Ris::ByteContent* aRxMsg)
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
    mRxMsgQCall.invoke(aRxMsg);
+}
+
+//******************************************************************************
+// This sends a message via the tcp client thread
+
+void UdpMsgThread::sendMsg (Ris::ByteContent* aTxMsg)
+{
+   mTxSocket.doSendMsg(aTxMsg);
 }
 
 //******************************************************************************

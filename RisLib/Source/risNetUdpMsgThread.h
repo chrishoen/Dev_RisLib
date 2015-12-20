@@ -87,6 +87,8 @@ public:
    void configure(
       char*                           aLocalIpAddress,
       int                             aLocalIpPort,
+      char*                           aRemoteIpAddress,
+      int                             aRemoteIpPort,
       Ris::BaseMessageParserCreator*  aMessageParserCreator,
       RxMsgQCall*                     aRxMsgQCall);
 
@@ -97,7 +99,7 @@ public:
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg          (Ris::ByteContent* aRxMsg);
+   void processRxMsg (Ris::ByteContent* aRxMsg);
 
    //--------------------------------------------------------------
    // QCall:
@@ -106,14 +108,22 @@ public:
    RxMsgQCall   mRxMsgQCall;
 
    //--------------------------------------------------------------
+   // Transmit message:
+
+   void sendMsg (Ris::ByteContent* aTxMsg);
+
+   //--------------------------------------------------------------
    // Sockets:
 
    // Socket address that socket instance connects to
    char  mLocalIpAddress[40];
    int   mLocalIpPort;
+   char  mRemoteIpAddress[40];
+   int   mRemoteIpPort;
 
    // Socket instance
    UdpRxMsgSocket mRxSocket;
+   UdpTxMsgSocket mTxSocket;
 
    // Message parser creator, this is used by the receive socket to
    // create an instance of a message parser

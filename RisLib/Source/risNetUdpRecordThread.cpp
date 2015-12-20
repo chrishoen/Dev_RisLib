@@ -32,11 +32,16 @@ UdpRecordThread::UdpRecordThread()
 void UdpRecordThread::configure(
    char*              aLocalIpAddress,
    int                aLocalIpPort,
+   char*              aRemoteIpAddress,
+   int                aRemoteIpPort,
    BaseRecordCopier*  aRecordCopier,
    RxRecordQCall*     aRxRecordQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);
    mLocalIpPort = aLocalIpPort;
+
+   strcpy(mRemoteIpAddress, aRemoteIpAddress);
+   mRemoteIpPort = aRemoteIpPort;
 
    mRecordCopier  = aRecordCopier;
    mRxRecordQCall = *aRxRecordQCall;
@@ -55,6 +60,11 @@ void UdpRecordThread::threadInitFunction()
       mLocalIpPort,
       mRecordCopier);
 
+   mTxSocket.configure(
+      mRemoteIpAddress,
+      mRemoteIpPort,
+      mRecordCopier);
+   
    Prn::print(Prn::SocketInit1, "UdpRecordThread::threadInitFunction END");
 }
 
@@ -66,7 +76,7 @@ void UdpRecordThread::threadInitFunction()
 void  UdpRecordThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun1, "UdpRxRecordThread::threadRunFunction");
-   
+
    //-----------------------------------------------------------
    // Loop
 
@@ -77,14 +87,14 @@ void  UdpRecordThread::threadRunFunction()
       // Try to receive a message with a blocking receive call
       // If a message was received then process it.
       // If a message was not received then the connection was lost.  
-      ByteRecord* rxRecord=0;
-      if (mRxSocket.doRecvRecord(rxRecord))
+      ByteRecord* tRecord=0;
+      if (mRxSocket.doRecvRecord(tRecord))
       {
          // Message was correctly received
-         Prn::print(Prn::SocketRun1, "Recv message %d",mRxSocket.mRxCount);
+         Prn::print(Prn::SocketRun1, "Recv message %d %d",mRxSocket.mRxCount,tRecord->mRecordType);
 
          // Call the receive method
-         processRxRecord(rxRecord);
+         processRxRecord(tRecord);
       }
       else
       {
@@ -135,6 +145,14 @@ void UdpRecordThread::processRxRecord(Ris::ByteRecord* aRxRecord)
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
    mRxRecordQCall.invoke(aRxRecord);
+}
+
+//******************************************************************************
+// This sends a record 
+
+void UdpRecordThread::sendRecord (Ris::ByteRecord* aRecord)
+{
+   mTxSocket.doSendRecord(aRecord);
 }
 
 //******************************************************************************

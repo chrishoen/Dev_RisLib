@@ -50,21 +50,15 @@ void NetworkThread::configure()
    mMessageParserCreator.configure(gSettings.mMyAppNumber);
 
    //---------------------------------------------------------------------------
-   // Configure receive socket thread
+   // Configure message thread
 
    mUdpMsgThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
-      &mMessageParserCreator,
-      &mRxMsgQCall);
-
-   //---------------------------------------------------------------------------
-   // Configure transmit socket
-
-   mTxSocket.configure(
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mMessageParserCreator);
+      &mMessageParserCreator,
+      &mRxMsgQCall);
 }
 
 //******************************************************************************
@@ -139,7 +133,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::StatusResponseMsg* tTxMsg = new ProtoComm::StatusResponseMsg;
-      sendMsg(tTxMsg);
+      mUdpMsgThread->sendMsg(tTxMsg);
    }
 
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
@@ -184,7 +178,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
    ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
    tx->mCode1=101;
 
-   sendMsg(tx);
+   mUdpMsgThread->sendMsg(tx);
 }
 
 //******************************************************************************
@@ -192,7 +186,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 
 void NetworkThread::sendMsg (ProtoComm::BaseMsg* aTxMsg)
 {
-   mTxSocket.doSendMsg(aTxMsg);
+   mUdpMsgThread->sendMsg(aTxMsg);
 }
 
 //******************************************************************************
@@ -200,10 +194,9 @@ void NetworkThread::sendMsg (ProtoComm::BaseMsg* aTxMsg)
 
 void NetworkThread::sendTestMsg()
 {
-   ProtoComm::TestMsg* msg = new ProtoComm::TestMsg;
-   msg->mCode1=201;
+   ProtoComm::TestMsg* tTxMsg = new ProtoComm::TestMsg;
  
-   mTxSocket.doSendMsg(msg);
+   mUdpMsgThread->sendMsg(tTxMsg);
 }
 
 }//namespace

@@ -46,21 +46,16 @@ void NetworkThread::configure()
    Prn::print(Prn::ThreadInit1, "NetworkThread::configure");
 
    //---------------------------------------------------------------------------
-   // Configure receive socket thread
+   // Configure socket thread
 
    mUdpRecordThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
+      gSettings.mOtherUdpIPAddress,
+      gSettings.mOtherUdpPort,
       &mRecordCopier,
       &mRxRecordQCall);
 
-   //---------------------------------------------------------------------------
-   // Configure transmit socket
-
-   mTxSocket.configure(
-      gSettings.mOtherUdpIPAddress,
-      gSettings.mOtherUdpPort,
-      &mRecordCopier);
 }
 
 //******************************************************************************
@@ -185,7 +180,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 
 void NetworkThread::sendRecord (Ris::ByteRecord* aRecord)
 {
-   mTxSocket.doSendRecord(aRecord);
+   mUdpRecordThread->sendRecord(aRecord);
 }
 
 //******************************************************************************
@@ -193,10 +188,10 @@ void NetworkThread::sendRecord (Ris::ByteRecord* aRecord)
 
 void NetworkThread::sendTestRecord()
 {
-   TestRecord* msg = new TestRecord;
-   msg->mCode1=201;
+   TestRecord* tRecord = new TestRecord;
+   tRecord->mCode1=201;
  
-   mTxSocket.doSendRecord(msg);
+   mUdpRecordThread->sendRecord(tRecord);
 }
 
 }//namespace

@@ -438,6 +438,7 @@ namespace Net
       // Transmit the buffer
       mTxLength=tBuffer.getLength();
       doSendTo(mRemote,tBuffer.getBaseAddress(),mTxLength);
+      Prn::print(Prn::SocketRun1, "UdpTxRecordSocket  doSendTo   $ %d",mTxLength);
 
       mTxCount++;
 

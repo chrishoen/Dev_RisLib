@@ -81,15 +81,9 @@ public:
    //--------------------------------------------------------------
    // Send a message
 
-   Ris::Net::UdpTxMsgSocket  mTxSocket;
+      void sendMsg (ProtoComm::BaseMsg* aTxMsg);
+      void sendTestMsg();   
 
-   void sendMsg (ProtoComm::BaseMsg* aTxMsg);
-   void sendTestMsg();   
-
-   //--------------------------------------------------------------
-   // State:
-
-   Ris::TimeMarker mTimeMarker;
 };
 //******************************************************************************
 // Global instance

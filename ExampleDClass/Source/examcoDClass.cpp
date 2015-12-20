@@ -9,51 +9,48 @@ namespace ExampleComm
    //******************************************************************************
    // This creates a new record, based on a record type
 
-   Ris::ByteDClass* DClassCopier::createDClass(int aDClassType)
+   Ris::DHandle DClassCopier::createDClass(int aType)
    {
-      Ris::ByteDClass* tDClass = 0;
+      Ris::DHandle tHandle;
 
-      switch (aDClassType)
+      switch (aType)
       {
-      case TypeIdT::cTestDClass :
-         tDClass = new TestDClass;
+      case TypeIdT::cTest :
+         return Ris::DHandle(TypeIdT::cTest,   new Test);
          break;
-      case TypeIdT::cStatusDClass :
-         tDClass = new StatusDClass;
+      case TypeIdT::cStatus :
+         return Ris::DHandle(TypeIdT::cStatus, new Status);
          break;
-      case TypeIdT::cData1DClass :
-         tDClass = new Data1DClass;
+      case TypeIdT::cData1 :
+         return Ris::DHandle(TypeIdT::cData1,  new Data1);
          break;
-      case TypeIdT::cData2DClass :
-         tDClass = new Data2DClass;
-         break;
-      default :
-         return 0;
+      case TypeIdT::cData2 :
+         return Ris::DHandle(TypeIdT::cData2,  new Data2);
          break;
       }
 
-      return tDClass;
+      return tHandle;
    }
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // DClassCopier
+   // Copier
 
-   void DClassCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteDClass* aDClass)
+   void DClassCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::DHandle aHandle)
    {
-      switch (aDClass->mDClassType)
+      switch (aHandle.mType)
       {
-      case TypeIdT::cTestDClass :
-         copyToFrom(aBuffer,(TestDClass*)aDClass);
+      case TypeIdT::cTest :
+         copyToFrom(aBuffer,(Test*)aHandle.mPtr);
          break;
-      case TypeIdT::cStatusDClass :
-         copyToFrom(aBuffer,(StatusDClass*)aDClass);
+      case TypeIdT::cStatus :
+         copyToFrom(aBuffer,(Status*)aHandle.mPtr);
          break;
-      case TypeIdT::cData1DClass :
-         copyToFrom(aBuffer,(Data1DClass*)aDClass);
+      case TypeIdT::cData1 :
+         copyToFrom(aBuffer,(Data1*)aHandle.mPtr);
          break;
-      case TypeIdT::cData2DClass :
-         copyToFrom(aBuffer,(Data2DClass*)aDClass);
+      case TypeIdT::cData2 :
+         copyToFrom(aBuffer,(Data2*)aHandle.mPtr);
          break;
       default :
          break;
@@ -63,94 +60,86 @@ namespace ExampleComm
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // TestDClass
+   // Test
 
-   TestDClass::TestDClass()
+   Test::Test()
    {
-      mDClassType     = TypeIdT::cTestDClass;
-
       mCode1           = 1001;
       mCode2           = 0;
       mCode3           = 0;
       mCode4           = 0;
    }
 
-   void DClassCopier::copyToFrom (Ris::ByteBuffer* aBuffer, TestDClass* aDClass)
+   void DClassCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Test* aClass)
    {
-      aBuffer->copy( &aDClass->mCode1 );
-      aBuffer->copy( &aDClass->mCode2 );
-      aBuffer->copy( &aDClass->mCode3 );
-      aBuffer->copy( &aDClass->mCode4 );
+      aBuffer->copy( &aClass->mCode1 );
+      aBuffer->copy( &aClass->mCode2 );
+      aBuffer->copy( &aClass->mCode3 );
+      aBuffer->copy( &aClass->mCode4 );
    }
 
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // StatusDClass
+   // Status
 
-   StatusDClass::StatusDClass()
+   Status::Status()
    {
-      mDClassType     = TypeIdT::cStatusDClass;
-
       mCode1           = 1002;
       mCode2           = 0;
       mCode3           = 0;
       mCode4           = 0;
    }
 
-   void DClassCopier::copyToFrom (Ris::ByteBuffer* aBuffer, StatusDClass* aDClass)
+   void DClassCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Status* aClass)
    {
-      aBuffer->copy( &aDClass->mCode1 );
-      aBuffer->copy( &aDClass->mCode2 );
-      aBuffer->copy( &aDClass->mCode3 );
-      aBuffer->copy( &aDClass->mCode4 );
+      aBuffer->copy( &aClass->mCode1 );
+      aBuffer->copy( &aClass->mCode2 );
+      aBuffer->copy( &aClass->mCode3 );
+      aBuffer->copy( &aClass->mCode4 );
    }
 
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // Data1DClass
+   // Data1
 
-   Data1DClass::Data1DClass()
+   Data1::Data1()
    {
-      mDClassType     = TypeIdT::cData1DClass;
-
       mCode1           = 1001;
       mCode2           = 0;
       mCode3           = 0;
       mCode4           = 0;
    }
 
-   void DClassCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data1DClass* aDClass)
+   void DClassCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data1* aClass)
    {
-      aBuffer->copy( &aDClass->mCode1 );
-      aBuffer->copy( &aDClass->mCode2 );
-      aBuffer->copy( &aDClass->mCode3 );
-      aBuffer->copy( &aDClass->mCode4 );
+      aBuffer->copy( &aClass->mCode1 );
+      aBuffer->copy( &aClass->mCode2 );
+      aBuffer->copy( &aClass->mCode3 );
+      aBuffer->copy( &aClass->mCode4 );
    }
 
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // Data2DClass
+   // Data2
 
-   Data2DClass::Data2DClass()
+   Data2::Data2()
    {
-      mDClassType     = TypeIdT::cData2DClass;
-
       mCode1           = 1001;
       mCode2           = 0;
       mCode3           = 0;
       mCode4           = 0;
    }
 
-   void DClassCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data2DClass* aDClass)
+   void DClassCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data2* aClass)
    {
-      aBuffer->copy( &aDClass->mCode1 );
-      aBuffer->copy( &aDClass->mCode2 );
-      aBuffer->copy( &aDClass->mCode3 );
-      aBuffer->copy( &aDClass->mCode4 );
-      DClassCopier::copyToFrom   (aBuffer, &aDClass->mDClass1 );
+      aBuffer->copy( &aClass->mCode1 );
+      aBuffer->copy( &aClass->mCode2 );
+      aBuffer->copy( &aClass->mCode3 );
+      aBuffer->copy( &aClass->mCode4 );
+      DClassCopier::copyToFrom   (aBuffer, &aClass->mData1 );
    }
 
 }

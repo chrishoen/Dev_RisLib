@@ -24,25 +24,60 @@ medium. All copies are done in network order.
 namespace Ris
 {
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is a base class for classes that can be copied to/from ByteBuffers.
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This is a base class for classes that can be copied to/from ByteBuffers.
 
-class ByteDClass
-{
-public:
-   // General purpose identifier
-   int mDClassType;
-
-   // Constructor
-   ByteDClass()
+   class DHandle
    {
-      mDClassType = 0;
-   }
-};
+   public:
 
-//******************************************************************************
+      // Members
+
+      int   mType;
+      void* mPtr;
+
+      // Constructor
+
+      DHandle()
+      {
+         mType = 0;
+         mPtr  = 0;
+      }
+
+      DHandle(int aType,void* aPtr)
+      {
+         mType = aType;
+         mPtr  = aPtr;
+      }
+
+      void set(int aType,void* aPtr)
+      {
+         mType = aType;
+         mPtr  = aPtr;
+      }
+   };
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This is a base class for classes that can be copied to/from ByteBuffers.
+
+   class ByteDClass
+   {
+   public:
+      // General purpose identifier
+      int mDClassType;
+
+      // Constructor
+      ByteDClass()
+      {
+         mDClassType = 0;
+      }
+   };
+
+   //******************************************************************************
 }//namespace
 #endif
 

@@ -17,17 +17,17 @@ namespace ExampleComm
     {
     public:
         static const int cUnspecified  = 0;
-        static const int cTestDClass   = 1;
-        static const int cStatusDClass = 2;
-        static const int cData1DClass  = 3;
-        static const int cData2DClass  = 4;
+        static const int cTest   = 1;
+        static const int cStatus = 2;
+        static const int cData1  = 3;
+        static const int cData2  = 4;
     };
 
     //***************************************************************************
     //***************************************************************************
     //***************************************************************************
 
-    class TestDClass : public Ris::ByteDClass
+    class Test
     {
     public:
 
@@ -42,7 +42,7 @@ namespace ExampleComm
        //***********************************************************************
        // Constructor
 
-       TestDClass();
+       Test();
 
     };
 
@@ -50,7 +50,7 @@ namespace ExampleComm
     //***************************************************************************
     //***************************************************************************
 
-    class StatusDClass : public Ris::ByteDClass
+    class Status
     {
     public:
 
@@ -65,14 +65,14 @@ namespace ExampleComm
        //***********************************************************************
        // Constructor
 
-       StatusDClass();
+       Status();
     };
 
     //***************************************************************************
     //***************************************************************************
     //***************************************************************************
 
-    class Data1DClass : public Ris::ByteDClass
+    class Data1
     {
     public:
 
@@ -87,7 +87,7 @@ namespace ExampleComm
        //***********************************************************************
        // Constructor
 
-       Data1DClass();
+       Data1();
 
     };
 
@@ -96,23 +96,23 @@ namespace ExampleComm
     //***************************************************************************
     //***************************************************************************
 
-    class Data2DClass : public Ris::ByteDClass
+    class Data2
     {
     public:
 
        //***********************************************************************
        // Members
 
-       int mCode1;
-       int mCode2;
-       int mCode3;
-       int mCode4;
-       Data1DClass mDClass1;
+       int   mCode1;
+       int   mCode2;
+       int   mCode3;
+       int   mCode4;
+       Data1 mData1;
 
        //***********************************************************************
        // Constructor
 
-       Data2DClass();
+       Data2();
 
     };
 
@@ -127,20 +127,20 @@ namespace ExampleComm
        //***********************************************************************
        // This creates a new record, based on a record type
 
-       Ris::ByteDClass* createDClass(int aDClassType);
+       Ris::DHandle createDClass(int aType);
 
        //***********************************************************************
        // This copies byte buffers to/from records
 
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteDClass* aDClass);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::DHandle aHandle);
 
        //***********************************************************************
        // These copy byte buffers to/from records
 
-       void copyToFrom (Ris::ByteBuffer* aBuffer, TestDClass*   aDClass);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, StatusDClass* aDClass);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Data1DClass*  aDClass);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Data2DClass*  aDClass);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Test*   aClass);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Status* aClass);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Data1*  aClass);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Data2*  aClass);
 
     };
 

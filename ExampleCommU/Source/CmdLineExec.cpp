@@ -58,9 +58,23 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
          gNetworkThread->sendRecord(tRecord);
          break;
       }
-      case 5:
+      case 2:
+      {
+         StatusRecord* tRecord = new StatusRecord;
+         Helper::initialize(tRecord);
+         gNetworkThread->sendRecord(tRecord);
+         break;
+      }
+      case 3:
       {
          Data1Record* tRecord = new Data1Record;
+         Helper::initialize(tRecord);
+         gNetworkThread->sendRecord(tRecord);
+         break;
+      }
+      case 4:
+      {
+         Data2Record* tRecord = new Data2Record;
          Helper::initialize(tRecord);
          gNetworkThread->sendRecord(tRecord);
          break;

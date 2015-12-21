@@ -6,14 +6,14 @@
 //******************************************************************************
 #include "risSockets.h"
 #include "prnPrint.h"
-#include "examcoSettings.h"
-#include "examcoHelper.h"
+#include "exampleSettings.h"
+#include "exampleRecordHelper.h"
 
-#define  _EXAMCONETWORKTHREAD_CPP_
-#include "examcoNetworkThread.h"
+#define  _EXAMPLENETWORKTHREAD_CPP_
+#include "exampleNetworkThread.h"
 
 
-namespace ExampleComm
+namespace Example
 {
 
 //******************************************************************************
@@ -119,7 +119,7 @@ void NetworkThread::processRxMessage(TestRecord* aRecord)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_TestRecord" );
 
-   Helper::show(aRecord);
+   RecordHelper::show(aRecord);
 
    delete aRecord;
 }
@@ -131,7 +131,7 @@ void NetworkThread::processRxMessage(StatusRecord* aRecord)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_StatusRecord %d",mStatusCount1++);
 
-   Helper::show(aRecord);
+   RecordHelper::show(aRecord);
 
    delete aRecord;
 }
@@ -143,7 +143,7 @@ void NetworkThread::processRxMessage(Data1Record* aRecord)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_Data1Record");
 
-   Helper::show(aRecord);
+   RecordHelper::show(aRecord);
 
    delete aRecord;
 }
@@ -155,7 +155,7 @@ void NetworkThread::processRxMessage(Data2Record* aRecord)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_Data2Record");
 
-   Helper::show(aRecord);
+   RecordHelper::show(aRecord);
 
    delete aRecord;
 }

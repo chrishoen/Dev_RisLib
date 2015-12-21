@@ -8,18 +8,18 @@
 #include "my_functions.h"
 #include "risCmdLineFile.h"
 #include "risPortableCalls.h"
-#include "examcoDefs.h"
+#include "exampleDefs.h"
 
 
-#define  _EXAMCOSETTINGS_CPP_
-#include "examcoSettings.h"
+#define  _EXAMPLESETTINGS_CPP_
+#include "exampleSettings.h"
 
-namespace ExampleComm
+namespace Example
 {
 
 //******************************************************************************
 
-ExampleCommSettings::ExampleCommSettings()
+ExampleSettings::ExampleSettings()
 {
    mSection[0]=0;
 
@@ -36,9 +36,9 @@ ExampleCommSettings::ExampleCommSettings()
    mOtherUdpPort = 0;
 }
 
-void ExampleCommSettings::show()
+void ExampleSettings::show()
 {
-   printf("ExampleCommSettings ******* %s\n", mSection);
+   printf("ExampleSettings ******* %s\n", mSection);
 
    printf("MyAppNumber               %d\n", mMyAppNumber);
    printf("MyAppRole                 %s\n", Defs::getAppRoleNameByEnum(mMyAppRole));
@@ -48,7 +48,7 @@ void ExampleCommSettings::show()
    printf("MyUdp      %-12s   %d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp   %-12s   %d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
-   printf("ExampleCommSettings ******* %s\n", mSection);
+   printf("ExampleSettings ******* %s\n", mSection);
 }
 
 //******************************************************************************
@@ -56,7 +56,7 @@ void ExampleCommSettings::show()
 // if "Section", the first command line argument, is the same as the section 
 // specified in initialize.
 
-bool ExampleCommSettings::isMySection(Ris::CmdLineCmd* aCmd)
+bool ExampleSettings::isMySection(Ris::CmdLineCmd* aCmd)
 {
    bool tFlag=false;
 
@@ -79,7 +79,7 @@ bool ExampleCommSettings::isMySection(Ris::CmdLineCmd* aCmd)
 // BEGIN starts a section, END exits a section
 // Only commands for a section are processed
 
-void ExampleCommSettings::execute(Ris::CmdLineCmd* aCmd)
+void ExampleSettings::execute(Ris::CmdLineCmd* aCmd)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -112,19 +112,19 @@ void ExampleCommSettings::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 // Specific execute 
 
-void ExampleCommSettings::executeOnTcpServer(Ris::CmdLineCmd* aCmd)
+void ExampleSettings::executeOnTcpServer(Ris::CmdLineCmd* aCmd)
 {
    aCmd->copyArgString(1, mTcpServerIPAddress,MaxStringSize);
    mTcpServerPort = aCmd->argInt(2);
 }
 
-void ExampleCommSettings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
+void ExampleSettings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
 {
    aCmd->copyArgString(1, mMyUdpIPAddress,MaxStringSize);
    mMyUdpPort = aCmd->argInt(2);
 }
 
-void ExampleCommSettings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
+void ExampleSettings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
 {
    aCmd->copyArgString(1, mOtherUdpIPAddress,MaxStringSize);
    mOtherUdpPort = aCmd->argInt(2);
@@ -134,13 +134,13 @@ void ExampleCommSettings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-bool ExampleCommSettings::initialize(char* aSection)
+bool ExampleSettings::initialize(char* aSection)
 { 
    // File path
    char tFilePath[200];
 
    strcpy(tFilePath, Ris::portableGetSettingsDir());
-   strcat(tFilePath, "examcoSettings.txt");
+   strcat(tFilePath, "exampleSettings.txt");
 
    // Copy arguments
    strcpy(mSection,aSection);
@@ -155,7 +155,7 @@ bool ExampleCommSettings::initialize(char* aSection)
    }
    else
    {
-      printf("ExampleCommSettings::file open failed\n");
+      printf("ExampleSettings::file open failed\n");
       return false;
    }
 }

@@ -1,11 +1,11 @@
-#ifndef _EXAMCODEFS_H_
-#define _EXAMCODEFS_H_
+#ifndef _EXAMPLEDEFS_H_
+#define _EXAMPLEDEFS_H_
 
 /*==============================================================================
 Description:
-ExampleComm definitions
+Example definitions
 ==============================================================================*/
-namespace ExampleComm
+namespace Example
 {
 
    //***************************************************************************

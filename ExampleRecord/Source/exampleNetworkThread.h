@@ -1,5 +1,5 @@
-#ifndef _EXAMCONETWORKTHREAD_H_
-#define _EXAMCONETWORKTHREAD_H_
+#ifndef _EXAMPLENETWORKTHREAD_H_
+#define _EXAMPLENETWORKTHREAD_H_
 
 //******************************************************************************
 //******************************************************************************
@@ -10,9 +10,9 @@
 #include "risNetUdpRecordThread.h"
 #include "risThreadsQCallThread.h"
 
-#include "examcoRecord.h"
+#include "exampleRecord.h"
 
-namespace ExampleComm
+namespace Example
 {
 
 //******************************************************************************
@@ -86,7 +86,7 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _EXAMCONETWORKTHREAD_CPP_
+#ifdef _EXAMPLENETWORKTHREAD_CPP_
          NetworkThread* gNetworkThread;
 #else
 extern   NetworkThread* gNetworkThread;

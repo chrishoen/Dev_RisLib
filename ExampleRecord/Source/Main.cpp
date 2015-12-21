@@ -4,11 +4,11 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "examcoNetworkThread.h"
+#include "exampleNetworkThread.h"
 
 #include "MainInit.h"
 
-using namespace ExampleComm;
+using namespace Example;
 
 //******************************************************************************
 int main(int argc,char** argv)

@@ -5,15 +5,15 @@
 #include <stdio.h>
 #include "prnPrint.h"
 
-#include "examcoSettings.h"
-#include "examcoDefs.h"
-#include "examcoRecord.h"
-#include "examcoHelper.h"
-#include "examcoNetworkThread.h"
+#include "exampleSettings.h"
+#include "exampleDefs.h"
+#include "exampleRecord.h"
+#include "exampleRecordHelper.h"
+#include "exampleNetworkThread.h"
 
 #include "CmdLineExec.h"
 
-using namespace ExampleComm;
+using namespace Example;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
@@ -54,28 +54,28 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
       case 1:
       {
          TestRecord* tRecord = new TestRecord;
-         Helper::initialize(tRecord);
+         RecordHelper::initialize(tRecord);
          gNetworkThread->sendMessage(tRecord);
          break;
       }
       case 2:
       {
          StatusRecord* tRecord = new StatusRecord;
-         Helper::initialize(tRecord);
+         RecordHelper::initialize(tRecord);
          gNetworkThread->sendMessage(tRecord);
          break;
       }
       case 3:
       {
          Data1Record* tRecord = new Data1Record;
-         Helper::initialize(tRecord);
+         RecordHelper::initialize(tRecord);
          gNetworkThread->sendMessage(tRecord);
          break;
       }
       case 4:
       {
          Data2Record* tRecord = new Data2Record;
-         Helper::initialize(tRecord);
+         RecordHelper::initialize(tRecord);
          gNetworkThread->sendMessage(tRecord);
          break;
       }
@@ -94,7 +94,7 @@ void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
    StatusRecord* tRecord = new StatusRecord;
-   Helper::initialize(tRecord);
+   RecordHelper::initialize(tRecord);
    gNetworkThread->sendMessage(tRecord);
 }
 

@@ -13,9 +13,9 @@ Description:
 
 #include "risPortableCalls.h"
 
-#include "examcoDefs.h"
+#include "exampleDefs.h"
 
-namespace ExampleComm
+namespace Example
 {
 
 //******************************************************************************

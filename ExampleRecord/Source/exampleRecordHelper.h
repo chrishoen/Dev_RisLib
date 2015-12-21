@@ -1,16 +1,16 @@
-#ifndef _EXAMCOMHELPER_H_
-#define _EXAMCOHELPER_H_
+#ifndef _EXAMPLERECORDHELPER_H_
+#define _EXAMPLERECORDHELPER_H__
 
-#include "examcoRecord.h"
+#include "exampleRecord.h"
 
-namespace ExampleComm
+namespace Example
 {
 
     //***************************************************************************
     //***************************************************************************
     //***************************************************************************
 
-    class Helper
+    class RecordHelper
     {
     public:
 

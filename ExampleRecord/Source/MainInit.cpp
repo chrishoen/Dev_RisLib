@@ -1,7 +1,7 @@
 #include "prnPrint.h"
 #include "risThreadsProcess.h"
-#include "examcoSettings.h"
-#include "examcoDefs.h"
+#include "exampleSettings.h"
+#include "exampleDefs.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -34,15 +34,15 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ThreadRun3,  true);
    Prn::setFilter(Prn::ThreadRun4, false);
 
-   Prn::print(0,"ExampleCommU*******************************************BEGIN");
+   Prn::print(0,"ExampleU*******************************************BEGIN");
 
    //---------------------------------------------------------------------------
    // Initialize Settings
 
    if (argc > 1)
    {
-      ExampleComm::gSettings.initialize(argv[1]);
-      ExampleComm::gSettings.show();
+      Example::gSettings.initialize(argv[1]);
+      Example::gSettings.show();
    }
 
 }
@@ -54,7 +54,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ExampleCommU*******************************************END");
+   Prn::print(0,"ExampleU*******************************************END");
 
    // Close print
    Prn::finalizePrint();

@@ -176,21 +176,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\examcoDefs.cpp" />
-    <ClCompile Include="Source\examcoHelper.cpp" />
-    <ClCompile Include="Source\examcoNetworkThread.cpp" />
-    <ClCompile Include="Source\examcoRecord.cpp" />
-    <ClCompile Include="Source\examcoSettings.cpp" />
+    <ClCompile Include="Source\exampleDefs.cpp" />
+    <ClCompile Include="Source\exampleRecordHelper.cpp" />
+    <ClCompile Include="Source\exampleNetworkThread.cpp" />
+    <ClCompile Include="Source\exampleRecord.cpp" />
+    <ClCompile Include="Source\exampleSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\examcoDefs.h" />
-    <ClInclude Include="Source\examcoHelper.h" />
-    <ClInclude Include="Source\examcoNetworkThread.h" />
-    <ClInclude Include="Source\examcoRecord.h" />
-    <ClInclude Include="Source\examcoSettings.h" />
+    <ClInclude Include="Source\exampleDefs.h" />
+    <ClInclude Include="Source\exampleRecordHelper.h" />
+    <ClInclude Include="Source\exampleNetworkThread.h" />
+    <ClInclude Include="Source\exampleRecord.h" />
+    <ClInclude Include="Source\exampleSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

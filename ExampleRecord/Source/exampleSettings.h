@@ -1,5 +1,5 @@
-#ifndef _EXAMCOSETTINGS_H_
-#define _EXAMCOSETTINGS_H_
+#ifndef _EXAMPLESETTINGS_H_
+#define _EXAMPLESETTINGS_H_
 /*==============================================================================
 
 This file contains settings for protocomm. 
@@ -12,18 +12,18 @@ This file contains settings for protocomm.
 
 #include "risCmdLineFile.h"
 
-namespace ExampleComm
+namespace Example
 {
 
 //**********************************************************************
 //**********************************************************************
 //**********************************************************************
-// ExampleCommSettings class, inherits from BaseCmdLineExec to process
+// ExampleSettings class, inherits from BaseCmdLineExec to process
 // command lines from a command line file.
 // Each application reads its own print settings from a common settings
 // file. 
 
-class  ExampleCommSettings : public Ris::BaseCmdLineExec
+class  ExampleSettings : public Ris::BaseCmdLineExec
 {
 public:
 
@@ -48,7 +48,7 @@ public:
    // Infrastucture. Constructor and such
 
    typedef Ris::BaseCmdLineExec BaseClass;
-   ExampleCommSettings();
+   ExampleSettings();
    void show();
 
    // Baseclass override, executes for each line in the settings
@@ -88,10 +88,10 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _EXAMCOSETTINGS_CPP_
-        ExampleCommSettings gSettings;
+#ifdef _EXAMPLESETTINGS_CPP_
+        ExampleSettings gSettings;
 #else
-        extern ExampleCommSettings gSettings;
+        extern ExampleSettings gSettings;
 #endif
 
 }//namespace

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include "examcoRecord.h"
+#include "exampleRecord.h"
 
-namespace ExampleComm
+namespace Example
 {
    //******************************************************************************
    //******************************************************************************

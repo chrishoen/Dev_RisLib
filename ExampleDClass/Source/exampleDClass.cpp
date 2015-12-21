@@ -9,23 +9,23 @@ namespace Example
    //******************************************************************************
    // This creates a new record, based on a record type
 
-   Ris::DHandle DClassCopier::createDClass(int aType)
+   DHandle DClassCopier::createDClass(int aType)
    {
-      Ris::DHandle tHandle;
+      DHandle tHandle;
 
       switch (aType)
       {
       case TypeIdT::cTest :
-         return Ris::DHandle(TypeIdT::cTest,   new Test);
+         return DHandle(TypeIdT::cTest,   new Test);
          break;
       case TypeIdT::cStatus :
-         return Ris::DHandle(TypeIdT::cStatus, new Status);
+         return DHandle(TypeIdT::cStatus, new Status);
          break;
       case TypeIdT::cData1 :
-         return Ris::DHandle(TypeIdT::cData1,  new Data1);
+         return DHandle(TypeIdT::cData1,  new Data1);
          break;
       case TypeIdT::cData2 :
-         return Ris::DHandle(TypeIdT::cData2,  new Data2);
+         return DHandle(TypeIdT::cData2,  new Data2);
          break;
       }
 
@@ -36,7 +36,7 @@ namespace Example
    //****************************************************************************
    // Copier
 
-   void DClassCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::DHandle aHandle)
+   void DClassCopier::copyToFrom(Ris::ByteBuffer* aBuffer, DHandle aHandle)
    {
       switch (aHandle.mType)
       {

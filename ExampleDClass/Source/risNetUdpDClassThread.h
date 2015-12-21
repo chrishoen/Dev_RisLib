@@ -81,7 +81,7 @@ public:
    // aMessageParser  is the message parser to be used on receive messages
    // aRxDClassQCall         is a qcall for receive messages
 
-   typedef Ris::Threads::QCall1<Ris::DHandle> RxDClassQCall;
+   typedef Ris::Threads::QCall1<DHandle> RxDClassQCall;
 
    void configure(
       char*                   aLocalIpAddress,
@@ -98,7 +98,7 @@ public:
    // to process a received message.
    //
    // It invokes the mRxDClassQCall that is passed in at configure.
-   void processRxDClass       (Ris::DHandle aRxDClass);
+   void processRxDClass       (DHandle aRxDClass);
 
    //--------------------------------------------------------------
    // QCall:
@@ -109,7 +109,7 @@ public:
    //--------------------------------------------------------------
    // Transmit message:
 
-   void sendDClass (Ris::DHandle aClass);
+   void sendDClass (DHandle aClass);
 
    //--------------------------------------------------------------
    // Sockets:

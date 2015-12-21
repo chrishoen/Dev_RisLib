@@ -4,7 +4,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteDClass.h"
+#include "dhandle.h"
 #include "risByteBuffer.h"
 
 namespace Ris
@@ -25,12 +25,12 @@ public:
    //***********************************************************************
    // This creates a new record, based on a record type
 
-   virtual Ris::DHandle createDClass(int aType)=0;
+   virtual DHandle createDClass(int aType)=0;
 
    //***********************************************************************
    // This copies byte buffers to/from records
 
-   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::DHandle aHandle)=0;
+   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, DHandle aHandle)=0;
 };
 
 }//namespace

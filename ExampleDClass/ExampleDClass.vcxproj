@@ -185,7 +185,7 @@
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\exampleDClass.h" />
     <ClInclude Include="Source\exampleDClassHelper.h" />
-    <ClInclude Include="Source\risByteDClass.h" />
+    <ClInclude Include="Source\dhandle.h" />
     <ClInclude Include="Source\risByteDClassCopier.h" />
     <ClInclude Include="Source\risNetUdpDClassSocket.h" />
     <ClInclude Include="Source\risNetUdpDClassThread.h" />

@@ -112,7 +112,7 @@ namespace Net
    // which they transfer into and out of the headers.
    //---------------------------------------------------------------------------
 
-   void DClassMsgHeader::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::DHandle* aParent)
+   void DClassMsgHeader::headerCopyToFrom (Ris::ByteBuffer* aBuffer,DHandle* aParent)
    {
       //------------------------------------------------------------------------
       // Instances of this class are members of parent message classes.
@@ -176,7 +176,7 @@ namespace Net
    //***************************************************************************
    //***************************************************************************
 
-   void DClassMsgHeader::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::DHandle* aParent)
+   void DClassMsgHeader::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,DHandle* aParent)
    {
       // If this is a put operation then this actually copies the header into
       // the buffer.

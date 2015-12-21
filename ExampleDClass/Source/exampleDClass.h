@@ -2,7 +2,7 @@
 #define _EXAMCOMSG_DCLASS_H_
 
 #include "risByteBuffer.h"
-#include "risByteDClass.h"
+#include "dhandle.h"
 #include "risByteDClassCopier.h"
 
 namespace Example
@@ -127,12 +127,12 @@ namespace Example
        //***********************************************************************
        // This creates a new record, based on a record type
 
-       Ris::DHandle createDClass(int aType);
+       DHandle createDClass(int aType);
 
        //***********************************************************************
        // This copies byte buffers to/from records
 
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::DHandle aHandle);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, DHandle aHandle);
 
        //***********************************************************************
        // These copy byte buffers to/from records
@@ -152,15 +152,15 @@ namespace Example
     {
     public:
 
-       static Ris::DHandle handle (Test*   aClass) {return Ris::DHandle(TypeIdT::cTest,   aClass);}
-       static Ris::DHandle handle (Status* aClass) {return Ris::DHandle(TypeIdT::cStatus, aClass);}
-       static Ris::DHandle handle (Data1*  aClass) {return Ris::DHandle(TypeIdT::cData1,  aClass);}
-       static Ris::DHandle handle (Data2*  aClass) {return Ris::DHandle(TypeIdT::cData2,  aClass);}
+       static DHandle handle (Test*   aClass) {return DHandle(TypeIdT::cTest,   aClass);}
+       static DHandle handle (Status* aClass) {return DHandle(TypeIdT::cStatus, aClass);}
+       static DHandle handle (Data1*  aClass) {return DHandle(TypeIdT::cData1,  aClass);}
+       static DHandle handle (Data2*  aClass) {return DHandle(TypeIdT::cData2,  aClass);}
 
-       static Test*   ptr_Test   (Ris::DHandle aHandle) {return (Test*)aHandle.mPtr;}
-       static Status* ptr_Status (Ris::DHandle aHandle) {return (Status*)aHandle.mPtr;}
-       static Data1*  ptr_Data1  (Ris::DHandle aHandle) {return (Data1*)aHandle.mPtr;}
-       static Data2*  ptr_Data2  (Ris::DHandle aHandle) {return (Data2*)aHandle.mPtr;}
+       static Test*   ptr_Test   (DHandle aHandle) {return (Test*)aHandle.mPtr;}
+       static Status* ptr_Status (DHandle aHandle) {return (Status*)aHandle.mPtr;}
+       static Data1*  ptr_Data1  (DHandle aHandle) {return (Data1*)aHandle.mPtr;}
+       static Data2*  ptr_Data2  (DHandle aHandle) {return (Data2*)aHandle.mPtr;}
     };
 }
 #endif

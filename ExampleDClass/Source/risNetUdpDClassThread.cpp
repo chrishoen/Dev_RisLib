@@ -140,7 +140,7 @@ void UdpDClassThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpDClassThread::processRxDClass(Ris::DHandle aRxDClass)
+void UdpDClassThread::processRxDClass(DHandle aRxDClass)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
@@ -150,7 +150,7 @@ void UdpDClassThread::processRxDClass(Ris::DHandle aRxDClass)
 //******************************************************************************
 // This sends a record 
 
-void UdpDClassThread::sendDClass (Ris::DHandle aClass)
+void UdpDClassThread::sendDClass (DHandle aClass)
 {
    mTxSocket.doSendDClass(aClass);
 }

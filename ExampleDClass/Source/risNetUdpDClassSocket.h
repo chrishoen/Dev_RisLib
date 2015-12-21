@@ -12,7 +12,7 @@ UdpTxDClassSocket -- udp transmit socket
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteDClass.h"
+#include "dhandle.h"
 #include "risByteContent.h"
 #include "risByteDClassCopier.h"
 #include "risSockets.h"
@@ -108,8 +108,8 @@ namespace Net
       // which they transfer into and out of the headers.
       //------------------------------------------------------------------------
 
-      void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::DHandle* aParent);
-      void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::DHandle* aParent);
+      void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, DHandle* aParent);
+      void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, DHandle* aParent);
 
       //------------------------------------------------------------------------
       // These are set by headerCopyToFrom and used by headerReCopyToFrom,

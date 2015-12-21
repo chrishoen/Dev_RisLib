@@ -29,9 +29,6 @@
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteDClass.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risByteDClassCopier.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -45,6 +42,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\exampleDClassHelper.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\dhandle.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

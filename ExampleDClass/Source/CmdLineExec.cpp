@@ -6,7 +6,7 @@
 #include "my_functions.h"
 #include "prnPrint.h"
 
-#include "risByteDClass.h"
+#include "dhandle.h"
 #include "exampleDClass.h"
 
 #include "CmdLineExec.h"
@@ -58,7 +58,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void myFunction1(Ris::DHandle aClass)
+void myFunction1(DHandle aClass)
 {
 }
 
@@ -66,10 +66,10 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
    Test* tTest1 = new Test;
    myFunction1 (DHMake::handle(tTest1));
-   myFunction1(Ris::DHandle(TypeIdT::cTest,tTest1));
+   myFunction1(DHandle(TypeIdT::cTest,tTest1));
 
-   Ris::DHandle tHandle1(TypeIdT::cTest,tTest1);
-   Ris::DHandle tHandle2(DHMake::handle(tTest1));
+   DHandle tHandle1(TypeIdT::cTest,tTest1);
+   DHandle tHandle2(DHMake::handle(tTest1));
 
 
    Test* tTest2 = (Test*)tHandle1.mPtr;

@@ -54,7 +54,7 @@ namespace Net
          mSyncWord1 != 0x11111111 ||
          mSyncWord2 != 0x22222222 ||
          mMessageLength < RecordMsgHeader::cLength  ||
-         mMessageLength > RecordSocketDefT::cMsgBufferSize;
+         mMessageLength > RecordSocketDefT::cBufferSize;
 
       // If no error then valid
       mHeaderValidFlag = !tError;
@@ -219,7 +219,6 @@ namespace Net
 
    UdpRxRecordSocket::UdpRxRecordSocket()
    {
-      mRxBuffer = (char*)malloc(RecordSocketDefT::cMsgBufferSize);
       mRxLength     = 0;
       mRxCount      = 0;
       mValidFlag    = false;
@@ -230,7 +229,6 @@ namespace Net
 
    UdpRxRecordSocket::~UdpRxRecordSocket()
    {
-      free(mRxBuffer);
    }
 
    //***************************************************************************
@@ -273,21 +271,21 @@ namespace Net
 
    bool UdpRxRecordSocket::doRecvRecord (ByteRecord*& aRecord)
    {
-      //------------------------------------------------------------------------
+      //-------------------------------------------------------------------------
       // Initialize
       aRecord=0;
 
       // Guard
       if (!mValidFlag) return false;
 
-      // Byte buffer, constructor takes address and size
-      ByteBuffer tBuffer(mRxBuffer,RecordSocketDefT::cMsgBufferSize);  
+      // Byte buffer, constructor takes size
+      ByteBuffer tBuffer(RecordSocketDefT::cBufferSize);  
       tBuffer.setCopyFrom();
 
-      //------------------------------------------------------------------------
+      //-------------------------------------------------------------------------
       // Read the message into the receive buffer
-   
-      doRecvFrom  (mFromAddress,mRxBuffer,mRxLength,RecordSocketDefT::cMsgBufferSize);
+
+      doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,RecordSocketDefT::cBufferSize);
 
       // Guard
       // If bad status then return false.
@@ -405,7 +403,7 @@ namespace Net
       if (!mValidFlag) return false;
 
       // Create byte buffer, constructor takes size
-      ByteBuffer tBuffer(RecordSocketDefT::cMsgBufferSize);
+      ByteBuffer tBuffer(RecordSocketDefT::cBufferSize);
 
       //------------------------------------------------------------------------
       // Instance of a header,set members

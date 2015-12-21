@@ -73,7 +73,6 @@ namespace Net
       BaseMessageParser* mMessageParser;
 
       // Buffer
-      char*  mRxBuffer;
       int    mRxLength;
 
       //------------------------------------------------------------------------
@@ -108,8 +107,7 @@ namespace Net
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
       // It is protected by the transmit mutex.
-      bool doSendMsg(
-         ByteContent*  aTxMsg);
+      bool doSendMsg(ByteContent* aMsg);
 
       //------------------------------------------------------------------------
       // Socket, these two should be used together
@@ -121,9 +119,7 @@ namespace Net
       // It returns true if successful.
       // It is protected by the transmit mutex.
 
-      bool doSendMsg(
-         Sockets::SocketAddress aRemote,
-         ByteContent*           aTxMsg);
+      bool doSendMsg(Sockets::SocketAddress aRemote,ByteContent* aMsg);
 
       //------------------------------------------------------------------------
       // This is a message parser that is used to get details about 

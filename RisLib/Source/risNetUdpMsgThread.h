@@ -99,7 +99,7 @@ public:
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg (Ris::ByteContent* aRxMsg);
+   void processRxMsg (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    // QCall:
@@ -110,7 +110,7 @@ public:
    //--------------------------------------------------------------
    // Transmit message:
 
-   void sendMsg (Ris::ByteContent* aTxMsg);
+   void sendMsg (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    // Sockets:

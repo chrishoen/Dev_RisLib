@@ -33,7 +33,7 @@ namespace Net
       //************************************************************************
       // Use this for a buffer size for these sockets
 
-      static const int cMsgBufferSize = 20000;
+      static const int cBufferSize = 20000;
 
    };
 
@@ -156,9 +156,6 @@ namespace Net
       // record type visible to it.
 
       BaseRecordCopier* mRecordCopier;
-
-      // Receive buffer
-      char* mRxBuffer;
 
       //------------------------------------------------------------------------
       // State:

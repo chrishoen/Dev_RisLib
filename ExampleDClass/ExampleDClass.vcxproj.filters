@@ -10,6 +10,15 @@
     <ClCompile Include="Source\examcoDClass.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risNetUdpDClassSocket.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risNetUdpDClassThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\examcoDClassHelper.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -27,6 +36,15 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteDClassCopier.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpDClassSocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpDClassThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\examcoDClassHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -16,6 +16,8 @@ to/from a ByteBuffer, which can be transported via some communications
 medium. All copies are done in network order. 
 
 ==============================================================================*/
+#include <stdlib.h>
+#include <stdio.h>
 
 //******************************************************************************
 //******************************************************************************
@@ -27,7 +29,7 @@ namespace Ris
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // This is a base class for classes that can be copied to/from ByteBuffers.
+   // This is a handle for DClasses, IT contains a type and a pointer
 
    class DHandle
    {
@@ -52,32 +54,28 @@ namespace Ris
          mPtr  = aPtr;
       }
 
+      void reset()
+      {
+         mType = 0;
+         mPtr  = 0;
+      }
+
       void set(int aType,void* aPtr)
       {
          mType = aType;
          mPtr  = aPtr;
       }
-   };
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is a base class for classes that can be copied to/from ByteBuffers.
-
-   class ByteDClass
-   {
-   public:
-      // General purpose identifier
-      int mDClassType;
-
-      // Constructor
-      ByteDClass()
+      void deallocate()
       {
-         mDClassType = 0;
+         if (mPtr != 0)
+         {
+            free (mPtr);
+         }
       }
    };
 
-   //******************************************************************************
+//******************************************************************************
 }//namespace
 #endif
 

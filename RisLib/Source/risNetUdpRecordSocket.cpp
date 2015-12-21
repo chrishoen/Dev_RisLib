@@ -269,7 +269,7 @@ namespace Net
    // This receives a datagram from the socket into a byte buffer and then
    // extracts a message from the byte buffer
 
-   bool UdpRxRecordSocket::doRecvRecord (ByteRecord*& aRecord)
+   bool UdpRxRecordSocket::doReceiveMessage (ByteRecord*& aRecord)
    {
       //-------------------------------------------------------------------------
       // Initialize
@@ -361,7 +361,7 @@ namespace Net
    }
 
    //***************************************************************************
-   // Configure the socket. Use with the next doSendMsg.
+   // Configure the socket. Use with the next doSendMessage.
 
    void UdpTxRecordSocket::configure(
       char*             aRemoteIpAddr,
@@ -397,7 +397,7 @@ namespace Net
    // This copies a message into a byte buffer and then sends the byte buffer 
    // out the socket. Use with the previous configure.
 
-   bool UdpTxRecordSocket::doSendRecord(ByteRecord* aRecord)
+   bool UdpTxRecordSocket::doSendMessage(ByteRecord* aRecord)
    {
       // Guard
       if (!mValidFlag) return false;

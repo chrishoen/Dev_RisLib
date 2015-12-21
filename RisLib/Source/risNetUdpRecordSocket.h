@@ -146,12 +146,12 @@ namespace Net
       // It returns true if successful.
       // The recvfrom address is stored in mFromAddress.
 
-      bool doRecvRecord (ByteRecord*& aRecord);
+      bool doReceiveMessage (ByteRecord*& aRecord);
 
       Sockets::SocketAddress mFromAddress;
 
       // This is a record copier that is used to copy a record from a
-      // byte buffer.It allows the doRecvMsg method to receive and
+      // byte buffer.It allows the doReceiveMessage method to receive and
       // extract a record from a byte buffer without the having the
       // record type visible to it.
 
@@ -192,17 +192,17 @@ namespace Net
       // It returns true if successful.
       // It is protected by the transmit mutex.
 
-      bool doSendRecord(ByteRecord*  aRecord);
+      bool doSendMessage(ByteRecord*  aRecord);
 
       //------------------------------------------------------------------------
       // This is a record copier that is used to copy a record to a byte
-      // buffer. It allows the doSendMsg method to send a record to a byte 
+      // buffer. It allows the doSendMessage method to send a record to a byte 
       // buffer without the having the record code visible to it.
 
       BaseRecordCopier* mRecordCopier;
 
       //------------------------------------------------------------------------
-      // Transmit mutex is used by doSendMsg for mutual exclusion.
+      // Transmit mutex is used by doSendMessage for mutual exclusion.
       Threads::MutexSemaphore  mTxMutex;
 
       //------------------------------------------------------------------------

@@ -73,7 +73,7 @@ void UdpRxMsgSocket::configure(
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpRxMsgSocket::doRecvMsg (ByteContent*& aMsg)
+bool UdpRxMsgSocket::doReceiveMessage (ByteContent*& aMsg)
 {
    //-------------------------------------------------------------------------
    // Initialize
@@ -165,7 +165,7 @@ UdpTxMsgSocket::~UdpTxMsgSocket()
 }
 
 //******************************************************************************
-// Configure the socket. Use with the next doSendMsg.
+// Configure the socket. Use with the next doSendMessage.
 
 void UdpTxMsgSocket::configure(
    char*                      aRemoteIpAddr,
@@ -201,7 +201,7 @@ void UdpTxMsgSocket::configure(
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket. Use with the previous configure.
 
-bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
+bool UdpTxMsgSocket::doSendMessage(ByteContent* aMsg)
 {
    // Guard
    if (!mValidFlag) return false;
@@ -234,7 +234,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 }
 
 //******************************************************************************
-// Configure the socket. Use with the next doSendMsg.
+// Configure the socket. Use with the next doSendMessage.
 
 void UdpTxMsgSocket::configure(
    BaseMessageParser*     aMessageParser)
@@ -257,7 +257,7 @@ void UdpTxMsgSocket::configure(
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket. Use with the previous configure.
 
-bool UdpTxMsgSocket::doSendMsg(
+bool UdpTxMsgSocket::doSendMessage(
    Sockets::SocketAddress aRemote,
    ByteContent* aMsg)
 {

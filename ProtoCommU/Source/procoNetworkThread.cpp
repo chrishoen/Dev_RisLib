@@ -27,7 +27,7 @@ NetworkThread::NetworkThread()
    mUdpMsgThread = new Ris::Net::UdpMsgThread;
 
    // Initialize QCalls
-   mRxMsgQCall.bind   (this,&NetworkThread::executeRxMsg);
+   mRxMessageQCall.bind   (this,&NetworkThread::executeRxMessage);
 }
 
 //******************************************************************************
@@ -58,7 +58,7 @@ void NetworkThread::configure()
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
       &mMessageParserCreator,
-      &mRxMsgQCall);
+      &mRxMessageQCall);
 }
 
 //******************************************************************************
@@ -90,29 +90,29 @@ void  NetworkThread::threadExitFunction()
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeRxMsg(Ris::ByteContent* aRxMsg)
+void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
 {
-   ProtoComm::BaseMsg* tRxMsg = (ProtoComm::BaseMsg*)aRxMsg;
+   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
-   switch (tRxMsg->mMessageType)
+   switch (tMsg->mMessageType)
    {
       case ProtoComm::MsgIdT::cTestMsg :
-         processRxMsg((ProtoComm::TestMsg*)tRxMsg);
+         processRxMessage((ProtoComm::TestMsg*)tMsg);
          break;
       case ProtoComm::MsgIdT::cStatusRequestMsg :
-         processRxMsg((ProtoComm::StatusRequestMsg*)tRxMsg);
+         processRxMessage((ProtoComm::StatusRequestMsg*)tMsg);
          break;
       case ProtoComm::MsgIdT::cStatusResponseMsg :
-         processRxMsg((ProtoComm::StatusResponseMsg*)tRxMsg);
+         processRxMessage((ProtoComm::StatusResponseMsg*)tMsg);
          break;
       case ProtoComm::MsgIdT::cDataMsg :
-         processRxMsg((ProtoComm::DataMsg*)tRxMsg);
+         processRxMessage((ProtoComm::DataMsg*)tMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",tRxMsg->mMessageType);
-         delete tRxMsg;
+         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",tMsg->mMessageType);
+         delete tMsg;
          break;
    }
 }
@@ -120,50 +120,50 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aRxMsg)
 //******************************************************************************
 // Message handler for TestMsg.
 
-void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
+void NetworkThread::processRxMessage(ProtoComm::TestMsg*  aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_TestMsg %d %d", aRxMsg->mCode1, aRxMsg->mHeader.mSourceId);
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_TestMsg %d %d", aMsg->mCode1, aMsg->mHeader.mSourceId);
 }
 
 //******************************************************************************
 // Rx message handler - StatusRequestMsg
 
-void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
+void NetworkThread::processRxMessage(ProtoComm::StatusRequestMsg* aMsg)
 {
    if (true)
    {
-      ProtoComm::StatusResponseMsg* tTxMsg = new ProtoComm::StatusResponseMsg;
-      mUdpMsgThread->sendMsg(tTxMsg);
+      ProtoComm::StatusResponseMsg* tMsg = new ProtoComm::StatusResponseMsg;
+      mUdpMsgThread->sendMessage(tMsg);
    }
 
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
-   Prn::print(Prn::ThreadRun1, "Code1      %d", aRxMsg->mCode1);
-   Prn::print(Prn::ThreadRun1, "Code2      %d", aRxMsg->mCode2);
-   Prn::print(Prn::ThreadRun1, "Code3      %d", aRxMsg->mCode3);
-   Prn::print(Prn::ThreadRun1, "Code4      %d", aRxMsg->mCode4);
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_StatusRequestMsg %d",mStatusCount1++);
+   Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "Code2      %d", aMsg->mCode2);
+   Prn::print(Prn::ThreadRun1, "Code3      %d", aMsg->mCode3);
+   Prn::print(Prn::ThreadRun1, "Code4      %d", aMsg->mCode4);
 
-   delete aRxMsg;
+   delete aMsg;
 }
 
 //******************************************************************************
 // Rx message handler - StatusResponseMsg
 
-void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
+void NetworkThread::processRxMessage(ProtoComm::StatusResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusResponseMsg");
-   delete aRxMsg;
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_StatusResponseMsg");
+   delete aMsg;
 }
 
 //******************************************************************************
 // Rx message handler - DataMsg
 
-void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
+void NetworkThread::processRxMessage(ProtoComm::DataMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_DataMsg");
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_DataMsg");
 
-   aRxMsg->show();
+   aMsg->show();
 
-   delete aRxMsg;
+   delete aMsg;
 }
 
 //******************************************************************************
@@ -171,22 +171,22 @@ void NetworkThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 
 void NetworkThread::executeOnTimer(int aTimerCount)
 {
-   Prn::print(Prn::ThreadRun2, "NetworkThread::executeRxMsg");
+   Prn::print(Prn::ThreadRun2, "NetworkThread::executeRxMessage");
 
    return;
 
    ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
    tx->mCode1=101;
 
-   mUdpMsgThread->sendMsg(tx);
+   mUdpMsgThread->sendMessage(tx);
 }
 
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void NetworkThread::sendMsg (ProtoComm::BaseMsg* aTxMsg)
+void NetworkThread::sendMessage (ProtoComm::BaseMsg* aMsg)
 {
-   mUdpMsgThread->sendMsg(aTxMsg);
+   mUdpMsgThread->sendMessage(aMsg);
 }
 
 //******************************************************************************
@@ -194,9 +194,9 @@ void NetworkThread::sendMsg (ProtoComm::BaseMsg* aTxMsg)
 
 void NetworkThread::sendTestMsg()
 {
-   ProtoComm::TestMsg* tTxMsg = new ProtoComm::TestMsg;
+   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
  
-   mUdpMsgThread->sendMsg(tTxMsg);
+   mUdpMsgThread->sendMessage(tMsg);
 }
 
 }//namespace

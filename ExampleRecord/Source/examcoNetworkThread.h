@@ -55,22 +55,22 @@ public:
    // QCall:
 
    // QCalls registered to mUdpRecordThread
-   Ris::Net::UdpRecordThread::RxRecordQCall    mRxRecordQCall;
+   Ris::Net::UdpRecordThread::RxMessageQCall    mRxMessageQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxRecord   (Ris::ByteRecord* aRxRecord);
+   void executeRxMessage   (Ris::ByteRecord* aRecord);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    // Rx message handlers
 
-   void processRxRecord (TestRecord*  aRecord);
-   void processRxRecord (StatusRecord* aRecord);
-   void processRxRecord (Data1Record* aRecord);
-   void processRxRecord (Data2Record* aRecord);
+   void processRxMessage (TestRecord*   aRecord);
+   void processRxMessage (StatusRecord* aRecord);
+   void processRxMessage (Data1Record*  aRecord);
+   void processRxMessage (Data2Record*  aRecord);
 
    int  mStatusCount1;
    int  mStatusCount2;
@@ -78,7 +78,7 @@ public:
    //--------------------------------------------------------------
    // Send a record
 
-   void sendRecord (Ris::ByteRecord* aRecord);
+   void sendMessage (Ris::ByteRecord* aRecord);
    void sendTestRecord();   
 
 };

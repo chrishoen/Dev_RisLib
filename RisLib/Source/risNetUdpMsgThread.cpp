@@ -37,7 +37,7 @@ void UdpMsgThread::configure(
    char*                      aRemoteIpAddress,
    int                        aRemoteIpPort,
    BaseMessageParserCreator*  aMessageParserCreator,
-   RxMsgQCall*                aMsgQCall)
+   RxMessageQCall*            aMessageQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);
    mLocalIpPort = aLocalIpPort;
@@ -47,7 +47,7 @@ void UdpMsgThread::configure(
 
    mMessageParserCreator = aMessageParserCreator;
 
-   mRxMsgQCall = *aMsgQCall;
+   mRxMessageQCall = *aMessageQCall;
 }
 
 //******************************************************************************
@@ -91,13 +91,13 @@ void  UdpMsgThread::threadRunFunction()
       // If a message was received then process it.
       // If a message was not received then the connection was lost.  
       ByteContent* rxMsg=0;
-      if (mRxSocket.doRecvMsg(rxMsg))
+      if (mRxSocket.doReceiveMessage(rxMsg))
       {
          // Message was correctly received
          Prn::print(Prn::SocketRun1, "Recv message %d",mRxSocket.mRxMsgCount);
 
          // Call the receive method
-         processRxMsg(rxMsg);
+         processRxMessage(rxMsg);
       }
       else
       {
@@ -126,8 +126,8 @@ void UdpMsgThread::threadExitFunction()
 // Shutdown, base class overload.
 // This sets the terminate request flag and closes the socket.
 //
-// If the while loop in the threadRunFunction is blocked on doRecvMsg then
-// closing the socket will cause doRecvMsg to return with false and 
+// If the while loop in the threadRunFunction is blocked on doReceiveMessage then
+// closing the socket will cause doReceiveMessage to return with false and 
 // then the terminate request flag will be polled and the threadRunFunction 
 // will exit.
 
@@ -142,19 +142,19 @@ void UdpMsgThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
+void UdpMsgThread::processRxMessage(Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMsgQCall.invoke(aMsg);
+   mRxMessageQCall.invoke(aMsg);
 }
 
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
+void UdpMsgThread::sendMessage (Ris::ByteContent* aMsg)
 {
-   mTxSocket.doSendMsg(aMsg);
+   mTxSocket.doSendMessage(aMsg);
 }
 
 //******************************************************************************

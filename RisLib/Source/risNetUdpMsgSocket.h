@@ -61,13 +61,13 @@ namespace Net
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
       // The recvfrom address is stored in mFromAddress.
-      bool doRecvMsg (ByteContent*& aRxMsg);
+      bool doReceiveMessage (ByteContent*& aRxMsg);
 
       Sockets::SocketAddress mFromAddress;
 
       // This is a message parser that is used to get details about 
       // a message from a message header that is contained in a
-      // byte buffer. It allows the doRecvMsg method to receive and extract a
+      // byte buffer. It allows the doReceiveMessage method to receive and extract a
       // message from a byte buffer without the having the message code
       // visible to it.
       BaseMessageParser* mMessageParser;
@@ -107,7 +107,7 @@ namespace Net
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
       // It is protected by the transmit mutex.
-      bool doSendMsg(ByteContent* aMsg);
+      bool doSendMessage(ByteContent* aMsg);
 
       //------------------------------------------------------------------------
       // Socket, these two should be used together
@@ -119,19 +119,19 @@ namespace Net
       // It returns true if successful.
       // It is protected by the transmit mutex.
 
-      bool doSendMsg(Sockets::SocketAddress aRemote,ByteContent* aMsg);
+      bool doSendMessage(Sockets::SocketAddress aRemote,ByteContent* aMsg);
 
       //------------------------------------------------------------------------
       // This is a message parser that is used to get details about 
       // a message from a message header that is contained in a
-      // byte buffer. It allows the doRecvMsg method to receive and extract a
+      // byte buffer. It allows the doReceiveMessage method to receive and extract a
       // message from a byte buffer without the having the message code
       // visible to it.
 
       BaseMessageParser* mMessageParser;
 
       //------------------------------------------------------------------------
-      // Transmit mutex is used by doSendMsg for mutual exclusion.
+      // Transmit mutex is used by doSendMessage for mutual exclusion.
 
       Threads::MutexSemaphore  mTxMutex;
 

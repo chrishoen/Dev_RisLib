@@ -58,22 +58,22 @@ public:
    // QCall:
 
    // QCalls registered to mUdpMsgThread
-   Ris::Net::UdpMsgThread::RxMsgQCall    mRxMsgQCall;
+   Ris::Net::UdpMsgThread::RxMessageQCall    mRxMessageQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxMsg   (Ris::ByteContent* aRxMsg);
+   void executeRxMessage   (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    // Rx message handlers
 
-   void processRxMsg (ProtoComm::TestMsg*  aRxMsg);
-   void processRxMsg (ProtoComm::StatusRequestMsg* aRxMsg);
-   void processRxMsg (ProtoComm::StatusResponseMsg* aRxMsg);
-   void processRxMsg (ProtoComm::DataMsg* aRxMsg);
+   void processRxMessage (ProtoComm::TestMsg*  aMsg);
+   void processRxMessage (ProtoComm::StatusRequestMsg* aMsg);
+   void processRxMessage (ProtoComm::StatusResponseMsg* aMsg);
+   void processRxMessage (ProtoComm::DataMsg* aMsg);
 
    int  mStatusCount1;
    int  mStatusCount2;
@@ -81,8 +81,8 @@ public:
    //--------------------------------------------------------------
    // Send a message
 
-      void sendMsg (ProtoComm::BaseMsg* aTxMsg);
-      void sendTestMsg();   
+   void sendMessage (ProtoComm::BaseMsg* aMsg);
+   void sendTestMsg();   
 
 };
 //******************************************************************************

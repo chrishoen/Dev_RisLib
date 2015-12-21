@@ -105,6 +105,9 @@ void NetworkThread::executeRxMessage(Ris::ByteTMessage* aMsg)
       case TypeIdT::cData2Msg :
          processRxMessage((Data2Msg*)aMsg);
          break;
+      case TypeIdT::cData3Msg :
+         processRxMessage((Data3Msg*)aMsg);
+         break;
       default :
          Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxTMessage ??? %d",aMsg->mTMessageType);
          delete aMsg;
@@ -154,6 +157,18 @@ void NetworkThread::processRxMessage(Data1Msg* aMsg)
 void NetworkThread::processRxMessage(Data2Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_Data2Msg");
+
+   TMessageHelper::show(aMsg);
+
+   delete aMsg;
+}
+
+//******************************************************************************
+// Message handler
+
+void NetworkThread::processRxMessage(Data3Msg* aMsg)
+{
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_Data3Msg");
 
    TMessageHelper::show(aMsg);
 

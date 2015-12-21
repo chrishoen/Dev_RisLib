@@ -71,6 +71,7 @@ public:
    void processRxMessage (StatusMsg* aMsg);
    void processRxMessage (Data1Msg*  aMsg);
    void processRxMessage (Data2Msg*  aMsg);
+   void processRxMessage (Data3Msg*  aMsg);
 
    int  mStatusCount1;
    int  mStatusCount2;

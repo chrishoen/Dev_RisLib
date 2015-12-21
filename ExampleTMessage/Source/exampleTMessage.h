@@ -21,6 +21,7 @@ namespace Example
         static const int cStatusMsg = 2;
         static const int cData1Msg  = 3;
         static const int cData2Msg  = 4;
+        static const int cData3Msg  = 5;
     };
 
     //***************************************************************************
@@ -120,6 +121,34 @@ namespace Example
     //***************************************************************************
     //***************************************************************************
 
+    class Data3Msg : public Ris::ByteTMessage
+    {
+    public:
+
+       //***********************************************************************
+       // Members
+
+       int       mCode1;
+       int       mCode2;
+       int       mCode3;
+       int       mCode4;
+       char      mString1[40];
+
+       static const int cMaxLoop=4;
+       int       mCode5Loop;
+       int       mCode5[cMaxLoop];
+
+       //***********************************************************************
+       // Constructor
+
+       Data3Msg();
+
+    };
+
+    //***************************************************************************
+    //***************************************************************************
+    //***************************************************************************
+
     class TMessageCopier : public Ris::BaseTMessageCopier
     {
     public:
@@ -141,6 +170,7 @@ namespace Example
        void copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg);
        void copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg*  aMsg);
        void copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg*  aMsg);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Data3Msg*  aMsg);
 
     };
 }

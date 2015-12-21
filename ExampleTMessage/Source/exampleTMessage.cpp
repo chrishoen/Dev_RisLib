@@ -27,6 +27,9 @@ namespace Example
       case TypeIdT::cData2Msg :
          tTMessage = new Data2Msg;
          break;
+      case TypeIdT::cData3Msg :
+         tTMessage = new Data3Msg;
+         break;
       default :
          return 0;
          break;
@@ -54,6 +57,9 @@ namespace Example
          break;
       case TypeIdT::cData2Msg :
          copyToFrom(aBuffer,(Data2Msg*)aMsg);
+         break;
+      case TypeIdT::cData3Msg :
+         copyToFrom(aBuffer,(Data3Msg*)aMsg);
          break;
       default :
          break;
@@ -151,6 +157,45 @@ namespace Example
       aBuffer->copy( &aMsg->mCode3 );
       aBuffer->copy( &aMsg->mCode4 );
       TMessageCopier::copyToFrom   (aBuffer, &aMsg->mTMessage1 );
+   }
+
+   //****************************************************************************
+   //****************************************************************************
+   //****************************************************************************
+   // Data3Msg
+
+   Data3Msg::Data3Msg()
+   {
+      mTMessageType     = TypeIdT::cData3Msg;
+
+      mCode1           = 1001;
+      mCode2           = 0;
+      mCode3           = 0;
+      mCode4           = 0;
+
+      mString1[0]=0;
+
+      mCode5Loop=cMaxLoop;
+      for (int i = 0; i < cMaxLoop; i++)
+      {
+         mCode5[i]=0;
+      }
+   }
+
+   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data3Msg* aMsg)
+   {
+      aBuffer->copy( &aMsg->mCode1 );
+      aBuffer->copy( &aMsg->mCode2 );
+      aBuffer->copy( &aMsg->mCode3 );
+      aBuffer->copy( &aMsg->mCode4 );
+
+      aBuffer->copyS( aMsg->mString1 );
+
+      aBuffer->copy( &aMsg->mCode5Loop );
+      for (int i = 0; i < aMsg->mCode5Loop; i++)
+      {
+      aBuffer->copy( &aMsg->mCode5[i]);
+      }
    }
 
 }

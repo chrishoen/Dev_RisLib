@@ -1,7 +1,6 @@
 #include "prnPrint.h"
 #include "risThreadsProcess.h"
 #include "exampleSettings.h"
-#include "exampleDefs.h"
 
 //******************************************************************************
 //******************************************************************************

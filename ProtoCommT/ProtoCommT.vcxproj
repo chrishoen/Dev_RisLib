@@ -174,7 +174,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\ProtoCommon\procoDefs.cpp" />
     <ClCompile Include="..\ProtoCommon\procoMsg_Base.cpp" />
     <ClCompile Include="..\ProtoCommon\procoMsg_Message.cpp" />
     <ClCompile Include="..\ProtoCommon\procoSettings.cpp" />
@@ -184,7 +183,6 @@
     <ClCompile Include="Source\procoServerThread.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ProtoCommon\procoDefs.h" />
     <ClInclude Include="..\ProtoCommon\procoMsg.h" />
     <ClInclude Include="..\ProtoCommon\procoMsg_Base.h" />
     <ClInclude Include="..\ProtoCommon\procoMsg_Message.h" />

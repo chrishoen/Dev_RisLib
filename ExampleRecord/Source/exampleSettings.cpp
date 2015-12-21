@@ -8,8 +8,6 @@
 #include "my_functions.h"
 #include "risCmdLineFile.h"
 #include "risPortableCalls.h"
-#include "exampleDefs.h"
-
 
 #define  _EXAMPLESETTINGS_CPP_
 #include "exampleSettings.h"
@@ -19,15 +17,11 @@ namespace Example
 
 //******************************************************************************
 
-ExampleSettings::ExampleSettings()
+Settings::Settings()
 {
    mSection[0]=0;
 
    mMyAppNumber = 0;
-   mMyAppRole = 0;
-
-   mTcpServerIPAddress[0]=0;
-   mTcpServerPort = 0;
 
    mMyUdpIPAddress[0]=0;
    mMyUdpPort = 0;
@@ -36,19 +30,16 @@ ExampleSettings::ExampleSettings()
    mOtherUdpPort = 0;
 }
 
-void ExampleSettings::show()
+void Settings::show()
 {
-   printf("ExampleSettings ******* %s\n", mSection);
+   printf("Settings ******* %s\n", mSection);
 
    printf("MyAppNumber               %d\n", mMyAppNumber);
-   printf("MyAppRole                 %s\n", Defs::getAppRoleNameByEnum(mMyAppRole));
-
-   printf("TcpServer  %-12s   %d\n",mTcpServerIPAddress,mTcpServerPort);
 
    printf("MyUdp      %-12s   %d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp   %-12s   %d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
-   printf("ExampleSettings ******* %s\n", mSection);
+   printf("Settings ******* %s\n", mSection);
 }
 
 //******************************************************************************
@@ -56,7 +47,7 @@ void ExampleSettings::show()
 // if "Section", the first command line argument, is the same as the section 
 // specified in initialize.
 
-bool ExampleSettings::isMySection(Ris::CmdLineCmd* aCmd)
+bool Settings::isMySection(Ris::CmdLineCmd* aCmd)
 {
    bool tFlag=false;
 
@@ -79,7 +70,7 @@ bool ExampleSettings::isMySection(Ris::CmdLineCmd* aCmd)
 // BEGIN starts a section, END exits a section
 // Only commands for a section are processed
 
-void ExampleSettings::execute(Ris::CmdLineCmd* aCmd)
+void Settings::execute(Ris::CmdLineCmd* aCmd)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -98,9 +89,6 @@ void ExampleSettings::execute(Ris::CmdLineCmd* aCmd)
    // Only process commands for the section specified in initialize.
 
    if(aCmd->isCmd("MyAppNumber"     ))   mMyAppNumber = aCmd->argInt(1);
-   if(aCmd->isCmd("MyAppRole"       ))   mMyAppRole   = Defs::getAppRoleEnumByName(aCmd->argString(1));
-
-   if(aCmd->isCmd("TcpServer"       ))   executeOnTcpServer (aCmd);
    if(aCmd->isCmd("MyUdp"           ))   executeOnMyUdp     (aCmd);
    if(aCmd->isCmd("OtherUdp"        ))   executeOnOtherUdp  (aCmd);
 }
@@ -112,21 +100,15 @@ void ExampleSettings::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 // Specific execute 
 
-void ExampleSettings::executeOnTcpServer(Ris::CmdLineCmd* aCmd)
+void Settings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->copyArgString(1, mTcpServerIPAddress,MaxStringSize);
-   mTcpServerPort = aCmd->argInt(2);
-}
-
-void ExampleSettings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->copyArgString(1, mMyUdpIPAddress,MaxStringSize);
+   aCmd->copyArgString(1, mMyUdpIPAddress,cMaxStringSize);
    mMyUdpPort = aCmd->argInt(2);
 }
 
-void ExampleSettings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
+void Settings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->copyArgString(1, mOtherUdpIPAddress,MaxStringSize);
+   aCmd->copyArgString(1, mOtherUdpIPAddress,cMaxStringSize);
    mOtherUdpPort = aCmd->argInt(2);
 }
 
@@ -134,7 +116,7 @@ void ExampleSettings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-bool ExampleSettings::initialize(char* aSection)
+bool Settings::initialize(char* aSection)
 { 
    // File path
    char tFilePath[200];
@@ -155,7 +137,7 @@ bool ExampleSettings::initialize(char* aSection)
    }
    else
    {
-      printf("ExampleSettings::file open failed\n");
+      printf("Settings::file open failed\n");
       return false;
    }
 }

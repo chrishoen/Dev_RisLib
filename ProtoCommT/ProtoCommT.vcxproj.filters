@@ -22,9 +22,6 @@
     <ClCompile Include="Source\procoServerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\ProtoCommon\procoDefs.cpp">
-      <Filter>ProtoCommon</Filter>
-    </ClCompile>
     <ClCompile Include="..\ProtoCommon\procoSettings.cpp">
       <Filter>ProtoCommon</Filter>
     </ClCompile>
@@ -44,9 +41,6 @@
     </ClInclude>
     <ClInclude Include="Source\procoServerThread.h">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ProtoCommon\procoDefs.h">
-      <Filter>ProtoCommon</Filter>
     </ClInclude>
     <ClInclude Include="..\ProtoCommon\procoMsg.h">
       <Filter>ProtoCommon</Filter>

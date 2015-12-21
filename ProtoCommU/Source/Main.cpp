@@ -5,7 +5,6 @@
 #include "CmdLineExec.h"
 
 #include "procoSettings.h"
-#include "procoDefs.h"
 #include "procoNetworkThread.h"
 
 #include "MainInit.h"

@@ -8,8 +8,6 @@
 #include "my_functions.h"
 #include "risCmdLineFile.h"
 #include "risPortableCalls.h"
-#include "procoDefs.h"
-
 
 #define  _PROCOSETTINGS_CPP_
 #include "procoSettings.h"
@@ -19,7 +17,7 @@ namespace ProtoComm
 
 //******************************************************************************
 
-ProtoCommSettings::ProtoCommSettings()
+   Settings::Settings()
 {
    mSection[0]=0;
 
@@ -36,19 +34,19 @@ ProtoCommSettings::ProtoCommSettings()
    mOtherUdpPort = 0;
 }
 
-void ProtoCommSettings::show()
+void Settings::show()
 {
-   printf("ProtoCommSettings ******* %s\n", mSection);
+   printf("Settings ******* %s\n", mSection);
 
    printf("MyAppNumber               %d\n", mMyAppNumber);
-   printf("MyAppRole                 %s\n", getAppRoleNameByEnum(mMyAppRole));
+   printf("MyAppRole                 %d\n", mMyAppRole);
 
    printf("TcpServer  %-12s   %d\n",mTcpServerIPAddress,mTcpServerPort);
 
    printf("MyUdp      %-12s   %d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp   %-12s   %d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
-   printf("ProtoCommSettings ******* %s\n", mSection);
+   printf("Settings ******* %s\n", mSection);
 }
 
 //******************************************************************************
@@ -56,7 +54,7 @@ void ProtoCommSettings::show()
 // if "Section", the first command line argument, is the same as the section 
 // specified in initialize.
 
-bool ProtoCommSettings::isMySection(Ris::CmdLineCmd* aCmd)
+bool Settings::isMySection(Ris::CmdLineCmd* aCmd)
 {
    bool tFlag=false;
 
@@ -79,7 +77,7 @@ bool ProtoCommSettings::isMySection(Ris::CmdLineCmd* aCmd)
 // BEGIN starts a section, END exits a section
 // Only commands for a section are processed
 
-void ProtoCommSettings::execute(Ris::CmdLineCmd* aCmd)
+void Settings::execute(Ris::CmdLineCmd* aCmd)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -98,7 +96,7 @@ void ProtoCommSettings::execute(Ris::CmdLineCmd* aCmd)
    // Only process commands for the section specified in initialize.
 
    if(aCmd->isCmd("MyAppNumber"     ))   mMyAppNumber = aCmd->argInt(1);
-   if(aCmd->isCmd("MyAppRole"       ))   mMyAppRole   = getAppRoleEnumByName(aCmd->argString(1));
+   if(aCmd->isCmd("MyAppRole"       ))   executeOnMyAppRole (aCmd);
 
    if(aCmd->isCmd("TcpServer"       ))   executeOnTcpServer (aCmd);
    if(aCmd->isCmd("MyUdp"           ))   executeOnMyUdp     (aCmd);
@@ -112,21 +110,28 @@ void ProtoCommSettings::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 // Specific execute 
 
-void ProtoCommSettings::executeOnTcpServer(Ris::CmdLineCmd* aCmd)
+void Settings::executeOnMyAppRole(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->copyArgString(1, mTcpServerIPAddress,MaxStringSize);
+   if (aCmd->isArgString(1, "TcpServer")) mMyAppRole = cTcpServer;
+   if (aCmd->isArgString(1, "TcpClient")) mMyAppRole = cTcpClient;
+   if (aCmd->isArgString(1, "UdpPeer"))   mMyAppRole = cUdpPeer;
+}
+
+void Settings::executeOnTcpServer(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->copyArgString(1, mTcpServerIPAddress,cMaxStringSize);
    mTcpServerPort = aCmd->argInt(2);
 }
 
-void ProtoCommSettings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
+void Settings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->copyArgString(1, mMyUdpIPAddress,MaxStringSize);
+   aCmd->copyArgString(1, mMyUdpIPAddress,cMaxStringSize);
    mMyUdpPort = aCmd->argInt(2);
 }
 
-void ProtoCommSettings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
+void Settings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->copyArgString(1, mOtherUdpIPAddress,MaxStringSize);
+   aCmd->copyArgString(1, mOtherUdpIPAddress,cMaxStringSize);
    mOtherUdpPort = aCmd->argInt(2);
 }
 
@@ -134,7 +139,7 @@ void ProtoCommSettings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-bool ProtoCommSettings::initialize(char* aSection)
+bool Settings::initialize(char* aSection)
 { 
    // File path
    char tFilePath[200];
@@ -155,7 +160,7 @@ bool ProtoCommSettings::initialize(char* aSection)
    }
    else
    {
-      printf("ProtoCommSettings::file open failed\n");
+      printf("Settings::file open failed\n");
       return false;
    }
 }

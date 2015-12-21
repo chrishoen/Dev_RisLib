@@ -23,32 +23,28 @@ namespace Example
 // Each application reads its own print settings from a common settings
 // file. 
 
-class  ExampleSettings : public Ris::BaseCmdLineExec
+class Settings : public Ris::BaseCmdLineExec
 {
 public:
 
    //---------------------------------------------------------------------------
    // Settings members.
 
-   enum {MaxStringSize=30};
+   static const int cMaxStringSize=30;
 
    int  mMyAppNumber;
-   int  mMyAppRole;
 
-   char mTcpServerIPAddress[MaxStringSize];
-   int  mTcpServerPort;
-
-   char mMyUdpIPAddress[MaxStringSize];
+   char mMyUdpIPAddress[cMaxStringSize];
    int  mMyUdpPort;
 
-   char mOtherUdpIPAddress[MaxStringSize];
+   char mOtherUdpIPAddress[cMaxStringSize];
    int  mOtherUdpPort;
 
    //---------------------------------------------------------------------------
    // Infrastucture. Constructor and such
 
    typedef Ris::BaseCmdLineExec BaseClass;
-   ExampleSettings();
+   Settings();
    void show();
 
    // Baseclass override, executes for each line in the settings
@@ -57,7 +53,6 @@ public:
    void execute(Ris::CmdLineCmd* aCmd);
 
    // Specific execute
-   void executeOnTcpServer (Ris::CmdLineCmd* aCmd);
    void executeOnMyUdp     (Ris::CmdLineCmd* aCmd);
    void executeOnOtherUdp  (Ris::CmdLineCmd* aCmd);
 
@@ -89,9 +84,9 @@ public:
 // Global instance
 
 #ifdef _EXAMPLESETTINGS_CPP_
-        ExampleSettings gSettings;
+        Settings gSettings;
 #else
-        extern ExampleSettings gSettings;
+        extern Settings gSettings;
 #endif
 
 }//namespace

@@ -23,32 +23,36 @@ namespace ProtoComm
 // Each application reads its own print settings from a common settings
 // file. 
 
-class  ProtoCommSettings : public Ris::BaseCmdLineExec
+class Settings : public Ris::BaseCmdLineExec
 {
 public:
 
    //---------------------------------------------------------------------------
    // Settings members.
 
-   enum {MaxStringSize=30};
+   static const int cTcpServer = 1;
+   static const int cTcpClient = 2;
+   static const int cUdpPeer   = 3;
+
+   static const int cMaxStringSize = 30;
 
    int  mMyAppNumber;
    int  mMyAppRole;
 
-   char mTcpServerIPAddress[MaxStringSize];
+   char mTcpServerIPAddress[cMaxStringSize];
    int  mTcpServerPort;
 
-   char mMyUdpIPAddress[MaxStringSize];
+   char mMyUdpIPAddress[cMaxStringSize];
    int  mMyUdpPort;
 
-   char mOtherUdpIPAddress[MaxStringSize];
+   char mOtherUdpIPAddress[cMaxStringSize];
    int  mOtherUdpPort;
 
    //---------------------------------------------------------------------------
    // Infrastucture. Constructor and such
 
    typedef Ris::BaseCmdLineExec BaseClass;
-   ProtoCommSettings();
+   Settings();
    void show();
 
    // Baseclass override, executes for each line in the settings
@@ -57,9 +61,10 @@ public:
    void execute(Ris::CmdLineCmd* aCmd);
 
    // Specific execute
-   void executeOnTcpServer (Ris::CmdLineCmd* aCmd);
-   void executeOnMyUdp     (Ris::CmdLineCmd* aCmd);
-   void executeOnOtherUdp  (Ris::CmdLineCmd* aCmd);
+   void executeOnMyAppRole  (Ris::CmdLineCmd* aCmd);
+   void executeOnTcpServer  (Ris::CmdLineCmd* aCmd);
+   void executeOnMyUdp      (Ris::CmdLineCmd* aCmd);
+   void executeOnOtherUdp   (Ris::CmdLineCmd* aCmd);
 
    // Initialize.
    // aSettingsFileName is the settings filename. aSection is the settings
@@ -89,9 +94,9 @@ public:
 // Global instance
 
 #ifdef _PROCOSETTINGS_CPP_
-        ProtoCommSettings gSettings;
+        Settings gSettings;
 #else
-        extern ProtoCommSettings gSettings;
+        extern Settings gSettings;
 #endif
 
 }//namespace

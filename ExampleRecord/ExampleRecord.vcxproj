@@ -176,7 +176,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\exampleDefs.cpp" />
     <ClCompile Include="Source\exampleRecordHelper.cpp" />
     <ClCompile Include="Source\exampleNetworkThread.cpp" />
     <ClCompile Include="Source\exampleRecord.cpp" />
@@ -186,7 +185,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\exampleDefs.h" />
     <ClInclude Include="Source\exampleRecordHelper.h" />
     <ClInclude Include="Source\exampleNetworkThread.h" />
     <ClInclude Include="Source\exampleRecord.h" />

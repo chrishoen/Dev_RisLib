@@ -6,7 +6,6 @@
 #include "prnPrint.h"
 
 #include "procoSettings.h"
-#include "procoDefs.h"
 #include "procoMsg.h"
 
 #include "procoNetworkThread.h"

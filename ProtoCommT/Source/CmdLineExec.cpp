@@ -6,7 +6,6 @@
 #include "prnPrint.h"
 
 #include "procoSettings.h"
-#include "procoDefs.h"
 #include "procoMsg.h"
 
 #include "procoClientThread.h"
@@ -39,10 +38,10 @@ void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
 {
    switch (ProtoComm::gSettings.mMyAppRole)
    {
-      case ProtoComm::AR_TcpServer:
+      case ProtoComm::Settings::cTcpServer:
          gServerThread->shutdownThread();
          break;
-      case ProtoComm::AR_TcpClient:
+      case ProtoComm::Settings::cTcpClient:
          gClientThread->shutdownThread();
          break;
    }
@@ -55,10 +54,10 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 
    switch (ProtoComm::gSettings.mMyAppRole)
    {
-      case ProtoComm::AR_TcpServer:
+      case ProtoComm::Settings::cTcpServer:
          gServerThread->sendTestMsg(aCmd->argInt(1));
          break;
-      case ProtoComm::AR_TcpClient:
+      case ProtoComm::Settings::cTcpClient:
          gClientThread->sendTestMsg();
          break;
    }
@@ -73,10 +72,10 @@ void CmdLineExec::executeOnPeriodic(Ris::CmdLineCmd* aCmd)
 
    switch (ProtoComm::gSettings.mMyAppRole)
    {
-      case ProtoComm::AR_TcpServer:
+      case ProtoComm::Settings::cTcpServer:
          gServerThread->mPeriodicEnable = tPeriodicEnable;
          break;
-      case ProtoComm::AR_TcpClient:
+      case ProtoComm::Settings::cTcpClient:
          gClientThread->mPeriodicEnable = tPeriodicEnable;
          break;
    }
@@ -95,12 +94,12 @@ void CmdLineExec::executeOnGo1(Ris::CmdLineCmd* aCmd)
    
       switch (ProtoComm::gSettings.mMyAppRole)
       {
-         case ProtoComm::AR_TcpServer:
+         case ProtoComm::Settings::cTcpServer:
             gServerThread->sendMsg(0,tTxMsg1);
           //Prn::print(0,"sendMsg %d",i);
             gServerThread->threadSleep(10);
             break;
-         case ProtoComm::AR_TcpClient:
+         case ProtoComm::Settings::cTcpClient:
             gClientThread->sendMsg(tTxMsg1);
           //Prn::print(0,"sendMsg %d",i);
             gClientThread->threadSleep(10);

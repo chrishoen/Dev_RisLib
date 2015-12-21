@@ -3,7 +3,6 @@
 #include "CmdLineExec.h"
 
 #include "procoSettings.h"
-#include "procoDefs.h"
 #include "procoClientThread.h"
 #include "procoServerThread.h"
 
@@ -29,12 +28,12 @@ int main(int argc,char** argv)
 
    switch (ProtoComm::gSettings.mMyAppRole)
    {
-      case ProtoComm::AR_TcpServer:
+      case ProtoComm::Settings::cTcpServer:
          ProtoComm::gServerThread = new ProtoComm::ServerThread;
          ProtoComm::gServerThread->configure();
          ProtoComm::gServerThread->launchThread();
          break;
-      case ProtoComm::AR_TcpClient:
+      case ProtoComm::Settings::cTcpClient:
          ProtoComm::gClientThread = new ProtoComm::ClientThread;
          ProtoComm::gClientThread->configure();
          ProtoComm::gClientThread->launchThread();
@@ -54,11 +53,11 @@ int main(int argc,char** argv)
 
    switch (ProtoComm::gSettings.mMyAppRole)
    {
-      case ProtoComm::AR_TcpServer:
+      case ProtoComm::Settings::cTcpServer:
          ProtoComm::gServerThread->shutdownThread();
          delete ProtoComm::gServerThread;
          break;
-      case ProtoComm::AR_TcpClient:
+      case ProtoComm::Settings::cTcpClient:
          ProtoComm::gClientThread->shutdownThread();
          delete ProtoComm::gClientThread;
          break;

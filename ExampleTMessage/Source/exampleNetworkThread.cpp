@@ -7,7 +7,7 @@
 #include "risSockets.h"
 #include "prnPrint.h"
 #include "exampleSettings.h"
-#include "exampleRecordHelper.h"
+#include "exampleTMessageHelper.h"
 
 #define  _EXAMPLENETWORKTHREAD_CPP_
 #include "exampleNetworkThread.h"
@@ -25,7 +25,7 @@ NetworkThread::NetworkThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpRecordThread = new Ris::Net::UdpRecordThread;
+   mUdpTMessageThread = new Ris::Net::UdpTMessageThread;
 
    // Initialize QCalls
    mRxMessageQCall.bind   (this,&NetworkThread::executeRxMessage);
@@ -35,7 +35,7 @@ NetworkThread::NetworkThread()
 
 NetworkThread::~NetworkThread()
 {
-   delete mUdpRecordThread;
+   delete mUdpTMessageThread;
 }
 
 //******************************************************************************
@@ -48,12 +48,12 @@ void NetworkThread::configure()
    //---------------------------------------------------------------------------
    // Configure socket thread
 
-   mUdpRecordThread->configure(
+   mUdpTMessageThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mRecordCopier,
+      &mMsgCopier,
       &mRxMessageQCall);
 
 }
@@ -65,7 +65,7 @@ void NetworkThread::launchThread()
    Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
 
    // Launch child thread
-   mUdpRecordThread->launchThread(); 
+   mUdpTMessageThread->launchThread(); 
    
    // Launch this thread
    BaseClass::launchThread();
@@ -78,7 +78,7 @@ void  NetworkThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
    // Shutdown the tcp client thread
-   mUdpRecordThread->shutdownThread();
+   mUdpTMessageThread->shutdownThread();
 
    // Base class exit
    BaseClass::threadExitFunction();
@@ -87,27 +87,27 @@ void  NetworkThread::threadExitFunction()
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeRxMessage(Ris::ByteRecord* aRecord)
+void NetworkThread::executeRxMessage(Ris::ByteTMessage* aMsg)
 {
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
-   switch (aRecord->mRecordType)
+   switch (aMsg->mTMessageType)
    {
-      case TypeIdT::cTestRecord :
-         processRxMessage((TestRecord*)aRecord);
+      case TypeIdT::cTestMsg :
+         processRxMessage((TestMsg*)aMsg);
          break;
-      case TypeIdT::cStatusRecord :
-         processRxMessage((StatusRecord*)aRecord);
+      case TypeIdT::cStatusMsg :
+         processRxMessage((StatusMsg*)aMsg);
          break;
-      case TypeIdT::cData1Record :
-         processRxMessage((Data1Record*)aRecord);
+      case TypeIdT::cData1Msg :
+         processRxMessage((Data1Msg*)aMsg);
          break;
-      case TypeIdT::cData2Record :
-         processRxMessage((Data2Record*)aRecord);
+      case TypeIdT::cData2Msg :
+         processRxMessage((Data2Msg*)aMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxRecord ??? %d",aRecord->mRecordType);
-         delete aRecord;
+         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxTMessage ??? %d",aMsg->mTMessageType);
+         delete aMsg;
          break;
    }
 }
@@ -115,49 +115,49 @@ void NetworkThread::executeRxMessage(Ris::ByteRecord* aRecord)
 //******************************************************************************
 // Message handler
 
-void NetworkThread::processRxMessage(TestRecord* aRecord)
+void NetworkThread::processRxMessage(TestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_TestRecord" );
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_TestMsg" );
 
-   RecordHelper::show(aRecord);
+   TMessageHelper::show(aMsg);
 
-   delete aRecord;
+   delete aMsg;
 }
 
 //******************************************************************************
 // Message handler
 
-void NetworkThread::processRxMessage(StatusRecord* aRecord)
+void NetworkThread::processRxMessage(StatusMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_StatusRecord %d",mStatusCount1++);
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_StatusMsg %d",mStatusCount1++);
 
-   RecordHelper::show(aRecord);
+   TMessageHelper::show(aMsg);
 
-   delete aRecord;
+   delete aMsg;
 }
 
 //******************************************************************************
 // Message handler
 
-void NetworkThread::processRxMessage(Data1Record* aRecord)
+void NetworkThread::processRxMessage(Data1Msg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_Data1Record");
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_Data1Msg");
 
-   RecordHelper::show(aRecord);
+   TMessageHelper::show(aMsg);
 
-   delete aRecord;
+   delete aMsg;
 }
 
 //******************************************************************************
 // Message handler
 
-void NetworkThread::processRxMessage(Data2Record* aRecord)
+void NetworkThread::processRxMessage(Data2Msg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_Data2Record");
+   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMessage_Data2Msg");
 
-   RecordHelper::show(aRecord);
+   TMessageHelper::show(aMsg);
 
-   delete aRecord;
+   delete aMsg;
 }
 
 //******************************************************************************
@@ -169,7 +169,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 
    return;
 
-   TestRecord* tx = new TestRecord;
+   TestMsg* tx = new TestMsg;
    tx->mCode1=101;
 
    sendMessage(tx);
@@ -178,20 +178,20 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void NetworkThread::sendMessage (Ris::ByteRecord* aRecord)
+void NetworkThread::sendMessage (Ris::ByteTMessage* aMsg)
 {
-   mUdpRecordThread->sendMessage(aRecord);
+   mUdpTMessageThread->sendMessage(aMsg);
 }
 
 //******************************************************************************
 // This sends a test message via the tcp client thread
 
-void NetworkThread::sendTestRecord()
+void NetworkThread::sendTestMsg()
 {
-   TestRecord* tRecord = new TestRecord;
-   tRecord->mCode1=201;
+   TestMsg* tTMessage = new TestMsg;
+   tTMessage->mCode1=201;
  
-   mUdpRecordThread->sendMessage(tRecord);
+   mUdpTMessageThread->sendMessage(tTMessage);
 }
 
 }//namespace

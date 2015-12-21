@@ -6,8 +6,8 @@
 #include "prnPrint.h"
 
 #include "exampleSettings.h"
-#include "exampleRecord.h"
-#include "exampleRecordHelper.h"
+#include "exampleTMessage.h"
+#include "exampleTMessageHelper.h"
 #include "exampleNetworkThread.h"
 
 #include "CmdLineExec.h"
@@ -46,36 +46,36 @@ void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1);
-   int tRecordType= aCmd->argInt(1);
+   int tMsgType= aCmd->argInt(1);
 
-   switch (tRecordType)
+   switch (tMsgType)
    {
       case 1:
       {
-         TestRecord* tRecord = new TestRecord;
-         RecordHelper::initialize(tRecord);
-         gNetworkThread->sendMessage(tRecord);
+         TestMsg* tMsg = new TestMsg;
+         TMessageHelper::initialize(tMsg);
+         gNetworkThread->sendMessage(tMsg);
          break;
       }
       case 2:
       {
-         StatusRecord* tRecord = new StatusRecord;
-         RecordHelper::initialize(tRecord);
-         gNetworkThread->sendMessage(tRecord);
+         StatusMsg* tMsg = new StatusMsg;
+         TMessageHelper::initialize(tMsg);
+         gNetworkThread->sendMessage(tMsg);
          break;
       }
       case 3:
       {
-         Data1Record* tRecord = new Data1Record;
-         RecordHelper::initialize(tRecord);
-         gNetworkThread->sendMessage(tRecord);
+         Data1Msg* tMsg = new Data1Msg;
+         TMessageHelper::initialize(tMsg);
+         gNetworkThread->sendMessage(tMsg);
          break;
       }
       case 4:
       {
-         Data2Record* tRecord = new Data2Record;
-         RecordHelper::initialize(tRecord);
-         gNetworkThread->sendMessage(tRecord);
+         Data2Msg* tMsg = new Data2Msg;
+         TMessageHelper::initialize(tMsg);
+         gNetworkThread->sendMessage(tMsg);
          break;
       }
    }
@@ -85,16 +85,16 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 {
-   gNetworkThread->sendTestRecord();
+   gNetworkThread->sendTestMsg();
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
-   StatusRecord* tRecord = new StatusRecord;
-   RecordHelper::initialize(tRecord);
-   gNetworkThread->sendMessage(tRecord);
+   StatusMsg* tMsg = new StatusMsg;
+   TMessageHelper::initialize(tMsg);
+   gNetworkThread->sendMessage(tMsg);
 }
 
 

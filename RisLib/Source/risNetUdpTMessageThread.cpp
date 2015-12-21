@@ -8,7 +8,7 @@
 #include "prnPrint.h"
 
 #include "ris_priorities.h"
-#include "risNetUdpRecordThread.h"
+#include "risNetUdpTMessageThread.h"
 
 namespace Ris
 {
@@ -19,7 +19,7 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 
-UdpRecordThread::UdpRecordThread()
+UdpTMessageThread::UdpTMessageThread()
 {
    mThreadPriority = get_default_udp_rx_thread_priority();
    mLocalIpAddress[0]=0;
@@ -29,13 +29,13 @@ UdpRecordThread::UdpRecordThread()
 //******************************************************************************
 // Configure:
 
-void UdpRecordThread::configure(
-   char*              aLocalIpAddress,
-   int                aLocalIpPort,
-   char*              aRemoteIpAddress,
-   int                aRemoteIpPort,
-   BaseRecordCopier*  aRecordCopier,
-   RxMessageQCall*    aRxMessageQCall)
+void UdpTMessageThread::configure(
+   char*                aLocalIpAddress,
+   int                  aLocalIpPort,
+   char*                aRemoteIpAddress,
+   int                  aRemoteIpPort,
+   Ris::BaseTMessageCopier* aMsgCopier,
+   RxMessageQCall*      aRxMessageQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);
    mLocalIpPort = aLocalIpPort;
@@ -43,7 +43,7 @@ void UdpRecordThread::configure(
    strcpy(mRemoteIpAddress, aRemoteIpAddress);
    mRemoteIpPort = aRemoteIpPort;
 
-   mRecordCopier  = aRecordCopier;
+   mMsgCopier  = aMsgCopier;
    mRxMessageQCall = *aRxMessageQCall;
 }
 
@@ -51,21 +51,21 @@ void UdpRecordThread::configure(
 // Thread init function, base class overload.
 // It configures the socket.
 
-void UdpRecordThread::threadInitFunction()
+void UdpTMessageThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit1, "UdpRecordThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInit1, "UdpTMessageThread::threadInitFunction BEGIN");
 
    mRxSocket.configure(
       mLocalIpAddress,
       mLocalIpPort,
-      mRecordCopier);
+      mMsgCopier);
 
    mTxSocket.configure(
       mRemoteIpAddress,
       mRemoteIpPort,
-      mRecordCopier);
+      mMsgCopier);
    
-   Prn::print(Prn::SocketInit1, "UdpRecordThread::threadInitFunction END");
+   Prn::print(Prn::SocketInit1, "UdpTMessageThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -73,9 +73,9 @@ void UdpRecordThread::threadInitFunction()
 // It contains a while loop that manages the connection to the server
 // and receives messages.
 
-void  UdpRecordThread::threadRunFunction()
+void  UdpTMessageThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketRun1, "UdpRxRecordThread::threadRunFunction");
+   Prn::print(Prn::SocketRun1, "UdpRxTMessageThread::threadRunFunction");
 
    //-----------------------------------------------------------
    // Loop
@@ -87,14 +87,14 @@ void  UdpRecordThread::threadRunFunction()
       // Try to receive a message with a blocking receive call
       // If a message was received then process it.
       // If a message was not received then the connection was lost.  
-      ByteRecord* tRecord=0;
-      if (mRxSocket.doReceiveMessage(tRecord))
+      ByteTMessage* tMsg=0;
+      if (mRxSocket.doReceiveMessage(tMsg))
       {
          // Message was correctly received
-         Prn::print(Prn::SocketRun1, "Recv message %d %d",mRxSocket.mRxCount,tRecord->mRecordType);
+         Prn::print(Prn::SocketRun1, "Recv message %d %d",mRxSocket.mRxCount,tMsg->mTMessageType);
 
          // Call the receive method
-         processRxMessage(tRecord);
+         processRxMessage(tMsg);
       }
       else
       {
@@ -115,9 +115,9 @@ void  UdpRecordThread::threadRunFunction()
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void UdpRecordThread::threadExitFunction()
+void UdpTMessageThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit1, "UdpRecordThread::threadExitFunction");
+   Prn::print(Prn::SocketInit1, "UdpTMessageThread::threadExitFunction");
 }
 
 //******************************************************************************
@@ -129,7 +129,7 @@ void UdpRecordThread::threadExitFunction()
 // then the terminate request flag will be polled and the threadRunFunction 
 // will exit.
 
-void UdpRecordThread::shutdownThread()
+void UdpTMessageThread::shutdownThread()
 {
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
@@ -140,19 +140,19 @@ void UdpRecordThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpRecordThread::processRxMessage(Ris::ByteRecord* aRxRecord)
+void UdpTMessageThread::processRxMessage(Ris::ByteTMessage* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMessageQCall.invoke(aRxRecord);
+   mRxMessageQCall.invoke(aMsg);
 }
 
 //******************************************************************************
 // This sends a record 
 
-void UdpRecordThread::sendMessage (Ris::ByteRecord* aRecord)
+void UdpTMessageThread::sendMessage (Ris::ByteTMessage* aMsg)
 {
-   mTxSocket.doSendMessage(aRecord);
+   mTxSocket.doSendMessage(aMsg);
 }
 
 //******************************************************************************

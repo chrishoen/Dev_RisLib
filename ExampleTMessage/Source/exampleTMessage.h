@@ -1,9 +1,9 @@
-#ifndef _EXAMPLEMSG_RECORD_H_
-#define _EXAMPLEMSG_RECORD_H_
+#ifndef _EXAMPLETMESSAGE_H_
+#define _EXAMPLETMESSAGE_H_
 
 #include "risByteBuffer.h"
-#include "risByteRecord.h"
-#include "risByteRecordCopier.h"
+#include "risByteTMessage.h"
+#include "risByteTMessageCopier.h"
 
 namespace Example
 {
@@ -11,23 +11,23 @@ namespace Example
     //***************************************************************************
     //***************************************************************************
     //***************************************************************************
-    // Record Types
+    // TMessage Types
 
     class TypeIdT
     {
     public:
         static const int cUnspecified  = 0;
-        static const int cTestRecord   = 1;
-        static const int cStatusRecord = 2;
-        static const int cData1Record  = 3;
-        static const int cData2Record  = 4;
+        static const int cTestMsg   = 1;
+        static const int cStatusMsg = 2;
+        static const int cData1Msg  = 3;
+        static const int cData2Msg  = 4;
     };
 
     //***************************************************************************
     //***************************************************************************
     //***************************************************************************
 
-    class TestRecord : public Ris::ByteRecord
+    class TestMsg : public Ris::ByteTMessage
     {
     public:
 
@@ -42,7 +42,7 @@ namespace Example
        //***********************************************************************
        // Constructor
 
-       TestRecord();
+       TestMsg();
 
     };
 
@@ -50,7 +50,7 @@ namespace Example
     //***************************************************************************
     //***************************************************************************
 
-    class StatusRecord : public Ris::ByteRecord
+    class StatusMsg : public Ris::ByteTMessage
     {
     public:
 
@@ -65,14 +65,14 @@ namespace Example
        //***********************************************************************
        // Constructor
 
-       StatusRecord();
+       StatusMsg();
     };
 
     //***************************************************************************
     //***************************************************************************
     //***************************************************************************
 
-    class Data1Record : public Ris::ByteRecord
+    class Data1Msg : public Ris::ByteTMessage
     {
     public:
 
@@ -87,7 +87,7 @@ namespace Example
        //***********************************************************************
        // Constructor
 
-       Data1Record();
+       Data1Msg();
 
     };
 
@@ -96,7 +96,7 @@ namespace Example
     //***************************************************************************
     //***************************************************************************
 
-    class Data2Record : public Ris::ByteRecord
+    class Data2Msg : public Ris::ByteTMessage
     {
     public:
 
@@ -107,12 +107,12 @@ namespace Example
        int mCode2;
        int mCode3;
        int mCode4;
-       Data1Record mRecord1;
+       Data1Msg mTMessage1;
 
        //***********************************************************************
        // Constructor
 
-       Data2Record();
+       Data2Msg();
 
     };
 
@@ -120,30 +120,28 @@ namespace Example
     //***************************************************************************
     //***************************************************************************
 
-    class RecordCopier : public Ris::BaseRecordCopier
+    class TMessageCopier : public Ris::BaseTMessageCopier
     {
     public:
 
        //***********************************************************************
        // This creates a new record, based on a record type
 
-       Ris::ByteRecord* createRecord(int aRecordType);
+       Ris::ByteTMessage* createMessage(int aMsgType);
 
        //***********************************************************************
        // This copies byte buffers to/from records
 
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aRecord);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteTMessage* aMsg);
 
        //***********************************************************************
        // These copy byte buffers to/from records
 
-       void copyToFrom (Ris::ByteBuffer* aBuffer, TestRecord*   aRecord);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, StatusRecord* aRecord);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Data1Record*  aRecord);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Data2Record*  aRecord);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, TestMsg*   aMsg);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg*  aMsg);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg*  aMsg);
 
     };
-
-
 }
 #endif

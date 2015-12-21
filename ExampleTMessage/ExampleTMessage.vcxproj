@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{41c4a6b3-652f-4e3c-8de6-7393244232b1}</ProjectGuid>
-    <RootNamespace>Test</RootNamespace>
+    <ProjectGuid>{c2bf9148-2ac3-4d97-920a-59094fcfa781}</ProjectGuid>
+    <RootNamespace>ExampleTMessage</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <ProjectName>ExampleTMessage</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -175,14 +176,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\examcoHelper.cpp" />
-    <ClCompile Include="Source\examcoRecord.cpp" />
+    <ClCompile Include="Source\exampleTMessageHelper.cpp" />
+    <ClCompile Include="Source\exampleNetworkThread.cpp" />
+    <ClCompile Include="Source\exampleTMessage.cpp" />
+    <ClCompile Include="Source\exampleSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\examcoHelper.h" />
-    <ClInclude Include="Source\examcoRecord.h" />
+    <ClInclude Include="Source\exampleTMessageHelper.h" />
+    <ClInclude Include="Source\exampleNetworkThread.h" />
+    <ClInclude Include="Source\exampleTMessage.h" />
+    <ClInclude Include="Source\exampleSettings.h" />
+    <ClInclude Include="Source\MainInit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

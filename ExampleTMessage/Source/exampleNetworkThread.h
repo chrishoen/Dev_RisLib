@@ -6,11 +6,11 @@
 //******************************************************************************
 #include "risContainers.h"
 #include "risTimeMarker.h"
-#include "risNetUdpRecordSocket.h"
-#include "risNetUdpRecordThread.h"
+#include "risNetUdpTMessageSocket.h"
+#include "risNetUdpTMessageThread.h"
 #include "risThreadsQCallThread.h"
 
-#include "exampleRecord.h"
+#include "exampleTMessage.h"
 
 namespace Example
 {
@@ -46,31 +46,31 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::UdpRecordThread*  mUdpRecordThread;
+   Ris::Net::UdpTMessageThread*  mUdpTMessageThread;
 
-   // Message parser used by mUdpRecordThread
-   RecordCopier mRecordCopier;
+   // Message parser used by mUdpTMessageThread
+   TMessageCopier mMsgCopier;
 
    //--------------------------------------------------------------
    // QCall:
 
-   // QCalls registered to mUdpRecordThread
-   Ris::Net::UdpRecordThread::RxMessageQCall    mRxMessageQCall;
+   // QCalls registered to mUdpTMessageThread
+   Ris::Net::UdpTMessageThread::RxMessageQCall    mRxMessageQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxMessage   (Ris::ByteRecord* aRecord);
+   void executeRxMessage   (Ris::ByteTMessage* aMsg);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    // Rx message handlers
 
-   void processRxMessage (TestRecord*   aRecord);
-   void processRxMessage (StatusRecord* aRecord);
-   void processRxMessage (Data1Record*  aRecord);
-   void processRxMessage (Data2Record*  aRecord);
+   void processRxMessage (TestMsg*   aMsg);
+   void processRxMessage (StatusMsg* aMsg);
+   void processRxMessage (Data1Msg*  aMsg);
+   void processRxMessage (Data2Msg*  aMsg);
 
    int  mStatusCount1;
    int  mStatusCount2;
@@ -78,8 +78,8 @@ public:
    //--------------------------------------------------------------
    // Send a record
 
-   void sendMessage (Ris::ByteRecord* aRecord);
-   void sendTestRecord();   
+   void sendMessage (Ris::ByteTMessage* aMsg);
+   void sendTestMsg();   
 
 };
 

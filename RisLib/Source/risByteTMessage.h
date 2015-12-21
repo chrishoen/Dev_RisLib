@@ -1,5 +1,5 @@
-#ifndef _RISBYTERECORD_H_
-#define _RISBYTERECORD_H_
+#ifndef _RISBYTETMESSAGE_H_
+#define _RISBYTETMESSAGE_H_
 /*==============================================================================
 
 ByteContent and ByteBuffer classes.
@@ -29,16 +29,16 @@ namespace Ris
 //******************************************************************************
 // This is a base class for classes that can be copied to/from ByteBuffers.
 
-class ByteRecord
+class ByteTMessage
 {
 public:
    // General purpose identifier
-   int mRecordType;
+   int mTMessageType;
 
    // Constructor
-   ByteRecord()
+   ByteTMessage()
    {
-      mRecordType = 0;
+      mTMessageType = 0;
    }
 };
 

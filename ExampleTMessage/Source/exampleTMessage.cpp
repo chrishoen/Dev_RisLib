@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "exampleRecord.h"
+#include "exampleTMessage.h"
 
 namespace Example
 {
@@ -9,51 +9,51 @@ namespace Example
    //******************************************************************************
    // This creates a new record, based on a record type
 
-   Ris::ByteRecord* RecordCopier::createRecord(int aRecordType)
+   Ris::ByteTMessage* TMessageCopier::createMessage(int aMsgType)
    {
-      Ris::ByteRecord* tRecord = 0;
+      Ris::ByteTMessage* tTMessage = 0;
 
-      switch (aRecordType)
+      switch (aMsgType)
       {
-      case TypeIdT::cTestRecord :
-         tRecord = new TestRecord;
+      case TypeIdT::cTestMsg :
+         tTMessage = new TestMsg;
          break;
-      case TypeIdT::cStatusRecord :
-         tRecord = new StatusRecord;
+      case TypeIdT::cStatusMsg :
+         tTMessage = new StatusMsg;
          break;
-      case TypeIdT::cData1Record :
-         tRecord = new Data1Record;
+      case TypeIdT::cData1Msg :
+         tTMessage = new Data1Msg;
          break;
-      case TypeIdT::cData2Record :
-         tRecord = new Data2Record;
+      case TypeIdT::cData2Msg :
+         tTMessage = new Data2Msg;
          break;
       default :
          return 0;
          break;
       }
 
-      return tRecord;
+      return tTMessage;
    }
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // RecordCopier
+   // TMessageCopier
 
-   void RecordCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aRecord)
+   void TMessageCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteTMessage* aMsg)
    {
-      switch (aRecord->mRecordType)
+      switch (aMsg->mTMessageType)
       {
-      case TypeIdT::cTestRecord :
-         copyToFrom(aBuffer,(TestRecord*)aRecord);
+      case TypeIdT::cTestMsg :
+         copyToFrom(aBuffer,(TestMsg*)aMsg);
          break;
-      case TypeIdT::cStatusRecord :
-         copyToFrom(aBuffer,(StatusRecord*)aRecord);
+      case TypeIdT::cStatusMsg :
+         copyToFrom(aBuffer,(StatusMsg*)aMsg);
          break;
-      case TypeIdT::cData1Record :
-         copyToFrom(aBuffer,(Data1Record*)aRecord);
+      case TypeIdT::cData1Msg :
+         copyToFrom(aBuffer,(Data1Msg*)aMsg);
          break;
-      case TypeIdT::cData2Record :
-         copyToFrom(aBuffer,(Data2Record*)aRecord);
+      case TypeIdT::cData2Msg :
+         copyToFrom(aBuffer,(Data2Msg*)aMsg);
          break;
       default :
          break;
@@ -63,11 +63,11 @@ namespace Example
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // TestRecord
+   // TestMsg
 
-   TestRecord::TestRecord()
+   TestMsg::TestMsg()
    {
-      mRecordType     = TypeIdT::cTestRecord;
+      mTMessageType     = TypeIdT::cTestMsg;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -75,22 +75,22 @@ namespace Example
       mCode4           = 0;
    }
 
-   void RecordCopier::copyToFrom (Ris::ByteBuffer* aBuffer, TestRecord* aRecord)
+   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, TestMsg* aMsg)
    {
-      aBuffer->copy( &aRecord->mCode1 );
-      aBuffer->copy( &aRecord->mCode2 );
-      aBuffer->copy( &aRecord->mCode3 );
-      aBuffer->copy( &aRecord->mCode4 );
+      aBuffer->copy( &aMsg->mCode1 );
+      aBuffer->copy( &aMsg->mCode2 );
+      aBuffer->copy( &aMsg->mCode3 );
+      aBuffer->copy( &aMsg->mCode4 );
    }
 
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // StatusRecord
+   // StatusMsg
 
-   StatusRecord::StatusRecord()
+   StatusMsg::StatusMsg()
    {
-      mRecordType     = TypeIdT::cStatusRecord;
+      mTMessageType     = TypeIdT::cStatusMsg;
 
       mCode1           = 1002;
       mCode2           = 0;
@@ -98,22 +98,22 @@ namespace Example
       mCode4           = 0;
    }
 
-   void RecordCopier::copyToFrom (Ris::ByteBuffer* aBuffer, StatusRecord* aRecord)
+   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg)
    {
-      aBuffer->copy( &aRecord->mCode1 );
-      aBuffer->copy( &aRecord->mCode2 );
-      aBuffer->copy( &aRecord->mCode3 );
-      aBuffer->copy( &aRecord->mCode4 );
+      aBuffer->copy( &aMsg->mCode1 );
+      aBuffer->copy( &aMsg->mCode2 );
+      aBuffer->copy( &aMsg->mCode3 );
+      aBuffer->copy( &aMsg->mCode4 );
    }
 
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // Data1Record
+   // Data1Msg
 
-   Data1Record::Data1Record()
+   Data1Msg::Data1Msg()
    {
-      mRecordType     = TypeIdT::cData1Record;
+      mTMessageType     = TypeIdT::cData1Msg;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -121,22 +121,22 @@ namespace Example
       mCode4           = 0;
    }
 
-   void RecordCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data1Record* aRecord)
+   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg* aMsg)
    {
-      aBuffer->copy( &aRecord->mCode1 );
-      aBuffer->copy( &aRecord->mCode2 );
-      aBuffer->copy( &aRecord->mCode3 );
-      aBuffer->copy( &aRecord->mCode4 );
+      aBuffer->copy( &aMsg->mCode1 );
+      aBuffer->copy( &aMsg->mCode2 );
+      aBuffer->copy( &aMsg->mCode3 );
+      aBuffer->copy( &aMsg->mCode4 );
    }
 
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // Data2Record
+   // Data2Msg
 
-   Data2Record::Data2Record()
+   Data2Msg::Data2Msg()
    {
-      mRecordType     = TypeIdT::cData2Record;
+      mTMessageType     = TypeIdT::cData2Msg;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -144,13 +144,13 @@ namespace Example
       mCode4           = 0;
    }
 
-   void RecordCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data2Record* aRecord)
+   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg* aMsg)
    {
-      aBuffer->copy( &aRecord->mCode1 );
-      aBuffer->copy( &aRecord->mCode2 );
-      aBuffer->copy( &aRecord->mCode3 );
-      aBuffer->copy( &aRecord->mCode4 );
-      RecordCopier::copyToFrom   (aBuffer, &aRecord->mRecord1 );
+      aBuffer->copy( &aMsg->mCode1 );
+      aBuffer->copy( &aMsg->mCode2 );
+      aBuffer->copy( &aMsg->mCode3 );
+      aBuffer->copy( &aMsg->mCode4 );
+      TMessageCopier::copyToFrom   (aBuffer, &aMsg->mTMessage1 );
    }
 
 }

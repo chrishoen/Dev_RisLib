@@ -142,10 +142,10 @@
     <ClCompile Include="Source\risNetUdpMsgThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risNetUdpRecordSocket.cpp">
+    <ClCompile Include="Source\risNetUdpTMessageSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risNetUdpRecordThread.cpp">
+    <ClCompile Include="Source\risNetUdpTMessageThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -312,16 +312,16 @@
     <ClInclude Include="Source\risNetUdpMsgThread.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteRecord.h">
+    <ClInclude Include="Source\risByteTMessage.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteRecordCopier.h">
+    <ClInclude Include="Source\risByteTMessageCopier.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risNetUdpRecordSocket.h">
+    <ClInclude Include="Source\risNetUdpTMessageSocket.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risNetUdpRecordThread.h">
+    <ClInclude Include="Source\risNetUdpTMessageThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

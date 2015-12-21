@@ -1,10 +1,10 @@
-#ifndef _RISBYTERECORDCOPIER_H_
-#define _RISBYTERECORDCOPIER_H_
+#ifndef _RISBYTETMESSAGECOPIER_H_
+#define _RISBYTETMESSAGECOPIER_H_
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteRecord.h"
+#include "risByteTMessage.h"
 #include "risByteBuffer.h"
 
 namespace Ris
@@ -18,19 +18,19 @@ namespace Ris
 // extract messages, as opposed to having the message classes being visible
 // to the receiving code.
 
-class  BaseRecordCopier
+class  BaseTMessageCopier
 {
 public:
 
    //***********************************************************************
    // This creates a new record, based on a record type
 
-   virtual Ris::ByteRecord* createRecord (int aRecordTYpe)=0;
+   virtual Ris::ByteTMessage* createMessage (int aType)=0;
 
    //***********************************************************************
    // This copies byte buffers to/from records
 
-   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteRecord* aRecord)=0;
+   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteTMessage* aTMessage)=0;
 };
 
 }//namespace

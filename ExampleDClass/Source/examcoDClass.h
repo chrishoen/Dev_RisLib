@@ -144,6 +144,23 @@ namespace ExampleComm
 
     };
 
+    //***************************************************************************
+    //***************************************************************************
+    //***************************************************************************
 
+    class DHMake
+    {
+    public:
+
+       static Ris::DHandle handle (Test*   aClass) {return Ris::DHandle(TypeIdT::cTest,   aClass);}
+       static Ris::DHandle handle (Status* aClass) {return Ris::DHandle(TypeIdT::cStatus, aClass);}
+       static Ris::DHandle handle (Data1*  aClass) {return Ris::DHandle(TypeIdT::cData1,  aClass);}
+       static Ris::DHandle handle (Data2*  aClass) {return Ris::DHandle(TypeIdT::cData2,  aClass);}
+
+       static Test*   ptr_Test   (Ris::DHandle aHandle) {return (Test*)aHandle.mPtr;}
+       static Status* ptr_Status (Ris::DHandle aHandle) {return (Status*)aHandle.mPtr;}
+       static Data1*  ptr_Data1  (Ris::DHandle aHandle) {return (Data1*)aHandle.mPtr;}
+       static Data2*  ptr_Data2  (Ris::DHandle aHandle) {return (Data2*)aHandle.mPtr;}
+    };
 }
 #endif

@@ -6,7 +6,12 @@
 #include "my_functions.h"
 #include "prnPrint.h"
 
+#include "risByteDClass.h"
+#include "examcoDClass.h"
+
 #include "CmdLineExec.h"
+
+using namespace ExampleComm;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
@@ -53,7 +58,21 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+void myFunction1(Ris::DHandle aClass)
+{
+}
+
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   Test* tTest1 = new Test;
+   myFunction1 (DHMake::handle(tTest1));
+   myFunction1(Ris::DHandle(TypeIdT::cTest,tTest1));
+
+   Ris::DHandle tHandle1(TypeIdT::cTest,tTest1);
+   Ris::DHandle tHandle2(DHMake::handle(tTest1));
+
+
+   Test* tTest2 = (Test*)tHandle1.mPtr;
+   Test* tTest3 = DHMake::ptr_Test(tHandle1);
 }
 

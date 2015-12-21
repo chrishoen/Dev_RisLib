@@ -5,7 +5,7 @@
 #include "risByteDClass.h"
 #include "risByteDClassCopier.h"
 
-namespace ExampleComm
+namespace Example
 {
 
     //***************************************************************************

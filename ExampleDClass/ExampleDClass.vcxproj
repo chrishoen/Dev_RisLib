@@ -175,16 +175,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\examcoDClass.cpp" />
-    <ClCompile Include="Source\examcoDClassHelper.cpp" />
+    <ClCompile Include="Source\exampleDClass.cpp" />
+    <ClCompile Include="Source\exampleDClassHelper.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\risNetUdpDClassSocket.cpp" />
     <ClCompile Include="Source\risNetUdpDClassThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\examcoDClass.h" />
-    <ClInclude Include="Source\examcoDClassHelper.h" />
+    <ClInclude Include="Source\exampleDClass.h" />
+    <ClInclude Include="Source\exampleDClassHelper.h" />
     <ClInclude Include="Source\risByteDClass.h" />
     <ClInclude Include="Source\risByteDClassCopier.h" />
     <ClInclude Include="Source\risNetUdpDClassSocket.h" />

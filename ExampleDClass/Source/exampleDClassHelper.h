@@ -1,9 +1,9 @@
 #ifndef _EXAMCODCLASSHELPER_H_
 #define _EXAMCODCLASSHELPER_H_
 
-#include "examcoDClass.h"
+#include "exampleDClass.h"
 
-namespace ExampleComm
+namespace Example
 {
 
     //***************************************************************************

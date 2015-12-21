@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "prnPrint.h"
-#include "examcoDClassHelper.h"
+#include "exampleDClassHelper.h"
 
-namespace ExampleComm
+namespace Example
 {
    //****************************************************************************
 

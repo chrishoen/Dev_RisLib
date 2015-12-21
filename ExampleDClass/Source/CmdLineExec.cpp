@@ -7,11 +7,11 @@
 #include "prnPrint.h"
 
 #include "risByteDClass.h"
-#include "examcoDClass.h"
+#include "exampleDClass.h"
 
 #include "CmdLineExec.h"
 
-using namespace ExampleComm;
+using namespace Example;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()

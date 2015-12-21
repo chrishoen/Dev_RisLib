@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include "examcoDClass.h"
+#include "exampleDClass.h"
 
-namespace ExampleComm
+namespace Example
 {
    //******************************************************************************
    //******************************************************************************

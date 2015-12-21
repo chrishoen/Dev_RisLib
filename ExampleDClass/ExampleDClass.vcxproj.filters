@@ -7,16 +7,16 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\examcoDClass.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risNetUdpDClassSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risNetUdpDClassThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\examcoDClassHelper.cpp">
+    <ClCompile Include="Source\exampleDClass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\exampleDClassHelper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,9 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\examcoDClass.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteDClass.h">
@@ -44,7 +41,10 @@
     <ClInclude Include="Source\risNetUdpDClassThread.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\examcoDClassHelper.h">
+    <ClInclude Include="Source\exampleDClass.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\exampleDClassHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

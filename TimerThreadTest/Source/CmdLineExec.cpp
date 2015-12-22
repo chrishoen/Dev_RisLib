@@ -34,7 +34,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("TP"    ))  executeTP      (aCmd);
-   if(aCmd->isCmd("T5"    ))  executeTest5   (aCmd);
+   if(aCmd->isCmd("TEST"  ))  executeTest    (aCmd);
    if(aCmd->isCmd("M1"    ))  executeMarker1 (aCmd);
    if(aCmd->isCmd("M2"    ))  executeMarker2 (aCmd);
    if(aCmd->isCmd("GO1"   ))  executeGo1     (aCmd);
@@ -55,10 +55,9 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeTest5(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeTest(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1000);
-   aCmd->setArgDefault(2,10);
+   gTimerThread->mTestCode=aCmd->argInt(1);
 }
 
 //******************************************************************************

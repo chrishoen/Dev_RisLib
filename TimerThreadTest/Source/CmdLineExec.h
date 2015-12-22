@@ -16,7 +16,7 @@ public:
   void execute(Ris::CmdLineCmd* aCmd);
 
   void executeTP      (Ris::CmdLineCmd* aCmd);
-  void executeTest5   (Ris::CmdLineCmd* aCmd);
+  void executeTest    (Ris::CmdLineCmd* aCmd);
   void executeMarker1 (Ris::CmdLineCmd* aCmd);
   void executeMarker2 (Ris::CmdLineCmd* aCmd);
   void executeMarker3 (Ris::CmdLineCmd* aCmd);

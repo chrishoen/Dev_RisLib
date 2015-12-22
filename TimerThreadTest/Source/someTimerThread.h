@@ -38,6 +38,16 @@ public:
    UView::TimeMarker mTimeMarker;
 
    bool mTPFlag;
+   int  mTestCode;
+
+   //--------------------------------------------------------------
+   //--------------------------------------------------------------
+   //--------------------------------------------------------------
+   // Members:
+   
+   void executeTest0 (int aTimeCount);
+   void executeTest1 (int aTimeCount);
+   void executeTest2 (int aTimeCount);
 };
 
 //******************************************************************************

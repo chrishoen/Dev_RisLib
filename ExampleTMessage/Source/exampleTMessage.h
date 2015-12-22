@@ -22,6 +22,7 @@ namespace Example
         static const int cData1Msg  = 3;
         static const int cData2Msg  = 4;
         static const int cData3Msg  = 5;
+        static const int cData4Msg  = 6;
     };
 
     //***************************************************************************
@@ -108,7 +109,7 @@ namespace Example
        int mCode2;
        int mCode3;
        int mCode4;
-       Data1Msg mTMessage1;
+       Data1Msg mData1;
 
        //***********************************************************************
        // Constructor
@@ -149,6 +150,33 @@ namespace Example
     //***************************************************************************
     //***************************************************************************
 
+    class Data4Msg : public Ris::ByteTMessage
+    {
+    public:
+
+       //***********************************************************************
+       // Members
+
+       int       mCode1;
+       int       mCode2;
+       int       mCode3;
+       int       mCode4;
+
+       static const int cMaxLoop=4;
+       int       mData1Loop;
+       Data1Msg  mData1[cMaxLoop];
+
+       //***********************************************************************
+       // Constructor
+
+       Data4Msg();
+
+    };
+
+    //***************************************************************************
+    //***************************************************************************
+    //***************************************************************************
+
     class TMessageCopier : public Ris::BaseTMessageCopier
     {
     public:
@@ -171,6 +199,7 @@ namespace Example
        void copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg*  aMsg);
        void copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg*  aMsg);
        void copyToFrom (Ris::ByteBuffer* aBuffer, Data3Msg*  aMsg);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Data4Msg*  aMsg);
 
     };
 }

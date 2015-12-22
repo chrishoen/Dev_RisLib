@@ -71,7 +71,7 @@ namespace Example
       aMsg->mCode2 = 202;
       aMsg->mCode3 = 203;
       aMsg->mCode4 = 204;
-      TMessageHelper::initialize(&aMsg->mTMessage1);
+      TMessageHelper::initialize(&aMsg->mData1);
    }
 
    void TMessageHelper::show(Data2Msg* aMsg)
@@ -80,7 +80,7 @@ namespace Example
       Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
       Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
       Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
-      TMessageHelper::show(&aMsg->mTMessage1);
+      TMessageHelper::show(&aMsg->mData1);
       Prn::print(Prn::ThreadRun3, "");
    }
 
@@ -96,7 +96,7 @@ namespace Example
       aMsg->mCode5Loop = 4;
       for (int i = 0; i < 4; i++)
       {
-      aMsg->mCode5[i]=1001+i;
+         aMsg->mCode5[i]=1001+i;
       }
    }
 
@@ -111,6 +111,35 @@ namespace Example
       for (int i = 0; i < 4; i++)
       {
       Prn::print(Prn::ThreadRun3, "Code5      %d", aMsg->mCode5[i]);
+      }
+      Prn::print(Prn::ThreadRun3, "");
+   }
+
+   //****************************************************************************
+
+   void TMessageHelper::initialize(Data4Msg* aMsg)
+   {
+      aMsg->mCode1 = 201;
+      aMsg->mCode2 = 202;
+      aMsg->mCode3 = 203;
+      aMsg->mCode4 = 204;
+      aMsg->mData1Loop = 4;
+      for (int i = 0; i < 4; i++)
+      {
+         initialize(&aMsg->mData1[i]);
+      }
+   }
+
+   void TMessageHelper::show(Data4Msg* aMsg)
+   {
+      Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
+      Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
+      Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
+      Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
+      aMsg->mData1Loop = 4;
+      for (int i = 0; i < 4; i++)
+      {
+         show(&aMsg->mData1[i]);
       }
       Prn::print(Prn::ThreadRun3, "");
    }

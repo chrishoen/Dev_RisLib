@@ -85,6 +85,13 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
          gNetworkThread->sendMessage(tMsg);
          break;
       }
+      case 6:
+      {
+         Data4Msg* tMsg = new Data4Msg;
+         TMessageHelper::initialize(tMsg);
+         gNetworkThread->sendMessage(tMsg);
+         break;
+      }
    }
 }
 

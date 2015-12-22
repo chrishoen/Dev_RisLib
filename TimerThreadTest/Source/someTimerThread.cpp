@@ -42,16 +42,18 @@ TimerThread::TimerThread()
 
 void TimerThread::executeOnTimer(int aTimeCount)
 {
+   if (!mTPFlag) return;
+
    mTimeMarker.doStop();
    mTimeMarker.doStart();
-
+#if 0
    if (aTimeCount == 0)
    {
       int tPrioriyClass = GetPriorityClass(GetCurrentProcess());
       int tThreadPriority = BaseThread::getThreadPriority();
       Prn::print(Prn::ThreadRun1, "TimerThread::executeOnTimer THREAD %08X %d", tPrioriyClass, tThreadPriority);
    }
-
+#endif
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
       Prn::print(Prn::ThreadRun1, " %10d %10d  %10.3f  %10.3f  %10.3f  %10.3f",
@@ -61,7 +63,6 @@ void TimerThread::executeOnTimer(int aTimeCount)
          mTimeMarker.mStatistics.mStdDev/1000.0,
          mTimeMarker.mStatistics.mMinX/1000.0,
          mTimeMarker.mStatistics.mMaxX/1000.0);
-
    }
 }
 

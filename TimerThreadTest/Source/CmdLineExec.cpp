@@ -6,6 +6,7 @@
 
 #include "CmdLineExec.h"
 
+#include "risThreads.h"
 #include "risTimeMarker.h"
 #include "risPortableCalls.h"
 
@@ -36,7 +37,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("T5"    ))  executeTest5   (aCmd);
    if(aCmd->isCmd("M1"    ))  executeMarker1 (aCmd);
    if(aCmd->isCmd("M2"    ))  executeMarker2 (aCmd);
-   if(aCmd->isCmd("M3"    ))  executeMarker3 (aCmd);
+   if(aCmd->isCmd("GO1"   ))  executeGo1     (aCmd);
+   if(aCmd->isCmd("GO2"   ))  executeGo2     (aCmd);
+   if(aCmd->isCmd("GO3"   ))  executeGo3     (aCmd);
 }
 
 //******************************************************************************
@@ -82,6 +85,7 @@ void CmdLineExec::executeMarker2(Ris::CmdLineCmd* aCmd)
    Prn::print(0,"%lld",tFreq);
    Prn::print(0,"%lld",tCount);
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -95,6 +99,78 @@ void CmdLineExec::executeMarker3(Ris::CmdLineCmd* aCmd)
    tMarker.doStop();
    Prn::print(0,"ScaleFactorUS     %8.3f",tMarker.mScaleFactorUS);
    Prn::print(0,"TimeDifferenceUS  %8.3f",tMarker.mTimeDifferenceUS);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,100000);
+   int tCount = aCmd->argInt(1);
+
+   UView::TimeMarker tMarker;
+   tMarker.initialize(tCount);
+
+   while(true)
+   {
+      tMarker.doStart();
+      tMarker.doStop();
+      if (tMarker.mStatistics.mEndOfPeriod)
+      {
+         break;
+      }
+   }
+
+   Prn::print(Prn::ThreadRun1, " %10.3f  %10.3f  %10.3f  %10.3f",
+      tMarker.mStatistics.mMean,
+      tMarker.mStatistics.mStdDev,
+      tMarker.mStatistics.mMinX,
+      tMarker.mStatistics.mMaxX);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,100000);
+   int tCount = aCmd->argInt(1);
+
+   UView::TimeMarker tMarker;
+   tMarker.initialize(tCount);
+
+   Ris::Threads::MutexSemaphore tMutex;
+
+   while(true)
+   {
+      tMarker.doStart();
+
+      tMutex.lock();
+      tMutex.unlock();
+
+      tMarker.doStop();
+      if (tMarker.mStatistics.mEndOfPeriod)
+      {
+         break;
+      }
+   }
+
+   Prn::print(Prn::ThreadRun1, " %10.3f  %10.3f  %10.3f  %10.3f",
+      tMarker.mStatistics.mMean,
+      tMarker.mStatistics.mStdDev,
+      tMarker.mStatistics.mMinX,
+      tMarker.mStatistics.mMaxX);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo3 (Ris::CmdLineCmd* aCmd)
+{
 }
 
 

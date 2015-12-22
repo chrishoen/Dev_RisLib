@@ -466,44 +466,22 @@ void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
 {
    Ris::Filter::PeriodicStatistics tF;
-   tF.initialize(20);
+   tF.initialize(40);
 
    for (int i = 0; i<20; i++)
    {
-      tF.put(0.0);
+      tF.put(2.0 + 10.0);
       tF.show();
    }
    Prn::print(0,"");
 
    for (int i = 0; i<20; i++)
    {
-      tF.put(1.0);
+      tF.put(-2.0 + 10.0);
       tF.show();
    }
    Prn::print(0,"");
 
-   for (int i = 0; i<20; i++)
-   {
-      tF.put(2.0);
-      tF.show();
-   }
-   Prn::print(0,"");
-
-   for (int i = 0; i<20; i++)
-   {
-      if (i==0) tF.put(1.0);
-      else      tF.put(0.0);   
-      tF.show();
-   }
-   Prn::print(0,"");
-
-   for (int i = 0; i<20; i++)
-   {
-      if (i==19) tF.put(1.0);
-      else       tF.put(0.0);   
-      tF.show();
-   }
-   Prn::print(0,"");
 
 }
 

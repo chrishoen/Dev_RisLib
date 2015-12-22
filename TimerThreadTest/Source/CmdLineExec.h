@@ -20,6 +20,9 @@ public:
   void executeMarker1 (Ris::CmdLineCmd* aCmd);
   void executeMarker2 (Ris::CmdLineCmd* aCmd);
   void executeMarker3 (Ris::CmdLineCmd* aCmd);
+  void executeGo1     (Ris::CmdLineCmd* aCmd);
+  void executeGo2     (Ris::CmdLineCmd* aCmd);
+  void executeGo3     (Ris::CmdLineCmd* aCmd);
 
 };
 //******************************************************************************

@@ -5,9 +5,11 @@ Description:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include <windows.h> 
+#include <windows.h>
+#include <atomic>
 
 #include "prnPrint.h"
+#include "risCriticalSection.h"
 
 #define  _SOMETIMERTHREAD_CPP_
 #include "someTimerThread.h"
@@ -34,7 +36,7 @@ TimerThread::TimerThread()
 
    // Members
    mTPFlag = false;
-   mTestCode=2;
+   mTestCode = 5;
 }
 
 //******************************************************************************
@@ -45,9 +47,12 @@ void TimerThread::executeOnTimer(int aTimeCount)
 {
    switch (mTestCode)
    {
-   case 0: executeTest0(aTimeCount); break;
-   case 1: executeTest1(aTimeCount); break;
-   case 2: executeTest2(aTimeCount); break;
+      case 0: executeTest0 (aTimeCount); break;
+      case 1: executeTest1 (aTimeCount); break;
+      case 2: executeTest2 (aTimeCount); break;
+      case 3: executeTest3 (aTimeCount); break;
+      case 4: executeTest4 (aTimeCount); break;
+      case 5: executeTest5 (aTimeCount); break;
    }
 }
 
@@ -108,6 +113,106 @@ void TimerThread::executeTest2(int aTimeCount)
    }
 
    Prn::print(Prn::ThreadRun1, "TEST2 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+      aTimeCount,
+      mTimeMarker.mStatistics.mMean,
+      mTimeMarker.mStatistics.mStdDev,
+      mTimeMarker.mStatistics.mMinX,
+      mTimeMarker.mStatistics.mMaxX);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TimerThread::executeTest3(int aTimeCount)
+{
+   int tCount = 10000;
+
+   mTimeMarker.initialize(tCount);
+
+   while(true)
+   {
+      mTimeMarker.doStart();
+
+      Ris::enterCriticalSection();
+      Ris::leaveCriticalSection();
+
+      mTimeMarker.doStop();
+
+      if (mTimeMarker.mStatistics.mEndOfPeriod)
+      {
+         break;
+      }
+   }
+
+   Prn::print(Prn::ThreadRun1, "TEST3 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+      aTimeCount,
+      mTimeMarker.mStatistics.mMean,
+      mTimeMarker.mStatistics.mStdDev,
+      mTimeMarker.mStatistics.mMinX,
+      mTimeMarker.mStatistics.mMaxX);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TimerThread::executeTest4(int aTimeCount)
+{
+   int tCount = 10000;
+
+   mTimeMarker.initialize(tCount);
+
+   std::atomic_int tAtom;
+
+   while(true)
+   {
+      mTimeMarker.doStart();
+
+      std::atomic_fetch_add (&tAtom,1);
+
+      mTimeMarker.doStop();
+
+      if (mTimeMarker.mStatistics.mEndOfPeriod)
+      {
+         break;
+      }
+   }
+
+   Prn::print(Prn::ThreadRun1, "TEST4 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+      aTimeCount,
+      mTimeMarker.mStatistics.mMean,
+      mTimeMarker.mStatistics.mStdDev,
+      mTimeMarker.mStatistics.mMinX,
+      mTimeMarker.mStatistics.mMaxX);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TimerThread::executeTest5(int aTimeCount)
+{
+   int tCount = 10000;
+
+   mTimeMarker.initialize(tCount);
+
+   while(true)
+   {
+      mTimeMarker.doStart();
+
+      void* tPtr = malloc(1000);
+      free(tPtr);
+
+      mTimeMarker.doStop();
+
+      if (mTimeMarker.mStatistics.mEndOfPeriod)
+      {
+         break;
+      }
+   }
+
+   Prn::print(Prn::ThreadRun1, "TEST5 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
       aTimeCount,
       mTimeMarker.mStatistics.mMean,
       mTimeMarker.mStatistics.mStdDev,

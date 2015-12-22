@@ -11,7 +11,7 @@ QCall test thread class.
 //******************************************************************************
 //******************************************************************************
 #include "risThreadsQCallThread.h"
-#include "risTimerTester.h"
+#include "uviewTimeMarker.h"
 
 namespace Some
 {
@@ -25,8 +25,6 @@ public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
 
    Thread1();
-
-   void configureThread();
 
    void executeOnTimer(int aTimerCount);
 
@@ -45,28 +43,10 @@ public:
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
-   // QCalls:
-
-   Ris::Threads::QCall1<int>   mTest1QCall;
-   void executeTest1 (int aX=0);
-
-   Ris::Threads::QCall1<int>   mTest2QCall;
-   void executeTest2 (int aX=0);
-
-   Ris::Threads::QCall1<int>   mTest3QCall;
-   void executeTest3 (int aX=0);
-
-   Ris::Threads::QCall2<int,int>   mTest4QCall;
-   void executeTest4 (int aNumOfIterations,int aNumOfExecutions);
-
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
    // Members:
 
-   Ris::TimerTester mTimerTester;
-
    bool mTPFlag;
+   UView::TimeMarker mTimeMarker;
 };
 
 //******************************************************************************

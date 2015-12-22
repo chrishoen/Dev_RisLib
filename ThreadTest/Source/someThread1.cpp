@@ -21,37 +21,32 @@ Thread1::Thread1()
    // QCall CallPointers
    mF101QCall.bind  (this,&Thread1::executeF101);
    mF102QCall.bind  (this,&Thread1::executeF102);
-   mTest1QCall.bind (this,&Thread1::executeTest1);
-   mTest2QCall.bind (this,&Thread1::executeTest2);
-   mTest3QCall.bind (this,&Thread1::executeTest3);
-   mTest4QCall.bind (this,&Thread1::executeTest4);
-
-   // Members
-   mTPFlag=false;
-}
-
-//******************************************************************************
-// This sets base thread configuration members
-
-void Thread1::configureThread()
-{
-   // Set base class configuration members to defaults
-   BaseClass::configureThread();
 
    // Set base class thread priority
    BaseClass::setThreadPriorityHigh();
 
    // Set timer period
-   BaseClass::mTimerPeriod = 1000;
+   int tFrequency = 100;
+   int tPeriod = 1000 / tFrequency;
+
+   BaseClass::mTimerPeriod = tPeriod;
+
+   mTimeMarker.initialize(5*tFrequency);
+
+   // Members
+   mTPFlag = false;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
 void Thread1::executeOnTimer(int aTimerCount)
 {
-   mTimerTester.executeOnTimer();
-   if (mTPFlag) Prn::print(Prn::ThreadRun4,"Timer %04d",aTimerCount);
+   mTimeMarker.doStart();
+   gThread2->mC101QCall.invoke(aTimerCount);
+
+// Prn::print(Prn::ThreadRun1,"Thread1::executeOnTimer %04d",aTimerCount);
 }
 
 //******************************************************************************
@@ -63,14 +58,20 @@ void Thread1::executeOnTimer(int aTimerCount)
 
 void Thread1::executeF101(int aN)
 {
-   int tCount=0;
-   while(true)
+   mTimeMarker.doStop();
+
+   if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      if (mTPFlag) printf("BEACON %d\n",tCount);
-      tCount++;
+      Prn::print(Prn::ThreadRun1, "TEST1 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         mTimeMarker.mChangeCount,
+         mTimeMarker.mStatistics.mMean,
+         mTimeMarker.mStatistics.mStdDev,
+         mTimeMarker.mStatistics.mMinX,
+         mTimeMarker.mStatistics.mMaxX);
    }
 
-// gThread2->mC101QCall.invoke(101);
+// Prn::print(Prn::ThreadRun1,"Thread1::executeF101    %04d",aN);
+// Prn::print(Prn::ThreadRun1,"");
 }
 
 //******************************************************************************
@@ -80,66 +81,5 @@ void Thread1::executeF102(int aN)
    gThread2->mC102QCall.invoke(102);
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Thread1::executeTest1(int aN)
-{
-   Prn::print(0,"Thread1::executeTest1 BEGIN");
-   threadWaitForTimerCompletion(4);
-   Prn::print(0,"Thread1::executeTest1 END");
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Thread1::executeTest2(int aN)
-{
-   try
-   {
-      Prn::print(0,"Thread1::executeTest2 BEGIN");
-      threadWaitForTimerCompletion(20);
-      Prn::print(0,"Thread1::executeTest2 END");
-   }
-   catch(int aStatus)
-   {
-      Prn::print(0,0, "Exception Thread1::executeTest2 ABORTED  %d",aStatus);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Thread1::executeTest3(int aN)
-{
-   try
-   {
-      Prn::print(0,"Thread1::executeTest3 BEGIN");
-      for (int i=0;i<20;i++)
-      {
-         threadWaitForTimerCompletion(1);
-      }
-      Prn::print(0,"Thread1::executeTest3 END");
-   }
-   catch(int aStatus)
-   {
-      Prn::print(0,0, "Exception Thread1::executeTest3 ABORTED  %d",aStatus);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Thread1::executeTest4(int aNumOfIterations,int aNumOfExecutions)
-{
-   mTimerTester.startTest(mTimerPeriod,aNumOfIterations,aNumOfExecutions);
-}
 
 }//namespace

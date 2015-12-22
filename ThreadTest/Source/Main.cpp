@@ -6,10 +6,9 @@
 #include "someThread1.h"
 #include "someThread2.h"
 #include "someTimerThread.h"
-using namespace Some;
+#include "MainInit.h"
 
-void amain_initialize(int argc,char** argv);
-void amain_finalize();
+using namespace Some;
 
 //******************************************************************************
 int main(int argc,char** argv)
@@ -17,16 +16,16 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Initialize
 
-   amain_initialize(argc,argv);
+   main_initialize(argc,argv);
 
    //--------------------------------------------------------------------
    // Launch threads
 
    gThread1 = new Thread1;
-// gThread1->launchThread();
+   gThread1->launchThread();
 
    gThread2 = new Thread2;
-// gThread2->launchThread();
+   gThread2->launchThread();
 
    gTimerThread = new TimerThread;
    gTimerThread->launchThread();
@@ -54,38 +53,8 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Exit
    
-   amain_finalize();
+   main_finalize();
 
    return 0;
-}
-
-//******************************************************************************
-// Initialize
-
-void amain_initialize(int argc,char** argv)
-{
-   // Enter process
-   Ris::Threads::enterProcessHigh();
-
-   // Initialize print facility
-   Prn::resetPrint();
-   Prn::useSettingsFileDefault();
-   Prn::initializePrint();
-
-   Prn::print(0,"ThreadTest*******************************************BEGIN");
-}
-
-//******************************************************************************
-// Main finalize
-
-void amain_finalize()
-{
-   Prn::print(0,"ThreadTest*******************************************END");
-
-   // Exit process
-   Ris::Threads::exitProcess();
-
-   // Close print
-   Prn::finalizePrint();
 }
 

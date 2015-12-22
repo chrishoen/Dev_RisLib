@@ -1,16 +1,12 @@
-#ifndef _SOMETHREAD1_H_
-#define _SOMETHREAD1_H_
+#ifndef _SOMESHARE_H_
+#define _SOMESHARE_H_
 
 /*==============================================================================
-File: someThread1.h
-Description:
-QCall test thread class.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risThreadsQCallThread.h"
 #include "uviewTimeMarker.h"
 
 namespace Some
@@ -19,42 +15,20 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class  Thread1 : public Ris::Threads::BaseQCallThread
+class Share
 {
 public:
-   typedef Ris::Threads::BaseQCallThread BaseClass;
 
-   Thread1();
-
-   void executeOnTimer(int aTimerCount);
-
-
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   // QCall:
-
-   Ris::Threads::QCall1<int>   mF101QCall;
-   void executeF101 (int aX=0);
-
-   Ris::Threads::QCall1<int>   mF102QCall;
-   void executeF102 (int aX=0);
-
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   // Members:
-
-   bool mTPFlag;
+   UView::TimeMarker mTimeMarker;
 };
 
 //******************************************************************************
 // Global instance
 
-#ifdef _SOMETHREAD1_CPP_
-          Thread1* gThread1;
+#ifdef _SOMESHARE_CPP_
+          Share gShare;
 #else
-   extern Thread1* gThread1;
+   extern Share gShare;
 #endif
 
 //******************************************************************************

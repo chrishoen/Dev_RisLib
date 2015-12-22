@@ -8,6 +8,7 @@ Description:
 
 #include "prnPrint.h"
 
+#include "someShare.h"
 #include "someThread2.h"
 
 #define  _SOMETHREAD1_CPP_
@@ -31,7 +32,7 @@ Thread1::Thread1()
 
    BaseClass::mTimerPeriod = tPeriod;
 
-   mTimeMarker.initialize(5*tFrequency);
+   gShare.mTimeMarker.initialize(5*tFrequency);
 
    // Members
    mTPFlag = false;
@@ -43,7 +44,7 @@ Thread1::Thread1()
 
 void Thread1::executeOnTimer(int aTimerCount)
 {
-   mTimeMarker.doStart();
+   gShare.mTimeMarker.doStart();
    gThread2->mC101QCall.invoke(aTimerCount);
 
 // Prn::print(Prn::ThreadRun1,"Thread1::executeOnTimer %04d",aTimerCount);
@@ -58,17 +59,6 @@ void Thread1::executeOnTimer(int aTimerCount)
 
 void Thread1::executeF101(int aN)
 {
-   mTimeMarker.doStop();
-
-   if (mTimeMarker.mStatistics.mEndOfPeriod)
-   {
-      Prn::print(Prn::ThreadRun1, "TEST1 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
-         mTimeMarker.mChangeCount,
-         mTimeMarker.mStatistics.mMean,
-         mTimeMarker.mStatistics.mStdDev,
-         mTimeMarker.mStatistics.mMinX,
-         mTimeMarker.mStatistics.mMaxX);
-   }
 
 // Prn::print(Prn::ThreadRun1,"Thread1::executeF101    %04d",aN);
 // Prn::print(Prn::ThreadRun1,"");

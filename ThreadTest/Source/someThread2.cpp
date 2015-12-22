@@ -10,6 +10,7 @@ Description:
 #include "prnPrint.h"
 
 #include "someThread1.h"
+#include "someShare.h"
 
 #define  _SOMETHREAD2_CPP_
 #include "someThread2.h"
@@ -42,8 +43,19 @@ void Thread2::executeOnTimer(int aCurrentTimeCount)
 
 void Thread2::executeC101(int aN)
 {
-// Prn::print(Prn::ThreadRun1,"Thread2::executeC101    %04d",aN);
-   gThread1->mF101QCall.invoke(aN);
+   gShare.mTimeMarker.doStop();
+
+   if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)
+   {
+      Prn::print(Prn::ThreadRun1, "TEST1 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         gShare.mTimeMarker.mChangeCount,
+         gShare.mTimeMarker.mStatistics.mMean,
+         gShare.mTimeMarker.mStatistics.mStdDev,
+         gShare.mTimeMarker.mStatistics.mMinX,
+         gShare.mTimeMarker.mStatistics.mMaxX);
+   }
+   // Prn::print(Prn::ThreadRun1,"Thread2::executeC101    %04d",aN);
+   // gThread1->mF101QCall.invoke(aN);
 }
 
 //******************************************************************************

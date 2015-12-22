@@ -36,7 +36,7 @@ void Thread1::threadRunFunction()
       if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)
       {
          Prn::print(Prn::ThreadRun1, "TEST1 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
-            gShare.mTimeMarker.mChangeCount,
+            gShare.mTimeMarker.mStatistics.mSize,
             gShare.mTimeMarker.mStatistics.mMean,
             gShare.mTimeMarker.mStatistics.mStdDev,
             gShare.mTimeMarker.mStatistics.mMinX,

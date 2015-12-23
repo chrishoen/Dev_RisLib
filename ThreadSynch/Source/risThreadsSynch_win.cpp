@@ -161,12 +161,12 @@ namespace Threads
 
    void ConditionVariable::wakeUp(int aPredicate)
    {
-      AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
+//    AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
 
       mImplementation->mPredicate = aPredicate;
       WakeConditionVariable(&mImplementation->mConditionVariable);
 
-      ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
+//    ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
    }
 
 

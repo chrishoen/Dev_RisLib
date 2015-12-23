@@ -23,12 +23,12 @@ TimerThread::TimerThread()
 // BaseClass::setThreadPriorityHigh();
 
    // Set timer period
-   int tFrequency = 5;
+   int tFrequency = 100;
    int tPeriod = 1000 / tFrequency;
 
    BaseClass::mTimerPeriod = tPeriod;
 
-   gShare.mTimeMarker.initialize(10*tFrequency);
+   gShare.mTimeMarker.initialize(5*tFrequency);
 }
 
 //******************************************************************************

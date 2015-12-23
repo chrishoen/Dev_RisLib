@@ -39,11 +39,11 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Shutdown threads
 
-   gThread1->shutdownThread();
-   delete gThread1;
-
    gTimerThread->shutdownThread();
    delete gTimerThread;
+
+   gThread1->shutdownThread();
+   delete gThread1;
 
    //--------------------------------------------------------------------
    // Exit

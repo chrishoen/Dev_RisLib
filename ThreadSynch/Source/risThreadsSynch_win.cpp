@@ -103,7 +103,7 @@ namespace Threads
    //******************************************************************************
    //******************************************************************************
 
-   class ConditionVariableSRW::Implementation
+   class ConditionVariable::Implementation
    {
    public:
       SRWLOCK            mSRWLock; 
@@ -113,7 +113,7 @@ namespace Threads
 
    //******************************************************************************
 
-   ConditionVariableSRW::ConditionVariableSRW() 
+   ConditionVariable::ConditionVariable() 
    {
       mImplementation = new Implementation;
       InitializeSRWLock(&mImplementation->mSRWLock); 
@@ -123,28 +123,28 @@ namespace Threads
 
    //******************************************************************************
 
-   ConditionVariableSRW::~ConditionVariableSRW() 
+   ConditionVariable::~ConditionVariable() 
    {
       delete mImplementation;
    }
 
    //******************************************************************************
 
-   void ConditionVariableSRW::acquireLock()
+   void ConditionVariable::acquireLock()
    {
       AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
    }
 
    //******************************************************************************
 
-   void ConditionVariableSRW::releaseLock()
+   void ConditionVariable::releaseLock()
    {
       ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
    }
 
    //******************************************************************************
 
-   void ConditionVariableSRW::waitFor()
+   void ConditionVariable::waitFor()
    {
       AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
 
@@ -159,86 +159,16 @@ namespace Threads
 
    //******************************************************************************
 
-   void ConditionVariableSRW::wakeUp(int aPredicate)
+   void ConditionVariable::wakeUp(int aPredicate)
    {
-      //    AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
+      AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
 
       mImplementation->mPredicate = aPredicate;
       WakeConditionVariable(&mImplementation->mConditionVariable);
 
-      //    ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
+      ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-
-   class ConditionVariableCS::Implementation
-   {
-   public:
-      CRITICAL_SECTION   mCriticalSection; 
-      CONDITION_VARIABLE mConditionVariable; 
-      int                mPredicate;
-   };
-
-   //******************************************************************************
-
-   ConditionVariableCS::ConditionVariableCS() 
-   {
-      mImplementation = new Implementation;
-      InitializeCriticalSectionAndSpinCount(&mImplementation->mCriticalSection,0x80000400); 
-      InitializeConditionVariable(&mImplementation->mConditionVariable); 
-      mImplementation->mPredicate = 0;
-   }
-
-   //******************************************************************************
-
-   ConditionVariableCS::~ConditionVariableCS() 
-   {
-      DeleteCriticalSection(&mImplementation->mCriticalSection); 
-      delete mImplementation;
-   }
-
-   //******************************************************************************
-
-   void ConditionVariableCS::acquireLock()
-   {
-      EnterCriticalSection(&mImplementation->mCriticalSection); 
-   }
-
-   //******************************************************************************
-
-   void ConditionVariableCS::releaseLock()
-   {
-      LeaveCriticalSection(&mImplementation->mCriticalSection); 
-   }
-
-   //******************************************************************************
-
-   void ConditionVariableCS::waitFor()
-   {
-      EnterCriticalSection(&mImplementation->mCriticalSection); 
-
-      while (mImplementation->mPredicate == 0)
-      {
-         SleepConditionVariableCS(&mImplementation->mConditionVariable, &mImplementation->mCriticalSection, INFINITE);
-      }
-      mImplementation->mPredicate = 0;
-
-      LeaveCriticalSection(&mImplementation->mCriticalSection); 
-   }
-
-   //******************************************************************************
-
-   void ConditionVariableCS::wakeUp(int aPredicate)
-   {
-      //    AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
-
-      mImplementation->mPredicate = aPredicate;
-      WakeConditionVariable(&mImplementation->mConditionVariable);
-
-      //    ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
-   }
 
 
 }//namespace

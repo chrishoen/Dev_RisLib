@@ -67,12 +67,12 @@ namespace Threads
    //******************************************************************************
    // This encapsulates a condition variable
 
-   class ConditionVariableSRW
+   class ConditionVariable
    {
    public:
 
-      ConditionVariableSRW();
-      ~ConditionVariableSRW();
+      ConditionVariable();
+     ~ConditionVariable();
 
       void acquireLock ();
       void releaseLock ();
@@ -86,30 +86,7 @@ namespace Threads
    };
 
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This encapsulates a condition variable
-
-   class ConditionVariableCS
-   {
-   public:
-
-      ConditionVariableCS();
-      ~ConditionVariableCS();
-
-      void acquireLock ();
-      void releaseLock ();
-
-      void waitFor ();
-      void wakeUp (int aPredicate = 1);
-
-   protected:
-      class Implementation;
-      Implementation* mImplementation;
-   };
-
-
+   
 }//namespace
 }//namespace
 #endif

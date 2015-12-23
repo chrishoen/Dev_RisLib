@@ -31,7 +31,7 @@ public:
    void threadRunFunction2();
 
    Ris::Threads::BinarySemaphore      mThreadSem;
-   Ris::Threads::ConditionVariableSRW mConditionVariable;
+   Ris::Threads::ConditionVariable    mConditionVariable;
 };
 
 //******************************************************************************

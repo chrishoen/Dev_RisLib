@@ -27,7 +27,7 @@ void enterProcessHigh()
    printf("GetPriorityClass %08X\n", tPriorityClass);
 #endif
    // Set process timer resolution to one millisecond
-   timeBeginPeriod(1);
+// timeBeginPeriod(1);
 }
 
 void exitProcess()

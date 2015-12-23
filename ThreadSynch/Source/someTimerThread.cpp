@@ -21,10 +21,9 @@ namespace Some
 TimerThread::TimerThread()
 {
    // Set base class thread priority
-// BaseClass::setThreadPriorityHigh();
 
    // Set timer period
-   int tFrequency = 100;
+   int tFrequency = 10;
    int tPeriod = 1000 / tFrequency;
 
    BaseClass::mTimerPeriod = tPeriod;
@@ -38,11 +37,19 @@ TimerThread::TimerThread()
 void TimerThread::executeOnTimer(int aTimeCount)
 {
    gShare.mTimeMarker.doStart();
-// gThread1->mThreadSem.put();
-// gThread1->mConditionVariable.wakeUp();
-   Experiment::send();
 
-// Prn::print(Prn::ThreadRun1, "Timer1");
+   switch (gShare.mTest)
+   {
+   case 1:
+      gThread1->mThreadSem.put();
+      break;
+   case 2:
+      gThread1->mConditionVariable.wakeUp();
+      break;
+   case 3:
+      Experiment::send();
+      break;
+   }
 }
 
 }//namespace

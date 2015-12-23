@@ -27,9 +27,9 @@ public:
    Thread1();
 
    void threadRunFunction();
-   void threadRunFunction1();
-   void threadRunFunction2();
-   void threadRunFunction3();
+   void runTest1();
+   void runTest2();
+   void runTest3();
 
    Ris::Threads::BinarySemaphore      mThreadSem;
    Ris::Threads::ConditionVariable    mConditionVariable;

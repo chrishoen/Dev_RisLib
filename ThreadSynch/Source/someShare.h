@@ -18,8 +18,10 @@ namespace Some
 class Share
 {
 public:
+   Share();
 
    Ris::TimeMarker mTimeMarker;
+   int mTest;
 };
 
 //******************************************************************************

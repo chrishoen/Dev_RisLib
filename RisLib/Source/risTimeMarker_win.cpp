@@ -8,9 +8,9 @@
 #include <stdio.h>
 
 #include "risPortableCalls.h"
-#include "uviewTimeMarker.h"
+#include "risTimeMarker.h"
 
-namespace UView
+namespace Ris
 {
 
 //******************************************************************************

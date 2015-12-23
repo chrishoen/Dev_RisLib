@@ -180,7 +180,6 @@
     <ClCompile Include="Source\someShare.cpp" />
     <ClCompile Include="Source\someThread1.cpp" />
     <ClCompile Include="Source\someTimerThread.cpp" />
-    <ClCompile Include="Source\uviewTimeMarker_win.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -188,7 +187,6 @@
     <ClInclude Include="Source\someShare.h" />
     <ClInclude Include="Source\someThread1.h" />
     <ClInclude Include="Source\someTimerThread.h" />
-    <ClInclude Include="Source\uviewTimeMarker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

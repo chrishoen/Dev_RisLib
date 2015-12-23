@@ -1,5 +1,5 @@
-#ifndef _UVIEWTIMEMARKER_H_
-#define _UVIEWTIMEMARKER_H_
+#ifndef _RISTIMEMARKER_H_
+#define _RISTIMEMARKER_H_
 /*==============================================================================
 
 This file contains a class that encapsulate a time marker that can be used
@@ -14,7 +14,7 @@ to measure computer execution time durations
 //******************************************************************************
 //******************************************************************************
 
-namespace UView
+namespace Ris
 {
 
 //******************************************************************************

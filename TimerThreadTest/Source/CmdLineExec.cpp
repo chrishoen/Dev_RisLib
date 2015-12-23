@@ -9,8 +9,6 @@
 #include "risThreads.h"
 #include "risPortableCalls.h"
 
-#include "uviewTimeMarker.h"
-
 #include "someTimerThread.h"
 using namespace Some;
 
@@ -64,27 +62,6 @@ void CmdLineExec::executeTest(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,100000);
-   int tCount = aCmd->argInt(1);
-
-   UView::TimeMarker tMarker;
-   tMarker.initialize(tCount);
-
-   while(true)
-   {
-      tMarker.doStart();
-      tMarker.doStop();
-      if (tMarker.mStatistics.mEndOfPeriod)
-      {
-         break;
-      }
-   }
-
-   Prn::print(Prn::ThreadRun1, " %10.3f  %10.3f  %10.3f  %10.3f",
-      tMarker.mStatistics.mMean,
-      tMarker.mStatistics.mStdDev,
-      tMarker.mStatistics.mMinX,
-      tMarker.mStatistics.mMaxX);
 }
 
 //******************************************************************************
@@ -93,33 +70,6 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,100000);
-   int tCount = aCmd->argInt(1);
-
-   UView::TimeMarker tMarker;
-   tMarker.initialize(tCount);
-
-   Ris::Threads::MutexSemaphore tMutex;
-
-   while(true)
-   {
-      tMarker.doStart();
-
-      tMutex.lock();
-      tMutex.unlock();
-
-      tMarker.doStop();
-      if (tMarker.mStatistics.mEndOfPeriod)
-      {
-         break;
-      }
-   }
-
-   Prn::print(Prn::ThreadRun1, " %10.3f  %10.3f  %10.3f  %10.3f",
-      tMarker.mStatistics.mMean,
-      tMarker.mStatistics.mStdDev,
-      tMarker.mStatistics.mMinX,
-      tMarker.mStatistics.mMaxX);
 }
 
 //******************************************************************************

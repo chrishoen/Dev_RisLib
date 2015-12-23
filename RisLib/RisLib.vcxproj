@@ -25,6 +25,7 @@
     <ClCompile Include="Source\risNetUdpTMessageThread.cpp" />
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
     <ClCompile Include="Source\risSerialPort.cpp" />
+    <ClCompile Include="Source\risTimeMarker_win.cpp" />
     <ClCompile Include="Source\ris_priorities_win.cpp" />
     <ClCompile Include="Source\prnPrint.cpp" />
     <ClCompile Include="Source\prnPrintSettings.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="Source\risNetUdpTMessageThread.h" />
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
     <ClInclude Include="Source\risSerialPort.h" />
+    <ClInclude Include="Source\risTimeMarker.h" />
     <ClInclude Include="Source\ris_priorities.h" />
     <ClInclude Include="Source\prnDefs.h" />
     <ClInclude Include="Source\prnPrint.h" />

@@ -11,7 +11,7 @@ QCall test thread class.
 //******************************************************************************
 //******************************************************************************
 #include "risThreadsTimerThread.h"
-#include "uviewTimeMarker.h"
+#include "risTimeMarker.h"
 
 namespace Some
 {
@@ -35,7 +35,7 @@ public:
    //--------------------------------------------------------------
    // Members:
 
-   UView::TimeMarker mTimeMarker;
+   Ris::TimeMarker mTimeMarker;
 
    bool mTPFlag;
    int  mTestCode;

@@ -24,11 +24,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source">
-      <UniqueIdentifier>{a58c3792-02fd-4067-846f-97e77db7b6d5}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -47,5 +42,10 @@
     <ClInclude Include="Source\uviewTimeMarker.h">
       <Filter>Source</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{26328112-235c-4757-bbcb-3e5ae4112ab2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

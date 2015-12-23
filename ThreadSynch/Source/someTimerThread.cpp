@@ -9,6 +9,7 @@ Description:
 #include "prnPrint.h"
 
 #include "someShare.h"
+#include "Experiment.h"
 #include "someThread1.h"
 
 #define  _SOMETIMERTHREAD_CPP_
@@ -38,7 +39,8 @@ void TimerThread::executeOnTimer(int aTimeCount)
 {
    gShare.mTimeMarker.doStart();
 // gThread1->mThreadSem.put();
-   gThread1->mConditionVariable.wakeUp();
+// gThread1->mConditionVariable.wakeUp();
+   Experiment::send();
 
 // Prn::print(Prn::ThreadRun1, "Timer1");
 }

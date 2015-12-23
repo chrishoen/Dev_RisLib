@@ -5,6 +5,7 @@
 
 #include "someThread1.h"
 #include "someTimerThread.h"
+#include "Experiment.h"
 #include "MainInit.h"
 
 using namespace Some;
@@ -16,6 +17,7 @@ int main(int argc,char** argv)
    // Initialize
 
    main_initialize(argc,argv);
+   Experiment::initialize();
 
    //--------------------------------------------------------------------
    // Launch threads

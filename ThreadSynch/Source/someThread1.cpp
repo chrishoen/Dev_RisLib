@@ -9,6 +9,7 @@ Description:
 #include "prnPrint.h"
 
 #include "someShare.h"
+#include "Experiment.h"
 
 #define  _SOMETHREAD1_CPP_
 #include "someThread1.h"
@@ -24,7 +25,7 @@ Thread1::Thread1()
 
 void Thread1::threadRunFunction()
 {
-   threadRunFunction2();
+   threadRunFunction3();
 }
 
 //******************************************************************************
@@ -75,6 +76,29 @@ void Thread1::threadRunFunction2()
    }
 
    // Prn::print(Prn::ThreadRun1, "Thread1");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Thread1::threadRunFunction3()
+{
+   while (true)
+   {
+      Experiment::receive();
+      gShare.mTimeMarker.doStop();
+
+      if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)
+      {
+         Prn::print(Prn::ThreadRun1, "TEST3 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+            gShare.mTimeMarker.mStatistics.mSize,
+            gShare.mTimeMarker.mStatistics.mMean,
+            gShare.mTimeMarker.mStatistics.mStdDev,
+            gShare.mTimeMarker.mStatistics.mMinX,
+            gShare.mTimeMarker.mStatistics.mMaxX);
+      }
+   }
 }
 
 }//namespace

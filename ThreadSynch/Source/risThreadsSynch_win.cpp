@@ -35,8 +35,6 @@ namespace Threads
    CriticalSection::CriticalSection() 
    {
       mImplementation = new Implementation;
-
-      // Initialize the critical section.
       InitializeCriticalSectionAndSpinCount(&mImplementation->mCriticalSection,0x80000400); 
 
    }
@@ -45,7 +43,6 @@ namespace Threads
 
    CriticalSection::~CriticalSection() 
    {
-      // Release resources used by the critical section object.
       DeleteCriticalSection(&mImplementation->mCriticalSection);
       delete mImplementation;
    }
@@ -54,7 +51,6 @@ namespace Threads
 
    void CriticalSection::enter()
    {
-      // Request ownership of the critical section.
       EnterCriticalSection(&mImplementation->mCriticalSection); 
    }
 
@@ -62,7 +58,6 @@ namespace Threads
 
    void CriticalSection::leave()
    {
-      // Release ownership of the critical section.
       LeaveCriticalSection(&mImplementation->mCriticalSection);
    }
 
@@ -81,10 +76,7 @@ namespace Threads
    SlimLock::SlimLock() 
    {
       mImplementation = new Implementation;
-
-      // Initialize the lock.
       InitializeSRWLock(&mImplementation->mSRWLock); 
-
    }
 
    //******************************************************************************
@@ -98,7 +90,6 @@ namespace Threads
 
    void SlimLock::acquire()
    {
-      // Acquire the lock
       AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
    }
 
@@ -106,7 +97,6 @@ namespace Threads
 
    void SlimLock::release()
    {
-      // Release the lock
       ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
    }
 

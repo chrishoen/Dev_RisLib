@@ -22,11 +22,16 @@ Thread1::Thread1()
    BaseClass::setThreadPriorityHigh();
 }
 
+void Thread1::threadRunFunction()
+{
+   threadRunFunction2();
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void Thread1::threadRunFunction()
+void Thread1::threadRunFunction1()
 {
    while (true)
    {
@@ -44,7 +49,32 @@ void Thread1::threadRunFunction()
       }
    }
 
-// Prn::print(Prn::ThreadRun1, "Thread1");
+   // Prn::print(Prn::ThreadRun1, "Thread1");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Thread1::threadRunFunction2()
+{
+   while (true)
+   {
+      mConditionVariable.waitFor();
+      gShare.mTimeMarker.doStop();
+
+      if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)
+      {
+         Prn::print(Prn::ThreadRun1, "TEST2 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+            gShare.mTimeMarker.mStatistics.mSize,
+            gShare.mTimeMarker.mStatistics.mMean,
+            gShare.mTimeMarker.mStatistics.mStdDev,
+            gShare.mTimeMarker.mStatistics.mMinX,
+            gShare.mTimeMarker.mStatistics.mMaxX);
+      }
+   }
+
+   // Prn::print(Prn::ThreadRun1, "Thread1");
 }
 
 }//namespace

@@ -37,7 +37,8 @@ TimerThread::TimerThread()
 void TimerThread::executeOnTimer(int aTimeCount)
 {
    gShare.mTimeMarker.doStart();
-   gThread1->mThreadSem.put();
+// gThread1->mThreadSem.put();
+   gThread1->mConditionVariable.wakeUp();
 
 // Prn::print(Prn::ThreadRun1, "Timer1");
 }

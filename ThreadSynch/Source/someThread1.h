@@ -11,6 +11,7 @@ QCall test thread class.
 //******************************************************************************
 //******************************************************************************
 #include "risThreads.h"
+#include "risThreadsSynch.h"
 
 namespace Some
 {
@@ -26,8 +27,11 @@ public:
    Thread1();
 
    void threadRunFunction();
+   void threadRunFunction1();
+   void threadRunFunction2();
 
-   Ris::Threads::BinarySemaphore  mThreadSem;
+   Ris::Threads::BinarySemaphore      mThreadSem;
+   Ris::Threads::ConditionVariableSRW mConditionVariable;
 };
 
 //******************************************************************************

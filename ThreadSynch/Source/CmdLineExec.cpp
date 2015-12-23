@@ -6,7 +6,6 @@
 
 #include "CmdLineExec.h"
 
-#include "risTimeMarker.h"
 #include "risPortableCalls.h"
 
 #include "someThread1.h"

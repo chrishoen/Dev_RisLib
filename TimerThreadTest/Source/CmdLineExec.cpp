@@ -7,7 +7,6 @@
 #include "CmdLineExec.h"
 
 #include "risThreads.h"
-#include "risTimeMarker.h"
 #include "risPortableCalls.h"
 
 #include "uviewTimeMarker.h"
@@ -35,8 +34,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("TP"    ))  executeTP      (aCmd);
    if(aCmd->isCmd("TEST"  ))  executeTest    (aCmd);
-   if(aCmd->isCmd("M1"    ))  executeMarker1 (aCmd);
-   if(aCmd->isCmd("M2"    ))  executeMarker2 (aCmd);
    if(aCmd->isCmd("GO1"   ))  executeGo1     (aCmd);
    if(aCmd->isCmd("GO2"   ))  executeGo2     (aCmd);
    if(aCmd->isCmd("GO3"   ))  executeGo3     (aCmd);
@@ -60,45 +57,6 @@ void CmdLineExec::executeTest(Ris::CmdLineCmd* aCmd)
    gTimerThread->mTestCode=aCmd->argInt(1);
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeMarker1(Ris::CmdLineCmd* aCmd)
-{
-   Ris::TimeMarker tMarker;
-   tMarker.doBegin();
-   Ris::portableSleep(1000);
-   tMarker.doEnd();
-   Prn::print(0,"%s",tMarker.asString2());
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeMarker2(Ris::CmdLineCmd* aCmd)
-{
-   long long tFreq  = Ris::portableGetHiResFrequency();
-   long long tCount = Ris::portableGetHiResCounter();
-   Prn::print(0,"%lld",tFreq);
-   Prn::print(0,"%lld",tCount);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeMarker3(Ris::CmdLineCmd* aCmd)
-{
-   Prn::print(0,"executeMarker3");
-   UView::TimeMarker tMarker;
-   tMarker.doStart();
-   Ris::portableSleep(1000);
-   tMarker.doStop();
-   Prn::print(0,"ScaleFactorUS     %8.3f",tMarker.mScaleFactorUS);
-   Prn::print(0,"TimeDifferenceUS  %8.3f",tMarker.mTimeDifferenceUS);
-}
 
 //******************************************************************************
 //******************************************************************************

@@ -64,8 +64,6 @@
     <ClCompile Include="Source\risThreads_win.cpp" />
     <ClCompile Include="Source\risTime.cpp" />
     <ClCompile Include="Source\risTimeDuration.cpp" />
-    <ClCompile Include="Source\risTimeMarker.cpp" />
-    <ClCompile Include="Source\risTimerTester.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_defs.h" />
@@ -124,8 +122,6 @@
     <ClInclude Include="Source\risThreadsTwoThread.h" />
     <ClInclude Include="Source\risTime.h" />
     <ClInclude Include="Source\risTimeDuration.h" />
-    <ClInclude Include="Source\risTimeMarker.h" />
-    <ClInclude Include="Source\risTimerTester.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{740DD552-6B3B-4A1B-9B22-B6F516E458AB}</ProjectGuid>

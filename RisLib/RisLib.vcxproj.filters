@@ -85,16 +85,10 @@
     <ClCompile Include="Source\risTimeDuration.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risTimerTester.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risThreadsProcess_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risThreadsTimer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risTimeMarker.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risThreadsCPSpecific.cpp">
@@ -247,12 +241,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risTimeDuration.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risTimeMarker.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risTimerTester.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsProcess.h">

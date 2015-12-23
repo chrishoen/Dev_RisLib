@@ -29,6 +29,9 @@ public:
    // Base class overloads
    void executeOnTimer(int aTimeCount);
 
+   // Members
+   int mTimerFrequency;
+
 };
 
 //******************************************************************************

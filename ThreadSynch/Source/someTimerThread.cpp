@@ -23,12 +23,10 @@ TimerThread::TimerThread()
    // Set base class thread priority
 
    // Set timer period
-   int tFrequency = 10;
-   int tPeriod = 1000 / tFrequency;
+   int mTimerFrequency = 10;
+   BaseClass::mTimerPeriod = 1000 / mTimerFrequency;
 
-   BaseClass::mTimerPeriod = tPeriod;
-
-   gShare.mTimeMarker.initialize(5*tFrequency);
+   gShare.mTimeMarker.initialize(5*mTimerFrequency);
 }
 
 //******************************************************************************
@@ -36,6 +34,8 @@ TimerThread::TimerThread()
 //******************************************************************************
 void TimerThread::executeOnTimer(int aTimeCount)
 {
+   if (aTimeCount < mTimerFrequency) return;
+
    gShare.mTimeMarker.doStart();
 
    switch (gShare.mTest)

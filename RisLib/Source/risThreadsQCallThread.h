@@ -204,28 +204,18 @@ public:
 
    // Mutex protected waitable queue
    //   mCallQue    is a queue of quecalls
-   //   mCallSem is signaled for mCallQue or timer functions
-   //   mLimitSem   is limits mCallQue from overflowing 
+   //   mCallSem    is signaled for mCallQue or timer functions
    //   mCallMutex  is mutex protection
 
    enum {CallQueSize=200};
    Ris::Containers::Queue<BaseQCall*,CallQueSize>  mCallQue;
    CountingSemaphore                               mCallSem;
-   CountingSemaphore                               mLimitSem;
    MutexSemaphore                                  mCallMutex;   
 
    //--------------------------------------------------------------
    // This is called by a QCall's invoke method to put itself to
    // the call queue.
    void putQCallToThread(BaseQCall* aQCall);
-
-   //--------------------------------------------------------------
-   // These set the queue mode.
-   // If     blocking and the queue is full then a queue write is blocked.
-   // If not blocking and the queue is full then a queue write is dropped.
-   void setQueModeBlocking() {mBlockingQueMode=true;}
-   void setQueModeDropping() {mBlockingQueMode=false;}
-   bool mBlockingQueMode;
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------

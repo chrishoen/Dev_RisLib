@@ -21,13 +21,10 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 
-BaseQCallThread::BaseQCallThread() :
-   mLimitSem(CallQueSize-10)
+BaseQCallThread::BaseQCallThread()
 {
    // Logic
-
    mTerminateFlag=false;
-   mBlockingQueMode=true;
 
    // Timer
    mTimerPeriod = 1000;
@@ -185,12 +182,6 @@ void BaseQCallThread::threadRunFunction()
       {
          // Get QCall from queue
          mCallQue.get(tQCall);
-   
-         // Put to the limit semaphore
-         if (mBlockingQueMode)
-         {
-            mLimitSem.put();
-         }
       }
    
       // Unlock the queue
@@ -253,12 +244,6 @@ void BaseQCallThread::shutdownThread()
 
 void BaseQCallThread::putQCallToThread(BaseQCall* aQCall)
 {
-   // Get from the limit semaphore, blocking if the queue is almost full
-   if (mBlockingQueMode)
-   {
-      mLimitSem.get();
-   }
-
    mCallMutex.lock();
    // Put the QCall to the queue and signal the semaphore
    if (mCallQue.isPut())

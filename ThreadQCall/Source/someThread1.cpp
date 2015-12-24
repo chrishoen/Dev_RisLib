@@ -25,7 +25,6 @@ Thread1::Thread1()
 {
    // BaseClass
    BaseClass::setThreadPriorityHigh();
-   mTimerPeriod=1000;
 
    // QCall CallPointers
    mC101QCall.bind  (this,&Thread1::executeC101);

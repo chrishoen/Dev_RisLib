@@ -27,6 +27,9 @@
     <ClCompile Include="Source\risThreadsApcTimer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risThreadsApcQCallThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -45,6 +48,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsApcTimer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsApcQCallThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

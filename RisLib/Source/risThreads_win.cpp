@@ -299,12 +299,6 @@ void BaseThread::launchThread()
    // the new thread,using configured priority and affinity
 
    ResumeThread(mBaseImplementation->mHandle);
-
-   //---------------------------------------------------------------------------
-   // Wait for semaphore that is signaled in the following
-   // threadFunction after the thread init section has executed.
-
-   mThreadInitSem.get();
 }
 
 //******************************************************************************
@@ -328,10 +322,6 @@ void BaseThread::threadFunction()
       // Note that the timer starts after the initialization section
       // has completed 
       threadTimerInitFunction();
-      // Put to the init sem that the launch method is
-      // waiting for. The launch method doesn't return
-      // until the above two functions have executed.
-      mThreadInitSem.put();
       // Run section, overload provided by inheritors 
       threadRunFunction();
       // Exit section, overload provided by inheritors
@@ -339,17 +329,11 @@ void BaseThread::threadFunction()
    }
    catch (char* aStr)
    {
-      // Put to the init sem that the launch method is
-      // waiting for
-      mThreadInitSem.put();
       // Exception section, overload provided by inheritors
       threadExceptionFunction(aStr);
    }
    catch (...)
    {
-      // Put to the init sem that the launch method is
-      // waiting for
-      mThreadInitSem.put();
       // Exception section, overload provided by inheritors
       threadExceptionFunction("UNKNOWN");
    }

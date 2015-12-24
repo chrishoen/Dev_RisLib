@@ -229,14 +229,6 @@ public:
    int    mThreadIdealProcessor;
    int    mThreadUseInitSem;
 
-   //Initialization semaphore.
-   //It is used to serialize thread initialization sections.
-   //After launch creates the thread it waits for this semaphore.
-   //The corresponding threadFunction signals it after it calls
-   // threadInitFunction.
-
-   BinarySemaphore  mThreadInitSem;
-
    //Exit semaphore.
    //It is posted to after the end of threadExitFunction.
    //waitForThreadTerminate waits for it.

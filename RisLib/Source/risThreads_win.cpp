@@ -5,14 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#ifdef _AFXDLL
-// MFC project
-#include <afxwin.h>
-#else
-#define _WIN32_WINNT 0x0500
-// NOT MFC project
 #include <windows.h> 
-#endif
 
 #include "my_functions.h"
 #include "ris_priorities.h"

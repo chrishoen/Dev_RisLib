@@ -13,7 +13,7 @@ namespace Some
 
    Share::Share()
    {
-      mTest = 1;
+      mTest = 3;
    }
 
 }

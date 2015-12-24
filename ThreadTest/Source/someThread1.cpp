@@ -44,10 +44,18 @@ Thread1::Thread1()
 
 void Thread1::executeOnTimer(int aTimerCount)
 {
+   if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)
+   {
+      Prn::print(Prn::ThreadRun1, "TEST1 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         gShare.mTimeMarker.mChangeCount,
+         gShare.mTimeMarker.mStatistics.mMean,
+         gShare.mTimeMarker.mStatistics.mStdDev,
+         gShare.mTimeMarker.mStatistics.mMinX,
+         gShare.mTimeMarker.mStatistics.mMaxX);
+   }
+
    gShare.mTimeMarker.doStart();
    gThread2->mC101QCall.invoke(aTimerCount);
-
-// Prn::print(Prn::ThreadRun1,"Thread1::executeOnTimer %04d",aTimerCount);
 }
 
 //******************************************************************************

@@ -173,7 +173,6 @@ class BaseApcQCallThread : public Ris::Threads::BaseThread,public BaseBaseQCallT
 {
 public:
    BaseApcQCallThread();
-  ~BaseApcQCallThread();
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -193,6 +192,7 @@ public:
 
    //Termination 
    AlertableSemaphore   mTerminateSem;
+   bool                 mTerminateFlag;
 
    //--------------------------------------------------------------
    // This is called by a QCall's invoke method to put itself to

@@ -43,6 +43,13 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ViewRun3,    false,1);
    Prn::setFilter(Prn::ViewRun4,    true, 1);
 
+   Prn::setFilter(Prn::QCallInit1, true);
+   Prn::setFilter(Prn::QCallInit2, true);
+   Prn::setFilter(Prn::QCallRun1,  false);
+   Prn::setFilter(Prn::QCallRun2,  false);
+   Prn::setFilter(Prn::QCallRun3,  false);
+   Prn::setFilter(Prn::QCallRun4,  false);
+
    Prn::print(0,"ThreadTest*******************************************BEGIN");
 }
 

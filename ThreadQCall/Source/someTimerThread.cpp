@@ -22,7 +22,7 @@ TimerThread::TimerThread()
    // Set base class thread priority
 
    // Set timer period
-   int mTimerFrequency = 100;
+   int mTimerFrequency = 1;
    BaseClass::mTimerPeriod = 1000 / mTimerFrequency;
 
    gShare.mTimeMarker.initialize(5*mTimerFrequency);

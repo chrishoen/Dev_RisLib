@@ -25,17 +25,16 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("GO"    ))  executeGo      (aCmd);
+   if(aCmd->isCmd("GO1"   ))  executeGo1     (aCmd);
    if(aCmd->isCmd("F101"  ))  executeF101    (aCmd);
    if(aCmd->isCmd("F102"  ))  executeF102    (aCmd);
 }
 
 //******************************************************************************
 
-void CmdLineExec::executeGo(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   gShare.mTest = aCmd->argInt(1);
+   gThread1->mC102QCall.invoke(202);
 }
 
 //******************************************************************************

@@ -5,6 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 
+#include <windows.h>
 #include "prnPrint.h"
 
 #include "ris_priorities.h"
@@ -21,9 +22,6 @@ namespace Threads
 
 BaseApcQCallThread::BaseApcQCallThread()
 {
-   // Logic
-   mTerminateFlag=false;
-
    mThreadPriority = get_default_qcall_thread_priority();
 }
 
@@ -61,67 +59,7 @@ void BaseApcQCallThread::threadRunFunction()
    // Exit the loop on a thread terminate.
    while (true)
    {
-      Prn::print(Prn::QCallRun1, "BaseApcQCallThread::threadRunFunction");
-
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      // Wait for the QCall thread semaphore
-
-      mCallSem.get();
-
-      // Test for terminate
-      if(mTerminateFlag) return;
-
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-	   //----------------------------------------------------------
-      // Get QCall from queue
-   
-      BaseQCall* tQCall=0;
-
-      // Lock the queue
-      mCallMutex.lock();
-   
-      // Test for pending QCall
-      if (mCallQue.isGet())
-      {
-         // Get QCall from queue
-         mCallQue.get(tQCall);
-      }
-   
-      // Unlock the queue
-      mCallMutex.unlock();
-
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      // Execute QCall
-   
-      // If there is a QCall pending
-      if (tQCall)
-      {
-         // Execute QCall
-         tQCall->execute();
-         // Delete it
-         delete tQCall;
-      }
-   }
-}
-
-//******************************************************************************
-// Thread init function, base class overload.
-
-void BaseApcQCallThread::threadExitFunction()
-{
-   Prn::print(Prn::QCallInit1, "BaseApcQCallThread::threadExitFunction");
-
-   // Empty the call queue
-   while(mCallQue.isGet())
-   {
-      BaseQCall* tQCall;
-      mCallQue.get(tQCall);
-      delete tQCall;
+      mTerminateSem.get(INFINITE);
    }
 }
 
@@ -133,30 +71,41 @@ void BaseApcQCallThread::shutdownThread()
    Prn::print(Prn::QCallInit1, "BaseApcQCallThread::shutdownThread");
 
    // Set termination flag
-   mTerminateFlag=true;
-   // Post to the call sem to wake up thread if blocked on it
-   mCallSem.put();
+   mTerminateSem.put();
    // Wait for thread terminate
    waitForThreadTerminate();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a c-function that is passed to the windows timer service to
+// execute periodically. It is passed a pointer to a Timer object.
+// It increments the current time count and calls the user timer call.
+
+VOID CALLBACK QCall_APCProc(
+   _In_ ULONG_PTR dwParam
+   )
+{
+   BaseQCall* tQCall = (BaseQCall*)dwParam;
+   tQCall->execute();
+   delete tQCall;
 }
 
 //******************************************************************************
 
 void BaseApcQCallThread::putQCallToThread(BaseQCall* aQCall)
 {
-   mCallMutex.lock();
-   // Put the QCall to the queue and signal the semaphore
-   if (mCallQue.isPut())
-   {
-      mCallQue.put(aQCall);
-      mCallSem.put();
-   }
-   else 
-   {
-      Prn::print(0,"ERROR CallQue FULL");
-      delete aQCall;
-   }
-   mCallMutex.unlock();
+// HANDLE*   hThreadPtr = (HANDLE*)(BaseThread::getHandlePtr());
+
+   PAPCFUNC  pfnAPC  = QCall_APCProc;
+   HANDLE    hThread = *(HANDLE*)BaseThread::getHandlePtr();
+   ULONG_PTR dwData  = (ULONG_PTR)aQCall;
+
+   QueueUserAPC(
+      pfnAPC,
+      hThread ,
+      dwData);
 }
 
 }//namespace

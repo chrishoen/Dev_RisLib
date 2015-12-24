@@ -37,8 +37,7 @@ void TimerThread::executeOnTimer(int aTimeCount)
 
    if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      Prn::print(Prn::ThreadRun1, "TEST%d %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
-         gShare.mTest,
+      Prn::print(Prn::ThreadRun1, "TESTQ %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
          gShare.mTimeMarker.mStatistics.mSize,
          gShare.mTimeMarker.mStatistics.mMean,
          gShare.mTimeMarker.mStatistics.mStdDev,

@@ -30,6 +30,9 @@
     <ClCompile Include="Source\risThreadsApcQCallThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risThreadsSynch_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -51,6 +54,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsApcQCallThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsSynch.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

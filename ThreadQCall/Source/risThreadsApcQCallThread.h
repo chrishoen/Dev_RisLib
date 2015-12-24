@@ -135,7 +135,7 @@ executed by the thread run function and then deleted.
 #include "risCallPointer.h"
 #include "risContainers.h"
 #include "risThreads.h"
-#include "risThreadsTimer.h"
+#include "risThreadsSynch.h"
 
 namespace Ris
 {
@@ -187,30 +187,12 @@ public:
    // the call queue, and executes the call. 
    virtual void threadRunFunction(); 
 
-   // Empties the call queue
-   void threadExitFunction(); 
-
-   // Sets the mTerminateFlag and posts to the call semaphore.
+   // Posts to the termination semaphore.
    // Then it waits for the thread to terminate.
    void shutdownThread(); 
 
-   //Termination Flag
-   bool   mTerminateFlag;
-
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   // call queue:
-
-   // Mutex protected waitable queue
-   //   mCallQue    is a queue of quecalls
-   //   mCallSem    is signaled for mCallQue or timer functions
-   //   mCallMutex  is mutex protection
-
-   enum {CallQueSize=200};
-   Ris::Containers::Queue<BaseQCall*,CallQueSize>  mCallQue;
-   CountingSemaphore                               mCallSem;
-   MutexSemaphore                                  mCallMutex;   
+   //Termination 
+   AlertableSemaphore   mTerminateSem;
 
    //--------------------------------------------------------------
    // This is called by a QCall's invoke method to put itself to

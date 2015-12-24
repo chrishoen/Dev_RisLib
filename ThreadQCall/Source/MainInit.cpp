@@ -1,3 +1,5 @@
+#include <windows.h>
+
 #include "prnPrint.h"
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
@@ -11,10 +13,14 @@ using namespace Some;
 //******************************************************************************
 // Initialize
 
+static const int cTimerPeriod = 100;
+
 void main_initialize(int argc,char** argv)
 {
    // Enter process
    Ris::Threads::enterProcessHigh();
+
+   timeBeginPeriod(cTimerPeriod);
 
    // Initialize print facility
    Prn::resetPrint();
@@ -68,5 +74,6 @@ void main_finalize()
    // Exit process
    Ris::Threads::exitProcess();
 
+   timeEndPeriod(cTimerPeriod);
 }
 

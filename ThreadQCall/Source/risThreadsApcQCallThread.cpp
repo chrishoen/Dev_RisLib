@@ -76,13 +76,9 @@ void BaseApcQCallThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a c-function that is passed to the windows timer service to
-// execute periodically. It is passed a pointer to a Timer object.
-// It increments the current time count and calls the user timer call.
+// This executes the qcall that was passed via APC by the following function.
 
-VOID CALLBACK QCall_APCProc(
-   _In_ ULONG_PTR dwParam
-   )
+VOID CALLBACK QCall_APCProc(_In_ ULONG_PTR dwParam)
 {
    BaseQCall* tQCall = (BaseQCall*)dwParam;
    tQCall->execute();
@@ -90,19 +86,15 @@ VOID CALLBACK QCall_APCProc(
 }
 
 //******************************************************************************
+// This sends an APC to this thread, it contains a pointer to the above 
+// function and a pointer to a qcall.
 
 void BaseApcQCallThread::putQCallToThread(BaseQCall* aQCall)
 {
-// HANDLE*   hThreadPtr = (HANDLE*)(BaseThread::getHandlePtr());
-
-   PAPCFUNC  pfnAPC  = QCall_APCProc;
-   HANDLE    hThread = *(HANDLE*)BaseThread::getHandlePtr();
-   ULONG_PTR dwData  = (ULONG_PTR)aQCall;
-
    QueueUserAPC(
-      pfnAPC,
-      hThread ,
-      dwData);
+      QCall_APCProc,
+      *(HANDLE*)BaseThread::getHandlePtr(),
+      (ULONG_PTR)aQCall);
 }
 
 }//namespace

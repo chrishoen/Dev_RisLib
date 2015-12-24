@@ -67,12 +67,11 @@ public:
    //--------------------------------------------------------------
    // Thread base class overloads:
 
-   // configure sets configuration members.
    // launch starts the child threads + this thread
    // threadInitFunction sets up the base class multiple objects.
    // threadExitFunction shuts down the child thread
    // shutdown shuts down child threads + this thread
-   void configureThread();
+
    void launchThread();
    void threadExitFunction(); 
    void executeOnTimer(int);

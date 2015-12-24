@@ -21,6 +21,8 @@ namespace ProtoComm
 
 ServerThread::ServerThread()
 {
+   BaseClass::mTimerPeriod=1000;
+
    mPeriodicEnable=false;
    mPeriodicCount=0;
    mStatusCount1=0;
@@ -61,20 +63,6 @@ void ServerThread::configure()
       &mMessageParserCreator,
       &mSessionQCall,
       &mRxMsgQCall);
-}
-
-//******************************************************************************
-// This sets base thread configuration members
-
-void ServerThread::configureThread()
-{
-   // Set base class configuration members to defaults
-   BaseClass::configureThread();
-
-   // Set base class configuration members to specific values
-
-   BaseClass::mTimerPeriod=1000;
-   BaseClass::setQueModeDropping();
 }
 
 //******************************************************************************

@@ -18,8 +18,9 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 // The Timer class provides a timer that can be used to call a function
-// periodically. It is passed a function pointer and a timer period.
-
+// periodically. It is passed a function pointer and a timer period. This uses
+// waitable timers and asynchronous procedure calls. These only work with
+// thread run functions that are alertable (SleepEx).
 
 // Call pointer for function to be called periodically
 typedef CallPointer1<int> TimerCall;

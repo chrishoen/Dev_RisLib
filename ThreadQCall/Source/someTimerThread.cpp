@@ -33,7 +33,6 @@ TimerThread::TimerThread()
 //******************************************************************************
 void TimerThread::executeOnTimer(int aTimeCount)
 {
-   return;
    if (aTimeCount < mTimerFrequency) return;
 
    if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)

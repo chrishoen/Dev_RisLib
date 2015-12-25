@@ -4,8 +4,6 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#pragma warning(disable:4793)
-
 #include <windows.h> 
 
 #include "prnPrint.h"
@@ -86,11 +84,16 @@ namespace Threads
       //---------------------------------------------------------------------------
       // Variables
 
+      // Members
       mTimerCall    = aTimerCall;
       mTimerPeriod  = aTimerPeriod;
 
+      // Guard
+      if (mTimerPeriod==0) return;
+
       mSpecific->mHandle = NULL;
 
+      // Locals
       LARGE_INTEGER liDueTime;
       liDueTime.QuadPart = -100000000LL;
 
@@ -129,6 +132,10 @@ namespace Threads
 
 void ApcTimer::cancel()
 {
+   // Guard
+   if (mTimerPeriod==0) return;
+
+   // Cancel timer and close handle
    if (mSpecific->mHandle != 0)
    {
       CancelWaitableTimer(mSpecific->mHandle);

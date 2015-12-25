@@ -135,6 +135,8 @@ executed by the thread run function and then deleted.
 #include "risCallPointer.h"
 #include "risContainers.h"
 #include "risThreads.h"
+
+#include "risThreadsApcTimer.h"
 #include "risThreadsSynch.h"
 
 namespace Ris
@@ -179,6 +181,7 @@ public:
 
    // This sets up the thread timer
    virtual void threadTimerInitFunction(); 
+   void threadExecuteOnTimer(int aTimeCount);
 
    // This executes a loop that calls threadRunRecursive to process 
    // the call queue. The loop terminates on the mTerminateFlag.
@@ -188,6 +191,7 @@ public:
 
    // Posts to the termination semaphore.
    // Then it waits for the thread to terminate.
+   void threadExitFunction(); 
    void shutdownThread(); 
 
    //Termination 
@@ -199,11 +203,13 @@ public:
    // the call queue.
    void putQCallToThread(BaseQCall* aQCall);
 
-   // This is directly executed by the timer. It calls
-   // inheritor executeOnTimer and is protected by the
-   // execution mutex
-   void threadExecuteOnTimer(int aCurrentTimeCount);
+   //--------------------------------------------------------------
+   // Timer
 
+   ApcTimer mApcTimer;
+   int      mTimerPeriod;
+
+   // This is called periodically by the apc timer
    // Inheritors provide an overload for this.
    virtual void executeOnTimer(int aCurrentTimeCount){}
 };

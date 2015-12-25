@@ -7,7 +7,6 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risPortableTypes.h"
 #include "risCallPointer.h"
 
 namespace Ris
@@ -31,8 +30,10 @@ public:
    ApcTimer();
   ~ApcTimer();
 
-   // Executes a timer call periodically, in milliseconds
-   void setPeriodic (TimerCall aTimerCall,int aTimerPeriod);
+   // Creates a timer call that is called periodically. It is passed a period
+   // and a call pointer that contains the address of a method to call.
+
+   void create (int aTimerPeriod, TimerCall aTimerCall);
 
    void cancel();
 

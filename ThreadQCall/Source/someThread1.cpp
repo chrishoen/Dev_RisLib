@@ -24,20 +24,21 @@ namespace Some
 Thread1::Thread1()
 {
    // BaseClass
+   BaseClass::mTimerPeriod=1000;
    BaseClass::setThreadPriorityHigh();
 
    // QCall CallPointers
    mC101QCall.bind  (this,&Thread1::executeC101);
    mC102QCall.bind  (this,&Thread1::executeC102);
-
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void Thread1::executeOnTimer(int aCurrentTimeCount)
+void Thread1::executeOnTimer (int aTimeCount)
 {
+   Prn::print(Prn::ThreadRun4,"Thread1::executeOnTimer %d",aTimeCount);
 }
 
 //******************************************************************************

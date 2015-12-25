@@ -22,6 +22,7 @@ namespace Threads
 
 BaseApcQCallThread::BaseApcQCallThread()
 {
+   mTimerPeriod=1000;
    mTerminateFlag = false;
    mThreadPriority = get_default_qcall_thread_priority();
 }
@@ -30,16 +31,28 @@ BaseApcQCallThread::BaseApcQCallThread()
 
 void BaseApcQCallThread::threadTimerInitFunction()
 {
+   // Guard
+   if (mTimerPeriod==0) return;
+
+   // Call pointer
+   TimerCall tTimerCall;
+   tTimerCall.bind(this,&BaseApcQCallThread::threadExecuteOnTimer);
+
+   // Create timer
+   mApcTimer.create(mTimerPeriod,tTimerCall);
 }
 
 //******************************************************************************
 
-void BaseApcQCallThread::threadExecuteOnTimer(int aCurrentTimeCount)
+void BaseApcQCallThread::threadExecuteOnTimer(int aTimeCount)
 {
-   //Execute inheritor timer method
-   executeOnTimer(aCurrentTimeCount);
-}
+   // Guard
+   if(mTerminateFlag) return;
 
+   //Execute inheritor timer method
+   executeOnTimer(aTimeCount);
+
+}
 //******************************************************************************
 // Thread run function, base class overload.
 // This provides the execution context for processing queued QCalls
@@ -58,6 +71,14 @@ void BaseApcQCallThread::threadRunFunction()
       mTerminateSem.get(INFINITE);
       if (mTerminateFlag) break;
    }
+}
+
+//******************************************************************************
+// Thread exit function, base class overload.
+
+void BaseApcQCallThread::threadExitFunction()
+{
+   mApcTimer.cancel();
 }
 
 //******************************************************************************

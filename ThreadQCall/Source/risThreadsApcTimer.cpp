@@ -16,112 +16,124 @@ namespace Ris
 namespace Threads
 {
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is a c-function that is passed to the windows timer service to
-// execute periodically. It is passed a pointer to a Timer object.
-// It increments the current time count and calls the user timer call.
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This is a c-function that is passed to the windows timer service to
+   // execute periodically. It is passed a pointer to a Timer object.
+   // It increments the current time count and calls the user timer call.
 
-VOID CALLBACK Timer_TimerProc(
-   UINT uTimerID,
-   UINT uMsg,
-   DWORD_PTR dwUser,
-   DWORD_PTR dw1,
-   DWORD_PTR dw2)
-{
-   // Convert pointer
-   ApcTimer* tTimer = (ApcTimer*)dwUser;
+   VOID CALLBACK TimerAPCProc(
+      LPVOID lpArg,               // Data value
+      DWORD dwTimerLowValue,      // Timer low value
+      DWORD dwTimerHighValue )    // Timer high value
 
-   // Increment current time
-   tTimer->mCurrentTimeCount++;
-
-   // Invoke user timer call
-   tTimer->mTimerCall(tTimer->mCurrentTimeCount);
-}
-
-
-VOID CALLBACK WaitOrTimerCallback_Proc(
-  __in  PVOID lpParameter,
-  __in  BOOLEAN TimerOrWaitFired
-)
-{
-   // Convert pointer
-   ApcTimer* tTimer = (ApcTimer*)lpParameter;
-
-   // Increment current time
-   tTimer->mCurrentTimeCount++;
-
-   // Invoke user timer call
-   tTimer->mTimerCall(tTimer->mCurrentTimeCount);
-}
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// class definition for implementation specific
-
-class ApcTimer::Specific
-{
-public:
-   Specific()
    {
-      mTimerId=0;
+      // Formal parameters not used in this example.
+      UNREFERENCED_PARAMETER(dwTimerLowValue);
+      UNREFERENCED_PARAMETER(dwTimerHighValue);
+
+      // Convert pointer
+      ApcTimer* tTimer = (ApcTimer*)lpArg;
+
+      // Increment current time
+      tTimer->mCurrentTimeCount++;
+
+      // Invoke user timer call
+      tTimer->mTimerCall(tTimer->mCurrentTimeCount);
    }
-   int mTimerId;
-};
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // class definition for implementation specific
 
-ApcTimer::ApcTimer()
-{
-   // Initialize members
-   mTimerPeriod=1000;
-   mCurrentTimeCount=0;
+   class ApcTimer::Specific
+   {
+   public:
+      Specific()
+      {
+         mHandle=0;
+      }
+      HANDLE mHandle;
+   };
 
-   // Create new specific implementation
-   mSpecific = new Specific;
-}
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
 
-ApcTimer::~ApcTimer()
-{
-   cancel();
-   delete mSpecific;
-}
+   ApcTimer::ApcTimer()
+   {
+      // Initialize members
+      mTimerPeriod=1000;
+      mCurrentTimeCount=0;
 
-//******************************************************************************
+      // Create new specific implementation
+      mSpecific = new Specific;
+   }
 
-void ApcTimer::setPeriodic (TimerCall aTimerCall,int aTimerPeriod)
-{
-   mTimerCall    = aTimerCall;
-   mTimerPeriod  = aTimerPeriod;
+   ApcTimer::~ApcTimer()
+   {
+      delete mSpecific;
+   }
 
-   HANDLE tHandle = 0;
-   ULONG  tFlags  = 0;
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
 
-   tFlags = WT_EXECUTEINTIMERTHREAD;
-// tFlags = WT_EXECUTEINPERSISTENTTHREAD;
+   void ApcTimer::create (int aTimerPeriod, TimerCall aTimerCall)
+   {
+      //---------------------------------------------------------------------------
+      // Variables
 
-   CreateTimerQueueTimer(
-      &tHandle,
-      0,
-      WaitOrTimerCallback_Proc,
-      (void*)this,
-      (DWORD)mTimerPeriod,
-      (DWORD)mTimerPeriod,
-      tFlags);
-}
+      mTimerCall    = aTimerCall;
+      mTimerPeriod  = aTimerPeriod;
+
+      mSpecific->mHandle = NULL;
+
+      LARGE_INTEGER liDueTime;
+      liDueTime.QuadPart = -100000000LL;
+
+      BOOL  bSuccess;
+
+      //---------------------------------------------------------------------------
+      // Create an unnamed waitable timer.
+
+      mSpecific->mHandle = CreateWaitableTimer(NULL, FALSE, NULL);
+
+      if (mSpecific->mHandle == NULL)
+      {
+         printf("CreateWaitableTimer failed (%d)\n", GetLastError());
+         return;
+      }
+
+      // Set the timer to execute the apc procedure periodically, with the
+      // timer call as an argument 
+
+      bSuccess = SetWaitableTimer(
+         mSpecific->mHandle,   // Handle to the timer object
+         &liDueTime,           // When timer will become signaled
+         mTimerPeriod,         // Periodic timer interval
+         TimerAPCProc,         // Completion routine
+         &mTimerCall,          // Argument to the completion routine
+         FALSE );              // Do not restore a suspended system
+
+      if (!bSuccess)
+         {
+         printf("SetWaitableTimer failed (%d)\n", GetLastError());
+         return;
+      }
+   }
 
 //******************************************************************************
 
 void ApcTimer::cancel()
 {
-   if (mSpecific->mTimerId != 0)
+   if (mSpecific->mHandle != 0)
    {
-      timeKillEvent(mSpecific->mTimerId);
+      CancelWaitableTimer(mSpecific->mHandle);
+      CloseHandle(mSpecific->mHandle);
+      mSpecific->mHandle = 0;
    }
 }
 

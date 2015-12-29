@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "my_functions.h"
+#include "risPortableCalls.h"
 #include "prnPrint.h"
 
 #include "CmdLineExec.h"
@@ -31,12 +32,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefaultUnsigned(1,0xffffffff);
-   aCmd->setArgDefaultUnsigned(1,4294967295);
-
-   unsigned int tN = aCmd->argUnsigned(1);
-
-   Prn::print(0,"%08X",tN);
+   Prn::print(0, "%s", Ris::portableGetCurrentWorkingDir());
 }
 
 //******************************************************************************

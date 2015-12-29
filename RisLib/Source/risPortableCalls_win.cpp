@@ -44,10 +44,20 @@ const char* portableGetSettingsDir()
 //******************************************************************************
 //******************************************************************************
 static char rCurrentWorkingDir[200];
+
 char* portableGetCurrentWorkingDir()
 {
-   _getcwd(rCurrentWorkingDir,200);
-   strcat(rCurrentWorkingDir,"\\");
+   int tIndex = GetModuleFileName(NULL, rCurrentWorkingDir, 200);
+
+   while (--tIndex > 0)
+   {
+      if (rCurrentWorkingDir[tIndex] == '\\')
+      {
+         rCurrentWorkingDir[tIndex + 1] = 0;
+         break;
+      }
+   }
+
    return rCurrentWorkingDir;
 }
 

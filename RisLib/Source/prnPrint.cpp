@@ -253,7 +253,7 @@ HANDLE rCreatePrintView(int aConsole)
    si.lpTitle = tConsoleTitle;
 
    // Start the child process. 
-   if( !CreateProcess(
+   BOOL status = CreateProcess(
       NULL,           // Module name  
       tCommandLine,   // Command Line
       NULL,           // Process handle not inheritable
@@ -263,12 +263,18 @@ HANDLE rCreatePrintView(int aConsole)
       NULL,           // Use parent's environment block
       NULL,           // Use parent's starting directory 
       &si,            // Pointer to STARTUPINFO structure
-      &pi )           // Pointer to PROCESS_INFORMATION structure
-      ) 
+      &pi);           // Pointer to PROCESS_INFORMATION structure
+
+   if (status)
+   {
+      Sleep(1000);
+   }
+   else
    {
       printf( "CreateProcess failed (%d).\n", GetLastError() );
       return 0;
    }
+
    return pi.hProcess;
 }
 

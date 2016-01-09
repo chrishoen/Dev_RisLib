@@ -57,6 +57,9 @@ namespace Threads
       void acquire ();
       void release ();
 
+      void lock ();
+      void unlock ();
+
    protected:
       class Implementation;
       Implementation* mImplementation;

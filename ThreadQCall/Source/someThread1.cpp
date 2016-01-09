@@ -25,6 +25,7 @@ Thread1::Thread1()
 {
    // BaseClass
    BaseClass::mTimerPeriod=1000;
+   BaseClass::mThreadTimerCreateFlag = true;
    BaseClass::setThreadPriorityHigh();
 
    // QCall CallPointers

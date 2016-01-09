@@ -35,6 +35,8 @@ BaseQCallThreadEx::BaseQCallThreadEx()
    mThreadPriority = get_default_qcall_thread_priority();
    mTimerThreadPriority = get_default_qcall_timer_thread_priority();
 
+   mCallQueue.initialize(CallQueSize);
+
 }
 
 BaseQCallThreadEx::~BaseQCallThreadEx()
@@ -171,20 +173,7 @@ void BaseQCallThreadEx::threadRunFunction()
 	   //----------------------------------------------------------
       // Get QCall from queue
    
-      BaseQCall* tQCall=0;
-
-      // Lock the queue
-      mCallMutex.lock();
-   
-      // Test for pending QCall
-      if (mCallQue.isGet())
-      {
-         // Get QCall from queue
-         mCallQue.get(tQCall);
-      }
-   
-      // Unlock the queue
-      mCallMutex.unlock();
+      BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
 
       //----------------------------------------------------------
       //----------------------------------------------------------
@@ -214,11 +203,18 @@ void BaseQCallThreadEx::threadExitFunction()
    Prn::print(Prn::QCallInit1, "BaseQCallThreadEx::threadExitFunction");
 
    // Empty the call queue
-   while(mCallQue.isGet())
+
+   while (true)
    {
-      BaseQCall* tQCall;
-      mCallQue.get(tQCall);
-      delete tQCall;
+      BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
+      if (tQCall)
+      {
+         delete tQCall;
+      }
+      else
+      {
+         break;
+      }
    }
 }
 
@@ -243,11 +239,9 @@ void BaseQCallThreadEx::shutdownThread()
 
 void BaseQCallThreadEx::putQCallToThread(BaseQCall* aQCall)
 {
-   mCallMutex.lock();
    // Put the QCall to the queue and signal the semaphore
-   if (mCallQue.isPut())
+   if (mCallQueue.writePtr(aQCall))
    {
-      mCallQue.put(aQCall);
       mCallSem.put();
    }
    else 
@@ -255,7 +249,6 @@ void BaseQCallThreadEx::putQCallToThread(BaseQCall* aQCall)
       Prn::print(0,"ERROR CallQue FULL");
       delete aQCall;
    }
-   mCallMutex.unlock();
 }
 
 void BaseQCallThreadEx::lockExecution()

@@ -177,6 +177,7 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\risLFPointerQueue.cpp" />
     <ClCompile Include="Source\risThreadsApcQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsApcTimer.cpp" />
     <ClCompile Include="Source\risThreadsQCallThreadEx.cpp" />
@@ -189,6 +190,7 @@
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\risLFPointerQueue.h" />
     <ClInclude Include="Source\risThreadsApcQCallThread.h" />
     <ClInclude Include="Source\risThreadsApcTimer.h" />
     <ClInclude Include="Source\risThreadsQCallThreadEx.h" />

@@ -133,7 +133,7 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 #include "risPortableTypes.h"
 #include "risCallPointer.h"
-#include "risContainers.h"
+#include "risLFPointerQueue.h"
 #include "risThreads.h"
 #include "risThreadsTimerEx.h"
 #include "risThreadsSynch.h"
@@ -209,9 +209,8 @@ public:
    //   mCallMutex  is mutex protection
 
    enum {CallQueSize=200};
-   Ris::Containers::Queue<BaseQCall*,CallQueSize>  mCallQue;
+   Ris::LFPointerQueue                             mCallQueue;
    CountingSemaphore                               mCallSem;
-   SlimLock                                        mCallMutex;   
 
    //--------------------------------------------------------------
    // This is called by a QCall's invoke method to put itself to

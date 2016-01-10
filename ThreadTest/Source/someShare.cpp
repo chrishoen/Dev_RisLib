@@ -13,6 +13,7 @@ namespace Some
 
    Share::Share()
    {
+      mPointerQueue.initialize(100);
    }
 
 }

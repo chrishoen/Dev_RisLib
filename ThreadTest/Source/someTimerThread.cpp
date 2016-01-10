@@ -10,6 +10,7 @@ Description:
 #include "prnPrint.h"
 
 #include "someShare.h"
+#include "someClass1.h"
 #include "Experiment.h"
 #include "GSettings.h"
 #include "someApcThread.h"
@@ -84,17 +85,29 @@ void TimerThread::executeOnTimer(int aTimeCount)
       switch (gGSettings.mTestNumber)
       {
       case 1:
+      {
          gThread1->mBinarySem.put();
-         break;
+      }
+      break;
       case 2:
+      {
          gThread1->mCountingSem.put();
-         break;
+      }
+      break;
       case 3:
-         gThread1->mConditionVariable.wakeUp();
-         break;
+      {
+         Class1A* tObject = 0;
+         gShare.mPointerQueue.writePtr(tObject);
+         gThread1->mCountingSem.put();
+      }
+      break;
       case 4:
-         Experiment::send();
-         break;
+      {
+         Class1A* tObject = new Class1A;
+         gShare.mPointerQueue.writePtr(tObject);
+         gThread1->mCountingSem.put();
+      }
+      break;
       }
    }
    break;
@@ -104,8 +117,10 @@ void TimerThread::executeOnTimer(int aTimeCount)
       switch (gGSettings.mTestNumber)
       {
       case 1:
+      {
          gApcThread->enqueueApc();
-         break;
+      }
+      break;
       }
    }
    break;
@@ -115,8 +130,10 @@ void TimerThread::executeOnTimer(int aTimeCount)
       switch (gGSettings.mTestNumber)
       {
       case 1:
+      {
          gQCallThread1->mC101QCall.invoke(aTimeCount);
-         break;
+      }
+      break;
       }
    }
    break;

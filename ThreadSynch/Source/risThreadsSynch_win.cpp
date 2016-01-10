@@ -100,6 +100,20 @@ namespace Threads
    }
 
    //******************************************************************************
+
+   void SlimLock::lock()
+   {
+      AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
+   }
+
+   //******************************************************************************
+
+   void SlimLock::unlock()
+   {
+      ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
+   }
+
+   //******************************************************************************
    //******************************************************************************
    //******************************************************************************
 
@@ -169,6 +183,46 @@ namespace Threads
 
    }
 
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   class AlertableSemaphore::Implementation
+   {
+   public:
+      HANDLE mHandle;
+   };
+
+   //******************************************************************************
+
+   AlertableSemaphore::AlertableSemaphore() 
+   {
+      mImplementation = new Implementation;
+      mImplementation->mHandle = CreateEvent(NULL,FALSE,FALSE,NULL);
+   }
+
+   //******************************************************************************
+
+   AlertableSemaphore::~AlertableSemaphore() 
+   {
+      CloseHandle(mImplementation->mHandle);
+      delete mImplementation;
+   }
+
+   //******************************************************************************
+
+   void AlertableSemaphore::put()
+   {
+      SetEvent(mImplementation->mHandle);
+   }
+
+   //******************************************************************************
+
+   bool AlertableSemaphore::get(int timeout)
+   {
+      return WaitForSingleObjectEx(mImplementation->mHandle,timeout,true) != WAIT_TIMEOUT ;
+   }
 
 
 }//namespace

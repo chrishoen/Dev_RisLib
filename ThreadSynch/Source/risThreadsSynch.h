@@ -57,6 +57,9 @@ namespace Threads
       void acquire ();
       void release ();
 
+      void lock ();
+      void unlock ();
+
    protected:
       class Implementation;
       Implementation* mImplementation;
@@ -79,6 +82,24 @@ namespace Threads
 
       void waitFor ();
       void wakeUp (int aPredicate = 1);
+
+   protected:
+      class Implementation;
+      Implementation* mImplementation;
+   };
+
+   //******************************************************************************
+   // This encapsulates an alertable binary semaphore.
+
+   class AlertableSemaphore
+   {
+   public:
+
+      AlertableSemaphore();
+      virtual ~AlertableSemaphore();
+
+      void put ();
+      bool get (int timeout= -1);
 
    protected:
       class Implementation;

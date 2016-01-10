@@ -3,6 +3,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
+#include "someApcThread.h"
 #include "someThread1.h"
 #include "someTimerThread.h"
 #include "Experiment.h"

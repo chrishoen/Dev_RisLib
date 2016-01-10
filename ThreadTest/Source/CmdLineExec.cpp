@@ -9,7 +9,6 @@
 #include "risPortableCalls.h"
 
 #include "someThread1.h"
-#include "someTimerThread.h"
 #include "someShare.h"
 using namespace Some;
 

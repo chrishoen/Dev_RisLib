@@ -26,6 +26,7 @@ public:
 
    int   mTestNumber;
    int   mTestThread;
+   int   mTimerThread;
 
    // Settings
    //---------------------------------------------------------------------------

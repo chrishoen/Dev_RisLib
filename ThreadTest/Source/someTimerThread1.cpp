@@ -17,13 +17,13 @@ Description:
 #include "someQCallThread1.h"
 #include "someThread1.h"
 
-#define  _SOMETIMERTHREAD_CPP_
-#include "someTimerThread.h"
+#define  _SOMETIMERTHREAD1_CPP_
+#include "someTimerThread1.h"
 
 namespace Some
 {
 
-TimerThread::TimerThread()
+TimerThread1::TimerThread1()
 {
    if (gGSettings.mTestThread == GSettings::cTestThread_None)
    {
@@ -46,7 +46,7 @@ TimerThread::TimerThread()
 //******************************************************************************
 //******************************************************************************
 
-void TimerThread::executeOnTimer(int aTimeCount)
+void TimerThread1::executeOnTimer(int aTimeCount)
 {
    //---------------------------------------------------------------------------
    // Time marker
@@ -145,7 +145,7 @@ void TimerThread::executeOnTimer(int aTimeCount)
 //******************************************************************************
 //******************************************************************************
 
-void TimerThread::showThreadInfo(int aTimeCount)
+void TimerThread1::showThreadInfo(int aTimeCount)
 {
    Prn::print(Prn::ThreadRun1, "TimerThread INFO******************************** %d",aTimeCount);
 

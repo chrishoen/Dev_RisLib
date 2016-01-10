@@ -7,7 +7,7 @@
 #include "someThread1.h"
 #include "someApcThread.h"
 #include "someQCallThread1.h"
-#include "someTimerThread.h"
+#include "someTimerThread1.h"
 #include "Experiment.h"
 #include "GSettings.h"
 #include "MainInit.h"
@@ -44,8 +44,11 @@ int main(int argc,char** argv)
       gQCallThread1->launchThread();
    }
 
-   gTimerThread = new TimerThread;
-   gTimerThread->launchThread();
+   if (gGSettings.mTestThread == 1)
+   {
+      gTimerThread1 = new TimerThread1;
+      gTimerThread1->launchThread();
+   }
 
    //--------------------------------------------------------------------
    // Start user command line executive,
@@ -58,8 +61,11 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Shutdown threads
 
-   gTimerThread->shutdownThread();
-   delete gTimerThread;
+   if (gGSettings.mTestThread == 1)
+   {
+      gTimerThread1->shutdownThread();
+      delete gTimerThread1;
+   }
 
    if (gGSettings.mTestThread == GSettings::cTestThread_Thread1)
    {

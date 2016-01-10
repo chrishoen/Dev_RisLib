@@ -1,5 +1,5 @@
-#ifndef _SOMETIMERTHREAD_H_
-#define _SOMETIMERTHREAD_H_
+#ifndef _SOMETIMERTHREAD1_H_
+#define _SOMETIMERTHREAD1_H_
 
 /*==============================================================================
 File: someThread1.h
@@ -18,13 +18,13 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class TimerThread : public Ris::Threads::BaseTimerThread
+class TimerThread1 : public Ris::Threads::BaseTimerThread
 {
 public:
    typedef Ris::Threads::BaseTimerThread BaseClass;
 
    // Constructor
-   TimerThread();
+   TimerThread1();
 
    // Base class overloads
    void executeOnTimer(int aTimeCount);
@@ -39,10 +39,10 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _SOMETIMERTHREAD_CPP_
-          TimerThread* gTimerThread;
+#ifdef _SOMETIMERTHREAD1_CPP_
+          TimerThread1* gTimerThread1;
 #else
-   extern TimerThread* gTimerThread;
+   extern TimerThread1* gTimerThread1;
 #endif
 
 //******************************************************************************

@@ -5,8 +5,6 @@
 #include "CmdLineExec.h"
 
 #include "GSettings.h"
-#include "someTimerThread.h"
-using namespace Some;
 
 //******************************************************************************
 //******************************************************************************
@@ -76,6 +74,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun4,  false);
 
    gGSettings.readFromFileName();
+   gGSettings.show();
 
    Prn::print(0,"ThreadTest*******************************************BEGIN");
 }

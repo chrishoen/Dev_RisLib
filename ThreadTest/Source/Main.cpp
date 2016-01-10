@@ -6,6 +6,7 @@
 #include "someApcThread.h"
 #include "someThread1.h"
 #include "someApcThread.h"
+#include "someQCallThread1.h"
 #include "someTimerThread.h"
 #include "Experiment.h"
 #include "GSettings.h"
@@ -37,6 +38,12 @@ int main(int argc,char** argv)
       gApcThread->launchThread();
    }
 
+   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
+   {
+      gQCallThread1 = new QCallThread1;
+      gQCallThread1->launchThread();
+   }
+
    gTimerThread = new TimerThread;
    gTimerThread->launchThread();
 
@@ -64,6 +71,12 @@ int main(int argc,char** argv)
    {
       gApcThread->shutdownThread();
       delete gApcThread;
+   }
+
+   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
+   {
+      gQCallThread1->shutdownThread();
+      delete gQCallThread1;
    }
 
    //--------------------------------------------------------------------

@@ -22,6 +22,7 @@ public:
    static const int   cTestThread_None           = 0;
    static const int   cTestThread_Thread1        = 1;
    static const int   cTestThread_ApcThread      = 2;
+   static const int   cTestThread_QCallThread1   = 3;
 
    int   mTestNumber;
    int   mTestThread;

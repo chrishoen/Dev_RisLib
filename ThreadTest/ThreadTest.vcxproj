@@ -179,9 +179,13 @@
     <ClCompile Include="Source\GSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\risLFPointerQueue.cpp" />
     <ClCompile Include="Source\risThreadsApcTimer.cpp" />
+    <ClCompile Include="Source\risThreadsQCallThreadEx.cpp" />
     <ClCompile Include="Source\risThreadsSynch_win.cpp" />
+    <ClCompile Include="Source\risThreadsTimerEx.cpp" />
     <ClCompile Include="Source\someApcThread.cpp" />
+    <ClCompile Include="Source\someQCallThread1.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
     <ClCompile Include="Source\someThread1.cpp" />
     <ClCompile Include="Source\someTimerThread.cpp" />
@@ -191,9 +195,13 @@
     <ClInclude Include="Source\Experiment.h" />
     <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\risLFPointerQueue.h" />
     <ClInclude Include="Source\risThreadsApcTimer.h" />
+    <ClInclude Include="Source\risThreadsQCallThreadEx.h" />
     <ClInclude Include="Source\risThreadsSynch.h" />
+    <ClInclude Include="Source\risThreadsTimerEx.h" />
     <ClInclude Include="Source\someApcThread.h" />
+    <ClInclude Include="Source\someQCallThread1.h" />
     <ClInclude Include="Source\someShare.h" />
     <ClInclude Include="Source\someThread1.h" />
     <ClInclude Include="Source\someTimerThread.h" />

@@ -13,6 +13,7 @@ Description:
 #include "Experiment.h"
 #include "GSettings.h"
 #include "someApcThread.h"
+#include "someQCallThread1.h"
 #include "someThread1.h"
 
 #define  _SOMETIMERTHREAD_CPP_
@@ -105,6 +106,18 @@ void TimerThread::executeOnTimer(int aTimeCount)
       }
    }
    break;
+
+   case GSettings::cTestThread_QCallThread1:
+   {
+      switch (gGSettings.mTestNumber)
+      {
+      case 1:
+         gQCallThread1->mC101QCall.invoke(aTimeCount);
+         break;
+      }
+   }
+   break;
+
    }
 }
 

@@ -22,7 +22,7 @@ namespace Some
 
 ApcThread::ApcThread()
 {
-   // Set base class thread priority
+   // Set base class
    BaseClass::setThreadPriorityHigh();
    BaseClass::mThreadAffinityMask = 0x20;
    BaseClass::mThreadIdealProcessor = 5;

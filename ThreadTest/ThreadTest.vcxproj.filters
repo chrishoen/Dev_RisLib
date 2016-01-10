@@ -10,22 +10,34 @@
     <ClCompile Include="Source\CmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Experiment.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GSettings.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someThread1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someThread2.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someTimerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risThreadsApcTimer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risThreadsSynch_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someApcThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
     <ClCompile Include="Source\someShare.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someThread1.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someTimerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,19 +45,31 @@
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someThread1.h">
+    <ClInclude Include="Source\Experiment.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someThread2.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someTimerThread.h">
+    <ClInclude Include="Source\GSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\risThreadsApcTimer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsSynch.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someApcThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
     <ClInclude Include="Source\someShare.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someThread1.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someTimerThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

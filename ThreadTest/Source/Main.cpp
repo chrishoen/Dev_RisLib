@@ -3,9 +3,12 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
+#include "someApcThread.h"
 #include "someThread1.h"
-#include "someThread2.h"
+#include "someApcThread.h"
 #include "someTimerThread.h"
+#include "Experiment.h"
+#include "GSettings.h"
 #include "MainInit.h"
 
 using namespace Some;
@@ -17,15 +20,22 @@ int main(int argc,char** argv)
    // Initialize
 
    main_initialize(argc,argv);
+   Experiment::initialize();
 
    //--------------------------------------------------------------------
    // Launch threads
 
-   gThread1 = new Thread1;
-   gThread1->launchThread();
+   if (gGSettings.mTestThread == GSettings::cThread1)
+   {
+      gThread1 = new Thread1;
+      gThread1->launchThread();
+   }
 
-   gThread2 = new Thread2;
-   gThread2->launchThread();
+   if (gGSettings.mTestThread == GSettings::cApcThread)
+   {
+      gApcThread = new ApcThread;
+      gApcThread->launchThread();
+   }
 
    gTimerThread = new TimerThread;
    gTimerThread->launchThread();
@@ -41,14 +51,20 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Shutdown threads
 
-   gThread2->shutdownThread();
-   delete gThread2;
-
-   gThread1->shutdownThread();
-   delete gThread1;
-
    gTimerThread->shutdownThread();
    delete gTimerThread;
+
+   if (gGSettings.mTestThread == GSettings::cThread1)
+   {
+      gThread1->shutdownThread();
+      delete gThread1;
+   }
+
+   if (gGSettings.mTestThread == GSettings::cApcThread)
+   {
+      gApcThread->shutdownThread();
+      delete gApcThread;
+   }
 
    //--------------------------------------------------------------------
    // Exit

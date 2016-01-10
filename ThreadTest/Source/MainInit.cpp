@@ -1,8 +1,11 @@
+#include <windows.h>
+
 #include "prnPrint.h"
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
+#include "GSettings.h"
 #include "someTimerThread.h"
 using namespace Some;
 
@@ -43,6 +46,15 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ViewRun3,    false,1);
    Prn::setFilter(Prn::ViewRun4,    true, 1);
 
+   Prn::setFilter(Prn::QCallInit1, true);
+   Prn::setFilter(Prn::QCallInit2, true);
+   Prn::setFilter(Prn::QCallRun1,  false);
+   Prn::setFilter(Prn::QCallRun2,  false);
+   Prn::setFilter(Prn::QCallRun3,  false);
+   Prn::setFilter(Prn::QCallRun4,  false);
+
+   gGSettings.readFromFileName();
+
    Prn::print(0,"ThreadTest*******************************************BEGIN");
 }
 
@@ -60,6 +72,5 @@ void main_finalize()
 
    // Exit process
    Ris::Threads::exitProcess();
-
 }
 

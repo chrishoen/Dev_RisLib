@@ -10,8 +10,8 @@ QCall test thread class.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risThreadsQCallThread.h"
-#include "risTimeMarker.h"
+#include "risThreads.h"
+#include "risThreadsSynch.h"
 
 namespace Some
 {
@@ -19,33 +19,17 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class  Thread1 : public Ris::Threads::BaseQCallThread
+class  Thread1 : public Ris::Threads::BaseThread
 {
 public:
-   typedef Ris::Threads::BaseQCallThread BaseClass;
+   typedef Ris::Threads::BaseThread BaseClass;
 
    Thread1();
 
-   void executeOnTimer(int aTimerCount);
+   void threadRunFunction();
 
-
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   // QCall:
-
-   Ris::Threads::QCall1<int>   mF101QCall;
-   void executeF101 (int aX=0);
-
-   Ris::Threads::QCall1<int>   mF102QCall;
-   void executeF102 (int aX=0);
-
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   // Members:
-
-   bool mTPFlag;
+   Ris::Threads::BinarySemaphore      mThreadSem;
+   Ris::Threads::ConditionVariable    mConditionVariable;
 };
 
 //******************************************************************************

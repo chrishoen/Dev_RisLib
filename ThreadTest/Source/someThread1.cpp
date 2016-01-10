@@ -41,14 +41,18 @@ void Thread1::threadRunFunction()
       switch (gGSettings.mTestNumber)
       {
       case 1:
-         mThreadSem.get();
+         mBinarySem.get();
          gShare.mTimeMarker.doStop();
          break;
       case 2:
-         mConditionVariable.waitFor();
+         mCountingSem.get();
          gShare.mTimeMarker.doStop();
          break;
       case 3:
+         mConditionVariable.wakeUp();
+         gShare.mTimeMarker.doStop();
+         break;
+      case 4:
          Experiment::receive();
          gShare.mTimeMarker.doStop();
          break;

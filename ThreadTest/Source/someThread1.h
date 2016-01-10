@@ -28,7 +28,8 @@ public:
 
    void threadRunFunction();
 
-   Ris::Threads::BinarySemaphore      mThreadSem;
+   Ris::Threads::BinarySemaphore      mBinarySem;
+   Ris::Threads::CountingSemaphore    mCountingSem;
    Ris::Threads::ConditionVariable    mConditionVariable;
 };
 

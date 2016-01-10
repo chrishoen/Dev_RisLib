@@ -84,12 +84,15 @@ void TimerThread::executeOnTimer(int aTimeCount)
       switch (gGSettings.mTestNumber)
       {
       case 1:
-         gThread1->mThreadSem.put();
+         gThread1->mBinarySem.put();
          break;
       case 2:
-         gThread1->mConditionVariable.wakeUp();
+         gThread1->mCountingSem.put();
          break;
       case 3:
+         gThread1->mConditionVariable.wakeUp();
+         break;
+      case 4:
          Experiment::send();
          break;
       }

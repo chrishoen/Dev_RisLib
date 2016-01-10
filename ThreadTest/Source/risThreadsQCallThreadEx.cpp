@@ -36,7 +36,6 @@ BaseQCallThreadEx::BaseQCallThreadEx()
    mTimerThreadPriority = get_default_qcall_timer_thread_priority();
 
    mCallQueue.initialize(CallQueSize);
-
 }
 
 BaseQCallThreadEx::~BaseQCallThreadEx()
@@ -154,10 +153,9 @@ void BaseQCallThreadEx::threadRunFunction()
 {
    // Loop to process the call queue.
    // Exit the loop on a thread terminate.
+   Prn::print(Prn::QCallRun1, "BaseQCallThreadEx::threadRunFunction");
    while (true)
    {
-      Prn::print(Prn::QCallRun1, "BaseQCallThreadEx::threadRunFunction");
-
       //----------------------------------------------------------
       //----------------------------------------------------------
       //----------------------------------------------------------
@@ -253,14 +251,14 @@ void BaseQCallThreadEx::putQCallToThread(BaseQCall* aQCall)
 
 void BaseQCallThreadEx::lockExecution()
 {
-      // Lock execution for this thread
-      mExecutionMutex.lock();
+   // Lock execution for this thread
+   mExecutionMutex.lock();
 }
 
 void BaseQCallThreadEx::unlockExecution()
 {
-      // Unlock execution for this thread
-      mExecutionMutex.unlock();
+   // Unlock execution for this thread
+   mExecutionMutex.unlock();
 }
 
 

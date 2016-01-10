@@ -84,12 +84,16 @@
     <ClInclude Include="Source\someTimerThread.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risThreadsQCallThreadEx.h" />
-    <ClInclude Include="Source\risThreadsTimerEx.h" />
     <ClInclude Include="Source\someQCallThread1.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risLFPointerQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsQCallThreadEx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsTimerEx.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

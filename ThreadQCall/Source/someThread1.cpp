@@ -39,7 +39,6 @@ Thread1::Thread1()
 
 void Thread1::executeOnTimer (int aTimeCount)
 {
-   Prn::print(Prn::ThreadRun4,"Thread1::executeOnTimer %d",aTimeCount);
 }
 
 //******************************************************************************

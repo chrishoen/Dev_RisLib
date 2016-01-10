@@ -23,6 +23,7 @@ namespace Threads
 BaseApcQCallThread::BaseApcQCallThread()
 {
    mTimerPeriod=1000;
+   mTimerPeriod=0;
    mTerminateFlag = false;
    mThreadPriority = get_default_qcall_thread_priority();
 }
@@ -78,6 +79,7 @@ void BaseApcQCallThread::threadRunFunction()
 
 void BaseApcQCallThread::threadExitFunction()
 {
+   if (mTimerPeriod==0) return;
    mApcTimer.cancel();
 }
 

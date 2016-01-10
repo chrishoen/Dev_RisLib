@@ -45,6 +45,8 @@ void TimerThread::executeOnTimer(int aTimeCount)
          gShare.mTimeMarker.mStatistics.mStdDev,
          gShare.mTimeMarker.mStatistics.mMinX,
          gShare.mTimeMarker.mStatistics.mMaxX);
+         gShare.mTimeMarker.mStatistics.mEndOfPeriod = false;
+         return;
    }
 
    gShare.mTimeMarker.doStart();

@@ -22,10 +22,13 @@ namespace Some
 
 ApcThread::ApcThread()
 {
-   mTimerPeriod=1000;
+   // Set base class thread priority
+   BaseClass::setThreadPriorityHigh();
+   BaseClass::mThreadAffinityMask = 0x20;
+   BaseClass::mThreadIdealProcessor = 5;
+
    mTimerPeriod=0;
    mTerminateFlag = false;
-   BaseClass::setThreadPriorityHigh();
 }
 
 //******************************************************************************

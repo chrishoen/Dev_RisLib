@@ -28,7 +28,6 @@ Thread1::Thread1()
    BaseClass::setThreadPriorityHigh();
    BaseClass::mThreadAffinityMask = 0x20;
    BaseClass::mThreadIdealProcessor = 5;
-
 }
 
 //******************************************************************************

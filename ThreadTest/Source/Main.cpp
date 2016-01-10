@@ -25,13 +25,13 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Launch threads
 
-   if (gGSettings.mTestThread == GSettings::cThread1)
+   if (gGSettings.mTestThread == GSettings::cTestThread_Thread1)
    {
       gThread1 = new Thread1;
       gThread1->launchThread();
    }
 
-   if (gGSettings.mTestThread == GSettings::cApcThread)
+   if (gGSettings.mTestThread == GSettings::cTestThread_ApcThread)
    {
       gApcThread = new ApcThread;
       gApcThread->launchThread();
@@ -54,13 +54,13 @@ int main(int argc,char** argv)
    gTimerThread->shutdownThread();
    delete gTimerThread;
 
-   if (gGSettings.mTestThread == GSettings::cThread1)
+   if (gGSettings.mTestThread == GSettings::cTestThread_Thread1)
    {
       gThread1->shutdownThread();
       delete gThread1;
    }
 
-   if (gGSettings.mTestThread == GSettings::cApcThread)
+   if (gGSettings.mTestThread == GSettings::cTestThread_ApcThread)
    {
       gApcThread->shutdownThread();
       delete gApcThread;

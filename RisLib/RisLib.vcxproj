@@ -58,7 +58,6 @@
     <ClCompile Include="Source\risThreadsProcess_win.cpp" />
     <ClCompile Include="Source\risThreadsQCall.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
-    <ClCompile Include="Source\risThreadsScheduler.cpp" />
     <ClCompile Include="Source\risThreadsTimer.cpp" />
     <ClCompile Include="Source\risThreadsTimerThread.cpp" />
     <ClCompile Include="Source\risThreadsTwoThread.cpp" />
@@ -118,7 +117,6 @@
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />
     <ClInclude Include="Source\risThreadsQueue.h" />
-    <ClInclude Include="Source\risThreadsScheduler.h" />
     <ClInclude Include="Source\risThreadsTimer.h" />
     <ClInclude Include="Source\risThreadsTimerThread.h" />
     <ClInclude Include="Source\risThreadsTwoThread.h" />

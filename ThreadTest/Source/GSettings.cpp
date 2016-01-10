@@ -39,8 +39,8 @@ void GSettings::show()
 void GSettings::execute(Ris::CmdLineCmd* aCmd)
 {
    // Read variables
-   if(aCmd->isCmd("THREAD"))  mTestThread = aCmd->argInt (1);
-   if(aCmd->isCmd("TEST"))    mTestNumber = aCmd->argInt (1);
+   if(aCmd->isCmd("TESTTHREAD"))  mTestThread = aCmd->argInt (1);
+   if(aCmd->isCmd("TESTNUMBER"))  mTestNumber = aCmd->argInt (1);
 }
 
 //******************************************************************************

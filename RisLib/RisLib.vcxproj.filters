@@ -70,9 +70,6 @@
     <ClCompile Include="Source\risThreads_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreadsScheduler.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risThreadsTimerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -226,9 +223,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsScheduler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsTimer.h">

@@ -6,6 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
+#include <windows.h>
 #include "prnPrint.h"
 
 #include "someShare.h"
@@ -22,18 +23,27 @@ namespace Some
 
 TimerThread::TimerThread()
 {
-   // Set base class thread priority
+   if (gGSettings.mTestThread == GSettings::cTestThread_None)
+   {
+      BaseClass::setThreadPriorityHigh();
+      BaseClass::mThreadAffinityMask = 0x20;
+      BaseClass::mThreadIdealProcessor = 5;
+      mTimerPeriod = 1000;
+   }
+   else
+   {
+      // Set timer period
+      int mTimerFrequency = 20;
+      BaseClass::mTimerPeriod = 1000 / mTimerFrequency;
 
-   // Set timer period
-   int mTimerFrequency = 20;
-   BaseClass::mTimerPeriod = 1000 / mTimerFrequency;
-
-   gShare.mTimeMarker.initialize(5*mTimerFrequency);
+      gShare.mTimeMarker.initialize(5 * mTimerFrequency);
+   }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
 void TimerThread::executeOnTimer(int aTimeCount)
 {
    //---------------------------------------------------------------------------
@@ -59,10 +69,16 @@ void TimerThread::executeOnTimer(int aTimeCount)
    //---------------------------------------------------------------------------
    // Send to test thread
 
-   switch (gGSettings.mTestNumber)
+   switch (gGSettings.mTestThread)
    {
 
-   case GSettings::cThread1:
+   case GSettings::cTestThread_None:
+   {
+      showThreadInfo(aTimeCount);
+   }
+   break;
+
+   case GSettings::cTestThread_Thread1:
    {
       switch (gGSettings.mTestNumber)
       {
@@ -79,7 +95,7 @@ void TimerThread::executeOnTimer(int aTimeCount)
    }
    break;
 
-   case GSettings::cApcThread:
+   case GSettings::cTestThread_ApcThread:
    {
       switch (gGSettings.mTestNumber)
       {
@@ -90,6 +106,57 @@ void TimerThread::executeOnTimer(int aTimeCount)
    }
    break;
    }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TimerThread::showThreadInfo(int aTimeCount)
+{
+   Prn::print(Prn::ThreadRun1, "TimerThread INFO******************************** %d",aTimeCount);
+
+   //---------------------------------------------------------------------------
+   int tPriorityClass = GetPriorityClass(GetCurrentProcess());
+   Prn::print(Prn::ThreadRun1, "GetPriorityClass %08X", tPriorityClass);
+
+   //---------------------------------------------------------------------------
+   unsigned long long tProcessAffinityMask=0;
+   unsigned long long tSystemAffinityMask=0;
+   GetProcessAffinityMask(
+     GetCurrentProcess(),
+     &tProcessAffinityMask,
+     &tSystemAffinityMask);
+
+   Prn::print(Prn::ThreadRun1, "GetProcessAffinityMask %llX  %llX",
+     tProcessAffinityMask,
+     tSystemAffinityMask);
+
+   //---------------------------------------------------------------------------
+   int tThreadPriority = GetThreadPriority(
+      GetCurrentThread());
+   Prn::print(Prn::ThreadRun1, "ThreadPriority   %8d", tThreadPriority);
+
+   //---------------------------------------------------------------------------
+   GROUP_AFFINITY tGroupAffinity;
+   GetThreadGroupAffinity(
+      GetCurrentThread(),
+      &tGroupAffinity);
+   Prn::print(Prn::ThreadRun1, "ThreadGroupAffinity   %d %llX ",
+      tGroupAffinity.Group,
+      tGroupAffinity.Mask);
+
+   //---------------------------------------------------------------------------
+   PROCESSOR_NUMBER tProcessorNumber;
+   GetThreadIdealProcessorEx(
+      GetCurrentThread(),
+      &tProcessorNumber);
+
+   Prn::print(Prn::ThreadRun1, "ThreadIdealProcessor  %d",
+      tProcessorNumber.Number);
+
+
+
 }
 
 }//namespace

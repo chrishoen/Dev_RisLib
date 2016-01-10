@@ -1,7 +1,6 @@
 #include <windows.h>
 
 #include "prnPrint.h"
-#include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
@@ -12,12 +11,35 @@ using namespace Some;
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+static const int cTimerPeriod = 10;
+
+void enterProcessHigh()
+{
+   // Set process priority class
+   SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+   SetProcessAffinityMask(GetCurrentProcess(), 0x20);
+
+   // Set process timer resolution to one millisecond
+   timeBeginPeriod(cTimerPeriod);
+}
+
+//******************************************************************************
+
+void exitProcess()
+{
+   timeEndPeriod(cTimerPeriod);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Initialize
 
 void main_initialize(int argc,char** argv)
 {
    // Enter process
-   Ris::Threads::enterProcessHigh();
+   enterProcessHigh();
 
    // Initialize print facility
    Prn::resetPrint();
@@ -71,6 +93,6 @@ void main_finalize()
    Prn::finalizePrint();
 
    // Exit process
-   Ris::Threads::exitProcess();
+   exitProcess();
 }
 

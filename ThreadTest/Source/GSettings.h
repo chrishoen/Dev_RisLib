@@ -19,8 +19,9 @@ public:
    //---------------------------------------------------------------------------
    // Settings
 
-   static const int   cThread1   = 1;
-   static const int   cApcThread = 2;
+   static const int   cTestThread_None           = 0;
+   static const int   cTestThread_Thread1        = 1;
+   static const int   cTestThread_ApcThread      = 2;
 
    int   mTestNumber;
    int   mTestThread;

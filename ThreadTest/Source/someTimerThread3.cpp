@@ -6,8 +6,6 @@
 //******************************************************************************
 #include "prnPrint.h"
 #include "someShare.h"
-#include "someClass1.h"
-#include "Experiment.h"
 #include "GSettings.h"
 
 #define  _SOMETIMERTHREAD3_CPP_

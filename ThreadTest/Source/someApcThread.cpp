@@ -7,8 +7,8 @@
 
 #include <windows.h>
 #include "prnPrint.h"
-
 #include "someShare.h"
+#include "GSettings.h"
 
 #define  _SOMEAPCTHREAD_CPP_
 #include "someApcThread.h"
@@ -22,41 +22,39 @@ namespace Some
 
 ApcThread::ApcThread()
 {
-   // Set base class
+   // Set base class priority
    BaseClass::setThreadPriorityHigh();
    BaseClass::mThreadAffinityMask = 0x20;
    BaseClass::mThreadIdealProcessor = 5;
 
-   mTimerPeriod=0;
+   // Set timer period
+   mTimerPeriod = 0;
+   if (gGSettings.mTestNumber==101 && gGSettings.mTimerThread == GSettings::cTimerThread_None)
+   {
+      int mTimerFrequency = 20;
+      mTimerPeriod = 1000 / mTimerFrequency;
+      gShare.mTimeMarker.initialize(5 * mTimerFrequency);
+   }
+
+   // Members
    mTerminateFlag = false;
 }
 
 //******************************************************************************
 
-void ApcThread::threadTimerInitFunction()
+void ApcThread::threadInitFunction()
 {
    // Guard
    if (mTimerPeriod==0) return;
 
    // Call pointer
    Ris::Threads::TimerCall tTimerCall;
-   tTimerCall.bind(this,&ApcThread::threadExecuteOnTimer);
+   tTimerCall.bind(this,&ApcThread::executeOnTimer);
 
    // Create timer
    mApcTimer.create(mTimerPeriod,tTimerCall);
 }
 
-//******************************************************************************
-
-void ApcThread::threadExecuteOnTimer(int aTimeCount)
-{
-   // Guard
-   if(mTerminateFlag) return;
-
-   //Execute inheritor timer method
-   executeOnTimer(aTimeCount);
-
-}
 //******************************************************************************
 // Thread run function, base class overload.
 // This provides the execution context for processing queued QCalls
@@ -96,7 +94,6 @@ void ApcThread::shutdownThread()
    mTerminateSem.put();
    // Wait for thread terminate
    waitForThreadTerminate();
-   Prn::print(Prn::QCallInit1, "ApcThread::shutdownThread");
 }
 
 //******************************************************************************
@@ -131,4 +128,32 @@ void ApcThread::executeOnApc()
    gShare.mTimeMarker.doStop();
 }
 
+//******************************************************************************
+
+void ApcThread::executeOnTimer(int aTimeCount)
+{
+   // Guard
+   if(mTerminateFlag) return;
+
+   //---------------------------------------------------------------------------
+   // Time marker
+
+   gShare.mTimeMarker.doStop();
+   gShare.mTimeMarker.doStart();
+
+   if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)
+   {
+      double tPeriodUS = mTimerPeriod*1000.0;
+      Prn::print(Prn::ThreadRun1, "TESTA %1d %1d %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         gGSettings.mTestThread,
+         gGSettings.mTestNumber,
+         gShare.mTimeMarker.mStatistics.mSize,
+         gShare.mTimeMarker.mStatistics.mMean   - tPeriodUS,
+         gShare.mTimeMarker.mStatistics.mStdDev,
+         gShare.mTimeMarker.mStatistics.mMinX   - tPeriodUS,
+         gShare.mTimeMarker.mStatistics.mMaxX   - tPeriodUS);
+         gShare.mTimeMarker.mStatistics.mEndOfPeriod = false;
+         return;
+   }
+}
 }//namespace

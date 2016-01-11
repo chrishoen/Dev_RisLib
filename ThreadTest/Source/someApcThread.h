@@ -31,22 +31,12 @@ public:
    ApcThread();
 
    //--------------------------------------------------------------
-   // Thread base class overloads:
+   //Base class overloads.
 
-   // This sets up the thread timer
-   virtual void threadTimerInitFunction(); 
-   void threadExecuteOnTimer(int aTimeCount);
-
-   // This executes a loop that calls threadRunRecursive to process 
-   // the call queue. The loop terminates on the mTerminateFlag.
-   // It waits for the call queue semaphore, extracts a call from
-   // the call queue, and executes the call. 
-   virtual void threadRunFunction(); 
-
-   // Posts to the termination semaphore.
-   // Then it waits for the thread to terminate.
-   void threadExitFunction(); 
-   void shutdownThread(); 
+   void threadInitFunction();
+   void threadRunFunction();
+   void threadExitFunction();
+   void shutdownThread();
 
    //Termination 
    Ris::Threads::AlertableSemaphore   mTerminateSem;
@@ -70,7 +60,7 @@ public:
 
    // This is called periodically by the apc timer
    // Inheritors provide an overload for this.
-   virtual void executeOnTimer(int aCurrentTimeCount){}
+   void executeOnTimer(int aCurrentTimeCount);
 };
 
 //******************************************************************************

@@ -27,16 +27,12 @@ public:
    TimerThread3(); 
 
    //Base class overloads.
-   //Thread function run.
-   //This is an infinite loop that sleeps for the timer period
-   //and periodically calls the inheritor executeOnTimer.
-
    void threadInitFunction();
    void threadRunFunction();
    void threadExitFunction();
    void shutdownThread();
 
-   // Tread Members
+   // Thread Members
    Ris::Threads::BinarySemaphore mSemaphore;
    bool  mTerminateFlag;
 

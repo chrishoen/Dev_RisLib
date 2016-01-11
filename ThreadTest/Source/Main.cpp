@@ -46,19 +46,19 @@ int main(int argc,char** argv)
       gQCallThread1->launchThread();
    }
 
-   if (gGSettings.mTimerThread == 1)
+   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
    {
       gTimerThread1 = new TimerThread1;
       gTimerThread1->launchThread();
    }
 
-   if (gGSettings.mTimerThread == 2)
+   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread2)
    {
       gTimerThread2 = new TimerThread2;
       gTimerThread2->launchThread();
    }
 
-   if (gGSettings.mTimerThread == 3)
+   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread3)
    {
       gTimerThread3 = new TimerThread3;
       gTimerThread3->launchThread();
@@ -75,19 +75,19 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Shutdown threads
 
-   if (gGSettings.mTimerThread == 1)
+   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
    {
       gTimerThread1->shutdownThread();
       delete gTimerThread1;
    }
 
-   if (gGSettings.mTimerThread == 2)
+   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread2)
    {
       gTimerThread2->shutdownThread();
       delete gTimerThread2;
    }
 
-   if (gGSettings.mTimerThread == 3)
+   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread3)
    {
       gTimerThread3->shutdownThread();
       delete gTimerThread3;

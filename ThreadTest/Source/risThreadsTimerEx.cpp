@@ -98,7 +98,6 @@ void ThreadTimerEx::startTimer (TimerCall aTimerCall,int aTimerPeriod)
    mTimerCall    = aTimerCall;
    mTimerPeriod  = aTimerPeriod;
 
-#if 0
    // Create a windows timer for periodic
    mSpecific->mTimerId = timeSetEvent(
       mTimerPeriod,
@@ -106,11 +105,11 @@ void ThreadTimerEx::startTimer (TimerCall aTimerCall,int aTimerPeriod)
       Timer_TimerProc,
      (DWORD_PTR)this,
       TIME_PERIODIC);
-#endif
 
    HANDLE tHandle = 0;
    ULONG  tFlags  = 0;
 
+#if 0
    tFlags = WT_EXECUTEINTIMERTHREAD;
 // tFlags = WT_EXECUTEINPERSISTENTTHREAD;
 
@@ -125,6 +124,7 @@ void ThreadTimerEx::startTimer (TimerCall aTimerCall,int aTimerPeriod)
       (DWORD)mTimerPeriod,
       (DWORD)mTimerPeriod,
       tFlags);
+#endif
 }
 
 //******************************************************************************

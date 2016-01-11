@@ -20,9 +20,16 @@ public:
    // Settings
 
    static const int   cTestThread_None           = 0;
+   static const int   cTimerThread_None          = 0;
+
    static const int   cTestThread_Thread1        = 1;
    static const int   cTestThread_ApcThread      = 2;
    static const int   cTestThread_QCallThread1   = 3;
+
+   static const int   cTimerThread_Thread1        = 1;
+   static const int   cTimerThread_Thread2        = 2;
+   static const int   cTimerThread_Thread3        = 3;
+   static const int   cTimerThread_ApcThread      = 4;
 
    int   mTestNumber;
    int   mTestThread;

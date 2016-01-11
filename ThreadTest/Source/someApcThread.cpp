@@ -144,7 +144,7 @@ void ApcThread::executeOnTimer(int aTimeCount)
    if (gShare.mTimeMarker.mStatistics.mEndOfPeriod)
    {
       double tPeriodUS = mTimerPeriod*1000.0;
-      Prn::print(Prn::ThreadRun1, "TESTA %1d %1d %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+      Prn::print(Prn::ThreadRun1, "TEST %1d %1d %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
          gGSettings.mTestThread,
          gGSettings.mTestNumber,
          gShare.mTimeMarker.mStatistics.mSize,

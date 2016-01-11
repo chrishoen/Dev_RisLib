@@ -9,6 +9,7 @@
 #include "someQCallThread1.h"
 #include "someTimerThread1.h"
 #include "someTimerThread2.h"
+#include "someTimerThread3.h"
 #include "Experiment.h"
 #include "GSettings.h"
 #include "MainInit.h"
@@ -57,6 +58,12 @@ int main(int argc,char** argv)
       gTimerThread2->launchThread();
    }
 
+   if (gGSettings.mTimerThread == 3)
+   {
+      gTimerThread3 = new TimerThread3;
+      gTimerThread3->launchThread();
+   }
+
    //--------------------------------------------------------------------
    // Start user command line executive,
    // It returns when user exits
@@ -78,6 +85,12 @@ int main(int argc,char** argv)
    {
       gTimerThread2->shutdownThread();
       delete gTimerThread2;
+   }
+
+   if (gGSettings.mTimerThread == 3)
+   {
+      gTimerThread3->shutdownThread();
+      delete gTimerThread3;
    }
 
    if (gGSettings.mTestThread == GSettings::cTestThread_Thread1)

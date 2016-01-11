@@ -8,6 +8,7 @@
 #include "someApcThread.h"
 #include "someQCallThread1.h"
 #include "someTimerThread1.h"
+#include "someTimerThread2.h"
 #include "Experiment.h"
 #include "GSettings.h"
 #include "MainInit.h"
@@ -44,10 +45,16 @@ int main(int argc,char** argv)
       gQCallThread1->launchThread();
    }
 
-   if (gGSettings.mTestThread == 1)
+   if (gGSettings.mTimerThread == 1)
    {
       gTimerThread1 = new TimerThread1;
       gTimerThread1->launchThread();
+   }
+
+   if (gGSettings.mTimerThread == 2)
+   {
+      gTimerThread2 = new TimerThread2;
+      gTimerThread2->launchThread();
    }
 
    //--------------------------------------------------------------------
@@ -61,10 +68,16 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Shutdown threads
 
-   if (gGSettings.mTestThread == 1)
+   if (gGSettings.mTimerThread == 1)
    {
       gTimerThread1->shutdownThread();
       delete gTimerThread1;
+   }
+
+   if (gGSettings.mTimerThread == 2)
+   {
+      gTimerThread2->shutdownThread();
+      delete gTimerThread2;
    }
 
    if (gGSettings.mTestThread == GSettings::cTestThread_Thread1)

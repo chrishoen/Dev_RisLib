@@ -441,7 +441,7 @@ int countsPerOneSecond()
 void halt(char* aPrintStr)
 {
    printf("HALTING %s\n",aPrintStr);
-   while(1);
+   exit(1);
 }
 
 }//namespace

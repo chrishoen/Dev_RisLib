@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 14 for Windows Desktop
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CmdLineTest1", "CmdLineTest1\CmdLineTest1.vcxproj", "{73A309B2-0AF9-47EB-B5D1-A932203B9F9C}"
 EndProject
@@ -46,6 +46,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadSynch", "ThreadSynch\ThreadSynch.vcxproj", "{90C1CE32-5D8A-42CA-8515-6E2695A410A1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadQCall", "ThreadQCall\ThreadQCall.vcxproj", "{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Statistics", "Statistics\Statistics.vcxproj", "{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -231,6 +233,14 @@ Global
 		{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}.Release|Win32.Build.0 = Release|Win32
 		{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}.Release|x64.ActiveCfg = Release|x64
 		{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}.Release|x64.Build.0 = Release|x64
+		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Debug|Win32.Build.0 = Debug|Win32
+		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Debug|x64.ActiveCfg = Debug|x64
+		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Debug|x64.Build.0 = Debug|x64
+		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Release|Win32.ActiveCfg = Release|Win32
+		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Release|Win32.Build.0 = Release|Win32
+		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Release|x64.ActiveCfg = Release|x64
+		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

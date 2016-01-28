@@ -64,9 +64,6 @@
     <ClCompile Include="Source\risSockets_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risStatistics.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risThreads_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -214,9 +211,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risSockets.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risStatistics.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreads.h">

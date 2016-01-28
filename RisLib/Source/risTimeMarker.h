@@ -18,6 +18,8 @@ namespace Ris
 {
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 class PeriodicTimeMarker
 {
@@ -52,6 +54,44 @@ public:
 
    Ris::PeriodicStatistics mStatistics;
    int mChangeCount;
+};
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+class TrialTimeMarker
+{
+public:
+   //------------------------------------------------
+   TrialTimeMarker();
+
+   void startTrial();
+   void finishTrial();
+
+   void doStart();
+   void doStop();
+
+   //------------------------------------------------
+   // Timer counter values at start and stop of 
+   // measured time interval.
+
+   long long mTimeCountAtStart;
+   long long mTimeCountAtStop;
+
+   // Difference between stop and start time counts, in microseconds
+   float mTimeDifferenceUS;
+
+   // Scale factor used to calculate the time difference
+   float mScaleFactorUS;
+
+   // True if a start has occurred
+   bool mStartFlag;
+   
+   //------------------------------------------------
+   // Statistics that are calculated for measured
+   // time interval
+
+   Ris::TrialStatistics mStatistics;
 };
 }//namespace
 

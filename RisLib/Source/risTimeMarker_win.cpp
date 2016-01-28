@@ -17,7 +17,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 
-TimeMarker::TimeMarker()
+PeriodicTimeMarker::PeriodicTimeMarker()
 {
    // All zero
    mTimeCountAtStart = 0;
@@ -34,7 +34,7 @@ TimeMarker::TimeMarker()
 //******************************************************************************
 //******************************************************************************
 
-void TimeMarker::initialize(int aWindowSize)
+void PeriodicTimeMarker::initialize(int aWindowSize)
 {
    // All zero
    mTimeCountAtStart = 0;
@@ -51,7 +51,7 @@ void TimeMarker::initialize(int aWindowSize)
 
 //******************************************************************************
 
-void TimeMarker::doStart()
+void PeriodicTimeMarker::doStart()
 {
    // Read start time from hardware
    mTimeCountAtStart = Ris::portableGetHiResCounter();
@@ -62,7 +62,7 @@ void TimeMarker::doStart()
 
 //******************************************************************************
 
-void TimeMarker::doStop()
+void PeriodicTimeMarker::doStop()
 {
    // Read stop time from hardware
    mTimeCountAtStop = Ris::portableGetHiResCounter();

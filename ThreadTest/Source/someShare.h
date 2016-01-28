@@ -21,7 +21,7 @@ class Share
 public:
    Share();
    
-   Ris::TimeMarker mTimeMarker;
+   Ris::PeriodicTimeMarker mTimeMarker;
    Ris::LFPointerQueue mPointerQueue;
 };
 

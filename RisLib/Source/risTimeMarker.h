@@ -19,11 +19,11 @@ namespace Ris
 
 //******************************************************************************
 
-class TimeMarker
+class PeriodicTimeMarker
 {
 public:
    //------------------------------------------------
-   TimeMarker();
+   PeriodicTimeMarker();
 
    void initialize(int aWindowSize);
 

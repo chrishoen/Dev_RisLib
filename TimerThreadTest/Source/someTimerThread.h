@@ -35,7 +35,7 @@ public:
    //--------------------------------------------------------------
    // Members:
 
-   Ris::TimeMarker mTimeMarker;
+   Ris::PeriodicTimeMarker mTimeMarker;
 
    bool mTPFlag;
    int  mTestCode;

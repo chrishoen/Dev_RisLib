@@ -20,7 +20,7 @@ class Share
 public:
    Share();
 
-   Ris::TimeMarker mTimeMarker;
+   Ris::PeriodicTimeMarker mTimeMarker;
    int mTest;
 };
 

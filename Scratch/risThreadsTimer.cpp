@@ -37,9 +37,9 @@ namespace Threads
 // execute periodically. It is passed a pointer to a Timer object.
 // It increments the current time count and calls the user timer call.
 
-Ris::TimeMarker rTimeMarker1;
-Ris::TimeMarker rTimeMarker2;
-Ris::TimeMarker rTimeMarker3;
+Ris::PeriodicTimeMarker rTimeMarker1;
+Ris::PeriodicTimeMarker rTimeMarker2;
+Ris::PeriodicTimeMarker rTimeMarker3;
 
 VOID CALLBACK Timer_TimerProc(
    UINT uTimerID,

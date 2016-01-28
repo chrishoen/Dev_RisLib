@@ -139,6 +139,9 @@
     <ClCompile Include="Source\risTimeMarker_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risStatistics.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -304,6 +307,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risTimeMarker.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risStatistics.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

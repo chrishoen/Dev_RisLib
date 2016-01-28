@@ -168,8 +168,6 @@ namespace Ris
       mMaxX = 0.0;
       mXSum = 0.0;
       mXSquareSum = 0.0;
-      mCurrentMinX = 0.0;
-      mCurrentMaxX = 0.0;
       mPutCount = 0;
       mK = 0;
    }
@@ -192,14 +190,14 @@ namespace Ris
       if (mFirstFlag)
       {
          mFirstFlag = false;
-         mCurrentMinX = mX;
-         mCurrentMaxX = mX;
+         mMinX = mX;
+         mMaxX = mX;
       }
       // Else, calculate min and max
       else
       {
-         if (mX < mCurrentMinX) mCurrentMinX = mX;
-         if (mX > mCurrentMaxX) mCurrentMaxX = mX;
+         if (mX < mMinX) mMinX = mX;
+         if (mX > mMaxX) mMaxX = mX;
       }
 
       //--------------------------------------------------------------------------- 
@@ -242,10 +240,6 @@ namespace Ris
       // Store
       mMean   = mEX;
       mStdDev = mUX;
-
-      // Latch minimum and maximum
-      mMinX = mCurrentMinX;
-      mMaxX = mCurrentMaxX;
    }
 
    //******************************************************************************

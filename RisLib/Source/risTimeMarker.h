@@ -7,7 +7,7 @@ to measure computer execution time durations
 
 ==============================================================================*/
 
-#include "risFilterStatistics.h"
+#include "risStatistics.h"
 
 
 //******************************************************************************
@@ -50,7 +50,7 @@ public:
    // Statistics that are calculated for measured
    // time interval
 
-   Ris::Filter::PeriodicStatistics mStatistics;
+   Ris::PeriodicStatistics mStatistics;
    int mChangeCount;
 };
 }//namespace

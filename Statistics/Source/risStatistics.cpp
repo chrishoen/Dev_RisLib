@@ -158,18 +158,21 @@ namespace Ris
 
    void TrialStatistics::startTrial()
    {
-      mFirstFlag = true;
+      mPutCount = 0;
       mX = 0.0;
+
       mEX = 0.0;
       mUX = 0.0;
       mMean   = 0.0;
       mStdDev = 0.0;
       mMinX = 0.0;
       mMaxX = 0.0;
-      mXSum = 0.0;
-      mXSquareSum = 0.0;
-      mPutCount = 0;
-      mK = 0;
+      mVariance = 0.0;
+
+      mOLMean = 0.0;
+      mOLM2 = 0.0;
+      mOLDelta = 0.0;
+
    }
    
    //******************************************************************************
@@ -187,9 +190,8 @@ namespace Ris
       // Update min and max
 
       // If first in period, set to current input  
-      if (mFirstFlag)
+      if (mPutCount==1)
       {
-         mFirstFlag = false;
          mMinX = mX;
          mMaxX = mX;
       }
@@ -201,14 +203,11 @@ namespace Ris
       }
 
       //--------------------------------------------------------------------------- 
-      // Update sums
+      // Calculate sums
 
-      mXSum += aX;
-      mXSquareSum += aX*aX;
-
-      //--------------------------------------------------------------------------- 
-      // Done
-      mK++;
+        mOLDelta =  mX - mOLMean;
+        mOLMean  += mOLDelta/mPutCount;
+        mOLM2    += mOLDelta*(mX - mOLMean);
    }
 
    //******************************************************************************
@@ -220,12 +219,17 @@ namespace Ris
       // Calculate results for mean and standard deviation
 
       // Expectation (mean) of X
-      mEX = mXSum / mPutCount;
-      // Expectation of X squared
-      mEXSquare = mXSquareSum / mPutCount;
+      mEX = mOLMean;
 
       // Variance of X
-      mVariance = mEXSquare - mEX*mEX;
+      if (mPutCount < 2)
+      {
+         mVariance = 0.0;
+      }
+      else
+      {
+         mVariance = mOLM2/(mPutCount);
+      }
 
       // Uncertainty (stddev) of X
       if (mVariance > 0.0f)
@@ -246,7 +250,7 @@ namespace Ris
    void TrialStatistics::show()
    {
       printf("%3d %8.3f $$ %8.3f %8.3f %8.3f  %8.3f\n",
-         mK,
+         mPutCount,
          mX,
          mEX,
          mUX,

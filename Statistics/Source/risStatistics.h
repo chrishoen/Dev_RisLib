@@ -79,29 +79,22 @@ namespace Ris
       void put(double aX);
 
       // Members
-      int mSize;
-      bool mFirstFlag;
+      unsigned  mPutCount;    // Number of samples
 
       // Output values
-      double  mX;            // Input value
-      double  mEX;           // expectation (mean)
-      double  mUX;           // uncertainty (standard deviation)
-      double  mMinX;         // minimum 
-      double  mMaxX;         // maximum
-      double  mMean;         // expectation (mean)
-      double  mStdDev;       // uncertainty (standard deviation)
+      double   mX;            // Input value
+      double   mEX;           // expectation (mean)
+      double   mUX;           // uncertainty (standard deviation)
+      double   mMinX;         // minimum 
+      double   mMaxX;         // maximum
+      double   mMean;         // expectation (mean)
+      double   mStdDev;       // uncertainty (standard deviation)
+      double   mVariance;     // variance
 
 
-      double  mEXSquare;     // expectation of X squared
-      double  mVariance;     // variance
-
-      // Sums for expectation and uncertainty
-      double  mXSum;         // Sum of X
-      double  mXSquareSum;   // Sum of X squared
-      int    mPutCount;      // Put count
-
-      // Members
-      int mK;
+      double   mOLMean;       // Online algorithm
+      double   mOLM2;         // Online algorithm
+      double   mOLDelta;      // Online algorithm
    };
 
 }//namespace

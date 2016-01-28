@@ -27,34 +27,82 @@ namespace Ris
       void show();
 
       // Put input value
-      void put(float aX);
+      void put(double aX);
 
       // Members
       int mSize;
       bool mFirstFlag;
 
       // Output values
-      bool   mEndOfPeriod;  // True at the end of a period
-      float  mX;            // Input value
-      float  mEX;           // expectation (mean)
-      float  mUX;           // uncertainty (standard deviation)
-      float  mMinX;         // minimum 
-      float  mMaxX;         // maximum
-      float  mMean;         // expectation (mean)
-      float  mStdDev;       // uncertainty (standard deviation)
+      bool    mEndOfPeriod;  // True at the end of a period
+      double  mX;            // Input value
+      double  mEX;           // expectation (mean)
+      double  mUX;           // uncertainty (standard deviation)
+      double  mMinX;         // minimum 
+      double  mMaxX;         // maximum
+      double  mMean;         // expectation (mean)
+      double  mStdDev;       // uncertainty (standard deviation)
 
 
-      float  mEXSquare;     // expectation of X squared
-      float  mVariance;     // variance
+      double  mEXSquare;     // expectation of X squared
+      double  mVariance;     // variance
 
       // Sums for expectation and uncertainty
-      float  mXSum;         // Sum of X
-      float  mXSquareSum;   // Sum of X squared
+      double  mXSum;         // Sum of X
+      double  mXSquareSum;   // Sum of X squared
+      int    mPutCount;      // Put count
+
+      // Current min and max
+      double  mCurrentMinX;  // minimum
+      double  mCurrentMaxX;  // maximum
+
+      // Members
+      int mK;
+   };
+
+      //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This filter characterizes an input signal by calculating expectations and
+   // uncertainties of the signal. It does this for a trial experiment, for an
+   // arbitrary number of samples.
+
+   class TrialStatistics
+   {
+   public:
+      // Initialize
+      void startTrial();
+      void finishTrial();
+      void show();
+
+      // Put input value
+      void put(double aX);
+
+      // Members
+      int mSize;
+      bool mFirstFlag;
+
+      // Output values
+      double  mX;            // Input value
+      double  mEX;           // expectation (mean)
+      double  mUX;           // uncertainty (standard deviation)
+      double  mMinX;         // minimum 
+      double  mMaxX;         // maximum
+      double  mMean;         // expectation (mean)
+      double  mStdDev;       // uncertainty (standard deviation)
+
+
+      double  mEXSquare;     // expectation of X squared
+      double  mVariance;     // variance
+
+      // Sums for expectation and uncertainty
+      double  mXSum;         // Sum of X
+      double  mXSquareSum;   // Sum of X squared
       int    mPutCount;     // Put count
 
       // Current min and max
-      float  mCurrentMinX;  // minimum
-      float  mCurrentMaxX;  // maximum
+      double  mCurrentMinX;  // minimum
+      double  mCurrentMaxX;  // maximum
 
 
       // Members

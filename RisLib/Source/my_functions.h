@@ -51,6 +51,8 @@ My math functions
    // Return string "true" "false" for a bool
    char* my_string_from_bool(bool aValue);
 
+   char* my_stringLLU(char* aString,unsigned long long aValue);
+
    //---------------------------------------------------------------------------
    // Time
 

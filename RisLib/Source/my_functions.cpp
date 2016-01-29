@@ -363,4 +363,63 @@ bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes)
    return tSameFlag;
 }
 
+//******************************************************************************
+
+char* my_stringLLU(char* aString,unsigned long long aValue)
+{
+   char tString1[24];
+   char tString2[24];
+   char tString3[24];
+   char tString4[24];
+   memset(tString2, '.',23);
+   memset(tString3, '.',23);
+   memset(tString4, '.',23);
+   tString2[23]=0;
+   tString3[23]=0;
+   tString4[23]=0;
+
+   sprintf(tString1, "%llu",aValue);
+   int tIndex[18] = {0,1,2, 4,5,6, 8,9,10 ,12,13,14 ,16,17,18, 20,21,22};
+
+   int tLen1=(int)strlen(tString1);
+   int tLen2=0;
+   int tLen3=0;
+   int tLen4=0;
+   int j=0;
+   char tSkip = ',';
+
+   for (int i = 0; i< tLen1; i++)
+   {
+      j = tLen1-i-1;
+      tString2[j] = tString1[i];
+   }
+   tLen2=tLen1;
+   tString2[tLen2]=0;
+
+   j=0;
+   for (int i = 0; i< tLen2; i++)
+   {
+      tString3[j] = tString2[i];
+      j++;
+      if (i % 3 == 2) tString3[j++]=tSkip;
+   }
+   if (tString3[j-1]==tSkip)j--;
+
+   tLen3=j;
+   tString3[tLen3]=0;
+
+   for (int i = 0; i< tLen3; i++)
+   {
+      j = tLen3-i-1;
+      tString4[j] = tString3[i];
+   }
+   tLen4=tLen3;
+   tString4[tLen4]=0;
+
+   strncpy(aString,tString4,tLen4);
+   aString[tLen4]=0;
+
+   return aString;
+}
+
 

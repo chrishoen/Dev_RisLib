@@ -79,7 +79,7 @@ namespace Ris
       void put(double aX);
 
       // Members
-      unsigned  mPutCount;    // Number of samples
+      unsigned long long mPutCount;    // Number of samples
 
       // Output values
       double   mX;            // Input value
@@ -95,6 +95,9 @@ namespace Ris
       double   mOLMean;       // Online algorithm
       double   mOLM2;         // Online algorithm
       double   mOLDelta;      // Online algorithm
+
+      double   mXSum;         // Sum of X
+      double   mXMean;        // expectation (mean)
    };
 
 }//namespace

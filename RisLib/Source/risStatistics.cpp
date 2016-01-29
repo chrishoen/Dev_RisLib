@@ -173,6 +173,8 @@ namespace Ris
       mOLM2 = 0.0;
       mOLDelta = 0.0;
 
+      mXSum = 0.0;
+      mXMean = 0.0;
    }
    
    //******************************************************************************
@@ -208,6 +210,8 @@ namespace Ris
         mOLDelta =  mX - mOLMean;
         mOLMean  += mOLDelta/mPutCount;
         mOLM2    += mOLDelta*(mX - mOLMean);
+
+        mXSum += mX;
    }
 
    //******************************************************************************
@@ -244,6 +248,8 @@ namespace Ris
       // Store
       mMean   = mEX;
       mStdDev = mUX;
+
+      mXMean = mXSum/mPutCount;
    }
 
    //******************************************************************************

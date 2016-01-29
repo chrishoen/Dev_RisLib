@@ -156,6 +156,11 @@ namespace Ris
    //******************************************************************************
    //******************************************************************************
 
+   TrialStatistics::TrialStatistics()
+   {
+      startTrial();
+   }
+
    void TrialStatistics::startTrial()
    {
       mPutCount = 0;

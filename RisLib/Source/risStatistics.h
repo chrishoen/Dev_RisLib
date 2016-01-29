@@ -70,6 +70,8 @@ namespace Ris
    class TrialStatistics
    {
    public:
+      TrialStatistics();
+
       // Initialize
       void startTrial();
       void finishTrial();

@@ -73,7 +73,7 @@ namespace Ris
       TrialStatistics();
 
       // Initialize
-      void startTrial();
+      void startTrial(double aXLimit=0.0);
       void finishTrial();
       void show();
 
@@ -83,8 +83,11 @@ namespace Ris
       // Members
       unsigned long long mPutCount;    // Number of samples
 
-      // Output values
+      // Input values
       double   mX;            // Input value
+      double   mXLimit;       // Input limit
+      bool     mXLimitFlag;   // Input limit
+      // Output values
       double   mEX;           // expectation (mean)
       double   mUX;           // uncertainty (standard deviation)
       double   mMinX;         // minimum 

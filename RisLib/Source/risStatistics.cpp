@@ -161,9 +161,11 @@ namespace Ris
       startTrial();
    }
 
-   void TrialStatistics::startTrial()
+   void TrialStatistics::startTrial(double aXLimit)
    {
       mPutCount = 0;
+      mXLimit = aXLimit;
+      mXLimitFlag = aXLimit!=0.0;
       mX = 0.0;
 
       mEX = 0.0;
@@ -190,9 +192,15 @@ namespace Ris
    {
       //--------------------------------------------------------------------------- 
       // Store current input
+
+      if (mXLimitFlag)
+      {
+         if (mX < -mXLimit) return;
+         if (mX >  mXLimit) return;
+      }
+
       mX = aX;
       mPutCount++;
-
       //--------------------------------------------------------------------------- 
       // Update min and max
 

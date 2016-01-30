@@ -65,7 +65,7 @@ public:
    //------------------------------------------------
    TrialTimeMarker();
 
-   void startTrial();
+   void startTrial(double aXLimit=0.0);
    void finishTrial();
 
    void doStart();

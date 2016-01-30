@@ -110,7 +110,7 @@ TrialTimeMarker::TrialTimeMarker()
 //******************************************************************************
 //******************************************************************************
 
-void TrialTimeMarker::startTrial()
+void TrialTimeMarker::startTrial(double aXLimit)
 {
    // All zero
    mTimeCountAtStart = 0;
@@ -121,7 +121,7 @@ void TrialTimeMarker::startTrial()
    mScaleFactorUS = (float)((1E6)/Ris::portableGetHiResFrequency());
 
    // Initialize statistics
-   mStatistics.startTrial();
+   mStatistics.startTrial(aXLimit);
 }
 
 void TrialTimeMarker::finishTrial()

@@ -188,7 +188,10 @@ void TimerThread1::showThreadInfo(int aTimeCount)
    Prn::print(Prn::ThreadRun1, "ThreadIdealProcessor  %d",
       tProcessorNumber.Number);
 
+   int tDwordProcessorNumber = GetCurrentProcessorNumber();
 
+   Prn::print(Prn::ThreadRun1, "ProcessorNumber  %d",
+      tDwordProcessorNumber);
 
 }
 

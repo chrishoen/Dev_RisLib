@@ -46,7 +46,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    Ris::TrialStatistics tF;
-   tF.startTrial();
+   tF.startTrial(50.0);
 
    for (int i = 0; i<20; i++)
    {

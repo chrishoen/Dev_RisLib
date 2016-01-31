@@ -12,6 +12,7 @@ Description:
 #include <string.h>
 #include <time.h>
 
+#include "risPortableCalls.h"
 #include "my_functions.h"
 
 //******************************************************************************
@@ -78,8 +79,8 @@ int my_round (double aA)
 // Seeds random with current time
 void my_srand()
 {
-   unsigned int tTime = ((unsigned int)time(NULL))&0x7fff;
-   srand(tTime*117);
+   unsigned int tTime = (unsigned int) (Ris::portableGetHiResCounter() &0xffffffff);
+   srand(tTime);
 }
 
 // Return random double 0.0 <= x < 1.0

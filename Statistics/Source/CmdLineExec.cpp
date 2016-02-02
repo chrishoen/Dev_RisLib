@@ -81,6 +81,10 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    {
       tF.put(60.0);
    }
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(-60.0);
+   }
 
    tF.finishTrial();
    tF.show();

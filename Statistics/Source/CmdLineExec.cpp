@@ -50,13 +50,36 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
    for (int i = 0; i<20; i++)
    {
-      tF.put(2.0 + 10.0);
+      tF.put(10.0 + 2.0);
    }
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(10.0 - 2.0);
+   }
+
+   tF.finishTrial();
+   tF.show();
    Prn::print(0,"");
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   Ris::TrialStatistics tF;
+   tF.startTrial(50.0);
 
    for (int i = 0; i<20; i++)
    {
-      tF.put(-2.0 + 10.0);
+      tF.put(10.0 + 2.0);
+   }
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(10.0 - 2.0);
+   }
+   for (int i = 0; i<20; i++)
+   {
+      tF.put(60.0);
    }
 
    tF.finishTrial();
@@ -64,12 +87,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    Prn::print(0,"");
 
 
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
-{
 }
 
 //******************************************************************************

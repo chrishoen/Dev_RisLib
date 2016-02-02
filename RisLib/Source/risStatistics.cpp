@@ -195,8 +195,8 @@ namespace Ris
 
       if (mXLimitFlag)
       {
-         if (mX < -mXLimit) return;
-         if (mX >  mXLimit) return;
+         if (aX < -mXLimit) return;
+         if (aX >  mXLimit) return;
       }
 
       mX = aX;

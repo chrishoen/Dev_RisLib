@@ -34,6 +34,7 @@ namespace Ris
 
    int get_default_thread_priority()                      { return THREAD_PRIORITY_NORMAL; }
    int get_default_high_thread_priority()                 { return THREAD_PRIORITY_TIME_CRITICAL; }
+   int get_default_low_thread_priority()                  { return THREAD_PRIORITY_BELOW_NORMAL; }
 
    int get_default_qcall_thread_priority()                { return THREAD_PRIORITY_NORMAL; }
    int get_default_qcall_timer_thread_priority()          { return THREAD_PRIORITY_ABOVE_NORMAL; }

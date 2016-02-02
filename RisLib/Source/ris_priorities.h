@@ -23,6 +23,7 @@ namespace Ris
    // RisLib default thread priorities
    int get_default_thread_priority();
    int get_default_high_thread_priority();
+   int get_default_low_thread_priority();
 
    int get_default_qcall_thread_priority();
    int get_default_qcall_timer_thread_priority();

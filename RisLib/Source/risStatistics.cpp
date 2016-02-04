@@ -268,9 +268,18 @@ namespace Ris
    //******************************************************************************
    void TrialStatistics::show()
    {
-      printf("%3d %8.3f $$ %8.3f %8.3f %8.3f  %8.3f\n",
+      printf("%3d $$ %8.3f %8.3f %8.3f  %8.3f\n",
          mPutCount,
-         mX,
+         mEX,
+         mUX,
+         mMinX,
+         mMaxX);
+   }
+
+   void TrialStatistics::show2()
+   {
+      printf("%3d $$ %8.6f %8.6f %8.6f  %8.6f\n",
+         mPutCount,
          mEX,
          mUX,
          mMinX,

@@ -42,6 +42,9 @@ My math functions
    // Return random int A <= x <= B
    int    my_irand(int aA,int aB);
 
+   // Return random flag with probability P
+   bool my_randflag(double aP);
+
    //---------------------------------------------------------------------------
    // String
 

@@ -108,6 +108,12 @@ int my_irand(int aA,int aB)
    return aA + rand() % (aB - aA + 1);
 }
 
+// Return random flag with probability P
+bool my_randflag(double aP)
+{
+   return (double(rand())/RAND_MAX) <= aP;
+}
+
 
 //******************************************************************************
 //******************************************************************************

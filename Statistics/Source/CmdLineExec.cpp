@@ -67,27 +67,16 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    Ris::TrialStatistics tF;
-   tF.startTrial(50.0);
+   tF.startTrial();
 
-   for (int i = 0; i<20; i++)
+   for (int i = 0; i<100000; i++)
    {
-      tF.put(10.0 + 2.0);
-   }
-   for (int i = 0; i<20; i++)
-   {
-      tF.put(10.0 - 2.0);
-   }
-   for (int i = 0; i<20; i++)
-   {
-      tF.put(60.0);
-   }
-   for (int i = 0; i<20; i++)
-   {
-      tF.put(-60.0);
+//    tF.put((double)my_irand(0,1));
+      tF.put(my_frand());
    }
 
    tF.finishTrial();
-   tF.show();
+   tF.show2();
    Prn::print(0,"");
 
 
@@ -97,6 +86,19 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+
+   Ris::TrialStatistics tF;
+   tF.startTrial();
+
+   for (int i = 0; i<1000000; i++)
+   {
+      if (my_randflag(1.0)) tF.put(1.0);
+      else                  tF.put(0.0);
+   }
+
+   tF.finishTrial();
+   tF.show2();
+   Prn::print(0,"");
 }
 
 //******************************************************************************

@@ -102,5 +102,11 @@ My math functions
 
    bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes);
 
+   //---------------------------------------------------------------------------
+   // Program halt
+
+   void my_halt(char* aString=0);
+
+
 #endif
 

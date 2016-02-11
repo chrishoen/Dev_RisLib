@@ -29,10 +29,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
-
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "%s", Ris::portableGetCurrentWorkingDir());
+// my_halt("hello world");
+   my_halt();
 }
 
 //******************************************************************************

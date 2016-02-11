@@ -429,4 +429,9 @@ char* my_stringLLU(char* aString,unsigned long long aValue)
    return aString;
 }
 
-
+//******************************************************************************
+void my_halt(char* aString)
+{
+   printf("MY_HALT MY_HALT MY_HALT MY_HALT MY_HALT %s\n",aString);
+   exit(-1);
+}

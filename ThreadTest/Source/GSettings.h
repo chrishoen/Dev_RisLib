@@ -28,8 +28,8 @@ public:
 
    static const int   cTimerThread_Thread1       = 1;
 
-   int   mTestNumber;
    int   mTestThread;
+   int   mTestNumber;
    int   mTimerThread;
 
    // Settings

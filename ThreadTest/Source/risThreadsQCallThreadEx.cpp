@@ -33,7 +33,6 @@ BaseQCallThreadEx::BaseQCallThreadEx()
    mThreadTimerCreateFlag = true;
 
    mThreadPriority = get_default_qcall_thread_priority();
-   mTimerThreadPriority = get_default_qcall_timer_thread_priority();
 
    mCallQueue.initialize(CallQueSize);
 }
@@ -53,7 +52,6 @@ void BaseQCallThreadEx::threadTimerInitFunction()
    mThreadTimerCall.bind (this,&BaseQCallThreadEx::threadExecuteOnTimer);
 
    // Start timer
-// mThreadTimer.startTimer(mThreadTimerCall,mTimerPeriod,mTimerThreadPriority);
    mThreadTimer.startTimer(mThreadTimerCall,mTimerPeriod);
 }
 

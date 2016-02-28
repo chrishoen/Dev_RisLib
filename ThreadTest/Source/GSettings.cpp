@@ -21,8 +21,9 @@
 
 GSettings::GSettings()
 {
-   mTestThread = 1;
-   mTestNumber = 1;
+   mTestThread  = 1;
+   mTestNumber  = 1;
+   mTimerThread = 1;
 }
 
 //******************************************************************************
@@ -30,8 +31,8 @@ GSettings::GSettings()
 void GSettings::show()
 {
    printf("GSettings   TestThread   %d\n",mTestThread);
-   printf("GSettings   TimerThread  %d\n",mTimerThread);
    printf("GSettings   TestNumber   %d\n",mTestNumber);
+   printf("GSettings   TimerThread  %d\n",mTimerThread);
 }
 
 //******************************************************************************
@@ -41,8 +42,8 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
 {
    // Read variables
    if(aCmd->isCmd("TESTTHREAD"))   mTestThread  = aCmd->argInt (1);
-   if(aCmd->isCmd("TIMERTHREAD"))  mTimerThread = aCmd->argInt (1);
    if(aCmd->isCmd("TESTNUMBER"))   mTestNumber  = aCmd->argInt (1);
+   if(aCmd->isCmd("TIMERTHREAD"))  mTimerThread = aCmd->argInt (1);
 }
 
 //******************************************************************************

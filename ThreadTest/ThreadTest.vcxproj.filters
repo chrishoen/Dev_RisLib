@@ -90,5 +90,8 @@
     <ClInclude Include="Source\someQCallThread2.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\risLFIndex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -194,6 +194,7 @@
     <ClInclude Include="Source\Experiment.h" />
     <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\risLFIndex.h" />
     <ClInclude Include="Source\risLFPointerQueue.h" />
     <ClInclude Include="Source\risThreadsQCallThreadEx.h" />
     <ClInclude Include="Source\risThreadsTimerEx.h" />

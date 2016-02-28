@@ -203,7 +203,7 @@ public:
 
    enum {CallQueSize=200};
    Ris::LFPointerQueue                             mCallQueue;
-   CountingSemaphore                               mCentralSem;
+   CountingSemaphore                               mCallSem;
 
    //--------------------------------------------------------------
    // This is called by a QCall's invoke method to put itself to
@@ -213,41 +213,67 @@ public:
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
+   // This mutex serializes execution between timer
+   // and qcall execution
+   MutexSemaphore  mExecutionMutex;
+
+   void lockExecution();
+   void unlockExecution();
+
+   //--------------------------------------------------------------
+   //--------------------------------------------------------------
+   //--------------------------------------------------------------
    // Thread timer. It periodically executes threadExecuteOnTimer,
    // not in the execution context of this thread.
    ThreadTimerEx  mThreadTimer;
    TimerCall      mThreadTimerCall;
    bool           mThreadTimerCreateFlag;
-   
-   // This is executed by the timer. It updates timer variables
-   // and signals the central semaphore to wake up the thread.
-   // aCurrentTimeCount gives the number of timer events that
-   // have occurred since thread launch.
+
+   // This is directly executed by the timer. It calls
+   // inheritor executeOnTimer and is protected by the
+   // execution mutex
    void threadExecuteOnTimer(int aCurrentTimeCount);
 
+   // This is posted to by the above call at the 
+   // completion of timer execution, if the down counter
+   // is not zero and then decrements to zero;
+
+   // Timer completion notification.
+   // The above threadExecuteOnTimer call posts to this semaphore,
+   // if the down counter is not zero and then decrements to zero.
+   BinarySemaphore mTimerCompletionSem;
+   int             mTimerCompletionDownCounter;
+
    // Inheritors provide an overload for this.
-   // It is executed in the context of this thread, after the
-   // central semaphore wakes up.
-   // aCurrentTimeCount gives the number of timer events that
-   // have occurred since thread launch.
-   // It is called by threadRunFunction and is caused by
-   // threadExecuteOnTimer.
    virtual void executeOnTimer(int aCurrentTimeCount){}
 
+
+   // The following method returns a status code
+   enum
+   {
+      TimerCompletion_None     = 0,
+      TimerCompletion_Timeout  = 1,
+      TimerCompletion_Aborted  = 2,
+      TimerCompletion_Forced   = 3,
+   };
+
+   // This waits for timer completions
+   int threadWaitForTimerCompletion(
+      int aTimerCount); 
+
+   // Timer completion code, set by above method
+   int mTimerCompletionCode;
+
+   // This aborts waits for timer completions
+   void threadAbortTimerCompletion();
+
+   // This forces a timer completion
+   void threadForceTimerCompletion();
+
    //--------------------------------------------------------------
-   // Timer state:
-
-   // Set by threadExecuteOnTimer to indicate that a timer
-   // update has occurred
-   bool  mTimerExecuteFlag;
-
    // Timer period in milliseconds
-   int   mTimerPeriod;
 
-   // These give the number of timer events that have
-   // occurred since thread launch
-   int   mCurrentTimeCount;
-   int   mTimerCurrentTimeCount;
+   int mTimerPeriod;
 };
 
 //******************************************************************************

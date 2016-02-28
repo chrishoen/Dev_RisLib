@@ -49,6 +49,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Statistics", "Statistics\St
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{1B969CC8-E47F-4AB5-803E-50B3360BEFDB}"
 	ProjectSection(SolutionItems) = preProject
+		Files\risThreadsQCall22.cpp = Files\risThreadsQCall22.cpp
+		Files\risThreadsQCall22.h = Files\risThreadsQCall22.h
+		Files\risThreadsQCallThreadEx.cpp = Files\risThreadsQCallThreadEx.cpp
+		Files\risThreadsQCallThreadEx.h = Files\risThreadsQCallThreadEx.h
 		Files\someTimerThread2.cpp = Files\someTimerThread2.cpp
 		Files\someTimerThread2.h = Files\someTimerThread2.h
 		Files\someTimerThread3.cpp = Files\someTimerThread3.cpp

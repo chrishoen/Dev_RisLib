@@ -27,13 +27,13 @@ BaseQCallThreadEx::BaseQCallThreadEx()
    mTerminateFlag=false;
 
    // Timer
-   mTimerExecuteFlag=false;
    mTimerPeriod = 1000;
-   mCurrentTimeCount=1;
-   mTimerCurrentTimeCount=1;
+   mTimerCompletionDownCounter = 0;
+   mTimerCompletionCode = 0;
    mThreadTimerCreateFlag = true;
 
    mThreadPriority = get_default_qcall_thread_priority();
+
    mCallQueue.initialize(CallQueSize);
 }
 
@@ -46,11 +46,6 @@ BaseQCallThreadEx::~BaseQCallThreadEx()
 void BaseQCallThreadEx::threadTimerInitFunction()
 {
    // Guard
-   if (mTimerPeriod == 0)
-   {
-      mThreadTimerCreateFlag = false;
-      return;
-   }
    if (mThreadTimerCreateFlag == false) return;
 
    // Bind timer callback
@@ -64,12 +59,82 @@ void BaseQCallThreadEx::threadTimerInitFunction()
 
 void BaseQCallThreadEx::threadExecuteOnTimer(int aCurrentTimeCount)
 {
-   // Update timer variables
-   mTimerCurrentTimeCount++;
-   mTimerExecuteFlag=true;
+   // Guard
+   if(mTerminateFlag) return;
 
-   // Use central semaphore to wake up the thread
-   mCentralSem.put();
+   // Lock thread execution
+   lockExecution();
+
+   //Execute inheritor timer method
+   executeOnTimer(aCurrentTimeCount);
+
+   // Post to the timer completion semaphore,
+   // If the down counter counts down to zero
+   if (mTimerCompletionDownCounter != 0)
+   {
+      if (--mTimerCompletionDownCounter == 0)
+      {
+         mTimerCompletionSem.put();
+      }
+   }
+
+   // Unlock thread execution
+   unlockExecution();
+}
+
+//******************************************************************************
+
+int BaseQCallThreadEx::threadWaitForTimerCompletion(
+      int aTimerCount) 
+{
+   // Guard
+   if (aTimerCount==0) return 0;
+   if (aTimerCount==0) return mTimerCompletionCode;
+
+   // Initialize completion code
+   mTimerCompletionCode = TimerCompletion_Timeout;
+   // Reset timer completion
+   mTimerCompletionSem.reset();
+   // Set the down counter, -1 means infinite timeout
+   mTimerCompletionDownCounter = aTimerCount != -1 ? aTimerCount : 0;
+   
+   // Unlock thread execution
+   unlockExecution();
+   // Wait for timer completion
+   mTimerCompletionSem.get();
+   // Lock thread execution
+   lockExecution();
+
+   // Return completion code
+   return mTimerCompletionCode;
+}
+
+//******************************************************************************
+
+void BaseQCallThreadEx::threadAbortTimerCompletion()
+{
+   // Set completion code
+   mTimerCompletionCode = TimerCompletion_Aborted;
+   // Clear down counter
+   mTimerCompletionDownCounter = 0;
+
+   // Post to timer completion
+   // This wakes up the above wait
+   mTimerCompletionSem.put();
+}
+
+//******************************************************************************
+
+void BaseQCallThreadEx::threadForceTimerCompletion()
+{
+   // Set completion code
+   mTimerCompletionCode = TimerCompletion_Forced;
+   // Clear down counter
+   mTimerCompletionDownCounter = 0;
+
+   // Post to timer completion
+   // This wakes up the above wait
+   mTimerCompletionSem.put();
 }
 
 //******************************************************************************
@@ -92,63 +157,36 @@ void BaseQCallThreadEx::threadRunFunction()
       //----------------------------------------------------------
       //----------------------------------------------------------
       //----------------------------------------------------------
-      // Wait for the central thread semaphore
+      // Wait for the QCall thread semaphore
 
-      mCentralSem.get();
+      mCallSem.get();
 
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      //----------------------------------------------------------
       // Test for terminate
-
       if(mTerminateFlag) return;
 
       //----------------------------------------------------------
       //----------------------------------------------------------
-      //----------------------------------------------------------
-      // Test for timer. 
-      // When the timer service routine is called, it sets
-      // TimerExecuteFlag true, increments mCurrentTimeCount, and
-      // puts to mCentralSem. 
+	   //----------------------------------------------------------
+      // Get QCall from queue
+   
+      BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
 
-      if(mTimerExecuteFlag)
+      //----------------------------------------------------------
+      //----------------------------------------------------------
+      //----------------------------------------------------------
+      // Execute QCall
+   
+      // If there is a QCall pending
+      if (tQCall)
       {
-         mTimerExecuteFlag=false;
-
-         // Copy time count from timer.
-         mCurrentTimeCount = mTimerCurrentTimeCount;
-
-         // Execute inheritor timer function.
-         executeOnTimer(mCurrentTimeCount);
-      }
-
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      // Not timer, was from the thread call queue.
-
-      else
-      {
-         //----------------------------------------------------------
-         //----------------------------------------------------------
-         //----------------------------------------------------------
-         // Get QCall from queue
-
-         BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
-
-         //----------------------------------------------------------
-         //----------------------------------------------------------
-         //----------------------------------------------------------
+         // Lock thread execution
+         lockExecution();
          // Execute QCall
-
-         // If there is a QCall available
-         if (tQCall)
-         {
-            // Execute QCall
-            tQCall->execute();
-            // Delete it
-            delete tQCall;
-         }
+         tQCall->execute();
+         // Delete it
+         delete tQCall;
+         // Unlock thread execution
+         unlockExecution();
       }
    }
 }
@@ -186,7 +224,9 @@ void BaseQCallThreadEx::shutdownThread()
    // Set termination flag
    mTerminateFlag=true;
    // Post to the call sem to wake up thread if blocked on it
-   mCentralSem.put();
+   mCallSem.put();
+   // Abort timer completion if thread if blocked on it
+   threadAbortTimerCompletion();
    // Wait for thread terminate
    waitForThreadTerminate();
 }
@@ -198,7 +238,7 @@ void BaseQCallThreadEx::putQCallToThread(BaseQCall* aQCall)
    // Put the QCall to the queue and signal the semaphore
    if (mCallQueue.writePtr(aQCall))
    {
-      mCentralSem.put();
+      mCallSem.put();
    }
    else 
    {
@@ -206,6 +246,19 @@ void BaseQCallThreadEx::putQCallToThread(BaseQCall* aQCall)
       delete aQCall;
    }
 }
+
+void BaseQCallThreadEx::lockExecution()
+{
+   // Lock execution for this thread
+   mExecutionMutex.lock();
+}
+
+void BaseQCallThreadEx::unlockExecution()
+{
+   // Unlock execution for this thread
+   mExecutionMutex.unlock();
+}
+
 
 }//namespace
 }//namespace

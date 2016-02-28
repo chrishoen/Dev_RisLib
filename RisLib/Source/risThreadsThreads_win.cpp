@@ -36,7 +36,7 @@ int BaseThread_Execute (BaseThread* someThread)
 //******************************************************************************
 //******************************************************************************
 
-class BaseThread::BaseImplementation
+class BaseThread::BaseSpecific
 {
 public:
    HANDLE mHandle;
@@ -46,8 +46,8 @@ public:
 
 BaseThread::BaseThread() 
 {
-   mBaseImplementation = new BaseImplementation;
-   mBaseImplementation->mHandle    = 0;
+   mBaseSpecific = new BaseSpecific;
+   mBaseSpecific->mHandle    = 0;
    mThreadPriority = get_default_thread_priority();
    mThreadAffinityMask    = 0;
    mThreadIdealProcessor  = -1;
@@ -59,21 +59,21 @@ BaseThread::BaseThread()
 
 BaseThread::~BaseThread() 
 {
-   delete mBaseImplementation;
+   delete mBaseSpecific;
 }
 
 //******************************************************************************
 
 void* BaseThread::getHandlePtr()
 {
-   return (void*)&mBaseImplementation->mHandle;
+   return (void*)&mBaseSpecific->mHandle;
 }
 
 //******************************************************************************
 
 void BaseThread::configureThread()
 {
-   mBaseImplementation->mHandle = 0;
+   mBaseSpecific->mHandle = 0;
    mThreadStackSize = 0;
 }
 
@@ -109,7 +109,7 @@ void BaseThread::launchThread()
    // Create the thread in a suspended state.
    // The following threadFunction() is executed in 
    // the context of the created thread.
-   mBaseImplementation->mHandle=CreateThread(
+   mBaseSpecific->mHandle=CreateThread(
         NULL, 
        (DWORD) mThreadStackSize,
        (LPTHREAD_START_ROUTINE)BaseThread_Execute,
@@ -120,27 +120,27 @@ void BaseThread::launchThread()
    //---------------------------------------------------------------------------
    // Set thread parameters
 
-   if( SetThreadPriority(mBaseImplementation->mHandle,mThreadPriority) == 0 )
+   if( SetThreadPriority(mBaseSpecific->mHandle,mThreadPriority) == 0 )
    {
       char tStr[100];
-      sprintf(tStr, "Bad Thread Priority %d %d %d",mThreadPriority,*((int*)&mBaseImplementation->mHandle),(int)GetLastError());
+      sprintf(tStr, "Bad Thread Priority %d %d %d",mThreadPriority,*((int*)&mBaseSpecific->mHandle),(int)GetLastError());
       halt(tStr);
    }
 
    if (mThreadAffinityMask != 0)
    {
-      if( SetThreadAffinityMask(mBaseImplementation->mHandle,mThreadAffinityMask) == -1 ) throw "Bad Thread Affinity";
+      if( SetThreadAffinityMask(mBaseSpecific->mHandle,mThreadAffinityMask) == -1 ) throw "Bad Thread Affinity";
    }
    if (mThreadIdealProcessor != -1)
    {
-      if( SetThreadIdealProcessor(mBaseImplementation->mHandle,mThreadIdealProcessor) == -1 ) throw "Bad Ideal Processor";
+      if( SetThreadIdealProcessor(mBaseSpecific->mHandle,mThreadIdealProcessor) == -1 ) throw "Bad Ideal Processor";
    }
 
    //---------------------------------------------------------------------------
    // Resume thread, this starts the thread function within the context of
    // the new thread,using configured priority and affinity
 
-   ResumeThread(mBaseImplementation->mHandle);
+   ResumeThread(mBaseSpecific->mHandle);
 }
 
 //******************************************************************************
@@ -223,21 +223,21 @@ void BaseThread::threadSleep(int aTicks)
 
 void BaseThread::forceTerminateThread()
 {
-   TerminateThread(mBaseImplementation->mHandle,-1);
+   TerminateThread(mBaseSpecific->mHandle,-1);
 }
 
 //******************************************************************************
 
 int BaseThread::getThreadPriority()
 {
-    return GetThreadPriority(mBaseImplementation->mHandle);
+    return GetThreadPriority(mBaseSpecific->mHandle);
 }
 
 //******************************************************************************
 
 void BaseThread::waitForThreadTerminate()
 {
-   WaitForSingleObject(mBaseImplementation->mHandle,INFINITE);
+   WaitForSingleObject(mBaseSpecific->mHandle,INFINITE);
 }
 
 //******************************************************************************

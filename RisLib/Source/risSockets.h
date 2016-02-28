@@ -128,8 +128,8 @@ public:
    bool ioctlGetBcastAddr  (IpAddress& aBcastAddr);
 
 public:
-   class BaseImplementation;
-   BaseImplementation* mBaseImplementation;
+   class BaseSpecific;
+   BaseSpecific* mBaseSpecific;
 };
 
 // *****************************************************************************
@@ -183,8 +183,8 @@ public:
    int  selectOnReadSet  ();
 
 public:
-   class Implementation;
-   Implementation* mImplementation;
+   class Specific;
+   Specific* mSpecific;
 };
 
 //******************************************************************************

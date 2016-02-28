@@ -178,7 +178,6 @@
     <ClCompile Include="Source\Experiment.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\risThreadsThreads_win.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
     <ClCompile Include="Source\someThread1.cpp" />
     <ClCompile Include="Source\someTimerThread.cpp" />
@@ -187,7 +186,6 @@
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\Experiment.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\risThreadsThreads.h" />
     <ClInclude Include="Source\someShare.h" />
     <ClInclude Include="Source\someThread1.h" />
     <ClInclude Include="Source\someTimerThread.h" />

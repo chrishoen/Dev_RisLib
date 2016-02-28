@@ -24,7 +24,7 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 
-class BinarySemaphore::Implementation
+class BinarySemaphore::Specific
 {
 public:
    HANDLE mHandle;
@@ -34,8 +34,8 @@ public:
 
 BinarySemaphore::BinarySemaphore() 
 {
-   mImplementation = new Implementation;
-   mImplementation->mHandle = CreateEvent(NULL,FALSE,FALSE,NULL);
+   mSpecific = new Specific;
+   mSpecific->mHandle = CreateEvent(NULL,FALSE,FALSE,NULL);
    mStatusCode=0;
 }
 
@@ -43,43 +43,43 @@ BinarySemaphore::BinarySemaphore()
 
 BinarySemaphore::~BinarySemaphore() 
 {
-   CloseHandle(mImplementation->mHandle);
-   delete mImplementation;
+   CloseHandle(mSpecific->mHandle);
+   delete mSpecific;
 }
 
 //******************************************************************************
 
 void* BinarySemaphore::getHandlePtr()
 {
-   return (void*)&mImplementation->mHandle;
+   return (void*)&mSpecific->mHandle;
 }
 
 //******************************************************************************
 
 void BinarySemaphore::reset()
 {
-   ResetEvent(mImplementation->mHandle);
+   ResetEvent(mSpecific->mHandle);
 }
 
 //******************************************************************************
 
 void BinarySemaphore::put()
 {
-   SetEvent(mImplementation->mHandle);
+   SetEvent(mSpecific->mHandle);
 }
 
 //******************************************************************************
 
 bool BinarySemaphore::get(int timeout)
 {
-   return WaitForSingleObject(mImplementation->mHandle,timeout) != WAIT_TIMEOUT ;
+   return WaitForSingleObject(mSpecific->mHandle,timeout) != WAIT_TIMEOUT ;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-class CountingSemaphore::Implementation
+class CountingSemaphore::Specific
 {
 public:
    HANDLE mHandle;
@@ -89,43 +89,43 @@ public:
 
 CountingSemaphore::CountingSemaphore() 
 {
-   mImplementation = new Implementation;
-   mImplementation->mHandle = CreateSemaphore(NULL,0,1000000,NULL);
+   mSpecific = new Specific;
+   mSpecific->mHandle = CreateSemaphore(NULL,0,1000000,NULL);
 }
 
 CountingSemaphore::CountingSemaphore(int aInitial) 
 {
-   mImplementation = new Implementation;
-   mImplementation->mHandle = CreateSemaphore(NULL,aInitial,1000000,NULL);
+   mSpecific = new Specific;
+   mSpecific->mHandle = CreateSemaphore(NULL,aInitial,1000000,NULL);
 }
 
 //******************************************************************************
 
 CountingSemaphore::~CountingSemaphore() 
 {
-   CloseHandle(mImplementation->mHandle);
-   delete mImplementation;
+   CloseHandle(mSpecific->mHandle);
+   delete mSpecific;
 }
 
 //******************************************************************************
 
 void* CountingSemaphore::getHandlePtr()
 {
-   return (void*)&mImplementation->mHandle;
+   return (void*)&mSpecific->mHandle;
 }
 
 //******************************************************************************
 
 void CountingSemaphore::put()
 {
-   ReleaseSemaphore(mImplementation->mHandle,1,NULL);
+   ReleaseSemaphore(mSpecific->mHandle,1,NULL);
 }
 
 //******************************************************************************
 
 bool CountingSemaphore::get(int timeout)
 {
-   switch (WaitForSingleObjectEx(mImplementation->mHandle,timeout,TRUE))
+   switch (WaitForSingleObjectEx(mSpecific->mHandle,timeout,TRUE))
    {
       case WAIT_OBJECT_0      : return true;  break;
       case WAIT_TIMEOUT       : return false; break;
@@ -138,7 +138,7 @@ bool CountingSemaphore::get(int timeout)
 //******************************************************************************
 //******************************************************************************
 
-class MutexSemaphore::Implementation
+class MutexSemaphore::Specific
 {
 public:
    HANDLE mHandle;
@@ -148,44 +148,44 @@ public:
 
 MutexSemaphore::MutexSemaphore() 
 {
-   mImplementation = new Implementation;
-   mImplementation->mHandle = CreateMutex(NULL,FALSE,NULL);
+   mSpecific = new Specific;
+   mSpecific->mHandle = CreateMutex(NULL,FALSE,NULL);
 }
 
 //******************************************************************************
 
 MutexSemaphore::~MutexSemaphore() 
 {
-   CloseHandle(mImplementation->mHandle);
-   delete mImplementation;
+   CloseHandle(mSpecific->mHandle);
+   delete mSpecific;
 }
 
 //******************************************************************************
 
 void* MutexSemaphore::getHandlePtr()
 {
-   return (void*)&mImplementation->mHandle;
+   return (void*)&mSpecific->mHandle;
 }
 
 //******************************************************************************
 
-void MutexSemaphore::put()
+bool MutexSemaphore::lock(int timeout)
 {
-   ReleaseMutex(mImplementation->mHandle);
+   return WaitForSingleObject(mSpecific->mHandle,timeout) != WAIT_TIMEOUT ;
 }
 
 //******************************************************************************
 
-bool MutexSemaphore::get(int timeout)
+void MutexSemaphore::unlock()
 {
-   return WaitForSingleObject(mImplementation->mHandle,timeout) != WAIT_TIMEOUT ;
+   ReleaseMutex(mSpecific->mHandle);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-class CriticalSection::Implementation
+class CriticalSection::Specific
 {
 public:
    CRITICAL_SECTION mCriticalSection; 
@@ -195,37 +195,37 @@ public:
 
 CriticalSection::CriticalSection() 
 {
-   mImplementation = new Implementation;
-   InitializeCriticalSectionAndSpinCount(&mImplementation->mCriticalSection,0x80000400); 
+   mSpecific = new Specific;
+   InitializeCriticalSectionAndSpinCount(&mSpecific->mCriticalSection,0x80000400); 
 }
 
 //******************************************************************************
 
 CriticalSection::~CriticalSection() 
 {
-   DeleteCriticalSection(&mImplementation->mCriticalSection);
-   delete mImplementation;
+   DeleteCriticalSection(&mSpecific->mCriticalSection);
+   delete mSpecific;
 }
 
 //******************************************************************************
 
 void CriticalSection::enter()
 {
-   EnterCriticalSection(&mImplementation->mCriticalSection); 
+   EnterCriticalSection(&mSpecific->mCriticalSection); 
 }
 
 //******************************************************************************
 
 void CriticalSection::leave()
 {
-   LeaveCriticalSection(&mImplementation->mCriticalSection);
+   LeaveCriticalSection(&mSpecific->mCriticalSection);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-class SlimLock::Implementation
+class SlimLock::Specific
 {
 public:
    SRWLOCK mSRWLock; 
@@ -235,50 +235,36 @@ public:
 
 SlimLock::SlimLock() 
 {
-   mImplementation = new Implementation;
-   InitializeSRWLock(&mImplementation->mSRWLock); 
+   mSpecific = new Specific;
+   InitializeSRWLock(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************
 
 SlimLock::~SlimLock() 
 {
-   delete mImplementation;
-}
-
-//******************************************************************************
-
-void SlimLock::acquire()
-{
-   AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
-}
-
-//******************************************************************************
-
-void SlimLock::release()
-{
-   ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
+   delete mSpecific;
 }
 
 //******************************************************************************
 
 void SlimLock::lock()
 {
-   AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
+   AcquireSRWLockExclusive(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************
 
 void SlimLock::unlock()
 {
-   ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
+   ReleaseSRWLockExclusive(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-class ConditionVariable::Implementation
+class ConditionVariable::Specific
 {
 public:
    SRWLOCK            mSRWLock; 
@@ -290,57 +276,57 @@ public:
 
 ConditionVariable::ConditionVariable() 
 {
-   mImplementation = new Implementation;
-   InitializeSRWLock(&mImplementation->mSRWLock); 
-   InitializeConditionVariable(&mImplementation->mConditionVariable); 
-   mImplementation->mPredicate = 0;
+   mSpecific = new Specific;
+   InitializeSRWLock(&mSpecific->mSRWLock); 
+   InitializeConditionVariable(&mSpecific->mConditionVariable); 
+   mSpecific->mPredicate = 0;
 }
 
 //******************************************************************************
 
 ConditionVariable::~ConditionVariable() 
 {
-   delete mImplementation;
+   delete mSpecific;
 }
 
 //******************************************************************************
 
 void ConditionVariable::acquireLock()
 {
-   AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
+   AcquireSRWLockExclusive(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************
 
 void ConditionVariable::releaseLock()
 {
-   ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
+   ReleaseSRWLockExclusive(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************
 
 void ConditionVariable::waitFor()
 {
-   AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
+   AcquireSRWLockExclusive(&mSpecific->mSRWLock); 
 
-   while (mImplementation->mPredicate == 0)
+   while (mSpecific->mPredicate == 0)
    {
-      SleepConditionVariableSRW(&mImplementation->mConditionVariable, &mImplementation->mSRWLock, INFINITE, 0);
+      SleepConditionVariableSRW(&mSpecific->mConditionVariable, &mSpecific->mSRWLock, INFINITE, 0);
    }
-   mImplementation->mPredicate = 0;
+   mSpecific->mPredicate = 0;
 
-   ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
+   ReleaseSRWLockExclusive(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************
 
 void ConditionVariable::wakeUp(int aPredicate)
 {
-//    AcquireSRWLockExclusive(&mImplementation->mSRWLock); 
-   mImplementation->mPredicate = aPredicate;
-//    ReleaseSRWLockExclusive(&mImplementation->mSRWLock); 
+//    AcquireSRWLockExclusive(&mSpecific->mSRWLock); 
+   mSpecific->mPredicate = aPredicate;
+//    ReleaseSRWLockExclusive(&mSpecific->mSRWLock); 
 
-   WakeConditionVariable(&mImplementation->mConditionVariable);
+   WakeConditionVariable(&mSpecific->mConditionVariable);
 
 }
 

@@ -166,7 +166,7 @@ bool UdpTxStringSocket::doSendString(char* aString)
    if (!mValidFlag) return false;
 
    // Mutex
-   mTxMutex.get();
+   mTxMutex.lock();
 
    // Transmit the buffer
    int tLength = (int)strlen(aString);
@@ -176,7 +176,7 @@ bool UdpTxStringSocket::doSendString(char* aString)
    mTxCount++;
 
    // Mutex
-   mTxMutex.put();
+   mTxMutex.unlock();
 
    return true;
 }

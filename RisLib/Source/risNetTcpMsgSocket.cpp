@@ -103,7 +103,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aTxMsg)
    bool tRet=false;
 
    // Mutex
-   mTxMutex.get();
+   mTxMutex.lock();
 
    // Message parser processing
    mTxMessageParser->processBeforeSend(aTxMsg);
@@ -127,7 +127,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aTxMsg)
    mTxMsgCount++;
 
    // Mutex
-   mTxMutex.put();
+   mTxMutex.unlock();
 
    if (!tRet)
    {

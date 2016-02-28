@@ -22,9 +22,6 @@
     <ClCompile Include="Source\Experiment.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreadsThreads_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -43,9 +40,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\Experiment.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsThreads.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

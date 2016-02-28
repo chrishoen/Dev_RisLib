@@ -176,7 +176,7 @@ void SocketAddress::set(IpAddress aIpAddr,int aPort)
 //******************************************************************************
 //******************************************************************************
 
-class BaseSocket::BaseImplementation
+class BaseSocket::BaseSpecific
 {
 public:
    SOCKET mDesc;
@@ -186,7 +186,7 @@ public:
 
 BaseSocket::BaseSocket()
 {
-   mBaseImplementation = new BaseImplementation;
+   mBaseSpecific = new BaseSpecific;
    reset();
 }
 
@@ -196,7 +196,7 @@ BaseSocket::~BaseSocket()
 {
    doClose();
    reset();
-   delete mBaseImplementation;
+   delete mBaseSpecific;
 }
 
 //******************************************************************************
@@ -205,7 +205,7 @@ void BaseSocket::reset()
 {
    mStatus       = 0;
    mError        = 0;
-   mBaseImplementation->mDesc         = -1;
+   mBaseSpecific->mDesc         = -1;
    mType         = 0;
    mProtocol     = 0;
    mLocal.reset();
@@ -218,7 +218,7 @@ bool BaseSocket::doClose()
 {
    int tStatus=0;
 
-   tStatus = closesocket(mBaseImplementation->mDesc);
+   tStatus = closesocket(mBaseSpecific->mDesc);
    return updateError(tStatus);
 }
 
@@ -258,7 +258,7 @@ bool BaseSocket::setOptionBroadcast ()
    int tStatus=0;
 
    BOOL bValue=true;
-   tStatus=setsockopt(mBaseImplementation->mDesc,SOL_SOCKET,SO_BROADCAST,(char*)&bValue,sizeof(BOOL));
+   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_BROADCAST,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -269,7 +269,7 @@ bool BaseSocket::setOptionReuseAddr ()
    int tStatus=0;
 
    BOOL bValue=true;
-   tStatus=setsockopt(mBaseImplementation->mDesc,SOL_SOCKET,SO_REUSEADDR,(char*)&bValue,sizeof(BOOL));
+   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_REUSEADDR,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -280,7 +280,7 @@ bool BaseSocket::setOptionDontRoute ()
    int tStatus=0;
 
    BOOL bValue=true;
-   tStatus=setsockopt(mBaseImplementation->mDesc,SOL_SOCKET,SO_DONTROUTE,(char*)&bValue,sizeof(BOOL));
+   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTROUTE,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -291,7 +291,7 @@ bool BaseSocket::setOptionDontLinger ()
    int tStatus=0;
 
    BOOL bValue=true;
-   tStatus=setsockopt(mBaseImplementation->mDesc,SOL_SOCKET,SO_DONTLINGER,(char*)&bValue,sizeof(BOOL));
+   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTLINGER,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -302,7 +302,7 @@ bool BaseSocket::setOptionNoDelay ()
    int tStatus=0;
 
    BOOL bValue=true;
-   tStatus=setsockopt(mBaseImplementation->mDesc,IPPROTO_TCP,TCP_NODELAY,(char*)&bValue,sizeof(BOOL));
+   tStatus=setsockopt(mBaseSpecific->mDesc,IPPROTO_TCP,TCP_NODELAY,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -316,7 +316,7 @@ bool BaseUdpSocket::setOptionMulticast(IpAddress& aGroup,IpAddress& aInterface)
    tMreq.imr_multiaddr.s_addr = htonl(aGroup.mValue); 
    tMreq.imr_interface.s_addr = htonl(aInterface.mValue); 
 
-   tStatus=setsockopt(mBaseImplementation->mDesc,IPPROTO_IP,IP_ADD_MEMBERSHIP,(char*)&tMreq,sizeof(ip_mreq));
+   tStatus=setsockopt(mBaseSpecific->mDesc,IPPROTO_IP,IP_ADD_MEMBERSHIP,(char*)&tMreq,sizeof(ip_mreq));
    return updateError(tStatus);
 }
 
@@ -329,7 +329,7 @@ bool BaseSocket::ioctlBlocking(bool aBlocking)
    u_long value;
    if (aBlocking) value=0;
    else           value=1;
-   tStatus=ioctlsocket(mBaseImplementation->mDesc,FIONBIO,&value);
+   tStatus=ioctlsocket(mBaseSpecific->mDesc,FIONBIO,&value);
 
    return updateError(tStatus);
 }
@@ -340,7 +340,7 @@ bool BaseSocket::ioctlFlush ()
 {
    int tStatus=0;
 
-   tStatus=ioctlsocket(mBaseImplementation->mDesc,SIO_FLUSH,NULL);
+   tStatus=ioctlsocket(mBaseSpecific->mDesc,SIO_FLUSH,NULL);
    return updateError(tStatus);
 }
 
@@ -356,7 +356,7 @@ bool BaseSocket::ioctlGetBcastAddr (IpAddress& aBcastAddr)
    DWORD bytesReturned;
 
    tStatus=WSAIoctl(
-      mBaseImplementation->mDesc,
+      mBaseSpecific->mDesc,
       SIO_GET_BROADCAST_ADDRESS,
       NULL,
       0,
@@ -383,9 +383,9 @@ bool BaseUdpSocket::doSocket()
    mType = SOCK_DGRAM;
    mProtocol = 0;
    DWORD dwFlags = WSA_FLAG_OVERLAPPED;
-   mBaseImplementation->mDesc = WSASocket(AF_INET,SOCK_DGRAM,0,NULL,0,dwFlags);
+   mBaseSpecific->mDesc = WSASocket(AF_INET,SOCK_DGRAM,0,NULL,0,dwFlags);
 
-   if (mBaseImplementation->mDesc==INVALID_SOCKET) tStatus = -1;
+   if (mBaseSpecific->mDesc==INVALID_SOCKET) tStatus = -1;
    else                       tStatus =  0;
 
    return updateError(tStatus);
@@ -410,7 +410,7 @@ bool BaseSocket::doBind()
    localName.sin_addr.s_addr = inet_addr(mLocal.mIpAddr.mString);
    localName.sin_port        = htons(mLocal.mPort);
 
-   tStatus = bind(mBaseImplementation->mDesc,(sockaddr*) &localName,sizeof(localName));
+   tStatus = bind(mBaseSpecific->mDesc,(sockaddr*) &localName,sizeof(localName));
    return updateError(tStatus);
 }
 
@@ -425,7 +425,7 @@ bool BaseUdpSocket::doConnect()
    hostName.sin_addr.s_addr = inet_addr(mRemote.mIpAddr.mString);
    hostName.sin_port        = htons(mRemote.mPort);
 
-   tStatus = connect(mBaseImplementation->mDesc,(sockaddr*) &hostName,sizeof(hostName));
+   tStatus = connect(mBaseSpecific->mDesc,(sockaddr*) &hostName,sizeof(hostName));
 
    return updateError(tStatus);
 }
@@ -438,7 +438,7 @@ bool BaseUdpSocket::doSend(char* aPayload,int& aLength)
 
    if (aLength==0) return true;
 
-   tStatus = send(mBaseImplementation->mDesc,aPayload,aLength,0);
+   tStatus = send(mBaseSpecific->mDesc,aPayload,aLength,0);
 
    return updateError(tStatus);
 }
@@ -451,7 +451,7 @@ bool BaseUdpSocket::doRecv(char* aPayload,int& aLength,int aMaxLength)
 
    if (aMaxLength==0) return true;
 
-   tStatus = recv(mBaseImplementation->mDesc,aPayload,aMaxLength,0);
+   tStatus = recv(mBaseSpecific->mDesc,aPayload,aMaxLength,0);
    if(tStatus>0) aLength = tStatus;
    else          aLength = 0;
 
@@ -472,7 +472,7 @@ bool BaseUdpSocket::doSendTo(SocketAddress& aHost,char* aPayload,int& aLength)
    destinAddr.sin_family      = AF_INET;
    destinAddr.sin_addr.s_addr = inet_addr(aHost.mIpAddr.mString);
    destinAddr.sin_port        = htons(aHost.mPort);
-   tStatus = sendto(mBaseImplementation->mDesc,aPayload,aLength,0,(SOCKADDR*)&destinAddr,sizeof(destinAddr));
+   tStatus = sendto(mBaseSpecific->mDesc,aPayload,aLength,0,(SOCKADDR*)&destinAddr,sizeof(destinAddr));
 
    return updateError(tStatus);
 }
@@ -488,7 +488,7 @@ bool BaseUdpSocket::doRecvFrom(SocketAddress& aHost,char* aPayload,int& aLength,
    sockaddr_in sender;
    int         senderSize=sizeof(sender);
 
-   tStatus = recvfrom(mBaseImplementation->mDesc,aPayload,aMaxLength,0,(SOCKADDR*)&sender,&senderSize);
+   tStatus = recvfrom(mBaseSpecific->mDesc,aPayload,aMaxLength,0,(SOCKADDR*)&sender,&senderSize);
    if(tStatus>0) aLength = tStatus;
    else          aLength = 0;
 
@@ -502,7 +502,7 @@ bool BaseUdpSocket::doRecvFrom(SocketAddress& aHost,char* aPayload,int& aLength,
 //******************************************************************************
 //******************************************************************************
 
-class BaseTcpServerHubSocket::Implementation
+class BaseTcpServerHubSocket::Specific
 {
 public:
    fd_set  mReadSet;
@@ -512,14 +512,14 @@ public:
 
 BaseTcpServerHubSocket::BaseTcpServerHubSocket()
 {
-   mImplementation = new Implementation;
+   mSpecific = new Specific;
 }
 
 //******************************************************************************
 
 BaseTcpServerHubSocket::~BaseTcpServerHubSocket()
 {
-   delete mImplementation;
+   delete mSpecific;
 }
 
 //******************************************************************************
@@ -530,9 +530,9 @@ bool BaseTcpServerHubSocket::doSocket()
 
    mType = SOCK_STREAM;
    mProtocol = 0;
-   mBaseImplementation->mDesc = socket(AF_INET,SOCK_STREAM,0);
+   mBaseSpecific->mDesc = socket(AF_INET,SOCK_STREAM,0);
 
-   if (mBaseImplementation->mDesc==INVALID_SOCKET) tStatus = -1;
+   if (mBaseSpecific->mDesc==INVALID_SOCKET) tStatus = -1;
    else                       tStatus =  0;
 
    return updateError(tStatus);
@@ -544,7 +544,7 @@ bool BaseTcpServerHubSocket::doListen()
 {
    int tStatus=0;
 
-   tStatus = listen(mBaseImplementation->mDesc,SOMAXCONN);
+   tStatus = listen(mBaseSpecific->mDesc,SOMAXCONN);
 
    return updateError(tStatus);
 }
@@ -562,12 +562,12 @@ bool BaseTcpServerHubSocket::doAccept(BaseTcpStreamSocket& aStream)
 
    SOCKET desc;
    tempNameLength = sizeof(tempName);
-   desc = accept(mBaseImplementation->mDesc,&tempName,&tempNameLength);
+   desc = accept(mBaseSpecific->mDesc,&tempName,&tempNameLength);
    memmove(&clientName,&tempName,sizeof(tempName));
    if(desc != INVALID_SOCKET)
    {
        tStatus=0;
-       aStream.mBaseImplementation->mDesc = desc;
+       aStream.mBaseSpecific->mDesc = desc;
        aStream.mLocal = mLocal;
        aStream.mType  = SOCK_STREAM;
        aStream.mRemote.mIpAddr.set((int)clientName.sin_addr.s_addr);
@@ -585,35 +585,35 @@ bool BaseTcpServerHubSocket::doAccept(BaseTcpStreamSocket& aStream)
 
 void BaseTcpServerHubSocket::resetReadSet()
 {
-   FD_ZERO(&mImplementation->mReadSet);
+   FD_ZERO(&mSpecific->mReadSet);
 }
 
 //******************************************************************************
 
 void BaseTcpServerHubSocket::addSelfToReadSet()
 {
-   FD_SET(mBaseImplementation->mDesc,&mImplementation->mReadSet);
+   FD_SET(mBaseSpecific->mDesc,&mSpecific->mReadSet);
 }
 
 //******************************************************************************
 
 void BaseTcpServerHubSocket::addToReadSet(BaseTcpStreamSocket* aStream)
 {
-   FD_SET(aStream->mBaseImplementation->mDesc,&mImplementation->mReadSet);
+   FD_SET(aStream->mBaseSpecific->mDesc,&mSpecific->mReadSet);
 }
 
 //******************************************************************************
 
 bool BaseTcpServerHubSocket::isSelfInReadSet()
 {
-   return 0!=FD_ISSET(mBaseImplementation->mDesc,&mImplementation->mReadSet);
+   return 0!=FD_ISSET(mBaseSpecific->mDesc,&mSpecific->mReadSet);
 }
 
 //******************************************************************************
 
 bool BaseTcpServerHubSocket::isInReadSet(BaseTcpStreamSocket* aStream)
 {
-   return 0!=FD_ISSET(aStream->mBaseImplementation->mDesc,&mImplementation->mReadSet);
+   return 0!=FD_ISSET(aStream->mBaseSpecific->mDesc,&mSpecific->mReadSet);
 }
 
 //******************************************************************************
@@ -624,7 +624,7 @@ int BaseTcpServerHubSocket::selectOnReadSet()
    tTimeout.tv_sec=0;
    tTimeout.tv_usec=500000;
 
-   return select(FD_SETSIZE,&mImplementation->mReadSet,0,0,&tTimeout);
+   return select(FD_SETSIZE,&mSpecific->mReadSet,0,0,&tTimeout);
 }
 
 //******************************************************************************
@@ -637,9 +637,9 @@ bool BaseTcpStreamSocket::doSocket()
 
    mType = SOCK_STREAM;
    mProtocol = 0;
-   mBaseImplementation->mDesc = socket(AF_INET,SOCK_STREAM,0);
+   mBaseSpecific->mDesc = socket(AF_INET,SOCK_STREAM,0);
 
-   if (mBaseImplementation->mDesc==INVALID_SOCKET) tStatus = -1;
+   if (mBaseSpecific->mDesc==INVALID_SOCKET) tStatus = -1;
    else                       tStatus =  0;
 
    setOptionDontLinger();
@@ -654,7 +654,7 @@ bool BaseTcpStreamSocket::setOptionKeepAlive ()
    int tStatus=0;
 
    BOOL bValue=true;
-   tStatus=setsockopt(mBaseImplementation->mDesc,SOL_SOCKET,SO_KEEPALIVE,(char*)&bValue,sizeof(BOOL));
+   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_KEEPALIVE,(char*)&bValue,sizeof(BOOL));
 
    DWORD dwBytes;
    tcp_keepalive keepalive1;
@@ -664,7 +664,7 @@ bool BaseTcpStreamSocket::setOptionKeepAlive ()
    keepalive1.keepaliveinterval=1000;
 
    tStatus = WSAIoctl(
-      mBaseImplementation->mDesc,
+      mBaseSpecific->mDesc,
       SIO_KEEPALIVE_VALS,
       &keepalive1,
       sizeof(tcp_keepalive),
@@ -687,7 +687,7 @@ bool BaseTcpStreamSocket::doConnect()
    hostName.sin_family      = AF_INET;
    hostName.sin_addr.s_addr = inet_addr(mRemote.mIpAddr.mString);
    hostName.sin_port        = htons(mRemote.mPort);
-   tStatus = connect(mBaseImplementation->mDesc,(sockaddr*) &hostName,sizeof(hostName));
+   tStatus = connect(mBaseSpecific->mDesc,(sockaddr*) &hostName,sizeof(hostName));
 
    return updateError(tStatus);
 }
@@ -707,7 +707,7 @@ bool BaseTcpStreamSocket::doSend(char* aPayload,int aLength)
    bool going=true;
    while(going)
    {
-      tStatus=send(mBaseImplementation->mDesc,&aPayload[bytesTotal],bytesRemaining,0);
+      tStatus=send(mBaseSpecific->mDesc,&aPayload[bytesTotal],bytesRemaining,0);
       if(tStatus>0)
       {
          bytesTotal     += tStatus;
@@ -742,7 +742,7 @@ bool BaseTcpStreamSocket::doRecv(char* aPayload,int aLength,int& aStatus)
    bool going=true;
    while(going)
    {
-      tStatus=recv(mBaseImplementation->mDesc,&aPayload[bytesTotal],bytesRemaining,0);
+      tStatus=recv(mBaseSpecific->mDesc,&aPayload[bytesTotal],bytesRemaining,0);
       if(tStatus>0)
       {
          bytesTotal     += tStatus;

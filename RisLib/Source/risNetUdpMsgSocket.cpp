@@ -219,7 +219,7 @@ bool UdpTxMsgSocket::doSendMessage(ByteContent* aMsg)
    delete aMsg;
 
    // Mutex
-   mTxMutex.get();
+   mTxMutex.lock();
 
    // Transmit the buffer
    mTxLength=tBuffer.getLength();
@@ -228,7 +228,7 @@ bool UdpTxMsgSocket::doSendMessage(ByteContent* aMsg)
    mTxCount++;
 
    // Mutex
-   mTxMutex.put();
+   mTxMutex.unlock();
 
    return true;
 }
@@ -274,7 +274,7 @@ bool UdpTxMsgSocket::doSendMessage(
    delete aMsg;
 
    // Mutex
-   mTxMutex.get();
+   mTxMutex.lock();
 
    // Transmit the buffer
    int tLength=tBuffer.getLength();
@@ -283,7 +283,7 @@ bool UdpTxMsgSocket::doSendMessage(
    mTxCount++;
 
    // mutex
-   mTxMutex.put();
+   mTxMutex.unlock();
 
    return true;
 }

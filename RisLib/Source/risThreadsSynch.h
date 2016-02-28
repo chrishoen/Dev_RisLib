@@ -44,8 +44,8 @@ namespace Threads
       void* getHandlePtr();
 
    protected:
-      class Implementation;
-      Implementation* mImplementation;
+      class Specific;
+      Specific* mSpecific;
    };
 
    //***************************************************************************
@@ -68,8 +68,8 @@ namespace Threads
       void* getHandlePtr();
 
    protected:
-      class Implementation;
-      Implementation* mImplementation;
+      class Specific;
+      Specific* mSpecific;
    };
 
    //***************************************************************************
@@ -81,27 +81,17 @@ namespace Threads
    {
    public:
 
-      MutexSemaphore();             //creates the semaphore
-      virtual ~MutexSemaphore();    //deletes the semaphore
+      MutexSemaphore();               //creates the mutex semaphore
+      virtual ~MutexSemaphore();      //deletes the mutex semaphore
 
-      void put ();                  //put to the semaphore
-      bool get (int timeout= -1);   //get from the semaphore, block until timeout,
-                                    //return true if no timeout
-      // synonyms
-      void unlock  ()                {put();}
-      bool lock    (int timeout= -1) {return get(timeout);}
-
-      void give    ()                {put();}
-      bool take    (int timeout= -1) {return get(timeout);}
-
-      void release ()                {put();}
-      bool acquire (int timeout= -1) {return get(timeout);}
+      bool lock    (int timeout= -1); // lock the mutex, block until timeout
+      void unlock  ();                // unlock the mutex
 
       void* getHandlePtr();
 
    protected:
-      class Implementation;
-      Implementation* mImplementation;
+      class Specific;
+      Specific* mSpecific;
    };
 
    //******************************************************************************
@@ -120,8 +110,8 @@ namespace Threads
       void leave ();
 
    protected:
-      class Implementation;
-      Implementation* mImplementation;
+      class Specific;
+      Specific* mSpecific;
    };
 
    //******************************************************************************
@@ -136,15 +126,12 @@ namespace Threads
       SlimLock();
       virtual ~SlimLock();
 
-      void acquire ();
-      void release ();
-
       void lock ();
       void unlock ();
 
    protected:
-      class Implementation;
-      Implementation* mImplementation;
+      class Specific;
+      Specific* mSpecific;
    };
 
    //******************************************************************************
@@ -166,8 +153,8 @@ namespace Threads
       void wakeUp (int aPredicate = 1);
 
    protected:
-      class Implementation;
-      Implementation* mImplementation;
+      class Specific;
+      Specific* mSpecific;
    };
   
 }//namespace

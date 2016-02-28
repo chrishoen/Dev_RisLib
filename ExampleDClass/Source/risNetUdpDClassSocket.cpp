@@ -433,7 +433,7 @@ namespace Net
       // Send buffer to socket
 
       // Mutex
-      mTxMutex.get();
+      mTxMutex.lock();
 
       // Transmit the buffer
       mTxLength=tBuffer.getLength();
@@ -443,7 +443,7 @@ namespace Net
       mTxCount++;
 
       // Mutex
-      mTxMutex.put();
+      mTxMutex.unlock();
 
       return true;
    }

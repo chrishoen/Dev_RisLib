@@ -165,8 +165,8 @@ public:
    void* getHandlePtr();
 
 protected:
-   class BaseImplementation;
-   BaseImplementation* mBaseImplementation;
+   class BaseSpecific;
+   BaseSpecific* mBaseSpecific;
 };
 
 //******************************************************************************

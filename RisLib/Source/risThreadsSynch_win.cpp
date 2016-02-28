@@ -141,7 +141,7 @@ bool CountingSemaphore::get(int timeout)
 class MutexSemaphore::Specific
 {
 public:
-   HANDLE mHandle;
+   SRWLOCK mSRWLock;
 };
 
 //******************************************************************************
@@ -149,14 +149,13 @@ public:
 MutexSemaphore::MutexSemaphore() 
 {
    mSpecific = new Specific;
-   mSpecific->mHandle = CreateMutex(NULL,FALSE,NULL);
+   InitializeSRWLock(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************
 
 MutexSemaphore::~MutexSemaphore() 
 {
-   CloseHandle(mSpecific->mHandle);
    delete mSpecific;
 }
 
@@ -164,21 +163,21 @@ MutexSemaphore::~MutexSemaphore()
 
 void* MutexSemaphore::getHandlePtr()
 {
-   return (void*)&mSpecific->mHandle;
+   return (void*)&mSpecific->mSRWLock;
 }
 
 //******************************************************************************
 
-bool MutexSemaphore::lock(int timeout)
+void MutexSemaphore::lock()
 {
-   return WaitForSingleObject(mSpecific->mHandle,timeout) != WAIT_TIMEOUT ;
+   AcquireSRWLockExclusive(&mSpecific->mSRWLock);
 }
 
 //******************************************************************************
 
 void MutexSemaphore::unlock()
 {
-   ReleaseMutex(mSpecific->mHandle);
+   ReleaseSRWLockExclusive(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************
@@ -219,45 +218,6 @@ void CriticalSection::enter()
 void CriticalSection::leave()
 {
    LeaveCriticalSection(&mSpecific->mCriticalSection);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-class SlimLock::Specific
-{
-public:
-   SRWLOCK mSRWLock; 
-};
-
-//******************************************************************************
-
-SlimLock::SlimLock() 
-{
-   mSpecific = new Specific;
-   InitializeSRWLock(&mSpecific->mSRWLock); 
-}
-
-//******************************************************************************
-
-SlimLock::~SlimLock() 
-{
-   delete mSpecific;
-}
-
-//******************************************************************************
-
-void SlimLock::lock()
-{
-   AcquireSRWLockExclusive(&mSpecific->mSRWLock); 
-}
-
-//******************************************************************************
-
-void SlimLock::unlock()
-{
-   ReleaseSRWLockExclusive(&mSpecific->mSRWLock); 
 }
 
 //******************************************************************************

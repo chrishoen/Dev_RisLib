@@ -215,7 +215,7 @@ public:
    //--------------------------------------------------------------
    // This mutex serializes execution between timer
    // and qcall execution
-   SlimLock  mExecutionMutex;
+   MutexSemaphore  mExecutionMutex;
 
    void lockExecution();
    void unlockExecution();

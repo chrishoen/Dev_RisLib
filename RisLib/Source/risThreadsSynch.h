@@ -31,15 +31,15 @@ namespace Threads
    {
    public:
 
-      BinarySemaphore();            //creates the semaphore
-      virtual ~BinarySemaphore();   //deletes the semaphore
-      void reset();                 //resets the semaphore
+      BinarySemaphore();            // Creates the semaphore
+      virtual ~BinarySemaphore();   // Deletes the semaphore
+      void reset();                 // Resets the semaphore
 
-      void put ();                  //put to the semaphore
-      bool get (int timeout= -1);   //get from the semaphore, block until timeout,
-                                    //return true if no timeout
+      void put ();                  // Put to the semaphore
+      bool get (int timeout= -1);   // Get from the semaphore, block until timeout,
+                                    // return true if no timeout
 
-      int mStatusCode;              //user status code
+      int mStatusCode;              // User status code
 
       void* getHandlePtr();
 
@@ -57,13 +57,13 @@ namespace Threads
    {
    public:
 
-      CountingSemaphore();             //creates the semaphore
-      CountingSemaphore(int aInitial); //creates the semaphore
-      virtual ~CountingSemaphore();    //deletes the semaphore
+      CountingSemaphore();             // Creates the semaphore
+      CountingSemaphore(int aInitial); // Creates the semaphore
+      virtual ~CountingSemaphore();    // Deletes the semaphore
 
-      void put ();                     //put to the semaphore
-      bool get (int timeout= -1);      //get from the semaphore, block until timeout,
-                                       //return true if no timeout
+      void put ();                     // Put to the semaphore
+      bool get (int timeout= -1);      // Get from the semaphore, block until timeout,
+                                       // return true if no timeout
 
       void* getHandlePtr();
 
@@ -81,11 +81,11 @@ namespace Threads
    {
    public:
 
-      MutexSemaphore();               //creates the mutex semaphore
-      virtual ~MutexSemaphore();      //deletes the mutex semaphore
+      MutexSemaphore();             // Creates the mutex semaphore
+      virtual ~MutexSemaphore();    // Deletes the mutex semaphore
 
-      bool lock    (int timeout= -1); // lock the mutex, block until timeout
-      void unlock  ();                // unlock the mutex
+      void lock   ();               // Lock the mutex
+      void unlock ();               // Unlock the mutex
 
       void* getHandlePtr();
 
@@ -108,26 +108,6 @@ namespace Threads
 
       void enter ();
       void leave ();
-
-   protected:
-      class Specific;
-      Specific* mSpecific;
-   };
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This encapsulates a slim reader/writer lock.
-
-   class SlimLock
-   {
-   public:
-
-      SlimLock();
-      virtual ~SlimLock();
-
-      void lock ();
-      void unlock ();
 
    protected:
       class Specific;

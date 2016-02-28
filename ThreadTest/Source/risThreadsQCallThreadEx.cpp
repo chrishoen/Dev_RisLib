@@ -24,14 +24,13 @@ namespace Threads
 BaseQCallThreadEx::BaseQCallThreadEx()
 {
    // Logic
-   mTerminateFlag=false;
+   mTerminateFlag = false;
 
    // Timer
-   mTimerExecuteFlag=false;
+   mTimerExecuteFlag = false;
    mTimerPeriod = 1000;
-   mCurrentTimeCount=1;
-   mTimerCurrentTimeCount=1;
-   mThreadTimerCreateFlag = true;
+   mCurrentTimeCount = 0;
+   mTimerCurrentTimeCount = 0;
 
    mThreadPriority = get_default_qcall_thread_priority();
    mCallQueue.initialize(CallQueSize);
@@ -46,12 +45,7 @@ BaseQCallThreadEx::~BaseQCallThreadEx()
 void BaseQCallThreadEx::threadTimerInitFunction()
 {
    // Guard
-   if (mTimerPeriod == 0)
-   {
-      mThreadTimerCreateFlag = false;
-      return;
-   }
-   if (mThreadTimerCreateFlag == false) return;
+   if (mTimerPeriod == 0) return;
 
    // Bind timer callback
    mThreadTimerCall.bind (this,&BaseQCallThreadEx::threadExecuteOnTimer);

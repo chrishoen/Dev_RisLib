@@ -217,7 +217,6 @@ public:
    // not in the execution context of this thread.
    ThreadTimerEx  mThreadTimer;
    TimerCall      mThreadTimerCall;
-   bool           mThreadTimerCreateFlag;
    
    // This is executed by the timer. It updates timer variables
    // and signals the central semaphore to wake up the thread.
@@ -241,7 +240,8 @@ public:
    // update has occurred
    bool  mTimerExecuteFlag;
 
-   // Timer period in milliseconds
+   // Timer period in milliseconds.
+   // If this is zero then no timer is created.
    int   mTimerPeriod;
 
    // These give the number of timer events that have

@@ -14,6 +14,7 @@ Description:
 #include "Experiment.h"
 #include "GSettings.h"
 #include "someQCallThread1.h"
+#include "someQCallThread2.h"
 #include "someThread1.h"
 
 #define  _SOMETIMERTHREAD1_CPP_
@@ -119,6 +120,20 @@ void TimerThread1::executeOnTimer(int aTimeCount)
             case 1:
             {
                gQCallThread1->mC101QCall.invoke(aTimeCount);
+            }
+            break;
+         }
+      }
+      break;
+
+      //------------------------------------------------------------------------
+      case GSettings::cTestThread_QCallThread2:
+      {
+         switch (gGSettings.mTestNumber)
+         {
+            case 1:
+            {
+               gQCallThread2->mC101QCall.invoke(aTimeCount);
             }
             break;
          }

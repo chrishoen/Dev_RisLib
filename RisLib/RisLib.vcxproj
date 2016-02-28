@@ -78,6 +78,7 @@
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
     <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\risStatistics.h" />
+    <ClInclude Include="Source\risThreadsQCallThreadBase.h" />
     <ClInclude Include="Source\risThreadsSynch.h" />
     <ClInclude Include="Source\risTimeMarker.h" />
     <ClInclude Include="Source\ris_priorities.h" />

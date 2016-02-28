@@ -5,6 +5,7 @@
 
 #include "someThread1.h"
 #include "someQCallThread1.h"
+#include "someQCallThread2.h"
 #include "someTimerThread1.h"
 #include "Experiment.h"
 #include "GSettings.h"
@@ -34,6 +35,12 @@ int main(int argc,char** argv)
    {
       gQCallThread1 = new QCallThread1;
       gQCallThread1->launchThread();
+   }
+
+   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread2)
+   {
+      gQCallThread2 = new QCallThread2;
+      gQCallThread2->launchThread();
    }
 
    if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
@@ -69,6 +76,12 @@ int main(int argc,char** argv)
    {
       gQCallThread1->shutdownThread();
       delete gQCallThread1;
+   }
+
+   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread2)
+   {
+      gQCallThread2->shutdownThread();
+      delete gQCallThread2;
    }
 
    //--------------------------------------------------------------------

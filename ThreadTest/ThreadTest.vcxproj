@@ -184,6 +184,7 @@
     <ClCompile Include="Source\risThreadsTimerEx.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
     <ClCompile Include="Source\someQCallThread1.cpp" />
+    <ClCompile Include="Source\someQCallThread2.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
     <ClCompile Include="Source\someThread1.cpp" />
     <ClCompile Include="Source\someTimerThread1.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Source\risThreadsTimerEx.h" />
     <ClInclude Include="Source\someClass1.h" />
     <ClInclude Include="Source\someQCallThread1.h" />
+    <ClInclude Include="Source\someQCallThread2.h" />
     <ClInclude Include="Source\someShare.h" />
     <ClInclude Include="Source\someThread1.h" />
     <ClInclude Include="Source\someTimerThread1.h" />

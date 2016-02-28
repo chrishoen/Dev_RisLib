@@ -1,8 +1,8 @@
-#ifndef _SOMEQCALLTHREAD1_H_
-#define _SOMEQCALLTHREAD1_H_
+#ifndef _SOMEQCALLTHREAD2_H_
+#define _SOMEQCALLTHREAD2_H_
 
 /*==============================================================================
-File: someQCallThread1.h
+File: someQCallThread2.h
 Description:
 QCall test thread class.
 ==============================================================================*/
@@ -10,7 +10,7 @@ QCall test thread class.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risThreadsQCallThread.h"
+#include "risThreadsQCallThreadEx.h"
 
 namespace Some
 {
@@ -19,12 +19,12 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class  QCallThread1 : public Ris::Threads::BaseQCallThread
+class  QCallThread2 : public Ris::Threads::BaseQCallThreadEx
 {
 public:
-   typedef Ris::Threads::BaseQCallThread BaseClass;
+   typedef Ris::Threads::BaseQCallThreadEx BaseClass;
 
-   QCallThread1();
+   QCallThread2();
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
@@ -47,10 +47,10 @@ public:
 //******************************************************************************
 // Global instance
        
-#ifdef _SOMEQCALLTHREAD1_CPP_
-          QCallThread1* gQCallThread1;
+#ifdef _SOMEQCALLTHREAD2_CPP_
+          QCallThread2* gQCallThread2;
 #else
-   extern QCallThread1* gQCallThread1;
+   extern QCallThread2* gQCallThread2;
 #endif
 
 //******************************************************************************

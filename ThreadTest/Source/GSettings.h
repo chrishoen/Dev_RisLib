@@ -24,10 +24,9 @@ public:
 
    static const int   cTestThread_Thread1        = 1;
    static const int   cTestThread_QCallThread1   = 2;
+   static const int   cTestThread_QCallThread2   = 3;
 
-   static const int   cTimerThread_Thread1        = 1;
-   static const int   cTimerThread_Thread2        = 2;
-   static const int   cTimerThread_Thread3        = 3;
+   static const int   cTimerThread_Thread1       = 1;
 
    int   mTestNumber;
    int   mTestThread;

@@ -49,6 +49,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadQCall", "ThreadQCall\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Statistics", "Statistics\Statistics.vcxproj", "{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{1B969CC8-E47F-4AB5-803E-50B3360BEFDB}"
+	ProjectSection(SolutionItems) = preProject
+		Files\someTimerThread2.cpp = Files\someTimerThread2.cpp
+		Files\someTimerThread2.h = Files\someTimerThread2.h
+		Files\someTimerThread3.cpp = Files\someTimerThread3.cpp
+		Files\someTimerThread3.h = Files\someTimerThread3.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

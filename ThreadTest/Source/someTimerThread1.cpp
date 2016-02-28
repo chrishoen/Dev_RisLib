@@ -68,61 +68,62 @@ void TimerThread1::executeOnTimer(int aTimeCount)
 
 
    //---------------------------------------------------------------------------
-   // Send to test thread
-
    switch (gGSettings.mTestThread)
    {
 
-   case GSettings::cTestThread_None:
-   {
-      showThreadInfo(aTimeCount);
-   }
-   break;
+      //------------------------------------------------------------------------
+      case GSettings::cTestThread_None:
+      {
+         showThreadInfo(aTimeCount);
+      }
+      break;
 
-   case GSettings::cTestThread_Thread1:
-   {
-      switch (gGSettings.mTestNumber)
+      //------------------------------------------------------------------------
+      case GSettings::cTestThread_Thread1:
       {
-      case 1:
-      {
-         gThread1->mBinarySem.put();
+         switch (gGSettings.mTestNumber)
+         {
+            case 1:
+            {
+               gThread1->mBinarySem.put();
+            }
+            break;
+            case 2:
+            {
+               gThread1->mCountingSem.put();
+            }
+            break;
+            case 3:
+            {
+               Class1A* tObject = 0;
+               gShare.mPointerQueue.writePtr(tObject);
+               gThread1->mCountingSem.put();
+            }
+            break;
+            case 4:
+            {
+               Class1A* tObject = new Class1A;
+               gShare.mPointerQueue.writePtr(tObject);
+               gThread1->mCountingSem.put();
+            }
+            break;
+         }
       }
       break;
-      case 2:
-      {
-         gThread1->mCountingSem.put();
-      }
-      break;
-      case 3:
-      {
-         Class1A* tObject = 0;
-         gShare.mPointerQueue.writePtr(tObject);
-         gThread1->mCountingSem.put();
-      }
-      break;
-      case 4:
-      {
-         Class1A* tObject = new Class1A;
-         gShare.mPointerQueue.writePtr(tObject);
-         gThread1->mCountingSem.put();
-      }
-      break;
-      }
-   }
-   break;
 
-   case GSettings::cTestThread_QCallThread1:
-   {
-      switch (gGSettings.mTestNumber)
+      //------------------------------------------------------------------------
+      case GSettings::cTestThread_QCallThread1:
       {
-      case 1:
-      {
-         gQCallThread1->mC101QCall.invoke(aTimeCount);
+         switch (gGSettings.mTestNumber)
+         {
+            case 1:
+            {
+               gQCallThread1->mC101QCall.invoke(aTimeCount);
+            }
+            break;
+         }
       }
       break;
-      }
-   }
-   break;
 
    }
 }

@@ -180,7 +180,6 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\risLFPointerQueue.cpp" />
-    <ClCompile Include="Source\risThreadsApcTimer.cpp" />
     <ClCompile Include="Source\risThreadsQCallThreadEx.cpp" />
     <ClCompile Include="Source\risThreadsTimerEx.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
@@ -197,7 +196,6 @@
     <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\risLFPointerQueue.h" />
-    <ClInclude Include="Source\risThreadsApcTimer.h" />
     <ClInclude Include="Source\risThreadsQCallThreadEx.h" />
     <ClInclude Include="Source\risThreadsTimerEx.h" />
     <ClInclude Include="Source\someClass1.h" />

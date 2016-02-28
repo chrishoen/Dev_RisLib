@@ -37,7 +37,7 @@ public:
    void cancel();
 
    //---------------------------------------------------------------------------
-   // members
+   // Members
 
    // Pointer to function to execute periodically
    TimerCall  mTimerCall;

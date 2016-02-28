@@ -22,9 +22,6 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreadsApcTimer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someShare.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -67,9 +64,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsApcTimer.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someShare.h">

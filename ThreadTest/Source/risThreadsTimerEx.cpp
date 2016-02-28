@@ -109,22 +109,6 @@ void ThreadTimerEx::startTimer (TimerCall aTimerCall,int aTimerPeriod)
    HANDLE tHandle = 0;
    ULONG  tFlags  = 0;
 
-#if 0
-   tFlags = WT_EXECUTEINTIMERTHREAD;
-// tFlags = WT_EXECUTEINPERSISTENTTHREAD;
-
-// tHandle = CreateTimerQueue();
- 
-
-   CreateTimerQueueTimer(
-      &tHandle,
-      0,
-      WaitOrTimerCallback_Proc,
-      (void*)this,
-      (DWORD)mTimerPeriod,
-      (DWORD)mTimerPeriod,
-      tFlags);
-#endif
 }
 
 //******************************************************************************

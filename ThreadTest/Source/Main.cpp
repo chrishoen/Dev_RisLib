@@ -3,9 +3,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "someApcThread.h"
 #include "someThread1.h"
-#include "someApcThread.h"
 #include "someQCallThread1.h"
 #include "someTimerThread1.h"
 #include "someTimerThread2.h"
@@ -32,12 +30,6 @@ int main(int argc,char** argv)
    {
       gThread1 = new Thread1;
       gThread1->launchThread();
-   }
-
-   if (gGSettings.mTestThread == GSettings::cTestThread_ApcThread)
-   {
-      gApcThread = new ApcThread;
-      gApcThread->launchThread();
    }
 
    if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
@@ -97,12 +89,6 @@ int main(int argc,char** argv)
    {
       gThread1->shutdownThread();
       delete gThread1;
-   }
-
-   if (gGSettings.mTestThread == GSettings::cTestThread_ApcThread)
-   {
-      gApcThread->shutdownThread();
-      delete gApcThread;
    }
 
    if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)

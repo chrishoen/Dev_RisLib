@@ -16,7 +16,7 @@ UdpTxTMessageSocket -- udp transmit socket
 #include "risByteTMessageCopier.h"
 #include "risByteContent.h"
 #include "risSockets.h"
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 
 namespace Ris
 {

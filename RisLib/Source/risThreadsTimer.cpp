@@ -5,7 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 #include "prnPrint.h"
 
 #include "risThreadsTimerThread.h"

@@ -10,8 +10,7 @@ QCall test thread class.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risThreadsApcQCallThread.h"
-//#include "risThreadsQCallThreadEx.h"
+#include "risThreadsQCallThreadEx.h"
 
 namespace Some
 {
@@ -20,12 +19,10 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class  Thread1 : public Ris::Threads::BaseApcQCallThread
-//class  Thread1 : public Ris::Threads::BaseQCallThreadEx
+class  Thread1 : public Ris::Threads::BaseQCallThreadEx
 {
 public:
-   typedef Ris::Threads::BaseApcQCallThread BaseClass;
-// typedef Ris::Threads::BaseQCallThreadEx BaseClass;
+   typedef Ris::Threads::BaseQCallThreadEx BaseClass;
 
    Thread1();
 

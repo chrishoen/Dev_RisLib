@@ -6,7 +6,7 @@
 
 #include "CmdLineExec.h"
 
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 #include "risPortableCalls.h"
 
 #include "someTimerThread.h"

@@ -13,7 +13,6 @@ Description:
 #include "someClass1.h"
 #include "Experiment.h"
 #include "GSettings.h"
-#include "someApcThread.h"
 #include "someQCallThread1.h"
 #include "someThread1.h"
 
@@ -106,19 +105,6 @@ void TimerThread1::executeOnTimer(int aTimeCount)
          Class1A* tObject = new Class1A;
          gShare.mPointerQueue.writePtr(tObject);
          gThread1->mCountingSem.put();
-      }
-      break;
-      }
-   }
-   break;
-
-   case GSettings::cTestThread_ApcThread:
-   {
-      switch (gGSettings.mTestNumber)
-      {
-      case 1:
-      {
-         gApcThread->enqueueApc();
       }
       break;
       }

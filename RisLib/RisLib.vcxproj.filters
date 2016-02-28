@@ -64,9 +64,6 @@
     <ClCompile Include="Source\risSockets_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreads_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risThreadsTimerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -142,6 +139,12 @@
     <ClCompile Include="Source\risStatistics.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risThreadsThreads_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risThreadsSynch_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -214,9 +217,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risSockets.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreads.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsQueue.h">
@@ -310,6 +310,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risStatistics.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsThreads.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsSynch.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

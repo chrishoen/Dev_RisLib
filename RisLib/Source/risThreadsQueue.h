@@ -18,7 +18,7 @@ class Queue_ManyToOneWaitableHiLo<class Element,int Allocate>
 #include "prnPrint.h"
 
 #include "risContainers.h"
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 
 namespace Ris
 {

@@ -16,7 +16,7 @@ UdpTxDClassSocket -- udp transmit socket
 #include "risByteContent.h"
 #include "risByteDClassCopier.h"
 #include "risSockets.h"
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 
 namespace Ris
 {

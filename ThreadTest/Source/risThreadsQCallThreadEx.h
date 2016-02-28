@@ -134,7 +134,7 @@ executed by the thread run function and then deleted.
 #include "risPortableTypes.h"
 #include "risCallPointer.h"
 #include "risLFPointerQueue.h"
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 #include "risThreadsTimerEx.h"
 #include "risThreadsSynch.h"
 

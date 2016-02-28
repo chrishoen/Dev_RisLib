@@ -36,7 +36,7 @@ or callbacks in their configure calls.
 #include "risCallPointer.h"
 #include "risContainers.h"
 #include "risSockets.h"
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
 
 #include "risNetTcpMsgSocket.h"

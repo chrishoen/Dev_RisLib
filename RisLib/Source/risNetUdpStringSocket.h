@@ -12,7 +12,7 @@ UdpTxStringSocket -- udp transmit socket
 //******************************************************************************
 //******************************************************************************
 
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 #include "risSockets.h"
 
 namespace Ris

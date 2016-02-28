@@ -24,15 +24,6 @@
     <ClCompile Include="Source\someTimerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreadsApcTimer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsApcQCallThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsSynch_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risThreadsQCallThreadEx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -57,15 +48,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someTimerThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsApcTimer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsApcQCallThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsSynch.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsQCallThreadEx.h">

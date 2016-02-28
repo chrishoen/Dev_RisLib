@@ -135,7 +135,7 @@ executed by the thread run function and then deleted.
 #include "risPortableTypes.h"
 #include "risCallPointer.h"
 #include "risContainers.h"
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 #include "risThreadsTimer.h"
 
 #pragma managed(push,off)

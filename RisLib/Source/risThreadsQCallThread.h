@@ -136,7 +136,7 @@ executed by the thread run function and then deleted.
 #include "risContainers.h"
 #include "risThreadsThreads.h"
 #include "risThreadsTimer.h"
-#include "risThreadsQCallThreadBase.h"
+#include "risThreadsQCallTarget.h"
 
 namespace Ris
 {
@@ -162,7 +162,7 @@ namespace Threads
 // sets an mTerminateFlag. The threadRunFunction polls the mTerminateFlag
 // and exits the thread if it is true.
 
-class BaseQCallThread : public Ris::Threads::BaseThread,public BaseBaseQCallThread
+class BaseQCallThread : public Ris::Threads::BaseThread,public BaseQCallTarget
 {
 public:
    BaseQCallThread();

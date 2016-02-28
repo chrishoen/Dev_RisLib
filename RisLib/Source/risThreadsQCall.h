@@ -224,14 +224,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -290,14 +290,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -358,14 +358,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -428,14 +428,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -500,14 +500,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -574,14 +574,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -650,14 +650,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -728,14 +728,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -808,14 +808,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseBaseQCallThread::putQCallToThread);
+      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTarget::putQCallToThread);
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };

@@ -1,5 +1,5 @@
-#ifndef _RISTHREADSQCALLTHREADBASE_H_
-#define _RISTHREADSQCALLTHREADBASE_H_
+#ifndef _RISTHREADSQCALLTARGET_H_
+#define _RISTHREADSQCALLTARGET_H_
 
 //******************************************************************************
 //******************************************************************************
@@ -16,7 +16,7 @@ namespace Threads
 
 class BaseQCall;
 
-class BaseBaseQCallThread
+class BaseQCallTarget
 {
 public:
    virtual void putQCallToThread(BaseQCall* aQCall)=0;

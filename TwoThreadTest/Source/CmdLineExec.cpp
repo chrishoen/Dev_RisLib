@@ -42,7 +42,7 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10*100);
+   aCmd->setArgDefault(1,10);
    gControllerThread->mTest1QCall(aCmd->argInt(1));
 }
 

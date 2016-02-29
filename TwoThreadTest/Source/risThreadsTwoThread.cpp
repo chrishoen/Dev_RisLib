@@ -146,6 +146,7 @@ BaseTwoThread::BaseTwoThread()
 
    mShortThread->mThreadPriority = get_default_short_thread_priority();
    mLongThread->mThreadPriority = get_default_long_thread_priority();
+   mLongThread->mTimerPeriod = 0;
 
 
    // Default exception codes

@@ -95,12 +95,15 @@ public:
 
    void launchThreads(); 
    void shutdownThreads();
-   void executeOnTimer(int aTimerCount);
 
+   //--------------------------------------------------------------
    // Thread methods, overloaded by inheritor
-   virtual void threadInitFunction();
-   virtual void threadExitFunction();
-   virtual void threadExceptionFunction(char* aStr);
+   // These execute in the context of the short thread
+
+   virtual void threadInitFunction(){}
+   virtual void threadExitFunction(){}
+   virtual void threadExceptionFunction(char* aStr){}
+   virtual void executeOnTimer(int aTimerCount){}
 
    //--------------------------------------------------------------
    // Thread members

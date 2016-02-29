@@ -106,7 +106,7 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
    // If the header is not valid then error
    if (!tMessageParser->mHeaderValidFlag)
    {
-      Prn::print(0,0, "ERROR doRecv1 INVALID HEADER ");
+      Prn::print(0,"ERROR doRecv1 INVALID HEADER ");
       return;
    }
 

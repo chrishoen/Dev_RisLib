@@ -80,7 +80,7 @@ void ControllerThread::executeTest1(int aN)
    }
    catch(int aStatus)
    {
-      Prn::print(0,0, "Exception ControllerThread::executeTest1 ABORTED  %d",aStatus);
+      Prn::print(0, "Exception ControllerThread::executeTest1 ABORTED  %d",aStatus);
    }
    Prn::print(0,"ControllerThread::executeTest1 END   %04d",aN);
 }
@@ -96,7 +96,7 @@ void ControllerThread::executeTest2(int aN)
    }
    catch(int aStatus)
    {
-      Prn::print(0,0, "Exception ControllerThread::executeTest2 ABORTED  %d",aStatus);
+      Prn::print(0, "Exception ControllerThread::executeTest2 ABORTED  %d",aStatus);
    }
    Prn::print(0,"ControllerThread::executeTest2 END   %04d",aN);
 }
@@ -118,7 +118,7 @@ void ControllerThread::executeSend(int aId,int aParm1,int aParm2)
    }
    catch(int aStatus)
    {
-      Prn::print(0,0, "Exception ControllerThread::executeSend ABORTED  %d",aStatus);
+      Prn::print(0, "Exception ControllerThread::executeSend ABORTED  %d",aStatus);
    }
 }
 
@@ -207,7 +207,7 @@ void ControllerThread::executeSequence(int aId,int aIterations,int aCommandTimeo
    }
    catch(int aStatus)
    {
-      Prn::print(0,0, "Exception ControllerThread::executeSequence ABORTED  %d",aStatus);
+      Prn::print(0, "Exception ControllerThread::executeSequence ABORTED  %d",aStatus);
    }
 }
 

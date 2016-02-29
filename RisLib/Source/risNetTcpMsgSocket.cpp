@@ -184,7 +184,7 @@ bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
       Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER");
       for (int i=0;i<40;i++) 
       {
-         Prn::print(0,0, "%02d %02x",i,0xff&(unsigned)mRxBuffer[i]);
+         Prn::print(0, "%02d %02x",i,0xff&(unsigned)mRxBuffer[i]);
       }
       return false;
    }

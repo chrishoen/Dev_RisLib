@@ -371,7 +371,7 @@ void BaseQCallThread::putQCallToThread(BaseQCall* aQCall)
    }
    else 
    {
-      Prn::print(0,0, "ERROR CallQue FULL");
+      Prn::print(0,"ERROR CallQue FULL");
       delete aQCall;
    }
    mCallMutex.unlock();

@@ -63,7 +63,7 @@ VOID CALLBACK Timer_TimerProc(
 
    double tTestPeriodUsec = double(tTimer->mTimerPeriod*1000.0);
    double tTimerError =  tTestPeriodUsec - rTimeMarker2.elapsedTimeInMicroseconds();
-   Prn::print(0,0,"Timer_TimerProc %d %8.2f",tTimer->mCurrentTimeCount,tTimerError);
+   Prn::print(0, "Timer_TimerProc %d %8.2f",tTimer->mCurrentTimeCount,tTimerError);
 #endif
 }
 
@@ -88,7 +88,7 @@ VOID CALLBACK WaitOrTimerCallback_Proc(
 
    double tTestPeriodUsec = double(tTimer->mTimerPeriod*1000.0);
    double tTimerError =  tTestPeriodUsec - rTimeMarker2.elapsedTimeInMicroseconds();
-   Prn::print(0,0,"Timer_TimerProc %d %8.2f",tTimer->mCurrentTimeCount,tTimerError);
+   Prn::print(0, "Timer_TimerProc %d %8.2f",tTimer->mCurrentTimeCount,tTimerError);
 #endif
 }
 

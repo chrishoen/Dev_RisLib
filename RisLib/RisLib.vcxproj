@@ -58,7 +58,6 @@
     <ClCompile Include="Source\risSockets_win.cpp" />
     <ClCompile Include="Source\risThreadsCPSpecific.cpp" />
     <ClCompile Include="Source\risThreadsProcess_win.cpp" />
-    <ClCompile Include="Source\risThreadsQCall.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsTimer.cpp" />
     <ClCompile Include="Source\risThreadsTimerThread.cpp" />

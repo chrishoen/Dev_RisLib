@@ -103,23 +103,30 @@ public:
    // It calls the following four subfunctions. The thread launch doesn't 
    // return until the first two have completed.
 
-   virtual void threadFunction(); 
+   void threadFunction();
 
    // Thread function initialization and run sections.
    // These are called by threadFunction, see above.
 
-   // This is an initialization section. It's purpose is to provide a thread
-   // initialization such that the launching thread waits for it to complete
-   virtual void threadInitFunction(); 
+   // This is used by inheritors to initialize resources. This should be
+   // overloaded by thread base classes and not by thread user classes.
+   virtual void threadResourceInitFunction(){}
+   // Initialization section, overload provided by inheritors
+   // It is intended that this will be overloaded by 
+   // inheriting thread base classes and by inheriting user classes
+   virtual void threadInitFunction(){}
    // This is used by inheritors to initialize thread timers. This should be
    // overloaded by thread base classes and not by thread user classes.
    // The launching thread also waits for this to complete.
-   virtual void threadTimerInitFunction(); 
+   virtual void threadTimerInitFunction(){}
    // This should be used by inheritors to do the actual work of the thread
-   virtual void threadRunFunction(); 
+   virtual void threadRunFunction(){}
    // This should be used by inheritors when the thread exits.It is used
    // for any thread cleanup
-   virtual void threadExitFunction(); 
+   virtual void threadExitFunction(){}
+   // This is used by inheritors to finalize resources. This should be
+   // overloaded by thread base classes and not by thread user classes.
+   virtual void threadResourceExitFunction(){}
 
    // This is called if there is an exception thrown in the above threadFunction.
    // Exceptions should throw a char*.

@@ -154,6 +154,9 @@ void BaseThread::threadFunction()
    {
       // Seed random numbers for this thread
       my_srand();
+      // This is used by inheritors to initialize resources. This should be
+      // overloaded by thread base classes and not by thread user classes.
+      threadResourceInitFunction();
       // Initialization section, overload provided by inheritors
       // It is intended that this will be overloaded by 
       // inheriting thread base classes and by inheriting user classes
@@ -168,6 +171,9 @@ void BaseThread::threadFunction()
       threadRunFunction();
       // Exit section, overload provided by inheritors
       threadExitFunction();
+      // This is used by inheritors to finalize resources. This should be
+      // overloaded by thread base classes and not by thread user classes.
+      threadResourceExitFunction();
    }
    catch (char* aStr)
    {
@@ -179,30 +185,6 @@ void BaseThread::threadFunction()
       // Exception section, overload provided by inheritors
       threadExceptionFunction("UNKNOWN");
    }
-}
-
-//******************************************************************************
-
-void BaseThread::threadTimerInitFunction()
-{
-}
-
-//******************************************************************************
-
-void BaseThread::threadInitFunction()
-{
-}
-
-//******************************************************************************
-
-void BaseThread::threadRunFunction()
-{
-}
-
-//******************************************************************************
-
-void BaseThread::threadExitFunction()
-{
 }
 
 //******************************************************************************

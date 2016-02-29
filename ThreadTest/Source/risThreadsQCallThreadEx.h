@@ -172,17 +172,20 @@ public:
    //--------------------------------------------------------------
    // Thread base class overloads:
 
+   // This initializes the thread call queue
+   void threadResourceInitFunction();
+
    // This sets up the thread timer
-   virtual void threadTimerInitFunction(); 
+   void threadTimerInitFunction(); 
 
    // This executes a loop that calls threadRunRecursive to process 
    // the call queue. The loop terminates on the mTerminateFlag.
    // It waits for the call queue semaphore, extracts a call from
    // the call queue, and executes the call. 
-   virtual void threadRunFunction(); 
+   void threadRunFunction(); 
 
-   // Empties the call queue
-   void threadExitFunction(); 
+   // This finalizes the thread call queue
+   void threadResourceExitFunction();
 
    // Sets the mTerminateFlag and posts to the call semaphore.
    // Then it waits for the thread to terminate.
@@ -194,16 +197,11 @@ public:
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
-   // call queue:
+   // Call queue:
 
-   // Mutex protected waitable queue
-   //   mCallQue    is a queue of quecalls
-   //   mCallSem    is signaled for mCallQue or timer functions
-   //   mCallMutex  is mutex protection
-
-   enum {CallQueSize=200};
-   Ris::LFPointerQueue                             mCallQueue;
-   CountingSemaphore                               mCentralSem;
+   CountingSemaphore    mCentralSem;
+   Ris::LFPointerQueue  mCallQueue;
+   int                  mCallQueSize;
 
    //--------------------------------------------------------------
    // This is called by a QCall's invoke method to put itself to

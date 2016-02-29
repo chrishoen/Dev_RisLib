@@ -25,6 +25,7 @@ BaseQCallThreadEx::BaseQCallThreadEx()
 {
    // Logic
    mTerminateFlag = false;
+   mCallQueSize=100;
 
    // Timer
    mTimerExecuteFlag = false;
@@ -33,11 +34,18 @@ BaseQCallThreadEx::BaseQCallThreadEx()
    mTimerCurrentTimeCount = 0;
 
    mThreadPriority = get_default_qcall_thread_priority();
-   mCallQueue.initialize(CallQueSize);
 }
 
 BaseQCallThreadEx::~BaseQCallThreadEx()
 {
+}
+
+//******************************************************************************
+
+void BaseQCallThreadEx::threadResourceInitFunction()
+{
+   // Initialize the call queue
+   mCallQueue.initialize(mCallQueSize);
 }
 
 //******************************************************************************
@@ -150,12 +158,11 @@ void BaseQCallThreadEx::threadRunFunction()
 //******************************************************************************
 // Thread init function, base class overload.
 
-void BaseQCallThreadEx::threadExitFunction()
+void BaseQCallThreadEx::threadResourceExitFunction()
 {
-   Prn::print(Prn::QCallInit1, "BaseQCallThreadEx::threadExitFunction");
+   Prn::print(Prn::QCallInit1, "BaseQCallThreadEx::threadResourceExitFunction");
 
    // Empty the call queue
-
    while (true)
    {
       BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
@@ -168,6 +175,9 @@ void BaseQCallThreadEx::threadExitFunction()
          break;
       }
    }
+
+   // Finalize the call queue
+   mCallQueue.finalize();
 }
 
 //******************************************************************************

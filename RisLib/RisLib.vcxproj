@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\risByteBuffer.cpp" />
+    <ClCompile Include="Source\risLFPointerQueue.cpp" />
     <ClCompile Include="Source\risNetUdpTMessageSocket.cpp" />
     <ClCompile Include="Source\risNetUdpTMessageThread.cpp" />
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
@@ -61,7 +62,6 @@
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsTimer.cpp" />
     <ClCompile Include="Source\risThreadsTimerThread.cpp" />
-    <ClCompile Include="Source\risThreadsTwoThread.cpp" />
     <ClCompile Include="Source\risThreadsThreads_win.cpp" />
     <ClCompile Include="Source\risTime.cpp" />
     <ClCompile Include="Source\risTimeDuration.cpp" />
@@ -72,6 +72,8 @@
     <ClInclude Include="Source\risByteBuffer.h" />
     <ClInclude Include="Source\risByteTMessage.h" />
     <ClInclude Include="Source\risByteTMessageCopier.h" />
+    <ClInclude Include="Source\risLFIndex.h" />
+    <ClInclude Include="Source\risLFPointerQueue.h" />
     <ClInclude Include="Source\risNetPortDef.h" />
     <ClInclude Include="Source\risNetUdpTMessageSocket.h" />
     <ClInclude Include="Source\risNetUdpTMessageThread.h" />
@@ -122,7 +124,6 @@
     <ClInclude Include="Source\risThreadsQueue.h" />
     <ClInclude Include="Source\risThreadsTimer.h" />
     <ClInclude Include="Source\risThreadsTimerThread.h" />
-    <ClInclude Include="Source\risThreadsTwoThread.h" />
     <ClInclude Include="Source\risTime.h" />
     <ClInclude Include="Source\risTimeDuration.h" />
   </ItemGroup>

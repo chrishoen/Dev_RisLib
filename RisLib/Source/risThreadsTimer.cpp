@@ -4,11 +4,10 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <windows.h> 
 
-#include "risThreadsThreads.h"
 #include "prnPrint.h"
 
-#include "risThreadsTimerThread.h"
 #include "risThreadsTimer.h"
 
 namespace Ris
@@ -19,60 +18,57 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// class definition for implementation specific timer thread
+// This is a c-function that is passed to the windows timer service to
+// execute periodically. It is passed a pointer to a Timer object.
+// It increments the current time count and calls the user timer call.
 
-class TimerTimerThread : public Ris::Threads::BaseTimerThread
+VOID CALLBACK Timer_TimerProc(
+   UINT uTimerID,
+   UINT uMsg,
+   DWORD_PTR dwUser,
+   DWORD_PTR dw1,
+   DWORD_PTR dw2)
 {
-public:
-   typedef Ris::Threads::BaseTimerThread BaseClass;
+   // Convert pointer
+   ThreadTimer* tTimer = (ThreadTimer*)dwUser;
 
-   TimerTimerThread(TimerCall aTimerCall,int aTimerPeriod,int aThreadPriority)
-   {
-      mFirstFlag=true;
-      mTimerCall                 = aTimerCall;
-      BaseClass::mTimerPeriod    = aTimerPeriod;
-      BaseClass::mThreadPriority = aThreadPriority;
-   }
+   // Increment current time
+   tTimer->mCurrentTimeCount++;
 
-   //--------------------------------------------------------------
-   // Base class overloads:
+   // Invoke user timer call
+   tTimer->mTimerCall(tTimer->mCurrentTimeCount);
+}
 
-   void executeOnTimer(int aTimerCount)
-   {
-      // Ignore first occurrence
-      if (mFirstFlag)
-      {
-         mFirstFlag=false;
-         return;
-      }
 
-      // Invoke owner timer call
-      mTimerCall(aTimerCount);
-   }
+VOID CALLBACK WaitOrTimerCallback_Proc(
+  __in  PVOID lpParameter,
+  __in  BOOLEAN TimerOrWaitFired
+)
+{
+   // Convert pointer
+   ThreadTimer* tTimer = (ThreadTimer*)lpParameter;
 
-   //--------------------------------------------------------------
-   // Members
+   // Increment current time
+   tTimer->mCurrentTimeCount++;
 
-   TimerCall  mTimerCall;
-   bool       mFirstFlag;
-};
+   // Invoke user timer call
+   tTimer->mTimerCall(tTimer->mCurrentTimeCount);
+}
+
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Class definition for implementation specific
+// class definition for implementation specific
 
 class ThreadTimer::Specific
 {
 public:
    Specific()
    {
-      mTimerThread=0;
+      mTimerId=0;
    }
-   TimerTimerThread* mTimerThread;
+   int mTimerId;
 };
 
 //******************************************************************************
@@ -83,6 +79,7 @@ ThreadTimer::ThreadTimer()
 {
    // Initialize members
    mTimerPeriod=1000;
+   mCurrentTimeCount=0;
 
    // Create new specific implementation
    mSpecific = new Specific;
@@ -96,27 +93,31 @@ ThreadTimer::~ThreadTimer()
 
 //******************************************************************************
 
-void ThreadTimer::startTimer(
-   TimerCall aTimerCall,
-   int       aTimerPeriod,
-   int       aThreadPriority)
+void ThreadTimer::startTimer (TimerCall aTimerCall,int aTimerPeriod)
 {
-   mTimerCall      = aTimerCall;
-   mTimerPeriod    = aTimerPeriod;
-   mThreadPriority = aThreadPriority;
+   mTimerCall    = aTimerCall;
+   mTimerPeriod  = aTimerPeriod;
 
-   // Create and launch timer thread  
-   mSpecific->mTimerThread = new TimerTimerThread(mTimerCall,mTimerPeriod,mThreadPriority);
-   mSpecific->mTimerThread->launchThread();
+   // Create a windows timer for periodic
+   mSpecific->mTimerId = timeSetEvent(
+      mTimerPeriod,
+      0,
+      Timer_TimerProc,
+     (DWORD_PTR)this,
+      TIME_PERIODIC);
+
+   HANDLE tHandle = 0;
+   ULONG  tFlags  = 0;
+
 }
 
 //******************************************************************************
 
 void ThreadTimer::cancel()
 {
-   if (mSpecific->mTimerThread != 0)
+   if (mSpecific->mTimerId != 0)
    {
-      mSpecific->mTimerThread->shutdownThread();
+      timeKillEvent(mSpecific->mTimerId);
    }
 }
 

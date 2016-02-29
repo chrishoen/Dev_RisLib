@@ -133,9 +133,10 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 #include "risPortableTypes.h"
 #include "risCallPointer.h"
-#include "risContainers.h"
+#include "risLFPointerQueue.h"
 #include "risThreadsThreads.h"
 #include "risThreadsTimer.h"
+#include "risThreadsSynch.h"
 #include "risThreadsQCallTarget.h"
 
 namespace Ris
@@ -171,39 +172,36 @@ public:
    //--------------------------------------------------------------
    // Thread base class overloads:
 
+   // This initializes the thread call queue
+   void threadResourceInitFunction();
+
    // This sets up the thread timer
-   virtual void threadTimerInitFunction(); 
+   void threadTimerInitFunction(); 
 
    // This executes a loop that calls threadRunRecursive to process 
    // the call queue. The loop terminates on the mTerminateFlag.
    // It waits for the call queue semaphore, extracts a call from
    // the call queue, and executes the call. 
-   virtual void threadRunFunction(); 
+   void threadRunFunction(); 
 
-   // Empties the call queue
-   void threadExitFunction(); 
+   // This finalizes the thread call queue
+   void threadResourceExitFunction();
 
    // Sets the mTerminateFlag and posts to the call semaphore.
    // Then it waits for the thread to terminate.
    void shutdownThread(); 
 
    //Termination Flag
-   bool   mTerminateFlag;
+   bool mTerminateFlag;
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
-   // call queue:
+   // Call queue:
 
-   // Mutex protected waitable queue
-   //   mCallQue    is a queue of quecalls
-   //   mCallSem    is signaled for mCallQue or timer functions
-   //   mCallMutex  is mutex protection
-
-   enum {CallQueSize=200};
-   Ris::Containers::Queue<BaseQCall*,CallQueSize>  mCallQue;
-   CountingSemaphore                               mCallSem;
-   MutexSemaphore                                  mCallMutex;   
+   CountingSemaphore    mCentralSem;
+   Ris::LFPointerQueue  mCallQueue;
+   int                  mCallQueSize;
 
    //--------------------------------------------------------------
    // This is called by a QCall's invoke method to put itself to
@@ -213,77 +211,41 @@ public:
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
-   // This mutex serializes execution between timer
-   // and qcall execution
-   MutexSemaphore  mExecutionMutex;
-
-   void lockExecution();
-   void unlockExecution();
-
-   // If this is called then execution is synchronized with
-   // another thread. It sets the SynchronizedExecutionMutex
-   // to point to ExecutionMutex of the other thread and uses
-   // it in place of its own ExecutionMutex.
-
-   void synchronizeExecutionWith(BaseQCallThread* aOtherThread);
-   MutexSemaphore*  mSynchronizedExecutionMutex;
-
-
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
    // Thread timer. It periodically executes threadExecuteOnTimer,
    // not in the execution context of this thread.
-   ThreadTimer  mThreadTimer;
-   TimerCall    mThreadTimerCall;
-   bool         mThreadTimerCreateFlag;
-   int          mTimerThreadPriority;
-
-   // This is directly executed by the timer. It calls
-   // inheritor executeOnTimer and is protected by the
-   // execution mutex
-   void threadExecuteOnTimer(int aCurrentTimeCount);
-
-   // This is posted to by the above call at the 
-   // completion of timer execution, if the down counter
-   // is not zero and then decrements to zero;
-
-   // Timer completion notification.
-   // The above threadExecuteOnTimer call posts to this semaphore,
-   // if the down counter is not zero and then decrements to zero.
-   BinarySemaphore mTimerCompletionSem;
-   int             mTimerCompletionDownCounter;
+   ThreadTimer    mThreadTimer;
+   TimerCall      mThreadTimerCall;
+   
+   // This is executed by the timer. It updates timer variables
+   // and signals the central semaphore to wake up the thread.
+   // aCurrentTimeCount gives the number of timer events that
+   // have occurred since thread launch.
+   virtual void threadExecuteOnTimer(int aCurrentTimeCount);
 
    // Inheritors provide an overload for this.
+   // It is executed in the context of this thread, after the
+   // central semaphore wakes up.
+   // aCurrentTimeCount gives the number of timer events that
+   // have occurred since thread launch.
+   // It is called by threadRunFunction and is caused by
+   // threadExecuteOnTimer.
    virtual void executeOnTimer(int aCurrentTimeCount){}
 
-
-   // The following method returns a status code
-   enum
-   {
-      TimerCompletion_None     = 0,
-      TimerCompletion_Timeout  = 1,
-      TimerCompletion_Aborted  = 2,
-      TimerCompletion_Forced   = 3,
-   };
-
-   // This waits for timer completions
-   int threadWaitForTimerCompletion(
-      int aTimerCount); 
-
-   // Timer completion code, set by above method
-   int mTimerCompletionCode;
-
-   // This aborts waits for timer completions
-   void threadAbortTimerCompletion();
-
-   // This forces a timer completion
-   void threadForceTimerCompletion();
-
    //--------------------------------------------------------------
-   // Timer period in milliseconds
+   // Timer state:
 
+   // Set by threadExecuteOnTimer to indicate that a timer
+   // update has occurred
+   bool  mTimerExecuteFlag;
+
+   // Timer period in milliseconds.
+   // If this is zero then no timer is created.
    int   mTimerPeriod;
+
+   // These give the number of timer events that have
+   // occurred since thread launch
+   int   mCurrentTimeCount;
+   int   mTimerCurrentTimeCount;
 };
 
 //******************************************************************************

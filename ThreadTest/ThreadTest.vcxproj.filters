@@ -28,16 +28,7 @@
     <ClCompile Include="Source\someThread1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreadsQCallThreadEx.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsTimerEx.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someQCallThread1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risLFPointerQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\someTimerThread1.cpp">
@@ -72,15 +63,6 @@
     <ClInclude Include="Source\someQCallThread1.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risLFPointerQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsQCallThreadEx.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsTimerEx.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\someTimerThread1.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -88,9 +70,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someQCallThread2.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risLFIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,6 +18,12 @@ namespace Some
 
 ControllerThread::ControllerThread()
 {
+   // Set base class thread priority
+   BaseClass::mShortThread->setThreadPriorityHigh();
+
+   // Set timer period
+   BaseClass::mShortThread->mTimerPeriod = 1000;
+
    // Base class call pointers
    BaseClass::mShortThread->mThreadInitCallPointer.bind(this,&ControllerThread::threadInitFunction);
    BaseClass::mShortThread->mThreadExitCallPointer.bind(this,&ControllerThread::threadExitFunction);
@@ -32,21 +38,7 @@ ControllerThread::ControllerThread()
 
    // Members
    mTPFlag=true;
-}
 
-//******************************************************************************
-// This sets base thread configuration members
-
-void ControllerThread::configureThreads()
-{
-   // Set base class configuration members to defaults
-   BaseClass::configureThreads();
-
-   // Set base class thread priority
-   BaseClass::mShortThread->setThreadPriorityHigh();
-
-   // Set timer period
-   BaseClass::mShortThread->mTimerPeriod = 1000;
 }
 
 //******************************************************************************

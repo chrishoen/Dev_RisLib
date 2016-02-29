@@ -35,10 +35,37 @@ TwoThreadShortThread::~TwoThreadShortThread()
 }
 
 //******************************************************************************
+// BaseClass overload
 
-void TwoThreadShortThread::threadExecuteOnTimer(int aCurrentTimeCount)
+void TwoThreadShortThread::threadInitFunction() 
 {
-   //---------------------------------------------------------------------------
+   // Call the call pointer
+   if (mThreadInitCallPointer.isValid()) mThreadInitCallPointer();
+}
+
+//******************************************************************************
+// BaseClass overload
+
+void TwoThreadShortThread::threadExitFunction() 
+{
+   // Call the call pointer
+   if (mThreadExitCallPointer.isValid()) mThreadExitCallPointer();
+}
+
+//******************************************************************************
+// BaseClass overload
+
+void TwoThreadShortThread::threadExceptionFunction(char* aStr)
+{
+   // Call the call pointer
+   if (mThreadExceptionCallPointer.isValid()) mThreadExceptionCallPointer(aStr);
+}
+
+//******************************************************************************
+// BaseClass overload
+
+void TwoThreadShortThread::executeOnTimer(int aTimerCount)
+{
    // Post to the timer completion semaphore,
    // If the down counter counts down to zero
    if (mTimerCompletionDownCounter != 0)
@@ -49,13 +76,8 @@ void TwoThreadShortThread::threadExecuteOnTimer(int aCurrentTimeCount)
       }
    }
 
-   //---------------------------------------------------------------------------
-   // Update timer variables
-   mTimerCurrentTimeCount++;
-   mTimerExecuteFlag=true;
-
-   // Use central semaphore to wake up the thread
-   mCentralSem.put();
+   // Call the call pointer
+   if (mThreadExecuteOnTimerCallPointer.isValid()) mThreadExecuteOnTimerCallPointer(aTimerCount);
 }
 
 //******************************************************************************

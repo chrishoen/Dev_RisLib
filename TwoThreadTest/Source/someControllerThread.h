@@ -24,7 +24,6 @@ public:
 
    ControllerThread();
 
-   void configureThreads();
    void threadInitFunction();
    void threadExitFunction();
 

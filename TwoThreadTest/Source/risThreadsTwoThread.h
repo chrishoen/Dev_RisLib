@@ -27,18 +27,35 @@ public:
    TwoThreadShortThread();
   ~TwoThreadShortThread();
 
-   // This is executed by the timer. It updates timer variables
-   // and signals the central semaphore to wake up the thread.
-   // aCurrentTimeCount gives the number of timer events that
-   // have occurred since thread launch.
-   void threadExecuteOnTimer(int aCurrentTimeCount);
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Thread base class overloads, these call the call pointers listed below, 
+   // if they have been bound. The timer function also manages timer completion
+   // notification logic.
 
-   // This is posted to by the above call at the 
-   // completion of timer execution, if the down counter
-   // is not zero and then decrements to zero;
+   void threadInitFunction(); 
+   void threadExitFunction(); 
+   void threadExceptionFunction(char* aStr);
+   void executeOnTimer(int aTimerCount);
 
+   //---------------------------------------------------------------------------
+   // Associated thread call pointers, these are called by the
+   // above thread base overloads, if they are bound. They are
+   // bound to functions by the instantiator before the thread
+   // is launched. Any that are not bound result in a no op
+   // for the thread run function
+
+   CallPointer0<>       mThreadInitCallPointer;
+   CallPointer0<>       mThreadExitCallPointer;
+   CallPointer1<char*>  mThreadExceptionCallPointer;
+   CallPointer1<int>    mThreadExecuteOnTimerCallPointer;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Timer completion notification.
-   // The above threadExecuteOnTimer call posts to this semaphore,
+   // The above timer execution method posts to this semaphore,
    // if the down counter is not zero and then decrements to zero.
    BinarySemaphore mTimerCompletionSem;
    int             mTimerCompletionDownCounter;

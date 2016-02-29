@@ -58,8 +58,8 @@ void CmdLineExec::executeTest2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,2);
-   aCmd->setArgDefault(2,10);
+   aCmd->setArgDefault(1,1);
+   aCmd->setArgDefault(2,2);
    aCmd->setArgDefault(3,12);
    gControllerThread->mSendQCall(aCmd->argInt(1),aCmd->argInt(2),aCmd->argInt(3));
 }

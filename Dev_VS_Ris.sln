@@ -49,13 +49,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{1B969CC8
 	ProjectSection(SolutionItems) = preProject
 		Files\risThreadsQCallThreadEx.cpp = Files\risThreadsQCallThreadEx.cpp
 		Files\risThreadsQCallThreadEx.h = Files\risThreadsQCallThreadEx.h
-		Files\risThreadsTwoThread.cpp = Files\risThreadsTwoThread.cpp
-		Files\risThreadsTwoThread.h = Files\risThreadsTwoThread.h
+		Files\risThreadsTwoThread22.cpp = Files\risThreadsTwoThread22.cpp
+		Files\risThreadsTwoThread22.h = Files\risThreadsTwoThread22.h
 		Files\someTimerThread2.cpp = Files\someTimerThread2.cpp
 		Files\someTimerThread2.h = Files\someTimerThread2.h
 		Files\someTimerThread3.cpp = Files\someTimerThread3.cpp
 		Files\someTimerThread3.h = Files\someTimerThread3.h
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwoThreadTest", "TwoThreadTest\TwoThreadTest.vcxproj", "{94FB6082-38EF-4E73-9DDD-F0969070F8C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -233,6 +235,14 @@ Global
 		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Release|Win32.Build.0 = Release|Win32
 		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Release|x64.ActiveCfg = Release|x64
 		{806C5C77-0A92-44FE-A0AB-9B05FCBB04D2}.Release|x64.Build.0 = Release|x64
+		{94FB6082-38EF-4E73-9DDD-F0969070F8C6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{94FB6082-38EF-4E73-9DDD-F0969070F8C6}.Debug|Win32.Build.0 = Debug|Win32
+		{94FB6082-38EF-4E73-9DDD-F0969070F8C6}.Debug|x64.ActiveCfg = Debug|x64
+		{94FB6082-38EF-4E73-9DDD-F0969070F8C6}.Debug|x64.Build.0 = Debug|x64
+		{94FB6082-38EF-4E73-9DDD-F0969070F8C6}.Release|Win32.ActiveCfg = Release|Win32
+		{94FB6082-38EF-4E73-9DDD-F0969070F8C6}.Release|Win32.Build.0 = Release|Win32
+		{94FB6082-38EF-4E73-9DDD-F0969070F8C6}.Release|x64.ActiveCfg = Release|x64
+		{94FB6082-38EF-4E73-9DDD-F0969070F8C6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

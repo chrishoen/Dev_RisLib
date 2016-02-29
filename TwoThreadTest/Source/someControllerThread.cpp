@@ -22,7 +22,7 @@ ControllerThread::ControllerThread()
    BaseClass::mShortThread->setThreadPriorityHigh();
 
    // Set timer period
-   BaseClass::mShortThread->mTimerPeriod = 1000;
+   BaseClass::mShortThread->mTimerPeriod = 10;
 
    // Base class call pointers
    BaseClass::mShortThread->mThreadInitCallPointer.bind(this,&ControllerThread::threadInitFunction);
@@ -37,7 +37,7 @@ ControllerThread::ControllerThread()
    mSequenceQCall.bind  (this->mLongThread, this,&ControllerThread::executeSequence);
 
    // Members
-   mTPFlag=true;
+   mTPFlag = false;
 
 }
 
@@ -59,7 +59,9 @@ void ControllerThread::threadExitFunction()
 //******************************************************************************
 void ControllerThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPFlag) Prn::print(0,"Timer %04d",aTimerCount);
+   if (!mTPFlag) return;
+   if (aTimerCount % 100 !=0) return;
+   Prn::print(0,"ControllerThread::executeOnTimer %6d",aTimerCount);
 }
 
 //******************************************************************************

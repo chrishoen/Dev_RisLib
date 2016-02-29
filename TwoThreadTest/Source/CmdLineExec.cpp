@@ -27,7 +27,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("SEND"  ))    executeSend      (aCmd);
    if(aCmd->isCmd("RES"   ))    executeResponse  (aCmd);
    if(aCmd->isCmd("SEQ"   ))    executeSequence  (aCmd);
-   if(aCmd->isCmd("ABORT" ))    executeAbort     (aCmd);
+   if(aCmd->isCmd("X"     ))    executeAbort     (aCmd);
 }
 
 //******************************************************************************
@@ -42,7 +42,7 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10);
+   aCmd->setArgDefault(1,10*100);
    gControllerThread->mTest1QCall(aCmd->argInt(1));
 }
 

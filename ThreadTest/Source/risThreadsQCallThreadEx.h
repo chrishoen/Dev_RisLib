@@ -220,7 +220,7 @@ public:
    // and signals the central semaphore to wake up the thread.
    // aCurrentTimeCount gives the number of timer events that
    // have occurred since thread launch.
-   void threadExecuteOnTimer(int aCurrentTimeCount);
+   virtual void threadExecuteOnTimer(int aCurrentTimeCount);
 
    // Inheritors provide an overload for this.
    // It is executed in the context of this thread, after the

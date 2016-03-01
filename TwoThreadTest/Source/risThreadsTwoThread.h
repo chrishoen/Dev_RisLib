@@ -141,9 +141,6 @@ public:
    int mTimerCompletionTimeoutException;
 
    //--------------------------------------------------------------
-   // Support
-
-   //--------------------------------------------------------------
    // Wait for timer
 
    // Long thread wait for timer.
@@ -162,6 +159,10 @@ public:
 
    //--------------------------------------------------------------
    // Multiple notifications
+
+   // Long thread wait for a notification from short thread.
+   // One notification in the list.
+   void waitForNotify(int aTimeout, int aIndex);
 
    // Long thread wait for a notification from short thread.
    // Any notifications in the list.

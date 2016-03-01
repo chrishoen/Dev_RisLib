@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
@@ -28,11 +29,23 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
 }
 
+void my_function1(int aNumArgs, ...)
+{
+   va_list valist;
+   va_start(valist,aNumArgs);
+   for (int i=0;i<aNumArgs;i++)
+   {
+      int tIndex = va_arg(valist,int);
+      Prn::print(0,"index %d",tIndex);
+   }
+   va_end(valist);
+
+}
+
 //******************************************************************************
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-// my_halt("hello world");
-   my_halt();
+   my_function1(2,11,12);
 }
 
 //******************************************************************************

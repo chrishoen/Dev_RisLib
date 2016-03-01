@@ -249,6 +249,25 @@ int BaseTwoThread::waitForNotify(int aTimeout)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Wait for a single notification.
+// This is abortable and has a timeout.
+// Uses the notification latch.
+
+void BaseTwoThread::waitForNotify(int aTimeout, int aIndex)
+{
+   // Set the notification latch mask
+   mNotifyLatch.setMask(aIndex,true);
+
+   // Set flag to wait for any notification
+   mWaitingForNotifyAny = true;
+
+   // Wait for notication
+   waitForNotify(aTimeout);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Wait for a multiple notification.
 // This is abortable and has a timeout.
 // Uses the notification latch.

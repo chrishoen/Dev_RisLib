@@ -25,82 +25,63 @@ AndOrLatch::AndOrLatch()
 }
 
 //******************************************************************************
-// Return flags
-
-bool AndOrLatch::isAny() {return mAnyFlag;}
-bool AndOrLatch::isAll() {return mAllFlag;}
-
-//******************************************************************************
 // Resets
 
 void AndOrLatch::reset()
 {
-   mAnyFlag=false;
-   mAllFlag=false;
-
-   for (int i=0;i<LatchSize;i++)
-   {
-      mMask[i]=false;
-      mLatch[i]=false;
-   }
+   mMask  = 0;
+   mLatch = 0;
 }
 
 void AndOrLatch::resetMask()
 {
-   mAnyFlag=false;
-   mAllFlag=false;
-
-   for (int i=0;i<LatchSize;i++)
-   {
-      mMask[i]=false;
-   }
+   mMask  = 0;
 }
 
 void AndOrLatch::resetLatch()
 {
-   mAnyFlag=false;
-   mAllFlag=false;
-
-   for (int i=0;i<LatchSize;i++)
-   {
-      mLatch[i]=false;
-   }
-}
-
-
-//******************************************************************************
-// Set mask bit
-
-void AndOrLatch::setMask(int aIndex, bool aValue)
-{
-   mMask[aIndex] = aValue;
+   mLatch = 0;
 }
 
 //******************************************************************************
-// Set latch bit and update the condition flags
+//******************************************************************************
+//******************************************************************************
+// Set bits
 
-void AndOrLatch::setLatch(int aIndex, bool aValue)
+void AndOrLatch::setMaskBit(int aBitNum)
 {
-   mLatch[aIndex] = aValue;
+   mMask |= (1 << aBitNum);
+}
 
-   mAnyFlag = false;
-   mAllFlag = true;
+void AndOrLatch::clearMaskBit(int aBitNum)
+{
+   mMask &= ~(1 << aBitNum);
+}
 
-   // For each masked latch bit, update condition flags
-   for (int i=0;i<LatchSize;i++)
-   {
-      if (mMask[i])
-      {
-         if (mLatch[i])
-         {
-            mAnyFlag = true;
-         }
-         else
-         {
-            mAllFlag = false;
-         }
-      }
-   }
+void AndOrLatch::setLatchBit(int aBitNum)
+{
+   mLatch |= (1 << aBitNum);
+}
+
+void AndOrLatch::clearLatchBit(int aBitNum)
+{
+   mLatch &= ~(1 << aBitNum);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test conditions
+
+bool AndOrLatch::isAny()
+{
+   return (mMask & mLatch) != 0;
+}
+
+bool AndOrLatch::isAll()
+{
+   unsigned tMask = mMask;
+   return (tMask & mLatch) == tMask;
 }
 
 }//namespace

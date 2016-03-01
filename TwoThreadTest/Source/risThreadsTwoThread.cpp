@@ -256,7 +256,7 @@ int BaseTwoThread::waitForNotify(int aTimeout)
 void BaseTwoThread::waitForNotify(int aTimeout, int aIndex)
 {
    // Set the notification latch mask
-   mNotifyLatch.setMask(aIndex,true);
+   mNotifyLatch.setMaskBit(aIndex);
 
    // Set flag to wait for any notification
    mWaitingForNotifyAny = true;
@@ -280,7 +280,7 @@ void BaseTwoThread::waitForNotifyAny(int aTimeout, int aNumArgs, ...)
    for (int i=0;i<aNumArgs;i++)
    {
       int tIndex = va_arg(valist,int);
-      mNotifyLatch.setMask(tIndex,true);
+      mNotifyLatch.setMaskBit(tIndex);
    }
    va_end(valist);
 
@@ -306,7 +306,7 @@ void BaseTwoThread::waitForNotifyAll(int aTimeout, int aNumArgs, ...)
    for (int i=0;i<aNumArgs;i++)
    {
       int tIndex = va_arg(valist,int);
-      mNotifyLatch.setMask(tIndex,true);
+      mNotifyLatch.setMaskBit(tIndex);
    }
    va_end(valist);
 
@@ -326,7 +326,7 @@ void BaseTwoThread::waitForNotifyAll(int aTimeout, int aNumArgs, ...)
 void BaseTwoThread::notify(int aIndex)
 {
    // Set notification latch element
-   mNotifyLatch.setLatch(aIndex,true);
+   mNotifyLatch.setLatchBit(aIndex);
 
    // Temp
    bool tNotify=false;

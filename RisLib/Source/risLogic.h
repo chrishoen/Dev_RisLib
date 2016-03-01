@@ -10,6 +10,7 @@ These are analagous to digital logic components.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <atomic>
 
 namespace Ris
 {
@@ -59,30 +60,21 @@ public:
    void resetLatch();
 
    // Mask and latch
-   void setMask  (int aIndex, bool aValue);
-   void setLatch (int aIndex, bool aValue);
+   void setMaskBit    (int aBitNum);
+   void clearMaskBit  (int aBitNum);
+   void setLatchBit   (int aBitNum);
+   void clearLatchBit (int aBitNum);
 
    // Returns true if any masked latch value  is true.
-   // It ORs  the masked latch values. 
    bool isAny();
    // Returns true if all masked latch values are true.
-   // It ANDs the masked latch values. 
    bool isAll();
    
-   // Condition flags
-   bool mAnyFlag;  // True if any masked latch bit  is  true
-   bool mAllFlag;  // True if all masked latch bits are true
-
    //--------------------------------------------------------------
    // Members:
 
-   enum {LatchSize=32};
-
-   // Latch array
-   bool  mLatch[LatchSize];      
-
-   // Mask array
-   bool  mMask[LatchSize];      
+   std::atomic<unsigned>  mLatch;
+   std::atomic<unsigned>  mMask;
 };
 
 }//namespace

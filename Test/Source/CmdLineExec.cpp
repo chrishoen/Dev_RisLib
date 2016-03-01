@@ -4,12 +4,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <atomic>
+#include <bitset>
+
 #include "my_functions.h"
 #include "risPortableCalls.h"
+#include "risLogic.h"
 #include "prnPrint.h"
 
 #include "CmdLineExec.h"
 
+using namespace std;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
@@ -29,46 +34,76 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
 }
 
-void my_function1(int aNumArgs, ...)
-{
-   va_list valist;
-   va_start(valist,aNumArgs);
-   for (int i=0;i<aNumArgs;i++)
-   {
-      int tIndex = va_arg(valist,int);
-      Prn::print(0,"index %d",tIndex);
-   }
-   va_end(valist);
-
-}
 
 //******************************************************************************
+
+void setBit(atomic<unsigned>& aX,int aBit)
+{
+   aX |= (1 << aBit);
+}
+
+void clearBit(atomic<unsigned>& aX,int aBit)
+{
+   aX &= ~(1 << aBit);
+}
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   my_function1(2,11,12);
+   atomic<unsigned> tX;
+   Prn::print(0,"%d",sizeof(tX));
+
+   tX = 0;
+
+   setBit(tX,0);
+   setBit(tX,2);
+   Prn::print(0,"%08X",tX);
+
+   clearBit(tX,0);
+   Prn::print(0,"%08X",tX);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1000);
+   atomic<unsigned> tMask=0;
+   atomic<unsigned> tLatch=0;
+   unsigned         tCompare=0;
 
-   int tTimeout = aCmd->argInt(1);
-   int tTimeout10 = tTimeout/100;
+   setBit(tMask,0);
+   setBit(tMask,1);
+   setBit(tMask,2);
+   Prn::print(0,"Mask    %08X",tMask);
 
-   Prn::print(0,"%5d %5d",tTimeout,tTimeout10);
+   setBit(tLatch,1);
+   setBit(tLatch,2);
+   setBit(tLatch,3);
+   Prn::print(0,"Latch   %08X",tLatch);
+
+   tCompare = tMask & tLatch;
+   Prn::print(0,"Compare %08X",tCompare);
+
+   bool tAny = tCompare != 0;
+   bool tAll = tCompare == tMask;
+   Prn::print(0,"Any %d",tAny);
+   Prn::print(0,"All %d",tAll);
+
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,"abcdefg");
+   Ris::Logic::AndOrLatch tLatch;
 
-   Prn::print(0,"%s %s",
-      my_string_from_bool(aCmd->isArgString(1, "abcdefg")),
-      aCmd->argString(1));
+   tLatch.setMaskBit  (0);
+   tLatch.setMaskBit  (1);
+
+   tLatch.setLatchBit (1);
+   tLatch.setLatchBit (2);
+
+   Prn::print(0,"Any %d",tLatch.isAny());
+   Prn::print(0,"All %d",tLatch.isAll());
 }
 
 //******************************************************************************

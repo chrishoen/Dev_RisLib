@@ -10,6 +10,8 @@
 
 #include "risThreadsTwoThread.h"
 
+using namespace std;
+
 namespace Ris
 {
 namespace Threads
@@ -82,12 +84,10 @@ void TwoThreadShortThread::executeOnTimer(int aTimerCount)
 
 //******************************************************************************
 
-int TwoThreadShortThread::threadWaitForTimerCompletion(
-      int aTimerCount) 
+int TwoThreadShortThread::threadWaitForTimerCompletion(int aTimerCount) 
 {
    // Guard
    if (aTimerCount==0) return 0;
-   if (aTimerCount==0) return mTimerCompletionCode;
 
    // Initialize completion code
    mTimerCompletionCode = TimerCompletion_Timeout;

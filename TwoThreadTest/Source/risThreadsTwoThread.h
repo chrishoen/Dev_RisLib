@@ -9,6 +9,7 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <atomic>
 #include "risLogic.h"
 #include "risThreadsQCallThread.h"
 
@@ -57,8 +58,8 @@ public:
    // Timer completion notification.
    // The above timer execution method posts to this semaphore,
    // if the down counter is not zero and then decrements to zero.
-   BinarySemaphore mTimerCompletionSem;
-   int             mTimerCompletionDownCounter;
+   BinarySemaphore  mTimerCompletionSem;
+   std::atomic<int> mTimerCompletionDownCounter;
 
    // The following method returns a status code
    enum

@@ -56,7 +56,6 @@
     <ClCompile Include="Source\risPortableCalls_win.cpp" />
     <ClCompile Include="Source\risRVector.cpp" />
     <ClCompile Include="Source\risSockets_win.cpp" />
-    <ClCompile Include="Source\risThreadsCPSpecific.cpp" />
     <ClCompile Include="Source\risThreadsProcess_win.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsTimer.cpp" />
@@ -116,7 +115,6 @@
     <ClInclude Include="Source\risRVector.h" />
     <ClInclude Include="Source\risSockets.h" />
     <ClInclude Include="Source\risThreadsThreads.h" />
-    <ClInclude Include="Source\risThreadsCPSpecific.h" />
     <ClInclude Include="Source\risThreadsProcess.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />

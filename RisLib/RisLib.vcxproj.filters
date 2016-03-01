@@ -79,9 +79,6 @@
     <ClCompile Include="Source\risThreadsTimer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreadsCPSpecific.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risNanoTime.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -232,9 +229,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsProcess.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsCPSpecific.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNanoTime.h">

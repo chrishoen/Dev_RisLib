@@ -152,11 +152,6 @@ namespace Threads
 class  BaseQCall
 {
 public:
-   BaseQCall()
-   {
-      mSpecialFlag=false;
-   }
-
    //---------------------------------------------------------------------------
    // Invoke, sends a QCall to a thread call queue:
 
@@ -171,10 +166,6 @@ public:
    // Execute, it is called by the called thread to execute the deferred 
    // procedure:
    virtual void execute()=0;
-
-   //---------------------------------------------------------------------------
-   // Special flag
-   bool mSpecialFlag;
 
 };
 

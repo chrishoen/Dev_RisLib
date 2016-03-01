@@ -92,7 +92,8 @@ void ControllerThread::executeTest2(int aN)
    Prn::print(0,"ControllerThread::executeTest2 BEGIN %04d",aN);
    try
    {
-      waitForNotify(aN);
+      BaseClass::mNotifyLatch.reset();
+      BaseClass::waitForNotifyAny(aN,1,1);
    }
    catch(int aStatus)
    {
@@ -111,8 +112,9 @@ void ControllerThread::executeSend(int aId,int aParm1,int aParm2)
    {
       Prn::print(0,"ControllerThread::executeSend BEGIN     %04d",aId);
 
+      BaseClass::mNotifyLatch.reset();
       gPlantThread->mCommandQCall(aId,aParm1,aParm2);
-      BaseClass::waitForNotify();
+      BaseClass::waitForNotifyAny(-1,1,aId);
 
       Prn::print(0,"ControllerThread::executeSend END       %04d",aId);
    }
@@ -136,44 +138,42 @@ void ControllerThread::executeSequence(int aId,int aIterations,int aCommandTimeo
       {
       case 1 :
          {
+            BaseClass::mNotifyLatch.reset();
             gPlantThread->mCommandQCall(1,aResponseDelay,0);
-            BaseClass::waitForNotify(aCommandTimeout);
+            BaseClass::waitForNotifyAny(aCommandTimeout,1,1);
          }
          break;
       case 2 :
          {
-            gPlantThread->mCommandQCall(2,aResponseDelay,0);
             BaseClass::mNotifyLatch.reset();
-            BaseClass::mNotifyLatch.setMask(2,true);
-            BaseClass::waitForNotifyAny(aCommandTimeout);
+            gPlantThread->mCommandQCall(2,aResponseDelay,0);
+            BaseClass::waitForNotifyAll(aCommandTimeout,1,2);
          }
          break;
       case 3 :
          {
-            gPlantThread->mCommandQCall(3,aResponseDelay,0);
             BaseClass::mNotifyLatch.reset();
-            BaseClass::mNotifyLatch.setMask(3,true);
-            BaseClass::mNotifyLatch.setMask(4,true);
-            BaseClass::waitForNotifyAny(aCommandTimeout);
+            gPlantThread->mCommandQCall(3,aResponseDelay,0);
+            BaseClass::waitForNotifyAny(aCommandTimeout,2,3,4);
          }
          break;
       case 5 :
          {
-            gPlantThread->mCommandQCall(5,aResponseDelay,0);
             BaseClass::mNotifyLatch.reset();
-            BaseClass::mNotifyLatch.setMask(5,true);
-            BaseClass::mNotifyLatch.setMask(6,true);
-            BaseClass::waitForNotifyAll(aCommandTimeout);
+            gPlantThread->mCommandQCall(5,aResponseDelay,0);
+            BaseClass::waitForNotifyAll(aCommandTimeout,2,5,6);
          }
          break;
       case 7 :
          {
+            BaseClass::mNotifyLatch.reset();
             gPlantThread->mCommandQCall(7,aResponseDelay,0);
             BaseClass::waitForNotifyAny(aCommandTimeout,2,7,8);
          }
          break;
       case 9 :
          {
+            BaseClass::mNotifyLatch.reset();
             gPlantThread->mCommandQCall(9,aResponseDelay,0);
             BaseClass::waitForNotifyAll(aCommandTimeout,2,9,10);
          }
@@ -182,11 +182,9 @@ void ControllerThread::executeSequence(int aId,int aIterations,int aCommandTimeo
          {
             for (int i=0;i<aIterations;i++)
             {
-               gPlantThread->mCommandQCall(5,2,0);
                BaseClass::mNotifyLatch.reset();
-               BaseClass::mNotifyLatch.setMask(5,true);
-               BaseClass::mNotifyLatch.setMask(6,true);
-               BaseClass::waitForNotifyAll(10);
+               gPlantThread->mCommandQCall(5,2,0);
+               BaseClass::waitForNotifyAll(10,2,5,6);
             }
          }
          break;
@@ -195,6 +193,7 @@ void ControllerThread::executeSequence(int aId,int aIterations,int aCommandTimeo
             for (int i=0;i<aIterations;i++)
             {
                Prn::print(0,"ControllerThread::executeSequence LOOP BEGIN %04d",i);
+               BaseClass::mNotifyLatch.reset();
                gPlantThread->mCommandQCall(9,aResponseDelay,0);
                BaseClass::waitForNotifyAll(aCommandTimeout,2,9,10);
                Prn::print(0,"ControllerThread::executeSequence LOOP END   %04d",i);

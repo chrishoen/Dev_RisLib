@@ -141,6 +141,9 @@ public:
    int mTimerCompletionTimeoutException;
 
    //--------------------------------------------------------------
+   // Support
+
+   //--------------------------------------------------------------
    // Wait for timer
 
    // Long thread wait for timer.
@@ -150,8 +153,6 @@ public:
    int waitForTimer(int aTimeout = -1);
 
    //--------------------------------------------------------------
-   // Single notifications
-
    // Long thread wait for a notification from short thread.
    // This waits for a timer completion.
    // If the wait times out  then it can throw an exception.
@@ -159,27 +160,8 @@ public:
    // It returns a TimerCompletion code.
    int waitForNotify(int aTimeout = -1);
 
-   // Abort long thread from waiting for notification from short thread.
-   // This aborts the wait for a timer completion.
-   void abortWaitForNotify();
-
-   // Short thread notifies long thread.
-   // This forces a timer completion, waking up the above waits.
-   void notify();
-
    //--------------------------------------------------------------
    // Multiple notifications
-
-   // Notification latch
-   Ris::Logic::AndOrLatch mNotifyLatch;
-
-   // Long thread wait for a notification from short thread.
-   // Any notifications in the list.
-   void waitForNotifyAny(int aTimeout = -1);
-
-   // Long thread wait for a notification from short thread.
-   // All notifications in the list.
-   void waitForNotifyAll(int aTimeout = -1);
 
    // Long thread wait for a notification from short thread.
    // Any notifications in the list.
@@ -189,14 +171,27 @@ public:
    // All notifications in the list.
    void waitForNotifyAll(int aTimeout, int aNumArgs, ...);
 
+   // Notification latch
+   Ris::Logic::AndOrLatch mNotifyLatch;
+
+   void resetNotify(){ mNotifyLatch.reset(); }
+
    // This is used by the above waits.
    // If true  then waiting for any notification.
    // If false then waiting for all notifications.
    bool mWaitingForNotifyAny;
 
+   //--------------------------------------------------------------
+   // Short thread notifies long thread
+
    // Short thread notifies long thread with a latch index
    // This forces a timer completion, waking up the above waits.
    void notify(int aIndex);
+
+   // Abort long thread from waiting for notification from short thread.
+   // This aborts the wait for a timer completion.
+   void abortWaitForNotify();
+
 };
 //******************************************************************************
 }//namespace

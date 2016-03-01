@@ -26,7 +26,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("T2"    ))    executeTest2     (aCmd);
    if(aCmd->isCmd("SEND"  ))    executeSend      (aCmd);
    if(aCmd->isCmd("RES"   ))    executeResponse  (aCmd);
-   if(aCmd->isCmd("SEQ"   ))    executeSequence  (aCmd);
+   if(aCmd->isCmd("S1"    ))    executeSequence1 (aCmd);
+   if(aCmd->isCmd("S2"    ))    executeSequence2 (aCmd);
    if(aCmd->isCmd("X"     ))    executeAbort     (aCmd);
 }
 
@@ -74,7 +75,24 @@ void CmdLineExec::executeResponse(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeSequence(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeSequence1(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,1);
+   aCmd->setArgDefault(2,1);
+   aCmd->setArgDefault(3,10);
+   aCmd->setArgDefault(4,1);
+
+   int tId              = aCmd->argInt(1);
+   int tIterations      = aCmd->argInt(2);
+   int tCommandTimeout  = aCmd->argInt(3);
+   int tResponseDelay   = aCmd->argInt(4);
+
+   gControllerThread->mSequenceQCall(tId,tIterations,tCommandTimeout,tResponseDelay);
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeSequence2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,109);
    aCmd->setArgDefault(2,100);

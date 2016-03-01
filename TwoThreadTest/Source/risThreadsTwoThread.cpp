@@ -247,43 +247,6 @@ int BaseTwoThread::waitForNotify(int aTimeout)
 }
 
 //******************************************************************************
-// Single notification by forcing a timer completion.
-
-void BaseTwoThread::notify()
-{
-   // Notify by forcing a timer completion
-   mShortThread->threadForceTimerCompletion();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Wait for a multiple notification.
-// This is abortable and has a timeout.
-// Uses the notification latch.
-
-void BaseTwoThread::waitForNotifyAny(int aTimeout)
-{
-   // Set flag to wait for any notification
-   mWaitingForNotifyAny = true;
-   // Wait for notication
-   waitForNotify(aTimeout);
-}
-
-//******************************************************************************
-// Wait for a multiple notification.
-// This is abortable and has a timeout.
-// Uses the notification latch.
-
-void BaseTwoThread::waitForNotifyAll(int aTimeout)
-{
-   // Set flag to wait for all notifications
-   mWaitingForNotifyAny = false;
-   // Wait for notication
-   waitForNotify(aTimeout);
-}
-
-//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Wait for a multiple notification.
@@ -292,9 +255,6 @@ void BaseTwoThread::waitForNotifyAll(int aTimeout)
 
 void BaseTwoThread::waitForNotifyAny(int aTimeout, int aNumArgs, ...)
 {
-   // Reset the notification latch
-   mNotifyLatch.reset();
-
    // Set the notification latch mask from variable arguments
    va_list valist;
    va_start(valist,aNumArgs);
@@ -305,8 +265,11 @@ void BaseTwoThread::waitForNotifyAny(int aTimeout, int aNumArgs, ...)
    }
    va_end(valist);
 
-   // Wait for notification
-   waitForNotifyAny(aTimeout);
+   // Set flag to wait for any notification
+   mWaitingForNotifyAny = true;
+
+   // Wait for notication
+   waitForNotify(aTimeout);
 }
 
 //******************************************************************************
@@ -318,9 +281,6 @@ void BaseTwoThread::waitForNotifyAny(int aTimeout, int aNumArgs, ...)
 
 void BaseTwoThread::waitForNotifyAll(int aTimeout, int aNumArgs, ...)
 {
-   // Reset the notification latch
-   mNotifyLatch.reset();
-
    // Set the notification latch mask from variable arguments
    va_list valist;
    va_start(valist,aNumArgs);
@@ -331,8 +291,11 @@ void BaseTwoThread::waitForNotifyAll(int aTimeout, int aNumArgs, ...)
    }
    va_end(valist);
 
-   // Wait for notification
-   waitForNotifyAll(aTimeout);
+   // Set flag to wait for all notifications
+   mWaitingForNotifyAny = false;
+
+   // Wait for notication
+   waitForNotify(aTimeout);
 }
 
 //******************************************************************************

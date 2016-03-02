@@ -49,25 +49,30 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   gQCallThread1->mC102QCall.mExecuteCallPointer(1001);
-   gQCallThread1->mC102QCall.mX1 = 1002;
-   gQCallThread1->mC102QCall.execute();
-
-   gQCallThread1->mC102QCall.mX1 = 1003;
-   Ris::Threads::BaseQCall* tQCall = (Ris::Threads::BaseQCall*)&gQCallThread1->mC102QCall;
-   tQCall->execute();
-
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeF101(Ris::CmdLineCmd* aCmd)
 {
+   gQCallThread1->mF100QCall();
+   gQCallThread1->mF101QCall(101);
+   gQCallThread1->mF102QCall(102,202.2);
+   gQCallThread1->mF103QCall(103,203.3,303.3f);
+   gQCallThread1->mF104QCall(104,204.4,304.4f,0x44FFFFFF01234567);
+   gQCallThread1->mF105QCall(105,205.5,305.5f,0x45FFFFFF01234567,505.5);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeF102(Ris::CmdLineCmd* aCmd)
 {
+   int           tX1 = 105;
+   double        tX2 = 205.5;
+   float         tX3 = 305.5;
+   long long int tX4 = 0x45FFFFFF01234567;
+   double        tX5 = 505.5;
+
+   gQCallThread1->mF105QCall(tX1,tX2,tX3,tX4,tX5);
 }
 

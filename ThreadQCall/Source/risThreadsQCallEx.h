@@ -203,55 +203,59 @@ public:
 };
 
 //******************************************************************************
-// QCall0 is a class for a QCall with 0 arguments
+//******************************************************************************
+//******************************************************************************
+// QCall0 is a class template for a QCall with no arguments
 
 class  QCall0 : public BaseQCall
 {
 public:
    //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
+   // Function call overload. It enqueues a copy of this QCall to the target
+   // queue and then notifies the target that a QCall is available.
 
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke()
-   {
-   }
-
-   // Invoke function call overload
    void operator()()
    {
-      invoke();
+      // Start a write to the target queue, obtaining memory for a new QCall.
+      int tIndex;
+      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
+      if (tBlock==0) return;
+      // Create a copy of this QCall, using the new memory.
+      QCall0* tQCall = new(tBlock)QCall0(*this);
+      // Finish the write to the target queue.
+      mTarget->mCallQueue.finishWrite(tIndex);
+      // Notify the target.
+      mTarget->notifyQCallAvailable();
    }
 
    //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
+   // Execute, it is called by the target thread to execute the QCall. 
 
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
+   // Execute CallPointer, it contains the address of the function to be called.
+   // This typically contains the address of a target class member function.
    typedef Ris::CallPointer0<> ExecuteCallPointer;
    ExecuteCallPointer mExecuteCallPointer;
 
-   // This is called by the called thread
+   // This is called by the target thread, after it dequeues the QCall.
    void execute()
    {
       mExecuteCallPointer();
    }
 
    //---------------------------------------------------------------------------
-   // Bind:
+   // Bind a target to the QCall.
 
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
    {
-      mTarget = aCallObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mTarget = aTargetObject;
+      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
    }
 
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mTarget = aInvokeToObject;
+      mTarget = aTargetObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -323,6 +327,8 @@ public:
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // QCall2 is a class template for a QCall with 2 arguments
 
 template <class X1,class X2>
@@ -330,59 +336,66 @@ class  QCall2 : public BaseQCall
 {
 public:
    //---------------------------------------------------------------------------
-   // Queued procedure arguments:
+   // Queued procedure call arguments:
 
    X1 mX1;
    X2 mX2;
 
    //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
+   // Function call overload. It enqueues a copy of this QCall to the target
+   // queue and then notifies the target that a QCall is available.
 
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke(X1 aX1,X2 aX2)
-   {
-   }
-
-   // Invoke function call overload
    void operator()(X1 aX1,X2 aX2)
    {
-      invoke(aX1,aX2);
+      // Store arguments into this QCall.
+      mX1=aX1;
+      mX2=aX2;
+      // Start a write to the target queue, obtaining memory for a new QCall.
+      int tIndex;
+      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
+      if (tBlock==0) return;
+      // Create a copy of this QCall, using the new memory.
+      QCall2* tQCall = new(tBlock)QCall2(*this);
+      // Finish the write to the target queue.
+      mTarget->mCallQueue.finishWrite(tIndex);
+      // Notify the target.
+      mTarget->notifyQCallAvailable();
    }
 
    //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
+   // Execute, it is called by the target thread to execute the QCall. 
 
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
+   // Execute CallPointer, it contains the address of the function to be called.
+   // This typically contains the address of a target class member function.
    typedef Ris::CallPointer2<X1,X2> ExecuteCallPointer;
    ExecuteCallPointer mExecuteCallPointer;
 
-   // This is called by the called thread
+   // This is called by the target thread, after it dequeues the QCall.
    void execute()
    {
       mExecuteCallPointer(mX1,mX2);
    }
 
    //---------------------------------------------------------------------------
-   // Bind:
+   // Bind a target to the QCall.
 
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
    {
-      mTarget = aCallObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mTarget = aTargetObject;
+      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
    }
 
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mTarget = aInvokeToObject;
+      mTarget = aTargetObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // QCall3 is a class template for a QCall with 3 arguments
 
@@ -391,60 +404,68 @@ class  QCall3 : public BaseQCall
 {
 public:
    //---------------------------------------------------------------------------
-   // Queued procedure arguments:
+   // Queued procedure call arguments:
 
    X1 mX1;
    X2 mX2;
    X3 mX3;
 
    //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
+   // Function call overload. It enqueues a copy of this QCall to the target
+   // queue and then notifies the target that a QCall is available.
 
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke(X1 aX1,X2 aX2,X3 aX3)
-   {
-   }
-
-   // Invoke function call overload
    void operator()(X1 aX1,X2 aX2,X3 aX3)
    {
-      invoke(aX1,aX2,aX3);
+      // Store arguments into this QCall.
+      mX1=aX1;
+      mX2=aX2;
+      mX3=aX3;
+      // Start a write to the target queue, obtaining memory for a new QCall.
+      int tIndex;
+      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
+      if (tBlock==0) return;
+      // Create a copy of this QCall, using the new memory.
+      QCall3* tQCall = new(tBlock)QCall3(*this);
+      // Finish the write to the target queue.
+      mTarget->mCallQueue.finishWrite(tIndex);
+      // Notify the target.
+      mTarget->notifyQCallAvailable();
    }
 
    //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
+   // Execute, it is called by the target thread to execute the QCall. 
 
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
+   // Execute CallPointer, it contains the address of the function to be called.
+   // This typically contains the address of a target class member function.
    typedef Ris::CallPointer3<X1,X2,X3> ExecuteCallPointer;
    ExecuteCallPointer mExecuteCallPointer;
 
-   // This is called by the called thread
+   // This is called by the target thread, after it dequeues the QCall.
    void execute()
    {
       mExecuteCallPointer(mX1,mX2,mX3);
    }
 
    //---------------------------------------------------------------------------
-   // Bind:
+   // Bind a target to the QCall.
 
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
    {
-      mTarget = aCallObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mTarget = aTargetObject;
+      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
    }
 
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mTarget = aInvokeToObject;
+      mTarget = aTargetObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // QCall4 is a class template for a QCall with 4 arguments
 
@@ -453,7 +474,7 @@ class  QCall4 : public BaseQCall
 {
 public:
    //---------------------------------------------------------------------------
-   // Queued procedure arguments:
+   // Queued procedure call arguments:
 
    X1 mX1;
    X2 mX2;
@@ -461,53 +482,62 @@ public:
    X4 mX4;
 
    //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
+   // Function call overload. It enqueues a copy of this QCall to the target
+   // queue and then notifies the target that a QCall is available.
 
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
-   {
-   }
-
-   // Invoke function call overload
    void operator()(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
    {
-      invoke(aX1,aX2,aX3,aX4);
+      // Store arguments into this QCall.
+      mX1=aX1;
+      mX2=aX2;
+      mX3=aX3;
+      mX4=aX4;
+      // Start a write to the target queue, obtaining memory for a new QCall.
+      int tIndex;
+      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
+      if (tBlock==0) return;
+      // Create a copy of this QCall, using the new memory.
+      QCall4* tQCall = new(tBlock)QCall4(*this);
+      // Finish the write to the target queue.
+      mTarget->mCallQueue.finishWrite(tIndex);
+      // Notify the target.
+      mTarget->notifyQCallAvailable();
    }
 
    //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
+   // Execute, it is called by the target thread to execute the QCall. 
 
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
+   // Execute CallPointer, it contains the address of the function to be called.
+   // This typically contains the address of a target class member function.
    typedef Ris::CallPointer4<X1,X2,X3,X4> ExecuteCallPointer;
    ExecuteCallPointer mExecuteCallPointer;
 
-   // This is called by the called thread
+   // This is called by the target thread, after it dequeues the QCall.
    void execute()
    {
       mExecuteCallPointer(mX1,mX2,mX3,mX4);
    }
 
    //---------------------------------------------------------------------------
-   // Bind:
+   // Bind a target to the QCall.
 
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
    {
-      mTarget = aCallObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mTarget = aTargetObject;
+      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
    }
 
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mTarget = aInvokeToObject;
+      mTarget = aTargetObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // QCall5 is a class template for a QCall with 5 arguments
 
@@ -516,7 +546,7 @@ class  QCall5 : public BaseQCall
 {
 public:
    //---------------------------------------------------------------------------
-   // Queued procedure arguments:
+   // Queued procedure call arguments:
 
    X1 mX1;
    X2 mX2;
@@ -525,56 +555,62 @@ public:
    X5 mX5;
 
    //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
+   // Function call overload. It enqueues a copy of this QCall to the target
+   // queue and then notifies the target that a QCall is available.
 
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5)
-   {
-   }
-
-   // Invoke function call overload
    void operator()(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5)
    {
-      invoke(aX1,aX2,aX3,aX4,aX5);
+      // Store arguments into this QCall.
+      mX1=aX1;
+      mX2=aX2;
+      mX3=aX3;
+      mX4=aX4;
+      mX5=aX5;
+      // Start a write to the target queue, obtaining memory for a new QCall.
+      int tIndex;
+      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
+      if (tBlock==0) return;
+      // Create a copy of this QCall, using the new memory.
+      QCall5* tQCall = new(tBlock)QCall5(*this);
+      // Finish the write to the target queue.
+      mTarget->mCallQueue.finishWrite(tIndex);
+      // Notify the target.
+      mTarget->notifyQCallAvailable();
    }
 
    //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
+   // Execute, it is called by the target thread to execute the QCall. 
 
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
+   // Execute CallPointer, it contains the address of the function to be called.
+   // This typically contains the address of a target class member function.
    typedef Ris::CallPointer5<X1,X2,X3,X4,X5> ExecuteCallPointer;
    ExecuteCallPointer mExecuteCallPointer;
 
-   // This is called by the called thread
+   // This is called by the target thread, after it dequeues the QCall.
    void execute()
    {
       mExecuteCallPointer(mX1,mX2,mX3,mX4,mX5);
    }
 
    //---------------------------------------------------------------------------
-   // Bind:
+   // Bind a target to the QCall.
 
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
    {
-      mTarget = aCallObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mTarget = aTargetObject;
+      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
    }
 
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mTarget = aInvokeToObject;
+      mTarget = aTargetObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
 
 //******************************************************************************
-
-
 }//namespace
 }//namespace
 

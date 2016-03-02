@@ -1,10 +1,10 @@
-#ifndef _RISLFPOINTERQUEUE_H_
-#define _RISLFPOINTERQUEUE_H_
+#ifndef _RISLFBLOCKQUEUE_H_
+#define _RISLFBLOCKQUEUE_H_
 /*==============================================================================
 
-Lock Free Pointer Queue. 
+Lock Free Block Queue. 
 
-This implements a pointer queue. The queue is thread safe. It uses a atomic
+This implements a fixed size queue. The queue is thread safe. It uses a atomic
 interlocked compare and exchanges to guard against concurrency contentions.
 It implements the Michael and Scott algorithm with no backoff.
 
@@ -21,7 +21,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 
-class LFPointerQueue
+class LFBlockQueue
 {
 public:
    //---------------------------------------------------------------------------
@@ -30,13 +30,13 @@ public:
    // Methods
 
    // Constructor
-   LFPointerQueue();
-  ~LFPointerQueue();
+   LFBlockQueue();
+  ~LFBlockQueue();
 
    // Allocate memory for the queue and free list arrays and initialize the
    // queue logic variables. aAllocate is the number of pointers to allocate
    // memory for.
-   void initialize(int aAllocate);
+   void initialize(int aAllocate,int aBlockSize);
 
    // Deallocate memory.
    void finalize();
@@ -44,11 +44,10 @@ public:
    // Queue size
    int  size();
 
-   // Write a pointer to the queue. Return false if the queue is full.
-   bool  writePtr(void* aPointer);
+   // Return a pointer to a block, based on its block index.
+  
+   void* element(int aIndex);
 
-   // Read a pointer from of the queue. Return null if the queue is empty.
-   void* readPtr();
 
    //***************************************************************************
    //***************************************************************************
@@ -56,12 +55,13 @@ public:
    // Queue and Free List Members
 
    // Number of values allocated
+   int mBlockSize;
    int mAllocate;
    int mQueueAllocate;
    int mListAllocate;
 
-   // Array of values
-   void** mValue;
+   // Pointer to allocated block memory
+   void* mMemory;
 
    // Queue array and variables
    AtomicLFIndex*    mQueueNext;
@@ -83,11 +83,14 @@ public:
    // Queue and Free List Methods. These write or read values from the queue
    // and pop or push node indices from the free list.
 
-   bool tryWrite (void*  aValue);
-   bool tryRead  (void** aValue);
+   void* startWrite  (int* aNodeIndex);
+   void  finishWrite (int  aNodeIndex);
 
-   bool listPop  (int*   aNode);
-   bool listPush (int    aNode);
+   void* startRead   (int* aNodeIndex);
+   void  finishRead  (int  aNodeIndex);
+
+   bool  listPop     (int* aNode);
+   bool  listPush    (int  aNode);
 };
 
 //******************************************************************************

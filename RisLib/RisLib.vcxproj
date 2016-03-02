@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\risByteBuffer.cpp" />
+    <ClCompile Include="Source\risLFBlockQueue.cpp" />
     <ClCompile Include="Source\risLFPointerQueue.cpp" />
     <ClCompile Include="Source\risNetUdpTMessageSocket.cpp" />
     <ClCompile Include="Source\risNetUdpTMessageThread.cpp" />
@@ -68,6 +69,7 @@
     <ClInclude Include="Source\risByteBuffer.h" />
     <ClInclude Include="Source\risByteTMessage.h" />
     <ClInclude Include="Source\risByteTMessageCopier.h" />
+    <ClInclude Include="Source\risLFBlockQueue.h" />
     <ClInclude Include="Source\risLFIndex.h" />
     <ClInclude Include="Source\risLFPointerQueue.h" />
     <ClInclude Include="Source\risNetPortDef.h" />

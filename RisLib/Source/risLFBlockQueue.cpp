@@ -12,7 +12,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "risLFPointerQueue.h"
+#include "risLFBlockQueue.h"
 
 using namespace std;
 
@@ -22,18 +22,18 @@ namespace Ris
    //******************************************************************************
    //******************************************************************************
 
-   LFPointerQueue::LFPointerQueue()
+   LFBlockQueue::LFBlockQueue()
    {
       // All null
-      mValue     = 0;
+      mMemory = 0;
       mQueueNext = 0;
-      mListNext  = 0;
+      mListNext = 0;
       mAllocate = 0;
       mQueueAllocate = 0;
       mListAllocate = 0;
    }
 
-   LFPointerQueue::~LFPointerQueue()
+   LFBlockQueue::~LFBlockQueue()
    {
       finalize();
    }
@@ -43,26 +43,25 @@ namespace Ris
    //***************************************************************************
    // Initialize
 
-   void LFPointerQueue::initialize(int aAllocate)
+   void LFBlockQueue::initialize(int aAllocate,int aBlockSize)
    {
       finalize();
 
+      mBlockSize     = aBlockSize;
       mAllocate      = aAllocate;
       mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 1;
 
-      mValue = new void*[mListAllocate];
+      mMemory = malloc(mListAllocate*mBlockSize);
       mQueueNext = new AtomicLFIndex[mListAllocate];
       mListNext = new AtomicLFIndex[mListAllocate];
 
       for (int i = 0; i < mListAllocate-1; i++)
       {
-         mValue[i] = 0;
          mQueueNext[i].store(LFIndex(cInvalid,0));
          mListNext[i].store(LFIndex(i+1,0));
       }
 
-      mValue[mListAllocate-1] = 0;
       mQueueNext[mListAllocate-1].store(LFIndex(cInvalid,0));
       mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
 
@@ -81,14 +80,24 @@ namespace Ris
    //***************************************************************************
    // Finalize
 
-   void LFPointerQueue::finalize()
+   void LFBlockQueue::finalize()
    {
-      if (mValue)     free(mValue);
+      if (mMemory)    free(mMemory);
       if (mQueueNext) free(mQueueNext);
       if (mListNext)  free(mListNext);
-      mValue     = 0;
+      mMemory    = 0;
       mQueueNext = 0;
       mListNext  = 0;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Return a pointer to a block, based on block array index
+
+   void* LFBlockQueue::element(int aIndex)
+   {
+      return (void*)((char*)mMemory + mBlockSize*aIndex);
    }
 
    //***************************************************************************
@@ -96,7 +105,7 @@ namespace Ris
    //***************************************************************************
    // Size
 
-   int LFPointerQueue::size()
+   int LFBlockQueue::size()
    { 
       return mListAllocate - mListSize.load(memory_order_relaxed);
    }
@@ -110,16 +119,23 @@ namespace Ris
    // is to be written is stored in the new node. The new node is then attached
    // to the queue tail node and the tail index is updated.
 
-   bool LFPointerQueue::tryWrite(void* aValue)
+   void* LFBlockQueue::startWrite(int* aNodeIndex)
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
       int tNodeIndex;
-      if (!listPop(&tNodeIndex)) return false;
+      if (!listPop(&tNodeIndex)) return 0;
 
-      // Initialize the node with the value.
-      mValue[tNodeIndex] = aValue;
-      mQueueNext[tNodeIndex].store(LFIndex(cInvalid,0),memory_order_relaxed);
+      // Return a pointer to the node block.
+      *aNodeIndex = tNodeIndex;
+      return element(tNodeIndex);
+   }
+
+   void LFBlockQueue::finishWrite(int aNodeIndex)
+   {
+      // Initialize the node.
+      int tNodeIndex = aNodeIndex;
+      mQueueNext[tNodeIndex].store(LFIndex(cInvalid, 0), memory_order_relaxed);
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -146,9 +162,6 @@ namespace Ris
       }
 
       mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
-
-      // Done
-      return true;
    }
 
    //******************************************************************************
@@ -160,8 +173,9 @@ namespace Ris
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool LFPointerQueue::tryRead(void** aValue)
+   void* LFBlockQueue::startRead(int* aNodeIndex)
    {
+      void* tBlockPtr = 0;
       LFIndex tHead, tTail, tNext;
 
       int tLoopCount=0;
@@ -175,12 +189,12 @@ namespace Ris
          {
             if (tHead.mIndex == tTail.mIndex)
             {
-               if (tNext.mIndex == cInvalid) return false;
+               if (tNext.mIndex == cInvalid) return 0;
                mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
             }
             else
             {
-               *aValue = mValue[tNext.mIndex];
+               tBlockPtr = element(tNext.mIndex);
                if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
             }
          }
@@ -188,10 +202,15 @@ namespace Ris
          if (++tLoopCount==10000) throw 102;
       }
 
-      listPush(tHead.mIndex);
+      *aNodeIndex = tHead.mIndex;
 
       // Done.
-      return true;
+      return tBlockPtr;
+   }
+
+   void LFBlockQueue::finishRead(int aNodeIndex)
+   {
+      listPush(aNodeIndex);
    }
 
    //******************************************************************************
@@ -199,7 +218,7 @@ namespace Ris
    //******************************************************************************
    // This detaches the head node.
 
-   bool LFPointerQueue::listPop(int* aNode)
+   bool LFBlockQueue::listPop(int* aNode)
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
@@ -230,7 +249,7 @@ namespace Ris
    //***************************************************************************
    // Insert a node into the list before the list head node.
 
-   bool LFPointerQueue::listPush(int aNode)
+   bool LFBlockQueue::listPush(int aNode)
    {
       // Store the head node in a temp.
       LFIndex tHead = mListHead.load(memory_order_relaxed);
@@ -250,24 +269,5 @@ namespace Ris
       mListSize.fetch_add(1,memory_order_relaxed);
       return true;
    }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // These are specific to queue pointer access.
-
-   bool LFPointerQueue::writePtr (void* aValue)
-   {
-      return tryWrite(aValue);
-   }
-
-   void* LFPointerQueue::readPtr ()
-   {
-      void* tValue;
-      if (!tryRead(&tValue)) return NULL;
-      return tValue;
-   }
-
-
 
 }//namespace

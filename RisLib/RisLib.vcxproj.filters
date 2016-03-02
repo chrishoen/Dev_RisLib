@@ -133,6 +133,9 @@
     <ClCompile Include="Source\risLFPointerQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risLFBlockQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -301,6 +304,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risLFPointerQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risLFBlockQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

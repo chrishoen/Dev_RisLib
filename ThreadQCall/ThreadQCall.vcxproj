@@ -178,6 +178,7 @@
     <ClCompile Include="Source\GSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\risThreadsQCallThreadEx.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
     <ClCompile Include="Source\someQCallThread1.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
@@ -187,6 +188,9 @@
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\risThreadsQCallEx.h" />
+    <ClInclude Include="Source\risThreadsQCallTargetEx.h" />
+    <ClInclude Include="Source\risThreadsQCallThreadEx.h" />
     <ClInclude Include="Source\someClass1.h" />
     <ClInclude Include="Source\someQCallThread1.h" />
     <ClInclude Include="Source\someShare.h" />

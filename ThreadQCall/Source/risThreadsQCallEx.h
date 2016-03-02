@@ -157,6 +157,12 @@ public:
 
    LFBlockQueue mCallQueue;
 
+   // Target inheritors provide an override for this method.
+   // It is called after a QCall has been enqueued to the target queue.
+   // It notifies the target that a QCall is available.
+
+   virtual void notifyQCallAvailable()=0;
+
    // Call queue block size, this is the maximum size of a QCall.
    static const int cCallQueueBlockSize = 128;
 
@@ -171,12 +177,6 @@ public:
    {
       mCallQueue.finalize();
    }
-
-   // Target inheritors provide an override for this method.
-   // It is called after a QCall has been enqueued to the target queue.
-   // It notifies the target that a QCall is available.
-
-   virtual void notifyQCallAvailable()=0;
 };
 
 
@@ -197,8 +197,7 @@ public:
    BaseQCallTargetEx* mTarget;
 
    //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
+   // Execute, it is called by the target thread to execute the QCall. 
 
    virtual void execute()=0;
 };
@@ -258,6 +257,8 @@ public:
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // QCall1 is a class template for a QCall with 1 argument
 
 template <class X1>
@@ -265,12 +266,12 @@ class  QCall1 : public BaseQCall
 {
 public:
    //---------------------------------------------------------------------------
-   // Queued procedure arguments:
+   // Queued procedure call arguments:
 
    X1 mX1;
 
    //---------------------------------------------------------------------------
-   // Function call overload. It enqueues a copy of the QCall to the target
+   // Function call overload. It enqueues a copy of this QCall to the target
    // queue and then notifies the target that a QCall is available.
 
    void operator()(X1 aX1)
@@ -283,41 +284,40 @@ public:
       if (tBlock==0) return;
       // Create a copy of this QCall, using the new memory.
       QCall1* tQCall = new(tBlock)QCall1(*this);
-      // Finish the write to the target queue and notify the target.
+      // Finish the write to the target queue.
       mTarget->mCallQueue.finishWrite(tIndex);
+      // Notify the target.
       mTarget->notifyQCallAvailable();
    }
 
    //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
+   // Execute, it is called by the target thread to execute the QCall. 
 
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
+   // Execute CallPointer, it contains the address of the function to be called.
+   // This typically contains the address of a target class member function.
    typedef Ris::CallPointer1<X1> ExecuteCallPointer;
    ExecuteCallPointer mExecuteCallPointer;
 
-   // This is called by the called thread
+   // This is called by the target thread, after it dequeues the QCall.
    void execute()
    {
       mExecuteCallPointer(mX1);
    }
 
    //---------------------------------------------------------------------------
-   // Bind:
+   // Bind a target to the QCall.
 
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
    {
-      mTarget = aCallObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mTarget = aTargetObject;
+      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
    }
 
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject,class CallObject,class CallMethod>
+   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mSpecial1 = 9012;
-      mTarget = aInvokeToObject;
+      mTarget = aTargetObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };

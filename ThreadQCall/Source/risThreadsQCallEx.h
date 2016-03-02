@@ -131,6 +131,7 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <new>
 #include "risCallPointer.h"
 
 namespace Ris
@@ -153,7 +154,7 @@ class  BaseQCall
 {
 public:
    //---------------------------------------------------------------------------
-   // Pointer to the target that the qcall is bound to
+   // Pointer to the target that the QCall is bound to.
 
    BaseQCallTargetEx* mTarget;
 
@@ -162,9 +163,6 @@ public:
    // procedure:
 
    virtual void execute()=0;
-
-   int mSpecial1;
-   int mSpecial2;
 };
 
 //******************************************************************************
@@ -247,15 +245,12 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1)
    {
-      // Copy this QCall to the CallQueue.
+      // Allocate a block from the call queue.
       int tIndex;
-      QCall1* tQCall = (QCall1*)mTarget->mCallQueue.startWrite(&tIndex);
-      if (tQCall==0) return;
+      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
+      if (tBlock==0) return;
       // Create a new copy of this QCall.
-      tQCall->mTarget = mTarget;
-      tQCall->mExecuteCallPointer = mExecuteCallPointer;
-      tQCall->mSpecial1=mSpecial1;
-      tQCall->mSpecial2=902;
+      QCall1* tQCall = new(tBlock)QCall1(*this);
       // Set its arguments.
       tQCall->mX1=aX1;
       // Invoke it.
@@ -281,7 +276,6 @@ public:
    // This is called by the called thread
    void execute()
    {
-//    printf("HHHHHHHHHHHHHHHH execute\n");
       mExecuteCallPointer(mX1);
    }
 
@@ -291,7 +285,6 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mSpecial1 = 9011;
       mTarget = aCallObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }

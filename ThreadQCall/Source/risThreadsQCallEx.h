@@ -153,18 +153,14 @@ class  BaseQCall
 {
 public:
    //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
+   // Pointer to the target that the qcall is bound to
 
-   // Invoke CallPointer, it contains the address of the called thread's
-   // putQCallToThread member function. It is called by inheritor class 
-   // templates to send a QCall to a call queue.
-   // void putQCallToThread(BaseQCall* aQCall);
-   typedef Ris::CallPointer1<BaseQCall*> InvokeCallPointer;
-   InvokeCallPointer mInvokeCallPointer;
+   BaseQCallTargetEx* mTarget;
 
    //---------------------------------------------------------------------------
    // Execute, it is called by the called thread to execute the deferred 
    // procedure:
+
    virtual void execute()=0;
 
 };
@@ -182,10 +178,13 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke()
    {
-      // Create a new copy of this QCall.
-      QCall0* tQCall = new QCall0(*this);
-      // Invoke it.
-      mInvokeCallPointer(tQCall);
+      // Copy this QCall to the CallQueue.
+      int tIndex;
+      QCall0* tQCall = (QCall0*)mTarget->mCallQueue.startWrite(&tIndex);
+      if (tQCall==0) return;
+      *tQCall = *this;
+      mTarget->mCallQueue.finishWrite(tIndex);
+      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -215,14 +214,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aCallObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aInvokeToObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -246,12 +245,17 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1)
    {
+      // Copy this QCall to the CallQueue.
+      int tIndex;
+      QCall1* tQCall = (QCall1*)mTarget->mCallQueue.startWrite(&tIndex);
+      if (tQCall==0) return;
       // Create a new copy of this QCall.
-      QCall1* tQCall = new QCall1(*this);
+      *tQCall = *this;
       // Set its arguments.
       tQCall->mX1=aX1;
       // Invoke it.
-      mInvokeCallPointer(tQCall);
+      mTarget->mCallQueue.finishWrite(tIndex);
+      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -281,14 +285,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aCallObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aInvokeToObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -313,13 +317,18 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1,X2 aX2)
    {
+      // Copy this QCall to the CallQueue.
+      int tIndex;
+      QCall2* tQCall = (QCall2*)mTarget->mCallQueue.startWrite(&tIndex);
+      if (tQCall==0) return;
       // Create a new copy of this QCall.
-      QCall2* tQCall = new QCall2(*this);
+      *tQCall = *this;
       // Set its arguments.
       tQCall->mX1=aX1;
       tQCall->mX2=aX2;
       // Invoke it.
-      mInvokeCallPointer(tQCall);
+      mTarget->mCallQueue.finishWrite(tIndex);
+      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -349,14 +358,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aCallObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aInvokeToObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -382,14 +391,19 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1,X2 aX2,X3 aX3)
    {
+      // Copy this QCall to the CallQueue.
+      int tIndex;
+      QCall3* tQCall = (QCall3*)mTarget->mCallQueue.startWrite(&tIndex);
+      if (tQCall==0) return;
       // Create a new copy of this QCall.
-      QCall3* tQCall = new QCall3(*this);
+      *tQCall = *this;
       // Set its arguments.
       tQCall->mX1=aX1;
       tQCall->mX2=aX2;
       tQCall->mX3=aX3;
       // Invoke it.
-      mInvokeCallPointer(tQCall);
+      mTarget->mCallQueue.finishWrite(tIndex);
+      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -419,14 +433,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aCallObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aInvokeToObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -453,15 +467,20 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
    {
+      // Copy this QCall to the CallQueue.
+      int tIndex;
+      QCall4* tQCall = (QCall4*)mTarget->mCallQueue.startWrite(&tIndex);
+      if (tQCall==0) return;
       // Create a new copy of this QCall.
-      QCall4* tQCall = new QCall4(*this);
+      *tQCall = *this;
       // Set its arguments.
       tQCall->mX1=aX1;
       tQCall->mX2=aX2;
       tQCall->mX3=aX3;
       tQCall->mX4=aX4;
       // Invoke it.
-      mInvokeCallPointer(tQCall);
+      mTarget->mCallQueue.finishWrite(tIndex);
+      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -491,14 +510,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aCallObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aInvokeToObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };
@@ -526,16 +545,21 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5)
    {
+      // Copy this QCall to the CallQueue.
+      int tIndex;
+      QCall5* tQCall = (QCall5*)mTarget->mCallQueue.startWrite(&tIndex);
+      if (tQCall==0) return;
       // Create a new copy of this QCall.
-      QCall5* tQCall = new QCall5(*this);
+      *tQCall = *this;
       // Set its arguments.
       tQCall->mX1=aX1;
       tQCall->mX2=aX2;
       tQCall->mX3=aX3;
       tQCall->mX4=aX4;
-      tQCall->mX5=aX5;
+      tQCall->mX5=aX4;
       // Invoke it.
-      mInvokeCallPointer(tQCall);
+      mTarget->mCallQueue.finishWrite(tIndex);
+      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -565,248 +589,14 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aCallObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
-   }
-};
-
-//******************************************************************************
-// QCall6 is a class template for a QCall with 6 arguments
-
-template <class X1,class X2,class X3,class X4,class X5,class X6>
-class  QCall6 : public BaseQCall
-{
-public:
-   //---------------------------------------------------------------------------
-   // Queued procedure arguments:
-
-   X1 mX1;
-   X2 mX2;
-   X3 mX3;
-   X4 mX4;
-   X5 mX5;
-   X6 mX6;
-
-   //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
-
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5,X6 aX6)
-   {
-      // Create a new copy of this QCall.
-      QCall6* tQCall = new QCall6(*this);
-      // Set its arguments.
-      tQCall->mX1=aX1;
-      tQCall->mX2=aX2;
-      tQCall->mX3=aX3;
-      tQCall->mX4=aX4;
-      tQCall->mX5=aX5;
-      tQCall->mX6=aX6;
-      // Invoke it.
-      mInvokeCallPointer(tQCall);
-   }
-
-   // Invoke function call overload
-   void operator()(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5,X6 aX6)
-   {
-      invoke(aX1,aX2,aX3,aX4,aX5,aX6);
-   }
-
-   //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
-
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
-   typedef Ris::CallPointer6<X1,X2,X3,X4,X5,X6> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
-
-   // This is called by the called thread
-   void execute()
-   {
-      mExecuteCallPointer(mX1,mX2,mX3,mX4,mX5,mX6);
-   }
-
-   //---------------------------------------------------------------------------
-   // Bind:
-
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
-   {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
-   }
-
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
-   {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
-   }
-};
-
-//******************************************************************************
-// QCall7 is a class template for a QCall with 7 arguments
-
-template <class X1,class X2,class X3,class X4,class X5,class X6,class X7>
-class  QCall7 : public BaseQCall
-{
-public:
-   //---------------------------------------------------------------------------
-   // Queued procedure arguments:
-
-   X1 mX1;
-   X2 mX2;
-   X3 mX3;
-   X4 mX4;
-   X5 mX5;
-   X6 mX6;
-   X7 mX7;
-
-   //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
-
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5,X6 aX6,X7 aX7)
-   {
-      // Create a new copy of this QCall.
-      QCall7* tQCall = new QCall7(*this);
-      // Set its arguments.
-      tQCall->mX1=aX1;
-      tQCall->mX2=aX2;
-      tQCall->mX3=aX3;
-      tQCall->mX4=aX4;
-      tQCall->mX5=aX5;
-      tQCall->mX6=aX6;
-      tQCall->mX7=aX7;
-      // Invoke it.
-      mInvokeCallPointer(tQCall);
-   }
-
-   // Invoke function call overload
-   void operator()(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5,X6 aX6,X7 aX7)
-   {
-      invoke(aX1,aX2,aX3,aX4,aX5,aX6,aX7);
-   }
-
-   //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
-
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
-   typedef Ris::CallPointer7<X1,X2,X3,X4,X5,X6,X7> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
-
-   // This is called by the called thread
-   void execute()
-   {
-      mExecuteCallPointer(mX1,mX2,mX3,mX4,mX5,mX6,mX7);
-   }
-
-   //---------------------------------------------------------------------------
-   // Bind:
-
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
-   {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
-   }
-
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
-   {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
-   }
-};
-
-//******************************************************************************
-// QCall8 is a class template for a QCall with 8 arguments
-
-template <class X1,class X2,class X3,class X4,class X5,class X6,class X7,class X8>
-class  QCall8 : public BaseQCall
-{
-public:
-   //---------------------------------------------------------------------------
-   // Queued procedure arguments:
-
-   X1 mX1;
-   X2 mX2;
-   X3 mX3;
-   X4 mX4;
-   X5 mX5;
-   X6 mX6;
-   X7 mX7;
-   X8 mX8;
-
-   //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
-
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5,X6 aX6,X7 aX7,X8 aX8)
-   {
-      // Create a new copy of this QCall.
-      QCall8* tQCall = new QCall8(*this);
-      // Set its arguments.
-      tQCall->mX1=aX1;
-      tQCall->mX2=aX2;
-      tQCall->mX3=aX3;
-      tQCall->mX4=aX4;
-      tQCall->mX5=aX5;
-      tQCall->mX6=aX6;
-      tQCall->mX7=aX7;
-      tQCall->mX8=aX8;
-      // Invoke it.
-      mInvokeCallPointer(tQCall);
-   }
-
-   // Invoke function call overload
-   void operator()(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5,X6 aX6,X7 aX7,X8 aX8)
-   {
-      invoke(aX1,aX2,aX3,aX4,aX5,aX6,aX7,aX8);
-   }
-
-   //---------------------------------------------------------------------------
-   // Execute, it is called by the called thread to execute the deferred 
-   // procedure:
-
-   // Execute CallPointer, it contains the address of the called thread's
-   // deferred procedure.
-   typedef Ris::CallPointer7<X1,X2,X3,X4,X5,X6,X7,X8> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
-
-   // This is called by the called thread
-   void execute()
-   {
-      mExecuteCallPointer(mX1,mX2,mX3,mX4,mX5,mX6,mX7,mX8);
-   }
-
-   //---------------------------------------------------------------------------
-   // Bind:
-
-   template <class CallObject,class CallMethod>
-   void bind(CallObject aCallObject,CallMethod aCallMethod)
-   {
-      mInvokeCallPointer.bind  (aCallObject,&BaseQCallTargetEx::putQCallToThread);
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
-   }
-
-   template <class InvokeToObject,class CallObject,class CallMethod>
-   void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
-   {
-      mInvokeCallPointer.bind  (aInvokeToObject,&BaseQCallTargetEx::putQCallToThread);
+      mTarget = aInvokeToObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
 };

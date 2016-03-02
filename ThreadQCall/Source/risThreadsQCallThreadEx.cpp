@@ -45,7 +45,7 @@ BaseQCallThreadEx::~BaseQCallThreadEx()
 void BaseQCallThreadEx::threadResourceInitFunction()
 {
    // Initialize the call queue
-   mCallQueue.initialize(mCallQueSize);
+   mCallQueue.initialize(mCallQueSize,128);
 }
 
 //******************************************************************************
@@ -136,7 +136,8 @@ void BaseQCallThreadEx::threadRunFunction()
          //----------------------------------------------------------
          // Get QCall from queue
 
-         BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
+         int tIndex;
+         BaseQCall* tQCall = (BaseQCall*)mCallQueue.startRead(&tIndex);
 
          //----------------------------------------------------------
          //----------------------------------------------------------
@@ -148,8 +149,8 @@ void BaseQCallThreadEx::threadRunFunction()
          {
             // Execute QCall
             tQCall->execute();
-            // Delete it
-            delete tQCall;
+            // Release it
+            mCallQueue.finishRead(tIndex);
          }
       }
    }
@@ -161,20 +162,6 @@ void BaseQCallThreadEx::threadRunFunction()
 void BaseQCallThreadEx::threadResourceExitFunction()
 {
    Prn::print(Prn::QCallInit1, "BaseQCallThreadEx::threadResourceExitFunction");
-
-   // Empty the call queue
-   while (true)
-   {
-      BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
-      if (tQCall)
-      {
-         delete tQCall;
-      }
-      else
-      {
-         break;
-      }
-   }
 
    // Finalize the call queue
    mCallQueue.finalize();
@@ -197,18 +184,9 @@ void BaseQCallThreadEx::shutdownThread()
 
 //******************************************************************************
 
-void BaseQCallThreadEx::putQCallToThread(BaseQCall* aQCall)
+void BaseQCallThreadEx::postQCallAvailable()
 {
-   // Put the QCall to the queue and signal the semaphore
-   if (mCallQueue.writePtr(aQCall))
-   {
-      mCentralSem.put();
-   }
-   else 
-   {
-      Prn::print(0,"ERROR CallQue FULL");
-      delete aQCall;
-   }
+   mCentralSem.put();
 }
 
 }//namespace

@@ -200,13 +200,10 @@ public:
    // Call queue:
 
    CountingSemaphore    mCentralSem;
-   Ris::LFPointerQueue  mCallQueue;
-   int                  mCallQueSize;
 
-   //--------------------------------------------------------------
-   // This is called by a QCall's invoke method to put itself to
-   // the call queue.
-   void putQCallToThread(BaseQCall* aQCall);
+
+   int                  mCallQueSize;
+   void postQCallAvailable();
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------

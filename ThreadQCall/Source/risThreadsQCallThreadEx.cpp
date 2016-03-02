@@ -45,7 +45,7 @@ BaseQCallThreadEx::~BaseQCallThreadEx()
 void BaseQCallThreadEx::threadResourceInitFunction()
 {
    // Initialize the call queue
-   mCallQueue.initialize(mCallQueSize,128);
+   BaseQCallTargetEx::initializeCallQueue(mCallQueSize);
 }
 
 //******************************************************************************
@@ -164,7 +164,7 @@ void BaseQCallThreadEx::threadResourceExitFunction()
    Prn::print(Prn::QCallInit1, "BaseQCallThreadEx::threadResourceExitFunction");
 
    // Finalize the call queue
-   mCallQueue.finalize();
+   BaseQCallTargetEx::initializeCallQueue(mCallQueSize);
 }
 
 //******************************************************************************

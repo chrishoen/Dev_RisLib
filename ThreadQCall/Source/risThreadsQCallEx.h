@@ -157,6 +157,21 @@ public:
 
    LFBlockQueue mCallQueue;
 
+   // Call queue block size, this is the maximum size of a QCall.
+   static const int cCallQueueBlockSize = 128;
+
+   // Initialize the call queue
+   void initializeCallQueue(int aCallQueueSize)
+   {
+      mCallQueue.initialize(aCallQueueSize,cCallQueueBlockSize);
+   }
+
+   // Finalize the call queue
+   void finalizeCallQueue()
+   {
+      mCallQueue.finalize();
+   }
+
    // Target inheritors provide an override for this method.
    // It is called after a QCall has been enqueued to the target queue.
    // It notifies the target that a QCall is available.

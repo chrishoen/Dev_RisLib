@@ -196,13 +196,20 @@ public:
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
-   // Call queue:
+   // Call queue.
 
-   CountingSemaphore    mCentralSem;
+   // This semahore is posted to when QCalls for this thread
+   // are invoked or when a periodic timer event occurrs.
 
+   CountingSemaphore mCentralSem;
 
-   int                  mCallQueSize;
+   // Overload from qcall target base class. It posts to the 
+   // central semahore. It is called by QCall invokations after
+   // a QCall has been enqueued to the call queue.
    void notifyQCallAvailable();
+
+   // Inherited target call queue size.
+   int  mCallQueSize;
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
@@ -247,9 +254,6 @@ public:
 //******************************************************************************
 }//namespace
 }//namespace
-
-// Put this include here for obscure compiler reasons
-//#include "risThreadsQCallEx.h"
 
 #endif
 

@@ -133,11 +133,10 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 #include "risPortableTypes.h"
 #include "risCallPointer.h"
-#include "risLFPointerQueue.h"
 #include "risThreadsThreads.h"
 #include "risThreadsTimer.h"
 #include "risThreadsSynch.h"
-#include "risThreadsQCallTargetEx.h"
+#include "risThreadsQCallEx.h"
 
 namespace Ris
 {
@@ -250,7 +249,7 @@ public:
 }//namespace
 
 // Put this include here for obscure compiler reasons
-#include "risThreadsQCallEx.h"
+//#include "risThreadsQCallEx.h"
 
 #endif
 

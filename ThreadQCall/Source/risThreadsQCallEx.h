@@ -132,6 +132,7 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 #include <new>
+#include "risLFBlockQueue.h"
 #include "risCallPointer.h"
 
 namespace Ris
@@ -142,6 +143,28 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// QCall target base class. Inheriting classes process received QCalls.
+
+class BaseQCall;
+
+class BaseQCallTargetEx
+{
+public:
+
+   // Lock free queue of fixed size blocks, contains QCalls.
+   // QCall invokations enqueue QCalls to this queue.
+   // QCall targets dequeue from it.
+
+   LFBlockQueue mCallQueue;
+
+   // Target inheritors provide an override for this method.
+   // It is called after a QCall has been enqueued to the target queue.
+   // It notifies the target that a QCall is available.
+
+   virtual void notifyQCallAvailable()=0;
+};
+
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

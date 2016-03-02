@@ -59,9 +59,6 @@
     <ClInclude Include="Source\risThreadsQCallEx.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risThreadsQCallTargetEx.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risThreadsQCallThreadEx.h">
       <Filter>Source</Filter>
     </ClInclude>

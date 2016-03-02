@@ -35,7 +35,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,"%d", sizeof(gQCallThread1->mC102QCall));
 }
 
 //******************************************************************************
@@ -49,6 +48,15 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0,"F100  %d", sizeof(gQCallThread1->mF100QCall));
+   Prn::print(0,"F101  %d", sizeof(gQCallThread1->mF101QCall));
+   Prn::print(0,"F102  %d", sizeof(gQCallThread1->mF102QCall));
+   Prn::print(0,"F103  %d", sizeof(gQCallThread1->mF103QCall));
+   Prn::print(0,"F104  %d", sizeof(gQCallThread1->mF104QCall));
+   Prn::print(0,"F105  %d", sizeof(gQCallThread1->mF105QCall));
+   Prn::print(0,"");
+   Prn::print(0,"%d", sizeof(gQCallThread1->mF105QCall.mTarget));
+   Prn::print(0,"%d", sizeof(gQCallThread1->mF105QCall.mExecuteCallPointer));
 }
 
 //******************************************************************************

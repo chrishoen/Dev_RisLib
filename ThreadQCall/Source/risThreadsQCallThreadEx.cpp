@@ -148,6 +148,7 @@ void BaseQCallThreadEx::threadRunFunction()
          if (tQCall)
          {
             // Execute QCall
+            Prn::print(0, "QCall.mSpecial %d %d ",tQCall->mSpecial1,tQCall->mSpecial2);
             tQCall->execute();
             // Release it
             mCallQueue.finishRead(tIndex);

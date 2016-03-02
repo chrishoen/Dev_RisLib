@@ -163,6 +163,8 @@ public:
 
    virtual void execute()=0;
 
+   int mSpecial1;
+   int mSpecial2;
 };
 
 //******************************************************************************
@@ -250,7 +252,10 @@ public:
       QCall1* tQCall = (QCall1*)mTarget->mCallQueue.startWrite(&tIndex);
       if (tQCall==0) return;
       // Create a new copy of this QCall.
-      *tQCall = *this;
+      tQCall->mTarget = mTarget;
+      tQCall->mExecuteCallPointer = mExecuteCallPointer;
+      tQCall->mSpecial1=mSpecial1;
+      tQCall->mSpecial2=902;
       // Set its arguments.
       tQCall->mX1=aX1;
       // Invoke it.
@@ -276,6 +281,7 @@ public:
    // This is called by the called thread
    void execute()
    {
+//    printf("HHHHHHHHHHHHHHHH execute\n");
       mExecuteCallPointer(mX1);
    }
 
@@ -285,6 +291,7 @@ public:
    template <class CallObject,class CallMethod>
    void bind(CallObject aCallObject,CallMethod aCallMethod)
    {
+      mSpecial1 = 9011;
       mTarget = aCallObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }
@@ -292,6 +299,7 @@ public:
    template <class InvokeToObject,class CallObject,class CallMethod>
    void bind(InvokeToObject aInvokeToObject,CallObject aCallObject,CallMethod aCallMethod)
    {
+      mSpecial1 = 9012;
       mTarget = aInvokeToObject;
       mExecuteCallPointer.bind (aCallObject,aCallMethod);
    }

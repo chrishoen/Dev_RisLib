@@ -203,7 +203,7 @@ public:
 
 
    int                  mCallQueSize;
-   void postQCallAvailable();
+   void notifyQCallAvailable();
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------

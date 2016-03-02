@@ -21,7 +21,7 @@ class BaseQCallTargetEx
 public:
    LFBlockQueue mCallQueue;
 
-   virtual void postQCallAvailable()=0;
+   virtual void notifyQCallAvailable()=0;
 };
 
 

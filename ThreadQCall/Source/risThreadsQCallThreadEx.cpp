@@ -184,7 +184,7 @@ void BaseQCallThreadEx::shutdownThread()
 
 //******************************************************************************
 
-void BaseQCallThreadEx::postQCallAvailable()
+void BaseQCallThreadEx::notifyQCallAvailable()
 {
    mCentralSem.put();
 }

@@ -178,13 +178,6 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke()
    {
-      // Copy this QCall to the CallQueue.
-      int tIndex;
-      QCall0* tQCall = (QCall0*)mTarget->mCallQueue.startWrite(&tIndex);
-      if (tQCall==0) return;
-      *tQCall = *this;
-      mTarget->mCallQueue.finishWrite(tIndex);
-      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -239,29 +232,22 @@ public:
    X1 mX1;
 
    //---------------------------------------------------------------------------
-   // Invoke, sends a QCall to a thread call queue:
+   // Function call overload. It enqueues a copy of the QCall to the target
+   // queue and then notifies the target that a QCall is available.
 
-   // This is called by the calling thread.
-   // It creates a new copy of the QCall, sets its arguments, and invokes it.
-   void invoke(X1 aX1)
+   void operator()(X1 aX1)
    {
-      // Allocate a block from the call queue.
+      // Store arguments into this QCall.
+      mX1=aX1;
+      // Start a write to the target queue, obtaining memory for a new QCall.
       int tIndex;
       void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
       if (tBlock==0) return;
-      // Create a new copy of this QCall.
+      // Create a copy of this QCall, using the new memory.
       QCall1* tQCall = new(tBlock)QCall1(*this);
-      // Set its arguments.
-      tQCall->mX1=aX1;
-      // Invoke it.
+      // Finish the write to the target queue and notify the target.
       mTarget->mCallQueue.finishWrite(tIndex);
-      mTarget->postQCallAvailable();
-   }
-
-   // Invoke function call overload
-   void operator()(X1 aX1)
-   {
-      invoke(aX1);
+      mTarget->notifyQCallAvailable();
    }
 
    //---------------------------------------------------------------------------
@@ -318,18 +304,6 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1,X2 aX2)
    {
-      // Copy this QCall to the CallQueue.
-      int tIndex;
-      QCall2* tQCall = (QCall2*)mTarget->mCallQueue.startWrite(&tIndex);
-      if (tQCall==0) return;
-      // Create a new copy of this QCall.
-      *tQCall = *this;
-      // Set its arguments.
-      tQCall->mX1=aX1;
-      tQCall->mX2=aX2;
-      // Invoke it.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -392,19 +366,6 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1,X2 aX2,X3 aX3)
    {
-      // Copy this QCall to the CallQueue.
-      int tIndex;
-      QCall3* tQCall = (QCall3*)mTarget->mCallQueue.startWrite(&tIndex);
-      if (tQCall==0) return;
-      // Create a new copy of this QCall.
-      *tQCall = *this;
-      // Set its arguments.
-      tQCall->mX1=aX1;
-      tQCall->mX2=aX2;
-      tQCall->mX3=aX3;
-      // Invoke it.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -468,20 +429,6 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
    {
-      // Copy this QCall to the CallQueue.
-      int tIndex;
-      QCall4* tQCall = (QCall4*)mTarget->mCallQueue.startWrite(&tIndex);
-      if (tQCall==0) return;
-      // Create a new copy of this QCall.
-      *tQCall = *this;
-      // Set its arguments.
-      tQCall->mX1=aX1;
-      tQCall->mX2=aX2;
-      tQCall->mX3=aX3;
-      tQCall->mX4=aX4;
-      // Invoke it.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload
@@ -546,21 +493,6 @@ public:
    // It creates a new copy of the QCall, sets its arguments, and invokes it.
    void invoke(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5)
    {
-      // Copy this QCall to the CallQueue.
-      int tIndex;
-      QCall5* tQCall = (QCall5*)mTarget->mCallQueue.startWrite(&tIndex);
-      if (tQCall==0) return;
-      // Create a new copy of this QCall.
-      *tQCall = *this;
-      // Set its arguments.
-      tQCall->mX1=aX1;
-      tQCall->mX2=aX2;
-      tQCall->mX3=aX3;
-      tQCall->mX4=aX4;
-      tQCall->mX5=aX4;
-      // Invoke it.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      mTarget->postQCallAvailable();
    }
 
    // Invoke function call overload

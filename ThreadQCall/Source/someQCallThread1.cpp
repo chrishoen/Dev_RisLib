@@ -11,8 +11,8 @@ Description:
 
 #include "someShare.h"
 
-#define  _SOMETHREAD1_CPP_
-#include "someThread1.h"
+#define  _SOMEQCALLTHREAD1_CPP_
+#include "someQCallThread1.h"
 
 namespace Some
 {
@@ -21,38 +21,39 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-Thread1::Thread1()
+QCallThread1::QCallThread1()
 {
-   // BaseClass
-   BaseClass::mTimerPeriod=1000;
-// BaseClass::mThreadTimerCreateFlag = false;
+   // Set base class
    BaseClass::setThreadPriorityHigh();
+   BaseClass::mThreadAffinityMask = 0x20;
+   BaseClass::mThreadIdealProcessor = 5;
+   BaseClass::mTimerPeriod=0;
 
    // QCall CallPointers
-   mC101QCall.bind  (this,&Thread1::executeC101);
-   mC102QCall.bind  (this,&Thread1::executeC102);
+   mC101QCall.bind  (this,&QCallThread1::executeC101);
+   mC102QCall.bind  (this,&QCallThread1::executeC102);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void Thread1::executeOnTimer (int aTimeCount)
+void QCallThread1::executeOnTimer (int aTimeCount)
 {
 }
 
 //******************************************************************************
 
-void Thread1::executeC101(int aN)
+void QCallThread1::executeC101(int aN)
 {
    gShare.mTimeMarker.doStop();
 }
 
 //******************************************************************************
 
-void Thread1::executeC102(int aN)
+void QCallThread1::executeC102(int aN)
 {
-   Prn::print(0,"Thread1::executeC102 %d",aN);
+   Prn::print(0,"QCallThread1::executeC102 %d",aN);
 }
 
 }//namespace

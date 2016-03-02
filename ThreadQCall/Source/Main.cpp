@@ -3,8 +3,9 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "someThread1.h"
-#include "someTimerThread.h"
+#include "someQCallThread1.h"
+#include "someTimerThread1.h"
+#include "GSettings.h"
 #include "MainInit.h"
 
 using namespace Some;
@@ -20,11 +21,17 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Launch threads
 
-   gThread1 = new Thread1;
-   gThread1->launchThread();
+   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
+   {
+      gQCallThread1 = new QCallThread1;
+      gQCallThread1->launchThread();
+   }
 
-   gTimerThread = new TimerThread;
-   gTimerThread->launchThread();
+   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
+   {
+      gTimerThread1 = new TimerThread1;
+      gTimerThread1->launchThread();
+   }
 
    //--------------------------------------------------------------------
    // Start user command line executive,
@@ -37,11 +44,17 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Shutdown threads
 
-   gThread1->shutdownThread();
-   delete gThread1;
+   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
+   {
+      gTimerThread1->shutdownThread();
+      delete gTimerThread1;
+   }
 
-   gTimerThread->shutdownThread();
-   delete gTimerThread;
+   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
+   {
+      gQCallThread1->shutdownThread();
+      delete gQCallThread1;
+   }
 
    //--------------------------------------------------------------------
    // Exit

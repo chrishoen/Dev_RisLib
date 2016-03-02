@@ -1,8 +1,8 @@
-#ifndef _SOMETHREAD1_H_
-#define _SOMETHREAD1_H_
+#ifndef _SOMEQCALLTHREAD1_H_
+#define _SOMEQCALLTHREAD1_H_
 
 /*==============================================================================
-File: someThread1.h
+File: someQCallThread1.h
 Description:
 QCall test thread class.
 ==============================================================================*/
@@ -10,7 +10,7 @@ QCall test thread class.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risThreadsQCallThreadEx.h"
+#include "risThreadsQCallThread.h"
 
 namespace Some
 {
@@ -19,12 +19,12 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class  Thread1 : public Ris::Threads::BaseQCallThreadEx
+class  QCallThread1 : public Ris::Threads::BaseQCallThread
 {
 public:
-   typedef Ris::Threads::BaseQCallThreadEx BaseClass;
+   typedef Ris::Threads::BaseQCallThread BaseClass;
 
-   Thread1();
+   QCallThread1();
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
@@ -47,10 +47,10 @@ public:
 //******************************************************************************
 // Global instance
        
-#ifdef _SOMETHREAD1_CPP_
-          Thread1* gThread1;
+#ifdef _SOMEQCALLTHREAD1_CPP_
+          QCallThread1* gQCallThread1;
 #else
-   extern Thread1* gThread1;
+   extern QCallThread1* gQCallThread1;
 #endif
 
 //******************************************************************************

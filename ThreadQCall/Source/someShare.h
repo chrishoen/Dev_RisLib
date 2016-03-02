@@ -19,9 +19,8 @@ class Share
 {
 public:
    Share();
-
+   
    Ris::PeriodicTimeMarker mTimeMarker;
-   int mTest;
 };
 
 //******************************************************************************

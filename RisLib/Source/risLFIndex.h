@@ -1,5 +1,5 @@
-#ifndef _RISLFINDEX_H_
-#define _RISLFINDEX_H_
+#ifndef _LFINDEX_H_
+#define _LFINDEX_H_
 
 #include <atomic>
 
@@ -15,36 +15,56 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Lock Free Index used by CAS based algorithms.
 
-   struct LFIndex
+struct LFIndex
+{
+   // Used as a node index.
+   int mIndex;
+   // Used to overcome the ABA problem.
+   int mCount;
+
+   // Constructor
+   LFIndex()
    {
-      int mIndex;
-      int mCount;
-
-      LFIndex()
-      {
-         mIndex = 0;
-         mCount = 0;
-      }
-
-      LFIndex(int aIndex, int aCount)
-      {
-         mIndex = aIndex;
-         mCount = aCount;
-      }
-   };
-
-   inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
-   {
-      return lhs.mIndex == rhs.mIndex && lhs.mCount == rhs.mCount;
+      mIndex = 0;
+      mCount = 0;
    }
 
-   inline bool operator!=(const LFIndex& lhs, const LFIndex& rhs)
+   // Constructor
+   LFIndex(int aIndex, int aCount)
    {
-      return lhs.mIndex != rhs.mIndex && lhs.mCount != rhs.mCount;
+      mIndex = aIndex;
+      mCount = aCount;
    }
+};
 
-   typedef std::atomic<LFIndex> AtomicLFIndex;
+// Operator
+inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
+{
+   return lhs.mIndex == rhs.mIndex && lhs.mCount == rhs.mCount;
+}
+
+// Operator
+inline bool operator!=(const LFIndex& lhs, const LFIndex& rhs)
+{
+   return lhs.mIndex != rhs.mIndex && lhs.mCount != rhs.mCount;
+}
+
+// Atomic
+typedef std::atomic<LFIndex> AtomicLFIndex;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Base class for lock free container blocks. This is inherited by classes that
+// are contained in intrusive lock free containers.
+
+class BaseLFBlock
+{
+public:
+   int mLFNodeIndex;
+};
 
 //******************************************************************************
 //******************************************************************************

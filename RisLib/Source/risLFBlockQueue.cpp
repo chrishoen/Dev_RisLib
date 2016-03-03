@@ -6,12 +6,6 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <windows.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-
 #include "risLFBlockQueue.h"
 
 using namespace std;
@@ -28,8 +22,6 @@ namespace Ris
       mMemory = 0;
       mQueueNext = 0;
       mListNext = 0;
-      mAllocate = 0;
-      mQueueAllocate = 0;
       mListAllocate = 0;
    }
 
@@ -48,8 +40,6 @@ namespace Ris
       finalize();
 
       mBlockSize     = aBlockSize;
-      mAllocate      = aAllocate;
-      mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 1;
 
       mMemory = malloc(mListAllocate*mBlockSize);
@@ -269,5 +259,4 @@ namespace Ris
       mListSize.fetch_add(1,memory_order_relaxed);
       return true;
    }
-
 }//namespace

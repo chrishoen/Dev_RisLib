@@ -146,7 +146,7 @@ void UdpMsgThread::processRxMessage(Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMessageQCall.invoke(aMsg);
+   mRxMessageQCall(aMsg);
 }
 
 //******************************************************************************

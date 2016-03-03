@@ -45,7 +45,7 @@ BaseQCallThread::~BaseQCallThread()
 void BaseQCallThread::threadResourceInitFunction()
 {
    // Initialize the call queue
-   mCallQueue.initialize(mCallQueSize);
+   BaseQCallTarget::initializeCallQueue(mCallQueSize);
 }
 
 //******************************************************************************
@@ -136,7 +136,8 @@ void BaseQCallThread::threadRunFunction()
          //----------------------------------------------------------
          // Get QCall from queue
 
-         BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
+         int tIndex;
+         BaseQCall* tQCall = (BaseQCall*)mCallQueue.startRead(&tIndex);
 
          //----------------------------------------------------------
          //----------------------------------------------------------
@@ -148,8 +149,8 @@ void BaseQCallThread::threadRunFunction()
          {
             // Execute QCall
             tQCall->execute();
-            // Delete it
-            delete tQCall;
+            // Release it
+            mCallQueue.finishRead(tIndex);
          }
       }
    }
@@ -162,22 +163,8 @@ void BaseQCallThread::threadResourceExitFunction()
 {
    Prn::print(Prn::QCallInit1, "BaseQCallThread::threadResourceExitFunction");
 
-   // Empty the call queue
-   while (true)
-   {
-      BaseQCall* tQCall = (BaseQCall*)mCallQueue.readPtr();
-      if (tQCall)
-      {
-         delete tQCall;
-      }
-      else
-      {
-         break;
-      }
-   }
-
    // Finalize the call queue
-   mCallQueue.finalize();
+   BaseQCallTarget::initializeCallQueue(mCallQueSize);
 }
 
 //******************************************************************************
@@ -197,18 +184,9 @@ void BaseQCallThread::shutdownThread()
 
 //******************************************************************************
 
-void BaseQCallThread::putQCallToThread(BaseQCall* aQCall)
+void BaseQCallThread::notifyQCallAvailable()
 {
-   // Put the QCall to the queue and signal the semaphore
-   if (mCallQueue.writePtr(aQCall))
-   {
-      mCentralSem.put();
-   }
-   else 
-   {
-      Prn::print(0,"ERROR CallQue FULL");
-      delete aQCall;
-   }
+   mCentralSem.put();
 }
 
 }//namespace

@@ -144,7 +144,7 @@ void UdpDClassThread::processRxDClass(DHandle aRxDClass)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxDClassQCall.invoke(aRxDClass);
+   mRxDClassQCall(aRxDClass);
 }
 
 //******************************************************************************

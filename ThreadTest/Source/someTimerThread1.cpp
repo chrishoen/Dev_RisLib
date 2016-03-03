@@ -119,7 +119,7 @@ void TimerThread1::executeOnTimer(int aTimeCount)
          {
             case 1:
             {
-               gQCallThread1->mC101QCall.invoke(aTimeCount);
+               gQCallThread1->mC101QCall(aTimeCount);
             }
             break;
          }
@@ -133,7 +133,7 @@ void TimerThread1::executeOnTimer(int aTimeCount)
          {
             case 1:
             {
-               gQCallThread2->mC101QCall.invoke(aTimeCount);
+               gQCallThread2->mC101QCall(aTimeCount);
             }
             break;
          }

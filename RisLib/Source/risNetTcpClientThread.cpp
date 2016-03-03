@@ -203,7 +203,7 @@ void TcpClientThread::processSessionChange(bool aEstablished)
    // Invoke the session qcall to notify that a session has
    // been established or disestablished
    // Create a new qcall, copied from the original, and invoke it.
-   mSessionQCall.invoke(aEstablished);
+   mSessionQCall(aEstablished);
 }
 
 //******************************************************************************
@@ -214,7 +214,7 @@ void TcpClientThread::processRxMsg(Ris::ByteContent* aRxMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMsgQCall.invoke(aRxMsg);
+   mRxMsgQCall(aRxMsg);
 }
 
 //******************************************************************************

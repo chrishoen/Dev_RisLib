@@ -20,7 +20,7 @@ class QCall1 <class X1>
 class QCall2 <class X1,class X2>
 class QCall3 <class X1,class X2,class X3>
 class QCall4 <class X1,class X2,class X3,class X4>
-class BaseQCallThread
+class BaseQCallThreadEx
 
 A QCall (Queued Function Call) is a thread interface mechanism that allows 
 thread member functions to be called by other threads in a deferred manner
@@ -69,19 +69,19 @@ The template syntax is based on that of the CallPointers.
 Note that CallPointers that have returns cannot be used because there
 is no way to get the return back to the caller.
 
-QCall threads inherit from BaseQCallThread or BaseQCallThreadMultipleWait.
+QCall threads inherit from BaseQCallThreadEx or BaseQCallThreadExMultipleWait.
 
-BaseQCallThread contains an mCallQue and a threadRunFunction that services
+BaseQCallThreadEx contains an mCallQue and a threadRunFunction that services
 it. The mCallQue is a queue of QCall pointers that contains a semaphore that 
 the thread waits at. When a QCall pointer is written to the queue, the thread
 wakes up, gets the QCall from the queue and and calls the QCall "execute" 
 CallPointer, passing in the QCall arguments.
 
-BaseQCallThread does a WaitForSingleObject on the QCallQue semaphore. The
+BaseQCallThreadEx does a WaitForSingleObject on the QCallQue semaphore. The
 wait has a one second timeout that is used to poll a thread terminate flag
 that is used to shutdown the thread.
 
-BaseQCallThreadMultipleWait is similar to BaseQCallThread. It does a
+BaseQCallThreadExMultipleWait is similar to BaseQCallThreadEx. It does a
 WaitForMultipleObject, where one of the objects is the mCallQue semaphore.
 Other objects are a timer and a termination request semaphore. Inheriting
 threads can add other objects to to the multiple wait list.
@@ -133,11 +133,10 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 #include "risPortableTypes.h"
 #include "risCallPointer.h"
-#include "risLFPointerQueue.h"
 #include "risThreadsThreads.h"
 #include "risThreadsTimer.h"
 #include "risThreadsSynch.h"
-#include "risThreadsQCallTarget.h"
+#include "risThreadsQCall.h"
 
 namespace Ris
 {
@@ -147,19 +146,19 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// BaseQCallThread is a thread that waits on a queue of QCalls, which are
+// BaseQCallThreadEx is a thread that waits on a queue of QCalls, which are
 // objects that contain a pointer to a function and values for arguments that
 // are to be passed to that function. This is similar to a thread that waits
 // on a message queue, and wakes up and processes messages when they are sent
 // to it's queue. Here the messages take the form of QCalls. 
 //
-// BaseQCallThread contains an mCallQue and a threadRunFunction that services
+// BaseQCallThreadEx contains an mCallQue and a threadRunFunction that services
 // it. The mCallQue is a queue of QCall pointers and it contains a semaphore that 
 // the thread waits at. When a QCall pointer is written to the queue, the thread
 // wakes up, gets the QCall from the queue and and calls the QCall "execute" 
 // CallPointer, passing in the QCall arguments.
 // 
-// BaseQCallThread supplies a shutdownThread that invokes a mTerminateQCall that
+// BaseQCallThreadEx supplies a shutdownThread that invokes a mTerminateQCall that
 // sets an mTerminateFlag. The threadRunFunction polls the mTerminateFlag
 // and exits the thread if it is true.
 
@@ -197,16 +196,20 @@ public:
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
-   // Call queue:
+   // Call queue.
 
-   CountingSemaphore    mCentralSem;
-   Ris::LFPointerQueue  mCallQueue;
-   int                  mCallQueSize;
+   // This semahore is posted to when QCalls for this thread
+   // are invoked or when a periodic timer event occurrs.
 
-   //--------------------------------------------------------------
-   // This is called by a QCall's invoke method to put itself to
-   // the call queue.
-   void putQCallToThread(BaseQCall* aQCall);
+   CountingSemaphore mCentralSem;
+
+   // Overload from qcall target base class. It posts to the 
+   // central semahore. It is called by QCall invokations after
+   // a QCall has been enqueued to the call queue.
+   void notifyQCallAvailable();
+
+   // Inherited target call queue size.
+   int  mCallQueSize;
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
@@ -251,9 +254,6 @@ public:
 //******************************************************************************
 }//namespace
 }//namespace
-
-// Put this include here for obscure compiler reasons
-#include "risThreadsQCall.h"
 
 #endif
 

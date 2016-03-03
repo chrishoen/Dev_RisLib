@@ -28,6 +28,7 @@
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
     <ClCompile Include="Source\risSerialPort.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
+    <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsSynch_win.cpp" />
     <ClCompile Include="Source\risTimeMarker_win.cpp" />
     <ClCompile Include="Source\ris_priorities_win.cpp" />
@@ -58,7 +59,6 @@
     <ClCompile Include="Source\risRVector.cpp" />
     <ClCompile Include="Source\risSockets_win.cpp" />
     <ClCompile Include="Source\risThreadsProcess_win.cpp" />
-    <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsTimer.cpp" />
     <ClCompile Include="Source\risThreadsTimerThread.cpp" />
     <ClCompile Include="Source\risThreadsThreads_win.cpp" />
@@ -78,7 +78,8 @@
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
     <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\risStatistics.h" />
-    <ClInclude Include="Source\risThreadsQCallTarget.h" />
+    <ClInclude Include="Source\risThreadsQCall.h" />
+    <ClInclude Include="Source\risThreadsQCallThread.h" />
     <ClInclude Include="Source\risThreadsSynch.h" />
     <ClInclude Include="Source\risTimeMarker.h" />
     <ClInclude Include="Source\ris_priorities.h" />
@@ -116,8 +117,6 @@
     <ClInclude Include="Source\risSockets.h" />
     <ClInclude Include="Source\risThreadsThreads.h" />
     <ClInclude Include="Source\risThreadsProcess.h" />
-    <ClInclude Include="Source\risThreadsQCall.h" />
-    <ClInclude Include="Source\risThreadsQCallThread.h" />
     <ClInclude Include="Source\risThreadsQueue.h" />
     <ClInclude Include="Source\risThreadsTimer.h" />
     <ClInclude Include="Source\risThreadsTimerThread.h" />

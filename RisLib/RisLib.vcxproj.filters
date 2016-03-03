@@ -88,9 +88,6 @@
     <ClCompile Include="Source\risPointerStack.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreadsQCallThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risCmdLineTables.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -134,6 +131,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risLFBlockQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risThreadsQCallThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -240,12 +240,6 @@
     <ClInclude Include="Source\risPointerStack.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risThreadsQCallThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsQCall.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risCmdLineTables.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -297,9 +291,6 @@
     <ClInclude Include="Source\risThreadsSynch.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risThreadsQCallTarget.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risLFIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -307,6 +298,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risLFBlockQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsQCall.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsQCallThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -354,7 +354,7 @@ void TcpServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
    // Invoke the session qcall to notify that a session has
    // been established or disestablished
    // Create a new qcall, copied from the original, and invoke it.
-   mSessionQCall.invoke(aSessionIndex,aEstablished);
+   mSessionQCall(aSessionIndex,aEstablished);
 }
 
 //******************************************************************************
@@ -365,7 +365,7 @@ void TcpServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMsgQCall.invoke(aSessionIndex,aRxMsg);
+   mRxMsgQCall(aSessionIndex,aRxMsg);
 }
 
 }//namespace

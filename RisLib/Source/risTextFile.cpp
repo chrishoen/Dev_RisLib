@@ -303,6 +303,7 @@ bool CsvFileReader::read(char* aFilename)
    //---------------------------------------------------------------------------
    // Done
 
+   fclose(mFile);
    mValidFlag = true;
    return true;
 }

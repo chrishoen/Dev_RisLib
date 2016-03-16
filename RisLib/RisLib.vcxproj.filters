@@ -136,6 +136,12 @@
     <ClCompile Include="Source\risThreadsQCallThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risThreadsTwoThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risTextFile.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -304,6 +310,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsQCallThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsTwoThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risTextFile.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

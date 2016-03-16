@@ -177,14 +177,12 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\risThreadsTwoThread.cpp" />
     <ClCompile Include="Source\someControllerThread.cpp" />
     <ClCompile Include="Source\somePlantThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\risThreadsTwoThread.h" />
     <ClInclude Include="Source\someControllerThread.h" />
     <ClInclude Include="Source\somePlantThread.h" />
   </ItemGroup>

@@ -59,12 +59,25 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   Ris::CsvFileReader tReader;
+   tReader.read("C:\\MyLib\\Data\\file_101.csv");
+
+   for (int i = 0; i < tReader.mRows; i++)
+   {
+      tReader.show(i);
+   }
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   char tString[100];
+   strcpy(tString,"1234.0, \n");
+
+   Prn::print(0, "%d %s", strlen(tString),tString);
+   Ris::CsvFileReader::trimString(tString);
+   Prn::print(0, "%d %s", strlen(tString),tString);
 }
 
 //******************************************************************************

@@ -57,6 +57,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwoThreadTest", "TwoThreadT
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadQCall", "ThreadQCall\ThreadQCall.vcxproj", "{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileTest", "FileTest\FileTest.vcxproj", "{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -249,6 +251,14 @@ Global
 		{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}.Release|Win32.Build.0 = Release|Win32
 		{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}.Release|x64.ActiveCfg = Release|x64
 		{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}.Release|x64.Build.0 = Release|x64
+		{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}.Debug|Win32.Build.0 = Debug|Win32
+		{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}.Debug|x64.ActiveCfg = Debug|x64
+		{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}.Debug|x64.Build.0 = Debug|x64
+		{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}.Release|Win32.ActiveCfg = Release|Win32
+		{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}.Release|Win32.Build.0 = Release|Win32
+		{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}.Release|x64.ActiveCfg = Release|x64
+		{D2FAE3CA-0CB3-4EE7-856D-649FF9C32648}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

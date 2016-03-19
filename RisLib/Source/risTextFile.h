@@ -74,19 +74,19 @@ public:
    bool open (char* aFilename);
 
    //---------------------------------------------------------------------------
-   // Write to the text file
-
-   void write  (const char* aFormat, ...);
-   void writeN (int aNumArgs, ...);
-   void write  (double aX1);
-   void write  (double aX1,double aX2);
-   void write  (double aX1,double aX2,double aX3);
-   void write  (double aX1,double aX2,double aX3,double aX4);
-
-   //---------------------------------------------------------------------------
    // Close the text file
 
    void close ();
+
+   //---------------------------------------------------------------------------
+   // Write a row to the text file
+
+   void writeRow  (const char* aFormat, ...);
+   void writeRowN (int aNumArgs, ...);
+   void writeRow  (double aX1);
+   void writeRow  (double aX1,double aX2);
+   void writeRow  (double aX1,double aX2,double aX3);
+   void writeRow  (double aX1,double aX2,double aX3,double aX4);
 
    //---------------------------------------------------------------------------
    // Members
@@ -114,9 +114,19 @@ public:
    CsvFileReader();
 
    //---------------------------------------------------------------------------
+   // Open the text file for read
+
+   bool open (char* aFilename);
+
+   //---------------------------------------------------------------------------
+   // Close the text file
+
+   void close ();
+
+   //---------------------------------------------------------------------------
    // Read from the file
 
-   bool read (char* aFilename);
+   bool readRow ();
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -125,10 +135,6 @@ public:
 
    // File handle
    FILE*  mFile;
-
-   // Valie
-   bool mValidFlag;
-
 
    // Text buffer
    static const int cMaxStringSize = 400;
@@ -140,20 +146,20 @@ public:
    //---------------------------------------------------------------------------
    // Matrix components
 
-   double* mValues;
-   int     mRows;
-   int     mCols;
+   static const int cMaxNumOfCols=100;
+   double mValues[cMaxNumOfCols];
+   int mCols;
 
-   // Access components
-   double& e(int aRow,int aCol);
-   double& operator()(int aRow,int aCol);
-   void show(int aRow);
+   // Access column values from the last row that was read.
+   double& e(int aCol);
+   double& operator()(int aCol);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    // Helpers
 
+   void show();
    static void trimString(char* aString);
 };
 

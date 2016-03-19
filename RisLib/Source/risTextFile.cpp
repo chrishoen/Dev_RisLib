@@ -123,11 +123,10 @@ void CsvFileWriter::close()
    }
 }
 
-
 //******************************************************************************
 // Write to the file
 
-void CsvFileWriter::write(const char* aFormat, ...)
+void CsvFileWriter::writeRow(const char* aFormat, ...)
 {
    //-----------------------------------------------------
    // Do a vsprintf with variable arg list into print string
@@ -150,7 +149,7 @@ void CsvFileWriter::write(const char* aFormat, ...)
 //******************************************************************************
 // Write to the file
 
-void CsvFileWriter::writeN(int aNumArgs, ...)
+void CsvFileWriter::writeRowN(int aNumArgs, ...)
 {
    va_list valist;
    va_start(valist,aNumArgs);
@@ -167,22 +166,22 @@ void CsvFileWriter::writeN(int aNumArgs, ...)
 //******************************************************************************
 // Write to the file
 
-void CsvFileWriter::write(double aX1)
+void CsvFileWriter::writeRow(double aX1)
 {
    fprintf(mFile, "%f,\n",aX1);
 }
 
-void CsvFileWriter::write(double aX1,double aX2)
+void CsvFileWriter::writeRow(double aX1,double aX2)
 {
    fprintf(mFile, "%f,%f,\n",aX1,aX2);
 }
 
-void CsvFileWriter::write(double aX1,double aX2,double aX3)
+void CsvFileWriter::writeRow(double aX1,double aX2,double aX3)
 {
    fprintf(mFile, "%f,%f,%f,\n",aX1,aX2,aX3);
 }
 
-void CsvFileWriter::write(double aX1,double aX2,double aX3,double aX4)
+void CsvFileWriter::writeRow(double aX1,double aX2,double aX3,double aX4)
 {
    fprintf(mFile, "%f,%f,%f,%f,\n",aX1,aX2,aX3,aX4);
 }
@@ -201,9 +200,9 @@ CsvFileReader::CsvFileReader()
 }
 
 //******************************************************************************
-// Read from the file
+// Open the file
 
-bool CsvFileReader::read(char* aFilename)
+bool CsvFileReader::open(char* aFilename)
 {            
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -212,11 +211,6 @@ bool CsvFileReader::read(char* aFilename)
 
    strcpy(mDelimiters," ,\t");
 
-   mValidFlag = false;
-
-   //---------------------------------------------------------------------------
-   // Open the file
-
    mFile = fopen(aFilename,"r");
 
    if (mFile==0)
@@ -224,87 +218,43 @@ bool CsvFileReader::read(char* aFilename)
       return false;
    }
 
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Read from the file to get the number of rows and columns
+   return true;
+}
 
-   mRows=0;
+//******************************************************************************
+// Close the file
+
+void CsvFileReader::close()
+{       
+   if (mFile)
+   {
+      fclose(mFile);
+   }
+}
+
+//******************************************************************************
+// Read from the file
+
+bool CsvFileReader::readRow()
+{            
    mCols=0;
-   while (true)
+   // Read the row
+   if (fgets(mString, cMaxStringSize, mFile) == NULL)
    {
-      // Read each row
-      if (fgets(mString, cMaxStringSize, mFile) != NULL)
-      {
-         mRows++;
-
-         // Trim the end of the string
-         trimString(mString);
-
-         // Read tokens in the row to get the number of columns
-         if (mRows == 1)
-         {
-            char* tPtr = strtok (mString,mDelimiters);
-            while (tPtr != NULL)
-            {
-               tPtr = strtok (NULL,mDelimiters);
-               mCols++;
-            }
-         }
-      }
-      else
-      {
-         break;
-      }
+      return false;
    }
 
-   // Rewind the file
-   rewind(mFile);
+   // Trim the end of the string
+   trimString(mString);
 
-   printf("READING %s %d %d\n",aFilename,mRows,mCols);
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Allocate memory for the table
-
-   mValues = new double[mRows*mCols];
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Read from the file to get the table values
-
-   // For all of the rows
-   for (int tRow=0;tRow<mRows;tRow++)
+   // Extract column values for the row
+   char* tPtr = strtok (mString,mDelimiters);
+   while (tPtr != NULL)
    {
-      // Read the row
-      if (fgets(mString, cMaxStringSize, mFile) == NULL)
-      {
-         printf("FILE READ ERROR 101\n");
-         return false;
-      }
-
-      // Trim the end of the string
-      trimString(mString);
-
-      // Extract column values for the row
-      int tCol=0;
-      char* tPtr = strtok (mString,mDelimiters);
-      while (tPtr != NULL)
-      {
-         e(tRow, tCol++) = atof(tPtr);
-         tPtr = strtok (NULL,mDelimiters);
-      }
+      e(mCols++) = atof(tPtr);
+      tPtr = strtok (NULL,mDelimiters);
    }
 
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Done
-
-   fclose(mFile);
-   mValidFlag = true;
    return true;
 }
 
@@ -313,33 +263,25 @@ bool CsvFileReader::read(char* aFilename)
 //******************************************************************************
 //******************************************************************************
 
-double& CsvFileReader::e (int aRow,int aCol)
+double& CsvFileReader::e (int aCol)
 {
-   int tIndex = (aRow)*mCols + (aCol);
-   return mValues[tIndex];
+   return mValues[aCol];
 }
 
-double& CsvFileReader::operator() (int aRow,int aCol)
+double& CsvFileReader::operator() (int aCol)
 {
-   int tIndex = (aRow)*mCols + (aCol);
-   return mValues[tIndex];
+   return mValues[aCol];
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CsvFileReader::show(int aRow)
+void CsvFileReader::show()
 {
-   if (!mValidFlag)
-   {
-      printf("CsvFileReader NOT VALID\n");
-      return;
-   }
-
    for (int j=0;j<mCols;j++)
    {
-      printf("%12.8f ",e(aRow,j));
+      printf("%12.8f ",e(j));
    }
    printf("\n");
 }

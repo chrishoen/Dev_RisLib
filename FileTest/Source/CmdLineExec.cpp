@@ -48,10 +48,10 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    Ris::CsvFileWriter tWriter;
    tWriter.open("C:\\MyLib\\Data\\file_101.csv");
-   tWriter.writeN(2,101.1,102.2);
-   tWriter.writeN(2,201.1,202.2);
-   tWriter.write (301.1,302.2);
-   tWriter.write (401.1,302.2);
+   tWriter.writeRowN(2,101.1,102.2);
+   tWriter.writeRowN(2,201.1,202.2);
+   tWriter.writeRow (301.1,302.2);
+   tWriter.writeRow (401.1,302.2);
    tWriter.close();
 }
 
@@ -60,11 +60,12 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    Ris::CsvFileReader tReader;
-   tReader.read("C:\\MyLib\\Data\\file_101.csv");
+   tReader.open("C:\\MyLib\\Data\\file_101.csv");
 
-   for (int i = 0; i < tReader.mRows; i++)
+   while(true)
    {
-      tReader.show(i);
+      if (!tReader.readRow()) return;
+      tReader.show();
    }
 }
 

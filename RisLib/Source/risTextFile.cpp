@@ -126,7 +126,7 @@ void CsvFileWriter::close()
 //******************************************************************************
 // Write to the file
 
-void CsvFileWriter::writeRow(const char* aFormat, ...)
+void CsvFileWriter::writeRow(int aRowIndex,const char* aFormat, ...)
 {
    //-----------------------------------------------------
    // Do a vsprintf with variable arg list into print string
@@ -143,14 +143,15 @@ void CsvFileWriter::writeRow(const char* aFormat, ...)
    //-----------------------------------------------------
    // Print the string
 
-   fputs(mString,mFile);
+   fprintf(mFile,"%d,%s\n",aRowIndex,mString);
 }
 
 //******************************************************************************
 // Write to the file
 
-void CsvFileWriter::writeRowN(int aNumArgs, ...)
+void CsvFileWriter::writeRowN(int aRowIndex,int aNumArgs, ...)
 {
+   fprintf(mFile,"%d,",aRowIndex);
    va_list valist;
    va_start(valist,aNumArgs);
    for (int i=0;i<aNumArgs;i++)
@@ -166,24 +167,24 @@ void CsvFileWriter::writeRowN(int aNumArgs, ...)
 //******************************************************************************
 // Write to the file
 
-void CsvFileWriter::writeRow(double aX1)
+void CsvFileWriter::writeRow(int aRowIndex,double aX1)
 {
-   fprintf(mFile, "%f,\n",aX1);
+   fprintf(mFile, "%d,%f,\n",aRowIndex,aX1);
 }
 
-void CsvFileWriter::writeRow(double aX1,double aX2)
+void CsvFileWriter::writeRow(int aRowIndex,double aX1,double aX2)
 {
-   fprintf(mFile, "%f,%f,\n",aX1,aX2);
+   fprintf(mFile, "%d,%f,%f,\n",aRowIndex,aX1,aX2);
 }
 
-void CsvFileWriter::writeRow(double aX1,double aX2,double aX3)
+void CsvFileWriter::writeRow(int aRowIndex,double aX1,double aX2,double aX3)
 {
-   fprintf(mFile, "%f,%f,%f,\n",aX1,aX2,aX3);
+   fprintf(mFile, "%d,%f,%f,%f,\n",aRowIndex,aX1,aX2,aX3);
 }
 
-void CsvFileWriter::writeRow(double aX1,double aX2,double aX3,double aX4)
+void CsvFileWriter::writeRow(int aRowIndex,double aX1,double aX2,double aX3,double aX4)
 {
-   fprintf(mFile, "%f,%f,%f,%f,\n",aX1,aX2,aX3,aX4);
+   fprintf(mFile, "%d,%f,%f,%f,%f,\n",aRowIndex,aX1,aX2,aX3,aX4);
 }
 
 //******************************************************************************
@@ -210,7 +211,8 @@ bool CsvFileReader::open(char* aFilename)
    // Initialize
 
    strcpy(mDelimiters," ,\t");
-
+   mRowIndex=0;
+   
    mFile = fopen(aFilename,"r");
 
    if (mFile==0)
@@ -247,12 +249,17 @@ bool CsvFileReader::readRow()
    // Trim the end of the string
    trimString(mString);
 
-   // Extract column values for the row
+   // Extract row index for the row
    char* tPtr = strtok (mString,mDelimiters);
+   if (tPtr==NULL) return false;
+   mRowIndex = atoi(tPtr);
+
+   // Extract column values for the row
    while (tPtr != NULL)
    {
-      e(mCols++) = atof(tPtr);
       tPtr = strtok (NULL,mDelimiters);
+      if (tPtr==NULL) break;;
+      e(mCols++) = atof(tPtr);
    }
 
    return true;
@@ -279,10 +286,13 @@ double& CsvFileReader::operator() (int aCol)
 
 void CsvFileReader::show()
 {
+   printf("%d ",mRowIndex);
+
    for (int j=0;j<mCols;j++)
    {
       printf("%12.8f ",e(j));
    }
+
    printf("\n");
 }
 

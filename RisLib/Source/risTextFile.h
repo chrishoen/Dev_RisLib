@@ -81,12 +81,12 @@ public:
    //---------------------------------------------------------------------------
    // Write a row to the text file
 
-   void writeRow  (const char* aFormat, ...);
-   void writeRowN (int aNumArgs, ...);
-   void writeRow  (double aX1);
-   void writeRow  (double aX1,double aX2);
-   void writeRow  (double aX1,double aX2,double aX3);
-   void writeRow  (double aX1,double aX2,double aX3,double aX4);
+   void writeRow  (int aRowIndex,const char* aFormat, ...);
+   void writeRowN (int aRowIndex,int aNumArgs, ...);
+   void writeRow  (int aRowIndex,double aX1);
+   void writeRow  (int aRowIndex,double aX1,double aX2);
+   void writeRow  (int aRowIndex,double aX1,double aX2,double aX3);
+   void writeRow  (int aRowIndex,double aX1,double aX2,double aX3,double aX4);
 
    //---------------------------------------------------------------------------
    // Members
@@ -149,6 +149,7 @@ public:
    static const int cMaxNumOfCols=100;
    double mValues[cMaxNumOfCols];
    int mCols;
+   int mRowIndex;
 
    // Access column values from the last row that was read.
    double& e(int aCol);

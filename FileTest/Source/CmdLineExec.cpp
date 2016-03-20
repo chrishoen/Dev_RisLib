@@ -6,6 +6,7 @@
 
 #include "my_functions.h"
 #include "prnPrint.h"
+#include "logFiles.h"
 #include "risTextFile.h"
 
 #include "CmdLineExec.h"
@@ -81,33 +82,13 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    Prn::print(0, "%d %s", strlen(tString),tString);
 }
 
+
 //******************************************************************************
-
-class MyClass1
-{
-public:
-
-   MyClass1()
-   {
-      mX1[0] = 101;
-      mX2[0] = 102;
-   }
-
-   enum {MaxSize = 100};
-   int  mX1[MaxSize];
-
-   static const int cMaxSize = 100;
-   int  mX2[cMaxSize];
-
-   void myCall(int aX)
-   {
-      const int* tPtr1 = &cMaxSize;
-      int* tPtr2 = (int*)&cMaxSize;
-   }
-
-};
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   Log::write(1,"%d %d",101,102);
+   Log::write(1,"%d %d",201,202);
 }
+
 

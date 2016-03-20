@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\logFiles.cpp" />
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\risByteBuffer.cpp" />
     <ClCompile Include="Source\risLFBlockQueue.cpp" />
@@ -66,6 +67,7 @@
     <ClCompile Include="Source\risThreadsThreads_win.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\logFiles.h" />
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
     <ClInclude Include="Source\risByteBuffer.h" />

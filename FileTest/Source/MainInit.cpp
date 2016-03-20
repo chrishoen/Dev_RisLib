@@ -1,8 +1,7 @@
 #include <windows.h>
 
 #include "prnPrint.h"
-#include "risCmdLineConsole.h"
-#include "CmdLineExec.h"
+#include "logFiles.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -46,6 +45,9 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun4,  false);
 
    Prn::print(0,"FileTest*******************************************BEGIN");
+
+   Log::reset();
+   Log::openFile(1,"C:\\MyLib\\Data\\logfile_101.txt");
 }
 
 //******************************************************************************

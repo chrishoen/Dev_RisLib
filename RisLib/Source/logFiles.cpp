@@ -79,6 +79,14 @@ void closeAllFiles()
 void write (int aLogNum, const char* aFormat, ...)
 {
    //-----------------------------------------------------
+   // Guard
+
+   if (mFile[aLogNum]==0)
+   {
+      return;
+   }
+
+   //-----------------------------------------------------
    // Do a vsprintf with variable arg list into print string
 
    char tString[cMaxStringSize];

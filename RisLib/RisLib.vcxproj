@@ -29,7 +29,6 @@
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
     <ClCompile Include="Source\risSerialPort.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
-    <ClCompile Include="Source\risTextFile.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsSynch_win.cpp" />
     <ClCompile Include="Source\risThreadsTwoThread.cpp" />
@@ -45,11 +44,7 @@
     <ClCompile Include="Source\risCmdLineString.cpp" />
     <ClCompile Include="Source\risCmdLineTables.cpp" />
     <ClCompile Include="Source\risCriticalSection_win.cpp" />
-    <ClCompile Include="Source\risFilterAlpha.cpp" />
-    <ClCompile Include="Source\risFilterFilters.cpp" />
-    <ClCompile Include="Source\risFilterStatistics.cpp" />
     <ClCompile Include="Source\risLogic.cpp" />
-    <ClCompile Include="Source\risLut.cpp" />
     <ClCompile Include="Source\risNanoTime.cpp" />
     <ClCompile Include="Source\risNetSessionStateList.cpp" />
     <ClCompile Include="Source\risNetTcpClientThread.cpp" />
@@ -59,7 +54,6 @@
     <ClCompile Include="Source\risNetUdpMsgThread.cpp" />
     <ClCompile Include="Source\risPointerStack.cpp" />
     <ClCompile Include="Source\risPortableCalls_win.cpp" />
-    <ClCompile Include="Source\risRVector.cpp" />
     <ClCompile Include="Source\risSockets_win.cpp" />
     <ClCompile Include="Source\risThreadsProcess_win.cpp" />
     <ClCompile Include="Source\risThreadsTimer.cpp" />
@@ -82,7 +76,6 @@
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
     <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\risStatistics.h" />
-    <ClInclude Include="Source\risTextFile.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />
     <ClInclude Include="Source\risThreadsSynch.h" />
@@ -104,11 +97,7 @@
     <ClInclude Include="Source\risContainers.h" />
     <ClInclude Include="Source\risContainers2.h" />
     <ClInclude Include="Source\risCriticalSection.h" />
-    <ClInclude Include="Source\risFilterAlpha.h" />
-    <ClInclude Include="Source\risFilterFilters.h" />
-    <ClInclude Include="Source\risFilterStatistics.h" />
     <ClInclude Include="Source\risLogic.h" />
-    <ClInclude Include="Source\risLut.h" />
     <ClInclude Include="Source\risNanoTime.h" />
     <ClInclude Include="Source\risNetSessionStateList.h" />
     <ClInclude Include="Source\risNetTcpClientThread.h" />
@@ -119,10 +108,8 @@
     <ClInclude Include="Source\risPointerStack.h" />
     <ClInclude Include="Source\risPortableCalls.h" />
     <ClInclude Include="Source\risPortableTypes.h" />
-    <ClInclude Include="Source\risRVector.h" />
     <ClInclude Include="Source\risSockets.h" />
     <ClInclude Include="Source\risThreadsThreads.h" />
-    <ClInclude Include="Source\risThreadsProcess.h" />
     <ClInclude Include="Source\risThreadsQueue.h" />
     <ClInclude Include="Source\risThreadsTimer.h" />
     <ClInclude Include="Source\risThreadsTimerThread.h" />

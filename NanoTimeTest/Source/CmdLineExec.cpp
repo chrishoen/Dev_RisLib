@@ -7,8 +7,6 @@
 #include "prnPrint.h"
 #include "risContainers.h"
 
-#include "risLUT.h"
-
 #include "CmdLineExec.h"
 
 //******************************************************************************

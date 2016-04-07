@@ -25,9 +25,6 @@
     <ClCompile Include="Source\risCmdLineString.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risCriticalSection_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risLogic.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -77,9 +74,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ris_priorities_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risSerialPort.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risByteMessageParser.cpp">
@@ -159,9 +153,6 @@
     <ClInclude Include="Source\risContainers.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risCriticalSection.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risLogic.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -220,9 +211,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ris_priorities.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risSerialPort.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteMessageParser.h">

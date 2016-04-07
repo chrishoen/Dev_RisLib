@@ -9,7 +9,6 @@ Description:
 #include <atomic>
 
 #include "prnPrint.h"
-#include "risCriticalSection.h"
 
 #define  _SOMETIMERTHREAD_CPP_
 #include "someTimerThread.h"
@@ -133,9 +132,6 @@ void TimerThread::executeTest3(int aTimeCount)
    while(true)
    {
       mTimeMarker.doStart();
-
-      Ris::enterCriticalSection();
-      Ris::leaveCriticalSection();
 
       mTimeMarker.doStop();
 

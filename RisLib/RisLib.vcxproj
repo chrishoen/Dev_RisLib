@@ -27,7 +27,6 @@
     <ClCompile Include="Source\risNetUdpTMessageSocket.cpp" />
     <ClCompile Include="Source\risNetUdpTMessageThread.cpp" />
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
-    <ClCompile Include="Source\risSerialPort.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsSynch_win.cpp" />
@@ -43,7 +42,6 @@
     <ClCompile Include="Source\risCmdLineFile.cpp" />
     <ClCompile Include="Source\risCmdLineString.cpp" />
     <ClCompile Include="Source\risCmdLineTables.cpp" />
-    <ClCompile Include="Source\risCriticalSection_win.cpp" />
     <ClCompile Include="Source\risLogic.cpp" />
     <ClCompile Include="Source\risNanoTime.cpp" />
     <ClCompile Include="Source\risNetSessionStateList.cpp" />
@@ -74,7 +72,6 @@
     <ClInclude Include="Source\risNetUdpTMessageSocket.h" />
     <ClInclude Include="Source\risNetUdpTMessageThread.h" />
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
-    <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\risStatistics.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />
@@ -96,7 +93,6 @@
     <ClInclude Include="Source\risCmdLineTables.h" />
     <ClInclude Include="Source\risContainers.h" />
     <ClInclude Include="Source\risContainers2.h" />
-    <ClInclude Include="Source\risCriticalSection.h" />
     <ClInclude Include="Source\risLogic.h" />
     <ClInclude Include="Source\risNanoTime.h" />
     <ClInclude Include="Source\risNetSessionStateList.h" />

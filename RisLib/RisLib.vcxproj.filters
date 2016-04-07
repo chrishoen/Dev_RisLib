@@ -10,9 +10,6 @@
     <ClCompile Include="Source\my_functions.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\prnPrint.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\prnPrintSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -53,9 +50,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risThreadsProcess_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsTimer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risNanoTime.cpp">
@@ -119,6 +113,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risStatistics.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risThreadsTimer_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\prnPrint_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

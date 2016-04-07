@@ -37,14 +37,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleTMessage", "ExampleT
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadSynch", "ThreadSynch\ThreadSynch.vcxproj", "{90C1CE32-5D8A-42CA-8515-6E2695A410A1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{1B969CC8-E47F-4AB5-803E-50B3360BEFDB}"
-	ProjectSection(SolutionItems) = preProject
-		Files\someTimerThread2.cpp = Files\someTimerThread2.cpp
-		Files\someTimerThread2.h = Files\someTimerThread2.h
-		Files\someTimerThread3.cpp = Files\someTimerThread3.cpp
-		Files\someTimerThread3.h = Files\someTimerThread3.h
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwoThreadTest", "TwoThreadTest\TwoThreadTest.vcxproj", "{94FB6082-38EF-4E73-9DDD-F0969070F8C6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadQCall", "ThreadQCall\ThreadQCall.vcxproj", "{E2A7B31A-1B78-4A68-81FC-24E3F8ABA614}"

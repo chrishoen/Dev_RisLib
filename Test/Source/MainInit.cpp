@@ -1,4 +1,3 @@
-#include <windows.h>
 
 #include "prnPrint.h"
 #include "risThreadsProcess.h"

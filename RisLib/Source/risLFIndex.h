@@ -1,6 +1,8 @@
 #ifndef _LFINDEX_H_
 #define _LFINDEX_H_
 
+
+#include "my_defs.h"
 #include <atomic>
 
 /*==============================================================================
@@ -25,14 +27,14 @@ struct LFIndex
    int mCount;
 
    // Constructor
-   LFIndex()
+   LFIndex() NOEXCEPT
    {
       mIndex = 0;
       mCount = 0;
    }
 
    // Constructor
-   LFIndex(int aIndex, int aCount)
+   LFIndex(int aIndex, int aCount) NOEXCEPT
    {
       mIndex = aIndex;
       mCount = aCount;

@@ -6,12 +6,11 @@
 //******************************************************************************
 
 #include <windows.h> 
+#include <stdio.h>
+#include <assert.h>
 
 #include "my_functions.h"
 #include "ris_priorities.h"
-
-#include <stdio.h>
-#include <assert.h>
 #include "prnPrint.h"
 #include "risThreadsThreads.h"
 

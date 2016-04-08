@@ -88,9 +88,6 @@
     <ClCompile Include="Source\risNetUdpTMessageThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risTimeMarker_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risThreadsThreads_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -119,6 +116,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\prnPrint_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risTimeMarker.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

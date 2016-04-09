@@ -1,5 +1,3 @@
-#include <windows.h>
-
 #include "prnPrint.h"
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
@@ -54,7 +52,7 @@ void main_initialize(int argc,char** argv)
    gGSettings.readFromFileName();
    gGSettings.show();
 
-   Prn::print(0,"ThreadQCall*******************************************BEGIN");
+   Prn::print(0,"ThreadSample*******************************************BEGIN");
 }
 
 //******************************************************************************
@@ -64,7 +62,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ThreadQCall*******************************************END");
+   Prn::print(0,"ThreadSample*******************************************END");
 
    // Close print
    Prn::finalizePrint();

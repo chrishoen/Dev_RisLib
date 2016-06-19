@@ -33,12 +33,12 @@ class ByteTMessage
 {
 public:
    // General purpose identifier
-   int mTMessageType;
+   int mMessageType;
 
    // Constructor
    ByteTMessage()
    {
-      mTMessageType = 0;
+      mMessageType = 0;
    }
 };
 

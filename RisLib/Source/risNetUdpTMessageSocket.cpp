@@ -168,7 +168,7 @@ namespace Net
          // Copy the buffer content into the header object.
          copyToFrom(aBuffer);
          // Set the message content type.
-         aParent->mTMessageType = mMessageIdentifier;
+         aParent->mMessageType = mMessageIdentifier;
       }
    }
 
@@ -191,7 +191,7 @@ namespace Net
          int tFinalLength   = aBuffer->getLength();
 
          // Get message parameters from parent
-         mMessageIdentifier = aParent->mTMessageType;
+         mMessageIdentifier = aParent->mMessageType;
          mMessageLength     = aBuffer->getLength();
 
          // Restore buffer parameters
@@ -403,7 +403,7 @@ namespace Net
       // Instance of a header,set members
 
       TMessageHeader tHeader;
-      tHeader.mMessageIdentifier = aMsg->mTMessageType;
+      tHeader.mMessageIdentifier = aMsg->mMessageType;
 
       //------------------------------------------------------------------------
       // Copy

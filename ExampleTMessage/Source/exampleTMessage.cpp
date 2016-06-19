@@ -48,7 +48,7 @@ namespace Example
 
    void TMessageCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteTMessage* aMsg)
    {
-      switch (aMsg->mTMessageType)
+      switch (aMsg->mMessageType)
       {
       case TypeIdT::cTestMsg :
          copyToFrom(aBuffer,(TestMsg*)aMsg);
@@ -77,7 +77,7 @@ namespace Example
 
    TestMsg::TestMsg()
    {
-      mTMessageType     = TypeIdT::cTestMsg;
+      mMessageType     = TypeIdT::cTestMsg;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -100,7 +100,7 @@ namespace Example
 
    StatusMsg::StatusMsg()
    {
-      mTMessageType     = TypeIdT::cStatusMsg;
+      mMessageType     = TypeIdT::cStatusMsg;
 
       mCode1           = 1002;
       mCode2           = 0;
@@ -123,7 +123,7 @@ namespace Example
 
    Data1Msg::Data1Msg()
    {
-      mTMessageType     = TypeIdT::cData1Msg;
+      mMessageType     = TypeIdT::cData1Msg;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -146,7 +146,7 @@ namespace Example
 
    Data2Msg::Data2Msg()
    {
-      mTMessageType     = TypeIdT::cData2Msg;
+      mMessageType     = TypeIdT::cData2Msg;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -170,7 +170,7 @@ namespace Example
 
    Data3Msg::Data3Msg()
    {
-      mTMessageType     = TypeIdT::cData3Msg;
+      mMessageType     = TypeIdT::cData3Msg;
 
       mCode1           = 1001;
       mCode2           = 0;
@@ -209,7 +209,7 @@ namespace Example
 
    Data4Msg::Data4Msg()
    {
-      mTMessageType     = TypeIdT::cData4Msg;
+      mMessageType     = TypeIdT::cData4Msg;
 
       mCode1           = 1001;
       mCode2           = 0;

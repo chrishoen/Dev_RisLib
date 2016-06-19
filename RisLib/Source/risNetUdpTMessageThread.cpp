@@ -91,7 +91,7 @@ void  UdpTMessageThread::threadRunFunction()
       if (mRxSocket.doReceiveMessage(tMsg))
       {
          // Message was correctly received
-         Prn::print(Prn::SocketRun1, "Recv message %d %d",mRxSocket.mRxCount,tMsg->mTMessageType);
+         Prn::print(Prn::SocketRun1, "Recv message %d %d",mRxSocket.mRxCount,tMsg->mMessageType);
 
          // Call the receive method
          processRxMessage(tMsg);

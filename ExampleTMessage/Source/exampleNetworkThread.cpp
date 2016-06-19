@@ -91,7 +91,7 @@ void NetworkThread::executeRxMessage(Ris::ByteTMessage* aMsg)
 {
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
-   switch (aMsg->mTMessageType)
+   switch (aMsg->mMessageType)
    {
       case TypeIdT::cTestMsg :
          processRxMessage((TestMsg*)aMsg);
@@ -112,7 +112,7 @@ void NetworkThread::executeRxMessage(Ris::ByteTMessage* aMsg)
          processRxMessage((Data4Msg*)aMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxTMessage ??? %d",aMsg->mTMessageType);
+         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxTMessage ??? %d",aMsg->mMessageType);
          delete aMsg;
          break;
    }

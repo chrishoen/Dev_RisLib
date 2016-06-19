@@ -37,7 +37,7 @@ void portableSleep(int aTicks)
 
 const char* portableGetSettingsDir()
 {
-   return "C:\\MyLib\\Settings\\";
+   return "C:\\Alpha\\Settings\\";
 }
 
 //******************************************************************************

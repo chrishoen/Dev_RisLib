@@ -246,7 +246,7 @@ HANDLE rCreatePrintView(int aConsole)
    ZeroMemory( &pi, sizeof(pi) );
 
    char tCommandLine[200];
-   sprintf(tCommandLine,"C:\\MyLib\\Bin\\PrintView.exe  %d",rConsolePort[aConsole]);
+   sprintf(tCommandLine,"C:\\Alpha\\Bin\\PrintView.exe  %d",rConsolePort[aConsole]);
 
    char tConsoleTitle[50];
    sprintf(tConsoleTitle,"PRINTVIEW%d",aConsole);

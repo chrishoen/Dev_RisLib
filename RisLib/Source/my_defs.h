@@ -14,11 +14,15 @@ My definitions for physical constants
 #define MY_2PI 2.0*MY_PI
 #define MY_C   299,792,458 
 
+/*
 #ifndef _MSC_VER
 #define NOEXCEPT noexcept(true)
 #else
 #define NOEXCEPT
 #endif
+*/
+
+#define NOEXCEPT noexcept(true)
 
 #endif
 

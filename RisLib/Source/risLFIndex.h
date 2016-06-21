@@ -19,6 +19,7 @@ namespace Ris
 //******************************************************************************
 // Lock Free Index used by CAS based algorithms.
 
+__declspec(align(8))
 struct LFIndex
 {
    // Used as a node index.
@@ -27,14 +28,14 @@ struct LFIndex
    int mCount;
 
    // Constructor
-   LFIndex() NOEXCEPT
+   LFIndex() noexcept
    {
       mIndex = 0;
       mCount = 0;
    }
 
    // Constructor
-   LFIndex(int aIndex, int aCount) NOEXCEPT
+   LFIndex(int aIndex, int aCount) noexcept
    {
       mIndex = aIndex;
       mCount = aCount;

@@ -8,6 +8,7 @@
 #include "prnPrint.h"
 #include "risContainers.h"
 #include "risTimeMarker.h"
+#include "risProgramTime.h"
 
 #include "CmdLineExec.h"
 
@@ -98,5 +99,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0, "ProgramTime %8.4f", Ris::getCurrentProgramTime());
 }
 

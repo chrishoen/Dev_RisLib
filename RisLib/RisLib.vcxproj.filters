@@ -121,6 +121,9 @@
     <ClCompile Include="Source\risTimeMarker.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risProgramTime.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -271,6 +274,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risStatistics.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risProgramTime.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

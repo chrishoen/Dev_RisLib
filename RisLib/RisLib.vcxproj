@@ -27,6 +27,7 @@
     <ClCompile Include="Source\risNetUdpTMessageSocket.cpp" />
     <ClCompile Include="Source\risNetUdpTMessageThread.cpp" />
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
+    <ClCompile Include="Source\risProgramTime.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsSynch_win.cpp" />
@@ -72,6 +73,7 @@
     <ClInclude Include="Source\risNetUdpTMessageSocket.h" />
     <ClInclude Include="Source\risNetUdpTMessageThread.h" />
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
+    <ClInclude Include="Source\risProgramTime.h" />
     <ClInclude Include="Source\risStatistics.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />

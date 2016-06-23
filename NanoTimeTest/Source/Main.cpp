@@ -1,44 +1,31 @@
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "prnPrint.h"
+#include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-void amain_init();
-
+#include "MainInit.h"
 
 //******************************************************************************
 int main(int argc,char** argv)
 {
    //--------------------------------------------------------------------
-   // Begin program
+   // Initialize
 
-   amain_init();
+   main_initialize(argc,argv);
 
-   Prn::print(0,"amain***************************************************BEGIN");
-   
    //--------------------------------------------------------------------
    // Start user command line executive,
-   // Wait for user to exit
+   // It returns when user exits
 
-   CmdLineExec* exec = new CmdLineExec;
-   Ris::gCmdLineConsole.execute(exec);
-   delete exec;
+   CmdLineExec* tExec = new CmdLineExec;
+   Ris::executeCmdLineConsole(tExec);
+   delete tExec;
 
    //--------------------------------------------------------------------
-   // End program
+   // Exit
+   
+   main_finalize();
 
-   Prn::print(0,"amain*****************************************************END");
    return 0;
-}
-//******************************************************************************
-void amain_init()
-{
-   // Initialize print facility
-   Prn::initializePrint();
-
-   Ris::setConsoleTitle("test");
 }
 

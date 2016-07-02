@@ -12,10 +12,12 @@ namespace Ris
 {
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 SerialPort::SerialPort()
 {
-   mHandle=0;
+   mPortHandle=0;
 }
 
 SerialPort::~SerialPort(void)
@@ -23,6 +25,10 @@ SerialPort::~SerialPort(void)
    doClose();
 }
 
+bool SerialPort::isValid(){return mValidFlag;}
+
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
@@ -43,7 +49,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
    char tSerialPortName[24];
    sprintf(tSerialPortName, "COM%u", mPortNumber);
 
-   mHandle = CreateFile(tSerialPortName,  
+   mPortHandle = CreateFile(tSerialPortName,  
      GENERIC_READ | GENERIC_WRITE, 
      0, 
      0, 
@@ -51,13 +57,13 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
      0,
      0);
 
-   if (mHandle==INVALID_HANDLE_VALUE)
+   if (mPortHandle==INVALID_HANDLE_VALUE)
    {
       Prn::print(Prn::SerialInit2,"serial_create_error_1 %d", GetLastError());
       return;
    }
 
-   SetupComm(mHandle,2048,2048);
+   SetupComm(mPortHandle,2048,2048);
    //--------------------------------------------------------------------------
    // Purge 
 
@@ -68,8 +74,8 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
    if (GetLastError() != ERROR_SUCCESS)
    {
       Prn::print(Prn::SerialInit2,"serial_create_error_2 %d", GetLastError());
-      CloseHandle(mHandle);
-      mHandle=INVALID_HANDLE_VALUE;
+      CloseHandle(mPortHandle);
+      mPortHandle=INVALID_HANDLE_VALUE;
       return;
    }
  
@@ -83,7 +89,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
    memset(&dcb, 0, sizeof(dcb));
    dcb.DCBlength = sizeof(dcb);
 
-   GetCommState(mHandle, &dcb);
+   GetCommState(mPortHandle, &dcb);
 
    BuildCommDCB(mPortSetup, &dcb);
   
@@ -98,7 +104,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
    bool going=true;
    while (going)
    {
-      if (SetCommState(mHandle, &dcb))
+      if (SetCommState(mPortHandle, &dcb))
       {
          // Successful, exit loop
          going=false;
@@ -113,8 +119,8 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
          if(count++ == 10)
          {
             Prn::print(Prn::SerialInit1,"serial_create_error_3 %d", GetLastError());
-            CloseHandle(mHandle);
-            mHandle=INVALID_HANDLE_VALUE;
+            CloseHandle(mPortHandle);
+            mPortHandle=INVALID_HANDLE_VALUE;
             return;
          }
       }
@@ -131,11 +137,11 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
    tComTimeout.WriteTotalTimeoutMultiplier = 0;
    tComTimeout.WriteTotalTimeoutConstant   = 0;
 
-   if(!SetCommTimeouts(mHandle, &tComTimeout))
+   if(!SetCommTimeouts(mPortHandle, &tComTimeout))
    {
       Prn::print(Prn::SerialInit1,"serial_create_error_4 %d", GetLastError());
-      CloseHandle(mHandle);
-      mHandle=INVALID_HANDLE_VALUE;
+      CloseHandle(mPortHandle);
+      mPortHandle=INVALID_HANDLE_VALUE;
       return;
    }
 
@@ -154,24 +160,40 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void SerialPort::doClose()
 {
    if (mValidFlag)
    {
-      CloseHandle(mHandle);
-      mHandle = INVALID_HANDLE_VALUE;
+      CloseHandle(mPortHandle);
+      mPortHandle = INVALID_HANDLE_VALUE;
       mValidFlag = false;
    } 
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Purge the comm channel
 
-bool SerialPort::isValid()
+void SerialPort::doPurge()
 {
-   return mValidFlag;
+   ClearCommError(mPortHandle,0,0);
+
+   DWORD lFlags;
+
+   lFlags = 
+      PURGE_RXABORT | PURGE_RXCLEAR |
+      PURGE_TXABORT | PURGE_TXCLEAR;
+
+   PurgeComm(mPortHandle, lFlags);
+
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Send fixed number of bytes
 
@@ -181,7 +203,7 @@ int SerialPort::doSend(char* aData, int aSize)
 
    if (!isValid()) return RetCodeError;
 
-   if (WriteFile(mHandle, aData, aSize, &tNumWritten, NULL))
+   if (WriteFile(mPortHandle, aData, aSize, &tNumWritten, NULL))
    {
       return 0;
    }
@@ -193,6 +215,8 @@ int SerialPort::doSend(char* aData, int aSize)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Send null terminated string
 
 int SerialPort::doSend(char* aData)
@@ -201,6 +225,8 @@ int SerialPort::doSend(char* aData)
    return doSend(aData,tSize);   
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Send one byte
 
@@ -214,15 +240,12 @@ int SerialPort::doSendOne(char aData)
 //******************************************************************************
 // Receive
 
-//******************************************************************************
-// Receive Data
-
 int SerialPort::doReceiveData(char *aData, int aSize, int aTimeout)
 {
    DWORD tBytesRead  = 0;
    int tBytesTotal = 0;
 
-   ReadFile(mHandle, aData, aSize, &tBytesRead, NULL);
+   ReadFile(mPortHandle, aData, aSize, &tBytesRead, NULL);
    if (tBytesRead != aSize)
    {
       return RetCodeError;
@@ -236,7 +259,7 @@ int SerialPort::doReceiveData(char *aData, int aSize, int aTimeout)
      // If the read was aborted then clear hardware error
      if (GetLastError()==ERROR_OPERATION_ABORTED)
      {
-        ClearCommError(mHandle,0,0);
+        ClearCommError(mPortHandle,0,0);
      }
 
      return RetCodeError;
@@ -245,6 +268,8 @@ int SerialPort::doReceiveData(char *aData, int aSize, int aTimeout)
    return 0;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // receive until cr/lf termination 
 
@@ -301,6 +326,8 @@ int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxSize,int aTimeout)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // receive until cr termination 
 
 int  SerialPort::doReceiveUntilCR(char *aData, int aMaxSize,int aTimeout)
@@ -353,29 +380,13 @@ int  SerialPort::doReceiveUntilCR(char *aData, int aMaxSize,int aTimeout)
 
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Receive one byte
 
 int  SerialPort::doReceiveOne(char *aData, int aTimeout)
 {
    return doReceiveData(aData, 1, aTimeout);
-}
-
-
-//******************************************************************************
-// Purge the comm channel
-
-void SerialPort::doPurge()
-{
-   ClearCommError(mHandle,0,0);
-
-   DWORD lFlags;
-
-   lFlags = 
-      PURGE_RXABORT | PURGE_RXCLEAR |
-      PURGE_TXABORT | PURGE_TXCLEAR;
-
-   PurgeComm(mHandle, lFlags);
-
 }
 
 }//namespace

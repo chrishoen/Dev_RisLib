@@ -11,12 +11,17 @@ namespace Ris
 {
 
 //******************************************************************************
-class SerialPort 
+//******************************************************************************
+//******************************************************************************
+
+   class SerialPort 
 {
 public:
+
    //---------------------------------------------------------------------------
-   // Constructor creates object, doesn't open serial port
-   // SerialPort* example = new SerialPort(1,"9600,N,8,1");
+   // Constructor
+   // SerialPort* example = new SerialPort();
+   // example->doOpen(1,"9600,N,8,1");
 
    SerialPort();
   ~SerialPort(void);
@@ -31,6 +36,7 @@ public:
    //---------------------------------------------------------------------------
    // Return codes, if retval >=0 then no error and retval is number of bytes
    // that were transferred. If retval < 0 then use these return codes
+
    enum {RetCodeError   = -1};
    enum {RetCodeTimeout = -2};
 
@@ -64,10 +70,10 @@ public:
    // Members
 
    // Serial port handle
-   HANDLE   mHandle;
+   HANDLE   mPortHandle;
 
    int  mPortNumber;
-   char mPortSetup[100];
+   char mPortSetup[16];
 
    bool mValidFlag;
 };

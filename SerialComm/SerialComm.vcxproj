@@ -177,14 +177,12 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\risSerialPort.cpp" />
     <ClCompile Include="Source\someSerialRxThread.cpp" />
     <ClCompile Include="Source\someSerialTxThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\someSerialRxThread.h" />
     <ClInclude Include="Source\someSerialTxThread.h" />
   </ItemGroup>

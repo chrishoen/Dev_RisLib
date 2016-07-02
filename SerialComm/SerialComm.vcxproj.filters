@@ -15,9 +15,6 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risSerialPort.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someSerialRxThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -30,9 +27,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risSerialPort.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someSerialRxThread.h">

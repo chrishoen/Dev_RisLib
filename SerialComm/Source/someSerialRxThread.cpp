@@ -73,7 +73,8 @@ void  SerialRxThread::threadRunFunction()
       // Read sample data from sensor via the serial port and send to consumer.
 
       char tString[100];
-      int tStatus = mSerialPort.doReceiveUntilCR(tString,100,0);
+//    int tStatus = mSerialPort.doReceiveUntilCR(tString,100,0);
+      int tStatus = mSerialPort.doReceiveOne(tString,0);
 
       //------------------------------------------------------------------------
       // If termination request, exit the loop.
@@ -84,7 +85,8 @@ void  SerialRxThread::threadRunFunction()
 
       if (tStatus >= 0)
       {
-         Prn::print(Prn::ThreadRun1,"SerialRxThread receive $$ %d $$ %s",tStatus,tString);
+//       Prn::print(Prn::ThreadRun1,"SerialRxThread receive $$ %d $$ %s",tStatus,tString);
+         Prn::print(Prn::ThreadRun1,"SerialRxThread receive $$ %d $$",tStatus);
       }
       else if (tStatus == Ris::SerialPort::cRetCodeTimeout)
       {

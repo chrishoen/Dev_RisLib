@@ -25,7 +25,7 @@ int main(int argc,char** argv)
    gSerialRxThread->launchThread();
 
    gSerialTxThread = new SerialTxThread();
-   gSerialTxThread->configure(5,"38400,N,8,1");
+   gSerialTxThread->configure(6,"38400,N,8,1");
    gSerialTxThread->launchThread();
 
    //--------------------------------------------------------------------

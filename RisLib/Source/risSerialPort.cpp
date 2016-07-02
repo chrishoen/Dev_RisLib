@@ -37,7 +37,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
    strcpy(mPortSetup,aPortSetup);
    mValidFlag=false;
 
-   Prn::print(Prn::SerialInit1,"SerialPort::doOpen BEGIN %d",mPortNumber);
+   Prn::print(Prn::SerialInit1,"SerialPort::doOpen %d",mPortNumber);
 
    if (mValidFlag)
    {
@@ -112,13 +112,13 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
       else
       {
          // Failed, continue to retry
-         Prn::print(Prn::SerialInit1,"serial_create_retry %d", GetLastError());
+         Prn::print(Prn::SerialInit2,"serial_create_retry %d", GetLastError());
          doPurge();
          Sleep(100);
          // Retry failed, abort initialization
          if(count++ == 10)
          {
-            Prn::print(Prn::SerialInit1,"serial_create_error_3 %d", GetLastError());
+            Prn::print(Prn::SerialInit2,"serial_create_error_3 %d", GetLastError());
             CloseHandle(mPortHandle);
             mPortHandle=INVALID_HANDLE_VALUE;
             return;
@@ -139,7 +139,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
 
    if(!SetCommTimeouts(mPortHandle, &tComTimeout))
    {
-      Prn::print(Prn::SerialInit1,"serial_create_error_4 %d", GetLastError());
+      Prn::print(Prn::SerialInit2,"serial_create_error_4 %d", GetLastError());
       CloseHandle(mPortHandle);
       mPortHandle=INVALID_HANDLE_VALUE;
       return;
@@ -155,8 +155,6 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
    // Done
  
    mValidFlag=true;
-
-   Prn::print(Prn::SerialInit1,"SerialPort::doOpen END %d",mPortNumber);
 }
 
 //******************************************************************************
@@ -165,7 +163,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
 
 void SerialPort::doClose()
 {
-   Prn::print(Prn::SerialInit2,"SerialPort::doClose %d",mPortNumber);
+   Prn::print(Prn::SerialInit1,"SerialPort::doClose %d",mPortNumber);
 
    if (mValidFlag)
    {

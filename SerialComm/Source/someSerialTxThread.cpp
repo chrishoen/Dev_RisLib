@@ -31,6 +31,7 @@ SerialTxThread::SerialTxThread()
    mPortNumber = 0;
    mPortSetup[0]=0;
    mCount=0;
+   mTPFlag=false;
 }
 
 //******************************************************************************
@@ -108,10 +109,13 @@ void  SerialTxThread::threadRunFunction()
       char tString[100];
       sprintf(tString,"ABCDEFGH\r");
 
-      int tStatus = mSerialPort.doSend(tString);
-      if (tStatus < 0)
+      if (mTPFlag)
       {
-         Prn::print(Prn::ThreadRun1,"SerialPort doSendOne ERROR %d",tStatus);
+         int tStatus = mSerialPort.doSend(tString);
+         if (tStatus < 0)
+         {
+            Prn::print(Prn::ThreadRun1, "SerialPort doSend ERROR %d", tStatus);
+         }
       }
     }         
 }

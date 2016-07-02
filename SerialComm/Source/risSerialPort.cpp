@@ -197,20 +197,20 @@ void SerialPort::doPurge()
 //******************************************************************************
 // Send fixed number of bytes
 
-int SerialPort::doSend(char* aData, int aSize)
+int SerialPort::doSend(char* aData, int aNumBytes)
 {
    DWORD tNumWritten;
 
-   if (!isValid()) return RetCodeError;
+   if (!isValid()) return cRetCodeError;
 
-   if (WriteFile(mPortHandle, aData, aSize, &tNumWritten, NULL))
+   if (WriteFile(mPortHandle, aData, aNumBytes, &tNumWritten, NULL))
    {
       return 0;
    }
    else
    {
       Prn::print(Prn::SerialInit1, "Write Failed, %d", GetLastError());
-      return RetCodeError;
+      return cRetCodeError;
    }
 }
 
@@ -221,8 +221,8 @@ int SerialPort::doSend(char* aData, int aSize)
 
 int SerialPort::doSend(char* aData)
 {
-   int tSize = (int)strlen(aData);
-   return doSend(aData,tSize);   
+   int tNumBytes = (int)strlen(aData);
+   return doSend(aData,tNumBytes);   
 }
 
 //******************************************************************************
@@ -238,42 +238,9 @@ int SerialPort::doSendOne(char aData)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive
-
-int SerialPort::doReceiveData(char *aData, int aSize, int aTimeout)
-{
-   DWORD tBytesRead  = 0;
-   int tBytesTotal = 0;
-
-   ReadFile(mPortHandle, aData, aSize, &tBytesRead, NULL);
-   if (tBytesRead != aSize)
-   {
-      return RetCodeError;
-   }
-
-   if (GetLastError() != ERROR_SUCCESS)
-   {
-     // Error in communications
-     Prn::print(Prn::SerialRun1,"serial_receive_error_1 %d", GetLastError());
-
-     // If the read was aborted then clear hardware error
-     if (GetLastError()==ERROR_OPERATION_ABORTED)
-     {
-        ClearCommError(mPortHandle,0,0);
-     }
-
-     return RetCodeError;
-   }
-    
-   return 0;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // receive until cr/lf termination 
 
-int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxSize,int aTimeout)
+int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxNumBytes,int aTimeout)
 {
    int  status=0;
    int  index = 0;
@@ -307,9 +274,9 @@ int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxSize,int aTimeout)
             aData[index-1]=0;
             status=index-2;
          }
-         if(index==aMaxSize-1)
+         if(index==aMaxNumBytes-1)
          {
-            // Size limit was reached
+            // NumBytes limit was reached
             going=false;
             aData[index]=0;
             status = index;
@@ -330,7 +297,7 @@ int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxSize,int aTimeout)
 //******************************************************************************
 // receive until cr termination 
 
-int  SerialPort::doReceiveUntilCR(char *aData, int aMaxSize,int aTimeout)
+int  SerialPort::doReceiveUntilCR(char *aData, int aMaxNumBytes,int aTimeout)
 {
    int  status=0;
    int  index = 0;
@@ -360,9 +327,9 @@ int  SerialPort::doReceiveUntilCR(char *aData, int aMaxSize,int aTimeout)
             aData[index]=0;
             status=index-1;
          }
-         if(index==aMaxSize-1)
+         if(index==aMaxNumBytes-1)
          {
-            // Size limit was reached
+            // NumBytes limit was reached
             going=false;
             aData[index]=0;
             status = index;
@@ -387,6 +354,48 @@ int  SerialPort::doReceiveUntilCR(char *aData, int aMaxSize,int aTimeout)
 int  SerialPort::doReceiveOne(char *aData, int aTimeout)
 {
    return doReceiveData(aData, 1, aTimeout);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Receive
+
+int SerialPort::doReceiveData(char *aData, int aNumBytes, int aTimeout)
+{
+   //---------------------------------------------------------------------------
+   // Locals
+
+   DWORD tBytesRead  = 0;
+   int tBytesTotal = 0;
+
+   //---------------------------------------------------------------------------
+   // Read from port.
+
+   ReadFile(mPortHandle, aData, aNumBytes, &tBytesRead, NULL);
+// Prn::print(0,"LINE101 %d", GetLastError());
+
+   // If read error
+   if (GetLastError() != ERROR_SUCCESS)
+   {
+     // Error in communications
+     Prn::print(Prn::SerialRun1,"serial_receive_error_1 %d", GetLastError());
+
+     // If the read was aborted then clear hardware error
+     if (GetLastError()==ERROR_OPERATION_ABORTED)
+     {
+        ClearCommError(mPortHandle,0,0);
+     }
+
+     return cRetCodeError;
+   }
+    
+   if (tBytesRead != aNumBytes)
+   {
+      return cRetCodeTimeout;
+   }
+
+   return 0;
 }
 
 }//namespace

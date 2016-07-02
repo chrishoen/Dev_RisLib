@@ -25,9 +25,9 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::SocketRun3,  false);
    Prn::setFilter(Prn::SocketRun4,  false);
 
-   Prn::setFilter(Prn::SerialInit1, false);
+   Prn::setFilter(Prn::SerialInit1, true);
    Prn::setFilter(Prn::SerialInit2, true);
-   Prn::setFilter(Prn::SerialRun1,  false);
+   Prn::setFilter(Prn::SerialRun1,  true);
    Prn::setFilter(Prn::SerialRun2,  false);
    Prn::setFilter(Prn::SerialRun3,  false);
    Prn::setFilter(Prn::SerialRun4,  false);

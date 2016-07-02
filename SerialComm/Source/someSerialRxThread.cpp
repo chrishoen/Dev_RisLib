@@ -84,6 +84,10 @@ void  SerialRxThread::threadRunFunction()
       {
          Prn::print(Prn::ThreadRun1,"SerialRxThread receive $$ %d $$ %s",tStatus,tString);
       }
+      else if (tStatus == Ris::SerialPort::cRetCodeTimeout)
+      {
+         Prn::print(Prn::ThreadRun1,"SerialRxThread receive TIMEOUT %d",tStatus);
+      }
       else
       {
          Prn::print(Prn::ThreadRun1,"SerialRxThread receive ERROR %d",tStatus);

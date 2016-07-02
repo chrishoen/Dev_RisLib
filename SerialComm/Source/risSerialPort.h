@@ -37,29 +37,34 @@ public:
    // Return codes, if retval >=0 then no error and retval is number of bytes
    // that were transferred. If retval < 0 then use these return codes
 
-   enum {RetCodeError   = -1};
-   enum {RetCodeTimeout = -2};
+   static const int cRetCodeError   = -1;
+   static const int cRetCodeTimeout = -2;
 
    //---------------------------------------------------------------------------
    // Send
 
-   // Send data, fixed size
-   int  doSend(char *aData, int aSize);
+   // Send data, fixed number of bytes.
+   int  doSend(char *aData, int aNumBytes);
 
-   // Send data, null terminated
+   // Send data, null terminated.
    int  doSend(char *aData);
 
-   // Send data, one byte
+   // Send data, one byte.
    int  doSendOne(char aData);
 
    //---------------------------------------------------------------------------
-   // Receive data, fixed size
-   int  doReceiveData (char *aData, int aSize, int aTimeout);
-   // Receive data, terminated with cr/lf
-   int  doReceiveUntilCRLF (char *aData, int aMaxSize,int aTimeout);
-   // Receive data, terminated with cr
-   int  doReceiveUntilCR (char *aData, int aMaxSize,int aTimeout);
-   // Receive one byte
+   // Receive
+
+   // Receive data, fixed number of bytes.
+   int  doReceiveData (char *aData, int aNumBytes, int aTimeout);
+
+   // Receive data, terminated with cr/lf.
+   int  doReceiveUntilCRLF (char *aData, int aMaxNumBytes,int aTimeout);
+
+   // Receive data, terminated with cr.
+   int  doReceiveUntilCR (char *aData, int aMaxNumBytes,int aTimeout);
+
+   // Receive one byte.
    int  doReceiveOne(char *aData, int aTimeout);
 
    //---------------------------------------------------------------------------

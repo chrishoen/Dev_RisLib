@@ -24,7 +24,7 @@ SerialTxThread::SerialTxThread()
    // Initialize base class members.
 
    BaseClass::setThreadPriorityHigh();
-   BaseClass::mTimerPeriod = 1000;
+   BaseClass::mTimerPeriod = 50;
 
    //---------------------------------------------------------------------------
    // Defaults.
@@ -32,7 +32,7 @@ SerialTxThread::SerialTxThread()
    mPortNumber = 0;
    mPortSetup[0]=0;
    mCount=0;
-   mTPFlag = false;
+   mTPFlag = true;
 }
 
 //******************************************************************************
@@ -81,7 +81,7 @@ void SerialTxThread::executeOnTimer(int aTimeCount)
    if (!mTPFlag) return;
 
    char tString[100];
-   sprintf(tString,"ABCDEFGH\r");
+   sprintf(tString,"ABCDEFGH01234567\r");
 
    int tStatus = mSerialPort.doSend(tString);
    if (tStatus < 0)

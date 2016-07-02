@@ -69,16 +69,18 @@ void  SerialRxThread::threadRunFunction()
 
    while(true)
    {
-      //---------------------------------------------------------------------------
-      // If termination request, exit the loop.
-      if (mTerminateFlag) break;
-
-      //---------------------------------------------------------------------------
+      //------------------------------------------------------------------------
       // Read sample data from sensor via the serial port and send to consumer.
 
       char tString[100];
       int tStatus = mSerialPort.doReceiveUntilCR(tString,100,0);
 
+      //------------------------------------------------------------------------
+      // If termination request, exit the loop.
+      if (mTerminateFlag) break;
+
+      //------------------------------------------------------------------------
+      // Test returned status.
 
       if (tStatus >= 0)
       {

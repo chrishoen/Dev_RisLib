@@ -163,10 +163,9 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
 
 void SerialPort::doClose()
 {
-   Prn::print(Prn::SerialInit1,"SerialPort::doClose %d",mPortNumber);
-
    if (mValidFlag)
    {
+      Prn::print(Prn::SerialInit1,"SerialPort::doClose %d",mPortNumber);
       CancelIoEx(mPortHandle,0);
       CloseHandle(mPortHandle);
       mPortHandle = INVALID_HANDLE_VALUE;

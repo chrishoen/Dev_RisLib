@@ -83,7 +83,7 @@ void SerialTxThread::executeOnTimer(int aTimeCount)
    char tString[100];
    sprintf(tString,"ABCDEFGH\r");
 
-   int tStatus = mSerialPort.doSend(tString,1);
+   int tStatus = mSerialPort.doSend(tString);
    if (tStatus < 0)
    {
       Prn::print(Prn::ThreadRun1, "SerialPort doSend ERROR %d", tStatus);

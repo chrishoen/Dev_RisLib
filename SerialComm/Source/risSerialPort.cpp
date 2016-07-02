@@ -131,15 +131,9 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
 
    COMMTIMEOUTS tComTimeout={0};
 
-   tComTimeout.ReadIntervalTimeout         = 4000;
-   tComTimeout.ReadTotalTimeoutMultiplier  = 1;
-   tComTimeout.ReadTotalTimeoutConstant    = 4000;
-   tComTimeout.WriteTotalTimeoutMultiplier = 0;
-   tComTimeout.WriteTotalTimeoutConstant   = 0;
-
    tComTimeout.ReadIntervalTimeout         = 0;
    tComTimeout.ReadTotalTimeoutMultiplier  = 0;
-   tComTimeout.ReadTotalTimeoutConstant    = 10000;
+   tComTimeout.ReadTotalTimeoutConstant    = 4000;
    tComTimeout.WriteTotalTimeoutMultiplier = 0;
    tComTimeout.WriteTotalTimeoutConstant   = 0;
 

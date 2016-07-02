@@ -24,6 +24,7 @@ SerialTxThread::SerialTxThread()
    // Initialize base class members.
 
    BaseClass::setThreadPriorityHigh();
+   BaseClass::mTimerPeriod = 1000;
 
    //---------------------------------------------------------------------------
    // Defaults.
@@ -31,7 +32,7 @@ SerialTxThread::SerialTxThread()
    mPortNumber = 0;
    mPortSetup[0]=0;
    mCount=0;
-   mTPFlag=false;
+   mTPFlag = false;
 }
 
 //******************************************************************************
@@ -64,24 +65,8 @@ void SerialTxThread::threadInitFunction()
 void SerialTxThread::threadExitFunction()
 {
    Prn::print(Prn::ThreadInit1, "SerialTxThread::threadExitFunction");
-}
-
-//******************************************************************************
-// Shutdown, base class overload.
-// This sets the terminate request flag and closes the socket.
-//
-// If the while loop in the threadRunFunction is blocked on doReceiveMessage then
-// closing the socket will cause doReceiveMessage to return with false and 
-// then the terminate request flag will be polled and the threadRunFunction 
-// will exit.
-
-void SerialTxThread::shutdownThread()
-{
-   BaseThreadWithTermFlag::mTerminateFlag = true;
 
    mSerialPort.doClose();
-
-   BaseThreadWithTermFlag::waitForThreadTerminate();
 }
 
 //******************************************************************************
@@ -91,33 +76,18 @@ void SerialTxThread::shutdownThread()
 // It receives serial data from the sensor and passes it to the owner thread
 // via the qcall.
 
-void  SerialTxThread::threadRunFunction()
+void SerialTxThread::executeOnTimer(int aTimeCount)
 {
-   //---------------------------------------------------------------------------
-   // Loop
+   if (!mTPFlag) return;
 
-   while(true)
+   char tString[100];
+   sprintf(tString,"ABCDEFGH\r");
+
+   int tStatus = mSerialPort.doSend(tString);
+   if (tStatus < 0)
    {
-      //------------------------------------------------------------------------
-      // If termination request, exit the loop.
-      if (mTerminateFlag) break;
-
-      //------------------------------------------------------------------------
-      // Read sample data from sensor via the serial port and send to consumer.
-      BaseClass::threadSleep(1000);
-
-      char tString[100];
-      sprintf(tString,"ABCDEFGH\r");
-
-      if (mTPFlag)
-      {
-         int tStatus = mSerialPort.doSend(tString);
-         if (tStatus < 0)
-         {
-            Prn::print(Prn::ThreadRun1, "SerialPort doSend ERROR %d", tStatus);
-         }
-      }
-    }         
+      Prn::print(Prn::ThreadRun1, "SerialPort doSend ERROR %d", tStatus);
+   }
 }
 
 //******************************************************************************

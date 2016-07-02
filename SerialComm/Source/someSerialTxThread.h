@@ -11,7 +11,7 @@ Sensor receiver thread classes.
 //******************************************************************************
 //******************************************************************************
 
-#include "risThreadsThreads.h"
+#include "risThreadsTimerThread.h"
 #include "risSerialPort.h"
 
 
@@ -22,10 +22,10 @@ namespace Some
 // Sensor receiver thread class.
 //
 
-class SerialTxThread : public Ris::Threads::BaseThreadWithTermFlag
+class SerialTxThread : public Ris::Threads::BaseTimerThread
 {
 public:
-   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
+   typedef Ris::Threads::BaseTimerThread BaseClass;
 
    SerialTxThread();
 
@@ -37,9 +37,8 @@ public:
    // threadExitFunction closes the serial port.
 
    void threadInitFunction(); 
-   void threadRunFunction(); 
+   void executeOnTimer(int aTimeCount);
    void threadExitFunction(); 
-   void shutdownThread(); 
 
    //---------------------------------------------------------------------------
    // Configure:

@@ -37,7 +37,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
    strcpy(mPortSetup,aPortSetup);
    mValidFlag=false;
 
-   Prn::print(Prn::SerialInit1,"SerialPort::SerialPort BEGIN");
+   Prn::print(Prn::SerialInit1,"SerialPort::doOpen BEGIN %d",mPortNumber);
 
    if (mValidFlag)
    {
@@ -137,6 +137,12 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
    tComTimeout.WriteTotalTimeoutMultiplier = 0;
    tComTimeout.WriteTotalTimeoutConstant   = 0;
 
+   tComTimeout.ReadIntervalTimeout         = 0;
+   tComTimeout.ReadTotalTimeoutMultiplier  = 0;
+   tComTimeout.ReadTotalTimeoutConstant    = 10000;
+   tComTimeout.WriteTotalTimeoutMultiplier = 0;
+   tComTimeout.WriteTotalTimeoutConstant   = 0;
+
    if(!SetCommTimeouts(mPortHandle, &tComTimeout))
    {
       Prn::print(Prn::SerialInit1,"serial_create_error_4 %d", GetLastError());
@@ -156,7 +162,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
  
    mValidFlag=true;
 
-   Prn::print(Prn::SerialInit1,"SerialPort::SerialPort END");
+   Prn::print(Prn::SerialInit1,"SerialPort::doOpen END %d",mPortNumber);
 }
 
 //******************************************************************************
@@ -165,9 +171,11 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
 
 void SerialPort::doClose()
 {
+   Prn::print(Prn::SerialInit2,"SerialPort::doClose %d",mPortNumber);
+
    if (mValidFlag)
    {
-      CancelIo(mPortHandle);
+      CancelIoEx(mPortHandle,0);
       CloseHandle(mPortHandle);
       mPortHandle = INVALID_HANDLE_VALUE;
       mValidFlag = false;

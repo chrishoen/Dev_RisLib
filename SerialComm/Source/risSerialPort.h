@@ -19,16 +19,39 @@ namespace Ris
 public:
 
    //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Members
+
+   // Serial port handle
+   HANDLE mPortHandle;
+
+   // COM1 = 1
+   int  mPortNumber;
+
+   // "9600,N,8,1"
+   char mPortSetup[16];
+
+   // Validity
+   bool mValidFlag;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Constructor
    // SerialPort* example = new SerialPort();
-   // example->doOpen(1,"9600,N,8,1");
+   // example->doOpen(1,"9600,N,8,1",2000);
 
    SerialPort();
   ~SerialPort(void);
 
    // Open/Close serial port
-   void doOpen(int aPortNumber,char* aPortSetup);
+   // PortNumber: COM1==1
+   // PortSetup:  "9600,N,8,1"
+   // RxTimeout:  Timeout for all receives, milliseconds, 0==no timeout
+   void doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout);
    void doClose();
+   void doPurge();
 
    // True if open and valid
    bool isValid();
@@ -41,47 +64,36 @@ public:
    static const int cRetCodeTimeout = -2;
 
    //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Send
 
    // Send data, fixed number of bytes.
-   int  doSend(char *aData, int aNumBytes);
+   int  doSendBytes(char *aData, int aNumBytes);
 
    // Send data, null terminated.
-   int  doSend(char *aData);
+   int  doSendZString(char *aData);
 
    // Send data, one byte.
    int  doSendOne(char aData);
 
    //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Receive
 
    // Receive data, fixed number of bytes.
-   int  doReceiveData (char *aData, int aNumBytes, int aTimeout);
+   int  doReceiveBytes (char *aData, int aNumBytes);
 
-   // Receive data, terminated with cr/lf.
-   int  doReceiveUntilCRLF (char *aData, int aMaxNumBytes,int aTimeout);
+   // Receive data, terminated with CR/LF.
+   int  doReceiveUntilCRLF (char *aData, int aMaxNumBytes);
 
-   // Receive data, terminated with cr.
-   int  doReceiveUntilCR (char *aData, int aMaxNumBytes,int aTimeout);
+   // Receive data, terminated with CR.
+   int  doReceiveUntilCR (char *aData, int aMaxNumBytes);
 
    // Receive one byte.
-   int  doReceiveOne(char *aData, int aTimeout);
+   int  doReceiveOne(char *aData);
 
-   //---------------------------------------------------------------------------
-   // Support
-
-   void doPurge();
-
-   //---------------------------------------------------------------------------
-   // Members
-
-   // Serial port handle
-   HANDLE   mPortHandle;
-
-   int  mPortNumber;
-   char mPortSetup[16];
-
-   bool mValidFlag;
 };
 //******************************************************************************
 }//namespace

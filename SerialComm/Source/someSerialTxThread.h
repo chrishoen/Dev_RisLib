@@ -43,19 +43,21 @@ public:
    //---------------------------------------------------------------------------
    // Configure:
 
-   // aSensorIdent            is the sensor identifier
-   // aPortNumber             is the sensor com port number
-   // aPortSetup              is the sensor com port setup, ie 9600N81
+   // PortNumber  is the com port number
+   // PortSetup   is the com port setup, ie 9600N81
+   // RxTimeout   is the com port receive timeout, zero means no timeout
 
    void configure(
-      int             aPortNumber,
-      char*           aPortSetup);
+      int    aPortNumber,
+      char*  aPortSetup,
+      int    aRxTimeout);
 
    //---------------------------------------------------------------------------
    // Stored configuration parameters:
 
-   int                mPortNumber;
-   char               mPortSetup[16];
+   int       mPortNumber;
+   char      mPortSetup[16];
+   int       mRxTimeout;
 
    //---------------------------------------------------------------------------
    // Serial port:

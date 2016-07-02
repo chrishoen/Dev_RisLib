@@ -30,6 +30,7 @@ SerialRxThread::SerialRxThread()
 
    mPortNumber = 0;
    mPortSetup[0]=0;
+   mRxTimeout=0;
    mCount=0;
 }
 
@@ -37,12 +38,14 @@ SerialRxThread::SerialRxThread()
 // Configure:
 
 void SerialRxThread::configure(
-   int             aPortNumber,
-   char*           aPortSetup)
+   int     aPortNumber,
+   char*   aPortSetup,
+   int     aRxTimeout)
 {
    // Store configuration parameters.
    mPortNumber = aPortNumber;
    strcpy(mPortSetup,aPortSetup);
+   mRxTimeout = aRxTimeout;
 }
 
 //******************************************************************************
@@ -53,7 +56,7 @@ void SerialRxThread::threadInitFunction()
 {
    Prn::print(Prn::ThreadInit1, "SerialRxThread::threadInitFunction");
 
-   mSerialPort.doOpen(mPortNumber,mPortSetup);
+   mSerialPort.doOpen(mPortNumber,mPortSetup,mRxTimeout);
    
 }
 
@@ -73,7 +76,7 @@ void  SerialRxThread::threadRunFunction()
       // Read sample data from sensor via the serial port and send to consumer.
 
       char tString[100];
-      int tStatus = mSerialPort.doReceiveUntilCR(tString,100,0);
+      int tStatus = mSerialPort.doReceiveUntilCR(tString,100);
 
       //------------------------------------------------------------------------
       // If termination request, exit the loop.

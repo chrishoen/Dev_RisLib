@@ -31,7 +31,7 @@ bool SerialPort::isValid(){return mValidFlag;}
 //******************************************************************************
 //******************************************************************************
 
-void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
+void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
 {
    mPortNumber = aPortNumber;
    strcpy(mPortSetup,aPortSetup);
@@ -133,7 +133,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup)
 
    tComTimeout.ReadIntervalTimeout         = 0;
    tComTimeout.ReadTotalTimeoutMultiplier  = 0;
-   tComTimeout.ReadTotalTimeoutConstant    = 4000;
+   tComTimeout.ReadTotalTimeoutConstant    = aRxTimeout;
    tComTimeout.WriteTotalTimeoutMultiplier = 0;
    tComTimeout.WriteTotalTimeoutConstant   = 0;
 
@@ -200,7 +200,7 @@ void SerialPort::doPurge()
 //******************************************************************************
 // Send fixed number of bytes
 
-int SerialPort::doSend(char* aData, int aNumBytes)
+int SerialPort::doSendBytes(char* aData, int aNumBytes)
 {
    DWORD tNumWritten;
 
@@ -212,7 +212,7 @@ int SerialPort::doSend(char* aData, int aNumBytes)
    }
    else
    {
-      Prn::print(Prn::SerialInit1, "Write Failed, %d", GetLastError());
+      Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR, %d", GetLastError());
       return cRetCodeError;
    }
 }
@@ -222,10 +222,10 @@ int SerialPort::doSend(char* aData, int aNumBytes)
 //******************************************************************************
 // Send null terminated string
 
-int SerialPort::doSend(char* aData)
+int SerialPort::doSendZString(char* aData)
 {
    int tNumBytes = (int)strlen(aData);
-   return doSend(aData,tNumBytes);   
+   return doSendBytes(aData,tNumBytes);   
 }
 
 //******************************************************************************
@@ -235,7 +235,7 @@ int SerialPort::doSend(char* aData)
 
 int SerialPort::doSendOne(char aData)
 {
-   return doSend(&aData,1);   
+   return doSendBytes(&aData,1);   
 }
 
 //******************************************************************************
@@ -243,56 +243,56 @@ int SerialPort::doSendOne(char aData)
 //******************************************************************************
 // receive until cr/lf termination 
 
-int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxNumBytes,int aTimeout)
+int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxNumBytes)
 {
-   int  status=0;
-   int  index = 0;
-   int  rxStat=0;
-   char rxChar=0;
-   char rxCharLast=0;
-   bool going=true;
+   int  tStatus=0;
+   int  tIndex = 0;
+   int  tRxStatus=0;
+   char tRxChar=0;
+   char tRxCharLast=0;
+   bool tGoing=true;
 
    aData[0]=0;
 
    // Loop to read single bytes, store them, and exit
    // when termination cr/lf is detected
-   while ( isValid() && going )
+   while ( isValid() && tGoing )
    {
       // Store last byte
-      rxCharLast = rxChar;
+      tRxCharLast = tRxChar;
 
       // Read one byte
-      rxStat=doReceiveOne(&rxChar,aTimeout);
-      if (rxStat >= 0)
+      tRxStatus=doReceiveOne(&tRxChar);
+      if (tRxStatus >= 0)
       { 
          // Read success
          // Store byte
-         aData[index]=rxChar;
-         index++;
+         aData[tIndex]=tRxChar;
+         tIndex++;
 
-         if(rxCharLast==13 && rxChar==10)
+         if(tRxCharLast==13 && tRxChar==10)
          {
             // Terminator detected
-            going=false;
-            aData[index-1]=0;
-            status=index-2;
+            tGoing=false;
+            aData[tIndex-1]=0;
+            tStatus=tIndex-2;
          }
-         if(index==aMaxNumBytes-1)
+         if(tIndex==aMaxNumBytes-1)
          {
             // NumBytes limit was reached
-            going=false;
-            aData[index]=0;
-            status = index;
+            tGoing=false;
+            aData[tIndex]=0;
+            tStatus = tIndex;
          }
       }
       else
       {  
          // Read failure
-         status = rxStat;
-         going = false;
+         tStatus = tRxStatus;
+         tGoing = false;
       }
    }
-   return status;
+   return tStatus;
 }
 
 //******************************************************************************
@@ -300,7 +300,7 @@ int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxNumBytes,int aTimeout)
 //******************************************************************************
 // receive until cr termination 
 
-int  SerialPort::doReceiveUntilCR(char *aData, int aMaxNumBytes,int aTimeout)
+int  SerialPort::doReceiveUntilCR(char *aData, int aMaxNumBytes)
 {
    int  tStatus=0;
    int  tIndex = 0;
@@ -315,7 +315,7 @@ int  SerialPort::doReceiveUntilCR(char *aData, int aMaxNumBytes,int aTimeout)
    while ( isValid() && tGoing )
    {
       // Read one byte
-      tRxStatus = doReceiveOne(&tRxChar,aTimeout);
+      tRxStatus = doReceiveOne(&tRxChar);
       if (tRxStatus >= 0)
       { 
          // Read success
@@ -354,9 +354,9 @@ int  SerialPort::doReceiveUntilCR(char *aData, int aMaxNumBytes,int aTimeout)
 //******************************************************************************
 // Receive one byte
 
-int  SerialPort::doReceiveOne(char *aData, int aTimeout)
+int  SerialPort::doReceiveOne(char *aData)
 {
-   return doReceiveData(aData, 1, aTimeout);
+   return doReceiveBytes(aData, 1);
 }
 
 //******************************************************************************
@@ -364,7 +364,7 @@ int  SerialPort::doReceiveOne(char *aData, int aTimeout)
 //******************************************************************************
 // Receive
 
-int SerialPort::doReceiveData(char *aData, int aNumBytes, int aTimeout)
+int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
 {
    //---------------------------------------------------------------------------
    // Locals
@@ -381,7 +381,7 @@ int SerialPort::doReceiveData(char *aData, int aNumBytes, int aTimeout)
    if (GetLastError() != ERROR_SUCCESS)
    {
      // Error in communications
-     Prn::print(Prn::SerialRun1,"serial_receive_error_1 %d", GetLastError());
+     Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR %d", GetLastError());
 
      // If the read was aborted then clear hardware error.
      if (GetLastError()==ERROR_OPERATION_ABORTED)

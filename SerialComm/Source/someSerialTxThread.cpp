@@ -31,6 +31,7 @@ SerialTxThread::SerialTxThread()
 
    mPortNumber = 0;
    mPortSetup[0]=0;
+   mRxTimeout=0;
    mCount=0;
    mTPFlag = true;
 }
@@ -39,12 +40,14 @@ SerialTxThread::SerialTxThread()
 // Configure:
 
 void SerialTxThread::configure(
-   int             aPortNumber,
-   char*           aPortSetup)
+   int     aPortNumber,
+   char*   aPortSetup,
+   int     aRxTimeout)
 {
    // Store configuration parameters.
    mPortNumber = aPortNumber;
    strcpy(mPortSetup,aPortSetup);
+   mRxTimeout = aRxTimeout;
 }
 
 //******************************************************************************
@@ -55,7 +58,7 @@ void SerialTxThread::threadInitFunction()
 {
    Prn::print(Prn::ThreadInit1, "SerialTxThread::threadInitFunction");
 
-   mSerialPort.doOpen(mPortNumber,mPortSetup);
+   mSerialPort.doOpen(mPortNumber,mPortSetup,mRxTimeout);
    
 }
 
@@ -83,7 +86,7 @@ void SerialTxThread::executeOnTimer(int aTimeCount)
    char tString[100];
    sprintf(tString,"ABCDEFGH01234567\r");
 
-   int tStatus = mSerialPort.doSend(tString);
+   int tStatus = mSerialPort.doSendZString(tString);
    if (tStatus < 0)
    {
       Prn::print(Prn::ThreadRun1, "SerialPort doSend ERROR %d", tStatus);

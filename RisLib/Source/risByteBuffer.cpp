@@ -398,7 +398,7 @@ void ByteBuffer::copy (bool*               aValue)
    if (isCopyTo())
    {
       // Copy boolean value to one byte in the buffer
-      unsigned char tFlag = aValue ? 1 : 0;
+      unsigned char tFlag = *aValue ? 1 : 0;
       BB_copyValue(this, &tFlag, 1);
    }
    else

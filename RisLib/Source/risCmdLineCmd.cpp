@@ -269,7 +269,7 @@ double CmdLineCmd::argDouble(int aArgIndex)
 //******************************************************************************
 // Return argument value
 
-double CmdLineCmd::argDegree(int aArgIndex)
+double CmdLineCmd::argRadian(int aArgIndex)
 {
    double tValue=0.0;
 

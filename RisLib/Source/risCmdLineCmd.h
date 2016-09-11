@@ -51,7 +51,7 @@ public:
    unsigned argUnsigned   (int aArgIndex);
    bool     argBool       (int aArgIndex);
    double   argDouble     (int aArgIndex);
-   double   argDegree     (int aArgIndex);
+   double   argRadian     (int aArgIndex);
    char*    argString     (int aArgIndex);
 
    // Tests argument aArgIndex against a string.

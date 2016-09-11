@@ -12,6 +12,7 @@
 #include <string.h>
 
 #include "my_functions.h"
+#include "my_defs.h"
 #include "risCmdLineCmd.h"
 
 namespace Ris
@@ -263,6 +264,24 @@ double CmdLineCmd::argDouble(int aArgIndex)
 
    // Return argument value
    return tValue;
+}
+
+//******************************************************************************
+// Return argument value
+
+double CmdLineCmd::argDegree(int aArgIndex)
+{
+   double tValue=0.0;
+
+   // Guard
+   if(!mArgFlag[aArgIndex]) return 0;
+
+   // Convert argument string
+   tValue = atof(mArgPtr[aArgIndex]);
+
+   // Return argument value
+   // Convert from degrees to radians
+   return tValue*MY_RAD;
 }
 
 //******************************************************************************

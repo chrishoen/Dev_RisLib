@@ -50,7 +50,10 @@ void CmdLineDoubleTable1D::initialize(
 {
    mRows   = aRows;
    int tAlloc = mRows;
-   mValues = new double[tAlloc];
+   if (mValues == 0)
+   {
+      mValues = new double[tAlloc];
+   }
    for (int i=0;i<mRows;i++) mValues[i]=0.0;
 
    mInitialized = true;

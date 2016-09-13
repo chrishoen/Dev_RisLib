@@ -33,10 +33,10 @@ public:
    // Constructor
    CmdLineDoubleTable1D();
   ~CmdLineDoubleTable1D();
+   void reset();
 
    // Initialize and allocate memory for the table
-   void initialize(
-      int     aRows);
+   void initialize(int aRows);
 
    // Access components
    double& e(int aRow);
@@ -78,11 +78,10 @@ public:
    // Constructor
    CmdLineDoubleTable2D();
   ~CmdLineDoubleTable2D();
+   void reset();
 
    // Initialize and allocate memory for the table
-   void initialize(
-      int     aRows,
-      int     aCols);
+   void initialize(int aRows,int aCols);
 
    // Access components
    double& e(int aRow,int aCol);

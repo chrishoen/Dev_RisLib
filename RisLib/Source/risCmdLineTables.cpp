@@ -26,9 +26,16 @@ namespace Ris
 
 CmdLineDoubleTable1D::CmdLineDoubleTable1D()
 {
-   mRows   = 0;
+   mValues = 0;
+   reset();
+}
+
+void CmdLineDoubleTable1D::reset()
+{
+   if (mValues) delete mValues;
    mValues = 0;
 
+   mRows   = 0;
    mInitialized = false;
    mFirstCmd = true;
    mAlloc = 0;
@@ -45,19 +52,17 @@ CmdLineDoubleTable1D::~CmdLineDoubleTable1D()
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineDoubleTable1D::initialize(
-   int     aRows)
+void CmdLineDoubleTable1D::initialize(int aRows)
 {
-   mRows   = aRows;
-   int tAlloc = mRows;
-   if (mValues == 0)
-   {
-      mValues = new double[tAlloc];
-   }
-   for (int i=0;i<mRows;i++) mValues[i]=0.0;
+   reset();
+
+   mRows  = aRows;
+   mAlloc = mRows;
+
+   mValues = new double[mAlloc];
+   for (int i=0;i<mAlloc;i++) mValues[i]=0.0;
 
    mInitialized = true;
-   mAlloc = tAlloc;
    mIndex = 0;
    mValidFlag = false;
 }
@@ -189,17 +194,23 @@ void CmdLineDoubleTable1D::execute(Ris::CmdLineCmd* aCmd)
 
 CmdLineDoubleTable2D::CmdLineDoubleTable2D()
 {
-   mRows   = 0;
-   mCols   = 0;
+   mValues = 0;
+   reset();
+}
+
+void CmdLineDoubleTable2D::reset()
+{
+   if (mValues) delete mValues;
    mValues = 0;
 
+   mRows   = 0;
+   mCols   = 0;
    mInitialized = false;
    mFirstCmd = true;
    mAlloc = 0;
    mIndex = 0;
    mValidFlag = false;
 }
-
 CmdLineDoubleTable2D::~CmdLineDoubleTable2D()
 {
    if (mValues) delete mValues;
@@ -209,18 +220,18 @@ CmdLineDoubleTable2D::~CmdLineDoubleTable2D()
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineDoubleTable2D::initialize(
-   int     aRows,
-   int     aCols)
+void CmdLineDoubleTable2D::initialize(int aRows,int aCols)
 {
+   reset();
+
    mRows   = aRows;
    mCols   = aCols;
-   int tAlloc = mRows*mCols;
-   mValues = new double[tAlloc];
-   for (int i=0;i<tAlloc;i++) mValues[i]=0.0;
+   mAlloc  = mRows*mCols;
+
+   mValues = new double[mAlloc];
+   for (int i=0;i<mAlloc;i++) mValues[i]=0.0;
 
    mInitialized = true;
-   mAlloc = tAlloc;
    mIndex = 0;
    mValidFlag = false;
 }

@@ -51,6 +51,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ByteContent", "ByteContent\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSettings", "GSettings\GSettings.vcxproj", "{F6067B90-9D8A-45D8-B124-168A964AC18F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TableTest", "TableTest\TableTest.vcxproj", "{8D179CBA-0512-4B12-8443-6D40E611C673}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -251,6 +253,14 @@ Global
 		{F6067B90-9D8A-45D8-B124-168A964AC18F}.Release|Win32.Build.0 = Release|Win32
 		{F6067B90-9D8A-45D8-B124-168A964AC18F}.Release|x64.ActiveCfg = Release|x64
 		{F6067B90-9D8A-45D8-B124-168A964AC18F}.Release|x64.Build.0 = Release|x64
+		{8D179CBA-0512-4B12-8443-6D40E611C673}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8D179CBA-0512-4B12-8443-6D40E611C673}.Debug|Win32.Build.0 = Debug|Win32
+		{8D179CBA-0512-4B12-8443-6D40E611C673}.Debug|x64.ActiveCfg = Debug|x64
+		{8D179CBA-0512-4B12-8443-6D40E611C673}.Debug|x64.Build.0 = Debug|x64
+		{8D179CBA-0512-4B12-8443-6D40E611C673}.Release|Win32.ActiveCfg = Release|Win32
+		{8D179CBA-0512-4B12-8443-6D40E611C673}.Release|Win32.Build.0 = Release|Win32
+		{8D179CBA-0512-4B12-8443-6D40E611C673}.Release|x64.ActiveCfg = Release|x64
+		{8D179CBA-0512-4B12-8443-6D40E611C673}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -34,7 +34,7 @@ StatusRequest
 //******************************************************************************
 //******************************************************************************
 #include "risByteContent.h"
-#include "risByteMessageParser.h"
+#include "risByteMsgAParser.h"
 
 namespace ProtoComm
 {
@@ -141,7 +141,7 @@ namespace ProtoComm
 
    class BaseMsg;
 
-   class MessageParser : public Ris::BaseMessageParser
+   class MessageParser : public Ris::BaseMsgAParser
    {
    public:
       //-------------------------------------------------------
@@ -177,7 +177,7 @@ namespace ProtoComm
    // message parser. It is used by transmitters and receivers to create new
    // instances of message parsers.
 
-   class MessageParserCreator : public  Ris::BaseMessageParserCreator
+   class MessageParserCreator : public  Ris::BaseMsgAParserCreator
    {
    public:
       // Constructor
@@ -189,7 +189,7 @@ namespace ProtoComm
 
       // Base class overload, creates a new message parser and sets some of its 
       // member variables.
-      Ris::BaseMessageParser* createNew();
+      Ris::BaseMsgAParser* createNew();
    };
 
    //******************************************************************************

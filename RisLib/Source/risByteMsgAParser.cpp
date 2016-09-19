@@ -5,12 +5,12 @@
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteMessageParser.h"
+#include "risByteMsgAParser.h"
 
 namespace Ris
 {
 
-BaseMessageParser::BaseMessageParser()
+BaseMsgAParser::BaseMsgAParser()
 {
    mHeaderLength=0;
    mMessageLength=0;
@@ -36,7 +36,7 @@ BaseMessageParser::BaseMessageParser()
 //    object and returns a pointer to the base class.
 //------------------------------------------------------------------------------
 
-ByteContent* BaseMessageParser::makeFromByteBuffer(ByteBuffer* aBuffer)
+ByteContent* BaseMsgAParser::makeFromByteBuffer(ByteBuffer* aBuffer)
 {
    // Guard
    if (!mHeaderValidFlag)
@@ -66,12 +66,12 @@ ByteContent* BaseMessageParser::makeFromByteBuffer(ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-void BaseMessageParser::setNetworkOrder (bool aNetworkOrder)
+void BaseMsgAParser::setNetworkOrder (bool aNetworkOrder)
 {
    mNetworkOrder=aNetworkOrder;
 }
 
-void BaseMessageParser::configureByteBuffer(ByteBuffer* aBuffer)
+void BaseMsgAParser::configureByteBuffer(ByteBuffer* aBuffer)
 {
    aBuffer->setNetworkOrder(mNetworkOrder);
 }

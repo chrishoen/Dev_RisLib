@@ -37,7 +37,7 @@
     <ClCompile Include="Source\ris_priorities_win.cpp" />
     <ClCompile Include="Source\prnPrint_win.cpp" />
     <ClCompile Include="Source\prnPrintSettings.cpp" />
-    <ClCompile Include="Source\risByteMessageParser.cpp" />
+    <ClCompile Include="Source\risByteMsgAParser.cpp" />
     <ClCompile Include="Source\risCmdLineCmd.cpp" />
     <ClCompile Include="Source\risCmdLineConsole.cpp" />
     <ClCompile Include="Source\risCmdLineExec.cpp" />
@@ -87,7 +87,7 @@
     <ClInclude Include="Source\prnPrint.h" />
     <ClInclude Include="Source\prnPrintSettings.h" />
     <ClInclude Include="Source\risByteContent.h" />
-    <ClInclude Include="Source\risByteMessageParser.h" />
+    <ClInclude Include="Source\risByteMsgAParser.h" />
     <ClInclude Include="Source\risCallPointer.h" />
     <ClInclude Include="Source\risCmdLineCmd.h" />
     <ClInclude Include="Source\risCmdLineConsole.h" />

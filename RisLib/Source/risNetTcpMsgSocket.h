@@ -13,7 +13,7 @@ Tcp message socket class.
 
 #include "risPortableTypes.h"
 #include "risByteContent.h"
-#include "risByteMessageParser.h"
+#include "risByteMsgAParser.h"
 #include "risContainers.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
@@ -49,10 +49,10 @@ public:
    // These do socket and bind calls
    void configure(
       Sockets::SocketAddress    aSocketAddress,
-      BaseMessageParserCreator* aMessageParserCreator);
+      BaseMsgAParserCreator* aMessageParserCreator);
 
    void configure(
-      BaseMessageParserCreator* aMessageParserCreator);
+      BaseMsgAParserCreator* aMessageParserCreator);
 
    void reconfigure(); 
 
@@ -73,8 +73,8 @@ public:
    // message parser allows the doSendMsg method to set header data
    // before the message is sent.
 
-   BaseMessageParser* mRxMessageParser;
-   BaseMessageParser* mTxMessageParser;
+   BaseMsgAParser* mRxMessageParser;
+   BaseMsgAParser* mTxMessageParser;
 
    // Buffers
    enum    {BufferSize = 4096};

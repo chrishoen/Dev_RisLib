@@ -77,7 +77,7 @@ void TcpServerThread::configure(
    char*                     aServerIpAddr,
    int                       aServerIpPort,
    int                       aMaxSessions, 
-   BaseMessageParserCreator* aMessageParserCreator,
+   BaseMsgAParserCreator* aMessageParserCreator,
    SessionQCall*             aSessionQCall,
    RxMsgQCall*               aRxMsgQCall,
    int                       aFlags)

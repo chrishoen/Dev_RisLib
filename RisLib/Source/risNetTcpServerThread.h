@@ -118,7 +118,7 @@ public:
       char*                     aServerIpAddr,
       int                       aServerIpPort,
       int                       aMaxSessions, 
-      BaseMessageParserCreator* aMessageParserCreator,
+      BaseMsgAParserCreator* aMessageParserCreator,
       SessionQCall*             aSessionQCall,
       RxMsgQCall*               aRxMsgQCall,
       int                       aFlags=0);
@@ -190,7 +190,7 @@ public:
    Sockets::SocketAddress mSocketAddress;
 
    // Message parser creator for node sockets.
-   BaseMessageParserCreator* mMessageParserCreator;
+   BaseMsgAParserCreator* mMessageParserCreator;
 
    //--------------------------------------------------------------
    // State:

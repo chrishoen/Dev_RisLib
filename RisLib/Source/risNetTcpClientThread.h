@@ -90,7 +90,7 @@ public:
    void configure(
       char*                          aServerIpAddr,
       int                            aServerIpPort,
-      Ris::BaseMessageParserCreator* aMessageParser,
+      Ris::BaseMsgAParserCreator* aMessageParser,
       SessionQCall*                  aSessionQCall,
       RxMsgQCall*                    aRxMsgQCall,
       int                            aFlags=0); 
@@ -152,7 +152,7 @@ public:
 
    // Message parser creator, this is used by the socket to
    // create an instance of a message parser
-   BaseMessageParserCreator* mMessageParserCreator;
+   BaseMsgAParserCreator* mMessageParserCreator;
 
    //--------------------------------------------------------------
    // State:

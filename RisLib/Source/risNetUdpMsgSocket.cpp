@@ -41,7 +41,7 @@ UdpRxMsgSocket::~UdpRxMsgSocket()
 void UdpRxMsgSocket::configure(
    char*                       aLocalIpAddr,
    int                         aLocalIpPort,
-   BaseMessageParserCreator*   aMessageParserCreator)
+   BaseMsgAParserCreator*   aMessageParserCreator)
 {
    mRxMsgCount=0;
 
@@ -170,7 +170,7 @@ UdpTxMsgSocket::~UdpTxMsgSocket()
 void UdpTxMsgSocket::configure(
    char*                      aRemoteIpAddr,
    int                        aRemoteIpPort,
-   BaseMessageParserCreator*  aMessageParserCreator)
+   BaseMsgAParserCreator*  aMessageParserCreator)
 {
    mTxCount=0;
 
@@ -237,7 +237,7 @@ bool UdpTxMsgSocket::doSendMessage(ByteContent* aMsg)
 // Configure the socket. Use with the next doSendMessage.
 
 void UdpTxMsgSocket::configure(
-   BaseMessageParser*     aMessageParser)
+   BaseMsgAParser*     aMessageParser)
 {
    mTxCount=0;
 

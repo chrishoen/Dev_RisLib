@@ -33,7 +33,7 @@ TcpClientThread::TcpClientThread()
 void TcpClientThread::configure(
    char*                      aServerIpAddr,
    int                        aServerIpPort,
-   BaseMessageParserCreator*  aMessageParserCreator,
+   BaseMsgAParserCreator*  aMessageParserCreator,
    SessionQCall*              aSessionQCall,
    RxMsgQCall*                aRxMsgQCall,
    int                        aFlags) 

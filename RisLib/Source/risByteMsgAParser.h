@@ -1,5 +1,5 @@
-#ifndef _RISBYTEMESSAGEPARSER_H_
-#define _RISBYTEMESSAGEPARSER_H_
+#ifndef _RISBYTEMSGAPARSER_H_
+#define _RISBYTEMSGAPARSER_H_
 /*==============================================================================
 ByteContent support classes for messages.
 ==============================================================================*/
@@ -21,10 +21,10 @@ namespace Ris
 // extract messages, as opposed to having the message classes being visible
 // to the receiving code.
 
-class  BaseMessageParser
+class BaseMsgAParser
 {
 public:
-   BaseMessageParser();
+   BaseMsgAParser();
 
    // Return a contant header length
    virtual int getHeaderLength()=0;
@@ -71,10 +71,10 @@ public:
 // It is used by transmitters and receivers to create new instances of message
 // parsers.
 
-class  BaseMessageParserCreator
+class BaseMsgAParserCreator
 {
 public:
-   virtual BaseMessageParser* createNew() = 0;
+   virtual BaseMsgAParser* createNew() = 0;
 };
 
 }//namespace

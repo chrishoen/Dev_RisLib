@@ -36,7 +36,7 @@ void UdpMsgThread::configure(
    int                        aLocalIpPort,
    char*                      aRemoteIpAddress,
    int                        aRemoteIpPort,
-   BaseMessageParserCreator*  aMessageParserCreator,
+   BaseMsgAParserCreator*  aMessageParserCreator,
    RxMessageQCall*            aMessageQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);

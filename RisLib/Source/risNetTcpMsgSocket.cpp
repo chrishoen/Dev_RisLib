@@ -42,7 +42,7 @@ TcpMsgSocket::~TcpMsgSocket()
 
 void TcpMsgSocket::configure(
    Sockets::SocketAddress    aSocketAddress,
-   BaseMessageParserCreator* aMessageParserCreator)
+   BaseMsgAParserCreator* aMessageParserCreator)
 {
    mTxMsgCount=0;
    mRxMsgCount=0;
@@ -75,7 +75,7 @@ void TcpMsgSocket::configure(
 }
 
 void TcpMsgSocket::configure(
-   BaseMessageParserCreator* aMessageParserCreator)
+   BaseMsgAParserCreator* aMessageParserCreator)
 {
    if (mRxMessageParser == 0) mRxMessageParser = aMessageParserCreator->createNew();
    if (mTxMessageParser == 0) mTxMessageParser = aMessageParserCreator->createNew();

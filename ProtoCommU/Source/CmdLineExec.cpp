@@ -96,7 +96,7 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
    tBuffer.rewind();
 // printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
-   Ris::BaseMessageParser* tMessageParser = new ProtoComm::MessageParser;
+   Ris::BaseMsgAParser* tMessageParser = new ProtoComm::MessageParser;
 
    tMessageParser->extractMessageHeaderParms(&tBuffer);
 

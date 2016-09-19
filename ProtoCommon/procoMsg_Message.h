@@ -34,7 +34,7 @@ StatusRequest
 //******************************************************************************
 //******************************************************************************
 #include "risByteContent.h"
-#include "risByteMessageParser.h"
+#include "risByteMsgAParser.h"
 #include "procoMsg_Base.h"
 
 namespace ProtoComm

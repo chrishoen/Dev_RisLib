@@ -14,7 +14,7 @@ UdpTxMsgSocket -- udp transmit socket
 
 #include "risPortableTypes.h"
 #include "risByteContent.h"
-#include "risByteMessageParser.h"
+#include "risByteMsgAParser.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 
@@ -56,7 +56,7 @@ namespace Net
       void configure(
          char*                     aLocalIpAddr,
          int                       aLocalIpPort,
-         BaseMessageParserCreator* aMessageParserCreator);
+         BaseMsgAParserCreator* aMessageParserCreator);
 
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
@@ -70,7 +70,7 @@ namespace Net
       // byte buffer. It allows the doReceiveMessage method to receive and extract a
       // message from a byte buffer without the having the message code
       // visible to it.
-      BaseMessageParser* mMessageParser;
+      BaseMsgAParser* mMessageParser;
 
       // Buffer
       int    mRxLength;
@@ -102,7 +102,7 @@ namespace Net
       void configure(
          char*                       aRemoteIpAddr,
          int                         aRemoteIpPort,
-         BaseMessageParserCreator*   aMessageParserCreator);
+         BaseMsgAParserCreator*   aMessageParserCreator);
 
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
@@ -113,7 +113,7 @@ namespace Net
       // Socket, these two should be used together
 
       void configure(
-         BaseMessageParser* aMessageParser);
+         BaseMsgAParser* aMessageParser);
 
       // This sends a message over the socket via a blocking sendto call.
       // It returns true if successful.
@@ -128,7 +128,7 @@ namespace Net
       // message from a byte buffer without the having the message code
       // visible to it.
 
-      BaseMessageParser* mMessageParser;
+      BaseMsgAParser* mMessageParser;
 
       //------------------------------------------------------------------------
       // Transmit mutex is used by doSendMessage for mutual exclusion.

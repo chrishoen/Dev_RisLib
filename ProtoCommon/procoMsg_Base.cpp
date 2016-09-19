@@ -277,14 +277,14 @@ namespace ProtoComm
       mSourceId = aSourceId;
    }
 
-   Ris::BaseMessageParser* MessageParserCreator::createNew()
+   Ris::BaseMsgAParser* MessageParserCreator::createNew()
    {
       // New message parser
       MessageParser* tMessageParser = new MessageParser();
       // Configure 
       tMessageParser->configure(mSourceId);
       // Return base message parser pointer
-      return (Ris::BaseMessageParser*)tMessageParser;
+      return (Ris::BaseMsgAParser*)tMessageParser;
    }
 
    //******************************************************************************

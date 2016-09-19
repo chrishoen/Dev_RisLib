@@ -137,8 +137,8 @@ namespace Net
 
       // These do socket and bind calls
       void configure(
-         char*                    aLocalIpAddr,
-         int                      aLocalIpPort,
+         char*                aLocalIpAddr,
+         int                  aLocalIpPort,
          Ris::BaseMsgBCopier* aMsgCopier);
 
       // This receives a message from the socket via blocking recvfrom calls.
@@ -183,8 +183,8 @@ namespace Net
 
       // These create and configure the socket
       void configure(
-         char*                    aRemoteIpAddr,
-         int                      aRemoteIpPort,
+         char*                aRemoteIpAddr,
+         int                  aRemoteIpPort,
          Ris::BaseMsgBCopier* aMsgCopier);
 
       // This sends a message over the socket via a blocking send call.

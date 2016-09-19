@@ -229,8 +229,8 @@ namespace Net
    // Configure the socket
 
    void UdpRxMsgBSocket::configure(
-      char*                    aLocalIpAddr,
-      int                      aLocalIpPort,
+      char*                aLocalIpAddr,
+      int                  aLocalIpPort,
       Ris::BaseMsgBCopier* aMsgCopier)
    {
       mRxCount=0;
@@ -358,8 +358,8 @@ namespace Net
    // Configure the socket. Use with the next doSendMsg.
 
    void UdpTxMsgBSocket::configure(
-      char*                    aRemoteIpAddr,
-      int                      aRemoteIpPort,
+      char*                aRemoteIpAddr,
+      int                  aRemoteIpPort,
       Ris::BaseMsgBCopier* aMsgCopier)
    {
       mTxCount=0;
@@ -439,8 +439,6 @@ namespace Net
 
       return true;
    }
-
-
 }//namespace
 }//namespace
 

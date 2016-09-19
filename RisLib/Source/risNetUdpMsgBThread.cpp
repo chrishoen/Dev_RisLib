@@ -35,7 +35,7 @@ void UdpMsgBThread::configure(
    char*                aRemoteIpAddress,
    int                  aRemoteIpPort,
    Ris::BaseMsgBCopier* aMsgCopier,
-   RxMsgQCall*      aRxMsgQCall)
+   RxMsgQCall*          aRxMsgQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);
    mLocalIpPort = aLocalIpPort;

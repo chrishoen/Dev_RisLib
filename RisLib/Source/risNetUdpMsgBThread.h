@@ -89,7 +89,7 @@ public:
       char*                 aRemoteIpAddress,
       int                   aRemoteIpPort,
       Ris::BaseMsgBCopier*  aMsgCopier,
-      RxMsgQCall*       aRxMsgQCall);
+      RxMsgQCall*           aRxMsgQCall);
 
    //--------------------------------------------------------------
    // Process:

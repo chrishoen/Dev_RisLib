@@ -10,16 +10,16 @@
     <ClCompile Include="Source\exampleSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\exampleTMessage.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\exampleTMessageHelper.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\MainInit.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\exampleMsgB.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\exampleMsgBHelper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,13 +33,13 @@
     <ClInclude Include="Source\exampleSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\exampleTMessage.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\exampleTMessageHelper.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MainInit.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\exampleMsgB.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\exampleMsgBHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
-#ifndef _EXAMPLETMESSAGEHELPER_H_
-#define _EXAMPLETMESSAGEHELPER_H_
+#ifndef _EXAMPLEMSGBHELPER_H_
+#define _EXAMPLEMSGBHELPER_H_
 
-#include "exampleTMessage.h"
+#include "exampleMsgB.h"
 
 namespace Example
 {
@@ -10,7 +10,7 @@ namespace Example
     //***************************************************************************
     //***************************************************************************
 
-    class TMessageHelper
+    class MsgBHelper
     {
     public:
 

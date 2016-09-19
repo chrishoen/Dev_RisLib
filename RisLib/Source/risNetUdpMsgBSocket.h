@@ -3,8 +3,8 @@
 
 /*==============================================================================
 
-UdpRxTMessageSocket -- udp receive socket
-UdpTxTMessageSocket -- udp transmit socket
+UdpRxMsgBSocket -- udp receive socket
+UdpTxMsgBSocket -- udp transmit socket
 
 ==============================================================================*/
 
@@ -12,8 +12,8 @@ UdpTxTMessageSocket -- udp transmit socket
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteTMessage.h"
-#include "risByteTMessageCopier.h"
+#include "risByteMsgB.h"
+#include "risByteMsgBCopier.h"
 #include "risByteContent.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
@@ -27,7 +27,7 @@ namespace Net
    //***************************************************************************
    // Definitions
 
-   class TMessageSocketDefT
+   class MsgBSocketDefT
    {
    public:
       //************************************************************************
@@ -42,11 +42,11 @@ namespace Net
    //***************************************************************************
    // This encapsualtes the message header.
 
-   class TMessageHeader : public Ris::ByteContent
+   class MsgBHeader : public Ris::ByteContent
    {
    public:
       // Constructor
-      TMessageHeader();
+      MsgBHeader();
       void reset();
 
       //------------------------------------------------------------------------
@@ -108,8 +108,8 @@ namespace Net
       // which they transfer into and out of the headers.
       //------------------------------------------------------------------------
 
-      void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteTMessage* aParent);
-      void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteTMessage* aParent);
+      void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aParent);
+      void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aParent);
 
       //------------------------------------------------------------------------
       // These are set by headerCopyToFrom and used by headerReCopyToFrom,
@@ -127,10 +127,10 @@ namespace Net
    // Udp receive message socket.
    // Messages are based on the Ris::ByteContent message encapsulation scheme.
 
-   class  UdpRxTMessageSocket : public Sockets::BaseUdpSocket
+   class  UdpRxMsgBSocket : public Sockets::BaseUdpSocket
    {
    public:
-      UdpRxTMessageSocket(); 
+      UdpRxMsgBSocket(); 
 
      //------------------------------------------------------------------------
      // Socket:
@@ -139,13 +139,13 @@ namespace Net
       void configure(
          char*                    aLocalIpAddr,
          int                      aLocalIpPort,
-         Ris::BaseTMessageCopier* aMsgCopier);
+         Ris::BaseMsgBCopier* aMsgCopier);
 
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
       // The recvfrom address is stored in mFromAddress.
 
-      bool doReceiveMsg (Ris::ByteTMessage*& aMsg);
+      bool doReceiveMsg (Ris::ByteMsgB*& aMsg);
 
       Sockets::SocketAddress mFromAddress;
 
@@ -154,7 +154,7 @@ namespace Net
       // extract a record from a byte buffer without the having the
       // record type visible to it.
 
-      Ris::BaseTMessageCopier* mMsgCopier;
+      Ris::BaseMsgBCopier* mMsgCopier;
 
       //------------------------------------------------------------------------
       // State:
@@ -173,10 +173,10 @@ namespace Net
    // Udp transmit message socket.
    // Messages are based on the Ris::ByteContent message encapsulation scheme.
 
-   class  UdpTxTMessageSocket : public Sockets::BaseUdpSocket
+   class  UdpTxMsgBSocket : public Sockets::BaseUdpSocket
    {
    public:
-      UdpTxTMessageSocket(); 
+      UdpTxMsgBSocket(); 
 
      //------------------------------------------------------------------------
      // Socket, these two should be used together
@@ -185,20 +185,20 @@ namespace Net
       void configure(
          char*                    aRemoteIpAddr,
          int                      aRemoteIpPort,
-         Ris::BaseTMessageCopier* aMsgCopier);
+         Ris::BaseMsgBCopier* aMsgCopier);
 
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
       // It is protected by the transmit mutex.
 
-      bool doSendMsg(Ris::ByteTMessage* aMsg);
+      bool doSendMsg(Ris::ByteMsgB* aMsg);
 
       //------------------------------------------------------------------------
       // This is a record copier that is used to copy a record to a byte
       // buffer. It allows the doSendMsg method to send a record to a byte 
       // buffer without the having the record code visible to it.
 
-      Ris::BaseTMessageCopier* mMsgCopier;
+      Ris::BaseMsgBCopier* mMsgCopier;
 
       //------------------------------------------------------------------------
       // Transmit mutex is used by doSendMsg for mutual exclusion.

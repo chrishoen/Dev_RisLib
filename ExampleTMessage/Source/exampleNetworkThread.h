@@ -9,7 +9,7 @@
 #include "risNetUdpMsgBThread.h"
 #include "risThreadsQCallThread.h"
 
-#include "exampleTMessage.h"
+#include "exampleMsgB.h"
 
 namespace Example
 {
@@ -45,21 +45,21 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::UdpTMessageThread*  mUdpTMessageThread;
+   Ris::Net::UdpMsgBThread*  mUdpMsgBThread;
 
-   // Message parser used by mUdpTMessageThread
-   TMessageCopier mMsgCopier;
+   // Message parser used by mUdpMsgBThread
+   MsgBCopier mMsgCopier;
 
    //--------------------------------------------------------------
    // QCall:
 
-   // QCalls registered to mUdpTMessageThread
-   Ris::Net::UdpTMessageThread::RxMsgQCall    mRxMsgQCall;
+   // QCalls registered to mUdpMsgBThread
+   Ris::Net::UdpMsgBThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxMessage   (Ris::ByteTMessage* aMsg);
+   void executeRxMessage   (Ris::ByteMsgB* aMsg);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
@@ -79,7 +79,7 @@ public:
    //--------------------------------------------------------------
    // Send a record
 
-   void sendMsg (Ris::ByteTMessage* aMsg);
+   void sendMsg (Ris::ByteMsgB* aMsg);
    void sendTestMsg();   
 
 };

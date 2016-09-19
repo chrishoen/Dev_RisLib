@@ -176,18 +176,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\exampleTMessageHelper.cpp" />
+    <ClCompile Include="Source\exampleMsgBHelper.cpp" />
     <ClCompile Include="Source\exampleNetworkThread.cpp" />
-    <ClCompile Include="Source\exampleTMessage.cpp" />
+    <ClCompile Include="Source\exampleMsgB.cpp" />
     <ClCompile Include="Source\exampleSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\exampleTMessageHelper.h" />
+    <ClInclude Include="Source\exampleMsgBHelper.h" />
     <ClInclude Include="Source\exampleNetworkThread.h" />
-    <ClInclude Include="Source\exampleTMessage.h" />
+    <ClInclude Include="Source\exampleMsgB.h" />
     <ClInclude Include="Source\exampleSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
   </ItemGroup>

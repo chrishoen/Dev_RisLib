@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "exampleTMessage.h"
+#include "exampleMsgB.h"
 
 namespace Example
 {
@@ -9,44 +9,44 @@ namespace Example
    //******************************************************************************
    // This creates a new record, based on a record type
 
-   Ris::ByteTMessage* TMessageCopier::createMessage(int aMsgType)
+   Ris::ByteMsgB* MsgBCopier::createMessage(int aMsgType)
    {
-      Ris::ByteTMessage* tTMessage = 0;
+      Ris::ByteMsgB* tMsgB = 0;
 
       switch (aMsgType)
       {
       case TypeIdT::cTestMsg :
-         tTMessage = new TestMsg;
+         tMsgB = new TestMsg;
          break;
       case TypeIdT::cStatusMsg :
-         tTMessage = new StatusMsg;
+         tMsgB = new StatusMsg;
          break;
       case TypeIdT::cData1Msg :
-         tTMessage = new Data1Msg;
+         tMsgB = new Data1Msg;
          break;
       case TypeIdT::cData2Msg :
-         tTMessage = new Data2Msg;
+         tMsgB = new Data2Msg;
          break;
       case TypeIdT::cData3Msg :
-         tTMessage = new Data3Msg;
+         tMsgB = new Data3Msg;
          break;
       case TypeIdT::cData4Msg :
-         tTMessage = new Data4Msg;
+         tMsgB = new Data4Msg;
          break;
       default :
          return 0;
          break;
       }
 
-      return tTMessage;
+      return tMsgB;
    }
 
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // TMessageCopier
+   // MsgBCopier
 
-   void TMessageCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteTMessage* aMsg)
+   void MsgBCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsg)
    {
       switch (aMsg->mMessageType)
       {
@@ -85,7 +85,7 @@ namespace Example
       mCode4           = 0;
    }
 
-   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, TestMsg* aMsg)
+   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, TestMsg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -108,7 +108,7 @@ namespace Example
       mCode4           = 0;
    }
 
-   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg)
+   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -131,7 +131,7 @@ namespace Example
       mCode4           = 0;
    }
 
-   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg* aMsg)
+   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -154,13 +154,13 @@ namespace Example
       mCode4           = 0;
    }
 
-   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg* aMsg)
+   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
       aBuffer->copy( &aMsg->mCode3 );
       aBuffer->copy( &aMsg->mCode4 );
-      TMessageCopier::copyToFrom   (aBuffer, &aMsg->mData1 );
+      MsgBCopier::copyToFrom   (aBuffer, &aMsg->mData1 );
    }
 
    //****************************************************************************
@@ -186,7 +186,7 @@ namespace Example
       }
    }
 
-   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data3Msg* aMsg)
+   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data3Msg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -219,7 +219,7 @@ namespace Example
       mData1Loop=cMaxLoop;
    }
 
-   void TMessageCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data4Msg* aMsg)
+   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data4Msg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -229,7 +229,7 @@ namespace Example
       aBuffer->copy( &aMsg->mData1Loop );
       for (int i=0; i<aMsg->mData1Loop; i++)
       {
-      TMessageCopier::copyToFrom   (aBuffer, &aMsg->mData1[i] );
+      MsgBCopier::copyToFrom   (aBuffer, &aMsg->mData1[i] );
       }
    }
 

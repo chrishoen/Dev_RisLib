@@ -7,7 +7,7 @@
 #include "risSockets.h"
 #include "prnPrint.h"
 #include "exampleSettings.h"
-#include "exampleTMessageHelper.h"
+#include "exampleMsgBHelper.h"
 
 #define  _EXAMPLENETWORKTHREAD_CPP_
 #include "exampleNetworkThread.h"
@@ -25,7 +25,7 @@ NetworkThread::NetworkThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpTMessageThread = new Ris::Net::UdpTMessageThread;
+   mUdpMsgBThread = new Ris::Net::UdpMsgBThread;
 
    // Initialize QCalls
    mRxMsgQCall.bind   (this,&NetworkThread::executeRxMessage);
@@ -35,7 +35,7 @@ NetworkThread::NetworkThread()
 
 NetworkThread::~NetworkThread()
 {
-   delete mUdpTMessageThread;
+   delete mUdpMsgBThread;
 }
 
 //******************************************************************************
@@ -48,7 +48,7 @@ void NetworkThread::configure()
    //---------------------------------------------------------------------------
    // Configure socket thread
 
-   mUdpTMessageThread->configure(
+   mUdpMsgBThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
@@ -65,7 +65,7 @@ void NetworkThread::launchThread()
    Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
 
    // Launch child thread
-   mUdpTMessageThread->launchThread(); 
+   mUdpMsgBThread->launchThread(); 
    
    // Launch this thread
    BaseClass::launchThread();
@@ -78,7 +78,7 @@ void  NetworkThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
    // Shutdown the tcp client thread
-   mUdpTMessageThread->shutdownThread();
+   mUdpMsgBThread->shutdownThread();
 
    // Base class exit
    BaseClass::threadExitFunction();
@@ -87,7 +87,7 @@ void  NetworkThread::threadExitFunction()
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeRxMessage(Ris::ByteTMessage* aMsg)
+void NetworkThread::executeRxMessage(Ris::ByteMsgB* aMsg)
 {
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
@@ -112,7 +112,7 @@ void NetworkThread::executeRxMessage(Ris::ByteTMessage* aMsg)
          processRxMsg((Data4Msg*)aMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxTMessage ??? %d",aMsg->mMessageType);
+         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsgB ??? %d",aMsg->mMessageType);
          delete aMsg;
          break;
    }
@@ -125,7 +125,7 @@ void NetworkThread::processRxMsg(TestMsg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_TestMsg" );
 
-   TMessageHelper::show(aMsg);
+   MsgBHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -137,7 +137,7 @@ void NetworkThread::processRxMsg(StatusMsg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusMsg %d",mStatusCount1++);
 
-   TMessageHelper::show(aMsg);
+   MsgBHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -149,7 +149,7 @@ void NetworkThread::processRxMsg(Data1Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data1Msg");
 
-   TMessageHelper::show(aMsg);
+   MsgBHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -161,7 +161,7 @@ void NetworkThread::processRxMsg(Data2Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data2Msg");
 
-   TMessageHelper::show(aMsg);
+   MsgBHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -173,7 +173,7 @@ void NetworkThread::processRxMsg(Data3Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data3Msg");
 
-   TMessageHelper::show(aMsg);
+   MsgBHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -185,7 +185,7 @@ void NetworkThread::processRxMsg(Data4Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data4Msg");
 
-   TMessageHelper::show(aMsg);
+   MsgBHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -208,9 +208,9 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void NetworkThread::sendMsg (Ris::ByteTMessage* aMsg)
+void NetworkThread::sendMsg (Ris::ByteMsgB* aMsg)
 {
-   mUdpTMessageThread->sendMsg(aMsg);
+   mUdpMsgBThread->sendMsg(aMsg);
 }
 
 //******************************************************************************
@@ -218,10 +218,10 @@ void NetworkThread::sendMsg (Ris::ByteTMessage* aMsg)
 
 void NetworkThread::sendTestMsg()
 {
-   TestMsg* tTMessage = new TestMsg;
-   tTMessage->mCode1=201;
+   TestMsg* tMsgB = new TestMsg;
+   tMsgB->mCode1=201;
  
-   mUdpTMessageThread->sendMsg(tTMessage);
+   mUdpMsgBThread->sendMsg(tMsgB);
 }
 
 }//namespace

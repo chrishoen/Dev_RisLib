@@ -1,5 +1,5 @@
-#ifndef _RISBYTETMESSAGE_H_
-#define _RISBYTETMESSAGE_H_
+#ifndef _RISBYTEMSGB_H_
+#define _RISBYTEMSGB_H_
 /*==============================================================================
 
 ByteContent and ByteBuffer classes.
@@ -29,14 +29,14 @@ namespace Ris
 //******************************************************************************
 // This is a base class for classes that can be copied to/from ByteBuffers.
 
-class ByteTMessage
+class ByteMsgB
 {
 public:
    // General purpose identifier
    int mMessageType;
 
    // Constructor
-   ByteTMessage()
+   ByteMsgB()
    {
       mMessageType = 0;
    }

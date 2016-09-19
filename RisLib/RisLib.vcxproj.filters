@@ -213,12 +213,6 @@
     <ClInclude Include="Source\risByteBuffer.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteTMessage.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risByteTMessageCopier.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risTimeMarker.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -283,6 +277,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetUdpStringSocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risByteMsgB.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risByteMsgBCopier.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

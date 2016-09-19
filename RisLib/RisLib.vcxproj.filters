@@ -64,9 +64,6 @@
     <ClCompile Include="Source\risByteBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risNetUdpMsgThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risNetUdpTMessageSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -125,6 +122,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risNetUdpMsgASocket.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risNetUdpMsgAThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -216,9 +216,6 @@
     <ClInclude Include="Source\risByteBuffer.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risNetUdpMsgThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risByteTMessage.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -283,6 +280,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetUdpMsgASocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpMsgAThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -51,7 +51,7 @@
     <ClCompile Include="Source\risNetTcpMsgASocket.cpp" />
     <ClCompile Include="Source\risNetTcpMsgAServerThread.cpp" />
     <ClCompile Include="Source\risNetUdpMsgASocket.cpp" />
-    <ClCompile Include="Source\risNetUdpMsgThread.cpp" />
+    <ClCompile Include="Source\risNetUdpMsgAThread.cpp" />
     <ClCompile Include="Source\risPointerStack.cpp" />
     <ClCompile Include="Source\risPortableCalls_win.cpp" />
     <ClCompile Include="Source\risSockets_win.cpp" />
@@ -104,7 +104,7 @@
     <ClInclude Include="Source\risNetTcpMsgASocket.h" />
     <ClInclude Include="Source\risNetTcpMsgAServerThread.h" />
     <ClInclude Include="Source\risNetUdpMsgASocket.h" />
-    <ClInclude Include="Source\risNetUdpMsgThread.h" />
+    <ClInclude Include="Source\risNetUdpMsgAThread.h" />
     <ClInclude Include="Source\risPointerStack.h" />
     <ClInclude Include="Source\risPortableCalls.h" />
     <ClInclude Include="Source\risPortableTypes.h" />

@@ -56,12 +56,12 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-class UdpMsgThread : public Ris::Threads::BaseThreadWithTermFlag
+class UdpMsgAThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
    typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
 
-   UdpMsgThread();
+   UdpMsgAThread();
 
    //--------------------------------------------------------------
    // Thread base class overloads:

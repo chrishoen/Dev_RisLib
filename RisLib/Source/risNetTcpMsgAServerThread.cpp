@@ -8,7 +8,7 @@
 #include "prnPrint.h"
 
 #include "ris_priorities.h"
-#include "risNetTcpServerThread.h"
+#include "risNetTcpMsgAServerThread.h"
 
 namespace Ris
 {
@@ -21,7 +21,7 @@ namespace Net
 // This initializes the socket. It stores the socket address to which the
 // socket will be bound and calls socket and bind.
 
-void TcpServerHubSocket::configure(Sockets::SocketAddress aSocketAddress)
+void TcpMsgAServerHubSocket::configure(Sockets::SocketAddress aSocketAddress)
 {
    reset();
    mLocal = aSocketAddress;
@@ -49,7 +49,7 @@ void TcpServerHubSocket::configure(Sockets::SocketAddress aSocketAddress)
 //******************************************************************************
 // This re-initializes the socket.
 
-void TcpServerHubSocket::reconfigure()
+void TcpMsgAServerHubSocket::reconfigure()
 {
    doSocket();
    setOptionReuseAddr();
@@ -60,7 +60,7 @@ void TcpServerHubSocket::reconfigure()
 //******************************************************************************
 //******************************************************************************
 
-TcpServerThread::TcpServerThread()
+TcpMsgAServerThread::TcpMsgAServerThread()
 {
    mThreadPriority = get_default_tcp_server_thread_priority();
 
@@ -73,7 +73,7 @@ TcpServerThread::TcpServerThread()
 //******************************************************************************
 // Configure:
 
-void TcpServerThread::configure(
+void TcpMsgAServerThread::configure(
    char*                     aServerIpAddr,
    int                       aServerIpPort,
    int                       aMaxSessions, 
@@ -97,7 +97,7 @@ void TcpServerThread::configure(
 // Thread init function, base class overload.
 // It configures the sockets.
 
-void TcpServerThread::threadInitFunction()
+void TcpMsgAServerThread::threadInitFunction()
 {
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction BEGIN");
 
@@ -118,7 +118,7 @@ void TcpServerThread::threadInitFunction()
 // It contains a while loop that does a select call to manage the hub socket
 // and the set of node sockets.
 
-void TcpServerThread::threadRunFunction()
+void TcpMsgAServerThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun1, "TcpServerThread::threadRunFunction");
    
@@ -306,7 +306,7 @@ void TcpServerThread::threadRunFunction()
 // Thread exit function, base class overload.
 // It closes all open sockets.
 
-void TcpServerThread::threadExitFunction()
+void TcpMsgAServerThread::threadExitFunction()
 {
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadExitFunction");
 
@@ -322,7 +322,7 @@ void TcpServerThread::threadExitFunction()
 
 //******************************************************************************
 
-void TcpServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
+void TcpMsgAServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
 {
    if (!aTxMsg) return;
 
@@ -349,7 +349,7 @@ void TcpServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
 //******************************************************************************
 //******************************************************************************
 
-void TcpServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
+void TcpMsgAServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
 {
    // Invoke the session qcall to notify that a session has
    // been established or disestablished
@@ -361,7 +361,7 @@ void TcpServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
 //******************************************************************************
 //******************************************************************************
 
-void TcpServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
+void TcpMsgAServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.

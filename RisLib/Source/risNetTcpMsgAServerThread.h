@@ -1,5 +1,5 @@
-#ifndef _RISNETTCPSERVERTHREAD_H_
-#define _RISNETTCPSERVERTHREAD_H_
+#ifndef _RISNETTCPMSGASERVERTHREAD_H_
+#define _RISNETTCPMSGASERVERTHREAD_H_
 
 /*==============================================================================
 
@@ -47,7 +47,7 @@ namespace Net
 // It does listen and accept socket calls into tcp stream sockets in response
 // to client connect calls. 
 
-class  TcpServerHubSocket : public Sockets::BaseTcpServerHubSocket
+class TcpMsgAServerHubSocket : public Sockets::BaseTcpServerHubSocket
 {
 public:
    // Socket setup
@@ -97,10 +97,10 @@ public:
 // select call.
 //
 
-class TcpServerThread : public Threads::BaseThreadWithTermFlag
+class TcpMsgAServerThread : public Threads::BaseThreadWithTermFlag
 {
 public:
-   TcpServerThread();
+   TcpMsgAServerThread();
 
    //--------------------------------------------------------------
    // Configure :
@@ -173,7 +173,7 @@ public:
    // Sockets:
 
    // Hub socket instance
-   TcpServerHubSocket mHubSocket;
+   TcpMsgAServerHubSocket mHubSocket;
 
    // Maximum possible number of sessions
    enum {MaxSessions=20};

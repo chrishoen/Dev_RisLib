@@ -49,7 +49,7 @@
     <ClCompile Include="Source\risNetSessionStateList.cpp" />
     <ClCompile Include="Source\risNetTcpMsgAClientThread.cpp" />
     <ClCompile Include="Source\risNetTcpMsgASocket.cpp" />
-    <ClCompile Include="Source\risNetTcpServerThread.cpp" />
+    <ClCompile Include="Source\risNetTcpMsgAServerThread.cpp" />
     <ClCompile Include="Source\risNetUdpMsgSocket.cpp" />
     <ClCompile Include="Source\risNetUdpMsgThread.cpp" />
     <ClCompile Include="Source\risPointerStack.cpp" />
@@ -102,7 +102,7 @@
     <ClInclude Include="Source\risNetSessionStateList.h" />
     <ClInclude Include="Source\risNetTcpMsgAClientThread.h" />
     <ClInclude Include="Source\risNetTcpMsgASocket.h" />
-    <ClInclude Include="Source\risNetTcpServerThread.h" />
+    <ClInclude Include="Source\risNetTcpMsgAServerThread.h" />
     <ClInclude Include="Source\risNetUdpMsgSocket.h" />
     <ClInclude Include="Source\risNetUdpMsgThread.h" />
     <ClInclude Include="Source\risPointerStack.h" />

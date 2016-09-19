@@ -5,8 +5,8 @@
 //******************************************************************************
 //******************************************************************************
 #include "risContainers.h"
-#include "risNetUdpTMessageSocket.h"
-#include "risNetUdpTMessageThread.h"
+#include "risNetUdpMsgBSocket.h"
+#include "risNetUdpMsgBThread.h"
 #include "risThreadsQCallThread.h"
 
 #include "exampleTMessage.h"

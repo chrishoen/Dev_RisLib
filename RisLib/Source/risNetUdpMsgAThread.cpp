@@ -91,7 +91,7 @@ void  UdpMsgAThread::threadRunFunction()
       // If a message was received then process it.
       // If a message was not received then the connection was lost.  
       ByteContent* rxMsg=0;
-      if (mRxSocket.doReceiveMessage(rxMsg))
+      if (mRxSocket.doReceiveMsg(rxMsg))
       {
          // Message was correctly received
          Prn::print(Prn::SocketRun1, "Recv message %d",mRxSocket.mRxMsgCount);
@@ -126,8 +126,8 @@ void UdpMsgAThread::threadExitFunction()
 // Shutdown, base class overload.
 // This sets the terminate request flag and closes the socket.
 //
-// If the while loop in the threadRunFunction is blocked on doReceiveMessage then
-// closing the socket will cause doReceiveMessage to return with false and 
+// If the while loop in the threadRunFunction is blocked on doReceiveMsg then
+// closing the socket will cause doReceiveMsg to return with false and 
 // then the terminate request flag will be polled and the threadRunFunction 
 // will exit.
 

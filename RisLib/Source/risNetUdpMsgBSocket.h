@@ -1,5 +1,5 @@
-#ifndef _RISNETUDPTMESSAGESOCKET_H_
-#define _RISNETUDPTMESSAGESOCKET_H_
+#ifndef _RISNETUDPMSGBSOCKET_H_
+#define _RISNETUDPMSGBSOCKET_H_
 
 /*==============================================================================
 
@@ -145,12 +145,12 @@ namespace Net
       // It returns true if successful.
       // The recvfrom address is stored in mFromAddress.
 
-      bool doReceiveMessage (Ris::ByteTMessage*& aMsg);
+      bool doReceiveMsg (Ris::ByteTMessage*& aMsg);
 
       Sockets::SocketAddress mFromAddress;
 
       // This is a record copier that is used to copy a record from a
-      // byte buffer.It allows the doReceiveMessage method to receive and
+      // byte buffer.It allows the doReceiveMsg method to receive and
       // extract a record from a byte buffer without the having the
       // record type visible to it.
 

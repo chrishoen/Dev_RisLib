@@ -25,7 +25,7 @@ UdpRxMsgASocket::UdpRxMsgASocket()
    mRxLength      = 0;
    mRxMsgCount    = 0;
    mValidFlag     = false;
-   mMsgParser = 0;
+   mMsgParser     = 0;
 }
 
 //******************************************************************************
@@ -39,9 +39,9 @@ UdpRxMsgASocket::~UdpRxMsgASocket()
 // configure the socket
 
 void UdpRxMsgASocket::configure(
-   char*                       aLocalIpAddr,
-   int                         aLocalIpPort,
-   BaseMsgAParserCreator*   aMsgParserCreator)
+   char*                  aLocalIpAddr,
+   int                    aLocalIpPort,
+   BaseMsgAParserCreator* aMsgParserCreator)
 {
    mRxMsgCount=0;
 
@@ -73,7 +73,7 @@ void UdpRxMsgASocket::configure(
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpRxMsgASocket::doReceiveMessage (ByteContent*& aMsg)
+bool UdpRxMsgASocket::doReceiveMsg (ByteContent*& aMsg)
 {
    //-------------------------------------------------------------------------
    // Initialize
@@ -168,9 +168,9 @@ UdpTxMsgASocket::~UdpTxMsgASocket()
 // Configure the socket. Use with the next doSendMsg.
 
 void UdpTxMsgASocket::configure(
-   char*                      aRemoteIpAddr,
-   int                        aRemoteIpPort,
-   BaseMsgAParserCreator*  aMsgParserCreator)
+   char*                  aRemoteIpAddr,
+   int                    aRemoteIpPort,
+   BaseMsgAParserCreator* aMsgParserCreator)
 {
    mTxCount=0;
 

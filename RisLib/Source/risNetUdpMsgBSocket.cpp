@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "risNetUdpTMessageSocket.h"
+#include "risNetUdpMsgBSocket.h"
 
 namespace Ris
 {
@@ -263,7 +263,7 @@ namespace Net
    // This receives a datagram from the socket into a byte buffer and then
    // extracts a message from the byte buffer
 
-   bool UdpRxTMessageSocket::doReceiveMessage (Ris::ByteTMessage*& aMsg)
+   bool UdpRxTMessageSocket::doReceiveMsg (Ris::ByteTMessage*& aMsg)
    {
       //-------------------------------------------------------------------------
       // Initialize

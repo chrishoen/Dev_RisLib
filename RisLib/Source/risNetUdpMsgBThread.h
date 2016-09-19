@@ -1,5 +1,5 @@
-#ifndef _RISNETUDPTMESSAGETHREAD_H_
-#define _RISNETUDPTMESSAGETHREAD_H_
+#ifndef _RISNETUDPMSGBTHREAD_H_
+#define _RISNETUDPMSGBTHREAD_H_
 
 /*==============================================================================
 
@@ -33,7 +33,7 @@ or callbacks in their configure calls.
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
-#include "risNetUdpTMessageSocket.h"
+#include "risNetUdpMsgBSocket.h"
 
 namespace Ris
 {

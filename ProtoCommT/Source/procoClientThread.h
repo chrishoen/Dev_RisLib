@@ -9,7 +9,7 @@ ProtoComm client thread class.
 //******************************************************************************
 //******************************************************************************
 #include "risContainers.h"
-#include "risNetTcpClientThread.h"
+#include "risNetTcpMsgAClientThread.h"
 #include "risThreadsQCallThread.h"
 
 #include "procoMsg.h"
@@ -79,7 +79,7 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::TcpClientThread*  mTcpClientThread;
+   Ris::Net::TcpMsgAClientThread*  mTcpClientThread;
 
    // Message parser used by mTcpClientThread
    ProtoComm::MessageParserCreator mMessageParserCreator;
@@ -88,8 +88,8 @@ public:
    // QCall:
 
    // QCalls registered to mTcpClientThread
-   Ris::Net::TcpClientThread::SessionQCall  mSessionQCall;
-   Ris::Net::TcpClientThread::RxMsgQCall    mRxMsgQCall;
+   Ris::Net::TcpMsgAClientThread::SessionQCall  mSessionQCall;
+   Ris::Net::TcpMsgAClientThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

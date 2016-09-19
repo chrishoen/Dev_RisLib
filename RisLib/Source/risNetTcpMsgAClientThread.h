@@ -1,5 +1,5 @@
-#ifndef _RISNETTCPCLIENTTHREAD_H_
-#define _RISNETTCPCLIENTTHREAD_H_
+#ifndef _RISNETTCPMSGACLIENTTHREAD_H_
+#define _RISNETTCPMSGACLIENTTHREAD_H_
 
 /*==============================================================================
 Tcp client thread classes.
@@ -70,10 +70,10 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-class TcpClientThread : public Ris::Threads::BaseThreadWithTermFlag
+class TcpMsgAClientThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
-   TcpClientThread();
+   TcpMsgAClientThread();
 
    //--------------------------------------------------------------
    // Configure:

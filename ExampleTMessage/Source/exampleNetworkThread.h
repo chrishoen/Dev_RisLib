@@ -54,7 +54,7 @@ public:
    // QCall:
 
    // QCalls registered to mUdpTMessageThread
-   Ris::Net::UdpTMessageThread::RxMessageQCall    mRxMessageQCall;
+   Ris::Net::UdpTMessageThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
@@ -66,12 +66,12 @@ public:
    //--------------------------------------------------------------
    // Rx message handlers
 
-   void processRxMessage (TestMsg*   aMsg);
-   void processRxMessage (StatusMsg* aMsg);
-   void processRxMessage (Data1Msg*  aMsg);
-   void processRxMessage (Data2Msg*  aMsg);
-   void processRxMessage (Data3Msg*  aMsg);
-   void processRxMessage (Data4Msg*  aMsg);
+   void processRxMsg (TestMsg*   aMsg);
+   void processRxMsg (StatusMsg* aMsg);
+   void processRxMsg (Data1Msg*  aMsg);
+   void processRxMsg (Data2Msg*  aMsg);
+   void processRxMsg (Data3Msg*  aMsg);
+   void processRxMsg (Data4Msg*  aMsg);
 
    int  mStatusCount1;
    int  mStatusCount2;
@@ -79,7 +79,7 @@ public:
    //--------------------------------------------------------------
    // Send a record
 
-   void sendMessage (Ris::ByteTMessage* aMsg);
+   void sendMsg (Ris::ByteTMessage* aMsg);
    void sendTestMsg();   
 
 };

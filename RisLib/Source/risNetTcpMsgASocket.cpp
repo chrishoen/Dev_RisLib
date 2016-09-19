@@ -42,7 +42,7 @@ TcpMsgASocket::~TcpMsgASocket()
 
 void TcpMsgASocket::configure(
    Sockets::SocketAddress    aSocketAddress,
-   BaseMsgAParserCreator* aMessageParserCreator)
+   BaseMsgAParserCreator* aMsgParserCreator)
 {
    mTxMsgCount=0;
    mRxMsgCount=0;
@@ -50,8 +50,8 @@ void TcpMsgASocket::configure(
    reset();
    mRemote = aSocketAddress;
 
-   if (mRxMessageParser==0) mRxMessageParser = aMessageParserCreator->createNew();
-   if (mTxMessageParser==0) mTxMessageParser = aMessageParserCreator->createNew();
+   if (mRxMessageParser==0) mRxMessageParser = aMsgParserCreator->createNew();
+   if (mTxMessageParser==0) mTxMessageParser = aMsgParserCreator->createNew();
 
    doSocket();
    setOptionKeepAlive();
@@ -75,10 +75,10 @@ void TcpMsgASocket::configure(
 }
 
 void TcpMsgASocket::configure(
-   BaseMsgAParserCreator* aMessageParserCreator)
+   BaseMsgAParserCreator* aMsgParserCreator)
 {
-   if (mRxMessageParser == 0) mRxMessageParser = aMessageParserCreator->createNew();
-   if (mTxMessageParser == 0) mTxMessageParser = aMessageParserCreator->createNew();
+   if (mRxMessageParser == 0) mRxMessageParser = aMsgParserCreator->createNew();
+   if (mTxMessageParser == 0) mTxMessageParser = aMsgParserCreator->createNew();
 }
 
 //******************************************************************************

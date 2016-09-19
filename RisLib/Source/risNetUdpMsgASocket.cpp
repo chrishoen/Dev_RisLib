@@ -25,14 +25,14 @@ UdpRxMsgASocket::UdpRxMsgASocket()
    mRxLength      = 0;
    mRxMsgCount    = 0;
    mValidFlag     = false;
-   mMessageParser = 0;
+   mMsgParser = 0;
 }
 
 //******************************************************************************
 
 UdpRxMsgASocket::~UdpRxMsgASocket()
 {
-   if (mMessageParser) delete mMessageParser;
+   if (mMsgParser) delete mMsgParser;
 }
 
 //******************************************************************************
@@ -41,12 +41,12 @@ UdpRxMsgASocket::~UdpRxMsgASocket()
 void UdpRxMsgASocket::configure(
    char*                       aLocalIpAddr,
    int                         aLocalIpPort,
-   BaseMsgAParserCreator*   aMessageParserCreator)
+   BaseMsgAParserCreator*   aMsgParserCreator)
 {
    mRxMsgCount=0;
 
    mLocal.set(aLocalIpAddr,aLocalIpPort);
-   mMessageParser = aMessageParserCreator->createNew();
+   mMsgParser = aMsgParserCreator->createNew();
 
    doSocket();
    doBind();
@@ -115,10 +115,10 @@ bool UdpRxMsgASocket::doReceiveMessage (ByteContent*& aMsg)
    // Copy from the receive buffer into the message parser object
    // and validate the header
 
-   mMessageParser->extractMessageHeaderParms(&tBuffer);
+   mMsgParser->extractMessageHeaderParms(&tBuffer);
 
    // If the header is not valid then error
-   if (!mMessageParser->mHeaderValidFlag)
+   if (!mMsgParser->mHeaderValidFlag)
    {
       Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER ");
       return false;
@@ -130,7 +130,7 @@ bool UdpRxMsgASocket::doReceiveMessage (ByteContent*& aMsg)
    // object and return it.
 
    tBuffer.rewind();
-   aMsg = mMessageParser->makeFromByteBuffer(&tBuffer);
+   aMsg = mMsgParser->makeFromByteBuffer(&tBuffer);
 
    // Test for errors and return.
    // If the pointer is zero then message is bad
@@ -154,28 +154,28 @@ UdpTxMsgASocket::UdpTxMsgASocket()
    mTxCount=0;
    mTxLength      = 0;
    mValidFlag=false;
-   mMessageParser=0;
+   mMsgParser=0;
 }
 
 //******************************************************************************
 
 UdpTxMsgASocket::~UdpTxMsgASocket()
 {
-   if (mMessageParser) delete mMessageParser;
+   if (mMsgParser) delete mMsgParser;
 }
 
 //******************************************************************************
-// Configure the socket. Use with the next doSendMessage.
+// Configure the socket. Use with the next doSendMsg.
 
 void UdpTxMsgASocket::configure(
    char*                      aRemoteIpAddr,
    int                        aRemoteIpPort,
-   BaseMsgAParserCreator*  aMessageParserCreator)
+   BaseMsgAParserCreator*  aMsgParserCreator)
 {
    mTxCount=0;
 
    mRemote.set(aRemoteIpAddr,aRemoteIpPort);
-   mMessageParser = aMessageParserCreator->createNew();
+   mMsgParser = aMsgParserCreator->createNew();
 
    doSocket();
 
@@ -201,13 +201,13 @@ void UdpTxMsgASocket::configure(
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket. Use with the previous configure.
 
-bool UdpTxMsgASocket::doSendMessage(ByteContent* aMsg)
+bool UdpTxMsgASocket::doSendMsg(ByteContent* aMsg)
 {
    // Guard
    if (!mValidFlag) return false;
 
    // Process message before send
-   mMessageParser->processBeforeSend(aMsg);
+   mMsgParser->processBeforeSend(aMsg);
 
    // Create byte buffer, constructor takes size
    ByteBuffer tBuffer(MsgASocketDefT::cBufferSize);
@@ -234,14 +234,14 @@ bool UdpTxMsgASocket::doSendMessage(ByteContent* aMsg)
 }
 
 //******************************************************************************
-// Configure the socket. Use with the next doSendMessage.
+// Configure the socket. Use with the next doSendMsg.
 
 void UdpTxMsgASocket::configure(
-   BaseMsgAParser*     aMessageParser)
+   BaseMsgAParser*     aMsgParser)
 {
    mTxCount=0;
 
-   mMessageParser = aMessageParser;
+   mMsgParser = aMsgParser;
 
    doSocket();
 
@@ -257,7 +257,7 @@ void UdpTxMsgASocket::configure(
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket. Use with the previous configure.
 
-bool UdpTxMsgASocket::doSendMessage(
+bool UdpTxMsgASocket::doSendMsg(
    Sockets::SocketAddress aRemote,
    ByteContent* aMsg)
 {

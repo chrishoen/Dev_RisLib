@@ -77,7 +77,7 @@ void TcpMsgAServerThread::configure(
    char*                     aServerIpAddr,
    int                       aServerIpPort,
    int                       aMaxSessions, 
-   BaseMsgAParserCreator* aMessageParserCreator,
+   BaseMsgAParserCreator* aMsgParserCreator,
    SessionQCall*             aSessionQCall,
    RxMsgQCall*               aRxMsgQCall,
    int                       aFlags)
@@ -86,7 +86,7 @@ void TcpMsgAServerThread::configure(
 
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
    mMaxSessions = aMaxSessions;
-   mMessageParserCreator = aMessageParserCreator;
+   mMsgParserCreator = aMsgParserCreator;
    mFlags = aFlags;
 
    mSessionQCall = *aSessionQCall;
@@ -107,7 +107,7 @@ void TcpMsgAServerThread::threadInitFunction()
    // Register the message parser for the node sockets
    for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
    {
-      mNodeSocket[sessionIndex].configure(mMessageParserCreator);
+      mNodeSocket[sessionIndex].configure(mMsgParserCreator);
    }
 
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");

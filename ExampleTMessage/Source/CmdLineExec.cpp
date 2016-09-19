@@ -54,42 +54,42 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
       {
          TestMsg* tMsg = new TestMsg;
          TMessageHelper::initialize(tMsg);
-         gNetworkThread->sendMessage(tMsg);
+         gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 2:
       {
          StatusMsg* tMsg = new StatusMsg;
          TMessageHelper::initialize(tMsg);
-         gNetworkThread->sendMessage(tMsg);
+         gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 3:
       {
          Data1Msg* tMsg = new Data1Msg;
          TMessageHelper::initialize(tMsg);
-         gNetworkThread->sendMessage(tMsg);
+         gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 4:
       {
          Data2Msg* tMsg = new Data2Msg;
          TMessageHelper::initialize(tMsg);
-         gNetworkThread->sendMessage(tMsg);
+         gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
          Data3Msg* tMsg = new Data3Msg;
          TMessageHelper::initialize(tMsg);
-         gNetworkThread->sendMessage(tMsg);
+         gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 6:
       {
          Data4Msg* tMsg = new Data4Msg;
          TMessageHelper::initialize(tMsg);
-         gNetworkThread->sendMessage(tMsg);
+         gNetworkThread->sendMsg(tMsg);
          break;
       }
    }
@@ -108,7 +108,7 @@ void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
    StatusMsg* tMsg = new StatusMsg;
    TMessageHelper::initialize(tMsg);
-   gNetworkThread->sendMessage(tMsg);
+   gNetworkThread->sendMsg(tMsg);
 }
 
 

@@ -52,14 +52,14 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
       {
          ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
          tMsg->initialize();
-         gNetworkThread->sendMessage(tMsg);
+         gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
          ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
          tMsg->initialize();
-         gNetworkThread->sendMessage(tMsg);
+         gNetworkThread->sendMsg(tMsg);
          break;
       }
    }
@@ -78,7 +78,7 @@ void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
 
-   gNetworkThread->sendMessage(tMsg);
+   gNetworkThread->sendMsg(tMsg);
 }
 
 
@@ -149,7 +149,7 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
    ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
    tMsg->initialize();
 
-   gNetworkThread->sendMessage(tMsg);
+   gNetworkThread->sendMsg(tMsg);
 }
 
 
@@ -159,5 +159,5 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
-   gNetworkThread->sendMessage(tMsg->cloneMessage());
+   gNetworkThread->sendMsg(tMsg->cloneMessage());
 }

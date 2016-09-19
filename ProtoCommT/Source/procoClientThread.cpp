@@ -48,7 +48,7 @@ void ClientThread::configure()
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
-   mMessageParserCreator.configure(gSettings.mMyAppNumber);
+   mMsgParserCreator.configure(gSettings.mMyAppNumber);
 
    //---------------------------------------------------------------------------
    // Configure child thread, client
@@ -56,7 +56,7 @@ void ClientThread::configure()
    mTcpClientThread->configure(
       "127.0.0.1",
       gSettings.mTcpServerPort,
-      &mMessageParserCreator,
+      &mMsgParserCreator,
       &mSessionQCall,
       &mRxMsgQCall);
 }

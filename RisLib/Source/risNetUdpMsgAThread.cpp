@@ -36,8 +36,8 @@ void UdpMsgAThread::configure(
    int                        aLocalIpPort,
    char*                      aRemoteIpAddress,
    int                        aRemoteIpPort,
-   BaseMsgAParserCreator*  aMessageParserCreator,
-   RxMessageQCall*            aMessageQCall)
+   BaseMsgAParserCreator*  aMsgParserCreator,
+   RxMsgQCall*            aMessageQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);
    mLocalIpPort = aLocalIpPort;
@@ -45,9 +45,9 @@ void UdpMsgAThread::configure(
    strcpy(mRemoteIpAddress, aRemoteIpAddress);
    mRemoteIpPort = aRemoteIpPort;
 
-   mMessageParserCreator = aMessageParserCreator;
+   mMsgParserCreator = aMsgParserCreator;
 
-   mRxMessageQCall = *aMessageQCall;
+   mRxMsgQCall = *aMessageQCall;
 }
 
 //******************************************************************************
@@ -56,19 +56,19 @@ void UdpMsgAThread::configure(
 
 void UdpMsgAThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInit1, "UdpMsgAThread::threadInitFunction BEGIN");
 
    mRxSocket.configure(
       mLocalIpAddress,
       mLocalIpPort,
-      mMessageParserCreator);
+      mMsgParserCreator);
 
    mTxSocket.configure(
       mRemoteIpAddress,
       mRemoteIpPort,
-      mMessageParserCreator);
+      mMsgParserCreator);
 
-   Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction END");
+   Prn::print(Prn::SocketInit1, "UdpMsgAThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -97,7 +97,7 @@ void  UdpMsgAThread::threadRunFunction()
          Prn::print(Prn::SocketRun1, "Recv message %d",mRxSocket.mRxMsgCount);
 
          // Call the receive method
-         processRxMessage(rxMsg);
+         processRxMsg(rxMsg);
       }
       else
       {
@@ -120,7 +120,7 @@ void  UdpMsgAThread::threadRunFunction()
 
 void UdpMsgAThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit1, "UdpMsgThread::threadExitFunction");
+   Prn::print(Prn::SocketInit1, "UdpMsgAThread::threadExitFunction");
 }
 //******************************************************************************
 // Shutdown, base class overload.
@@ -142,19 +142,19 @@ void UdpMsgAThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpMsgAThread::processRxMessage(Ris::ByteContent* aMsg)
+void UdpMsgAThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMessageQCall(aMsg);
+   mRxMsgQCall(aMsg);
 }
 
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void UdpMsgAThread::sendMessage (Ris::ByteContent* aMsg)
+void UdpMsgAThread::sendMsg (Ris::ByteContent* aMsg)
 {
-   mTxSocket.doSendMessage(aMsg);
+   mTxSocket.doSendMsg(aMsg);
 }
 
 //******************************************************************************

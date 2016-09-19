@@ -191,17 +191,17 @@ namespace Net
       // It returns true if successful.
       // It is protected by the transmit mutex.
 
-      bool doSendMessage(Ris::ByteTMessage* aMsg);
+      bool doSendMsg(Ris::ByteTMessage* aMsg);
 
       //------------------------------------------------------------------------
       // This is a record copier that is used to copy a record to a byte
-      // buffer. It allows the doSendMessage method to send a record to a byte 
+      // buffer. It allows the doSendMsg method to send a record to a byte 
       // buffer without the having the record code visible to it.
 
       Ris::BaseTMessageCopier* mMsgCopier;
 
       //------------------------------------------------------------------------
-      // Transmit mutex is used by doSendMessage for mutual exclusion.
+      // Transmit mutex is used by doSendMsg for mutual exclusion.
 
       Ris::Threads::MutexSemaphore  mTxMutex;
 

@@ -33,7 +33,7 @@ TcpMsgAClientThread::TcpMsgAClientThread()
 void TcpMsgAClientThread::configure(
    char*                      aServerIpAddr,
    int                        aServerIpPort,
-   BaseMsgAParserCreator*  aMessageParserCreator,
+   BaseMsgAParserCreator*  aMsgParserCreator,
    SessionQCall*              aSessionQCall,
    RxMsgQCall*                aRxMsgQCall,
    int                        aFlags) 
@@ -43,7 +43,7 @@ void TcpMsgAClientThread::configure(
    mConnectionFlag=false;
    mFlags=aFlags;
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
-   mMessageParserCreator = aMessageParserCreator;
+   mMsgParserCreator = aMsgParserCreator;
 
    mSessionQCall = *aSessionQCall;
    mRxMsgQCall   = *aRxMsgQCall;
@@ -58,7 +58,7 @@ void TcpMsgAClientThread::threadInitFunction()
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction BEGIN");
 
    // Configure the socket
-   mSocket.configure(mSocketAddress,mMessageParserCreator);
+   mSocket.configure(mSocketAddress,mMsgParserCreator);
 
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction END");
 }

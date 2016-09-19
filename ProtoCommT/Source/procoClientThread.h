@@ -38,7 +38,7 @@ namespace ProtoComm
 // its mTcpClientThread. When mTcpClientThread detects a session change it
 // invokes the client thread's mSessionQCall, which defers execution of its
 // executeSession member function. Likewise, when mTcpClientThread receives
-// a message it invokes the client thread's mRxMessageQCall, which defers 
+// a message it invokes the client thread's mRxMsgQCall, which defers 
 // execution of its executeRxMsg member function. 
 //
 // mTcpClientThread provides the execution context for actually managing
@@ -82,7 +82,7 @@ public:
    Ris::Net::TcpMsgAClientThread*  mTcpClientThread;
 
    // Message parser used by mTcpClientThread
-   ProtoComm::MessageParserCreator mMessageParserCreator;
+   ProtoComm::MsgAParserCreator mMsgParserCreator;
 
    //--------------------------------------------------------------
    // QCall:

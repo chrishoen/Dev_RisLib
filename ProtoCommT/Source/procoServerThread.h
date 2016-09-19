@@ -41,7 +41,7 @@ namespace ProtoComm
 // its mTcpServerThread. When mTcpServerThread detects a session change it
 // invokes the server thread's mSessionQCall, which defers execution of its
 // executeSession member function. Likewise, when mTcpServerThread receives
-// a message it invokes the server thread's mRxMessageQCall, which defers 
+// a message it invokes the server thread's mRxMsgQCall, which defers 
 // execution of its executeRxMsg member function. 
 //
 // mTcpServerThread provides the execution context for actually managing
@@ -86,7 +86,7 @@ public:
    enum {MaxSessions=10};
 
    // Message parser used by mTcpServerThread
-   ProtoComm::MessageParserCreator mMessageParserCreator;
+   ProtoComm::MsgAParserCreator mMsgParserCreator;
 
    //--------------------------------------------------------------
    // QCall:

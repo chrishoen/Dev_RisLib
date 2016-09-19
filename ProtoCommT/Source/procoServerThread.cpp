@@ -51,7 +51,7 @@ void ServerThread::configure()
 
    //--------------------------------------------------------------------------- 
    // Configure message parser
-   mMessageParserCreator.configure(gSettings.mMyAppNumber);
+   mMsgParserCreator.configure(gSettings.mMyAppNumber);
 
    //--------------------------------------------------------------------------- 
    // Configure child thread, server
@@ -60,7 +60,7 @@ void ServerThread::configure()
       "0.0.0.0",
       gSettings.mTcpServerPort,
       MaxSessions,
-      &mMessageParserCreator,
+      &mMsgParserCreator,
       &mSessionQCall,
       &mRxMsgQCall);
 }

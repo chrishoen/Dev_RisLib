@@ -267,17 +267,17 @@ namespace ProtoComm
    //******************************************************************************
    // MessageParser creator
 
-   MessageParserCreator::MessageParserCreator()
+   MsgAParserCreator::MsgAParserCreator()
    {
       mSourceId = 0;
    }
 
-   void MessageParserCreator::configure(int aSourceId)
+   void MsgAParserCreator::configure(int aSourceId)
    {
       mSourceId = aSourceId;
    }
 
-   Ris::BaseMsgAParser* MessageParserCreator::createNew()
+   Ris::BaseMsgAParser* MsgAParserCreator::createNew()
    {
       // New message parser
       MessageParser* tMessageParser = new MessageParser();

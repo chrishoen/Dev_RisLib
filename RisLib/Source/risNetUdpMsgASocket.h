@@ -56,7 +56,7 @@ namespace Net
       void configure(
          char*                     aLocalIpAddr,
          int                       aLocalIpPort,
-         BaseMsgAParserCreator* aMessageParserCreator);
+         BaseMsgAParserCreator* aMsgParserCreator);
 
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
@@ -70,7 +70,7 @@ namespace Net
       // byte buffer. It allows the doReceiveMessage method to receive and extract a
       // message from a byte buffer without the having the message code
       // visible to it.
-      BaseMsgAParser* mMessageParser;
+      BaseMsgAParser* mMsgParser;
 
       // Buffer
       int    mRxLength;
@@ -102,24 +102,24 @@ namespace Net
       void configure(
          char*                       aRemoteIpAddr,
          int                         aRemoteIpPort,
-         BaseMsgAParserCreator*   aMessageParserCreator);
+         BaseMsgAParserCreator*   aMsgParserCreator);
 
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
       // It is protected by the transmit mutex.
-      bool doSendMessage(ByteContent* aMsg);
+      bool doSendMsg(ByteContent* aMsg);
 
       //------------------------------------------------------------------------
       // Socket, these two should be used together
 
       void configure(
-         BaseMsgAParser* aMessageParser);
+         BaseMsgAParser* aMsgParser);
 
       // This sends a message over the socket via a blocking sendto call.
       // It returns true if successful.
       // It is protected by the transmit mutex.
 
-      bool doSendMessage(Sockets::SocketAddress aRemote,ByteContent* aMsg);
+      bool doSendMsg(Sockets::SocketAddress aRemote,ByteContent* aMsg);
 
       //------------------------------------------------------------------------
       // This is a message parser that is used to get details about 
@@ -128,10 +128,10 @@ namespace Net
       // message from a byte buffer without the having the message code
       // visible to it.
 
-      BaseMsgAParser* mMessageParser;
+      BaseMsgAParser* mMsgParser;
 
       //------------------------------------------------------------------------
-      // Transmit mutex is used by doSendMessage for mutual exclusion.
+      // Transmit mutex is used by doSendMsg for mutual exclusion.
 
       Threads::MutexSemaphore  mTxMutex;
 

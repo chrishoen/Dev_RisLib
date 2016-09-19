@@ -49,10 +49,10 @@ public:
    // These do socket and bind calls
    void configure(
       Sockets::SocketAddress    aSocketAddress,
-      BaseMsgAParserCreator* aMessageParserCreator);
+      BaseMsgAParserCreator* aMsgParserCreator);
 
    void configure(
-      BaseMsgAParserCreator* aMessageParserCreator);
+      BaseMsgAParserCreator* aMsgParserCreator);
 
    void reconfigure(); 
 

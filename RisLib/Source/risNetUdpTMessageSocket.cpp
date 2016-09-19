@@ -355,7 +355,7 @@ namespace Net
    }
 
    //***************************************************************************
-   // Configure the socket. Use with the next doSendMessage.
+   // Configure the socket. Use with the next doSendMsg.
 
    void UdpTxTMessageSocket::configure(
       char*                    aRemoteIpAddr,
@@ -391,7 +391,7 @@ namespace Net
    // This copies a message into a byte buffer and then sends the byte buffer 
    // out the socket. Use with the previous configure.
 
-   bool UdpTxTMessageSocket::doSendMessage(Ris::ByteTMessage* aMsg)
+   bool UdpTxTMessageSocket::doSendMsg(Ris::ByteTMessage* aMsg)
    {
       // Guard
       if (!mValidFlag) return false;

@@ -35,7 +35,7 @@ void UdpTMessageThread::configure(
    char*                aRemoteIpAddress,
    int                  aRemoteIpPort,
    Ris::BaseTMessageCopier* aMsgCopier,
-   RxMessageQCall*      aRxMessageQCall)
+   RxMsgQCall*      aRxMsgQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);
    mLocalIpPort = aLocalIpPort;
@@ -44,7 +44,7 @@ void UdpTMessageThread::configure(
    mRemoteIpPort = aRemoteIpPort;
 
    mMsgCopier  = aMsgCopier;
-   mRxMessageQCall = *aRxMessageQCall;
+   mRxMsgQCall = *aRxMsgQCall;
 }
 
 //******************************************************************************
@@ -94,7 +94,7 @@ void  UdpTMessageThread::threadRunFunction()
          Prn::print(Prn::SocketRun1, "Recv message %d %d",mRxSocket.mRxCount,tMsg->mMessageType);
 
          // Call the receive method
-         processRxMessage(tMsg);
+         processRxMsg(tMsg);
       }
       else
       {
@@ -140,19 +140,19 @@ void UdpTMessageThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpTMessageThread::processRxMessage(Ris::ByteTMessage* aMsg)
+void UdpTMessageThread::processRxMsg(Ris::ByteTMessage* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMessageQCall(aMsg);
+   mRxMsgQCall(aMsg);
 }
 
 //******************************************************************************
 // This sends a record 
 
-void UdpTMessageThread::sendMessage (Ris::ByteTMessage* aMsg)
+void UdpTMessageThread::sendMsg (Ris::ByteTMessage* aMsg)
 {
-   mTxSocket.doSendMessage(aMsg);
+   mTxSocket.doSendMsg(aMsg);
 }
 
 //******************************************************************************

@@ -10,16 +10,16 @@ execution context for a udp socket that receives udp datagrams.
 
 There is a base class and three classes that provide different interfaces.
 
-1) UdpMsgThread   provides the udp receiver thread functionality
+1) UdpMsgAThread   provides the udp receiver thread functionality
 
-2) UdpMsgThreadWithQCall : public UdpMsgThread provides a udp receiver
+2) UdpMsgAThreadWithQCall : public UdpMsgAThread provides a udp receiver
    thread with a QCall (queued function call) interface
 
-3) UdpMsgThreadWithCallback : public UdpMsgThread provides a udp
+3) UdpMsgAThreadWithCallback : public UdpMsgAThread provides a udp
    receiver thread with a callback interface
 
 Threads that want to perform Udp receiver activity maintain instances of 
-UdpMsgThreadWithQCall or UdpMsgThreadWithCallback and pass in QCalls
+UdpMsgAThreadWithQCall or UdpMsgAThreadWithCallback and pass in QCalls
 or callbacks in their configure calls.
 
 ==============================================================================*/
@@ -79,38 +79,38 @@ public:
 
    // aLocalIpAddr    is the ip address of the local interface bound to
    // aLocalIpPort    is the ip port    of the local interface bound to
-   // aMessageParser  is the message parser to be used on receive messages
-   // aRxMessageQCall         is a qcall for receive messages
+   // aMsgParser  is the message parser to be used on receive messages
+   // aRxMsgQCall         is a qcall for receive messages
 
-   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMessageQCall;
+   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
 
    void configure(
-      char*                           aLocalIpAddress,
-      int                             aLocalIpPort,
-      char*                           aRemoteIpAddress,
-      int                             aRemoteIpPort,
-      Ris::BaseMsgAParserCreator*  aMessageParserCreator,
-      RxMessageQCall*                 aRxMessageQCall);
+      char*                        aLocalIpAddress,
+      int                          aLocalIpPort,
+      char*                        aRemoteIpAddress,
+      int                          aRemoteIpPort,
+      Ris::BaseMsgAParserCreator*  aMsgParserCreator,
+      RxMsgQCall*                  aRxMsgQCall);
 
    //--------------------------------------------------------------
    // Process:
    
-   // This is called by the UdpMsgThread threadRunFunction 
+   // This is called by the UdpMsgAThread threadRunFunction 
    // to process a received message.
    //
-   // It invokes the mRxMessageQCall that is passed in at configure.
-   void processRxMessage (Ris::ByteContent* aMsg);
+   // It invokes the mRxMsgQCall that is passed in at configure.
+   void processRxMsg (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    // QCall:
 
    // This is a dpc that is called when a message is received
-   RxMessageQCall   mRxMessageQCall;
+   RxMsgQCall   mRxMsgQCall;
 
    //--------------------------------------------------------------
    // Transmit message:
 
-   void sendMessage (Ris::ByteContent* aMsg);
+   void sendMsg (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    // Sockets:
@@ -127,7 +127,7 @@ public:
 
    // Message parser creator, this is used by the receive socket to
    // create an instance of a message parser
-   BaseMsgAParserCreator* mMessageParserCreator;
+   BaseMsgAParserCreator* mMsgParserCreator;
 };
 
 //******************************************************************************

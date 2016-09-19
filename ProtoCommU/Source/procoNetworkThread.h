@@ -48,16 +48,16 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::UdpMsgThread*  mUdpMsgThread;
+   Ris::Net::UdpMsgAThread*  mUdpMsgAThread;
 
-   // Message parser used by mUdpMsgThread
-   ProtoComm::MessageParserCreator mMessageParserCreator;
+   // Message parser used by mUdpMsgAThread
+   ProtoComm::MsgAParserCreator mMsgParserCreator;
 
    //--------------------------------------------------------------
    // QCall:
 
-   // QCalls registered to mUdpMsgThread
-   Ris::Net::UdpMsgThread::RxMessageQCall    mRxMessageQCall;
+   // QCalls registered to mUdpMsgAThread
+   Ris::Net::UdpMsgAThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
@@ -69,10 +69,10 @@ public:
    //--------------------------------------------------------------
    // Rx message handlers
 
-   void processRxMessage (ProtoComm::TestMsg*  aMsg);
-   void processRxMessage (ProtoComm::StatusRequestMsg* aMsg);
-   void processRxMessage (ProtoComm::StatusResponseMsg* aMsg);
-   void processRxMessage (ProtoComm::DataMsg* aMsg);
+   void processRxMsg (ProtoComm::TestMsg*  aMsg);
+   void processRxMsg (ProtoComm::StatusRequestMsg* aMsg);
+   void processRxMsg (ProtoComm::StatusResponseMsg* aMsg);
+   void processRxMsg (ProtoComm::DataMsg* aMsg);
 
    int  mStatusCount1;
    int  mStatusCount2;
@@ -80,7 +80,7 @@ public:
    //--------------------------------------------------------------
    // Send a message
 
-   void sendMessage (ProtoComm::BaseMsg* aMsg);
+   void sendMsg (ProtoComm::BaseMsg* aMsg);
    void sendTestMsg();   
 
 };

@@ -177,11 +177,11 @@ namespace ProtoComm
    // message parser. It is used by transmitters and receivers to create new
    // instances of message parsers.
 
-   class MessageParserCreator : public  Ris::BaseMsgAParserCreator
+   class MsgAParserCreator : public  Ris::BaseMsgAParserCreator
    {
    public:
       // Constructor
-      MessageParserCreator();
+      MsgAParserCreator();
 
       // Members
       void configure(int aSourceId);

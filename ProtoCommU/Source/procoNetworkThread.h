@@ -9,7 +9,7 @@
 //******************************************************************************
 #include "risContainers.h"
 #include "risNetUdpMsgThread.h"
-#include "risNetUdpMsgSocket.h"
+#include "risNetUdpMsgASocket.h"
 #include "risThreadsQCallThread.h"
 
 #include "procoMsg.h"

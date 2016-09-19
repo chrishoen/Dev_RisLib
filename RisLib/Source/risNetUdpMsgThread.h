@@ -34,7 +34,7 @@ or callbacks in their configure calls.
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
-#include "risNetUdpMsgSocket.h"
+#include "risNetUdpMsgASocket.h"
 
 namespace Ris
 {
@@ -122,8 +122,8 @@ public:
    int   mRemoteIpPort;
 
    // Socket instance
-   UdpRxMsgSocket mRxSocket;
-   UdpTxMsgSocket mTxSocket;
+   UdpRxMsgASocket mRxSocket;
+   UdpTxMsgASocket mTxSocket;
 
    // Message parser creator, this is used by the receive socket to
    // create an instance of a message parser

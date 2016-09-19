@@ -48,7 +48,7 @@
     <ClCompile Include="Source\risNanoTime.cpp" />
     <ClCompile Include="Source\risNetSessionStateList.cpp" />
     <ClCompile Include="Source\risNetTcpClientThread.cpp" />
-    <ClCompile Include="Source\risNetTcpMsgSocket.cpp" />
+    <ClCompile Include="Source\risNetTcpMsgASocket.cpp" />
     <ClCompile Include="Source\risNetTcpServerThread.cpp" />
     <ClCompile Include="Source\risNetUdpMsgSocket.cpp" />
     <ClCompile Include="Source\risNetUdpMsgThread.cpp" />
@@ -101,7 +101,7 @@
     <ClInclude Include="Source\risNanoTime.h" />
     <ClInclude Include="Source\risNetSessionStateList.h" />
     <ClInclude Include="Source\risNetTcpClientThread.h" />
-    <ClInclude Include="Source\risNetTcpMsgSocket.h" />
+    <ClInclude Include="Source\risNetTcpMsgASocket.h" />
     <ClInclude Include="Source\risNetTcpServerThread.h" />
     <ClInclude Include="Source\risNetUdpMsgSocket.h" />
     <ClInclude Include="Source\risNetUdpMsgThread.h" />

@@ -35,7 +35,7 @@ or callbacks in their configure calls.
 #include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
 
-#include "risNetTcpMsgSocket.h"
+#include "risNetTcpMsgASocket.h"
 
 namespace Ris
 {
@@ -184,7 +184,7 @@ public:
    // Node socket instances.
    // Access this array with a session index and test the node socket
    // valid flag.
-   TcpMsgSocket mNodeSocket[MaxSessions];
+   TcpMsgASocket mNodeSocket[MaxSessions];
 
    // Socket address that the hub socket binds to
    Sockets::SocketAddress mSocketAddress;

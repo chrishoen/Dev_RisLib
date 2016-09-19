@@ -39,7 +39,7 @@ or callbacks in their configure calls.
 #include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
 
-#include "risNetTcpMsgSocket.h"
+#include "risNetTcpMsgASocket.h"
 
 namespace Ris
 {
@@ -145,7 +145,7 @@ public:
    // Sockets:
 
    // Socket instance
-   TcpMsgSocket mSocket;
+   TcpMsgASocket mSocket;
 
    // Socket address that socket instance connects to
    Sockets::SocketAddress mSocketAddress;

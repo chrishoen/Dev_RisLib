@@ -31,9 +31,6 @@
     <ClCompile Include="Source\risNetTcpClientThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risNetTcpMsgSocket.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risNetTcpServerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -127,6 +124,9 @@
     <ClCompile Include="Source\risByteMsgAParser.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risNetTcpMsgASocket.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -166,9 +166,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetTcpClientThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetTcpMsgSocket.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetTcpServerThread.h">
@@ -283,6 +280,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteMsgAParser.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetTcpMsgASocket.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

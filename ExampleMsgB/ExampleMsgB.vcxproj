@@ -22,7 +22,7 @@
     <ProjectGuid>{c2bf9148-2ac3-4d97-920a-59094fcfa781}</ProjectGuid>
     <RootNamespace>ExampleTMessage</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>ExampleTMessage</ProjectName>
+    <ProjectName>ExampleMsgB</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

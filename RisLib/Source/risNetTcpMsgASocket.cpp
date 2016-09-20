@@ -28,8 +28,8 @@ TcpMsgASocket::TcpMsgASocket()
    mTxMsgCount=0;
    mRxMsgCount=0;
    mValidFlag=false;
-   mRxMessageParser=0;
-   mTxMessageParser=0;
+   mRxMsgParser=0;
+   mTxMsgParser=0;
 }
 //******************************************************************************
 TcpMsgASocket::~TcpMsgASocket()
@@ -50,8 +50,8 @@ void TcpMsgASocket::configure(
    reset();
    mRemote = aSocketAddress;
 
-   if (mRxMessageParser==0) mRxMessageParser = aMsgParserCreator->createNew();
-   if (mTxMessageParser==0) mTxMessageParser = aMsgParserCreator->createNew();
+   if (mRxMsgParser==0) mRxMsgParser = aMsgParserCreator->createNew();
+   if (mTxMsgParser==0) mTxMsgParser = aMsgParserCreator->createNew();
 
    doSocket();
    setOptionKeepAlive();
@@ -77,8 +77,8 @@ void TcpMsgASocket::configure(
 void TcpMsgASocket::configure(
    BaseMsgAParserCreator* aMsgParserCreator)
 {
-   if (mRxMessageParser == 0) mRxMessageParser = aMsgParserCreator->createNew();
-   if (mTxMessageParser == 0) mTxMessageParser = aMsgParserCreator->createNew();
+   if (mRxMsgParser == 0) mRxMsgParser = aMsgParserCreator->createNew();
+   if (mTxMsgParser == 0) mTxMsgParser = aMsgParserCreator->createNew();
 }
 
 //******************************************************************************
@@ -106,12 +106,12 @@ bool TcpMsgASocket::doSendMsg(ByteContent* aTxMsg)
    mTxMutex.lock();
 
    // Message parser processing
-   mTxMessageParser->processBeforeSend(aTxMsg);
+   mTxMsgParser->processBeforeSend(aTxMsg);
 
    // Byte buffer, constructor takes address and size
    ByteBuffer tBuffer(mTxBuffer,BufferSize);
 
-   mTxMessageParser->configureByteBuffer(&tBuffer);
+   mTxMsgParser->configureByteBuffer(&tBuffer);
 
    // Copy transmit message to buffer
    tBuffer.putToBuffer(aTxMsg);
@@ -150,10 +150,10 @@ bool TcpMsgASocket::doRecvMsg (ByteContent*& aRxMsg)
 
    // Byte buffer, constructor takes address and size
    ByteBuffer tBuffer(mRxBuffer,BufferSize);  
-   mRxMessageParser->configureByteBuffer(&tBuffer);
+   mRxMsgParser->configureByteBuffer(&tBuffer);
 
    // Header length
-   int tHeaderLength = mRxMessageParser->getHeaderLength();
+   int tHeaderLength = mRxMsgParser->getHeaderLength();
 
    //-------------------------------------------------------------------------
    // Read the message header into the receive buffer
@@ -176,10 +176,10 @@ bool TcpMsgASocket::doRecvMsg (ByteContent*& aRxMsg)
    // Copy from the receive buffer into the message parser object
    // and validate the header
 
-   mRxMessageParser->extractMessageHeaderParms(&tBuffer);
+   mRxMsgParser->extractMessageHeaderParms(&tBuffer);
 
    // If the header is not valid then error
-   if (!mRxMessageParser->mHeaderValidFlag)
+   if (!mRxMsgParser->mHeaderValidFlag)
    {
       Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER");
       for (int i=0;i<40;i++) 
@@ -192,7 +192,7 @@ bool TcpMsgASocket::doRecvMsg (ByteContent*& aRxMsg)
    //-------------------------------------------------------------------------
    // Read the message payload into the receive buffer
 
-   int tPayloadLength = mRxMessageParser->mPayloadLength;
+   int tPayloadLength = mRxMsgParser->mPayloadLength;
 
    tRet=doRecv(&mRxBuffer[tHeaderLength],tPayloadLength,tStatus);
    Prn::print(Prn::SocketRun4, "doRecv2 %d %d %d",mStatus,mError,tPayloadLength);
@@ -207,7 +207,7 @@ bool TcpMsgASocket::doRecvMsg (ByteContent*& aRxMsg)
    }
 
    // Set the buffer length
-   tBuffer.setLength(mRxMessageParser->mMessageLength);
+   tBuffer.setLength(mRxMsgParser->mMessageLength);
 
    //--------------------------------------------------------------
    // At this point the buffer contains the complete message.
@@ -215,7 +215,7 @@ bool TcpMsgASocket::doRecvMsg (ByteContent*& aRxMsg)
    // object and return it.
 
    tBuffer.rewind();
-   aRxMsg = mRxMessageParser->makeFromByteBuffer(&tBuffer);
+   aRxMsg = mRxMsgParser->makeFromByteBuffer(&tBuffer);
 
    // Test for errors and return.
    // If the pointer is zero then message is bad

@@ -96,21 +96,21 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
    tBuffer.rewind();
 // printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
-   Ris::BaseMsgAParser* tMessageParser = new ProtoComm::MessageParser;
+   Ris::BaseMsgAParser* tMsgParser = new ProtoComm::MsgParser;
 
-   tMessageParser->extractMessageHeaderParms(&tBuffer);
+   tMsgParser->extractMessageHeaderParms(&tBuffer);
 
    // printf("Buffer2 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
    // If the header is not valid then error
-   if (!tMessageParser->mHeaderValidFlag)
+   if (!tMsgParser->mHeaderValidFlag)
    {
       Prn::print(0,"ERROR doRecv1 INVALID HEADER ");
       return;
    }
 
    tBuffer.rewind();
-   tRxMsg = (ProtoComm::DataMsg*)tMessageParser->makeFromByteBuffer(&tBuffer);
+   tRxMsg = (ProtoComm::DataMsg*)tMsgParser->makeFromByteBuffer(&tBuffer);
    tRxMsg->show();
 
    delete tTxMsg;

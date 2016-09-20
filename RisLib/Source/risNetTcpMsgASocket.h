@@ -73,8 +73,8 @@ public:
    // message parser allows the doSendMsg method to set header data
    // before the message is sent.
 
-   BaseMsgAParser* mRxMessageParser;
-   BaseMsgAParser* mTxMessageParser;
+   BaseMsgAParser* mRxMsgParser;
+   BaseMsgAParser* mTxMsgParser;
 
    // Buffers
    enum    {BufferSize = 4096};

@@ -195,28 +195,28 @@ namespace ProtoComm
    //******************************************************************************
    //******************************************************************************
 
-   void  MessageParser::configure(int aSourceId)
+   void  MsgParser::configure(int aSourceId)
    {
       mSourceId=aSourceId;
    }
 
    //******************************************************************************
 
-   int  MessageParser::getHeaderLength()
+   int  MsgParser::getHeaderLength()
    {
       return Header::cLength;
    }
 
    //******************************************************************************
 
-   int  MessageParser::getMaxBufferSize()
+   int  MsgParser::getMaxBufferSize()
    {
       return MsgDefT::cMsgBufferSize;
    }
 
    //******************************************************************************
 
-   bool MessageParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
+   bool MsgParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
    {
       // Extract header from buffer
       Header tHeader;
@@ -245,14 +245,14 @@ namespace ProtoComm
 
    //******************************************************************************
 
-   Ris::ByteContent* MessageParser::createMessage(int aMessageType)
+   Ris::ByteContent* MsgParser::createMessage(int aMessageType)
    {
       return MessageCreator::createMessage(aMessageType);
    }
 
    //******************************************************************************
 
-   void MessageParser::processBeforeSend(Ris::ByteContent* aMsg)
+   void MsgParser::processBeforeSend(Ris::ByteContent* aMsg)
    {
       BaseMsg* tx = (BaseMsg*)aMsg;
 
@@ -265,7 +265,7 @@ namespace ProtoComm
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // MessageParser creator
+   // MsgParser creator
 
    MsgAParserCreator::MsgAParserCreator()
    {
@@ -280,11 +280,11 @@ namespace ProtoComm
    Ris::BaseMsgAParser* MsgAParserCreator::createNew()
    {
       // New message parser
-      MessageParser* tMessageParser = new MessageParser();
+      MsgParser* tMsgParser = new MsgParser();
       // Configure 
-      tMessageParser->configure(mSourceId);
+      tMsgParser->configure(mSourceId);
       // Return base message parser pointer
-      return (Ris::BaseMsgAParser*)tMessageParser;
+      return (Ris::BaseMsgAParser*)tMsgParser;
    }
 
    //******************************************************************************

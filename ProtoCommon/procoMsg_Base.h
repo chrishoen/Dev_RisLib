@@ -141,7 +141,7 @@ namespace ProtoComm
 
    class BaseMsg;
 
-   class MessageParser : public Ris::BaseMsgAParser
+   class MsgParser : public Ris::BaseMsgAParser
    {
    public:
       //-------------------------------------------------------

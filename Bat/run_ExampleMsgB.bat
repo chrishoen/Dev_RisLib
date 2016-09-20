@@ -1,5 +1,3 @@
-start "UDP1" C:\Prime\DevelopMine\Dev_VS_Ris\x64\Debug\ExampleTMessage.exe UdpPeer1
-start "UDP2" C:\Prime\DevelopMine\Dev_VS_Ris\x64\Debug\ExampleTMessage.exe UdpPeer2
-
-
+start "UDP1" C:\Prime\DevelopLib\Dev_RisLib\x64\Debug\ExampleMsgB.exe UdpPeer1
+start "UDP2" C:\Prime\DevelopLib\Dev_RisLib\x64\Debug\ExampleMsgB.exe UdpPeer2
 

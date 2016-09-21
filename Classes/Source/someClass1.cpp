@@ -14,25 +14,21 @@ Description:
 namespace Some
 {
 
-Class1::Class1() :
-   mMyCallPointer(this,&Class1::myCall)
-{
-   // CallPointers
-   mMyCallPointer.bind  (this,&Class1::myCall);
-}
-
 //******************************************************************************
 
-void Class1::myCall(int aX)
+Traits1::Traits1()
 {
-   Prn::print(0,"Class1::myCall %d",aX);
+   mCode=101;
 }
 
-//******************************************************************************
-
-void Class1::configure(MyCallPointer tMyCallPointer)
+void Traits1::print1()
 {
-   mMyCallPointer = tMyCallPointer;
+   Prn::print(0,"Traits1 %d",101);
+}
+
+void Traits1::print2()
+{
+   Prn::print(0,"Traits1 %d",mCode);
 }
 
 }//namespace

@@ -53,13 +53,5 @@ public:
 //******************************************************************************
 }//namespace
 
-/*==============================================================================
-Copyright (C) 2014 Chris Hoen, Hamburg NY.
-Legal Notice:  It is forbidden to do anything against me because of this.
-Legal Warning: Use this at your own risk, it's software.
-Legal Rights:  Other than that, do whatever you want with it.
-==============================================================================*/
-
-
 #endif
 

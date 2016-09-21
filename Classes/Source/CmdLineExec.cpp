@@ -53,38 +53,27 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,101);
 
-   gClass1.mMyCallPointer(aCmd->argInt(1));
+   Class1<Traits1> tClass1;
+   tClass1.test1();
+   tClass1.test2();
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,201);
-
-   gClass1.mMyCallPointer = Class1::MyCallPointer(this,&CmdLineExec::myCall);
-
-   gClass1.mMyCallPointer(aCmd->argInt(1));
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,301);
-
-   gClass1.configure(Class1::MyCallPointer(this,&CmdLineExec::myCall));
-
-   gClass1.mMyCallPointer(aCmd->argInt(1));
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,401);
-
-   gClass2.mMyCallback(aCmd->argInt(1));
 }
 
 //******************************************************************************

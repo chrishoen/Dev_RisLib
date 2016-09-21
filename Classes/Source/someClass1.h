@@ -10,7 +10,7 @@ QCall test Class class.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risCallPointer.h"
+#include "prnPrint.h"
 
 namespace Some
 {
@@ -20,44 +20,43 @@ namespace Some
 // test1
 // test2
 
-class  Class1
+class Traits1
+{
+public:
+   Traits1();
+   static void print1();
+   void print2();
+   int mCode;
+};
+
+template <class Traits>
+class Class1
 {
 public:
 
-   Class1();
+   Class1()
+   {
 
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   // CallPointer:
+   }
 
-   typedef Ris::CallPointer1<int>   MyCallPointer;
-   MyCallPointer mMyCallPointer;
 
-   void myCall(int aX);
+   void test1()
+	{
+	   Traits::print1();
+	}
 
-   void configure(MyCallPointer tMyCallPointer);
+   void test2()
+	{
+	   mTraits.print2();
+	}
+
+   Traits mTraits;
 
 };
 
-//******************************************************************************
-// Global instance
-
-#ifdef _SOMEClass1_CPP_
-          Class1 gClass1;
-#else
-   extern Class1 gClass1;
-#endif
 
 //******************************************************************************
 }//namespace
-
-/*==============================================================================
-Copyright (C) 2014 Chris Hoen, Hamburg NY.
-Legal Notice:  It is forbidden to do anything against me because of this.
-Legal Warning: Use this at your own risk, it's software.
-Legal Rights:  Other than that, do whatever you want with it.
-==============================================================================*/
 
 
 #endif

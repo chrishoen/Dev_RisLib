@@ -12,7 +12,7 @@ This file contains settings for protocomm.
 
 #include "risCmdLineFile.h"
 
-namespace Example
+namespace ExampleMsg
 {
 
 //**********************************************************************

@@ -7,13 +7,13 @@
 #include "risSockets.h"
 #include "prnPrint.h"
 #include "exampleSettings.h"
-#include "exampleMsgBHelper.h"
+#include "exampleMsgHelper.h"
 
 #define  _EXAMPLENETWORKTHREAD_CPP_
 #include "exampleNetworkThread.h"
 
 
-namespace Example
+namespace ExampleMsg
 {
 
 //******************************************************************************
@@ -125,7 +125,7 @@ void NetworkThread::processRxMsg(TestMsg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_TestMsg" );
 
-   MsgBHelper::show(aMsg);
+   MsgHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -137,7 +137,7 @@ void NetworkThread::processRxMsg(StatusMsg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusMsg %d",mStatusCount1++);
 
-   MsgBHelper::show(aMsg);
+   MsgHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -149,7 +149,7 @@ void NetworkThread::processRxMsg(Data1Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data1Msg");
 
-   MsgBHelper::show(aMsg);
+   MsgHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -161,7 +161,7 @@ void NetworkThread::processRxMsg(Data2Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data2Msg");
 
-   MsgBHelper::show(aMsg);
+   MsgHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -173,7 +173,7 @@ void NetworkThread::processRxMsg(Data3Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data3Msg");
 
-   MsgBHelper::show(aMsg);
+   MsgHelper::show(aMsg);
 
    delete aMsg;
 }
@@ -185,7 +185,7 @@ void NetworkThread::processRxMsg(Data4Msg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data4Msg");
 
-   MsgBHelper::show(aMsg);
+   MsgHelper::show(aMsg);
 
    delete aMsg;
 }

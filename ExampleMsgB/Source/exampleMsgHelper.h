@@ -1,16 +1,16 @@
-#ifndef _EXAMPLEMSGBHELPER_H_
-#define _EXAMPLEMSGBHELPER_H_
+#ifndef _EXAMPLEMSGHELPER_H_
+#define _EXAMPLEMSGHELPER_H_
 
-#include "exampleMsgB.h"
+#include "exampleMsg.h"
 
-namespace Example
+namespace ExampleMsg
 {
 
     //***************************************************************************
     //***************************************************************************
     //***************************************************************************
 
-    class MsgBHelper
+    class MsgHelper
     {
     public:
 

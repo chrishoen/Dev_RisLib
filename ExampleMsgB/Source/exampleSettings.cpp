@@ -12,7 +12,7 @@
 #define  _EXAMPLESETTINGS_CPP_
 #include "exampleSettings.h"
 
-namespace Example
+namespace ExampleMsg
 {
 
 //******************************************************************************

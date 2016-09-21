@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "prnPrint.h"
-#include "exampleMsgBHelper.h"
+#include "exampleMsgHelper.h"
 
-namespace Example
+namespace ExampleMsg
 {
    //****************************************************************************
 
-   void MsgBHelper::initialize(TestMsg* aMsg)
+   void MsgHelper::initialize(TestMsg* aMsg)
    {
       aMsg->mCode1 = 901;
       aMsg->mCode2 = 902;
@@ -15,7 +15,7 @@ namespace Example
       aMsg->mCode4 = 904;
    }
 
-   void MsgBHelper::show(TestMsg* aMsg)
+   void MsgHelper::show(TestMsg* aMsg)
    {
       Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
       Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
@@ -26,7 +26,7 @@ namespace Example
 
    //****************************************************************************
 
-   void MsgBHelper::initialize(StatusMsg* aMsg)
+   void MsgHelper::initialize(StatusMsg* aMsg)
    {
       aMsg->mCode1 = 901;
       aMsg->mCode2 = 902;
@@ -34,7 +34,7 @@ namespace Example
       aMsg->mCode4 = 904;
    }
 
-   void MsgBHelper::show(StatusMsg* aMsg)
+   void MsgHelper::show(StatusMsg* aMsg)
    {
       Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
       Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
@@ -45,7 +45,7 @@ namespace Example
 
    //****************************************************************************
 
-   void MsgBHelper::initialize(Data1Msg* aMsg)
+   void MsgHelper::initialize(Data1Msg* aMsg)
    {
       aMsg->mCode1 = 101;
       aMsg->mCode2 = 102;
@@ -53,7 +53,7 @@ namespace Example
       aMsg->mCode4 = 104;
    }
 
-   void MsgBHelper::show(Data1Msg* aMsg)
+   void MsgHelper::show(Data1Msg* aMsg)
    {
       Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
       Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
@@ -65,28 +65,28 @@ namespace Example
 
    //****************************************************************************
 
-   void MsgBHelper::initialize(Data2Msg* aMsg)
+   void MsgHelper::initialize(Data2Msg* aMsg)
    {
       aMsg->mCode1 = 201;
       aMsg->mCode2 = 202;
       aMsg->mCode3 = 203;
       aMsg->mCode4 = 204;
-      MsgBHelper::initialize(&aMsg->mData1);
+      MsgHelper::initialize(&aMsg->mData1);
    }
 
-   void MsgBHelper::show(Data2Msg* aMsg)
+   void MsgHelper::show(Data2Msg* aMsg)
    {
       Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
       Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
       Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
       Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
-      MsgBHelper::show(&aMsg->mData1);
+      MsgHelper::show(&aMsg->mData1);
       Prn::print(Prn::ThreadRun3, "");
    }
 
    //****************************************************************************
 
-   void MsgBHelper::initialize(Data3Msg* aMsg)
+   void MsgHelper::initialize(Data3Msg* aMsg)
    {
       aMsg->mCode1 = 201;
       aMsg->mCode2 = 202;
@@ -100,7 +100,7 @@ namespace Example
       }
    }
 
-   void MsgBHelper::show(Data3Msg* aMsg)
+   void MsgHelper::show(Data3Msg* aMsg)
    {
       Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
       Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
@@ -117,7 +117,7 @@ namespace Example
 
    //****************************************************************************
 
-   void MsgBHelper::initialize(Data4Msg* aMsg)
+   void MsgHelper::initialize(Data4Msg* aMsg)
    {
       aMsg->mCode1 = 201;
       aMsg->mCode2 = 202;
@@ -130,7 +130,7 @@ namespace Example
       }
    }
 
-   void MsgBHelper::show(Data4Msg* aMsg)
+   void MsgHelper::show(Data4Msg* aMsg)
    {
       Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
       Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);

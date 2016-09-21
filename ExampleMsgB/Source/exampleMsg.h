@@ -1,11 +1,11 @@
-#ifndef _EXAMPLEMSGB_H_
-#define _EXAMPLEMSGB_H_
+#ifndef _EXAMPLEMSG_H_
+#define _EXAMPLEMSG_H_
 
 #include "risByteBuffer.h"
 #include "risByteMsgB.h"
 #include "risByteMsgBCopier.h"
 
-namespace Example
+namespace ExampleMsg
 {
 
     //***************************************************************************
@@ -177,7 +177,7 @@ namespace Example
     //***************************************************************************
     //***************************************************************************
 
-    class MsgBCopier : public Ris::BaseMsgBCopier
+    class MsgCopier : public Ris::BaseMsgBCopier
     {
     public:
 

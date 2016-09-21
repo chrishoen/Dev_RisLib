@@ -9,9 +9,9 @@
 #include "risNetUdpMsgBThread.h"
 #include "risThreadsQCallThread.h"
 
-#include "exampleMsgB.h"
+#include "exampleMsg.h"
 
-namespace Example
+namespace ExampleMsg
 {
 
 //******************************************************************************
@@ -48,7 +48,7 @@ public:
    Ris::Net::UdpMsgBThread*  mUdpMsgBThread;
 
    // Message parser used by mUdpMsgBThread
-   MsgBCopier mMsgCopier;
+   MsgCopier mMsgCopier;
 
    //--------------------------------------------------------------
    // QCall:

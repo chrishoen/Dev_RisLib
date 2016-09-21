@@ -8,7 +8,7 @@
 
 #include "MainInit.h"
 
-using namespace Example;
+using namespace ExampleMsg;
 
 //******************************************************************************
 int main(int argc,char** argv)

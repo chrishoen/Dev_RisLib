@@ -16,10 +16,10 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\exampleMsgB.cpp">
+    <ClCompile Include="Source\exampleMsg.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\exampleMsgBHelper.cpp">
+    <ClCompile Include="Source\exampleMsgHelper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,10 +36,10 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\exampleMsgB.h">
+    <ClInclude Include="Source\exampleMsg.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\exampleMsgBHelper.h">
+    <ClInclude Include="Source\exampleMsgHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

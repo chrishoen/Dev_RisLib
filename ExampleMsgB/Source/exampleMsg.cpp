@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <string.h>
-#include "exampleMsgB.h"
+#include "exampleMsg.h"
 
-namespace Example
+namespace ExampleMsg
 {
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
    // This creates a new record, based on a record type
 
-   Ris::ByteMsgB* MsgBCopier::createMessage(int aMsgType)
+   Ris::ByteMsgB* MsgCopier::createMessage(int aMsgType)
    {
       Ris::ByteMsgB* tMsgB = 0;
 
@@ -46,7 +46,7 @@ namespace Example
    //****************************************************************************
    // MsgBCopier
 
-   void MsgBCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsg)
+   void MsgCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsg)
    {
       switch (aMsg->mMessageType)
       {
@@ -85,7 +85,7 @@ namespace Example
       mCode4           = 0;
    }
 
-   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, TestMsg* aMsg)
+   void MsgCopier::copyToFrom (Ris::ByteBuffer* aBuffer, TestMsg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -108,7 +108,7 @@ namespace Example
       mCode4           = 0;
    }
 
-   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg)
+   void MsgCopier::copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -131,7 +131,7 @@ namespace Example
       mCode4           = 0;
    }
 
-   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg* aMsg)
+   void MsgCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -154,13 +154,13 @@ namespace Example
       mCode4           = 0;
    }
 
-   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg* aMsg)
+   void MsgCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
       aBuffer->copy( &aMsg->mCode3 );
       aBuffer->copy( &aMsg->mCode4 );
-      MsgBCopier::copyToFrom   (aBuffer, &aMsg->mData1 );
+      MsgCopier::copyToFrom   (aBuffer, &aMsg->mData1 );
    }
 
    //****************************************************************************
@@ -186,7 +186,7 @@ namespace Example
       }
    }
 
-   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data3Msg* aMsg)
+   void MsgCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data3Msg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -219,7 +219,7 @@ namespace Example
       mData1Loop=cMaxLoop;
    }
 
-   void MsgBCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data4Msg* aMsg)
+   void MsgCopier::copyToFrom (Ris::ByteBuffer* aBuffer, Data4Msg* aMsg)
    {
       aBuffer->copy( &aMsg->mCode1 );
       aBuffer->copy( &aMsg->mCode2 );
@@ -229,7 +229,7 @@ namespace Example
       aBuffer->copy( &aMsg->mData1Loop );
       for (int i=0; i<aMsg->mData1Loop; i++)
       {
-      MsgBCopier::copyToFrom   (aBuffer, &aMsg->mData1[i] );
+      MsgCopier::copyToFrom   (aBuffer, &aMsg->mData1[i] );
       }
    }
 

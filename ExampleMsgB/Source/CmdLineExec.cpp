@@ -6,13 +6,13 @@
 #include "prnPrint.h"
 
 #include "exampleSettings.h"
-#include "exampleMsgB.h"
-#include "exampleMsgBHelper.h"
+#include "exampleMsg.h"
+#include "exampleMsgHelper.h"
 #include "exampleNetworkThread.h"
 
 #include "CmdLineExec.h"
 
-using namespace Example;
+using namespace ExampleMsg;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
@@ -53,42 +53,42 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
       case 1:
       {
          TestMsg* tMsg = new TestMsg;
-         MsgBHelper::initialize(tMsg);
+         MsgHelper::initialize(tMsg);
          gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 2:
       {
          StatusMsg* tMsg = new StatusMsg;
-         MsgBHelper::initialize(tMsg);
+         MsgHelper::initialize(tMsg);
          gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 3:
       {
          Data1Msg* tMsg = new Data1Msg;
-         MsgBHelper::initialize(tMsg);
+         MsgHelper::initialize(tMsg);
          gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 4:
       {
          Data2Msg* tMsg = new Data2Msg;
-         MsgBHelper::initialize(tMsg);
+         MsgHelper::initialize(tMsg);
          gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
          Data3Msg* tMsg = new Data3Msg;
-         MsgBHelper::initialize(tMsg);
+         MsgHelper::initialize(tMsg);
          gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 6:
       {
          Data4Msg* tMsg = new Data4Msg;
-         MsgBHelper::initialize(tMsg);
+         MsgHelper::initialize(tMsg);
          gNetworkThread->sendMsg(tMsg);
          break;
       }
@@ -107,7 +107,7 @@ void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
    StatusMsg* tMsg = new StatusMsg;
-   MsgBHelper::initialize(tMsg);
+   MsgHelper::initialize(tMsg);
    gNetworkThread->sendMsg(tMsg);
 }
 

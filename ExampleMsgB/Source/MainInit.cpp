@@ -40,8 +40,8 @@ void main_initialize(int argc,char** argv)
 
    if (argc > 1)
    {
-      Example::gSettings.initialize(argv[1]);
-      Example::gSettings.show();
+      ExampleMsg::gSettings.initialize(argv[1]);
+      ExampleMsg::gSettings.show();
    }
 
 }

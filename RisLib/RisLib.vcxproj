@@ -24,8 +24,7 @@
     <ClCompile Include="Source\risByteBuffer.cpp" />
     <ClCompile Include="Source\risLFBlockQueue.cpp" />
     <ClCompile Include="Source\risLFPointerQueue.cpp" />
-    <ClCompile Include="Source\risNetUdpMsgBSocket.cpp" />
-    <ClCompile Include="Source\risNetUdpMsgBThread.cpp" />
+    <ClCompile Include="Source\risNetUdpMsgBHeader.cpp" />
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
     <ClCompile Include="Source\risProgramTime.cpp" />
     <ClCompile Include="Source\risSerialPort.cpp" />
@@ -71,6 +70,7 @@
     <ClInclude Include="Source\risLFIndex.h" />
     <ClInclude Include="Source\risLFPointerQueue.h" />
     <ClInclude Include="Source\risNetPortDef.h" />
+    <ClInclude Include="Source\risNetUdpMsgBHeader.h" />
     <ClInclude Include="Source\risNetUdpMsgBSocket.h" />
     <ClInclude Include="Source\risNetUdpMsgBThread.h" />
     <ClInclude Include="Source\risNetUdpStringSocket.h" />

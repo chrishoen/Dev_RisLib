@@ -133,7 +133,7 @@ public:
       //------------------------------------------------------------------------
       // Read the message into the receive buffer
 
-      doRecvFrom (mFromAddress,tBuffer.getBaseAddress(),mRxLength,MsgBSocketDefT::cBufferSize);
+      doRecvFrom (mFromAddress,tBuffer.getBaseAddress(),mRxLength,MsgTraits::cBufferSize);
 
       // Guard
       // If bad status then return false.
@@ -176,10 +176,10 @@ public:
       // object and return it.
 
       // Create a record based on the record type
-      aMsg = mTraits.mCopier->createMessage(tHeader.mMessageIdentifier);
+      aMsg = mTraits.mCopier.createMessage(mTraits.mHeader.mMessageIdentifier);
 
       // Copy from the buffer into the record
-      mTraits.mCopier->copyToFrom(&tBuffer, aMsg);
+      mTraits.mCopier.copyToFrom(&tBuffer, aMsg);
 
       // Test for errors and return.
       // If the pointer is zero then message is bad
@@ -201,7 +201,7 @@ public:
 // Udp transmit message socket.
 // Messages are based on the Ris::ByteContent message encapsulation scheme.
 
-template <class MsgTraits>
+template <class Traits>
 class UdpTxMsgBSocket : public Sockets::BaseUdpSocket
 {
 public:
@@ -213,7 +213,7 @@ public:
    // This is an instance of the message traits. It is used to copy a record
    // to a byte buffer. It allows the doSendMsg method to send a record to a byte 
    // buffer without the having the record code visible to it.
-   MsgTraits mTraits;
+   Traits mTraits;
 
    // Transmit mutex is used by doSendMsg for mutual exclusion.
    Ris::Threads::MutexSemaphore  mTxMutex;
@@ -287,7 +287,7 @@ public:
       if (!mValidFlag) return false;
 
       // Create byte buffer, constructor takes size
-      Ris::ByteBuffer tBuffer(MsgTraits::cBufferSize);
+      Ris::ByteBuffer tBuffer(Traits::cBufferSize);
 
       // Mutex
       mTxMutex.lock();

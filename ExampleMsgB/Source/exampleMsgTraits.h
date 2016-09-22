@@ -1,5 +1,5 @@
 #ifndef _EXAMPLEMSGTRAITS_H_
-#define _EXAMPLEMSGYTRAITS_H_
+#define _EXAMPLEMSGTRAITS_H_
 
 #include "risNetUdpMsgBHeader.h"
 #include "exampleMsg.h"

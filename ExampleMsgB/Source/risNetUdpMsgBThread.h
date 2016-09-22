@@ -31,6 +31,7 @@ or callbacks in their configure calls.
 #include "risThreadsThreads.h"
 #include "risThreadsQCall.h"
 #include "risNetUdpMsgBSocket.h"
+#include "exampleMsgTraits.h"
 
 namespace Ris
 {
@@ -52,7 +53,7 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-template <class MsgTraits>
+//template <class MsgTraits>
 class UdpMsgBThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
@@ -70,8 +71,10 @@ public:
    int   mRemoteIpPort;
 
    // Socket instance
-   UdpRxMsgBSocket<MsgTraits> mRxSocket;
-   UdpTxMsgBSocket<MsgTraits> mTxSocket;
+// UdpRxMsgBSocket<MsgTraits> mRxSocket;
+// UdpTxMsgBSocket<MsgTraits> mTxSocket;
+   UdpRxMsgBSocket<ExampleMsg::MsgTraits> mRxSocket;
+   UdpTxMsgBSocket<ExampleMsg::MsgTraits> mTxSocket;
 
    // This is a qcall that is called when a message is received
    typedef Ris::Threads::QCall1<Ris::ByteMsgB*> RxMsgQCall;

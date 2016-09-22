@@ -46,7 +46,8 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   typedef Ris::Net::UdpMsgBThread<ExampleMsg::MsgTraits> UdpMsgThread;
+// typedef Ris::Net::UdpMsgBThread<ExampleMsg::MsgTraits> UdpMsgThread;
+   typedef Ris::Net::UdpMsgBThread UdpMsgThread;
    UdpMsgThread*  mUdpMsgThread;
 
    //--------------------------------------------------------------

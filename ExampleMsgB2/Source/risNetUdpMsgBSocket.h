@@ -22,199 +22,100 @@ namespace Ris
 {
 namespace Net
 {
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Definitions
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Udp receive message socket.
+// Messages are based on the Ris::ByteContent message encapsulation scheme.
 
-   class MsgBSocketDefT
-   {
-   public:
-      //************************************************************************
-      // Use this for a buffer size for these sockets
+class  UdpRxMsgBSocket : public Sockets::BaseUdpSocket
+{
+public:
+   UdpRxMsgBSocket(); 
 
-      static const int cBufferSize = 20000;
+   //------------------------------------------------------------------------
+   // Socket:
 
-   };
+   // These do socket and bind calls
+   void configure(
+      char*                aLocalIpAddr,
+      int                  aLocalIpPort,
+      Ris::BaseMsgMonkey* aMonkey);
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // This encapsualtes the message header.
+   // This receives a message from the socket via blocking recvfrom calls.
+   // It returns true if successful.
+   // The recvfrom address is stored in mFromAddress.
 
-   class MsgBHeader : public Ris::ByteContent
-   {
-   public:
-      // Constructor
-      MsgBHeader();
-      void reset();
+   bool doReceiveMsg (Ris::ByteMsgB*& aMsg);
 
-      //------------------------------------------------------------------------
-      // Header Content
+   Sockets::SocketAddress mFromAddress;
 
-      int   mSyncWord1;
-      int   mSyncWord2;
-      int   mMessageIdentifier;
-      int   mMessageLength;
-      int   mSourceId;
-      int   mDestinationId;
+   // This is a record copier that is used to copy a record from a
+   // byte buffer.It allows the doReceiveMsg method to receive and
+   // extract a record from a byte buffer without the having the
+   // record type visible to it.
 
-      // Header Content
-      //------------------------------------------------------------------------
+   Ris::BaseMsgMonkey* mMonkey;
 
-      // Header length
-      static const int cLength = 24;
+   //------------------------------------------------------------------------
+   // State:
 
-      // Valid
-      bool mHeaderValidFlag;
+   // General purpose valid flag
+   bool mValidFlag;
 
-      //------------------------------------------------------------------------
-      // Validate a received header
+   // Metrics
+   int mRxCount;
+   int mRxLength;
+};
 
-      bool validate();
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Udp transmit message socket.
+// Messages are based on the Ris::ByteContent message encapsulation scheme.
 
-      //------------------------------------------------------------------------
-      // If the byte buffer is configured for put operations then this puts the
-      // contents of the object into the byte buffer (it does a copy to, it
-      // copies the object to the byte buffer).
-      // If the byte buffer is configured for get operations then this gets the
-      // contents of the object from the byte buffer (it does a copy from, it
-      // copies the object from the byte buffer).
-      // Copy To and Copy From are symmetrical.
-      //------------------------------------------------------------------------
+class  UdpTxMsgBSocket : public Sockets::BaseUdpSocket
+{
+public:
+   UdpTxMsgBSocket(); 
 
-      void copyToFrom(Ris::ByteBuffer* aBuffer);
+   //------------------------------------------------------------------------
+   // Socket, these two should be used together
 
-      //------------------------------------------------------------------------
-      // For variable content messages, the message length cannot be known until
-      // the entire message has been written to a byte buffer. Therefore, the 
-      // message header cannot be written to a byte buffer until the entire
-      // message has been written and the length is known.
-      //
-      // The procedure to write a message to a byte buffer is to skip over the 
-      // buffer segment where the header is located, write the message payload
-      // to the buffer, set the header message length based on the now known
-      // payload length, and write the header to the buffer.
-      //
-      // These are called explicitly by inheriting messages at the
-      // beginning and end of their copyToFrom's to manage the headers.
-      // For "get" operations, headerCopyToFrom "gets" the header and
-      // headerReCopyToFrom does nothing. For "put" operations,
-      // headerCopyToFrom stores the buffer pointer and advances past where the
-      // header will be written and headerReCopyToFrom "puts" the header at the
-      // stored position. Both functions are passed a byte buffer pointer to
-      // where the copy is to take place. Both are also passed a Ris::ByteContent
-      // pointer to where they can get and mMessageType
-      // which they transfer into and out of the headers.
-      //------------------------------------------------------------------------
+   // These create and configure the socket
+   void configure(
+      char*                aRemoteIpAddr,
+      int                  aRemoteIpPort,
+      Ris::BaseMsgMonkey* aMonkey);
 
-      void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aParent);
-      void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aParent);
+   // This sends a message over the socket via a blocking send call.
+   // It returns true if successful.
+   // It is protected by the transmit mutex.
 
-      //------------------------------------------------------------------------
-      // These are set by headerCopyToFrom and used by headerReCopyToFrom,
-      // for "put" operations.Theyt contain the buffer position and length of
-      // where the headerReCopyToFrom will take place, which should be
-      // where headerCopyToFrom was told to do the copy.
+   bool doSendMsg(Ris::ByteMsgB* aMsg);
 
-      int mInitialPosition;
-      int mInitialLength;
-   };
+   //------------------------------------------------------------------------
+   // This is a record copier that is used to copy a record to a byte
+   // buffer. It allows the doSendMsg method to send a record to a byte 
+   // buffer without the having the record code visible to it.
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // Udp receive message socket.
-   // Messages are based on the Ris::ByteContent message encapsulation scheme.
+   Ris::BaseMsgMonkey* mMonkey;
 
-   class  UdpRxMsgBSocket : public Sockets::BaseUdpSocket
-   {
-   public:
-      UdpRxMsgBSocket(); 
+   //------------------------------------------------------------------------
+   // Transmit mutex is used by doSendMsg for mutual exclusion.
 
-     //------------------------------------------------------------------------
-     // Socket:
+   Ris::Threads::MutexSemaphore  mTxMutex;
 
-      // These do socket and bind calls
-      void configure(
-         char*                aLocalIpAddr,
-         int                  aLocalIpPort,
-         Ris::BaseMsgMonkey* aMonkey);
+   //------------------------------------------------------------------------
+   // State:
 
-      // This receives a message from the socket via blocking recvfrom calls.
-      // It returns true if successful.
-      // The recvfrom address is stored in mFromAddress.
+   // General purpose valid flag
+   bool mValidFlag;
 
-      bool doReceiveMsg (Ris::ByteMsgB*& aMsg);
-
-      Sockets::SocketAddress mFromAddress;
-
-      // This is a record copier that is used to copy a record from a
-      // byte buffer.It allows the doReceiveMsg method to receive and
-      // extract a record from a byte buffer without the having the
-      // record type visible to it.
-
-      Ris::BaseMsgMonkey* mMonkey;
-
-      //------------------------------------------------------------------------
-      // State:
-
-      // General purpose valid flag
-      bool mValidFlag;
-
-      // Metrics
-      int mRxCount;
-      int mRxLength;
-   };
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Udp transmit message socket.
-   // Messages are based on the Ris::ByteContent message encapsulation scheme.
-
-   class  UdpTxMsgBSocket : public Sockets::BaseUdpSocket
-   {
-   public:
-      UdpTxMsgBSocket(); 
-
-     //------------------------------------------------------------------------
-     // Socket, these two should be used together
-
-      // These create and configure the socket
-      void configure(
-         char*                aRemoteIpAddr,
-         int                  aRemoteIpPort,
-         Ris::BaseMsgMonkey* aMonkey);
-
-      // This sends a message over the socket via a blocking send call.
-      // It returns true if successful.
-      // It is protected by the transmit mutex.
-
-      bool doSendMsg(Ris::ByteMsgB* aMsg);
-
-      //------------------------------------------------------------------------
-      // This is a record copier that is used to copy a record to a byte
-      // buffer. It allows the doSendMsg method to send a record to a byte 
-      // buffer without the having the record code visible to it.
-
-      Ris::BaseMsgMonkey* mMonkey;
-
-      //------------------------------------------------------------------------
-      // Transmit mutex is used by doSendMsg for mutual exclusion.
-
-      Ris::Threads::MutexSemaphore  mTxMutex;
-
-      //------------------------------------------------------------------------
-      // State:
-
-      // General purpose valid flag
-      bool mValidFlag;
-
-      // Metrics
-      int mTxCount;
-      int mTxLength;
-   };
+   // Metrics
+   int mTxCount;
+   int mTxLength;
+};
 
 }//namespace
 }//namespace

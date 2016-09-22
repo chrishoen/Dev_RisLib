@@ -36,6 +36,9 @@
     <ClCompile Include="Source\exampleMsgMonkey.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risByteMsgBHeader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -69,6 +72,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\exampleMsgMonkey.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risByteMsgBHeader.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

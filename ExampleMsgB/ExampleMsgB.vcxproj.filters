@@ -22,6 +22,9 @@
     <ClCompile Include="Source\exampleMsgHelper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risNetUdpMsgBHeader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -43,6 +46,21 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\exampleMsgTraits.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risByteMsgB.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risByteMsgBCopier.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpMsgBHeader.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpMsgBSocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpMsgBThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

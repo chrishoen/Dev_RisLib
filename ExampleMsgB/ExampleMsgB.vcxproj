@@ -182,6 +182,7 @@
     <ClCompile Include="Source\exampleSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\risNetUdpMsgBHeader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -191,6 +192,11 @@
     <ClInclude Include="Source\exampleMsg.h" />
     <ClInclude Include="Source\exampleSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\risByteMsgB.h" />
+    <ClInclude Include="Source\risByteMsgBCopier.h" />
+    <ClInclude Include="Source\risNetUdpMsgBHeader.h" />
+    <ClInclude Include="Source\risNetUdpMsgBSocket.h" />
+    <ClInclude Include="Source\risNetUdpMsgBThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

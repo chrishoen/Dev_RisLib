@@ -29,7 +29,9 @@ public:
    // Members
 
    Ris::Net::MsgBHeader mHeader;
-   MsgCopier mCopier;
+
+   MsgCreator  mCreator;
+   MsgCopier   mCopier;
 
 };
 

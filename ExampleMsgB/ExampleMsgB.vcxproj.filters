@@ -51,9 +51,6 @@
     <ClInclude Include="Source\risByteMsgB.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteMsgBCopier.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risNetUdpMsgBHeader.h">
       <Filter>Source</Filter>
     </ClInclude>

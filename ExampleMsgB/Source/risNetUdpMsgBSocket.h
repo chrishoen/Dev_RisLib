@@ -17,7 +17,6 @@ UdpTxMsgBSocket -- udp transmit socket
 #include "risThreadsThreads.h"
 
 #include "risByteMsgB.h"
-#include "risByteMsgBCopier.h"
 #include "risByteContent.h"
 #include "risSockets.h"
 #include "risNetUdpMsgBHeader.h"
@@ -176,7 +175,7 @@ public:
       // object and return it.
 
       // Create a record based on the record type
-      aMsg = mTraits.mCopier.createMessage(mTraits.mHeader.mMessageIdentifier);
+      aMsg = mTraits.mCreator.createMessage(mTraits.mHeader.mMessageIdentifier);
 
       // Copy from the buffer into the record
       mTraits.mCopier.copyToFrom(&tBuffer, aMsg);

@@ -13,7 +13,6 @@ UdpTxMsgBSocket -- udp transmit socket
 //******************************************************************************
 
 #include "risByteMsgB.h"
-#include "risByteMsgBCopier.h"
 #include "risByteContent.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"

@@ -76,13 +76,13 @@ bool UdpRxMsgBSocket::doReceiveMsg (Ris::ByteMsgB*& aMsg)
    if (!mValidFlag) return false;
 
    // Byte buffer, constructor takes size
-   Ris::ByteBuffer tBuffer(Ris::MsgBHeaderDefT::cBufferSize);
+   Ris::ByteBuffer tBuffer(mMonkey->bufferSize());
    tBuffer.setCopyFrom();
 
    //-------------------------------------------------------------------------
    // Read the message into the receive buffer
 
-   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,Ris::MsgBHeaderDefT::cBufferSize);
+   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,mMonkey->bufferSize());
 
    // Guard
    // If bad status then return false.
@@ -200,7 +200,7 @@ bool UdpTxMsgBSocket::doSendMsg(Ris::ByteMsgB* aMsg)
    if (!mValidFlag) return false;
 
    // Create byte buffer, constructor takes size
-   Ris::ByteBuffer tBuffer(MsgBHeaderDefT::cBufferSize);
+   Ris::ByteBuffer tBuffer(mMonkey->bufferSize());
 
    //------------------------------------------------------------------------
    // Instance of a header,set members

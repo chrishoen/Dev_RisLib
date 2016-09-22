@@ -23,6 +23,11 @@ class  BaseMsgMonkey
 public:
 
    //***************************************************************************
+   // Return the number of bytes that need to be allocated for a message. 
+
+   virtual int bufferSize()=0;
+
+   //***************************************************************************
    // Create a new record, based on a record type.
 
    virtual Ris::ByteMsgB* createMessage (int aType)=0;

@@ -20,6 +20,11 @@ public:
    MsgMonkey();
 
    //***************************************************************************
+   // Return the number of bytes that need to be allocated for a message. 
+
+   int bufferSize() { return 20000; }
+
+   //***************************************************************************
    // This creates a new record, based on a record type
 
    Ris::ByteMsgB* createMessage (int aType) override;

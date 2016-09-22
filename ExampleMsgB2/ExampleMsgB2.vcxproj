@@ -178,6 +178,7 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\exampleMsg.cpp" />
     <ClCompile Include="Source\exampleMsgHelper.cpp" />
+    <ClCompile Include="Source\exampleMsgMonkey.cpp" />
     <ClCompile Include="Source\exampleNetworkThread.cpp" />
     <ClCompile Include="Source\exampleSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -189,11 +190,13 @@
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\exampleMsg.h" />
     <ClInclude Include="Source\exampleMsgHelper.h" />
+    <ClInclude Include="Source\exampleMsgMonkey.h" />
     <ClInclude Include="Source\exampleNetworkThread.h" />
     <ClInclude Include="Source\exampleSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\risByteMsgB.h" />
     <ClInclude Include="Source\risByteMsgBCopier.h" />
+    <ClInclude Include="Source\risByteMsgMonkey.h" />
     <ClInclude Include="Source\risNetUdpMsgBSocket.h" />
     <ClInclude Include="Source\risNetUdpMsgBThread.h" />
   </ItemGroup>

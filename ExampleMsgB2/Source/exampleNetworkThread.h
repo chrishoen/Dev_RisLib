@@ -10,6 +10,7 @@
 #include "risThreadsQCallThread.h"
 
 #include "exampleMsg.h"
+#include "exampleMsgMonkey.h"
 
 namespace ExampleMsg
 {
@@ -47,8 +48,8 @@ public:
 
    Ris::Net::UdpMsgBThread*  mUdpMsgBThread;
 
-   // Message parser used by mUdpMsgBThread
-   MsgCopier mMsgCopier;
+   // Message monkey used by mUdpMsgBThread
+   MsgMonkey mMsgMonkey;
 
    //--------------------------------------------------------------
    // QCall:

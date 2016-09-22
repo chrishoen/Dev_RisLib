@@ -88,7 +88,7 @@ public:
       int                   aLocalIpPort,
       char*                 aRemoteIpAddress,
       int                   aRemoteIpPort,
-      Ris::BaseMsgBCopier*  aMsgCopier,
+      Ris::BaseMsgMonkey*  aMonkey,
       RxMsgQCall*           aRxMsgQCall);
 
    //--------------------------------------------------------------
@@ -126,7 +126,7 @@ public:
 
    // Message parser creator, this is used by the receive socket to
    // create an instance of a message parser
-   Ris::BaseMsgBCopier* mMsgCopier;
+   Ris::BaseMsgMonkey* mMonkey;
 };
 
 //******************************************************************************

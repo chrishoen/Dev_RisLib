@@ -222,7 +222,7 @@ namespace Net
       mRxLength     = 0;
       mRxCount      = 0;
       mValidFlag    = false;
-      mMsgCopier    = 0;
+      mMonkey    = 0;
    }
 
    //***************************************************************************
@@ -231,12 +231,12 @@ namespace Net
    void UdpRxMsgBSocket::configure(
       char*                aLocalIpAddr,
       int                  aLocalIpPort,
-      Ris::BaseMsgBCopier* aMsgCopier)
+      Ris::BaseMsgMonkey* aMonkey)
    {
       mRxCount=0;
 
       mLocal.set(aLocalIpAddr,aLocalIpPort);
-      mMsgCopier = aMsgCopier;
+      mMonkey = aMonkey;
 
       doSocket();
       doBind();
@@ -324,10 +324,10 @@ namespace Net
       // object and return it.
 
       // Create a record based on the record type
-      aMsg = mMsgCopier->createMessage(tHeader.mMessageIdentifier);
+      aMsg = mMonkey->createMessage(tHeader.mMessageIdentifier);
 
       // Copy from the buffer into the record
-      mMsgCopier->copyToFrom(&tBuffer, aMsg);
+      mMonkey->copyToFrom(&tBuffer, aMsg);
 
       // Test for errors and return.
       // If the pointer is zero then message is bad
@@ -351,7 +351,7 @@ namespace Net
       mTxCount      = 0;
       mTxLength     = 0;
       mValidFlag    = false;
-      mMsgCopier = 0;
+      mMonkey = 0;
    }
 
    //***************************************************************************
@@ -360,12 +360,12 @@ namespace Net
    void UdpTxMsgBSocket::configure(
       char*                aRemoteIpAddr,
       int                  aRemoteIpPort,
-      Ris::BaseMsgBCopier* aMsgCopier)
+      Ris::BaseMsgMonkey* aMonkey)
    {
       mTxCount=0;
 
       mRemote.set(aRemoteIpAddr,aRemoteIpPort);
-      mMsgCopier = aMsgCopier;
+      mMonkey = aMonkey;
 
       doSocket();
 
@@ -413,7 +413,7 @@ namespace Net
       tHeader.headerCopyToFrom(&tBuffer,aMsg);
 
       // Copy record to buffer
-      mMsgCopier->copyToFrom(&tBuffer,aMsg);
+      mMonkey->copyToFrom(&tBuffer,aMsg);
       
       // ReCopy header to buffer
       tHeader.headerReCopyToFrom(&tBuffer,aMsg);

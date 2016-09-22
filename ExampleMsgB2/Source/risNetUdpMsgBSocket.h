@@ -12,11 +12,11 @@ UdpTxMsgBSocket -- udp transmit socket
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteMsgB.h"
-#include "risByteMsgBCopier.h"
-#include "risByteContent.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
+#include "risByteContent.h"
+#include "risByteMsgB.h"
+#include "risByteMsgMonkey.h"
 
 namespace Ris
 {
@@ -139,7 +139,7 @@ namespace Net
       void configure(
          char*                aLocalIpAddr,
          int                  aLocalIpPort,
-         Ris::BaseMsgBCopier* aMsgCopier);
+         Ris::BaseMsgMonkey* aMonkey);
 
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
@@ -154,7 +154,7 @@ namespace Net
       // extract a record from a byte buffer without the having the
       // record type visible to it.
 
-      Ris::BaseMsgBCopier* mMsgCopier;
+      Ris::BaseMsgMonkey* mMonkey;
 
       //------------------------------------------------------------------------
       // State:
@@ -185,7 +185,7 @@ namespace Net
       void configure(
          char*                aRemoteIpAddr,
          int                  aRemoteIpPort,
-         Ris::BaseMsgBCopier* aMsgCopier);
+         Ris::BaseMsgMonkey* aMonkey);
 
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
@@ -198,7 +198,7 @@ namespace Net
       // buffer. It allows the doSendMsg method to send a record to a byte 
       // buffer without the having the record code visible to it.
 
-      Ris::BaseMsgBCopier* mMsgCopier;
+      Ris::BaseMsgMonkey* mMonkey;
 
       //------------------------------------------------------------------------
       // Transmit mutex is used by doSendMsg for mutual exclusion.

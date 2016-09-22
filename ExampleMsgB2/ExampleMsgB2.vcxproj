@@ -195,7 +195,6 @@
     <ClInclude Include="Source\exampleSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\risByteMsgB.h" />
-    <ClInclude Include="Source\risByteMsgBCopier.h" />
     <ClInclude Include="Source\risByteMsgMonkey.h" />
     <ClInclude Include="Source\risNetUdpMsgBSocket.h" />
     <ClInclude Include="Source\risNetUdpMsgBThread.h" />

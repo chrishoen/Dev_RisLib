@@ -3,7 +3,6 @@
 
 #include "risByteBuffer.h"
 #include "risByteMsgB.h"
-#include "risByteMsgBCopier.h"
 
 namespace ExampleMsg
 {
@@ -177,22 +176,32 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
+    class MsgCreator : public Ris::BaseMsgBCreator
+    {
+    public:
+
+       //***********************************************************************
+       // Create a new record, based on a record type
+
+       Ris::ByteMsgB* createMessage(int aMsgType) override;
+
+    };
+
+    //***************************************************************************
+    //***************************************************************************
+    //***************************************************************************
+
     class MsgCopier : public Ris::BaseMsgBCopier
     {
     public:
 
        //***********************************************************************
-       // This creates a new record, based on a record type
+       // Copy a record to/from a byte buffer. 
 
-       Ris::ByteMsgB* createMessage(int aMsgType);
-
-       //***********************************************************************
-       // This copies byte buffers to/from records
-
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsg);
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsg) override;
 
        //***********************************************************************
-       // These copy byte buffers to/from records
+       // Copy a record to/from a byte buffer. 
 
        void copyToFrom (Ris::ByteBuffer* aBuffer, TestMsg*   aMsg);
        void copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg);

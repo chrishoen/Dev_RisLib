@@ -22,8 +22,8 @@ MsgMonkey::MsgMonkey()
 
 Ris::ByteMsgB* MsgMonkey::createMessage(int aMsgType)
 {
-   ExampleMsg::MsgCopier tCopier;
-   return tCopier.createMessage(aMsgType);
+   ExampleMsg::MsgCreator tCreator;
+   return tCreator.createMessage(aMsgType);
 }
 
 //****************************************************************************

@@ -186,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\exampleMsgHelper.h" />
+    <ClInclude Include="Source\exampleMsgTraits.h" />
     <ClInclude Include="Source\exampleNetworkThread.h" />
     <ClInclude Include="Source\exampleMsg.h" />
     <ClInclude Include="Source\exampleSettings.h" />

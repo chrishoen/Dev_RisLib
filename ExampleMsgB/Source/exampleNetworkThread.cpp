@@ -25,7 +25,7 @@ NetworkThread::NetworkThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpMsgBThread = new Ris::Net::UdpMsgBThread;
+   mUdpMsgThread = new UdpMsgThread;
 
    // Initialize QCalls
    mRxMsgQCall.bind   (this,&NetworkThread::executeRxMessage);
@@ -35,7 +35,7 @@ NetworkThread::NetworkThread()
 
 NetworkThread::~NetworkThread()
 {
-   delete mUdpMsgBThread;
+   delete mUdpMsgThread;
 }
 
 //******************************************************************************
@@ -48,14 +48,12 @@ void NetworkThread::configure()
    //---------------------------------------------------------------------------
    // Configure socket thread
 
-   mUdpMsgBThread->configure(
+   mUdpMsgThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mMsgCopier,
       &mRxMsgQCall);
-
 }
 
 //******************************************************************************
@@ -65,7 +63,7 @@ void NetworkThread::launchThread()
    Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
 
    // Launch child thread
-   mUdpMsgBThread->launchThread(); 
+   mUdpMsgThread->launchThread(); 
    
    // Launch this thread
    BaseClass::launchThread();
@@ -78,7 +76,7 @@ void  NetworkThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
    // Shutdown the tcp client thread
-   mUdpMsgBThread->shutdownThread();
+   mUdpMsgThread->shutdownThread();
 
    // Base class exit
    BaseClass::threadExitFunction();
@@ -210,7 +208,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 
 void NetworkThread::sendMsg (Ris::ByteMsgB* aMsg)
 {
-   mUdpMsgBThread->sendMsg(aMsg);
+   mUdpMsgThread->sendMsg(aMsg);
 }
 
 //******************************************************************************
@@ -221,7 +219,7 @@ void NetworkThread::sendTestMsg()
    TestMsg* tMsgB = new TestMsg;
    tMsgB->mCode1=201;
  
-   mUdpMsgBThread->sendMsg(tMsgB);
+   mUdpMsgThread->sendMsg(tMsgB);
 }
 
 }//namespace

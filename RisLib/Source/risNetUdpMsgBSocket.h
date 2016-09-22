@@ -29,25 +29,10 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Definitions
-
-class MsgBSocketDefT
-{
-public:
-   //***************************************************************************
-   // Use this for a buffer size for these sockets
-
-   static const int cBufferSize = 20000;
-
-};
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Udp receive message socket. Messages are based on the Ris::ByteContent
 // message encapsulation scheme.
 
+template <class MsgTraits>
 class UdpRxMsgBSocket : public Sockets::BaseUdpSocket
 {
 public:
@@ -56,11 +41,12 @@ public:
    //***************************************************************************
    // Members.
 
-   // This is a record copier that is used to copy a record from a
-   // byte buffer.It allows the doReceiveMsg method to receive and
-   // extract a record from a byte buffer without the having the
-   // record type visible to it.
-   Ris::BaseMsgBCopier* mMsgCopier;
+   // This is an instance of the message traits. It is used to copy a record
+   // from a byte buffer.It allows the doReceiveMsg method to receive and
+   // extract a record from a byte buffer without the having the record type
+   // visible to it.
+   // These are message traits.
+   MsgTraits mTraits;
 
    // General purpose valid flag
    bool mValidFlag;
@@ -82,27 +68,29 @@ public:
       mRxLength     = 0;
       mRxCount      = 0;
       mValidFlag    = false;
-      mMsgCopier    = 0;
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Configure.
+   // This creates the socket, does a socket and bind call, and configures
+   // it with the local ip address and port.
 
    void configure(
-      char*                aLocalIpAddr,
-      int                  aLocalIpPort,
-      Ris::BaseMsgBCopier* aMsgCopier)
+      char*  aLocalIpAddr,
+      int    aLocalIpPort)
    {
+      // Initialize.
       mRxCount=0;
 
+      // Store local address and port.
       mLocal.set(aLocalIpAddr,aLocalIpPort);
-      mMsgCopier = aMsgCopier;
 
+      // Do socket and bind calls.
       doSocket();
       doBind();
 
+      // Print status.
       if (mStatus==0)
       {
          Prn::print(Prn::SocketInit2, "UdpRxMsgBSocket     $ %16s : %d",
@@ -118,6 +106,7 @@ public:
             mError);
       }
 
+      // Set valid flag.
       mValidFlag=mStatus==0;
    }
 
@@ -138,13 +127,13 @@ public:
       if (!mValidFlag) return false;
 
       // Byte buffer, constructor takes size
-      Ris::ByteBuffer tBuffer(MsgBSocketDefT::cBufferSize);  
+      Ris::ByteBuffer tBuffer(MsgTraits::cBufferSize);  
       tBuffer.setCopyFrom();
 
       //------------------------------------------------------------------------
       // Read the message into the receive buffer
 
-      doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,MsgBSocketDefT::cBufferSize);
+      doRecvFrom (mFromAddress,tBuffer.getBaseAddress(),mRxLength,MsgBSocketDefT::cBufferSize);
 
       // Guard
       // If bad status then return false.
@@ -170,14 +159,12 @@ public:
       // Copy from the receive buffer into an instance of the header
       // and validate the header
 
-      MsgBHeader tHeader;
-
       tBuffer.setCopyFrom();
-      tBuffer.getFromBuffer(&tHeader);
+      tBuffer.getFromBuffer(&mTraits.mHeader);
 
       // If the header is not valid then error
       
-      if (!tHeader.validate())
+      if (!mTraits.mHeader.validate())
       {
          Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER ");
          return false;
@@ -189,10 +176,10 @@ public:
       // object and return it.
 
       // Create a record based on the record type
-      aMsg = mMsgCopier->createMessage(tHeader.mMessageIdentifier);
+      aMsg = mTraits.mCopier->createMessage(tHeader.mMessageIdentifier);
 
       // Copy from the buffer into the record
-      mMsgCopier->copyToFrom(&tBuffer, aMsg);
+      mTraits.mCopier->copyToFrom(&tBuffer, aMsg);
 
       // Test for errors and return.
       // If the pointer is zero then message is bad
@@ -214,6 +201,7 @@ public:
 // Udp transmit message socket.
 // Messages are based on the Ris::ByteContent message encapsulation scheme.
 
+template <class MsgTraits>
 class UdpTxMsgBSocket : public Sockets::BaseUdpSocket
 {
 public:
@@ -222,14 +210,12 @@ public:
    //***************************************************************************
    // Members.
 
-   // This is a record copier that is used to copy a record to a byte
-   // buffer. It allows the doSendMsg method to send a record to a byte 
+   // This is an instance of the message traits. It is used to copy a record
+   // to a byte buffer. It allows the doSendMsg method to send a record to a byte 
    // buffer without the having the record code visible to it.
-
-   Ris::BaseMsgBCopier* mMsgCopier;
+   MsgTraits mTraits;
 
    // Transmit mutex is used by doSendMsg for mutual exclusion.
-
    Ris::Threads::MutexSemaphore  mTxMutex;
 
    // General purpose valid flag
@@ -249,7 +235,6 @@ public:
       mTxCount      = 0;
       mTxLength     = 0;
       mValidFlag    = false;
-      mMsgCopier = 0;
    }
 
    //***************************************************************************
@@ -258,17 +243,19 @@ public:
    // Configure.
 
    void configure(
-      char*                aRemoteIpAddr,
-      int                  aRemoteIpPort,
-      Ris::BaseMsgBCopier* aMsgCopier)
+      char*   aRemoteIpAddr,
+      int     aRemoteIpPort)
    {
+      // Initialize.
       mTxCount=0;
 
+      // Store the remote ip address and port.
       mRemote.set(aRemoteIpAddr,aRemoteIpPort);
-      mMsgCopier = aMsgCopier;
 
+      // Do a socket call.
       doSocket();
 
+      // Print status.
       if (mStatus==0)
       {
          Prn::print(Prn::SocketInit2, "UdpTxMsgBSocket     $ %16s : %d",
@@ -284,6 +271,7 @@ public:
             mError);
       }
 
+      // Set valid flag.
       mValidFlag=mStatus==0;
    }
 
@@ -291,8 +279,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    // This sends a message over the socket via a blocking send call.
-   // It returns true if successful.
-   // It is protected by the transmit mutex.
+   // It returns true if successful. It is protected by the transmit mutex.
 
    bool doSendMsg(Ris::ByteMsgB* aMsg)
    {
@@ -300,26 +287,28 @@ public:
       if (!mValidFlag) return false;
 
       // Create byte buffer, constructor takes size
-      Ris::ByteBuffer tBuffer(MsgBSocketDefT::cBufferSize);
+      Ris::ByteBuffer tBuffer(MsgTraits::cBufferSize);
+
+      // Mutex
+      mTxMutex.lock();
 
       //------------------------------------------------------------------------
-      // Instance of a header,set members
+      // Set header members.
 
-      MsgBHeader tHeader;
-      tHeader.mMessageIdentifier = aMsg->mMessageType;
+      mTraits.mHeader.mMessageIdentifier = aMsg->mMessageType;
 
       //------------------------------------------------------------------------
       // Copy
 
       // Copy header to buffer
       tBuffer.setCopyTo();
-      tHeader.headerCopyToFrom(&tBuffer,aMsg);
+      mTraits.mHeader.headerCopyToFrom(&tBuffer,aMsg);
 
       // Copy record to buffer
-      mMsgCopier->copyToFrom(&tBuffer,aMsg);
+      mTraits.mCopier.copyToFrom(&tBuffer,aMsg);
       
       // ReCopy header to buffer
-      tHeader.headerReCopyToFrom(&tBuffer,aMsg);
+      mTraits.mHeader.headerReCopyToFrom(&tBuffer,aMsg);
 
       // Delete the record
       delete aMsg;
@@ -327,13 +316,13 @@ public:
       //------------------------------------------------------------------------
       // Send buffer to socket
 
-      // Mutex
-      mTxMutex.lock();
-
       // Transmit the buffer
       mTxLength=tBuffer.getLength();
       doSendTo(mRemote,tBuffer.getBaseAddress(),mTxLength);
       Prn::print(Prn::SocketRun1, "UdpTxMsgBSocket  doSendTo   $ %d",mTxLength);
+
+      //------------------------------------------------------------------------
+      // Done.
 
       mTxCount++;
 

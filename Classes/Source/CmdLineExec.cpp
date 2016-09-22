@@ -10,6 +10,7 @@
 #include "someClass2.h"
 #include "someClass3.h"
 #include "someClass4.h"
+#include "someClass5.h"
 
 #include "CmdLineExec.h"
 
@@ -56,12 +57,15 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    Class1<Traits1> tClass1;
    tClass1.test1();
    tClass1.test2();
+   tClass1.parent1();
+   tClass1.parent2();
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   Class5<Traits1> tClass;
 }
 
 //******************************************************************************

@@ -188,6 +188,7 @@
     <ClInclude Include="Source\someClass2.h" />
     <ClInclude Include="Source\someClass3.h" />
     <ClInclude Include="Source\someClass4.h" />
+    <ClInclude Include="Source\someClass5.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

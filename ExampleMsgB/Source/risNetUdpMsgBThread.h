@@ -53,7 +53,7 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-//template <class MsgTraits>
+template <class MsgTraits>
 class UdpMsgBThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
@@ -71,10 +71,8 @@ public:
    int   mRemoteIpPort;
 
    // Socket instance
-// UdpRxMsgBSocket<MsgTraits> mRxSocket;
-// UdpTxMsgBSocket<MsgTraits> mTxSocket;
-   UdpRxMsgBSocket<ExampleMsg::MsgTraits> mRxSocket;
-   UdpTxMsgBSocket<ExampleMsg::MsgTraits> mTxSocket;
+   UdpRxMsgBSocket<MsgTraits> mRxSocket;
+   UdpTxMsgBSocket<MsgTraits> mTxSocket;
 
    // This is a qcall that is called when a message is received
    typedef Ris::Threads::QCall1<Ris::ByteMsgB*> RxMsgQCall;
@@ -127,7 +125,7 @@ public:
    // Thread init function, base class overload.
    // It configures the socket.
 
-   void UdpMsgBThread::threadInitFunction() 
+   void threadInitFunction() 
    {
       Prn::print(Prn::SocketInit1, "UdpMsgBThread::threadInitFunction BEGIN");
 
@@ -147,7 +145,7 @@ public:
    // It contains a while loop that manages the connection to the server
    // and receives messages.
 
-   void  UdpMsgBThread::threadRunFunction22()
+   void threadRunFunction()
    {
       Prn::print(Prn::SocketRun1, "UdpRxMsgBThread::threadRunFunction");
 
@@ -189,7 +187,7 @@ public:
    //***************************************************************************
    // Thread exit function, base class overload.
 
-   void UdpMsgBThread::threadExitFunction22()
+   void threadExitFunction()
    {
       Prn::print(Prn::SocketInit1, "UdpMsgBThread::threadExitFunction");
    }
@@ -203,7 +201,7 @@ public:
    // then the terminate request flag will be polled and the threadRunFunction 
    // will exit.
 
-   void UdpMsgBThread::shutdownThread22()
+   void shutdownThread()
    {
       BaseThreadWithTermFlag::mTerminateFlag = true;
 

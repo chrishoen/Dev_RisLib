@@ -46,15 +46,14 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-// typedef Ris::Net::UdpMsgBThread<ExampleMsg::MsgTraits> UdpMsgThread;
-   typedef Ris::Net::UdpMsgBThread UdpMsgThread;
-   UdpMsgThread*  mUdpMsgThread;
+   typedef Ris::Net::UdpMsgBThread<ExampleMsg::MsgTraits> UdpMsgThread;
+   UdpMsgThread* mUdpMsgThread;
 
    //--------------------------------------------------------------
    // QCall:
 
    // QCalls registered to mUdpMsgBThread
-   UdpMsgThread::RxMsgQCall    mRxMsgQCall;
+   UdpMsgThread::RxMsgQCall mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

@@ -83,13 +83,13 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    if (!mValidFlag) return false;
 
    // Byte buffer, constructor takes size
-   ByteBuffer tBuffer(MsgSocketDefT::cBufferSize);  
+   ByteBuffer tBuffer(mMsgMonkey->getMaxBufferSize());
    tBuffer.setCopyFrom();
 
    //-------------------------------------------------------------------------
    // Read the message into the receive buffer
    
-   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,MsgSocketDefT::cBufferSize);
+   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,mMsgMonkey->getMaxBufferSize());
 
    // Guard
    // If bad status then return false.
@@ -210,7 +210,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    mMsgMonkey->processBeforeSend(aMsg);
 
    // Create byte buffer, constructor takes size
-   ByteBuffer tBuffer(MsgSocketDefT::cBufferSize);
+   ByteBuffer tBuffer(mMsgMonkey->getMaxBufferSize());
 
    // Copy transmit message to buffer
    tBuffer.putToBuffer(aMsg);

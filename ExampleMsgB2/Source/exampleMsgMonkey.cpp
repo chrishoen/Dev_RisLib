@@ -26,9 +26,9 @@ Ris::ByteMsg* MsgMonkey::createMsg(int aMsgType)
    return tCreator.createMsg(aMsgType);
 }
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // MsgCopier
 
 void MsgMonkey::copyMsgToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
@@ -37,16 +37,37 @@ void MsgMonkey::copyMsgToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
    tCopier.copyToFrom(aBuffer, aMsg);
 }
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Copy a message to/from a byte buffer.
-
-   // Copy into the header instance from a byte buffer.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy into the header instance from a byte buffer.
 
 void MsgMonkey::copyHeaderFrom(Ris::ByteBuffer* aBuffer)
 {
-
+   mHeader.copyToFrom(aBuffer);
 }
+
+//******************************************************************************
+// Validate the header.
+
+bool MsgMonkey::validateHeader()
+{
+   return mHeader.validate();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Access the message identifiier.
+
+int MsgMonkey::getHeaderMsgId()
+{
+   return mHeader.mMessageIdentifier;
+}
+void MsgMonkey::setHeaderMsgId(int aMsgId)
+{
+   mHeader.mMessageIdentifier = aMsgId;
+}
+
 
 }//namespace

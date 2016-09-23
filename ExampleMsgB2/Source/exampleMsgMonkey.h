@@ -2,6 +2,7 @@
 #define _EXAMPLEMSGMONKEY_H_
 
 #include "risByteMsgMonkey.h"
+#include "risByteMsgDefault.h"
 
 namespace ExampleMsg
 {
@@ -17,6 +18,14 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Members. 
+
+   // Instance of header to be used for message transmit and receive.
+   Ris::DefaultMsgHeader mHeader;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Constructor and initialization. 
 
    MsgMonkey();
@@ -24,9 +33,14 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Return the number of bytes that need to be allocated for a message. 
+   // Return configuration constants. 
 
+   // Return a contant max buffer size.
    int bufferSize() override { return 20000; }
+   // Return a contant header length.
+   int headerLength() override { return 24; }
+
+
 
    //***************************************************************************
    // Create a new message, based on a record type.
@@ -44,6 +58,18 @@ public:
    // Copy into the header instance from a byte buffer.
 
    void copyHeaderFrom(Ris::ByteBuffer* aBuffer) override;
+
+   //***************************************************************************
+   // Validate the header.
+
+   bool validateHeader() override;
+
+   //***************************************************************************
+   // Access the message identifiier.
+
+   int  getHeaderMsgId() override;
+   void setHeaderMsgId(int aMsgId) override;
+
 };
 }
 #endif

@@ -184,6 +184,7 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\risByteMsgDefault.cpp" />
+    <ClCompile Include="Source\risByteMsgMonkey.cpp" />
     <ClCompile Include="Source\risNetUdpMsgSocket.cpp" />
     <ClCompile Include="Source\risNetUdpMsgThread.cpp" />
   </ItemGroup>

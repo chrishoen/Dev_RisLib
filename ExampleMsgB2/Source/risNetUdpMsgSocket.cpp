@@ -34,7 +34,7 @@ UdpRxMsgSocket::UdpRxMsgSocket()
 void UdpRxMsgSocket::configure(
    char*                aLocalIpAddr,
    int                  aLocalIpPort,
-   Ris::BaseMsgMonkey* aMonkey)
+   Ris::BaseMsgMonkey*  aMonkey)
 {
    mRxCount=0;
 
@@ -108,14 +108,12 @@ bool UdpRxMsgSocket::doReceiveMsg (Ris::ByteMsg*& aMsg)
    // Copy from the receive buffer into an instance of the header
    // and validate the header
 
-   DefaultMsgHeader tHeader;
-
    tBuffer.setCopyFrom();
-   tBuffer.getFromBuffer(&tHeader);
+   mMonkey->copyHeaderFrom(&tBuffer);
 
    // If the header is not valid then error
       
-   if (!tHeader.validate())
+   if (!mMonkey->validateHeader())
    {
       Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER ");
       return false;
@@ -127,7 +125,7 @@ bool UdpRxMsgSocket::doReceiveMsg (Ris::ByteMsg*& aMsg)
    // object and return it.
 
    // Create a record based on the record type
-   aMsg = mMonkey->createMsg(tHeader.mMessageIdentifier);
+   aMsg = mMonkey->createMsg(mMonkey->getHeaderMsgId());
 
    // Copy from the buffer into the record
    mMonkey->copyMsgToFrom(&tBuffer, aMsg);

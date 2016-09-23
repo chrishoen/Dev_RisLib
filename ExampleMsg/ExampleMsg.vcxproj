@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{c2bf9148-2ac3-4d97-920a-59094fcfa781}</ProjectGuid>
+    <ProjectGuid>{4014caa5-ca7c-4625-8b9d-673fddfe52b7}</ProjectGuid>
     <RootNamespace>ExampleTMessage</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>ExampleMsgB</ProjectName>
+    <ProjectName>ExampleMsg</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -176,26 +176,31 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\exampleMsgHelper.cpp" />
-    <ClCompile Include="Source\exampleNetworkThread.cpp" />
     <ClCompile Include="Source\exampleMsg.cpp" />
+    <ClCompile Include="Source\exampleMsgHelper.cpp" />
+    <ClCompile Include="Source\exampleMsgMonkey.cpp" />
+    <ClCompile Include="Source\exampleNetworkThread.cpp" />
     <ClCompile Include="Source\exampleSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\risNetUdpMsgBHeader.cpp" />
+    <ClCompile Include="Source\risByteMsgDefault.cpp" />
+    <ClCompile Include="Source\risByteMsgMonkey.cpp" />
+    <ClCompile Include="Source\risNetUdpMsgSocket.cpp" />
+    <ClCompile Include="Source\risNetUdpMsgThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\exampleMsgHelper.h" />
-    <ClInclude Include="Source\exampleMsgTraits.h" />
-    <ClInclude Include="Source\exampleNetworkThread.h" />
     <ClInclude Include="Source\exampleMsg.h" />
+    <ClInclude Include="Source\exampleMsgHelper.h" />
+    <ClInclude Include="Source\exampleMsgMonkey.h" />
+    <ClInclude Include="Source\exampleNetworkThread.h" />
     <ClInclude Include="Source\exampleSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\risByteMsgB.h" />
-    <ClInclude Include="Source\risNetUdpMsgBHeader.h" />
-    <ClInclude Include="Source\risNetUdpMsgBSocket.h" />
-    <ClInclude Include="Source\risNetUdpMsgBThread.h" />
+    <ClInclude Include="Source\risByteMsg.h" />
+    <ClInclude Include="Source\risByteMsgDefault.h" />
+    <ClInclude Include="Source\risByteMsgMonkey.h" />
+    <ClInclude Include="Source\risNetUdpMsgSocket.h" />
+    <ClInclude Include="Source\risNetUdpMsgThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

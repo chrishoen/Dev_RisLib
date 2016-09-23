@@ -1,5 +1,5 @@
-#ifndef _RISNETTCPMSGASERVERTHREAD_H_
-#define _RISNETTCPMSGASERVERTHREAD_H_
+#ifndef _RISNETTCPMSGSERVERTHREAD_H_
+#define _RISNETTCPMSGSERVERTHREAD_H_
 
 /*==============================================================================
 
@@ -35,7 +35,7 @@ or callbacks in their configure calls.
 #include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
 
-#include "risNetTcpMsgASocket.h"
+#include "risNetTcpMsgSocket.h"
 
 namespace Ris
 {
@@ -47,7 +47,7 @@ namespace Net
 // It does listen and accept socket calls into tcp stream sockets in response
 // to client connect calls. 
 
-class TcpMsgAServerHubSocket : public Sockets::BaseTcpServerHubSocket
+class TcpMsgServerHubSocket : public Sockets::BaseTcpServerHubSocket
 {
 public:
    // Socket setup
@@ -97,10 +97,10 @@ public:
 // select call.
 //
 
-class TcpMsgAServerThread : public Threads::BaseThreadWithTermFlag
+class TcpMsgServerThread : public Threads::BaseThreadWithTermFlag
 {
 public:
-   TcpMsgAServerThread();
+   TcpMsgServerThread();
 
    //--------------------------------------------------------------
    // Configure :
@@ -173,7 +173,7 @@ public:
    // Sockets:
 
    // Hub socket instance
-   TcpMsgAServerHubSocket mHubSocket;
+   TcpMsgServerHubSocket mHubSocket;
 
    // Maximum possible number of sessions
    enum {MaxSessions=20};
@@ -184,7 +184,7 @@ public:
    // Node socket instances.
    // Access this array with a session index and test the node socket
    // valid flag.
-   TcpMsgASocket mNodeSocket[MaxSessions];
+   TcpMsgSocket mNodeSocket[MaxSessions];
 
    // Socket address that the hub socket binds to
    Sockets::SocketAddress mSocketAddress;

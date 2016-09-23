@@ -1,5 +1,5 @@
-#ifndef _RISNETTCPMSGASOCKET_H_
-#define _RISNETTCPMSGASOCKET_H_
+#ifndef _RISNETTCPMSGSOCKET_H_
+#define _RISNETTCPMSGSOCKET_H_
 
 /*==============================================================================
 
@@ -37,11 +37,11 @@ namespace Net
 //
 // Messages are based on the ByteContent message encapsulation scheme.
 
-class TcpMsgASocket : public Sockets::BaseTcpStreamSocket
+class TcpMsgSocket : public Sockets::BaseTcpStreamSocket
 {
 public:
-   TcpMsgASocket(); 
-  ~TcpMsgASocket(); 
+   TcpMsgSocket(); 
+  ~TcpMsgSocket(); 
 
    //--------------------------------------------------------------
    // Socket:

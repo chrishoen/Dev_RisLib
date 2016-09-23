@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "risNetUdpMsgASocket.h"
+#include "risNetUdpMsgSocket.h"
 
 namespace Ris
 {
@@ -20,7 +20,7 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 
-UdpRxMsgASocket::UdpRxMsgASocket()
+UdpRxMsgSocket::UdpRxMsgSocket()
 {
    mRxLength      = 0;
    mRxMsgCount    = 0;
@@ -30,7 +30,7 @@ UdpRxMsgASocket::UdpRxMsgASocket()
 
 //******************************************************************************
 
-UdpRxMsgASocket::~UdpRxMsgASocket()
+UdpRxMsgSocket::~UdpRxMsgSocket()
 {
    if (mMsgMonkey) delete mMsgMonkey;
 }
@@ -38,7 +38,7 @@ UdpRxMsgASocket::~UdpRxMsgASocket()
 //******************************************************************************
 // configure the socket
 
-void UdpRxMsgASocket::configure(
+void UdpRxMsgSocket::configure(
    char*                  aLocalIpAddr,
    int                    aLocalIpPort,
    BaseMsgMonkeyCreator* aMsgMonkeyCreator)
@@ -73,7 +73,7 @@ void UdpRxMsgASocket::configure(
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpRxMsgASocket::doReceiveMsg (ByteContent*& aMsg)
+bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 {
    //-------------------------------------------------------------------------
    // Initialize
@@ -83,13 +83,13 @@ bool UdpRxMsgASocket::doReceiveMsg (ByteContent*& aMsg)
    if (!mValidFlag) return false;
 
    // Byte buffer, constructor takes size
-   ByteBuffer tBuffer(MsgASocketDefT::cBufferSize);  
+   ByteBuffer tBuffer(MsgSocketDefT::cBufferSize);  
    tBuffer.setCopyFrom();
 
    //-------------------------------------------------------------------------
    // Read the message into the receive buffer
    
-   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,MsgASocketDefT::cBufferSize);
+   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,MsgSocketDefT::cBufferSize);
 
    // Guard
    // If bad status then return false.
@@ -149,7 +149,7 @@ bool UdpRxMsgASocket::doReceiveMsg (ByteContent*& aMsg)
 //******************************************************************************
 //******************************************************************************
 
-UdpTxMsgASocket::UdpTxMsgASocket()
+UdpTxMsgSocket::UdpTxMsgSocket()
 {
    mTxCount=0;
    mTxLength      = 0;
@@ -159,7 +159,7 @@ UdpTxMsgASocket::UdpTxMsgASocket()
 
 //******************************************************************************
 
-UdpTxMsgASocket::~UdpTxMsgASocket()
+UdpTxMsgSocket::~UdpTxMsgSocket()
 {
    if (mMsgMonkey) delete mMsgMonkey;
 }
@@ -167,7 +167,7 @@ UdpTxMsgASocket::~UdpTxMsgASocket()
 //******************************************************************************
 // Configure the socket. Use with the next doSendMsg.
 
-void UdpTxMsgASocket::configure(
+void UdpTxMsgSocket::configure(
    char*                  aRemoteIpAddr,
    int                    aRemoteIpPort,
    BaseMsgMonkeyCreator* aMsgMonkeyCreator)
@@ -201,7 +201,7 @@ void UdpTxMsgASocket::configure(
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket. Use with the previous configure.
 
-bool UdpTxMsgASocket::doSendMsg(ByteContent* aMsg)
+bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 {
    // Guard
    if (!mValidFlag) return false;
@@ -210,7 +210,7 @@ bool UdpTxMsgASocket::doSendMsg(ByteContent* aMsg)
    mMsgMonkey->processBeforeSend(aMsg);
 
    // Create byte buffer, constructor takes size
-   ByteBuffer tBuffer(MsgASocketDefT::cBufferSize);
+   ByteBuffer tBuffer(MsgSocketDefT::cBufferSize);
 
    // Copy transmit message to buffer
    tBuffer.putToBuffer(aMsg);
@@ -236,7 +236,7 @@ bool UdpTxMsgASocket::doSendMsg(ByteContent* aMsg)
 //******************************************************************************
 // Configure the socket. Use with the next doSendMsg.
 
-void UdpTxMsgASocket::configure(
+void UdpTxMsgSocket::configure(
    BaseMsgMonkey*     aMsgMonkey)
 {
    mTxCount=0;
@@ -257,7 +257,7 @@ void UdpTxMsgASocket::configure(
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket. Use with the previous configure.
 
-bool UdpTxMsgASocket::doSendMsg(
+bool UdpTxMsgSocket::doSendMsg(
    Sockets::SocketAddress aRemote,
    ByteContent* aMsg)
 {
@@ -265,7 +265,7 @@ bool UdpTxMsgASocket::doSendMsg(
    if (!mValidFlag) return false;
 
    // Byte buffer, constructor takes size
-   ByteBuffer tBuffer(MsgASocketDefT::cBufferSize);  
+   ByteBuffer tBuffer(MsgSocketDefT::cBufferSize);  
 
    // Copy transmit message to buffer
    tBuffer.putToBuffer(aMsg);

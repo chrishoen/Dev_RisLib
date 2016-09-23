@@ -8,7 +8,7 @@
 #include "prnPrint.h"
 
 #include "ris_priorities.h"
-#include "risNetTcpMsgAClientThread.h"
+#include "risNetTcpMsgClientThread.h"
 
 namespace Ris
 {
@@ -19,7 +19,7 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 
-TcpMsgAClientThread::TcpMsgAClientThread()
+TcpMsgClientThread::TcpMsgClientThread()
 {
    mThreadPriority = get_default_tcp_client_thread_priority();
 
@@ -30,7 +30,7 @@ TcpMsgAClientThread::TcpMsgAClientThread()
 //******************************************************************************
 // Configure:
 
-void TcpMsgAClientThread::configure(
+void TcpMsgClientThread::configure(
    char*                      aServerIpAddr,
    int                        aServerIpPort,
    BaseMsgMonkeyCreator*  aMsgMonkeyCreator,
@@ -53,7 +53,7 @@ void TcpMsgAClientThread::configure(
 // Thread init function, base class overload.
 // It configures the socket.
 
-void TcpMsgAClientThread::threadInitFunction()
+void TcpMsgClientThread::threadInitFunction()
 {
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction BEGIN");
 
@@ -68,7 +68,7 @@ void TcpMsgAClientThread::threadInitFunction()
 // It contains a while loop that manages the connection to the server
 // and receives messages.
 
-void TcpMsgAClientThread::threadRunFunction()
+void TcpMsgClientThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun1, "TcpClientThread::threadRunFunction");
    
@@ -155,7 +155,7 @@ void TcpMsgAClientThread::threadRunFunction()
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void TcpMsgAClientThread::threadExitFunction()
+void TcpMsgClientThread::threadExitFunction()
 {
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadExitFunction");
 }
@@ -168,7 +168,7 @@ void TcpMsgAClientThread::threadExitFunction()
 // then the terminate request flag will be polled and the the
 // threadRunFunction will exit.
 
-void TcpMsgAClientThread::shutdownThread()
+void TcpMsgClientThread::shutdownThread()
 {
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
@@ -178,7 +178,7 @@ void TcpMsgAClientThread::shutdownThread()
 }
 //******************************************************************************
 
-void TcpMsgAClientThread::sendMsg(ByteContent* aTxMsg)
+void TcpMsgClientThread::sendMsg(ByteContent* aTxMsg)
 {
    if (!aTxMsg) return;
 
@@ -198,7 +198,7 @@ void TcpMsgAClientThread::sendMsg(ByteContent* aTxMsg)
 //******************************************************************************
 //******************************************************************************
 
-void TcpMsgAClientThread::processSessionChange(bool aEstablished)
+void TcpMsgClientThread::processSessionChange(bool aEstablished)
 {
    // Invoke the session qcall to notify that a session has
    // been established or disestablished
@@ -210,7 +210,7 @@ void TcpMsgAClientThread::processSessionChange(bool aEstablished)
 //******************************************************************************
 //******************************************************************************
 
-void TcpMsgAClientThread::processRxMsg(Ris::ByteContent* aRxMsg)
+void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aRxMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.

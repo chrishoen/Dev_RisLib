@@ -11,7 +11,7 @@ ProtoComm server thread class.
 #include "prnPrint.h"
 
 #include "risContainers.h"
-#include "risNetTcpMsgAServerThread.h"
+#include "risNetTcpMsgServerThread.h"
 #include "risNetSessionStateList.h"
 #include "risThreadsQCallThread.h"
 
@@ -80,7 +80,7 @@ public:
    // Tcp server thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::TcpMsgAServerThread* mTcpServerThread;
+   Ris::Net::TcpMsgServerThread* mTcpServerThread;
 
    // Maximum number of sessions for mTcpServerThread
    enum {MaxSessions=10};
@@ -92,8 +92,8 @@ public:
    // QCall:
 
    // QCalls registered to mTcpServerThread
-   Ris::Net::TcpMsgAServerThread::SessionQCall  mSessionQCall;
-   Ris::Net::TcpMsgAServerThread::RxMsgQCall    mRxMsgQCall;
+   Ris::Net::TcpMsgServerThread::SessionQCall  mSessionQCall;
+   Ris::Net::TcpMsgServerThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

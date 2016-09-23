@@ -27,7 +27,7 @@ namespace Net
    //***************************************************************************
    // Message Socket Definitions
 
-   class MsgASocketDefT
+   class MsgSocketDefT
    {
    public:
       //************************************************************************
@@ -43,11 +43,11 @@ namespace Net
    // Udp receive message socket.
    // Messages are based on the ByteContent message encapsulation scheme.
 
-   class UdpRxMsgASocket : public Sockets::BaseUdpSocket
+   class UdpRxMsgSocket : public Sockets::BaseUdpSocket
    {
    public:
-      UdpRxMsgASocket(); 
-     ~UdpRxMsgASocket(); 
+      UdpRxMsgSocket(); 
+     ~UdpRxMsgSocket(); 
 
      //------------------------------------------------------------------------
      // Socket:
@@ -89,11 +89,11 @@ namespace Net
    // Udp transmit message socket.
    // Messages are based on the ByteContent message encapsulation scheme.
 
-   class UdpTxMsgASocket : public Sockets::BaseUdpSocket
+   class UdpTxMsgSocket : public Sockets::BaseUdpSocket
    {
    public:
-      UdpTxMsgASocket(); 
-     ~UdpTxMsgASocket(); 
+      UdpTxMsgSocket(); 
+     ~UdpTxMsgSocket(); 
 
      //------------------------------------------------------------------------
      // Socket, these two should be used together

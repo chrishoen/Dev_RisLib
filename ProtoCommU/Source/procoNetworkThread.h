@@ -8,8 +8,8 @@
 //******************************************************************************
 //******************************************************************************
 #include "risContainers.h"
-#include "risNetUdpMsgAThread.h"
-#include "risNetUdpMsgASocket.h"
+#include "risNetUdpMsgThread.h"
+#include "risNetUdpMsgSocket.h"
 #include "risThreadsQCallThread.h"
 
 #include "procoMsg.h"
@@ -48,16 +48,16 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::UdpMsgAThread*  mUdpMsgAThread;
+   Ris::Net::UdpMsgThread*  mUdpMsgThread;
 
-   // Message monkey used by mUdpMsgAThread
+   // Message monkey used by mUdpMsgThread
    ProtoComm::MsgMonkeyCreator mMsgMonkeyCreator;
 
    //--------------------------------------------------------------
    // QCall:
 
-   // QCalls registered to mUdpMsgAThread
-   Ris::Net::UdpMsgAThread::RxMsgQCall    mRxMsgQCall;
+   // QCalls registered to mUdpMsgThread
+   Ris::Net::UdpMsgThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

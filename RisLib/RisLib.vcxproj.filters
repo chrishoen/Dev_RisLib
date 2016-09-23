@@ -100,25 +100,25 @@
     <ClCompile Include="Source\risSerialPort.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risNetTcpMsgASocket.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetTcpMsgAClientThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetTcpMsgAServerThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetUdpMsgASocket.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetUdpMsgAThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risNetUdpStringSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risByteMsgMonkey.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risNetTcpMsgClientThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risNetTcpMsgServerThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risNetTcpMsgSocket.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risNetUdpMsgSocket.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risNetUdpMsgThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -246,25 +246,25 @@
     <ClInclude Include="Source\risSerialPort.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risNetTcpMsgASocket.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetTcpMsgAClientThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetTcpMsgAServerThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetUdpMsgASocket.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetUdpMsgAThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risNetUdpStringSocket.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteMsgMonkey.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetTcpMsgClientThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetTcpMsgServerThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetTcpMsgSocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpMsgSocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetUdpMsgThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

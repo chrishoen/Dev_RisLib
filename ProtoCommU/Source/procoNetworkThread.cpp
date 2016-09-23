@@ -24,7 +24,7 @@ NetworkThread::NetworkThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpMsgAThread = new Ris::Net::UdpMsgAThread;
+   mUdpMsgThread = new Ris::Net::UdpMsgThread;
 
    // Initialize QCalls
    mRxMsgQCall.bind   (this,&NetworkThread::executeRxMessage);
@@ -34,7 +34,7 @@ NetworkThread::NetworkThread()
 
 NetworkThread::~NetworkThread()
 {
-   delete mUdpMsgAThread;
+   delete mUdpMsgThread;
 }
 
 //******************************************************************************
@@ -52,7 +52,7 @@ void NetworkThread::configure()
    //---------------------------------------------------------------------------
    // Configure message thread
 
-   mUdpMsgAThread->configure(
+   mUdpMsgThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
@@ -68,7 +68,7 @@ void NetworkThread::launchThread()
    Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
 
    // Launch child thread
-   mUdpMsgAThread->launchThread(); 
+   mUdpMsgThread->launchThread(); 
    
    // Launch this thread
    BaseClass::launchThread();
@@ -81,7 +81,7 @@ void  NetworkThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
    // Shutdown the tcp client thread
-   mUdpMsgAThread->shutdownThread();
+   mUdpMsgThread->shutdownThread();
 
    // Base class exit
    BaseClass::threadExitFunction();
@@ -133,7 +133,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
    if (true)
    {
       ProtoComm::StatusResponseMsg* tMsg = new ProtoComm::StatusResponseMsg;
-      mUdpMsgAThread->sendMsg(tMsg);
+      mUdpMsgThread->sendMsg(tMsg);
    }
 
    Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
@@ -178,7 +178,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
    ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
    tx->mCode1=101;
 
-   mUdpMsgAThread->sendMsg(tx);
+   mUdpMsgThread->sendMsg(tx);
 }
 
 //******************************************************************************
@@ -186,7 +186,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 
 void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 {
-   mUdpMsgAThread->sendMsg(aMsg);
+   mUdpMsgThread->sendMsg(aMsg);
 }
 
 //******************************************************************************
@@ -196,7 +196,7 @@ void NetworkThread::sendTestMsg()
 {
    ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
  
-   mUdpMsgAThread->sendMsg(tMsg);
+   mUdpMsgThread->sendMsg(tMsg);
 }
 
 }//namespace

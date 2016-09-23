@@ -10,16 +10,16 @@ execution context for a udp socket that receives udp datagrams.
 
 There is a base class and three classes that provide different interfaces.
 
-1) UdpMsgAThread   provides the udp receiver thread functionality
+1) UdpMsgThread   provides the udp receiver thread functionality
 
-2) UdpMsgAThreadWithQCall : public UdpMsgAThread provides a udp receiver
+2) UdpMsgThreadWithQCall : public UdpMsgThread provides a udp receiver
    thread with a QCall (queued function call) interface
 
-3) UdpMsgAThreadWithCallback : public UdpMsgAThread provides a udp
+3) UdpMsgThreadWithCallback : public UdpMsgThread provides a udp
    receiver thread with a callback interface
 
 Threads that want to perform Udp receiver activity maintain instances of 
-UdpMsgAThreadWithQCall or UdpMsgAThreadWithCallback and pass in QCalls
+UdpMsgThreadWithQCall or UdpMsgThreadWithCallback and pass in QCalls
 or callbacks in their configure calls.
 
 ==============================================================================*/
@@ -34,7 +34,7 @@ or callbacks in their configure calls.
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
-#include "risNetUdpMsgASocket.h"
+#include "risNetUdpMsgSocket.h"
 
 namespace Ris
 {
@@ -56,12 +56,12 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-class UdpMsgAThread : public Ris::Threads::BaseThreadWithTermFlag
+class UdpMsgThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
    typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
 
-   UdpMsgAThread();
+   UdpMsgThread();
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -95,7 +95,7 @@ public:
    //--------------------------------------------------------------
    // Process:
    
-   // This is called by the UdpMsgAThread threadRunFunction 
+   // This is called by the UdpMsgThread threadRunFunction 
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
@@ -122,8 +122,8 @@ public:
    int   mRemoteIpPort;
 
    // Socket instance
-   UdpRxMsgASocket mRxSocket;
-   UdpTxMsgASocket mTxSocket;
+   UdpRxMsgSocket mRxSocket;
+   UdpTxMsgSocket mTxSocket;
 
    // Message monkey creator, this is used by the receive socket to
    // create an instance of a message monkey

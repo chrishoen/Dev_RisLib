@@ -28,7 +28,7 @@ ServerThread::ServerThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mTcpServerThread  = new Ris::Net::TcpMsgAServerThread;
+   mTcpServerThread  = new Ris::Net::TcpMsgServerThread;
 
    // Initialize QCalls
    mSessionQCall.bind (this,&ServerThread::executeSession);

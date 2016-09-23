@@ -1,5 +1,5 @@
-#ifndef _RISNETTCPMSGACLIENTTHREAD_H_
-#define _RISNETTCPMSGACLIENTTHREAD_H_
+#ifndef _RISNETTCPMSGCLIENTTHREAD_H_
+#define _RISNETTCPMSGCLIENTTHREAD_H_
 
 /*==============================================================================
 Tcp client thread classes.
@@ -39,7 +39,7 @@ or callbacks in their configure calls.
 #include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
 
-#include "risNetTcpMsgASocket.h"
+#include "risNetTcpMsgSocket.h"
 
 namespace Ris
 {
@@ -70,10 +70,10 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-class TcpMsgAClientThread : public Ris::Threads::BaseThreadWithTermFlag
+class TcpMsgClientThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
-   TcpMsgAClientThread();
+   TcpMsgClientThread();
 
    //--------------------------------------------------------------
    // Configure:
@@ -145,7 +145,7 @@ public:
    // Sockets:
 
    // Socket instance
-   TcpMsgASocket mSocket;
+   TcpMsgSocket mSocket;
 
    // Socket address that socket instance connects to
    Sockets::SocketAddress mSocketAddress;

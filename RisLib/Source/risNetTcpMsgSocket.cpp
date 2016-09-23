@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "risNetTcpMsgASocket.h"
+#include "risNetTcpMsgSocket.h"
 
 namespace Ris
 {
@@ -19,7 +19,7 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-TcpMsgASocket::TcpMsgASocket()
+TcpMsgSocket::TcpMsgSocket()
 {
    mTxBuffer = Sockets::memAlloc(BufferSize);
    mTxLength=0;
@@ -32,7 +32,7 @@ TcpMsgASocket::TcpMsgASocket()
    mTxMsgMonkey=0;
 }
 //******************************************************************************
-TcpMsgASocket::~TcpMsgASocket()
+TcpMsgSocket::~TcpMsgSocket()
 {
    Sockets::memFree(mTxBuffer);
    Sockets::memFree(mRxBuffer);
@@ -40,7 +40,7 @@ TcpMsgASocket::~TcpMsgASocket()
 //******************************************************************************
 // Configure the socket
 
-void TcpMsgASocket::configure(
+void TcpMsgSocket::configure(
    Sockets::SocketAddress    aSocketAddress,
    BaseMsgMonkeyCreator* aMsgMonkeyCreator)
 {
@@ -59,13 +59,13 @@ void TcpMsgASocket::configure(
 
    if (mStatus==0)
    {
-      Prn::print(Prn::SocketInit2, "TcpMsgASocket       $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "TcpMsgSocket       $ %16s : %d",
          aSocketAddress.mIpAddr.mString,
          aSocketAddress.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "TcpMsgASocket       $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "TcpMsgSocket       $ %16s : %d $ %d %d",
          aSocketAddress.mIpAddr.mString,
          aSocketAddress.mPort,
          mStatus,
@@ -74,7 +74,7 @@ void TcpMsgASocket::configure(
 
 }
 
-void TcpMsgASocket::configure(
+void TcpMsgSocket::configure(
    BaseMsgMonkeyCreator* aMsgMonkeyCreator)
 {
    if (mRxMsgMonkey == 0) mRxMsgMonkey = aMsgMonkeyCreator->createNew();
@@ -84,7 +84,7 @@ void TcpMsgASocket::configure(
 //******************************************************************************
 // Reconfigure the socket
 
-void TcpMsgASocket::reconfigure()
+void TcpMsgSocket::reconfigure()
 {
    mTxMsgCount=0;
    mRxMsgCount=0;
@@ -96,7 +96,7 @@ void TcpMsgASocket::reconfigure()
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket
 
-bool TcpMsgASocket::doSendMsg(ByteContent* aTxMsg)
+bool TcpMsgSocket::doSendMsg(ByteContent* aTxMsg)
 {
    if (!aTxMsg) return false;
 
@@ -131,7 +131,7 @@ bool TcpMsgASocket::doSendMsg(ByteContent* aTxMsg)
 
    if (!tRet)
    {
-      Prn::print(Prn::SocketRun1, "ERROR TcpMsgASocket::doSendMsg FAIL");
+      Prn::print(Prn::SocketRun1, "ERROR TcpMsgSocket::doSendMsg FAIL");
    }
 
    return true;
@@ -140,7 +140,7 @@ bool TcpMsgASocket::doSendMsg(ByteContent* aTxMsg)
 // This receives data from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool TcpMsgASocket::doRecvMsg (ByteContent*& aRxMsg)
+bool TcpMsgSocket::doRecvMsg (ByteContent*& aRxMsg)
 {
    //-------------------------------------------------------------------------
    // Initialize

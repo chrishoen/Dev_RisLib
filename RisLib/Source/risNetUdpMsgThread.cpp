@@ -8,7 +8,7 @@
 #include "prnPrint.h"
 
 #include "ris_priorities.h"
-#include "risNetUdpMsgAThread.h"
+#include "risNetUdpMsgThread.h"
 
 namespace Ris
 {
@@ -19,7 +19,7 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 
-UdpMsgAThread::UdpMsgAThread()
+UdpMsgThread::UdpMsgThread()
 {
    mThreadPriority = get_default_udp_rx_thread_priority();
    mLocalIpAddress[0]=0;
@@ -31,7 +31,7 @@ UdpMsgAThread::UdpMsgAThread()
 //******************************************************************************
 // Configure:
 
-void UdpMsgAThread::configure(
+void UdpMsgThread::configure(
    char*                      aLocalIpAddress,
    int                        aLocalIpPort,
    char*                      aRemoteIpAddress,
@@ -54,9 +54,9 @@ void UdpMsgAThread::configure(
 // Thread init function, base class overload.
 // It configures the socket.
 
-void UdpMsgAThread::threadInitFunction()
+void UdpMsgThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit1, "UdpMsgAThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction BEGIN");
 
    mRxSocket.configure(
       mLocalIpAddress,
@@ -68,7 +68,7 @@ void UdpMsgAThread::threadInitFunction()
       mRemoteIpPort,
       mMsgMonkeyCreator);
 
-   Prn::print(Prn::SocketInit1, "UdpMsgAThread::threadInitFunction END");
+   Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -76,7 +76,7 @@ void UdpMsgAThread::threadInitFunction()
 // It contains a while loop that manages the connection to the server
 // and receives messages.
 
-void  UdpMsgAThread::threadRunFunction()
+void  UdpMsgThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun1, "UdpRxMsgThread::threadRunFunction");
    
@@ -118,9 +118,9 @@ void  UdpMsgAThread::threadRunFunction()
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void UdpMsgAThread::threadExitFunction()
+void UdpMsgThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit1, "UdpMsgAThread::threadExitFunction");
+   Prn::print(Prn::SocketInit1, "UdpMsgThread::threadExitFunction");
 }
 //******************************************************************************
 // Shutdown, base class overload.
@@ -131,7 +131,7 @@ void UdpMsgAThread::threadExitFunction()
 // then the terminate request flag will be polled and the threadRunFunction 
 // will exit.
 
-void UdpMsgAThread::shutdownThread()
+void UdpMsgThread::shutdownThread()
 {
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
@@ -142,7 +142,7 @@ void UdpMsgAThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpMsgAThread::processRxMsg(Ris::ByteContent* aMsg)
+void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
@@ -152,7 +152,7 @@ void UdpMsgAThread::processRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void UdpMsgAThread::sendMsg (Ris::ByteContent* aMsg)
+void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {
    mTxSocket.doSendMsg(aMsg);
 }

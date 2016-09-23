@@ -1,10 +1,10 @@
-#ifndef _RISBYTEMSGBHEADER_H_
-#define _RISBYTEMSGBHEADER_H_
+#ifndef _RISBYTEMSGHEADER_H_
+#define _RISBYTEMSGHEADER_H_
 
 /*==============================================================================
 
-UdpRxMsgBSocket -- udp receive socket
-UdpTxMsgBSocket -- udp transmit socket
+UdpRxMsgSocket -- udp receive socket
+UdpTxMsgSocket -- udp transmit socket
 
 ==============================================================================*/
 
@@ -12,7 +12,7 @@ UdpTxMsgBSocket -- udp transmit socket
 //*********************************************************************************
 //*********************************************************************************
 
-#include "risByteMsgB.h"
+#include "risByteMsg.h"
 #include "risByteContent.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
@@ -24,11 +24,11 @@ namespace Ris
 //******************************************************************************
 // This encapsualtes the message header.
 
-class MsgBHeader : public Ris::ByteContent
+class MsgHeader : public Ris::ByteContent
 {
 public:
    // Constructor
-   MsgBHeader();
+   MsgHeader();
    void reset();
 
    //------------------------------------------------------------------------
@@ -90,8 +90,8 @@ public:
    // which they transfer into and out of the headers.
    //------------------------------------------------------------------------
 
-   void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aParent);
-   void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aParent);
+   void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aParent);
+   void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aParent);
 
    //------------------------------------------------------------------------
    // These are set by headerCopyToFrom and used by headerReCopyToFrom,

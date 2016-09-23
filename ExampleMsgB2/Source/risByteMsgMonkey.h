@@ -1,10 +1,10 @@
-#ifndef _RISBYTEMSGBMONKEY_H_
-#define _RISBYTEMSGBMONKEY_H_
+#ifndef _RISBYTEMSGMONKEY_H_
+#define _RISBYTEMSGMONKEY_H_
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteMsgB.h"
+#include "risByteMsg.h"
 #include "risByteBuffer.h"
 
 namespace Ris
@@ -30,12 +30,12 @@ public:
    //***************************************************************************
    // Create a new record, based on a record type.
 
-   virtual Ris::ByteMsgB* createMessage (int aType)=0;
+   virtual Ris::ByteMsg* createMessage (int aType)=0;
 
    //***************************************************************************
    // Copy a record to/from a byte buffer.
 
-   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsgB)=0;
+   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)=0;
 };
 
 }//namespace

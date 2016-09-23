@@ -5,8 +5,8 @@
 //******************************************************************************
 //******************************************************************************
 #include "risContainers.h"
-#include "risNetUdpMsgBSocket.h"
-#include "risNetUdpMsgBThread.h"
+#include "risNetUdpMsgSocket.h"
+#include "risNetUdpMsgThread.h"
 #include "risThreadsQCallThread.h"
 
 #include "exampleMsg.h"
@@ -46,21 +46,21 @@ public:
    // Tcp client thread, this manages session connections and 
    // message transmission and reception
 
-   Ris::Net::UdpMsgBThread*  mUdpMsgBThread;
+   Ris::Net::UdpMsgThread*  mUdpMsgThread;
 
-   // Message monkey used by mUdpMsgBThread
+   // Message monkey used by mUdpMsgThread
    MsgMonkey mMsgMonkey;
 
    //--------------------------------------------------------------
    // QCall:
 
-   // QCalls registered to mUdpMsgBThread
-   Ris::Net::UdpMsgBThread::RxMsgQCall    mRxMsgQCall;
+   // QCalls registered to mUdpMsgThread
+   Ris::Net::UdpMsgThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxMessage   (Ris::ByteMsgB* aMsg);
+   void executeRxMessage   (Ris::ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
@@ -80,7 +80,7 @@ public:
    //--------------------------------------------------------------
    // Send a record
 
-   void sendMsg (Ris::ByteMsgB* aMsg);
+   void sendMsg (Ris::ByteMsg* aMsg);
    void sendTestMsg();   
 
 };

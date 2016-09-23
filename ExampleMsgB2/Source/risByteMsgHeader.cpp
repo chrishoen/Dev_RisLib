@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "risByteMsgBHeader.h"
+#include "risByteMsgHeader.h"
 
 namespace Ris
 {
@@ -18,7 +18,7 @@ namespace Ris
 //******************************************************************************
 // Definitions
 
-class MsgBHeaderDefT
+class MsgHeaderDefT
 {
 public:
    //************************************************************************
@@ -33,7 +33,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-MsgBHeader::MsgBHeader()
+MsgHeader::MsgHeader()
 {
    mSyncWord1         = 0x11111111;
    mSyncWord2         = 0x22222222;
@@ -47,7 +47,7 @@ MsgBHeader::MsgBHeader()
    mHeaderValidFlag   = false;
 }
 
-void MsgBHeader::reset()
+void MsgHeader::reset()
 {
    mSyncWord1         = 0;
    mSyncWord2         = 0;
@@ -61,14 +61,14 @@ void MsgBHeader::reset()
 }
 
 
-bool MsgBHeader::validate()
+bool MsgHeader::validate()
 {
    // Test for error
    bool tError =
       mSyncWord1 != 0x11111111 ||
       mSyncWord2 != 0x22222222 ||
-      mMessageLength < MsgBHeader::cLength  ||
-      mMessageLength > MsgBHeaderDefT::cBufferSize;
+      mMessageLength < MsgHeader::cLength  ||
+      mMessageLength > MsgHeaderDefT::cBufferSize;
 
    // If no error then valid
    mHeaderValidFlag = !tError;
@@ -90,7 +90,7 @@ bool MsgBHeader::validate()
 // Copy To and Copy From are symmetrical.
 //---------------------------------------------------------------------------
 
-void MsgBHeader::copyToFrom (Ris::ByteBuffer* aBuffer)
+void MsgHeader::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
    aBuffer->copy( &mSyncWord1         );
    aBuffer->copy( &mSyncWord2         );
@@ -126,7 +126,7 @@ void MsgBHeader::copyToFrom (Ris::ByteBuffer* aBuffer)
 // which they transfer into and out of the headers.
 //---------------------------------------------------------------------------
 
-void MsgBHeader::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteMsgB* aParent)
+void MsgHeader::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aParent)
 {
    //------------------------------------------------------------------------
    // Instances of this class are members of parent message classes.
@@ -190,7 +190,7 @@ void MsgBHeader::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteMsgB* aPare
 //******************************************************************************
 //******************************************************************************
 
-void MsgBHeader::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteMsgB* aParent)
+void MsgHeader::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aParent)
 {
    // If this is a put operation then this actually copies the header into
    // the buffer.

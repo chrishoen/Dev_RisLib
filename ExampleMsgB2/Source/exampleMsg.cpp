@@ -9,44 +9,44 @@ namespace ExampleMsg
    //******************************************************************************
    // This creates a new record, based on a record type
 
-   Ris::ByteMsgB* MsgCreator::createMessage(int aMsgType)
+   Ris::ByteMsg* MsgCreator::createMessage(int aMsgType)
    {
-      Ris::ByteMsgB* tMsgB = 0;
+      Ris::ByteMsg* tMsg = 0;
 
       switch (aMsgType)
       {
       case TypeIdT::cTestMsg :
-         tMsgB = new TestMsg;
+         tMsg = new TestMsg;
          break;
       case TypeIdT::cStatusMsg :
-         tMsgB = new StatusMsg;
+         tMsg = new StatusMsg;
          break;
       case TypeIdT::cData1Msg :
-         tMsgB = new Data1Msg;
+         tMsg = new Data1Msg;
          break;
       case TypeIdT::cData2Msg :
-         tMsgB = new Data2Msg;
+         tMsg = new Data2Msg;
          break;
       case TypeIdT::cData3Msg :
-         tMsgB = new Data3Msg;
+         tMsg = new Data3Msg;
          break;
       case TypeIdT::cData4Msg :
-         tMsgB = new Data4Msg;
+         tMsg = new Data4Msg;
          break;
       default :
          return 0;
          break;
       }
 
-      return tMsgB;
+      return tMsg;
    }
 
    //****************************************************************************
    //****************************************************************************
    //****************************************************************************
-   // MsgBCopier
+   // MsgCopier
 
-   void MsgCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsg)
+   void MsgCopier::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
    {
       switch (aMsg->mMessageType)
       {

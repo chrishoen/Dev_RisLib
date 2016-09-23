@@ -1,5 +1,5 @@
-#ifndef _RISBYTEMSGB_H_
-#define _RISBYTEMSGB_H_
+#ifndef _RISBYTEMSG_H_
+#define _RISBYTEMSG_H_
 /*==============================================================================
 
 ByteContent and ByteBuffer classes.
@@ -29,14 +29,14 @@ namespace Ris
 //******************************************************************************
 // This is a base class for classes that can be copied to/from ByteBuffers.
 
-class ByteMsgB
+class ByteMsg
 {
 public:
    // General purpose identifier
    int mMessageType;
 
    // Constructor
-   ByteMsgB()
+   ByteMsg()
    {
       mMessageType = 0;
    }
@@ -48,14 +48,14 @@ public:
 // This is an abstract base class for a message creator. Inheriting classes 
 // are used to create messages for a specific message set.
 
-class BaseMsgBCreator
+class BaseMsgCreator
 {
 public:
 
    //***********************************************************************
    // Create a new record, based on a record type.
 
-   virtual Ris::ByteMsgB* createMessage (int aType)=0;
+   virtual Ris::ByteMsg* createMessage (int aType)=0;
 
 };
 
@@ -65,14 +65,14 @@ public:
 // This is an abstract base class for a message copier. Inheriting classes 
 // are used to copy messages for a specific message set to/from byte buffers.
 
-class  BaseMsgBCopier
+class  BaseMsgCopier
 {
 public:
 
    //***********************************************************************
    // Copy records to/from a byte buffer.
 
-   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsgB)=0;
+   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)=0;
 };
 
 //******************************************************************************

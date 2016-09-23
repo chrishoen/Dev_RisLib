@@ -1,5 +1,5 @@
-#ifndef _RISNETUDPMSGBTHREAD_H_
-#define _RISNETUDPMSGBTHREAD_H_
+#ifndef _RISNETUDPMSGTHREAD_H_
+#define _RISNETUDPMSGTHREAD_H_
 
 /*==============================================================================
 
@@ -10,16 +10,16 @@ execution context for a udp socket that receives udp datagrams.
 
 There is a base class and three classes that provide different interfaces.
 
-1) UdpMsgBThread   provides the udp receiver thread functionality
+1) UdpMsgThread   provides the udp receiver thread functionality
 
-2) UdpMsgBThreadWithQCall : public UdpMsgBThread provides a udp receiver
+2) UdpMsgThreadWithQCall : public UdpMsgThread provides a udp receiver
    thread with a QCall (queued function call) interface
 
-3) UdpMsgBThreadWithCallback : public UdpMsgBThread provides a udp
+3) UdpMsgThreadWithCallback : public UdpMsgThread provides a udp
    receiver thread with a callback interface
 
 Threads that want to perform Udp receiver activity maintain instances of 
-UdpMsgBThreadWithQCall or UdpMsgBThreadWithCallback and pass in QCalls
+UdpMsgThreadWithQCall or UdpMsgThreadWithCallback and pass in QCalls
 or callbacks in their configure calls.
 
 ==============================================================================*/
@@ -33,7 +33,7 @@ or callbacks in their configure calls.
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
-#include "risNetUdpMsgBSocket.h"
+#include "risNetUdpMsgSocket.h"
 
 namespace Ris
 {
@@ -55,12 +55,12 @@ namespace Net
 // state variables and it provides the context for the blocking of the 
 // recv call.
 
-class UdpMsgBThread : public Ris::Threads::BaseThreadWithTermFlag
+class UdpMsgThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
    typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
 
-   UdpMsgBThread();
+   UdpMsgThread();
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -81,7 +81,7 @@ public:
    // aMsgParser  is the message parser to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
 
-   typedef Ris::Threads::QCall1<Ris::ByteMsgB*> RxMsgQCall;
+   typedef Ris::Threads::QCall1<Ris::ByteMsg*> RxMsgQCall;
 
    void configure(
       char*                 aLocalIpAddress,
@@ -94,11 +94,11 @@ public:
    //--------------------------------------------------------------
    // Process:
    
-   // This is called by the UdpMsgBThread threadRunFunction 
+   // This is called by the UdpMsgThread threadRunFunction 
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg       (Ris::ByteMsgB* aMsg);
+   void processRxMsg       (Ris::ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    // QCall:
@@ -109,7 +109,7 @@ public:
    //--------------------------------------------------------------
    // Transmit message:
 
-   void sendMsg (Ris::ByteMsgB* aMsg);
+   void sendMsg (Ris::ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    // Sockets:
@@ -121,8 +121,8 @@ public:
    int   mRemoteIpPort;
 
    // Socket instance
-   UdpRxMsgBSocket mRxSocket;
-   UdpTxMsgBSocket mTxSocket;
+   UdpRxMsgSocket mRxSocket;
+   UdpTxMsgSocket mTxSocket;
 
    // Message parser creator, this is used by the receive socket to
    // create an instance of a message parser

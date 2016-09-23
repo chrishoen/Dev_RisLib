@@ -20,7 +20,7 @@ MsgMonkey::MsgMonkey()
 //******************************************************************************
 // This creates a new record, based on a record type
 
-Ris::ByteMsgB* MsgMonkey::createMessage(int aMsgType)
+Ris::ByteMsg* MsgMonkey::createMessage(int aMsgType)
 {
    ExampleMsg::MsgCreator tCreator;
    return tCreator.createMessage(aMsgType);
@@ -29,9 +29,9 @@ Ris::ByteMsgB* MsgMonkey::createMessage(int aMsgType)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// MsgBCopier
+// MsgCopier
 
-void MsgMonkey::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsg)
+void MsgMonkey::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
 {
    ExampleMsg::MsgCopier tCopier;
    tCopier.copyToFrom(aBuffer, aMsg);

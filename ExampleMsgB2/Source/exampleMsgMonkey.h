@@ -27,12 +27,12 @@ public:
    //***************************************************************************
    // This creates a new record, based on a record type
 
-   Ris::ByteMsgB* createMessage (int aType) override;
+   Ris::ByteMsg* createMessage (int aType) override;
 
    //***************************************************************************
    // This copies byte buffers to/from records
 
-   void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsgB) override;
+   void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg) override;
 
 };
 }

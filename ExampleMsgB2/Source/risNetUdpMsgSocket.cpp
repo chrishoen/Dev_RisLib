@@ -9,8 +9,8 @@
 
 #include "prnPrint.h"
 
-#include "risByteMsgBHeader.h"
-#include "risNetUdpMsgBSocket.h"
+#include "risByteMsgHeader.h"
+#include "risNetUdpMsgSocket.h"
 
 namespace Ris
 {
@@ -20,7 +20,7 @@ namespace Net
 //***************************************************************************
 //***************************************************************************
 
-UdpRxMsgBSocket::UdpRxMsgBSocket()
+UdpRxMsgSocket::UdpRxMsgSocket()
 {
    mRxLength     = 0;
    mRxCount      = 0;
@@ -31,7 +31,7 @@ UdpRxMsgBSocket::UdpRxMsgBSocket()
 //***************************************************************************
 // Configure the socket
 
-void UdpRxMsgBSocket::configure(
+void UdpRxMsgSocket::configure(
    char*                aLocalIpAddr,
    int                  aLocalIpPort,
    Ris::BaseMsgMonkey* aMonkey)
@@ -46,13 +46,13 @@ void UdpRxMsgBSocket::configure(
 
    if (mStatus==0)
    {
-      Prn::print(Prn::SocketInit2, "UdpRxMsgBSocket     $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d",
          mLocal.mIpAddr.mString,
          mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpRxMsgBSocket     $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d $ %d %d",
          mLocal.mIpAddr.mString,
          mLocal.mPort,
          mStatus,
@@ -66,7 +66,7 @@ void UdpRxMsgBSocket::configure(
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpRxMsgBSocket::doReceiveMsg (Ris::ByteMsgB*& aMsg)
+bool UdpRxMsgSocket::doReceiveMsg (Ris::ByteMsg*& aMsg)
 {
    //-------------------------------------------------------------------------
    // Initialize
@@ -108,7 +108,7 @@ bool UdpRxMsgBSocket::doReceiveMsg (Ris::ByteMsgB*& aMsg)
    // Copy from the receive buffer into an instance of the header
    // and validate the header
 
-   MsgBHeader tHeader;
+   MsgHeader tHeader;
 
    tBuffer.setCopyFrom();
    tBuffer.getFromBuffer(&tHeader);
@@ -149,7 +149,7 @@ bool UdpRxMsgBSocket::doReceiveMsg (Ris::ByteMsgB*& aMsg)
 //***************************************************************************
 //***************************************************************************
 
-UdpTxMsgBSocket::UdpTxMsgBSocket()
+UdpTxMsgSocket::UdpTxMsgSocket()
 {
    mTxCount      = 0;
    mTxLength     = 0;
@@ -160,7 +160,7 @@ UdpTxMsgBSocket::UdpTxMsgBSocket()
 //***************************************************************************
 // Configure the socket. Use with the next doSendMsg.
 
-void UdpTxMsgBSocket::configure(
+void UdpTxMsgSocket::configure(
    char*                aRemoteIpAddr,
    int                  aRemoteIpPort,
    Ris::BaseMsgMonkey* aMonkey)
@@ -174,13 +174,13 @@ void UdpTxMsgBSocket::configure(
 
    if (mStatus==0)
    {
-      Prn::print(Prn::SocketInit2, "UdpTxMsgBSocket     $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d",
          mRemote.mIpAddr.mString,
          mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpTxMsgBSocket     $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d $ %d %d",
          mRemote.mIpAddr.mString,
          mRemote.mPort,
          mStatus,
@@ -194,7 +194,7 @@ void UdpTxMsgBSocket::configure(
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket. Use with the previous configure.
 
-bool UdpTxMsgBSocket::doSendMsg(Ris::ByteMsgB* aMsg)
+bool UdpTxMsgSocket::doSendMsg(Ris::ByteMsg* aMsg)
 {
    // Guard
    if (!mValidFlag) return false;
@@ -205,7 +205,7 @@ bool UdpTxMsgBSocket::doSendMsg(Ris::ByteMsgB* aMsg)
    //------------------------------------------------------------------------
    // Instance of a header,set members
 
-   MsgBHeader tHeader;
+   MsgHeader tHeader;
    tHeader.mMessageIdentifier = aMsg->mMessageType;
 
    //------------------------------------------------------------------------
@@ -233,7 +233,7 @@ bool UdpTxMsgBSocket::doSendMsg(Ris::ByteMsgB* aMsg)
    // Transmit the buffer
    mTxLength=tBuffer.getLength();
    doSendTo(mRemote,tBuffer.getBaseAddress(),mTxLength);
-   Prn::print(Prn::SocketRun1, "UdpTxMsgBSocket  doSendTo   $ %d",mTxLength);
+   Prn::print(Prn::SocketRun1, "UdpTxMsgSocket  doSendTo   $ %d",mTxLength);
 
    mTxCount++;
 

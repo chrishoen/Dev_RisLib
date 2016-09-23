@@ -25,7 +25,7 @@ NetworkThread::NetworkThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpMsgBThread = new Ris::Net::UdpMsgBThread;
+   mUdpMsgThread = new Ris::Net::UdpMsgThread;
 
    // Initialize QCalls
    mRxMsgQCall.bind   (this,&NetworkThread::executeRxMessage);
@@ -35,7 +35,7 @@ NetworkThread::NetworkThread()
 
 NetworkThread::~NetworkThread()
 {
-   delete mUdpMsgBThread;
+   delete mUdpMsgThread;
 }
 
 //******************************************************************************
@@ -48,7 +48,7 @@ void NetworkThread::configure()
    //---------------------------------------------------------------------------
    // Configure socket thread
 
-   mUdpMsgBThread->configure(
+   mUdpMsgThread->configure(
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
@@ -65,7 +65,7 @@ void NetworkThread::launchThread()
    Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
 
    // Launch child thread
-   mUdpMsgBThread->launchThread(); 
+   mUdpMsgThread->launchThread(); 
    
    // Launch this thread
    BaseClass::launchThread();
@@ -78,7 +78,7 @@ void  NetworkThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
    // Shutdown the tcp client thread
-   mUdpMsgBThread->shutdownThread();
+   mUdpMsgThread->shutdownThread();
 
    // Base class exit
    BaseClass::threadExitFunction();
@@ -87,7 +87,7 @@ void  NetworkThread::threadExitFunction()
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeRxMessage(Ris::ByteMsgB* aMsg)
+void NetworkThread::executeRxMessage(Ris::ByteMsg* aMsg)
 {
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
@@ -112,7 +112,7 @@ void NetworkThread::executeRxMessage(Ris::ByteMsgB* aMsg)
          processRxMsg((Data4Msg*)aMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsgB ??? %d",aMsg->mMessageType);
+         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",aMsg->mMessageType);
          delete aMsg;
          break;
    }
@@ -208,9 +208,9 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void NetworkThread::sendMsg (Ris::ByteMsgB* aMsg)
+void NetworkThread::sendMsg (Ris::ByteMsg* aMsg)
 {
-   mUdpMsgBThread->sendMsg(aMsg);
+   mUdpMsgThread->sendMsg(aMsg);
 }
 
 //******************************************************************************
@@ -218,10 +218,10 @@ void NetworkThread::sendMsg (Ris::ByteMsgB* aMsg)
 
 void NetworkThread::sendTestMsg()
 {
-   TestMsg* tMsgB = new TestMsg;
-   tMsgB->mCode1=201;
+   TestMsg* tMsg = new TestMsg;
+   tMsg->mCode1=201;
  
-   mUdpMsgBThread->sendMsg(tMsgB);
+   mUdpMsgThread->sendMsg(tMsg);
 }
 
 }//namespace

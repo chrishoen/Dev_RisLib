@@ -1,10 +1,10 @@
-#ifndef _RISNETUDPMSGBSOCKET_H_
-#define _RISNETUDPMSGBSOCKET_H_
+#ifndef _RISNETUDPMSGSOCKET_H_
+#define _RISNETUDPMSGSOCKET_H_
 
 /*==============================================================================
 
-UdpRxMsgBSocket -- udp receive socket
-UdpTxMsgBSocket -- udp transmit socket
+UdpRxMsgSocket -- udp receive socket
+UdpTxMsgSocket -- udp transmit socket
 
 ==============================================================================*/
 
@@ -15,7 +15,7 @@ UdpTxMsgBSocket -- udp transmit socket
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 #include "risByteContent.h"
-#include "risByteMsgB.h"
+#include "risByteMsg.h"
 #include "risByteMsgMonkey.h"
 
 namespace Ris
@@ -28,10 +28,10 @@ namespace Net
 // Udp receive message socket.
 // Messages are based on the Ris::ByteContent message encapsulation scheme.
 
-class  UdpRxMsgBSocket : public Sockets::BaseUdpSocket
+class  UdpRxMsgSocket : public Sockets::BaseUdpSocket
 {
 public:
-   UdpRxMsgBSocket(); 
+   UdpRxMsgSocket(); 
 
    //------------------------------------------------------------------------
    // Socket:
@@ -46,7 +46,7 @@ public:
    // It returns true if successful.
    // The recvfrom address is stored in mFromAddress.
 
-   bool doReceiveMsg (Ris::ByteMsgB*& aMsg);
+   bool doReceiveMsg (Ris::ByteMsg*& aMsg);
 
    Sockets::SocketAddress mFromAddress;
 
@@ -74,10 +74,10 @@ public:
 // Udp transmit message socket.
 // Messages are based on the Ris::ByteContent message encapsulation scheme.
 
-class  UdpTxMsgBSocket : public Sockets::BaseUdpSocket
+class  UdpTxMsgSocket : public Sockets::BaseUdpSocket
 {
 public:
-   UdpTxMsgBSocket(); 
+   UdpTxMsgSocket(); 
 
    //------------------------------------------------------------------------
    // Socket, these two should be used together
@@ -92,7 +92,7 @@ public:
    // It returns true if successful.
    // It is protected by the transmit mutex.
 
-   bool doSendMsg(Ris::ByteMsgB* aMsg);
+   bool doSendMsg(Ris::ByteMsg* aMsg);
 
    //------------------------------------------------------------------------
    // This is a record copier that is used to copy a record to a byte

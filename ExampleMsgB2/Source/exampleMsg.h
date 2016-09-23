@@ -2,7 +2,7 @@
 #define _EXAMPLEMSG_H_
 
 #include "risByteBuffer.h"
-#include "risByteMsgB.h"
+#include "risByteMsg.h"
 
 namespace ExampleMsg
 {
@@ -10,7 +10,7 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
     //***************************************************************************
-    // MsgB Types
+    // Msg Types
 
     class TypeIdT
     {
@@ -28,7 +28,7 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
-    class TestMsg : public Ris::ByteMsgB
+    class TestMsg : public Ris::ByteMsg
     {
     public:
 
@@ -51,7 +51,7 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
-    class StatusMsg : public Ris::ByteMsgB
+    class StatusMsg : public Ris::ByteMsg
     {
     public:
 
@@ -73,7 +73,7 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
-    class Data1Msg : public Ris::ByteMsgB
+    class Data1Msg : public Ris::ByteMsg
     {
     public:
 
@@ -97,7 +97,7 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
-    class Data2Msg : public Ris::ByteMsgB
+    class Data2Msg : public Ris::ByteMsg
     {
     public:
 
@@ -121,7 +121,7 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
-    class Data3Msg : public Ris::ByteMsgB
+    class Data3Msg : public Ris::ByteMsg
     {
     public:
 
@@ -149,7 +149,7 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
-    class Data4Msg : public Ris::ByteMsgB
+    class Data4Msg : public Ris::ByteMsg
     {
     public:
 
@@ -176,14 +176,14 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
-    class MsgCreator : public Ris::BaseMsgBCreator
+    class MsgCreator : public Ris::BaseMsgCreator
     {
     public:
 
        //***********************************************************************
        // Create a new record, based on a record type
 
-       Ris::ByteMsgB* createMessage(int aMsgType) override;
+       Ris::ByteMsg* createMessage(int aMsgType) override;
 
     };
 
@@ -191,14 +191,14 @@ namespace ExampleMsg
     //***************************************************************************
     //***************************************************************************
 
-    class MsgCopier : public Ris::BaseMsgBCopier
+    class MsgCopier : public Ris::BaseMsgCopier
     {
     public:
 
        //***********************************************************************
        // Copy a record to/from a byte buffer. 
 
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsgB* aMsg) override;
+       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg) override;
 
        //***********************************************************************
        // Copy a record to/from a byte buffer. 

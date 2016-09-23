@@ -45,9 +45,9 @@ void NetworkThread::configure()
    Prn::print(Prn::ThreadInit1, "NetworkThread::configure");
 
    //--------------------------------------------------------------------------- 
-   // Configure message parser
+   // Configure message monkey
 
-   mMsgParserCreator.configure(gSettings.mMyAppNumber);
+   mMsgMonkeyCreator.configure(gSettings.mMyAppNumber);
 
    //---------------------------------------------------------------------------
    // Configure message thread
@@ -57,7 +57,7 @@ void NetworkThread::configure()
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mMsgParserCreator,
+      &mMsgMonkeyCreator,
       &mRxMsgQCall);
 }
 

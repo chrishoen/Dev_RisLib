@@ -14,7 +14,7 @@ UdpTxMsgSocket -- udp transmit socket
 
 #include "risPortableTypes.h"
 #include "risByteContent.h"
-#include "risByteMsgAParser.h"
+#include "risByteMsgMonkey.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 
@@ -56,7 +56,7 @@ namespace Net
       void configure(
          char*                     aLocalIpAddr,
          int                       aLocalIpPort,
-         BaseMsgAParserCreator* aMsgParserCreator);
+         BaseMsgMonkeyCreator* aMsgMonkeyCreator);
 
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
@@ -65,12 +65,12 @@ namespace Net
 
       Sockets::SocketAddress mFromAddress;
 
-      // This is a message parser that is used to get details about 
+      // This is a message monkey that is used to get details about 
       // a message from a message header that is contained in a
       // byte buffer. It allows the doReceiveMsg method to receive and extract a
       // message from a byte buffer without the having the message code
       // visible to it.
-      BaseMsgAParser* mMsgParser;
+      BaseMsgMonkey* mMsgMonkey;
 
       // Buffer
       int    mRxLength;
@@ -102,7 +102,7 @@ namespace Net
       void configure(
          char*                       aRemoteIpAddr,
          int                         aRemoteIpPort,
-         BaseMsgAParserCreator*   aMsgParserCreator);
+         BaseMsgMonkeyCreator*   aMsgMonkeyCreator);
 
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
@@ -113,7 +113,7 @@ namespace Net
       // Socket, these two should be used together
 
       void configure(
-         BaseMsgAParser* aMsgParser);
+         BaseMsgMonkey* aMsgMonkey);
 
       // This sends a message over the socket via a blocking sendto call.
       // It returns true if successful.
@@ -122,13 +122,13 @@ namespace Net
       bool doSendMsg(Sockets::SocketAddress aRemote,ByteContent* aMsg);
 
       //------------------------------------------------------------------------
-      // This is a message parser that is used to get details about 
+      // This is a message monkey that is used to get details about 
       // a message from a message header that is contained in a
       // byte buffer. It allows the doReceiveMsg method to receive and extract a
       // message from a byte buffer without the having the message code
       // visible to it.
 
-      BaseMsgAParser* mMsgParser;
+      BaseMsgMonkey* mMsgMonkey;
 
       //------------------------------------------------------------------------
       // Transmit mutex is used by doSendMsg for mutual exclusion.

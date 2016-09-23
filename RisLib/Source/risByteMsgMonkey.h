@@ -1,5 +1,5 @@
-#ifndef _RISBYTEMSGAPARSER_H_
-#define _RISBYTEMSGAPARSER_H_
+#ifndef _RISBYTEMSGMONKEY_H_
+#define _RISBYTEMSGMONKEY_H_
 /*==============================================================================
 ByteContent support classes for messages.
 ==============================================================================*/
@@ -14,17 +14,17 @@ namespace Ris
 {
 
 //******************************************************************************
-// This is an abstract base class for a message parser. It can be used
+// This is an abstract base class for a message monkey. It can be used
 // by code that receives messages into byte buffers such that the message
 // classes don't have to be visible to the receiving code. Inheriting classes
 // provide all of the details that are needed by receiving code to receive and
 // extract messages, as opposed to having the message classes being visible
 // to the receiving code.
 
-class BaseMsgAParser
+class BaseMsgMonkey
 {
 public:
-   BaseMsgAParser();
+   BaseMsgMonkey();
 
    // Return a contant header length
    virtual int getHeaderLength()=0;
@@ -55,7 +55,7 @@ public:
    // Preprocess a message before it is sent
    virtual void processBeforeSend(Ris::ByteContent* msg){};
 
-   // Endianess for buffers associated with the parser.
+   // Endianess for buffers associated with the monkey.
    // If true then the messages will be sent in network order,
    // big endian. If false, then little endian.
    void setNetworkOrder (bool aNetworkOrder);
@@ -66,15 +66,15 @@ public:
 };
 
 //******************************************************************************
-// This is an abstract base class for a message parser creator. It defines
-// a method that inheriting classes overload to create new message parsers.
+// This is an abstract base class for a message monkey creator. It defines
+// a method that inheriting classes overload to create new message monkeys.
 // It is used by transmitters and receivers to create new instances of message
-// parsers.
+// monkeys.
 
-class BaseMsgAParserCreator
+class BaseMsgMonkeyCreator
 {
 public:
-   virtual BaseMsgAParser* createNew() = 0;
+   virtual BaseMsgMonkey* createNew() = 0;
 };
 
 }//namespace

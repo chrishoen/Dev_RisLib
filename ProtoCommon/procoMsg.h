@@ -36,7 +36,7 @@ StatusRequest
 // The message set is encapsulated by classes that are defined in the following
 // files.
 
-// Contains header, parser, message base classes
+// Contains header, monkey, message base classes
 #include "procoMsg_Base.h"    
 
 // Contains particular message classes

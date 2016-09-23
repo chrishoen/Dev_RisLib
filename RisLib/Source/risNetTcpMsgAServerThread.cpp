@@ -77,7 +77,7 @@ void TcpMsgAServerThread::configure(
    char*                     aServerIpAddr,
    int                       aServerIpPort,
    int                       aMaxSessions, 
-   BaseMsgAParserCreator* aMsgParserCreator,
+   BaseMsgMonkeyCreator* aMsgMonkeyCreator,
    SessionQCall*             aSessionQCall,
    RxMsgQCall*               aRxMsgQCall,
    int                       aFlags)
@@ -86,7 +86,7 @@ void TcpMsgAServerThread::configure(
 
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
    mMaxSessions = aMaxSessions;
-   mMsgParserCreator = aMsgParserCreator;
+   mMsgMonkeyCreator = aMsgMonkeyCreator;
    mFlags = aFlags;
 
    mSessionQCall = *aSessionQCall;
@@ -104,10 +104,10 @@ void TcpMsgAServerThread::threadInitFunction()
    // Configure the hub socket
    mHubSocket.configure(mSocketAddress);
 
-   // Register the message parser for the node sockets
+   // Register the message monkey for the node sockets
    for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
    {
-      mNodeSocket[sessionIndex].configure(mMsgParserCreator);
+      mNodeSocket[sessionIndex].configure(mMsgMonkeyCreator);
    }
 
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");

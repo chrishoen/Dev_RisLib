@@ -47,8 +47,8 @@ void ClientThread::configure()
    Prn::print(Prn::ThreadInit1, "ClientThread::configure");
 
    //--------------------------------------------------------------------------- 
-   // Configure message parser
-   mMsgParserCreator.configure(gSettings.mMyAppNumber);
+   // Configure message monkey
+   mMsgMonkeyCreator.configure(gSettings.mMyAppNumber);
 
    //---------------------------------------------------------------------------
    // Configure child thread, client
@@ -56,7 +56,7 @@ void ClientThread::configure()
    mTcpClientThread->configure(
       "127.0.0.1",
       gSettings.mTcpServerPort,
-      &mMsgParserCreator,
+      &mMsgMonkeyCreator,
       &mSessionQCall,
       &mRxMsgQCall);
 }

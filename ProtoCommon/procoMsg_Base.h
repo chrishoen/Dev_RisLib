@@ -34,7 +34,7 @@ StatusRequest
 //******************************************************************************
 //******************************************************************************
 #include "risByteContent.h"
-#include "risByteMsgAParser.h"
+#include "risByteMsgMonkey.h"
 
 namespace ProtoComm
 {
@@ -135,13 +135,13 @@ namespace ProtoComm
    //******************************************************************************
    // This encapsualtes a message header.
    //******************************************************************************
-   // This is a message parser that can be used by code that receives messages
+   // This is a message monkey that can be used by code that receives messages
    // into byte buffers and then extracts them into message objects that live
    // on the heap.
 
    class BaseMsg;
 
-   class MsgParser : public Ris::BaseMsgAParser
+   class MsgMonkey : public Ris::BaseMsgMonkey
    {
    public:
       //-------------------------------------------------------
@@ -173,23 +173,23 @@ namespace ProtoComm
       int mSourceId;
    };
    //******************************************************************************
-   // This is a message parser creator. It defines a method that creates a new
-   // message parser. It is used by transmitters and receivers to create new
-   // instances of message parsers.
+   // This is a message monkey creator. It defines a method that creates a new
+   // message monkey. It is used by transmitters and receivers to create new
+   // instances of message monkeys.
 
-   class MsgAParserCreator : public  Ris::BaseMsgAParserCreator
+   class MsgMonkeyCreator : public  Ris::BaseMsgMonkeyCreator
    {
    public:
       // Constructor
-      MsgAParserCreator();
+      MsgMonkeyCreator();
 
       // Members
       void configure(int aSourceId);
       int  mSourceId;
 
-      // Base class overload, creates a new message parser and sets some of its 
+      // Base class overload, creates a new message monkey and sets some of its 
       // member variables.
-      Ris::BaseMsgAParser* createNew();
+      Ris::BaseMsgMonkey* createNew();
    };
 
    //******************************************************************************

@@ -79,7 +79,7 @@ public:
 
    // aLocalIpAddr    is the ip address of the local interface bound to
    // aLocalIpPort    is the ip port    of the local interface bound to
-   // aMsgParser  is the message parser to be used on receive messages
+   // aMsgMonkey  is the message monkey to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
 
    typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
@@ -89,7 +89,7 @@ public:
       int                          aLocalIpPort,
       char*                        aRemoteIpAddress,
       int                          aRemoteIpPort,
-      Ris::BaseMsgAParserCreator*  aMsgParserCreator,
+      Ris::BaseMsgMonkeyCreator*  aMsgMonkeyCreator,
       RxMsgQCall*                  aRxMsgQCall);
 
    //--------------------------------------------------------------
@@ -125,9 +125,9 @@ public:
    UdpRxMsgASocket mRxSocket;
    UdpTxMsgASocket mTxSocket;
 
-   // Message parser creator, this is used by the receive socket to
-   // create an instance of a message parser
-   BaseMsgAParserCreator* mMsgParserCreator;
+   // Message monkey creator, this is used by the receive socket to
+   // create an instance of a message monkey
+   BaseMsgMonkeyCreator* mMsgMonkeyCreator;
 };
 
 //******************************************************************************

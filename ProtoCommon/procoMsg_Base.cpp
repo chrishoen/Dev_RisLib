@@ -195,28 +195,28 @@ namespace ProtoComm
    //******************************************************************************
    //******************************************************************************
 
-   void  MsgParser::configure(int aSourceId)
+   void  MsgMonkey::configure(int aSourceId)
    {
       mSourceId=aSourceId;
    }
 
    //******************************************************************************
 
-   int  MsgParser::getHeaderLength()
+   int  MsgMonkey::getHeaderLength()
    {
       return Header::cLength;
    }
 
    //******************************************************************************
 
-   int  MsgParser::getMaxBufferSize()
+   int  MsgMonkey::getMaxBufferSize()
    {
       return MsgDefT::cMsgBufferSize;
    }
 
    //******************************************************************************
 
-   bool MsgParser::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
+   bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
    {
       // Extract header from buffer
       Header tHeader;
@@ -245,14 +245,14 @@ namespace ProtoComm
 
    //******************************************************************************
 
-   Ris::ByteContent* MsgParser::createMessage(int aMessageType)
+   Ris::ByteContent* MsgMonkey::createMessage(int aMessageType)
    {
       return MessageCreator::createMessage(aMessageType);
    }
 
    //******************************************************************************
 
-   void MsgParser::processBeforeSend(Ris::ByteContent* aMsg)
+   void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
    {
       BaseMsg* tx = (BaseMsg*)aMsg;
 
@@ -265,26 +265,26 @@ namespace ProtoComm
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // MsgParser creator
+   // MsgMonkey creator
 
-   MsgAParserCreator::MsgAParserCreator()
+   MsgMonkeyCreator::MsgMonkeyCreator()
    {
       mSourceId = 0;
    }
 
-   void MsgAParserCreator::configure(int aSourceId)
+   void MsgMonkeyCreator::configure(int aSourceId)
    {
       mSourceId = aSourceId;
    }
 
-   Ris::BaseMsgAParser* MsgAParserCreator::createNew()
+   Ris::BaseMsgMonkey* MsgMonkeyCreator::createNew()
    {
-      // New message parser
-      MsgParser* tMsgParser = new MsgParser();
+      // New message monkey
+      MsgMonkey* tMsgMonkey = new MsgMonkey();
       // Configure 
-      tMsgParser->configure(mSourceId);
-      // Return base message parser pointer
-      return (Ris::BaseMsgAParser*)tMsgParser;
+      tMsgMonkey->configure(mSourceId);
+      // Return base message monkey pointer
+      return (Ris::BaseMsgMonkey*)tMsgMonkey;
    }
 
    //******************************************************************************

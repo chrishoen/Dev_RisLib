@@ -50,8 +50,8 @@ public:
 
    Ris::Net::UdpMsgAThread*  mUdpMsgAThread;
 
-   // Message parser used by mUdpMsgAThread
-   ProtoComm::MsgAParserCreator mMsgParserCreator;
+   // Message monkey used by mUdpMsgAThread
+   ProtoComm::MsgMonkeyCreator mMsgMonkeyCreator;
 
    //--------------------------------------------------------------
    // QCall:

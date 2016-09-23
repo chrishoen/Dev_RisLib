@@ -80,7 +80,7 @@ public:
 
    // aServerIpAddr     is the server ip address
    // aServerIpPort     is the server ip port
-   // aMsgParser    is the message parser to be used on receive messages
+   // aMsgMonkey    is the message monkey to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
    // aSessionQCallChange is a qcall for session changes
 
@@ -90,7 +90,7 @@ public:
    void configure(
       char*                          aServerIpAddr,
       int                            aServerIpPort,
-      Ris::BaseMsgAParserCreator* aMsgParser,
+      Ris::BaseMsgMonkeyCreator* aMsgMonkey,
       SessionQCall*                  aSessionQCall,
       RxMsgQCall*                    aRxMsgQCall,
       int                            aFlags=0); 
@@ -150,9 +150,9 @@ public:
    // Socket address that socket instance connects to
    Sockets::SocketAddress mSocketAddress;
 
-   // Message parser creator, this is used by the socket to
-   // create an instance of a message parser
-   BaseMsgAParserCreator* mMsgParserCreator;
+   // Message monkey creator, this is used by the socket to
+   // create an instance of a message monkey
+   BaseMsgMonkeyCreator* mMsgMonkeyCreator;
 
    //--------------------------------------------------------------
    // State:

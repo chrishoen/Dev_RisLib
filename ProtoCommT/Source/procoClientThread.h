@@ -81,8 +81,8 @@ public:
 
    Ris::Net::TcpMsgAClientThread*  mTcpClientThread;
 
-   // Message parser used by mTcpClientThread
-   ProtoComm::MsgAParserCreator mMsgParserCreator;
+   // Message monkey used by mTcpClientThread
+   ProtoComm::MsgMonkeyCreator mMsgMonkeyCreator;
 
    //--------------------------------------------------------------
    // QCall:

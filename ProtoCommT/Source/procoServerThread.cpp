@@ -50,8 +50,8 @@ void ServerThread::configure()
    Prn::print(Prn::ThreadInit1, "ServerThread::configure");
 
    //--------------------------------------------------------------------------- 
-   // Configure message parser
-   mMsgParserCreator.configure(gSettings.mMyAppNumber);
+   // Configure message monkey
+   mMsgMonkeyCreator.configure(gSettings.mMyAppNumber);
 
    //--------------------------------------------------------------------------- 
    // Configure child thread, server
@@ -60,7 +60,7 @@ void ServerThread::configure()
       "0.0.0.0",
       gSettings.mTcpServerPort,
       MaxSessions,
-      &mMsgParserCreator,
+      &mMsgMonkeyCreator,
       &mSessionQCall,
       &mRxMsgQCall);
 }

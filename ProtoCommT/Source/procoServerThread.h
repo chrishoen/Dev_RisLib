@@ -85,8 +85,8 @@ public:
    // Maximum number of sessions for mTcpServerThread
    enum {MaxSessions=10};
 
-   // Message parser used by mTcpServerThread
-   ProtoComm::MsgAParserCreator mMsgParserCreator;
+   // Message monkey used by mTcpServerThread
+   ProtoComm::MsgMonkeyCreator mMsgMonkeyCreator;
 
    //--------------------------------------------------------------
    // QCall:

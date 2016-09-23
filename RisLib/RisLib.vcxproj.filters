@@ -100,9 +100,6 @@
     <ClCompile Include="Source\risSerialPort.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risByteMsgAParser.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risNetTcpMsgASocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -119,6 +116,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risNetUdpStringSocket.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risByteMsgMonkey.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -246,9 +246,6 @@
     <ClInclude Include="Source\risSerialPort.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteMsgAParser.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risNetTcpMsgASocket.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -265,6 +262,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetUdpStringSocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risByteMsgMonkey.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

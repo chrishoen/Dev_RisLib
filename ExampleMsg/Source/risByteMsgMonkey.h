@@ -96,7 +96,7 @@ public:
    // Preprocess a message before it is sent
    virtual void processBeforeSend(Ris::ByteContent* msg){};
 
-   // Endianess for buffers associated with the parser.
+   // Endianess for buffers associated with the monkey.
    // If true then the messages will be sent in network order,
    // big endian. If false, then little endian.
    void setNetworkOrder (bool aNetworkOrder);

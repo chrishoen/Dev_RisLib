@@ -13,7 +13,7 @@ Tcp message socket class.
 
 #include "risPortableTypes.h"
 #include "risByteContent.h"
-#include "risByteMsgAParser.h"
+#include "risByteMsgMonkey.h"
 #include "risContainers.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
@@ -49,10 +49,10 @@ public:
    // These do socket and bind calls
    void configure(
       Sockets::SocketAddress    aSocketAddress,
-      BaseMsgAParserCreator* aMsgParserCreator);
+      BaseMsgMonkeyCreator* aMsgMonkeyCreator);
 
    void configure(
-      BaseMsgAParserCreator* aMsgParserCreator);
+      BaseMsgMonkeyCreator* aMsgMonkeyCreator);
 
    void reconfigure(); 
 
@@ -65,16 +65,16 @@ public:
    // It returns true if successful.
    bool doRecvMsg (ByteContent*& aRxMsg);
 
-   // These are message parsers that are used to get details about 
+   // These are message monkeys that are used to get details about 
    // a message from a message header that is contained in a
-   // byte buffer. The receive message parser allows the doRecvMsg
+   // byte buffer. The receive message monkey allows the doRecvMsg
    // method to receive and extract a message from a byte buffer 
    // without the having the message code visible to it. The transmit
-   // message parser allows the doSendMsg method to set header data
+   // message monkey allows the doSendMsg method to set header data
    // before the message is sent.
 
-   BaseMsgAParser* mRxMsgParser;
-   BaseMsgAParser* mTxMsgParser;
+   BaseMsgMonkey* mRxMsgMonkey;
+   BaseMsgMonkey* mTxMsgMonkey;
 
    // Buffers
    enum    {BufferSize = 4096};

@@ -107,7 +107,7 @@ public:
 
    // aServerIpAddr     is the server ip address
    // aServerIpPort     is the server ip port
-   // aMsgParser    is the message parser to be used on receive messages
+   // aMsgMonkey    is the message monkey to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
    // aSessionQCallChange is a qcall for session changes
 
@@ -118,7 +118,7 @@ public:
       char*                     aServerIpAddr,
       int                       aServerIpPort,
       int                       aMaxSessions, 
-      BaseMsgAParserCreator* aMsgParserCreator,
+      BaseMsgMonkeyCreator* aMsgMonkeyCreator,
       SessionQCall*             aSessionQCall,
       RxMsgQCall*               aRxMsgQCall,
       int                       aFlags=0);
@@ -189,8 +189,8 @@ public:
    // Socket address that the hub socket binds to
    Sockets::SocketAddress mSocketAddress;
 
-   // Message parser creator for node sockets.
-   BaseMsgAParserCreator* mMsgParserCreator;
+   // Message monkey creator for node sockets.
+   BaseMsgMonkeyCreator* mMsgMonkeyCreator;
 
    //--------------------------------------------------------------
    // State:

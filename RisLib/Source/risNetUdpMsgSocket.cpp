@@ -233,60 +233,6 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    return true;
 }
 
-//******************************************************************************
-// Configure the socket. Use with the next doSendMsg.
-
-void UdpTxMsgSocket::configure(
-   BaseMsgMonkey*     aMsgMonkey)
-{
-   mTxCount=0;
-
-   mMsgMonkey = aMsgMonkey;
-
-   doSocket();
-
-   Prn::print(Prn::SocketInit1, "UdpTxMsgSocket:: %s %s %d %d",
-      mRemote.mIpAddr.mString,
-      mStatus,
-      mError);
-
-   mValidFlag=mStatus==0;
-}
-
-//******************************************************************************
-// This copies a message into a byte buffer and then sends the byte buffer 
-// out the socket. Use with the previous configure.
-
-bool UdpTxMsgSocket::doSendMsg(
-   Sockets::SocketAddress aRemote,
-   ByteContent* aMsg)
-{
-   // Guard
-   if (!mValidFlag) return false;
-
-   // Byte buffer, constructor takes size
-   ByteBuffer tBuffer(MsgSocketDefT::cBufferSize);  
-
-   // Copy transmit message to buffer
-   tBuffer.putToBuffer(aMsg);
-
-   // Delete the message
-   delete aMsg;
-
-   // Mutex
-   mTxMutex.lock();
-
-   // Transmit the buffer
-   int tLength=tBuffer.getLength();
-   doSendTo(aRemote,tBuffer.getBaseAddress(),tLength);
-
-   mTxCount++;
-
-   // mutex
-   mTxMutex.unlock();
-
-   return true;
-}
 
 }//namespace
 }//namespace

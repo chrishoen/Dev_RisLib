@@ -110,18 +110,6 @@ namespace Net
       bool doSendMsg(ByteContent* aMsg);
 
       //------------------------------------------------------------------------
-      // Socket, these two should be used together
-
-      void configure(
-         BaseMsgMonkey* aMsgMonkey);
-
-      // This sends a message over the socket via a blocking sendto call.
-      // It returns true if successful.
-      // It is protected by the transmit mutex.
-
-      bool doSendMsg(Sockets::SocketAddress aRemote,ByteContent* aMsg);
-
-      //------------------------------------------------------------------------
       // This is a message monkey that is used to get details about 
       // a message from a message header that is contained in a
       // byte buffer. It allows the doReceiveMsg method to receive and extract a

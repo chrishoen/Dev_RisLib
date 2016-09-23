@@ -11,12 +11,12 @@ namespace Ris
 {
 
 //******************************************************************************
-// This is an abstract base class for a message parser. It can be used
+// This is an abstract base class for a message monkey. It can be used
 // by code that receives messages into byte buffers such that the message
 // classes don't have to be visible to the receiving code. Inheriting classes
 // provide all of the details that are needed by receiving code to receive and
 // extract messages, as opposed to having the message classes being visible
-// to the receiving code.
+// to the receiving code. Likewise for transmitting classes.
 
 class  BaseMsgMonkey
 {
@@ -104,6 +104,22 @@ public:
 
    // Configures a byte buffer endianess
    void configureByteBuffer(ByteBuffer* aBuffer);
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is an abstract base class for a message monkey creator. It defines
+// a method that inheriting classes overload to create new message monkeys.
+// It is used by individual transmitters and receivers to create new instances
+// of monkeys. Each individual transmitter or receiver needs a unique instance 
+// of a monkey, instances cannot be shared because they contain state.
+
+class BaseMsgMonkeyCreator
+{
+public:
+   // Return a new message monkey.
+   virtual BaseMsgMonkey* createNew() = 0;
 };
 
 }//namespace

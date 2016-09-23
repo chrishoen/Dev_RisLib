@@ -183,7 +183,7 @@ namespace ExampleMsg
        //***********************************************************************
        // Create a new record, based on a record type
 
-       Ris::ByteMsg* createMessage(int aMsgType) override;
+       Ris::ByteMsg* createMsg(int aMsgType) override;
 
     };
 

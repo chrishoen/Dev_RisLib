@@ -127,10 +127,10 @@ bool UdpRxMsgSocket::doReceiveMsg (Ris::ByteMsg*& aMsg)
    // object and return it.
 
    // Create a record based on the record type
-   aMsg = mMonkey->createMessage(tHeader.mMessageIdentifier);
+   aMsg = mMonkey->createMsg(tHeader.mMessageIdentifier);
 
    // Copy from the buffer into the record
-   mMonkey->copyToFrom(&tBuffer, aMsg);
+   mMonkey->copyMsgToFrom(&tBuffer, aMsg);
 
    // Test for errors and return.
    // If the pointer is zero then message is bad
@@ -216,7 +216,7 @@ bool UdpTxMsgSocket::doSendMsg(Ris::ByteMsg* aMsg)
    tHeader.headerCopyToFrom(&tBuffer,aMsg);
 
    // Copy record to buffer
-   mMonkey->copyToFrom(&tBuffer,aMsg);
+   mMonkey->copyMsgToFrom(&tBuffer,aMsg);
       
    // ReCopy header to buffer
    tHeader.headerReCopyToFrom(&tBuffer,aMsg);

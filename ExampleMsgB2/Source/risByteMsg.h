@@ -55,7 +55,7 @@ public:
    //***********************************************************************
    // Create a new record, based on a record type.
 
-   virtual Ris::ByteMsg* createMessage (int aType)=0;
+   virtual Ris::ByteMsg* createMsg (int aType)=0;
 
 };
 

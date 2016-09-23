@@ -23,19 +23,28 @@ class  BaseMsgMonkey
 public:
 
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Return the number of bytes that need to be allocated for a message. 
 
    virtual int bufferSize()=0;
 
    //***************************************************************************
-   // Create a new record, based on a record type.
+   // Create a new message, based on a record type.
 
-   virtual Ris::ByteMsg* createMessage (int aType)=0;
+   virtual Ris::ByteMsg* createMsg (int aType)=0;
 
    //***************************************************************************
-   // Copy a record to/from a byte buffer.
+   // Copy a message to/from a byte buffer.
 
-   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)=0;
+   virtual void copyMsgToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)=0;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Copy into the header instance from a byte buffer.
+
+   virtual void copyHeaderFrom(Ris::ByteBuffer* aBuffer)=0;
 };
 
 }//namespace

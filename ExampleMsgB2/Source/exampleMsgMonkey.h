@@ -14,26 +14,36 @@ class MsgMonkey : public Ris::BaseMsgMonkey
 {
 public:
 
-   //**************************************************************************
-   // Constructor and initialization.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constructor and initialization. 
 
    MsgMonkey();
 
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Return the number of bytes that need to be allocated for a message. 
 
-   int bufferSize() { return 20000; }
+   int bufferSize() override { return 20000; }
 
    //***************************************************************************
-   // This creates a new record, based on a record type
+   // Create a new message, based on a record type.
 
-   Ris::ByteMsg* createMessage (int aType) override;
+   Ris::ByteMsg* createMsg (int aType) override;
 
    //***************************************************************************
-   // This copies byte buffers to/from records
+   // Copy a message to/from a byte buffer.
 
-   void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg) override;
+   void copyMsgToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg) override;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Copy into the header instance from a byte buffer.
+
+   void copyHeaderFrom(Ris::ByteBuffer* aBuffer) override;
 };
 }
 #endif

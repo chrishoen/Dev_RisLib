@@ -9,7 +9,7 @@ namespace ExampleMsg
    //******************************************************************************
    // This creates a new record, based on a record type
 
-   Ris::ByteMsg* MsgCreator::createMessage(int aMsgType)
+   Ris::ByteMsg* MsgCreator::createMsg(int aMsgType)
    {
       Ris::ByteMsg* tMsg = 0;
 

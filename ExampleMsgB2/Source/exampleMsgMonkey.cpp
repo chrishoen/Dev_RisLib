@@ -18,12 +18,12 @@ MsgMonkey::MsgMonkey()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This creates a new record, based on a record type
+// Create a new message, based on a record type.
 
-Ris::ByteMsg* MsgMonkey::createMessage(int aMsgType)
+Ris::ByteMsg* MsgMonkey::createMsg(int aMsgType)
 {
    ExampleMsg::MsgCreator tCreator;
-   return tCreator.createMessage(aMsgType);
+   return tCreator.createMsg(aMsgType);
 }
 
 //****************************************************************************
@@ -31,10 +31,22 @@ Ris::ByteMsg* MsgMonkey::createMessage(int aMsgType)
 //****************************************************************************
 // MsgCopier
 
-void MsgMonkey::copyToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
+void MsgMonkey::copyMsgToFrom(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
 {
    ExampleMsg::MsgCopier tCopier;
    tCopier.copyToFrom(aBuffer, aMsg);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Copy a message to/from a byte buffer.
+
+   // Copy into the header instance from a byte buffer.
+
+void MsgMonkey::copyHeaderFrom(Ris::ByteBuffer* aBuffer)
+{
+
 }
 
 }//namespace

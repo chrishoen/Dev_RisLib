@@ -86,7 +86,7 @@ void TcpMsgServerThread::configure(
 
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
    mMaxSessions = aMaxSessions;
-   mMsgMonkeyCreator = aMsgMonkeyCreator;
+   mMonkeyCreator = aMsgMonkeyCreator;
    mFlags = aFlags;
 
    mSessionQCall = *aSessionQCall;
@@ -107,7 +107,7 @@ void TcpMsgServerThread::threadInitFunction()
    // Register the message monkey for the node sockets
    for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
    {
-      mNodeSocket[sessionIndex].configure(mMsgMonkeyCreator);
+      mNodeSocket[sessionIndex].configure(mMonkeyCreator);
    }
 
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");

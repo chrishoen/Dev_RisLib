@@ -25,14 +25,14 @@ UdpRxMsgSocket::UdpRxMsgSocket()
    mRxLength      = 0;
    mRxMsgCount    = 0;
    mValidFlag     = false;
-   mMsgMonkey     = 0;
+   mMonkey     = 0;
 }
 
 //******************************************************************************
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
-   if (mMsgMonkey) delete mMsgMonkey;
+   if (mMonkey) delete mMonkey;
 }
 
 //******************************************************************************
@@ -46,7 +46,7 @@ void UdpRxMsgSocket::configure(
    mRxMsgCount=0;
 
    mLocal.set(aLocalIpAddr,aLocalIpPort);
-   mMsgMonkey = aMsgMonkeyCreator->createNew();
+   mMonkey = aMsgMonkeyCreator->createNew();
 
    doSocket();
    doBind();
@@ -83,13 +83,13 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    if (!mValidFlag) return false;
 
    // Byte buffer, constructor takes size
-   ByteBuffer tBuffer(mMsgMonkey->getMaxBufferSize());
+   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
    tBuffer.setCopyFrom();
 
    //-------------------------------------------------------------------------
    // Read the message into the receive buffer
    
-   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,mMsgMonkey->getMaxBufferSize());
+   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,mMonkey->getMaxBufferSize());
 
    // Guard
    // If bad status then return false.
@@ -115,10 +115,10 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Copy from the receive buffer into the message monkey object
    // and validate the header
 
-   mMsgMonkey->extractMessageHeaderParms(&tBuffer);
+   mMonkey->extractMessageHeaderParms(&tBuffer);
 
    // If the header is not valid then error
-   if (!mMsgMonkey->mHeaderValidFlag)
+   if (!mMonkey->mHeaderValidFlag)
    {
       Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER ");
       return false;
@@ -130,7 +130,7 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // object and return it.
 
    tBuffer.rewind();
-   aMsg = mMsgMonkey->makeFromByteBuffer(&tBuffer);
+   aMsg = mMonkey->makeFromByteBuffer(&tBuffer);
 
    // Test for errors and return.
    // If the pointer is zero then message is bad
@@ -154,14 +154,14 @@ UdpTxMsgSocket::UdpTxMsgSocket()
    mTxCount=0;
    mTxLength      = 0;
    mValidFlag=false;
-   mMsgMonkey=0;
+   mMonkey=0;
 }
 
 //******************************************************************************
 
 UdpTxMsgSocket::~UdpTxMsgSocket()
 {
-   if (mMsgMonkey) delete mMsgMonkey;
+   if (mMonkey) delete mMonkey;
 }
 
 //******************************************************************************
@@ -175,7 +175,7 @@ void UdpTxMsgSocket::configure(
    mTxCount=0;
 
    mRemote.set(aRemoteIpAddr,aRemoteIpPort);
-   mMsgMonkey = aMsgMonkeyCreator->createNew();
+   mMonkey = aMsgMonkeyCreator->createNew();
 
    doSocket();
 
@@ -207,10 +207,10 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    if (!mValidFlag) return false;
 
    // Process message before send
-   mMsgMonkey->processBeforeSend(aMsg);
+   mMonkey->processBeforeSend(aMsg);
 
    // Create byte buffer, constructor takes size
-   ByteBuffer tBuffer(mMsgMonkey->getMaxBufferSize());
+   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
 
    // Copy transmit message to buffer
    tBuffer.putToBuffer(aMsg);

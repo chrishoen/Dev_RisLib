@@ -55,7 +55,7 @@ namespace Net
       // byte buffer. It allows the doReceiveMsg method to receive and extract a
       // message from a byte buffer without the having the message code
       // visible to it.
-      BaseMsgMonkey* mMsgMonkey;
+      BaseMsgMonkey* mMonkey;
 
       // Buffer
       int    mRxLength;
@@ -101,7 +101,7 @@ namespace Net
       // message from a byte buffer without the having the message code
       // visible to it.
 
-      BaseMsgMonkey* mMsgMonkey;
+      BaseMsgMonkey* mMonkey;
 
       //------------------------------------------------------------------------
       // Transmit mutex is used by doSendMsg for mutual exclusion.

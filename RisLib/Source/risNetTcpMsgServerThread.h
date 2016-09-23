@@ -190,7 +190,7 @@ public:
    Sockets::SocketAddress mSocketAddress;
 
    // Message monkey creator for node sockets.
-   BaseMsgMonkeyCreator* mMsgMonkeyCreator;
+   BaseMsgMonkeyCreator* mMonkeyCreator;
 
    //--------------------------------------------------------------
    // State:

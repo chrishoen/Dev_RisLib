@@ -86,7 +86,7 @@ public:
    enum {MaxSessions=10};
 
    // Message monkey used by mTcpServerThread
-   ProtoComm::MsgMonkeyCreator mMsgMonkeyCreator;
+   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
 
    //--------------------------------------------------------------
    // QCall:

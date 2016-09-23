@@ -53,7 +53,7 @@ void NetworkThread::configure()
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mMsgMonkey,
+      &mMonkey,
       &mRxMsgQCall);
 
 }

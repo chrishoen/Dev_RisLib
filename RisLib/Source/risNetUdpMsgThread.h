@@ -127,7 +127,7 @@ public:
 
    // Message monkey creator, this is used by the receive socket to
    // create an instance of a message monkey
-   BaseMsgMonkeyCreator* mMsgMonkeyCreator;
+   BaseMsgMonkeyCreator* mMonkeyCreator;
 };
 
 //******************************************************************************

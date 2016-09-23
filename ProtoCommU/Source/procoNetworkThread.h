@@ -51,7 +51,7 @@ public:
    Ris::Net::UdpMsgThread*  mUdpMsgThread;
 
    // Message monkey used by mUdpMsgThread
-   ProtoComm::MsgMonkeyCreator mMsgMonkeyCreator;
+   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
 
    //--------------------------------------------------------------
    // QCall:

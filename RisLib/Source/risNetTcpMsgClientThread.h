@@ -152,7 +152,7 @@ public:
 
    // Message monkey creator, this is used by the socket to
    // create an instance of a message monkey
-   BaseMsgMonkeyCreator* mMsgMonkeyCreator;
+   BaseMsgMonkeyCreator* mMonkeyCreator;
 
    //--------------------------------------------------------------
    // State:

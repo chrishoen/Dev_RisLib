@@ -51,7 +51,7 @@ void ServerThread::configure()
 
    //--------------------------------------------------------------------------- 
    // Configure message monkey
-   mMsgMonkeyCreator.configure(gSettings.mMyAppNumber);
+   mMonkeyCreator.configure(gSettings.mMyAppNumber);
 
    //--------------------------------------------------------------------------- 
    // Configure child thread, server
@@ -60,7 +60,7 @@ void ServerThread::configure()
       "0.0.0.0",
       gSettings.mTcpServerPort,
       MaxSessions,
-      &mMsgMonkeyCreator,
+      &mMonkeyCreator,
       &mSessionQCall,
       &mRxMsgQCall);
 }

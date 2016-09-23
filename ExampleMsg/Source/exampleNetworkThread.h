@@ -49,7 +49,7 @@ public:
    Ris::Net::UdpMsgThread*  mUdpMsgThread;
 
    // Message monkey used by mUdpMsgThread
-   MsgMonkey mMsgMonkey;
+   MsgMonkey mMonkey;
 
    //--------------------------------------------------------------
    // QCall:

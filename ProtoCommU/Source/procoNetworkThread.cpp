@@ -47,7 +47,7 @@ void NetworkThread::configure()
    //--------------------------------------------------------------------------- 
    // Configure message monkey
 
-   mMsgMonkeyCreator.configure(gSettings.mMyAppNumber);
+   mMonkeyCreator.configure(gSettings.mMyAppNumber);
 
    //---------------------------------------------------------------------------
    // Configure message thread
@@ -57,7 +57,7 @@ void NetworkThread::configure()
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mMsgMonkeyCreator,
+      &mMonkeyCreator,
       &mRxMsgQCall);
 }
 

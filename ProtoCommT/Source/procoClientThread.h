@@ -82,7 +82,7 @@ public:
    Ris::Net::TcpMsgClientThread*  mTcpClientThread;
 
    // Message monkey used by mTcpClientThread
-   ProtoComm::MsgMonkeyCreator mMsgMonkeyCreator;
+   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
 
    //--------------------------------------------------------------
    // QCall:

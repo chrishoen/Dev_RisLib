@@ -45,7 +45,7 @@ void UdpMsgThread::configure(
    strcpy(mRemoteIpAddress, aRemoteIpAddress);
    mRemoteIpPort = aRemoteIpPort;
 
-   mMsgMonkeyCreator = aMsgMonkeyCreator;
+   mMonkeyCreator = aMsgMonkeyCreator;
 
    mRxMsgQCall = *aMessageQCall;
 }
@@ -61,12 +61,12 @@ void UdpMsgThread::threadInitFunction()
    mRxSocket.configure(
       mLocalIpAddress,
       mLocalIpPort,
-      mMsgMonkeyCreator);
+      mMonkeyCreator);
 
    mTxSocket.configure(
       mRemoteIpAddress,
       mRemoteIpPort,
-      mMsgMonkeyCreator);
+      mMonkeyCreator);
 
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction END");
 }

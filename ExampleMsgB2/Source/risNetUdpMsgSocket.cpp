@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "risByteMsgHeader.h"
+#include "risByteMsgDefault.h"
 #include "risNetUdpMsgSocket.h"
 
 namespace Ris
@@ -108,7 +108,7 @@ bool UdpRxMsgSocket::doReceiveMsg (Ris::ByteMsg*& aMsg)
    // Copy from the receive buffer into an instance of the header
    // and validate the header
 
-   MsgHeader tHeader;
+   DefaultMsgHeader tHeader;
 
    tBuffer.setCopyFrom();
    tBuffer.getFromBuffer(&tHeader);
@@ -205,7 +205,7 @@ bool UdpTxMsgSocket::doSendMsg(Ris::ByteMsg* aMsg)
    //------------------------------------------------------------------------
    // Instance of a header,set members
 
-   MsgHeader tHeader;
+   DefaultMsgHeader tHeader;
    tHeader.mMessageIdentifier = aMsg->mMessageType;
 
    //------------------------------------------------------------------------

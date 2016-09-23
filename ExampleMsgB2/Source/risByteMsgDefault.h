@@ -1,5 +1,5 @@
-#ifndef _RISBYTEMSGHEADER_H_
-#define _RISBYTEMSGHEADER_H_
+#ifndef _RISBYTEMSGDEFAULT_H_
+#define _RISBYTEMSGDEFAULT_H_
 
 /*==============================================================================
 
@@ -24,11 +24,11 @@ namespace Ris
 //******************************************************************************
 // This encapsualtes the message header.
 
-class MsgHeader : public Ris::ByteContent
+class DefaultMsgHeader : public Ris::ByteContent
 {
 public:
    // Constructor
-   MsgHeader();
+   DefaultMsgHeader();
    void reset();
 
    //------------------------------------------------------------------------

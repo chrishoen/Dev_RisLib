@@ -30,13 +30,13 @@
     <ClCompile Include="Source\exampleMsgMonkey.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risByteMsgHeader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risNetUdpMsgSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risNetUdpMsgThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risByteMsgDefault.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,13 +68,13 @@
     <ClInclude Include="Source\risByteMsg.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteMsgHeader.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risNetUdpMsgSocket.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetUdpMsgThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risByteMsgDefault.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

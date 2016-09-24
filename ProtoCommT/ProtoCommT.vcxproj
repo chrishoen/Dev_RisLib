@@ -179,6 +179,7 @@
     <ClCompile Include="..\ProtoCommon\procoSettings.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\procoClientThread.cpp" />
     <ClCompile Include="Source\procoServerThread.cpp" />
   </ItemGroup>
@@ -188,6 +189,7 @@
     <ClInclude Include="..\ProtoCommon\procoMsg_Message.h" />
     <ClInclude Include="..\ProtoCommon\procoSettings.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\procoClientThread.h" />
     <ClInclude Include="Source\procoServerThread.h" />
   </ItemGroup>

@@ -66,6 +66,8 @@ void TcpMsgSocket::configure(
          mStatus,
          mError);
    }
+
+   mValidFlag=mStatus==0;
 }
 
 void TcpMsgSocket::configure(
@@ -93,7 +95,12 @@ void TcpMsgSocket::reconfigure()
 bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 {
    // Guard.
-   if (!mValidFlag) return false;
+   if (!mValidFlag)
+   {
+      Prn::print(Prn::SocketRun2, "ERROR doSend when Invalid");
+      delete aMsg;
+      return false;
+   }
 
    // Create a byte buffer.
    ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
@@ -115,6 +122,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    bool tRet=false;
    int tLength=tBuffer.getLength();
    tRet = doSend(tBuffer.getBaseAddress(),tLength);
+   Prn::print(Prn::SocketRun4, "doSendM %d %d %d",mStatus,mError,tLength);
 
    mTxMsgCount++;
 
@@ -123,7 +131,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 
    if (!tRet)
    {
-      Prn::print(Prn::SocketRun1, "ERROR TcpMsgSocket::doSendMsg FAIL");
+      Prn::print(Prn::SocketRun2, "ERROR TcpMsgSocket::doSendMsg FAIL");
    }
 
    return true;
@@ -155,7 +163,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    char* tHeaderBuffer = tBuffer.getBaseAddress();
 
    tRet = doRecv(tHeaderBuffer,tHeaderLength,tStatus);
-   Prn::print(Prn::SocketRun4, "doRecv1 %d %d",mStatus,mError);
+   Prn::print(Prn::SocketRun4, "doRecvH %d %d",mStatus,mError);
 
    // Guard
    // If bad status then return false.
@@ -188,7 +196,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    char* tPayloadBuffer = tBuffer.getBaseAddress() + tHeaderLength;
 
    tRet=doRecv(tPayloadBuffer,tPayloadLength,tStatus);
-   Prn::print(Prn::SocketRun4, "doRecv2 %d %d %d",mStatus,mError,tPayloadLength);
+   Prn::print(Prn::SocketRun4, "doRecvP %d %d %d",mStatus,mError,tPayloadLength);
 
    // Guard
    // If bad status then return false.
@@ -213,6 +221,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
+      Prn::print(Prn::SocketRun1, "ERROR getMsgFromBuffer");
       mStatus=tBuffer.getError();
       return false;
    }

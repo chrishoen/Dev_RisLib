@@ -188,10 +188,10 @@ void TcpMsgClientThread::sendMsg(ByteContent* aMsg)
    }
    else
    {
+      Prn::print(Prn::SocketRun1, "ERROR doSendMsg FAIL session invalid");
       delete aMsg;
    }
 
-   Prn::print(Prn::SocketRun2, "doSendMsg %d %d %d",mSocket.mStatus,mSocket.mError,mSocket.mTxMsgCount);
 }
 
 //******************************************************************************

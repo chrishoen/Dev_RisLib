@@ -31,6 +31,9 @@
     <ClCompile Include="..\ProtoCommon\procoMsg_Message.cpp">
       <Filter>ProtoCommon</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MainInit.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -53,6 +56,9 @@
     </ClInclude>
     <ClInclude Include="..\ProtoCommon\procoMsg_Message.h">
       <Filter>ProtoCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainInit.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

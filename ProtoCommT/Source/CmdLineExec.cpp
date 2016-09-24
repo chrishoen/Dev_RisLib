@@ -25,30 +25,20 @@ void CmdLineExec::reset()
 {
 }
 //******************************************************************************
+
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("SHUTDOWN"  ))  executeOnShutdown(aCmd);
-   if(aCmd->isCmd("TX"        ))  executeOnTx(aCmd);
-   if(aCmd->isCmd("PER"       ))  executeOnPeriodic(aCmd);
-   if(aCmd->isCmd("G1"        ))  executeOnGo1(aCmd);
-   if(aCmd->isCmd("T1"        ))  executeOnTest1(aCmd);
+   if(aCmd->isCmd("SHUTDOWN"  ))  executeShutdown(aCmd);
+   if(aCmd->isCmd("TX"        ))  executeTx(aCmd);
+   if(aCmd->isCmd("PER"       ))  executePeriodic(aCmd);
+   if(aCmd->isCmd("GO1"       ))  executeGo1(aCmd);
+   if(aCmd->isCmd("GO2"       ))  executeGo2(aCmd);
+   if(aCmd->isCmd("T1"        ))  executeTest1(aCmd);
 }
-//******************************************************************************
-void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
-{
-   switch (ProtoComm::gSettings.mMyAppRole)
-   {
-      case ProtoComm::Settings::cTcpServer:
-         gServerThread->shutdownThread();
-         break;
-      case ProtoComm::Settings::cTcpClient:
-         gClientThread->shutdownThread();
-         break;
-   }
-}
+
 //******************************************************************************
 
-void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,201);
 
@@ -65,7 +55,51 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeOnPeriodic(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,1);
+
+   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+ 
+   switch (ProtoComm::gSettings.mMyAppRole)
+   {
+      case ProtoComm::Settings::cTcpServer:
+         gServerThread->sendMsg(0,tMsg);
+         break;
+      case ProtoComm::Settings::cTcpClient:
+         gClientThread->sendMsg(tMsg);
+         break;
+   }
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,1);
+   int tN = aCmd->argInt(1);
+
+   for (int i=0;i<tN;i++)
+   {
+      ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
+ 
+      switch (ProtoComm::gSettings.mMyAppRole)
+      {
+         case ProtoComm::Settings::cTcpServer:
+            gServerThread->sendMsg(0,tMsg);
+            gServerThread->threadSleep(10);
+            break;
+         case ProtoComm::Settings::cTcpClient:
+            gClientThread->sendMsg(tMsg);
+            gClientThread->threadSleep(10);
+            break;
+      }
+   }
+}
+
+//******************************************************************************
+
+void CmdLineExec::executePeriodic(Ris::CmdLineCmd* aCmd)
 {
    bool tPeriodicEnable=false;
    tPeriodicEnable = aCmd->argBool(1);
@@ -83,34 +117,20 @@ void CmdLineExec::executeOnPeriodic(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeOnGo1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
-   int tN = aCmd->argInt(1);
-   if(tN==0) tN=4;
-
-   for (int i=0;i<tN;i++)
-   {
-      ProtoComm::StatusRequestMsg* tTxMsg1 = new ProtoComm::StatusRequestMsg;
-   
-      switch (ProtoComm::gSettings.mMyAppRole)
-      {
-         case ProtoComm::Settings::cTcpServer:
-            gServerThread->sendMsg(0,tTxMsg1);
-          //Prn::print(0,"sendMsg %d",i);
-            gServerThread->threadSleep(10);
-            break;
-         case ProtoComm::Settings::cTcpClient:
-            gClientThread->sendMsg(tTxMsg1);
-          //Prn::print(0,"sendMsg %d",i);
-            gClientThread->threadSleep(10);
-            break;
-      }
-   }
 }
 
 //******************************************************************************
-
-void CmdLineExec::executeOnTest1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeShutdown (Ris::CmdLineCmd* aCmd)
 {
+   switch (ProtoComm::gSettings.mMyAppRole)
+   {
+      case ProtoComm::Settings::cTcpServer:
+         gServerThread->shutdownThread();
+         break;
+      case ProtoComm::Settings::cTcpClient:
+         gClientThread->shutdownThread();
+         break;
+   }
 }
-

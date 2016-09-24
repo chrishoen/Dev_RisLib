@@ -332,11 +332,6 @@ void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aMsg)
       // Send the message and update the state
       mNodeSocket[aSessionIndex].doSendMsg(aMsg);
       mNodeSocket[aSessionIndex].mTxMsgCount++;
-
-      Prn::print(Prn::SocketRun2, "doSendMsg %d %d %d",
-         mNodeSocket[aSessionIndex].mStatus,
-         mNodeSocket[aSessionIndex].mError,
-         mNodeSocket[aSessionIndex].mTxMsgCount);
    }
    else
    {

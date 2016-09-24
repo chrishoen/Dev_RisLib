@@ -137,8 +137,7 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteMsg*& aMsg)
    // object and return it.
 
    tBuffer.rewind();
-   aMsg=0;
-   mMonkey->copyMsgFromBuffer(&tBuffer,aMsg);
+   aMsg = mMonkey->getMsgFromBuffer(&tBuffer);
 
    // Test for errors.
    if (aMsg==0)
@@ -222,7 +221,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteMsg* aMsg)
    tBuffer.setCopyTo();
 
    // Copy the message to the buffer.
-   mMonkey->copyMsgToBuffer(&tBuffer,aMsg);
+   mMonkey->putMsgToBuffer(&tBuffer,aMsg);
 
    // Delete the message.
    delete aMsg;

@@ -110,7 +110,7 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
    }
 
    tBuffer.rewind();
-   tRxMsg = (ProtoComm::DataMsg*)tMsgMonkey->makeFromByteBuffer(&tBuffer);
+   tRxMsg = (ProtoComm::DataMsg*)tMsgMonkey->getMsgFromBuffer(&tBuffer);
    tRxMsg->show();
 
    delete tTxMsg;
@@ -158,6 +158,4 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
-   gNetworkThread->sendMsg(tMsg->cloneMessage());
 }

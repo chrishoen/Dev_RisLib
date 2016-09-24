@@ -41,15 +41,8 @@ public:
 
    virtual void copyToFrom(Ris::ByteBuffer* aBuffer) {}
 
-   // General purpose identifier
-   int mMessageType;
-
-   // Constructor
-   ByteContent()
-   {
-      mMessageType = 0;
-   }
 };
+
 //******************************************************************************
 }//namespace
 #endif

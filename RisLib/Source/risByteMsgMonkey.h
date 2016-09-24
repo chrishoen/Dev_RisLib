@@ -64,10 +64,10 @@ public:
    virtual void processBeforeSend(Ris::ByteMsg* aMsg){};
 
    // Copy a message to a byte buffer.
-   void copyMsgToBuffer   (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aMsg);
+   void putMsgToBuffer (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aMsg);
 
    // Copy a message from a byte buffer.
-   void copyMsgFromBuffer (Ris::ByteBuffer* aBuffer,Ris::ByteMsg*& aMsg);
+   Ris::ByteMsg* getMsgFromBuffer (Ris::ByteBuffer* aBuffer);
 
    // Message creator, this must be set bythe inheritor.
    // Message copier, this must be set bythe inheritor.

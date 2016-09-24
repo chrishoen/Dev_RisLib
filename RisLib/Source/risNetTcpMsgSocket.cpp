@@ -103,7 +103,7 @@ bool TcpMsgSocket::doSendMsg(ByteMsg* aMsg)
    tBuffer.setCopyTo();
 
    // Copy the message to the buffer.
-   mMonkey->copyMsgToBuffer(&tBuffer,aMsg);
+   mMonkey->putMsgToBuffer(&tBuffer,aMsg);
 
    // Delete the message.
    delete aMsg;
@@ -208,7 +208,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteMsg*& aMsg)
    // object and return it.
 
    tBuffer.rewind();
-   mMonkey->copyMsgFromBuffer(&tBuffer,aMsg);
+   aMsg = mMonkey->getMsgFromBuffer(&tBuffer);
 
    // Test for errors.
    if (aMsg==0)

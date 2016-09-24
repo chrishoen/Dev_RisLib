@@ -62,7 +62,7 @@ public:
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxMessage   (Ris::ByteContent* aMsg);
+   void executeRxMessage   (Ris::ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------

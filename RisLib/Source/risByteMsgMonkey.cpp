@@ -48,7 +48,7 @@ void BaseMsgMonkey::configureByteBuffer(ByteBuffer* aBuffer)
 //******************************************************************************
 // Copy a message to a byte buffer.
 
-void BaseMsgMonkey::copyMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
+void BaseMsgMonkey::putMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
 {
    // Call inheritor's override to preprocess the message before it is sent.
    processBeforeSend(aMsg);
@@ -70,24 +70,26 @@ void BaseMsgMonkey::copyMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg
 // 2) Copy the data from the byte buffer into the new message object
 // and returns a pointer to the base class.
 
-void BaseMsgMonkey::copyMsgFromBuffer (Ris::ByteBuffer* aBuffer,Ris::ByteMsg*& aMsg)
+Ris::ByteMsg* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 {
-   // Guard
-   aMsg = 0;
-   if (!mHeaderValidFlag) return;
+   // Guard.
+   if (!mHeaderValidFlag) return 0;
 
    // Call inheritor's creator to create a new message based on the
    // message type that was extracted from the header.
-   aMsg = mCreator->createMsg(mMessageType);
+   Ris::ByteMsg* aMsg = mCreator->createMsg(mMessageType);
 
    // Guard
-   if (!aMsg) return;
+   if (!aMsg) return 0;
 
    // Set buffer direction for get.
    aBuffer->setCopyFrom();
 
    // Call inheritor's copier to copy from the buffer to the message.
    mCopier->copyToFrom(aBuffer,aMsg);
+
+   // Done.
+   return aMsg;
 }
 
 //******************************************************************************

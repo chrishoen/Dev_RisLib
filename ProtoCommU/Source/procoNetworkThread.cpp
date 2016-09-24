@@ -53,11 +53,11 @@ void NetworkThread::configure()
    // Configure message thread
 
    mUdpMsgThread->configure(
+      &mMonkeyCreator,
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mMonkeyCreator,
       &mRxMsgQCall);
 }
 
@@ -90,7 +90,7 @@ void  NetworkThread::threadExitFunction()
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
+void NetworkThread::executeRxMessage(Ris::ByteMsg* aMsg)
 {
    ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 

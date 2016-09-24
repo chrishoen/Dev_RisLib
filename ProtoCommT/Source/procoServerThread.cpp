@@ -57,10 +57,10 @@ void ServerThread::configure()
    // Configure child thread, server
 
    mTcpServerThread->configure(
+      &mMonkeyCreator,
       "0.0.0.0",
       gSettings.mTcpServerPort,
       MaxSessions,
-      &mMonkeyCreator,
       &mSessionQCall,
       &mRxMsgQCall);
 }
@@ -109,32 +109,32 @@ void ServerThread::executeSession (int aSessionIndex,bool aConnected)
 
 //******************************************************************************
 // QCall
-void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
+void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteMsg* aMsg)
 {
-   if(!aRxMsg) return;
+   if(!aMsg) return;
 
    // Put the message to the message processor
-   ProtoComm::BaseMsg* tRxMsg = (ProtoComm::BaseMsg*)aRxMsg;
+   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
-   switch (tRxMsg->mMessageType)
+   switch (tMsg->mMessageType)
    {
       case ProtoComm::MsgIdT::cTestMsg :
-         processRxMsg(aSessionIndex,(ProtoComm::TestMsg*)tRxMsg);
+         processRxMsg(aSessionIndex,(ProtoComm::TestMsg*)tMsg);
          break;
       case ProtoComm::MsgIdT::cFirstMessageMsg :
-         processRxMsg(aSessionIndex,(ProtoComm::FirstMessageMsg*)tRxMsg);
+         processRxMsg(aSessionIndex,(ProtoComm::FirstMessageMsg*)tMsg);
          break;
       case ProtoComm::MsgIdT::cStatusRequestMsg :
-         processRxMsg(aSessionIndex,(ProtoComm::StatusRequestMsg*)tRxMsg);
+         processRxMsg(aSessionIndex,(ProtoComm::StatusRequestMsg*)tMsg);
          break;
       case ProtoComm::MsgIdT::cStatusResponseMsg :
-         processRxMsg(aSessionIndex,(ProtoComm::StatusResponseMsg*)tRxMsg);
+         processRxMsg(aSessionIndex,(ProtoComm::StatusResponseMsg*)tMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg %d",tRxMsg->mMessageType);
-         delete aRxMsg;
+         Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg %d",tMsg->mMessageType);
+         delete aMsg;
          break;
    }
 }

@@ -95,7 +95,7 @@ public:
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
    void executeSession (bool aConnected);
-   void executeRxMsg   (Ris::ByteContent* aRxMsg);
+   void executeRxMsg   (Ris::ByteMsg* aRxMsg);
 
    //--------------------------------------------------------------
    // Receive message handlers:

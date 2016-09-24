@@ -28,7 +28,6 @@ or callbacks in their configure calls.
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
 #include "risCallPointer.h"
 #include "risContainers.h"
 #include "risSockets.h"
@@ -107,21 +106,21 @@ public:
 
    // aServerIpAddr     is the server ip address
    // aServerIpPort     is the server ip port
-   // aMsgMonkey    is the message monkey to be used on receive messages
+   // aMonkey    is the message monkey to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
    // aSessionQCallChange is a qcall for session changes
 
-   typedef Ris::Threads::QCall2<int,bool>              SessionQCall;
-   typedef Ris::Threads::QCall2<int,Ris::ByteContent*> RxMsgQCall;
+   typedef Ris::Threads::QCall2<int,bool>          SessionQCall;
+   typedef Ris::Threads::QCall2<int,Ris::ByteMsg*> RxMsgQCall;
 
    void configure(
-      char*                     aServerIpAddr,
-      int                       aServerIpPort,
-      int                       aMaxSessions, 
-      BaseMsgMonkeyCreator* aMsgMonkeyCreator,
-      SessionQCall*             aSessionQCall,
-      RxMsgQCall*               aRxMsgQCall,
-      int                       aFlags=0);
+      BaseMsgMonkeyCreator* aMonkeyCreator,
+      char*                 aServerIpAddr,
+      int                   aServerIpPort,
+      int                   aMaxSessions, 
+      SessionQCall*         aSessionQCall,
+      RxMsgQCall*           aRxMsgQCall,
+      int                   aFlags=0);
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -149,7 +148,7 @@ public:
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg          (int aSessionIndex,Ris::ByteContent* aRxMsg);
+   void processRxMsg (int aSessionIndex,Ris::ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    // QCall:
@@ -167,7 +166,7 @@ public:
    // This is called by the user of this thread to transmit a message
    // via the node socket at the session index. It executes a send 
    // call in the context of the caller.
-   void sendMsg(int aSessionIndex,ByteContent* aTxMsg);
+   void sendMsg(int aSessionIndex,ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    // Sockets:

@@ -74,19 +74,19 @@ TcpMsgServerThread::TcpMsgServerThread()
 // Configure:
 
 void TcpMsgServerThread::configure(
-   char*                     aServerIpAddr,
-   int                       aServerIpPort,
-   int                       aMaxSessions, 
-   BaseMsgMonkeyCreator* aMsgMonkeyCreator,
-   SessionQCall*             aSessionQCall,
-   RxMsgQCall*               aRxMsgQCall,
-   int                       aFlags)
+   BaseMsgMonkeyCreator* aMonkeyCreator,
+   char*                 aServerIpAddr,
+   int                   aServerIpPort,
+   int                   aMaxSessions, 
+   SessionQCall*         aSessionQCall,
+   RxMsgQCall*           aRxMsgQCall,
+   int                   aFlags)
 {
    Prn::print(Prn::SocketInit1, "TcpClientThread::configure");
 
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
    mMaxSessions = aMaxSessions;
-   mMonkeyCreator = aMsgMonkeyCreator;
+   mMonkeyCreator = aMonkeyCreator;
    mFlags = aFlags;
 
    mSessionQCall = *aSessionQCall;
@@ -249,8 +249,8 @@ void TcpMsgServerThread::threadRunFunction()
                   // there is a data available to be read from the socket.
  
                   // Attempt to receive a message on the node socket.
-                  ByteContent* rxMsg=0;
-                  if (mNodeSocket[sessionIndex].doRecvMsg (rxMsg))
+                  ByteMsg* tMsg=0;
+                  if (mNodeSocket[sessionIndex].doReceiveMsg (tMsg))
                   {
                      // A valid message was received 
                      Prn::print(Prn::SocketRun2, "Recv message %d %d",
@@ -258,9 +258,9 @@ void TcpMsgServerThread::threadRunFunction()
                         mNodeSocket[sessionIndex].mRxMsgCount);
 
                      // process the received message
-                     if (rxMsg)
+                     if (tMsg)
                      {
-                        processRxMsg(sessionIndex,rxMsg);
+                        processRxMsg(sessionIndex,tMsg);
                      } 
                   }
                   else 
@@ -322,15 +322,15 @@ void TcpMsgServerThread::threadExitFunction()
 
 //******************************************************************************
 
-void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
+void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteMsg* aMsg)
 {
-   if (!aTxMsg) return;
+   if (!aMsg) return;
 
    // Test if the session is valid
    if (mNodeSocket[aSessionIndex].mValidFlag)
    {
       // Send the message and update the state
-      mNodeSocket[aSessionIndex].doSendMsg(aTxMsg);
+      mNodeSocket[aSessionIndex].doSendMsg(aMsg);
       mNodeSocket[aSessionIndex].mTxMsgCount++;
 
       Prn::print(Prn::SocketRun2, "doSendMsg %d %d %d",
@@ -341,7 +341,7 @@ void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aTxMsg)
    else
    {
       Prn::print(Prn::SocketRun1, "ERROR doSendMsg FAIL session invalid %d",aSessionIndex);
-      delete aTxMsg;
+      delete aMsg;
    }
 }
 
@@ -361,11 +361,11 @@ void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablishe
 //******************************************************************************
 //******************************************************************************
 
-void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aRxMsg)
+void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteMsg* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMsgQCall(aSessionIndex,aRxMsg);
+   mRxMsgQCall(aSessionIndex,aMsg);
 }
 
 }//namespace

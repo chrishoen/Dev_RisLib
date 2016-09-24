@@ -80,20 +80,20 @@ public:
 
    // aServerIpAddr     is the server ip address
    // aServerIpPort     is the server ip port
-   // aMsgMonkey    is the message monkey to be used on receive messages
+   // aMonkey    is the message monkey to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
    // aSessionQCallChange is a qcall for session changes
 
-   typedef Ris::Threads::QCall1<bool>              SessionQCall;
-   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
+   typedef Ris::Threads::QCall1<bool>          SessionQCall;
+   typedef Ris::Threads::QCall1<Ris::ByteMsg*> RxMsgQCall;
 
    void configure(
-      char*                          aServerIpAddr,
-      int                            aServerIpPort,
-      Ris::BaseMsgMonkeyCreator* aMsgMonkey,
-      SessionQCall*                  aSessionQCall,
-      RxMsgQCall*                    aRxMsgQCall,
-      int                            aFlags=0); 
+      Ris::BaseMsgMonkeyCreator* aMonkey,
+      char*                      aServerIpAddr,
+      int                        aServerIpPort,
+      SessionQCall*              aSessionQCall,
+      RxMsgQCall*                aRxMsgQCall,
+      int                        aFlags=0); 
 
    //--------------------------------------------------------------
    // Thread base class overloads:
@@ -121,7 +121,7 @@ public:
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg          (Ris::ByteContent* aRxMsg);
+   void processRxMsg (Ris::ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    // QCall:
@@ -139,7 +139,7 @@ public:
    // This sends a transmit message through the socket to the server
    // It executes a blocking send() call in the context of the caller.
    // It is protected by a mutex semaphore.
-   void sendMsg(ByteContent* aTxMsg);
+   void sendMsg(ByteMsg* aTxMsg);
 
    //--------------------------------------------------------------
    // Sockets:

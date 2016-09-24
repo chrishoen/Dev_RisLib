@@ -9,6 +9,7 @@ ByteContent support classes for messages.
 //******************************************************************************
 
 #include "risByteContent.h"
+#include "risByteMsg.h"
 
 namespace Ris
 {
@@ -24,13 +25,18 @@ namespace Ris
 class BaseMsgMonkey
 {
 public:
-   BaseMsgMonkey();
 
-   // Return a contant header length
-   virtual int getHeaderLength()=0;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constructors and initialization:
 
-   // Return a contant max buffer size
-   virtual int getMaxBufferSize()=0;
+   BaseMsgMonkey(BaseMsgCreator* aCreator,BaseMsgCopier* aCopier);
+   
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Header processisng:
 
    // Extract message header parameters from a buffer and validate them
    // Returns true if the header is valid
@@ -46,14 +52,38 @@ public:
    int  mPayloadLength;
    bool mHeaderValidFlag;
 
-   // create a new message based on a message type
-   virtual Ris::ByteContent* createMessage(int aMessageType)=0;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Message processisng:
 
-   // Extract a complete message from a byte buffer
-   Ris::ByteContent* makeFromByteBuffer(Ris::ByteBuffer* buffer);
+   // Create a new message based on a message type
+   Ris::ByteMsg* createMessage(int aMessageType);
 
-   // Preprocess a message before it is sent
-   virtual void processBeforeSend(Ris::ByteContent* msg){};
+   // Preprocess a message before it is sent.
+   virtual void processBeforeSend(Ris::ByteMsg* aMsg){};
+
+   // Copy a message to a byte buffer.
+   void copyMsgToBuffer   (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aMsg);
+
+   // Copy a message from a byte buffer.
+   void copyMsgFromBuffer (Ris::ByteBuffer* aBuffer,Ris::ByteMsg*& aMsg);
+
+   // Message creator, this must be set bythe inheritor.
+   // Message copier, this must be set bythe inheritor.
+   BaseMsgCreator* mCreator;
+   BaseMsgCopier*  mCopier;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Buffer management:
+
+   // Return a contant header length
+   virtual int getHeaderLength()=0;
+
+   // Return a contant max buffer size
+   virtual int getMaxBufferSize()=0;
 
    // Endianess for buffers associated with the monkey.
    // If true then the messages will be sent in network order,

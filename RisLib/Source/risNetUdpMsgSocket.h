@@ -12,9 +12,9 @@ UdpTxMsgSocket -- udp transmit socket
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
+#include "risByteMsg.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 
@@ -39,14 +39,14 @@ namespace Net
 
       // These do socket and bind calls
       void configure(
-         char*                     aLocalIpAddr,
-         int                       aLocalIpPort,
-         BaseMsgMonkeyCreator* aMsgMonkeyCreator);
+         BaseMsgMonkeyCreator* aMonkeyCreator,
+         char*                 aLocalIpAddr,
+         int                   aLocalIpPort);
 
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
       // The recvfrom address is stored in mFromAddress.
-      bool doReceiveMsg (ByteContent*& aRxMsg);
+      bool doReceiveMsg (ByteMsg*& aRxMsg);
 
       Sockets::SocketAddress mFromAddress;
 
@@ -85,14 +85,14 @@ namespace Net
 
       // These create and configure the socket
       void configure(
-         char*                       aRemoteIpAddr,
-         int                         aRemoteIpPort,
-         BaseMsgMonkeyCreator*   aMsgMonkeyCreator);
+         BaseMsgMonkeyCreator* aMonkeyCreator,
+         char*                 aRemoteIpAddr,
+         int                   aRemoteIpPort);
 
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
       // It is protected by the transmit mutex.
-      bool doSendMsg(ByteContent* aMsg);
+      bool doSendMsg(ByteMsg* aMsg);
 
       //------------------------------------------------------------------------
       // This is a message monkey that is used to get details about 

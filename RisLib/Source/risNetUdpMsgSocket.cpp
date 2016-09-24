@@ -22,9 +22,9 @@ namespace Net
 
 UdpRxMsgSocket::UdpRxMsgSocket()
 {
-   mRxLength      = 0;
-   mRxMsgCount    = 0;
-   mValidFlag     = false;
+   mRxLength   = 0;
+   mRxMsgCount = 0;
+   mValidFlag  = false;
    mMonkey     = 0;
 }
 
@@ -39,14 +39,14 @@ UdpRxMsgSocket::~UdpRxMsgSocket()
 // configure the socket
 
 void UdpRxMsgSocket::configure(
-   char*                  aLocalIpAddr,
-   int                    aLocalIpPort,
-   BaseMsgMonkeyCreator* aMsgMonkeyCreator)
+   BaseMsgMonkeyCreator* aMonkeyCreator,
+   char*                 aLocalIpAddr,
+   int                   aLocalIpPort)
 {
    mRxMsgCount=0;
 
    mLocal.set(aLocalIpAddr,aLocalIpPort);
-   mMonkey = aMsgMonkeyCreator->createNew();
+   mMonkey = aMonkeyCreator->createNew();
 
    doSocket();
    doBind();
@@ -73,7 +73,7 @@ void UdpRxMsgSocket::configure(
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
+bool UdpRxMsgSocket::doReceiveMsg (ByteMsg*& aMsg)
 {
    //-------------------------------------------------------------------------
    // Initialize
@@ -82,8 +82,11 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Guard
    if (!mValidFlag) return false;
 
-   // Byte buffer, constructor takes size
+   // Create a byte buffer.
    ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
+
+   // Configure the byte buffer.
+   mMonkey->configureByteBuffer(&tBuffer);
    tBuffer.setCopyFrom();
 
    //-------------------------------------------------------------------------
@@ -130,13 +133,14 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // object and return it.
 
    tBuffer.rewind();
-   aMsg = mMonkey->makeFromByteBuffer(&tBuffer);
+   aMsg=0;
+   mMonkey->copyMsgFromBuffer(&tBuffer,aMsg);
 
-   // Test for errors and return.
-   // If the pointer is zero then message is bad
+   // Test for errors.
    if (aMsg==0)
    {
       mStatus=tBuffer.getError();
+      return false;
    }
 
    // Returning true  means socket was not closed
@@ -168,14 +172,14 @@ UdpTxMsgSocket::~UdpTxMsgSocket()
 // Configure the socket. Use with the next doSendMsg.
 
 void UdpTxMsgSocket::configure(
-   char*                  aRemoteIpAddr,
-   int                    aRemoteIpPort,
-   BaseMsgMonkeyCreator* aMsgMonkeyCreator)
+   BaseMsgMonkeyCreator* aMonkeyCreator,
+   char*                 aRemoteIpAddr,
+   int                   aRemoteIpPort)
 {
    mTxCount=0;
 
    mRemote.set(aRemoteIpAddr,aRemoteIpPort);
-   mMonkey = aMsgMonkeyCreator->createNew();
+   mMonkey = aMonkeyCreator->createNew();
 
    doSocket();
 
@@ -199,37 +203,38 @@ void UdpTxMsgSocket::configure(
 
 //******************************************************************************
 // This copies a message into a byte buffer and then sends the byte buffer 
-// out the socket. Use with the previous configure.
+// out the socket.
 
-bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
+bool UdpTxMsgSocket::doSendMsg(ByteMsg* aMsg)
 {
-   // Guard
+   // Guard.
    if (!mValidFlag) return false;
 
-   // Process message before send
-   mMonkey->processBeforeSend(aMsg);
-
-   // Create byte buffer, constructor takes size
+   // Create a byte buffer.
    ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
 
-   // Copy transmit message to buffer
-   tBuffer.putToBuffer(aMsg);
+   // Configure the byte buffer.
+   mMonkey->configureByteBuffer(&tBuffer);
+   tBuffer.setCopyTo();
 
-   // Delete the message
+   // Copy the message to the buffer.
+   mMonkey->copyMsgToBuffer(&tBuffer,aMsg);
+
+   // Delete the message.
    delete aMsg;
 
-   // Mutex
+   // Mutex.
    mTxMutex.lock();
 
-   // Transmit the buffer
+   // Transmit the buffer.
    mTxLength=tBuffer.getLength();
    doSendTo(mRemote,tBuffer.getBaseAddress(),mTxLength);
 
-   mTxCount++;
-
-   // Mutex
+   // Mutex.
    mTxMutex.unlock();
 
+   // Done.
+   mTxCount++;
    return true;
 }
 

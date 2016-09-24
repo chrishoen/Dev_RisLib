@@ -63,6 +63,7 @@
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
     <ClInclude Include="Source\risByteBuffer.h" />
+    <ClInclude Include="Source\risByteMsg.h" />
     <ClInclude Include="Source\risLFBlockQueue.h" />
     <ClInclude Include="Source\risLFIndex.h" />
     <ClInclude Include="Source\risLFPointerQueue.h" />

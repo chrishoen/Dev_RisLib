@@ -78,7 +78,7 @@ public:
 
    // aLocalIpAddr    is the ip address of the local interface bound to
    // aLocalIpPort    is the ip port    of the local interface bound to
-   // aMsgMonkey  is the message monkey to be used on receive messages
+   // aMonkey  is the message monkey to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
 
    typedef Ris::Threads::QCall1<Ris::ByteMsg*> RxMsgQCall;

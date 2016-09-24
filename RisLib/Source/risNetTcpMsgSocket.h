@@ -48,22 +48,22 @@ public:
 
    // These do socket and bind calls
    void configure(
-      Sockets::SocketAddress    aSocketAddress,
-      BaseMsgMonkeyCreator* aMsgMonkeyCreator);
+      BaseMsgMonkeyCreator*  aMonkeyCreator,
+      Sockets::SocketAddress aSocketAddress);
 
    void configure(
-      BaseMsgMonkeyCreator* aMsgMonkeyCreator);
+      BaseMsgMonkeyCreator*  aMonkeyCreator);
 
    void reconfigure(); 
+
+   // This receives a message from the socket via blocking recv calls.
+   // It returns true if successful.
+   bool doReceiveMsg (ByteMsg*& aRxMsg);
 
    // This sends a message over the socket via a blocking send call.
    // It returns true if successful.
    // It is protected by the transmit mutex.
-   bool doSendMsg (ByteContent*  aTxMsg);
-
-   // This receives a message from the socket via blocking recv calls.
-   // It returns true if successful.
-   bool doRecvMsg (ByteContent*& aRxMsg);
+   bool doSendMsg (ByteMsg*  aTxMsg);
 
    // These are message monkeys that are used to get details about 
    // a message from a message header that is contained in a
@@ -73,15 +73,7 @@ public:
    // message monkey allows the doSendMsg method to set header data
    // before the message is sent.
 
-   BaseMsgMonkey* mRxMsgMonkey;
-   BaseMsgMonkey* mTxMsgMonkey;
-
-   // Buffers
-   enum    {BufferSize = 4096};
-   char*                mRxBuffer;
-   int                  mRxLength;
-   char*                mTxBuffer;
-   int                  mTxLength;
+   BaseMsgMonkey* mMonkey;
 
    //--------------------------------------------------------------
    // Mutex:

@@ -32,12 +32,12 @@ UdpMsgThread::UdpMsgThread()
 // Configure:
 
 void UdpMsgThread::configure(
-   char*                      aLocalIpAddress,
-   int                        aLocalIpPort,
-   char*                      aRemoteIpAddress,
-   int                        aRemoteIpPort,
-   BaseMsgMonkeyCreator*  aMsgMonkeyCreator,
-   RxMsgQCall*            aMessageQCall)
+   BaseMsgMonkeyCreator* aMonkeyCreator,
+   char*                 aLocalIpAddress,
+   int                   aLocalIpPort,
+   char*                 aRemoteIpAddress,
+   int                   aRemoteIpPort,
+   RxMsgQCall*           aMessageQCall)
 {
    strcpy(mLocalIpAddress,aLocalIpAddress);
    mLocalIpPort = aLocalIpPort;
@@ -45,7 +45,7 @@ void UdpMsgThread::configure(
    strcpy(mRemoteIpAddress, aRemoteIpAddress);
    mRemoteIpPort = aRemoteIpPort;
 
-   mMonkeyCreator = aMsgMonkeyCreator;
+   mMonkeyCreator = aMonkeyCreator;
 
    mRxMsgQCall = *aMessageQCall;
 }
@@ -59,14 +59,14 @@ void UdpMsgThread::threadInitFunction()
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction BEGIN");
 
    mRxSocket.configure(
+      mMonkeyCreator,
       mLocalIpAddress,
-      mLocalIpPort,
-      mMonkeyCreator);
+      mLocalIpPort);
 
    mTxSocket.configure(
+      mMonkeyCreator,
       mRemoteIpAddress,
-      mRemoteIpPort,
-      mMonkeyCreator);
+      mRemoteIpPort);
 
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction END");
 }
@@ -83,21 +83,21 @@ void  UdpMsgThread::threadRunFunction()
    //-----------------------------------------------------------
    // Loop
 
-   bool going=mRxSocket.mValidFlag;
+   bool tGoing=mRxSocket.mValidFlag;
 
-   while(going)
+   while(tGoing)
    {
       // Try to receive a message with a blocking receive call
       // If a message was received then process it.
       // If a message was not received then the connection was lost.  
-      ByteContent* rxMsg=0;
-      if (mRxSocket.doReceiveMsg(rxMsg))
+      ByteMsg* tMsg=0;
+      if (mRxSocket.doReceiveMsg(tMsg))
       {
          // Message was correctly received
          Prn::print(Prn::SocketRun1, "Recv message %d",mRxSocket.mRxMsgCount);
 
          // Call the receive method
-         processRxMsg(rxMsg);
+         processRxMsg(tMsg);
       }
       else
       {
@@ -110,7 +110,7 @@ void  UdpMsgThread::threadRunFunction()
       // This is set by shutdown, see below.
       if (mTerminateFlag)
       {
-         going=false;
+         tGoing=false;
       }  
    }         
 }
@@ -142,7 +142,7 @@ void UdpMsgThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
+void UdpMsgThread::processRxMsg(Ris::ByteMsg* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
@@ -152,7 +152,7 @@ void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
+void UdpMsgThread::sendMsg (Ris::ByteMsg* aMsg)
 {
    mTxSocket.doSendMsg(aMsg);
 }

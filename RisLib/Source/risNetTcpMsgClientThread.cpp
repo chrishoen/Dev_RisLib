@@ -31,19 +31,19 @@ TcpMsgClientThread::TcpMsgClientThread()
 // Configure:
 
 void TcpMsgClientThread::configure(
-   char*                      aServerIpAddr,
-   int                        aServerIpPort,
-   BaseMsgMonkeyCreator*  aMsgMonkeyCreator,
-   SessionQCall*              aSessionQCall,
-   RxMsgQCall*                aRxMsgQCall,
-   int                        aFlags) 
+   BaseMsgMonkeyCreator* aMonkeyCreator,
+   char*                 aServerIpAddr,
+   int                   aServerIpPort,
+   SessionQCall*         aSessionQCall,
+   RxMsgQCall*           aRxMsgQCall,
+   int                   aFlags) 
 {
    Prn::print(Prn::SocketInit1, "TcpClientThread::configure");
 
    mConnectionFlag=false;
    mFlags=aFlags;
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
-   mMonkeyCreator = aMsgMonkeyCreator;
+   mMonkeyCreator = aMonkeyCreator;
 
    mSessionQCall = *aSessionQCall;
    mRxMsgQCall   = *aRxMsgQCall;
@@ -58,7 +58,7 @@ void TcpMsgClientThread::threadInitFunction()
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction BEGIN");
 
    // Configure the socket
-   mSocket.configure(mSocketAddress,mMonkeyCreator);
+   mSocket.configure(mMonkeyCreator,mSocketAddress);
 
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction END");
 }
@@ -118,16 +118,16 @@ void TcpMsgClientThread::threadRunFunction()
          // Try to receive a message with a blocking receive call
          // If a message was received then process it.
          // If a message was not received then the connection was lost.  
-         ByteContent* rxMsg=0;
-         if (mSocket.doRecvMsg(rxMsg))
+         ByteMsg* tMsg=0;
+         if (mSocket.doReceiveMsg(tMsg))
          {
             // Message was correctly received
             Prn::print(Prn::SocketRun2, "Recv message %d",mSocket.mRxMsgCount);
 
             // process the receive message
-            if (rxMsg)
+            if (tMsg)
             {
-               processRxMsg(rxMsg);
+               processRxMsg(tMsg);
             }
          }
          else
@@ -178,17 +178,17 @@ void TcpMsgClientThread::shutdownThread()
 }
 //******************************************************************************
 
-void TcpMsgClientThread::sendMsg(ByteContent* aTxMsg)
+void TcpMsgClientThread::sendMsg(ByteMsg* aMsg)
 {
-   if (!aTxMsg) return;
+   if (!aMsg) return;
 
    if (mConnectionFlag)
    {
-      mSocket.doSendMsg(aTxMsg);
+      mSocket.doSendMsg(aMsg);
    }
    else
    {
-      delete aTxMsg;
+      delete aMsg;
    }
 
    Prn::print(Prn::SocketRun2, "doSendMsg %d %d %d",mSocket.mStatus,mSocket.mError,mSocket.mTxMsgCount);
@@ -210,11 +210,11 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
 //******************************************************************************
 //******************************************************************************
 
-void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aRxMsg)
+void TcpMsgClientThread::processRxMsg(Ris::ByteMsg* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
-   mRxMsgQCall(aRxMsg);
+   mRxMsgQCall(aMsg);
 }
 
 //******************************************************************************

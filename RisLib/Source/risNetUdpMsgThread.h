@@ -28,7 +28,6 @@ or callbacks in their configure calls.
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
 #include "risCallPointer.h"
 #include "risContainers.h"
 #include "risSockets.h"
@@ -79,18 +78,18 @@ public:
 
    // aLocalIpAddr    is the ip address of the local interface bound to
    // aLocalIpPort    is the ip port    of the local interface bound to
-   // aMsgMonkey  is the message monkey to be used on receive messages
+   // aMonkey  is the message monkey to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
 
-   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
+   typedef Ris::Threads::QCall1<Ris::ByteMsg*> RxMsgQCall;
 
    void configure(
-      char*                        aLocalIpAddress,
-      int                          aLocalIpPort,
-      char*                        aRemoteIpAddress,
-      int                          aRemoteIpPort,
-      Ris::BaseMsgMonkeyCreator*  aMsgMonkeyCreator,
-      RxMsgQCall*                  aRxMsgQCall);
+      Ris::BaseMsgMonkeyCreator* aMonkeyCreator,
+      char*                      aLocalIpAddress,
+      int                        aLocalIpPort,
+      char*                      aRemoteIpAddress,
+      int                        aRemoteIpPort,
+      RxMsgQCall*                aRxMsgQCall);
 
    //--------------------------------------------------------------
    // Process:
@@ -99,7 +98,7 @@ public:
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg (Ris::ByteContent* aMsg);
+   void processRxMsg (Ris::ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    // QCall:
@@ -110,7 +109,7 @@ public:
    //--------------------------------------------------------------
    // Transmit message:
 
-   void sendMsg (Ris::ByteContent* aMsg);
+   void sendMsg (Ris::ByteMsg* aMsg);
 
    //--------------------------------------------------------------
    // Sockets:

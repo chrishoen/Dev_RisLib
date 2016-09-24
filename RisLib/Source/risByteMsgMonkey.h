@@ -9,10 +9,26 @@ ByteContent support classes for messages.
 //******************************************************************************
 
 #include "risByteContent.h"
-#include "risByteMsg.h"
 
 namespace Ris
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is an abstract base class for a message creator. Inheriting classes 
+// are used to create messages for a specific message set.
+
+class BaseMsgCreator
+{
+public:
+
+   //***********************************************************************
+   // Create a new message, based on a message type.
+
+   virtual Ris::ByteContent* createMsg (int aMessageType)=0;
+
+};
 
 //******************************************************************************
 // This is an abstract base class for a message monkey. It can be used

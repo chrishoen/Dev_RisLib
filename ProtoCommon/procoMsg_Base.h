@@ -35,7 +35,6 @@ StatusRequest
 //******************************************************************************
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
-#include "risByteMsg.h"
 
 namespace ProtoComm
 {
@@ -58,6 +57,8 @@ namespace MsgDefT
 //******************************************************************************
 //******************************************************************************
 // This encapsualtes the message header.
+
+class BaseMsg;
 
 class Header : public Ris::ByteContent
 {
@@ -117,8 +118,8 @@ public:
    // which they transfer into and out of the headers.
    //--------------------------------------------------------------------------
 
-   void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aParent);
-   void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aParent);
+   void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, BaseMsg* aParent);
+   void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, BaseMsg* aParent);
 
    //---------------------------------------------------------------------------
    // These are set by headerCopyToFrom and used by headerReCopyToFrom,
@@ -137,14 +138,20 @@ public:
 // Base message class. All particular messages for this message set inherit
 // from this.
 
-class BaseMsg : public Ris::ByteMsg
+class BaseMsg : public Ris::ByteContent
 {
 public:
-   //---------------------------------------------------------------------------
-   // Message Header 
+   // Message type. 
+   int mMessageType;
 
+   // Message Header 
    Header mHeader;
 
+   // Constructor
+   BaseMsg()
+   {
+      mMessageType = 0;
+   }
 };
 
 //******************************************************************************

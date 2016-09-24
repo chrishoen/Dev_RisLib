@@ -90,7 +90,7 @@ void Header::copyToFrom (Ris::ByteBuffer* aBuffer)
 // which they transfer into and out of the headers.
 //--------------------------------------------------------------------------
 
-void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aParent)
+void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 {
    //---------------------------------------------------------------------
    // Instances of this class are members of parent message classes.
@@ -154,7 +154,7 @@ void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aParent)
 //******************************************************************************
 //******************************************************************************
 
-void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aParent)
+void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 {
    // If this is a put operation then this actually copies the header into
    // the buffer.

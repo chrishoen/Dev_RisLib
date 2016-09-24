@@ -267,8 +267,5 @@
     <ClInclude Include="Source\risNetUdpMsgThread.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risByteMsg.h">
-      <Filter>Source</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

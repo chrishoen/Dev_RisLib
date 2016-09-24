@@ -32,7 +32,11 @@ UdpRxMsgSocket::UdpRxMsgSocket()
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
-   if (mMonkey) delete mMonkey;
+   if (mMonkey == 0)
+   {
+      delete mMonkey;
+      mMonkey = 0;
+   }
 }
 
 //******************************************************************************
@@ -46,7 +50,7 @@ void UdpRxMsgSocket::configure(
    mRxMsgCount=0;
 
    mLocal.set(aLocalIpAddr,aLocalIpPort);
-   mMonkey = aMonkeyCreator->createNew();
+   mMonkey = aMonkeyCreator->createMonkey();
 
    doSocket();
    doBind();
@@ -179,7 +183,7 @@ void UdpTxMsgSocket::configure(
    mTxCount=0;
 
    mRemote.set(aRemoteIpAddr,aRemoteIpPort);
-   mMonkey = aMonkeyCreator->createNew();
+   mMonkey = aMonkeyCreator->createMonkey();
 
    doSocket();
 

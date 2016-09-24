@@ -30,6 +30,7 @@ TcpMsgSocket::TcpMsgSocket()
 //******************************************************************************
 TcpMsgSocket::~TcpMsgSocket()
 {
+   if (mMonkey == 0) delete mMonkey;
 }
 
 //******************************************************************************
@@ -45,7 +46,7 @@ void TcpMsgSocket::configure(
    reset();
    mRemote = aSocketAddress;
 
-   if (mMonkey==0) mMonkey = aMonkeyCreator->createNew();
+   if (mMonkey==0) mMonkey = aMonkeyCreator->createMonkey();
 
    doSocket();
    setOptionKeepAlive();
@@ -70,7 +71,7 @@ void TcpMsgSocket::configure(
 void TcpMsgSocket::configure(
    BaseMsgMonkeyCreator* aMonkeyCreator)
 {
-   if (mMonkey == 0) mMonkey = aMonkeyCreator->createNew();
+   if (mMonkey == 0) mMonkey = aMonkeyCreator->createMonkey();
 }
 
 //******************************************************************************

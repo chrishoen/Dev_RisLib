@@ -104,7 +104,7 @@ public:
 class BaseMsgMonkeyCreator
 {
 public:
-   virtual BaseMsgMonkey* createNew() = 0;
+   virtual BaseMsgMonkey* createMonkey() = 0;
 };
 
 }//namespace

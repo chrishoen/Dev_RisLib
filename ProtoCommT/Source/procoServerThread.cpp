@@ -109,7 +109,7 @@ void ServerThread::executeSession (int aSessionIndex,bool aConnected)
 
 //******************************************************************************
 // QCall
-void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteMsg* aMsg)
+void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 {
    if(!aMsg) return;
 

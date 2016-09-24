@@ -26,7 +26,6 @@ ClientThread::ClientThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-
    // Initialize QCalls
    mSessionQCall.bind (this,&ClientThread::executeSession);
    mRxMsgQCall.bind   (this,&ClientThread::executeRxMsg);
@@ -122,7 +121,7 @@ void ClientThread::executeSession (bool aConnected)
 //******************************************************************************
 // QCall
 
-void ClientThread::executeRxMsg(Ris::ByteMsg* aRxMsg)
+void ClientThread::executeRxMsg(Ris::ByteContent* aRxMsg)
 {
    if(!aRxMsg) return;
 

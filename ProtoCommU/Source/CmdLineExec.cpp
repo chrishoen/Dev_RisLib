@@ -92,6 +92,30 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
    ProtoComm::DataMsg* tRxMsg = new ProtoComm::DataMsg;
    tTxMsg->initialize();
 
+   ProtoComm::MsgCopier tCopier;
+
+   tBuffer.setCopyTo();
+   tCopier.copyToFrom(&tBuffer,tTxMsg);
+
+   tBuffer.rewind();
+   tBuffer.setCopyFrom();
+   tCopier.copyToFrom(&tBuffer,tRxMsg);
+   tRxMsg->show();
+
+   delete tTxMsg;
+   delete tRxMsg;
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
+{
+   Ris::ByteBuffer tBuffer(20000);
+
+   ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
+   ProtoComm::DataMsg* tRxMsg = new ProtoComm::DataMsg;
+   tTxMsg->initialize();
+
    tBuffer.putToBuffer((Ris::ByteContent*)tTxMsg);
    tBuffer.rewind();
 // printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
@@ -119,7 +143,7 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
@@ -144,7 +168,7 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
    tMsg->initialize();
@@ -153,9 +177,3 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 }
 
 
-//******************************************************************************
-
-
-void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
-{
-}

@@ -137,7 +137,8 @@ public:
 // Base message class. All particular messages for this message set inherit from
 // this.
 
-class BaseMsg : public Ris::ByteContent,public Ris::ByteMsg
+//class BaseMsg : public Ris::ByteContent,public Ris::ByteMsg
+class BaseMsg : public Ris::ByteMsg,public Ris::ByteContent
 {
 public:
    //---------------------------------------------------------------------------

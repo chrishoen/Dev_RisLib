@@ -39,186 +39,182 @@ StatusRequest
 
 namespace ProtoComm
 {
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Message Types
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // Message Types
+class MsgIdT
+{
+public:
 
-   class MsgIdT
-   {
-   public:
+   static const int   cUnspecifiedMsg    = 0;
+   static const int   cTestMsg           = 1;
+   static const int   cFirstMessageMsg   = 2;
+   static const int   cStatusRequestMsg  = 3;
+   static const int   cStatusResponseMsg = 4;
+   static const int   cDataMsg           = 5;
 
-      static const int   cUnspecifiedMsg    = 0;
-      static const int   cTestMsg           = 1;
-      static const int   cFirstMessageMsg   = 2;
-      static const int   cStatusRequestMsg  = 3;
-      static const int   cStatusResponseMsg = 4;
-      static const int   cDataMsg           = 5;
-
-   };
+};
 
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // Particular message classes.
-   // There is one class for each message in the message set.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Particular message classes.
+// There is one class for each message in the message set.
 
-   class TestMsg : public BaseMsg
-   {
-   public:
-      TestMsg();
-      void copyToFrom (Ris::ByteBuffer* aBuffer);
+class TestMsg : public BaseMsg
+{
+public:
+   //------------------------------------------------
+   // Content
 
-      //------------------------------------------------
-      // Content
+   int mCode1;
+   int mCode2;
+   int mCode3;
+   int mCode4;
 
-      int mCode1;
-      int mCode2;
-      int mCode3;
-      int mCode4;
+   // Content
+   //------------------------------------------------
 
-      // Content
-      //------------------------------------------------
+   TestMsg();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
 
-      void initialize();
-      void show();
+   void initialize();
+   void show();
 
-   };
+};
 
-   //******************************************************************************
+//******************************************************************************
 
-   class FirstMessageMsg : public BaseMsg
-   {
-   public:
-      FirstMessageMsg();
-      void copyToFrom (Ris::ByteBuffer* aBuffer);
+class FirstMessageMsg : public BaseMsg
+{
+public:
+   //------------------------------------------------
+   // Content
 
-      //------------------------------------------------
-      // Content
+   int mCode1;
 
-      int mCode1;
+   // Content
+   //------------------------------------------------
 
-      // Content
-      //------------------------------------------------
+   FirstMessageMsg();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
+};
 
-   };
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+class StatusRequestMsg : public BaseMsg
+{
+public:
+   //------------------------------------------------
+   // Content
 
-   class StatusRequestMsg : public BaseMsg
-   {
-   public:
-      StatusRequestMsg();
-      void copyToFrom (Ris::ByteBuffer* aBuffer);
+   int    mCode1;
+   int    mCode2;
+   int    mCode3;
+   int    mCode4;
 
-      //------------------------------------------------
-      // Content
+   enum {MaxWords=1000};
+   int  mNumOfWords;
+   int  mWords[MaxWords];
 
-      int    mCode1;
-      int    mCode2;
-      int    mCode3;
-      int    mCode4;
+   // Content
+   //------------------------------------------------
 
-      enum {MaxWords=1000};
-      int  mNumOfWords;
-      int  mWords[MaxWords];
+   StatusRequestMsg();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
+};
 
-      // Content
-      //------------------------------------------------
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-   };
+class StatusResponseMsg : public BaseMsg
+{
+public:
+   //------------------------------------------------
+   // Content
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   int   mCode1;
+   int   mCode2;
+   int   mCode3;
+   int   mCode4;
 
-   class StatusResponseMsg : public BaseMsg
-   {
-   public:
-      StatusResponseMsg();
-      void copyToFrom(Ris::ByteBuffer* aBuffer);
+   enum { MaxWords = 1000 };
+   int   mNumOfWords;
+   int   mWords[MaxWords];
 
-      //------------------------------------------------
-      // Content
+   // Content
+   //------------------------------------------------
 
-      int   mCode1;
-      int   mCode2;
-      int   mCode3;
-      int   mCode4;
+   StatusResponseMsg();
+   void copyToFrom(Ris::ByteBuffer* aBuffer);
+};
 
-      enum { MaxWords = 1000 };
-      int   mNumOfWords;
-      int   mWords[MaxWords];
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-      // Content
-      //------------------------------------------------
+class DataRecord : public Ris::ByteContent
+{
+public:
 
-   };
+   //------------------------------------------------
+   // Content
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   int mX1;
+   int mX2;
+   int mX3;
+   int mX4;
 
-   class DataRecord : public Ris::ByteContent
-   {
-   public:
+   // Content
+   //------------------------------------------------
 
-      //------------------------------------------------
-      // Content
+   DataRecord();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
 
-      int mX1;
-      int mX2;
-      int mX3;
-      int mX4;
+   void initialize();
+   void show();
+};
 
-      // Content
-      //------------------------------------------------
+class DataMsg : public BaseMsg
+{
+public:
 
-      DataRecord();
-      void copyToFrom (Ris::ByteBuffer* aBuffer);
+   //------------------------------------------------
+   // Content
 
-      void initialize();
-      void show();
-   };
+   unsigned char       mUChar;
+   unsigned short      mUShort;
+   unsigned int        mUInt;
+   unsigned long long  mUInt64;
+   char                mChar;
+   short               mShort;
+   int                 mInt;
+   long long           mInt64;
+   float               mFloat;
+   double              mDouble;
+   bool                mBool;
 
-   class DataMsg : public BaseMsg
-   {
-   public:
+   char                mString1[100];
+   char                mString2[100];
 
-      //------------------------------------------------
-      // Content
+   DataRecord          mDataRecord;
 
-      unsigned char       mUChar;
-      unsigned short      mUShort;
-      unsigned int        mUInt;
-      unsigned long long  mUInt64;
-      char                mChar;
-      short               mShort;
-      int                 mInt;
-      long long           mInt64;
-      float               mFloat;
-      double              mDouble;
-      bool                mBool;
+   // Content
+   //------------------------------------------------
 
-      char                mString1[100];
-      char                mString2[100];
+   DataMsg();
+   void copyToFrom(Ris::ByteBuffer* aBuffer);
 
-      DataRecord          mDataRecord;
+   void initialize();
+   void show();
 
-      // Content
-      //------------------------------------------------
-
-      DataMsg();
-      void copyToFrom(Ris::ByteBuffer* aBuffer);
-
-      void initialize();
-      void show();
-
-   };
+};
 
 }//namespace
 #endif

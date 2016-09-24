@@ -15,38 +15,6 @@ namespace ProtoComm
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // This creates a new message, based on a message type
-
-   BaseMsg* MessageCreator::createMessage(int aMessageType)
-   {
-      BaseMsg* message = 0;
-
-      switch (aMessageType)
-      {
-      case MsgIdT::cTestMsg :
-         message = new TestMsg;
-         break;
-      case MsgIdT::cFirstMessageMsg :
-         message = new FirstMessageMsg;
-         break;
-      case MsgIdT::cStatusRequestMsg :
-         message = new StatusRequestMsg;
-         break;
-      case MsgIdT::cStatusResponseMsg :
-         message = new StatusResponseMsg;
-         break;
-      case MsgIdT::cDataMsg :
-         message = new DataMsg;
-         break;
-      default :
-         return 0;
-         break;
-      }
-      return message;
-   }
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
 
    TestMsg::TestMsg ()
    {

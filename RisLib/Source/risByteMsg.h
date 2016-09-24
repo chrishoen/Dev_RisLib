@@ -53,9 +53,9 @@ class BaseMsgCreator
 public:
 
    //***********************************************************************
-   // Create a new record, based on a record type.
+   // Create a new message, based on a message type.
 
-   virtual Ris::ByteMsg* createMsg (int aType)=0;
+   virtual Ris::ByteMsg* createMsg (int aMessageType)=0;
 
 };
 
@@ -69,8 +69,8 @@ class  BaseMsgCopier
 {
 public:
 
-   //***********************************************************************
-   // Copy records to/from a byte buffer.
+   //***************************************************************************
+   // Copy a message to/from a byte buffer.
 
    virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)=0;
 };

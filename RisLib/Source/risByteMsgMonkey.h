@@ -20,7 +20,7 @@ namespace Ris
 // classes don't have to be visible to the receiving code. Inheriting classes
 // provide all of the details that are needed by receiving code to receive and
 // extract messages, as opposed to having the message classes being visible
-// to the receiving code.
+// to the receiving code. Likewise for the transmitting code.
 
 class BaseMsgMonkey
 {

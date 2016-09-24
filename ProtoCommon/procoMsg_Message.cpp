@@ -266,6 +266,39 @@ void DataMsg::show()
    printf("\n");
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This creates a new message, based on a message type
+
+Ris::ByteContent* MsgCreator::createMsg (int aMessageType)
+{
+   Ris::ByteContent* tMsg = 0;
+
+   switch (aMessageType)
+   {
+   case MsgIdT::cTestMsg :
+      tMsg = new TestMsg;
+      break;
+   case MsgIdT::cFirstMessageMsg :
+      tMsg = new FirstMessageMsg;
+      break;
+   case MsgIdT::cStatusRequestMsg :
+      tMsg = new StatusRequestMsg;
+      break;
+   case MsgIdT::cStatusResponseMsg :
+      tMsg = new StatusResponseMsg;
+      break;
+   case MsgIdT::cDataMsg :
+      tMsg = new DataMsg;
+      break;
+   default :
+      return 0;
+      break;
+   }
+   return tMsg;
+}
+
 }//namespace
 
 

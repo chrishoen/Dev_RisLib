@@ -216,6 +216,20 @@ public:
 
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Message creator:
+
+class MsgCreator : public Ris::BaseMsgCreator
+{
+public:
+   //***********************************************************************
+   // Create a new message, based on a message type.
+
+   Ris::ByteContent* createMsg (int aMessageType) override;
+};
+
 }//namespace
 #endif
 

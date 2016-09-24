@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "procoMsg_Base.h"
 #include "procoMsg_Message.h"
+#include "procoMsg_Base.h"
 
 
 namespace ProtoComm
@@ -194,42 +194,9 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This creates a new message, based on a message type
 
-Ris::ByteContent* MsgCreator::createMsg (int aMessageType)
-{
-   Ris::ByteContent* tMsg = 0;
-
-   switch (aMessageType)
-   {
-   case MsgIdT::cTestMsg :
-      tMsg = new TestMsg;
-      break;
-   case MsgIdT::cFirstMessageMsg :
-      tMsg = new FirstMessageMsg;
-      break;
-   case MsgIdT::cStatusRequestMsg :
-      tMsg = new StatusRequestMsg;
-      break;
-   case MsgIdT::cStatusResponseMsg :
-      tMsg = new StatusResponseMsg;
-      break;
-   case MsgIdT::cDataMsg :
-      tMsg = new DataMsg;
-      break;
-   default :
-      return 0;
-      break;
-   }
-   return tMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-MsgMonkey::MsgMonkey() :
-   Ris::BaseMsgMonkey(&mMsgCreator)
+MsgMonkey::MsgMonkey()
+   : Ris::BaseMsgMonkey(new MsgCreator)
 {
    mSourceId=0;
 }

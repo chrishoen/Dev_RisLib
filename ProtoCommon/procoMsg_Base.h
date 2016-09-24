@@ -155,20 +155,6 @@ public:
 };
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Message creator:
-
-class MsgCreator : public Ris::BaseMsgCreator
-{
-public:
-   //***********************************************************************
-   // Create a new message, based on a message type.
-
-   Ris::ByteContent* createMsg (int aMessageType) override;
-};
-
-//******************************************************************************
 // This is the message monkey. It is used by code that receives messages into
 // byte buffers such that the message classes don't have to be visible to the
 // receiving code. Inheriting classes provide all of the details that are
@@ -183,8 +169,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Members:
-
-   MsgCreator mMsgCreator;
 
    int mSourceId;
 

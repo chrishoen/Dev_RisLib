@@ -16,7 +16,7 @@ to/from a ByteBuffer, which can be transported via some communications
 medium. All copies are done in network order. 
 
 ==============================================================================*/
-#include "risByteBuffer.h"
+#include "risByteContent.h"
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -29,7 +29,7 @@ namespace Ris
 //******************************************************************************
 // This is a base class for classes that can be copied to/from ByteBuffers.
 
-class ByteMsg
+class ByteMsg : public Ris::ByteContent
 {
 public:
    // General purpose identifier
@@ -55,24 +55,8 @@ public:
    //***********************************************************************
    // Create a new message, based on a message type.
 
-   virtual Ris::ByteMsg* createMsg (int aMessageType)=0;
+   virtual Ris::ByteContent* createMsg (int aMessageType)=0;
 
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is an abstract base class for a message copier. Inheriting classes 
-// are used to copy messages for a specific message set to/from byte buffers.
-
-class  BaseMsgCopier
-{
-public:
-
-   //***************************************************************************
-   // Copy a message to/from a byte buffer.
-
-   virtual void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)=0;
 };
 
 //******************************************************************************

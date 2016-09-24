@@ -90,7 +90,7 @@ void  UdpMsgThread::threadRunFunction()
       // Try to receive a message with a blocking receive call
       // If a message was received then process it.
       // If a message was not received then the connection was lost.  
-      ByteMsg* tMsg=0;
+      ByteContent* tMsg=0;
       if (mRxSocket.doReceiveMsg(tMsg))
       {
          // Message was correctly received
@@ -142,7 +142,7 @@ void UdpMsgThread::shutdownThread()
 
 //******************************************************************************
 
-void UdpMsgThread::processRxMsg(Ris::ByteMsg* aMsg)
+void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
@@ -152,7 +152,7 @@ void UdpMsgThread::processRxMsg(Ris::ByteMsg* aMsg)
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void UdpMsgThread::sendMsg (Ris::ByteMsg* aMsg)
+void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {
    mTxSocket.doSendMsg(aMsg);
 }

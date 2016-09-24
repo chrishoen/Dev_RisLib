@@ -31,7 +31,7 @@ public:
    //***************************************************************************
    // Constructors and initialization:
 
-   BaseMsgMonkey(BaseMsgCreator* aCreator,BaseMsgCopier* aCopier);
+   BaseMsgMonkey(BaseMsgCreator* aCreator);
    
    //***************************************************************************
    //***************************************************************************
@@ -58,21 +58,19 @@ public:
    // Message processisng:
 
    // Create a new message based on a message type
-   Ris::ByteMsg* createMessage(int aMessageType);
+   Ris::ByteContent* createMessage(int aMessageType);
 
    // Preprocess a message before it is sent.
-   virtual void processBeforeSend(Ris::ByteMsg* aMsg){};
+   virtual void processBeforeSend(Ris::ByteContent* aMsg){};
 
    // Copy a message to a byte buffer.
-   void putMsgToBuffer (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aMsg);
+   void putMsgToBuffer (Ris::ByteBuffer* aBuffer,Ris::ByteContent* aMsg);
 
    // Copy a message from a byte buffer.
-   Ris::ByteMsg* getMsgFromBuffer (Ris::ByteBuffer* aBuffer);
+   Ris::ByteContent* getMsgFromBuffer (Ris::ByteBuffer* aBuffer);
 
    // Message creator, this must be set bythe inheritor.
-   // Message copier, this must be set bythe inheritor.
    BaseMsgCreator* mCreator;
-   BaseMsgCopier*  mCopier;
 
    //***************************************************************************
    //***************************************************************************

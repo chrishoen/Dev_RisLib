@@ -58,12 +58,12 @@ public:
 
    // This receives a message from the socket via blocking recv calls.
    // It returns true if successful.
-   bool doReceiveMsg (ByteMsg*& aRxMsg);
+   bool doReceiveMsg (ByteContent*& aRxMsg);
 
    // This sends a message over the socket via a blocking send call.
    // It returns true if successful.
    // It is protected by the transmit mutex.
-   bool doSendMsg (ByteMsg*  aTxMsg);
+   bool doSendMsg (ByteContent*  aTxMsg);
 
    // These are message monkeys that are used to get details about 
    // a message from a message header that is contained in a

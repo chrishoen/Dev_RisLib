@@ -77,7 +77,7 @@ void UdpRxMsgSocket::configure(
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpRxMsgSocket::doReceiveMsg (ByteMsg*& aMsg)
+bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 {
    //-------------------------------------------------------------------------
    // Initialize
@@ -208,7 +208,7 @@ void UdpTxMsgSocket::configure(
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket.
 
-bool UdpTxMsgSocket::doSendMsg(ByteMsg* aMsg)
+bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 {
    // Guard.
    if (!mValidFlag) return false;

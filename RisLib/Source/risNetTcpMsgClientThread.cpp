@@ -118,7 +118,7 @@ void TcpMsgClientThread::threadRunFunction()
          // Try to receive a message with a blocking receive call
          // If a message was received then process it.
          // If a message was not received then the connection was lost.  
-         ByteMsg* tMsg=0;
+         ByteContent* tMsg=0;
          if (mSocket.doReceiveMsg(tMsg))
          {
             // Message was correctly received
@@ -178,7 +178,7 @@ void TcpMsgClientThread::shutdownThread()
 }
 //******************************************************************************
 
-void TcpMsgClientThread::sendMsg(ByteMsg* aMsg)
+void TcpMsgClientThread::sendMsg(ByteContent* aMsg)
 {
    if (!aMsg) return;
 
@@ -210,7 +210,7 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
 //******************************************************************************
 //******************************************************************************
 
-void TcpMsgClientThread::processRxMsg(Ris::ByteMsg* aMsg)
+void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.

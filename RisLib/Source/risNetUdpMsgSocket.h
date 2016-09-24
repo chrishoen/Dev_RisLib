@@ -14,7 +14,6 @@ UdpTxMsgSocket -- udp transmit socket
 
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
-#include "risByteMsg.h"
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 
@@ -46,7 +45,7 @@ namespace Net
       // This receives a message from the socket via blocking recvfrom calls.
       // It returns true if successful.
       // The recvfrom address is stored in mFromAddress.
-      bool doReceiveMsg (ByteMsg*& aRxMsg);
+      bool doReceiveMsg (ByteContent*& aRxMsg);
 
       Sockets::SocketAddress mFromAddress;
 
@@ -92,7 +91,7 @@ namespace Net
       // This sends a message over the socket via a blocking send call.
       // It returns true if successful.
       // It is protected by the transmit mutex.
-      bool doSendMsg(ByteMsg* aMsg);
+      bool doSendMsg(ByteContent* aMsg);
 
       //------------------------------------------------------------------------
       // This is a message monkey that is used to get details about 

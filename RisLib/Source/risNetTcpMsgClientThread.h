@@ -85,7 +85,7 @@ public:
    // aSessionQCallChange is a qcall for session changes
 
    typedef Ris::Threads::QCall1<bool>          SessionQCall;
-   typedef Ris::Threads::QCall1<Ris::ByteMsg*> RxMsgQCall;
+   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
 
    void configure(
       Ris::BaseMsgMonkeyCreator* aMonkey,
@@ -121,7 +121,7 @@ public:
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg (Ris::ByteMsg* aMsg);
+   void processRxMsg (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    // QCall:
@@ -139,7 +139,7 @@ public:
    // This sends a transmit message through the socket to the server
    // It executes a blocking send() call in the context of the caller.
    // It is protected by a mutex semaphore.
-   void sendMsg(ByteMsg* aTxMsg);
+   void sendMsg(ByteContent* aTxMsg);
 
    //--------------------------------------------------------------
    // Sockets:

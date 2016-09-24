@@ -196,9 +196,9 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aParent
 //******************************************************************************
 // This creates a new message, based on a message type
 
-Ris::ByteMsg* MsgCreator::createMsg (int aMessageType)
+Ris::ByteContent* MsgCreator::createMsg (int aMessageType)
 {
-   Ris::ByteMsg* tMsg = 0;
+   Ris::ByteContent* tMsg = 0;
 
    switch (aMessageType)
    {
@@ -227,21 +227,9 @@ Ris::ByteMsg* MsgCreator::createMsg (int aMessageType)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy a message to/from a byte buffer.
-
-void MsgCopier::copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
-{
-   // Copy with a byte content copy to/from.
-   Ris::ByteContent* tMsg = (Ris::ByteContent*)aMsg;
-   tMsg->copyToFrom(aBuffer);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
 MsgMonkey::MsgMonkey() :
-   Ris::BaseMsgMonkey(&mMsgCreator,&mMsgCopier)
+   Ris::BaseMsgMonkey(&mMsgCreator)
 {
    mSourceId=0;
 }
@@ -282,7 +270,7 @@ bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 
 //******************************************************************************
 
-void MsgMonkey::processBeforeSend(Ris::ByteMsg* aMsg)
+void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
 {
    BaseMsg* tx = (BaseMsg*)aMsg;
 

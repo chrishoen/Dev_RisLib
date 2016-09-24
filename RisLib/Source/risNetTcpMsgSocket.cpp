@@ -90,7 +90,7 @@ void TcpMsgSocket::reconfigure()
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket.
 
-bool TcpMsgSocket::doSendMsg(ByteMsg* aMsg)
+bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 {
    // Guard.
    if (!mValidFlag) return false;
@@ -133,7 +133,7 @@ bool TcpMsgSocket::doSendMsg(ByteMsg* aMsg)
 // This receives data from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool TcpMsgSocket::doReceiveMsg (ByteMsg*& aMsg)
+bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 {
    //-------------------------------------------------------------------------
    // Initialize

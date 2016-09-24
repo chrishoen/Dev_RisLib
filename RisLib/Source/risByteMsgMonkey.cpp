@@ -15,10 +15,9 @@ namespace Ris
 //******************************************************************************
 // Constructor
 
-   BaseMsgMonkey::BaseMsgMonkey(BaseMsgCreator* aCreator,BaseMsgCopier* aCopier)
+   BaseMsgMonkey::BaseMsgMonkey(BaseMsgCreator* aCreator)
 {
    mCreator = aCreator;
-   mCopier  = aCopier;
 
    mHeaderLength=0;
    mMessageLength=0;
@@ -48,7 +47,7 @@ void BaseMsgMonkey::configureByteBuffer(ByteBuffer* aBuffer)
 //******************************************************************************
 // Copy a message to a byte buffer.
 
-void BaseMsgMonkey::putMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
+void BaseMsgMonkey::putMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteContent* aMsg)
 {
    // Call inheritor's override to preprocess the message before it is sent.
    processBeforeSend(aMsg);
@@ -57,7 +56,7 @@ void BaseMsgMonkey::putMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
    aBuffer->setCopyTo();
 
    // Call inheritor's copier to copy from the message to the buffer.
-   mCopier->copyToFrom(aBuffer,aMsg);
+   aMsg->copyToFrom(aBuffer);
 }
 
 //******************************************************************************
@@ -70,14 +69,14 @@ void BaseMsgMonkey::putMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg)
 // 2) Copy the data from the byte buffer into the new message object
 // and returns a pointer to the base class.
 
-Ris::ByteMsg* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
+Ris::ByteContent* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 {
    // Guard.
    if (!mHeaderValidFlag) return 0;
 
    // Call inheritor's creator to create a new message based on the
    // message type that was extracted from the header.
-   Ris::ByteMsg* aMsg = mCreator->createMsg(mMessageType);
+   Ris::ByteContent* aMsg = mCreator->createMsg(mMessageType);
 
    // Guard
    if (!aMsg) return 0;
@@ -86,7 +85,7 @@ Ris::ByteMsg* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
    aBuffer->setCopyFrom();
 
    // Call inheritor's copier to copy from the buffer to the message.
-   mCopier->copyToFrom(aBuffer,aMsg);
+   aMsg->copyToFrom(aBuffer);
 
    // Done.
    return aMsg;

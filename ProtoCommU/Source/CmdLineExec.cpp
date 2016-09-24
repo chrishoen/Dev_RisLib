@@ -92,14 +92,13 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
    ProtoComm::DataMsg* tRxMsg = new ProtoComm::DataMsg;
    tTxMsg->initialize();
 
-   ProtoComm::MsgCopier tCopier;
+   ProtoComm::MsgMonkey tMonkey;
 
-   tBuffer.setCopyTo();
-   tCopier.copyToFrom(&tBuffer,tTxMsg);
+   tMonkey.putMsgToBuffer(&tBuffer,tTxMsg);
 
    tBuffer.rewind();
-   tBuffer.setCopyFrom();
-   tCopier.copyToFrom(&tBuffer,tRxMsg);
+   tRxMsg = (ProtoComm::DataMsg*)tMonkey.getMsgFromBuffer(&tBuffer);
+
    tRxMsg->show();
 
    delete tTxMsg;

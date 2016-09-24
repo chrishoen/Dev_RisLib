@@ -249,7 +249,7 @@ void TcpMsgServerThread::threadRunFunction()
                   // there is a data available to be read from the socket.
  
                   // Attempt to receive a message on the node socket.
-                  ByteMsg* tMsg=0;
+                  ByteContent* tMsg=0;
                   if (mNodeSocket[sessionIndex].doReceiveMsg (tMsg))
                   {
                      // A valid message was received 
@@ -322,7 +322,7 @@ void TcpMsgServerThread::threadExitFunction()
 
 //******************************************************************************
 
-void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteMsg* aMsg)
+void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aMsg)
 {
    if (!aMsg) return;
 
@@ -361,7 +361,7 @@ void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablishe
 //******************************************************************************
 //******************************************************************************
 
-void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteMsg* aMsg)
+void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.

@@ -81,7 +81,7 @@ public:
    // aMonkey  is the message monkey to be used on receive messages
    // aRxMsgQCall         is a qcall for receive messages
 
-   typedef Ris::Threads::QCall1<Ris::ByteMsg*> RxMsgQCall;
+   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
 
    void configure(
       Ris::BaseMsgMonkeyCreator* aMonkeyCreator,
@@ -98,7 +98,7 @@ public:
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg (Ris::ByteMsg* aMsg);
+   void processRxMsg (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    // QCall:
@@ -109,7 +109,7 @@ public:
    //--------------------------------------------------------------
    // Transmit message:
 
-   void sendMsg (Ris::ByteMsg* aMsg);
+   void sendMsg (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    // Sockets:

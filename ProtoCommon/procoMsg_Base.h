@@ -131,14 +131,13 @@ public:
 
 };
 
-//*********************************************************************************
-//*********************************************************************************
-//*********************************************************************************
-// Base message class. All particular messages for this message set inherit from
-// this.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Base message class. All particular messages for this message set inherit
+// from this.
 
-//class BaseMsg : public Ris::ByteContent,public Ris::ByteMsg
-class BaseMsg : public Ris::ByteMsg,public Ris::ByteContent
+class BaseMsg : public Ris::ByteMsg
 {
 public:
    //---------------------------------------------------------------------------
@@ -159,21 +158,7 @@ public:
    //***********************************************************************
    // Create a new message, based on a message type.
 
-   Ris::ByteMsg* createMsg (int aMessageType) override;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Message copier:
-
-class MsgCopier : public Ris::BaseMsgCopier
-{
-public:
-   //***************************************************************************
-   // Copy a message to/from a byte buffer.
-
-   void copyToFrom( Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg) override;
+   Ris::ByteContent* createMsg (int aMessageType) override;
 };
 
 //******************************************************************************
@@ -193,7 +178,6 @@ public:
    // Members:
 
    MsgCreator mMsgCreator;
-   MsgCopier  mMsgCopier;
 
    int mSourceId;
 
@@ -219,8 +203,7 @@ public:
    bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer) override;
 
    // Preprocess a message before it is sent
-   void processBeforeSend(Ris::ByteMsg* aMsg) override;
-
+   void processBeforeSend(Ris::ByteContent* aMsg) override;
 };
 
 //*********************************************************************************

@@ -29,9 +29,9 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a base class for classes that can be copied to/from ByteBuffers.
-// Each inheriting class supplies a copyToFrom member function that can be
-// called by ByteBuffer put and get functions to copy it.
+// This is an abstract base class for classes that can be copied to/from
+// byte buffers. Each inheriting class supplies a copyToFrom member function
+// that can be called by ByteBuffer put and get functions to copy it.
 
 class ByteContent
 {
@@ -39,8 +39,7 @@ public:
    // This is supplied by each particular inheriting class to copy itself
    // to/from a byte buffer.
 
-   virtual void copyToFrom(Ris::ByteBuffer* aBuffer) {}
-
+   virtual void copyToFrom(Ris::ByteBuffer* aBuffer)=0;
 };
 
 //******************************************************************************

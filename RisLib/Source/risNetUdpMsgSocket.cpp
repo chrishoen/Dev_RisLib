@@ -40,7 +40,9 @@ UdpRxMsgSocket::~UdpRxMsgSocket()
 }
 
 //******************************************************************************
-// configure the socket
+//******************************************************************************
+//******************************************************************************
+// Configure the socket.
 
 void UdpRxMsgSocket::configure(
    BaseMsgMonkeyCreator* aMonkeyCreator,
@@ -74,16 +76,18 @@ void UdpRxMsgSocket::configure(
 }
 
 //******************************************************************************
-// This receives a datagram from the socket into a byte buffer and then
-// extracts a message from the byte buffer
+//******************************************************************************
+//******************************************************************************
+// Receive a datagram from the socket into a byte buffer and then extract a 
+// message from it.
 
 bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 {
-   //-------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Initialize
    aMsg=0;
 
-   // Guard
+   // Guard.
    if (!mValidFlag) return false;
 
    // Create a byte buffer.
@@ -93,15 +97,15 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    mMonkey->configureByteBuffer(&tBuffer);
    tBuffer.setCopyFrom();
 
-   //-------------------------------------------------------------------------
-   // Read the message into the receive buffer
+   //---------------------------------------------------------------------------
+   // Read the message into the receive buffer.
    
    doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,mMonkey->getMaxBufferSize());
 
-   // Guard
+   // Guard.
    // If bad status then return false.
-   // Returning true  means socket was not closed
-   // Returning false means socket was closed
+   // Returning true  means socket was not closed.
+   // Returning false means socket was closed.
 
    if (mRxLength<=0)
    {
@@ -115,26 +119,25 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
          return false;
    }
 
-   // Set the buffer length
+   // Set the buffer length.
    tBuffer.setLength(mRxLength);
 
-   //--------------------------------------------------------------
-   // Copy from the receive buffer into the message monkey object
-   // and validate the header
+   //---------------------------------------------------------------------------
+   // Copy from the receive buffer into the message monkey object and validate
+   // the header.
 
    mMonkey->extractMessageHeaderParms(&tBuffer);
 
-   // If the header is not valid then error
+   // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
       Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER ");
       return false;
    }
 
-   //--------------------------------------------------------------
-   // At this point the buffer contains the complete message.
-   // Extract the message from the byte buffer into a new message
-   // object and return it.
+   //---------------------------------------------------------------------------
+   // At this point the buffer contains the complete message. Extract the
+   // message from the byte buffer into a new message object and return it.
 
    tBuffer.rewind();
    aMsg = mMonkey->getMsgFromBuffer(&tBuffer);
@@ -146,8 +149,8 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
       return false;
    }
 
-   // Returning true  means socket was not closed
-   // Returning false means socket was closed
+   // Returning true  means socket was not closed.
+   // Returning false means socket was closed.
    mRxMsgCount++;
    return true;
 }
@@ -172,7 +175,7 @@ UdpTxMsgSocket::~UdpTxMsgSocket()
 }
 
 //******************************************************************************
-// Configure the socket. Use with the next doSendMsg.
+// Configure the socket.
 
 void UdpTxMsgSocket::configure(
    BaseMsgMonkeyCreator* aMonkeyCreator,
@@ -205,8 +208,10 @@ void UdpTxMsgSocket::configure(
 }
 
 //******************************************************************************
-// This copies a message into a byte buffer and then sends the byte buffer 
-// out the socket.
+//******************************************************************************
+//******************************************************************************
+// Copy a message into a byte buffer and then send the byte buffer out the 
+// socket.
 
 bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 {

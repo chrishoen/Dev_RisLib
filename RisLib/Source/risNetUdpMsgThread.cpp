@@ -80,14 +80,14 @@ void  UdpMsgThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun1, "UdpRxMsgThread::threadRunFunction");
    
-   //-----------------------------------------------------------
+   //----------------------------------------------------------------------------
    // Loop
 
    bool tGoing=mRxSocket.mValidFlag;
 
    while(tGoing)
    {
-      // Try to receive a message with a blocking receive call
+      // Try to receive a message with a blocking receive call.
       // If a message was received then process it.
       // If a message was not received then the connection was lost.  
       ByteContent* tMsg=0;
@@ -105,7 +105,7 @@ void  UdpMsgThread::threadRunFunction()
          // Connection was lost
          Prn::print(Prn::SocketRun1, "Recv failed, Connection lost");
       }
-      //-----------------------------------------------------------
+      //-------------------------------------------------------------------------
       // If termination request, exit the loop
       // This is set by shutdown, see below.
       if (mTerminateFlag)

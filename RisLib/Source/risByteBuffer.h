@@ -4,38 +4,46 @@
 
 ByteContent and ByteBuffer classes.
 
-ByteBuffer is a smart pointer that addresses a fixed section of memory.
+ByteBuffer is a memory buffer that contains data that is binary encoded.
 
 ByteContent is a base class for something that can be copied to/from a
 ByteBuffer.
 
 These classes are intended to support the construction of message classes.
 The idea here is that each message is encapsulated by a class that inherits
-from ByteContent and supplies a member function that allows it to be copied
-to/from a ByteBuffer, which can be transported via some communications
-medium. All copies are done in network order. 
+from ByteContent and supplies a copytoFrom member function that allows it 
+to be copied to/from a ByteBuffer, which can be then transported via some 
+communications medium. 
+
+Copying a message class to a byte buffer entails writing the class member
+variables to the buffer, binary encoding them. 
+
+Copying a message class from a byte buffer entails reading the class member
+variables from the buffer, binary decoding them.
+
+The binary encoding/decoding of a message class is defined by the copyToFrom.
 
 ==============================================================================*/
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
 
 namespace Ris
 {
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
 // This is a base class for classes that can be copied to/from ByteBuffers.
 // Each inheriting class supplies a copyToFrom member function that can be
 // called by ByteBuffer put and get functions to copy it.
 
 class ByteContent;
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
 // This class encapsualtes byte buffers. It represents memory sections. It
 // provides member functions to do some simple memory management for a buffer.
 // It provides primitive data type put and get operations that allow primitives
@@ -52,9 +60,9 @@ class ByteContent;
 class  ByteBuffer
 {
 public:
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members
 
    //---------------------------------------------------------------------------
@@ -100,9 +108,9 @@ public:
 
    int mMemAllocCode;
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Constructors.
 
    // Default constructor        does not do a memory alloc operation.
@@ -144,9 +152,9 @@ public:
    void  advance     (int aByteSize=1);
    void  fillZero    (int aByteSize=1);
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Buffer position
 
    // Get the address of the start of the buffer
@@ -162,9 +170,9 @@ public:
    char* getPositionC ();
    void* getPositionV ();
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Length, Error, Direction.
 
    //---------------------------------------------------------------------------
@@ -198,8 +206,8 @@ public:
    bool isCopyFrom ();
 
    //---------------------------------------------------------------------------
-   // This sets the network order of the buffer and whether or not
-   // byte swapping happens.
+   // This sets the network order (endianness) of the buffer and whether or
+   // not byte swapping happens.
    //
    // If network order is true then bytes are copied into the 
    // buffer in network order, big endian. If false then little
@@ -210,13 +218,13 @@ public:
    // the machine is big endian then byte swapping does not 
    // happen. The other two cases follow.
    //
-   // The default is non network order.
+   // The default is non network order. (little endian)
 
    void setNetworkOrder (bool aNetworkOrder);
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Copy operations
 
    //---------------------------------------------------------------------------
@@ -249,7 +257,7 @@ public:
    void getFromBuffer (ByteContent* content);
 };
 
-//******************************************************************************
+//***************************************************************************
 }//namespace
 #endif
 

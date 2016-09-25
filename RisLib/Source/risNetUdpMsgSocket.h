@@ -21,102 +21,103 @@ namespace Ris
 {
 namespace Net
 {
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Udp receive message socket.
-   // Messages are based on the ByteContent message encapsulation scheme.
 
-   class UdpRxMsgSocket : public Sockets::BaseUdpSocket
-   {
-   public:
-      UdpRxMsgSocket(); 
-     ~UdpRxMsgSocket(); 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Udp receive message socket.
+// Messages are based on the ByteContent message encapsulation scheme.
 
-     //------------------------------------------------------------------------
-     // Socket:
+class UdpRxMsgSocket : public Sockets::BaseUdpSocket
+{
+public:
+   UdpRxMsgSocket(); 
+   ~UdpRxMsgSocket(); 
 
-      // These do socket and bind calls
-      void configure(
-         BaseMsgMonkeyCreator* aMonkeyCreator,
-         char*                 aLocalIpAddr,
-         int                   aLocalIpPort);
+   //---------------------------------------------------------------------------
+   // Socket:
 
-      // This receives a message from the socket via blocking recvfrom calls.
-      // It returns true if successful.
-      // The recvfrom address is stored in mFromAddress.
-      bool doReceiveMsg (ByteContent*& aRxMsg);
+   // Configure the socket. This does socket and bind calls.
+   void configure(
+      BaseMsgMonkeyCreator* aMonkeyCreator,
+      char*                 aLocalIpAddr,
+      int                   aLocalIpPort);
 
-      Sockets::SocketAddress mFromAddress;
+   // Receive a message from the socket via blocking recvfrom calls.
+   // Return true if successful.
+   bool doReceiveMsg (ByteContent*& aRxMsg);
 
-      // This is a message monkey that is used to get details about 
-      // a message from a message header that is contained in a
-      // byte buffer. It allows the doReceiveMsg method to receive and extract a
-      // message from a byte buffer without the having the message code
-      // visible to it.
-      BaseMsgMonkey* mMonkey;
+   // The recvfrom address is stored here.
+   Sockets::SocketAddress mFromAddress;
 
-      // Buffer
-      int    mRxLength;
+   // Number of bytes received.
+   int mRxLength;
 
-      //------------------------------------------------------------------------
-      // State:
+   //---------------------------------------------------------------------------
+   // This is a message monkey that is used to get details about a message 
+   // from a message header that is contained in a byte buffer. It allows the 
+   // receive method to receive and extract a message from a byte buffer
+   // without the having the message code visible to it.
+   BaseMsgMonkey* mMonkey;
 
-      // General purpose valid flag
-      bool mValidFlag;
+   //--------------------------------------------------------------------------
+   // State:
 
-      // Metrics
-      int mRxMsgCount;
-   };
+   // True if the socket is valid.
+   bool mValidFlag;
 
-   //***************************************************************************
-   // Udp transmit message socket.
-   // Messages are based on the ByteContent message encapsulation scheme.
+   // Metrics
+   int mRxMsgCount;
+};
 
-   class UdpTxMsgSocket : public Sockets::BaseUdpSocket
-   {
-   public:
-      UdpTxMsgSocket(); 
-     ~UdpTxMsgSocket(); 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Udp transmit message socket.
+// Messages are based on the ByteContent message encapsulation scheme.
 
-     //------------------------------------------------------------------------
-     // Socket, these two should be used together
+class UdpTxMsgSocket : public Sockets::BaseUdpSocket
+{
+public:
+   UdpTxMsgSocket(); 
+   ~UdpTxMsgSocket(); 
 
-      // These create and configure the socket
-      void configure(
-         BaseMsgMonkeyCreator* aMonkeyCreator,
-         char*                 aRemoteIpAddr,
-         int                   aRemoteIpPort);
+   //---------------------------------------------------------------------------
+   // Socket:
 
-      // This sends a message over the socket via a blocking send call.
-      // It returns true if successful.
-      // It is protected by the transmit mutex.
-      bool doSendMsg(ByteContent* aMsg);
+   // Configure the socket. This does socket and bind calls.
+   void configure(
+      BaseMsgMonkeyCreator* aMonkeyCreator,
+      char*                 aRemoteIpAddr,
+      int                   aRemoteIpPort);
 
-      //------------------------------------------------------------------------
-      // This is a message monkey that is used to get details about 
-      // a message from a message header that is contained in a
-      // byte buffer. It allows the doReceiveMsg method to receive and extract a
-      // message from a byte buffer without the having the message code
-      // visible to it.
+   // Send a message over the socket via a blocking send call.
+   // Return true if successful.
+   // It is protected by the transmit mutex.
+   bool doSendMsg(ByteContent* aMsg);
 
-      BaseMsgMonkey* mMonkey;
+   //---------------------------------------------------------------------------
+   // This is a message monkey that is used to get details about a message 
+   // from a message header that is contained in a byte buffer. It allows the 
+   // receive method to receive and extract a message from a byte buffer
+   // without the having the message code visible to it.
+   BaseMsgMonkey* mMonkey;
 
-      //------------------------------------------------------------------------
-      // Transmit mutex is used by doSendMsg for mutual exclusion.
+   //---------------------------------------------------------------------------
+   // Transmit mutex is used by doSendMsg for mutual exclusion.
 
-      Threads::MutexSemaphore  mTxMutex;
+   Threads::MutexSemaphore  mTxMutex;
 
-      //------------------------------------------------------------------------
-      // State:
+   //---------------------------------------------------------------------------
+   // State:
 
-      // General purpose valid flag
-      bool mValidFlag;
+   // General purpose valid flag
+   bool mValidFlag;
 
-      // Metrics
-      int mTxCount;
-      int mTxLength;
-   };
+   // Metrics
+   int mTxCount;
+   int mTxLength;
+};
 }//namespace
 }//namespace
 #endif

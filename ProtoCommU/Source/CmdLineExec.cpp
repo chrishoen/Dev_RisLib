@@ -89,16 +89,15 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
-   ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
-   ProtoComm::DataMsg* tRxMsg = new ProtoComm::DataMsg;
+   ProtoComm::TestMsg* tTxMsg = new ProtoComm::TestMsg;
+   ProtoComm::TestMsg* tRxMsg = 0;
    MsgHelper::initialize(tTxMsg);
 
    ProtoComm::MsgMonkey tMonkey;
 
    tMonkey.putMsgToBuffer(&tBuffer,tTxMsg);
 
-   tBuffer.rewind();
-   tRxMsg = (ProtoComm::DataMsg*)tMonkey.getMsgFromBuffer(&tBuffer);
+   tRxMsg = (ProtoComm::TestMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
 
    MsgHelper::show(tRxMsg);
 
@@ -113,28 +112,15 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
    Ris::ByteBuffer tBuffer(20000);
 
    ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
-   ProtoComm::DataMsg* tRxMsg = new ProtoComm::DataMsg;
+   ProtoComm::DataMsg* tRxMsg = 0;
    MsgHelper::initialize(tTxMsg);
 
-   tBuffer.putToBuffer((Ris::ByteContent*)tTxMsg);
-   tBuffer.rewind();
-// printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
+   ProtoComm::MsgMonkey tMonkey;
 
-   Ris::BaseMsgMonkey* tMsgMonkey = new ProtoComm::MsgMonkey;
+   tMonkey.putMsgToBuffer(&tBuffer,tTxMsg);
 
-   tMsgMonkey->extractMessageHeaderParms(&tBuffer);
+   tRxMsg = (ProtoComm::DataMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
 
-   // printf("Buffer2 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
-
-   // If the header is not valid then error
-   if (!tMsgMonkey->mHeaderValidFlag)
-   {
-      Prn::print(0,"ERROR doRecv1 INVALID HEADER ");
-      return;
-   }
-
-   tBuffer.rewind();
-   tRxMsg = (ProtoComm::DataMsg*)tMsgMonkey->getMsgFromBuffer(&tBuffer);
    MsgHelper::show(tRxMsg);
 
    delete tTxMsg;

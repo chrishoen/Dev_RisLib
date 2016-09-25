@@ -83,7 +83,12 @@ public:
    void putMsgToBuffer (Ris::ByteBuffer* aBuffer,Ris::ByteContent* aMsg);
 
    // Copy a message from a byte buffer.
+   // The header parms must be extracted prior to calling this.
    Ris::ByteContent* getMsgFromBuffer (Ris::ByteBuffer* aBuffer);
+
+   // Copy a message from a byte buffer.
+   // This first extracts the header parms.
+   Ris::ByteContent* makeMsgFromBuffer (Ris::ByteBuffer* aBuffer);
 
    // Message creator, this must be set bythe inheritor.
    BaseMsgCreator* mCreator;

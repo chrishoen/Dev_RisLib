@@ -132,18 +132,18 @@ void StatusResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 
 DataRecord::DataRecord ()
 {
-   mX1 = 0;
-   mX2 = 0;
-   mX3 = 0;
-   mX4 = 0;
+   mCode1 = 0;
+   mCode2 = 0;
+   mCode3 = 0;
+   mCode4 = 0;
 } 
 
 void DataRecord::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
-   aBuffer->copy( &mX1 );
-   aBuffer->copy( &mX2 );
-   aBuffer->copy( &mX3 );
-   aBuffer->copy( &mX4 );
+   aBuffer->copy( &mCode1 );
+   aBuffer->copy( &mCode2 );
+   aBuffer->copy( &mCode3 );
+   aBuffer->copy( &mCode4 );
 }
 
 //******************************************************************************

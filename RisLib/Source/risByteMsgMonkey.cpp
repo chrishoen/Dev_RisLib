@@ -17,7 +17,7 @@ namespace Ris
 
    BaseMsgMonkey::BaseMsgMonkey(BaseMsgCreator* aCreator)
 {
-   mCreator = aCreator;
+   mMsgCreator = aCreator;
 
    mHeaderLength=0;
    mMessageLength=0;
@@ -76,7 +76,7 @@ Ris::ByteContent* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 
    // Call inheritor's creator to create a new message based on the
    // message type that was extracted from the header.
-   Ris::ByteContent* aMsg = mCreator->createMsg(mMessageType);
+   Ris::ByteContent* aMsg = mMsgCreator->createMsg(mMessageType);
 
    // Guard
    if (!aMsg) return 0;
@@ -117,7 +117,7 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 
    // Call inheritor's creator to create a new message based on the
    // message type that was extracted from the header.
-   Ris::ByteContent* aMsg = mCreator->createMsg(mMessageType);
+   Ris::ByteContent* aMsg = mMsgCreator->createMsg(mMessageType);
 
    // Guard
    if (!aMsg) return 0;

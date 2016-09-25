@@ -91,7 +91,7 @@ public:
    Ris::ByteContent* makeMsgFromBuffer (Ris::ByteBuffer* aBuffer);
 
    // Message creator, this must be set bythe inheritor.
-   BaseMsgCreator* mCreator;
+   BaseMsgCreator* mMsgCreator;
 
    //***************************************************************************
    //***************************************************************************

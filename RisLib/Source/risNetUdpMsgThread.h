@@ -84,7 +84,7 @@ public:
    //---------------------------------------------------------------------------
    // QCall:
 
-   // This is a qcall that is called when a message is received.
+   // This is a qcall callback that is called when a message is received.
    RxMsgQCall mRxMsgQCall;
 
    //---------------------------------------------------------------------------

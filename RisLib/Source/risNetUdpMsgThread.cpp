@@ -122,6 +122,7 @@ void UdpMsgThread::threadExitFunction()
 {
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadExitFunction");
 }
+
 //******************************************************************************
 // Shutdown, base class overload.
 // This sets the terminate request flag and closes the socket.
@@ -141,11 +142,12 @@ void UdpMsgThread::shutdownThread()
 }
 
 //******************************************************************************
+// Invoke the qcall callback.
 
 void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
-   // Invoke the receive QCall
-   // Create a new qcall, copied from the original, and invoke it.
+   // Invoke the receive qcall callback, passes the received message to the
+   // thread owner.
    mRxMsgQCall(aMsg);
 }
 

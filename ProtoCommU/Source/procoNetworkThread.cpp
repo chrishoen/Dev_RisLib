@@ -7,6 +7,7 @@
 #include "risSockets.h"
 #include "prnPrint.h"
 #include "procoSettings.h"
+#include "procoMsgHelper.h"
 
 #define  _PROCONETWORKTHREAD_CPP_
 #include "procoNetworkThread.h"
@@ -122,7 +123,8 @@ void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_TestMsg %d %d", aMsg->mCode1, aMsg->mHeader.mSourceId);
+   MsgHelper::show(aMsg);
+   delete aMsg;
 }
 
 //******************************************************************************
@@ -136,12 +138,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
       mUdpMsgThread->sendMsg(tMsg);
    }
 
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
-   Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
-   Prn::print(Prn::ThreadRun1, "Code2      %d", aMsg->mCode2);
-   Prn::print(Prn::ThreadRun1, "Code3      %d", aMsg->mCode3);
-   Prn::print(Prn::ThreadRun1, "Code4      %d", aMsg->mCode4);
-
+   MsgHelper::show(aMsg);
    delete aMsg;
 }
 
@@ -150,7 +147,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusResponseMsg");
+   MsgHelper::show(aMsg);
    delete aMsg;
 }
 
@@ -159,10 +156,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
 
 void NetworkThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_DataMsg");
-
-   aMsg->show();
-
+   MsgHelper::show(aMsg);
    delete aMsg;
 }
 

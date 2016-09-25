@@ -1,39 +1,21 @@
 /*==============================================================================
 ==============================================================================*/
 
-//*********************************************************************************
-//*********************************************************************************
-//*********************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "exampleMsg.h"
 
-#include "prnPrint.h"
 
-#include "risByteMsgDefault.h"
-
-namespace Ris
+namespace ExampleMsg
 {
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Definitions
-
-class MsgHeaderDefT
-{
-public:
-   //************************************************************************
-   // Use this for a buffer size for these sockets
-
-   static const int cBufferSize = 20000;
-
-};
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-DefaultMsgHeader::DefaultMsgHeader()
+Header::Header()
 {
    mSyncWord1         = 0x11111111;
    mSyncWord2         = 0x22222222;
@@ -44,10 +26,9 @@ DefaultMsgHeader::DefaultMsgHeader()
 
    mInitialPosition   = 0;
    mInitialLength     = 0;
-   mHeaderValidFlag   = false;
 }
 
-void DefaultMsgHeader::reset()
+void Header::reset()
 {
    mSyncWord1         = 0;
    mSyncWord2         = 0;
@@ -57,30 +38,12 @@ void DefaultMsgHeader::reset()
    mDestinationId     = 0;
    mInitialPosition   = 0;
    mInitialLength     = 0;
-   mHeaderValidFlag   = false;
-}
-
-
-bool DefaultMsgHeader::validate()
-{
-   // Test for error
-   bool tError =
-      mSyncWord1 != 0x11111111 ||
-      mSyncWord2 != 0x22222222 ||
-      mMessageLength < DefaultMsgHeader::cLength  ||
-      mMessageLength > MsgHeaderDefT::cBufferSize;
-
-   // If no error then valid
-   mHeaderValidFlag = !tError;
-
-   // Return valid flag
-   return mHeaderValidFlag;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//---------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 // If the byte buffer is configured for put operations then this puts the
 // contents of the object into the byte buffer (it does a copy to, it
 // copies the object to the byte buffer).
@@ -88,9 +51,9 @@ bool DefaultMsgHeader::validate()
 // contents of the object from the byte buffer (it does a copy from, it
 // copies the object from the byte buffer).
 // Copy To and Copy From are symmetrical.
-//---------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 
-void DefaultMsgHeader::copyToFrom (Ris::ByteBuffer* aBuffer)
+void Header::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
    aBuffer->copy( &mSyncWord1         );
    aBuffer->copy( &mSyncWord2         );
@@ -103,7 +66,7 @@ void DefaultMsgHeader::copyToFrom (Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//---------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 // For variable content messages, the message length cannot be known until
 // the entire message has been written to a byte buffer. Therefore, the 
 // message header cannot be written to a byte buffer until the entire
@@ -124,20 +87,20 @@ void DefaultMsgHeader::copyToFrom (Ris::ByteBuffer* aBuffer)
 // where the copy is to take place. Both are also passed a MessageByte
 // pointer to where they can get and mMessageType
 // which they transfer into and out of the headers.
-//---------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 
-void DefaultMsgHeader::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aParent)
+void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 {
-   //------------------------------------------------------------------------
+   //---------------------------------------------------------------------
    // Instances of this class are members of parent message classes.
    // A call to this function should be the first line of code in a
-   // containing parent message class's copyToFrom. It performs precopyToFrom
+   // containing parent message class's copyToFrom. It performs pre-copyToFrom
    // operations. It's purpose is to copy headers to/from byte buffers. The
    // corresponding function headerReCopyToFrom should be called as the last
    // line of code in the containing message class' copyToFrom. Lines of code
    // in between should copy individual data elements into/out of the buffer.
 
-   //------------------------------------------------------------------------
+   //---------------------------------------------------------------------
    // for a "copy to" put
    //
    // If this is a "copy to" put operation then the header copy will actually
@@ -190,7 +153,7 @@ void DefaultMsgHeader::headerCopyToFrom (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* 
 //******************************************************************************
 //******************************************************************************
 
-void DefaultMsgHeader::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteMsg* aParent)
+void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 {
    // If this is a put operation then this actually copies the header into
    // the buffer.
@@ -227,5 +190,92 @@ void DefaultMsgHeader::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,Ris::ByteMs
    }
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+MsgMonkey::MsgMonkey()
+   : Ris::BaseMsgMonkey(new MsgCreator)
+{
+   mSourceId=0;
+}
+
+void  MsgMonkey::configure(int aSourceId)
+{
+   mSourceId=aSourceId;
+}
+
+//******************************************************************************
+
+bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
+{
+   // Extract header from buffer
+   Header tHeader;
+   tHeader.reset();
+   aBuffer->getFromBuffer(&tHeader);
+
+   // Set header parameters
+   mHeaderLength    = Header::cLength;
+   mMessageLength   = tHeader.mMessageLength;
+   mMessageType     = tHeader.mMessageIdentifier;
+   mPayloadLength   = tHeader.mMessageLength - Header::cLength;
+
+   // Test for error
+   bool tError =
+      tHeader.mSyncWord1 != 0x11111111 ||
+      tHeader.mSyncWord2 != 0x22222222 ||
+      tHeader.mMessageLength < Header::cLength  ||
+      tHeader.mMessageLength > MsgDefT::cMsgBufferSize;
+
+   // If no error then valid
+   mHeaderValidFlag = !tError;
+
+   // Return valid flag
+   return mHeaderValidFlag;
+}
+
+//******************************************************************************
+
+void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
+{
+   BaseMsg* tx = (BaseMsg*)aMsg;
+
+   if (tx->mHeader.mSourceId==0)
+   {
+      tx->mHeader.mSourceId=mSourceId;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// MsgMonkey creator
+
+MsgMonkeyCreator::MsgMonkeyCreator()
+{
+   mSourceId = 0;
+}
+
+void MsgMonkeyCreator::configure(int aSourceId)
+{
+   mSourceId = aSourceId;
+}
+
+Ris::BaseMsgMonkey* MsgMonkeyCreator::createMonkey()
+{
+   // New message monkey
+   MsgMonkey* tMsgMonkey = new MsgMonkey();
+   // Configure 
+   tMsgMonkey->configure(mSourceId);
+   // Return base message monkey pointer
+   return (Ris::BaseMsgMonkey*)tMsgMonkey;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+
 }//namespace
+
 

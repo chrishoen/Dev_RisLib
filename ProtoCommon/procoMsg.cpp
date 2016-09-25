@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "procoMsg_Message.h"
+#include "procoMsg.h"
 
 
 namespace ProtoComm
@@ -37,23 +37,8 @@ void TestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
    mHeader.headerReCopyToFrom(aBuffer,this);
 }
 
-void TestMsg::initialize()
-{
-   mCode1 = 901;
-   mCode2 = 902;
-   mCode3 = 903;
-   mCode4 = 904;
-}
-
-void TestMsg::show()
-{
-   printf("%d\n",  mCode1   );
-   printf("%d\n",  mCode1   );
-   printf("%d\n",  mCode2   );
-   printf("%d\n",  mCode3   );
-   printf("\n");
-}
-
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 FirstMessageMsg::FirstMessageMsg ()
@@ -161,23 +146,6 @@ void DataRecord::copyToFrom (Ris::ByteBuffer* aBuffer)
    aBuffer->copy( &mX4 );
 }
 
-void DataRecord::initialize()
-{
-   mX1 = 701;
-   mX2 = 702;
-   mX3 = 703;
-   mX4 = 704;
-}
-
-void DataRecord::show()
-{
-   printf("%d\n",  mX1   );
-   printf("%d\n",  mX2   );
-   printf("%d\n",  mX3   );
-   printf("%d\n",  mX4   );
-   printf("\n");
-}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -222,48 +190,6 @@ void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
    aBuffer->copyS( mString2 );
 
    mHeader.headerReCopyToFrom(aBuffer, this);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void DataMsg::initialize()
-{
-   mUChar  = 0x11;
-   mUShort = 0x1234;
-   mUInt   = 0x12345678;
-   mUInt64 = 0x1112131415161718;
-   mChar   = 0x11;
-   mShort  = 0x1234;
-   mInt    = 0x12345678;
-   mInt64  = 0x1112131415161718;
-   mFloat  = 12.34f;
-   mDouble = 56.78;
-   mBool   = true;
-   strcpy(mString1, "abcdef");
-   strcpy(mString2, "01234567");
-
-   mDataRecord.initialize();
-}
-
-void DataMsg::show()
-{
-   printf("UChar    %hhX\n",  mUChar   );
-   printf("UShort   %hX\n",   mUShort  );
-   printf("UInt     %X\n",    mUInt    );
-   printf("Unit64   %llX\n",  mUInt64  );
-   printf("Char     %hhX\n",  mChar    );
-   printf("Short    %hX\n",   mShort   );
-   printf("Int      %X\n",    mInt     );
-   printf("Int64    %llX\n",  mInt64   );
-   printf("Float    %5.2f\n", mFloat   );
-   printf("Double   %5.2f\n", mDouble  );
-   printf("Bool     %d\n",    mBool    );
-   printf("String1  %s\n",    mString1 );
-   printf("String2  %s\n",    mString2 );
-   mDataRecord.show();
-   printf("\n");
 }
 
 //******************************************************************************

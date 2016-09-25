@@ -1,9 +1,7 @@
-#ifndef _PROCOMSG_MESSAGE_H_
-#define _PROCOMSG_MESSAGE_H_
+#ifndef _PROCOMSG_H_
+#define _PROCOMSG_H_
 /*==============================================================================
-This file contains a set of classes that encapsulate the message set
-that is used to communicate with Intranet. The messages are specified
-in the IDD.
+This file contains a set of classes that encapsulate a message set.
 
 There is a class for each particular message in the set and there is a
 base class that all of the messages inherit from.
@@ -22,12 +20,6 @@ to the base class.
 These messages all have the same common form, they all contain a
 common message header. The base class has a Header member object that
 encapsulates the header.
-
-These are the messages:
-
-Test
-FirstMessage
-StatusRequest
 ==============================================================================*/
 
 //******************************************************************************
@@ -35,7 +27,7 @@ StatusRequest
 //******************************************************************************
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
-#include "procoMsg_Base.h"
+#include "procoMsgBase.h"
 
 namespace ProtoComm
 {
@@ -54,6 +46,7 @@ public:
    static const int   cStatusRequestMsg  = 3;
    static const int   cStatusResponseMsg = 4;
    static const int   cDataMsg           = 5;
+
 };
 
 //******************************************************************************
@@ -65,22 +58,20 @@ public:
 class TestMsg : public BaseMsg
 {
 public:
-   //------------------------------------------------
-   // Content
+
+   //***************************************************************************
+   // Members:
 
    int mCode1;
    int mCode2;
    int mCode3;
    int mCode4;
 
-   // Content
-   //------------------------------------------------
+   //***************************************************************************
+   // Methods:
 
    TestMsg();
    void copyToFrom (Ris::ByteBuffer* aBuffer);
-
-   void initialize();
-   void show();
 };
 
 //******************************************************************************
@@ -90,13 +81,14 @@ public:
 class FirstMessageMsg : public BaseMsg
 {
 public:
-   //------------------------------------------------
-   // Content
+
+   //***************************************************************************
+   // Members:
 
    int mCode1;
 
-   // Content
-   //------------------------------------------------
+   //***************************************************************************
+   // Methods:
 
    FirstMessageMsg();
    void copyToFrom (Ris::ByteBuffer* aBuffer);
@@ -109,8 +101,9 @@ public:
 class StatusRequestMsg : public BaseMsg
 {
 public:
-   //------------------------------------------------
-   // Content
+
+   //***************************************************************************
+   // Members:
 
    int    mCode1;
    int    mCode2;
@@ -121,8 +114,8 @@ public:
    int  mNumOfWords;
    int  mWords[MaxWords];
 
-   // Content
-   //------------------------------------------------
+   //***************************************************************************
+   // Methods:
 
    StatusRequestMsg();
    void copyToFrom (Ris::ByteBuffer* aBuffer);
@@ -135,8 +128,9 @@ public:
 class StatusResponseMsg : public BaseMsg
 {
 public:
-   //------------------------------------------------
-   // Content
+
+   //***************************************************************************
+   // Members:
 
    int   mCode1;
    int   mCode2;
@@ -147,8 +141,8 @@ public:
    int   mNumOfWords;
    int   mWords[MaxWords];
 
-   // Content
-   //------------------------------------------------
+   //***************************************************************************
+   // Methods:
 
    StatusResponseMsg();
    void copyToFrom(Ris::ByteBuffer* aBuffer);
@@ -162,30 +156,27 @@ class DataRecord : public Ris::ByteContent
 {
 public:
 
-   //------------------------------------------------
-   // Content
+   //***************************************************************************
+   // Members:
 
-   int mX1;
-   int mX2;
-   int mX3;
-   int mX4;
+   int mCode1;
+   int mCode2;
+   int mCode3;
+   int mCode4;
 
-   // Content
-   //------------------------------------------------
+   //***************************************************************************
+   // Methods:
 
    DataRecord();
    void copyToFrom (Ris::ByteBuffer* aBuffer);
-
-   void initialize();
-   void show();
 };
 
 class DataMsg : public BaseMsg
 {
 public:
 
-   //------------------------------------------------
-   // Content
+   //***************************************************************************
+   // Members:
 
    unsigned char       mUChar;
    unsigned short      mUShort;
@@ -204,15 +195,11 @@ public:
 
    DataRecord          mDataRecord;
 
-   // Content
-   //------------------------------------------------
+   //***************************************************************************
+   // Methods:
 
    DataMsg();
    void copyToFrom(Ris::ByteBuffer* aBuffer);
-
-   void initialize();
-   void show();
-
 };
 
 //******************************************************************************

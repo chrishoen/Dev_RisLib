@@ -22,17 +22,17 @@
     <ClCompile Include="Source\procoServerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\ProtoCommon\procoSettings.cpp">
-      <Filter>ProtoCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ProtoCommon\procoMsg_Base.cpp">
-      <Filter>ProtoCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ProtoCommon\procoMsg_Message.cpp">
-      <Filter>ProtoCommon</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProtoCommon\procoMsg.cpp">
+      <Filter>ProtoCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProtoCommon\procoMsgBase.cpp">
+      <Filter>ProtoCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProtoCommon\procoSettings.cpp">
+      <Filter>ProtoCommon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -45,20 +45,17 @@
     <ClInclude Include="Source\procoServerThread.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\MainInit.h">
+      <Filter>Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\ProtoCommon\procoMsg.h">
+      <Filter>ProtoCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProtoCommon\procoMsgBase.h">
       <Filter>ProtoCommon</Filter>
     </ClInclude>
     <ClInclude Include="..\ProtoCommon\procoSettings.h">
       <Filter>ProtoCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ProtoCommon\procoMsg_Base.h">
-      <Filter>ProtoCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ProtoCommon\procoMsg_Message.h">
-      <Filter>ProtoCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MainInit.h">
-      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

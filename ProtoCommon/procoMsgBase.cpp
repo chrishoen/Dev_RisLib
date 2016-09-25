@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "procoMsg_Message.h"
-#include "procoMsg_Base.h"
+#include "procoMsg.h"
+#include "procoMsgBase.h"
 
 
 namespace ProtoComm

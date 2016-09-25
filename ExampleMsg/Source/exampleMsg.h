@@ -1,8 +1,9 @@
 #ifndef _EXAMPLEMSG_H_
 #define _EXAMPLEMSG_H_
 
-#include "risByteBuffer.h"
-#include "risByteMsg.h"
+#include "risByteContent.h"
+#include "risByteMsgMonkey.h"
+#include "exampleMsgBase.h"
 
 namespace ExampleMsg
 {

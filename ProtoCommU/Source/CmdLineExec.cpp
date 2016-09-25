@@ -6,6 +6,7 @@
 
 #include "procoSettings.h"
 #include "procoMsg.h"
+#include "procoMsgHelper.h"
 
 #include "procoNetworkThread.h"
 
@@ -51,14 +52,14 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
       case 1:
       {
          ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-         tMsg->initialize();
+         MsgHelper::initialize(tMsg);
          gNetworkThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
          ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-         tMsg->initialize();
+         MsgHelper::initialize(tMsg);
          gNetworkThread->sendMsg(tMsg);
          break;
       }
@@ -90,7 +91,7 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 
    ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
    ProtoComm::DataMsg* tRxMsg = new ProtoComm::DataMsg;
-   tTxMsg->initialize();
+   MsgHelper::initialize(tTxMsg);
 
    ProtoComm::MsgMonkey tMonkey;
 
@@ -99,7 +100,7 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
    tBuffer.rewind();
    tRxMsg = (ProtoComm::DataMsg*)tMonkey.getMsgFromBuffer(&tBuffer);
 
-   tRxMsg->show();
+   MsgHelper::show(tRxMsg);
 
    delete tTxMsg;
    delete tRxMsg;
@@ -113,7 +114,7 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
 
    ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
    ProtoComm::DataMsg* tRxMsg = new ProtoComm::DataMsg;
-   tTxMsg->initialize();
+   MsgHelper::initialize(tTxMsg);
 
    tBuffer.putToBuffer((Ris::ByteContent*)tTxMsg);
    tBuffer.rewind();
@@ -134,7 +135,7 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
 
    tBuffer.rewind();
    tRxMsg = (ProtoComm::DataMsg*)tMsgMonkey->getMsgFromBuffer(&tBuffer);
-   tRxMsg->show();
+   MsgHelper::show(tRxMsg);
 
    delete tTxMsg;
    delete tRxMsg;
@@ -148,7 +149,7 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 
    ProtoComm::DataRecord* tTxMsg = new ProtoComm::DataRecord;
    ProtoComm::DataRecord* tRxMsg = new ProtoComm::DataRecord;
-   tTxMsg->initialize();
+   MsgHelper::initialize(tTxMsg);
 
    tBuffer.putToBuffer((Ris::ByteContent*)tTxMsg);
    printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
@@ -159,7 +160,7 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
    tBuffer.getFromBuffer((Ris::ByteContent*)tRxMsg);
    printf("Buffer3 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
 
-   tRxMsg->show();
+   MsgHelper::show(tRxMsg);
 
    delete tTxMsg;
    delete tRxMsg;
@@ -170,7 +171,7 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-   tMsg->initialize();
+   MsgHelper::initialize(tMsg);
 
    gNetworkThread->sendMsg(tMsg);
 }

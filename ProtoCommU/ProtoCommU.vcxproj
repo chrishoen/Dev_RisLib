@@ -174,8 +174,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\ProtoCommon\procoMsg_Base.cpp" />
-    <ClCompile Include="..\ProtoCommon\procoMsg_Message.cpp" />
+    <ClCompile Include="..\ProtoCommon\procoMsg.cpp" />
+    <ClCompile Include="..\ProtoCommon\procoMsgBase.cpp" />
+    <ClCompile Include="..\ProtoCommon\procoMsgHelper.cpp" />
     <ClCompile Include="..\ProtoCommon\procoSettings.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -184,8 +185,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ProtoCommon\procoMsg.h" />
-    <ClInclude Include="..\ProtoCommon\procoMsg_Base.h" />
-    <ClInclude Include="..\ProtoCommon\procoMsg_Message.h" />
+    <ClInclude Include="..\ProtoCommon\procoMsgBase.h" />
+    <ClInclude Include="..\ProtoCommon\procoMsgHelper.h" />
     <ClInclude Include="..\ProtoCommon\procoSettings.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />

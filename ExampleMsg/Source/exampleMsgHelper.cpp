@@ -5,142 +5,142 @@
 
 namespace ExampleMsg
 {
-   //****************************************************************************
+//****************************************************************************
 
-   void MsgHelper::initialize(TestMsg* aMsg)
-   {
-      aMsg->mCode1 = 901;
-      aMsg->mCode2 = 902;
-      aMsg->mCode3 = 903;
-      aMsg->mCode4 = 904;
-   }
+void MsgHelper::initialize(TestMsg* aMsg)
+{
+   aMsg->mCode1 = 101;
+   aMsg->mCode2 = 102;
+   aMsg->mCode3 = 103;
+   aMsg->mCode4 = 104;
+}
 
-   void MsgHelper::show(TestMsg* aMsg)
-   {
-      Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
-      Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
-      Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
-      Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
-      Prn::print(Prn::ThreadRun3, "");
-   }
+void MsgHelper::show(TestMsg* aMsg)
+{
+   Prn::print(Prn::ThreadRun1, "TestMsg");
+   Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "Code2      %d", aMsg->mCode2);
+   Prn::print(Prn::ThreadRun1, "Code3      %d", aMsg->mCode3);
+   Prn::print(Prn::ThreadRun1, "Code4      %d", aMsg->mCode4);
+   Prn::print(Prn::ThreadRun1, "");
+}
 
-   //****************************************************************************
+//****************************************************************************
 
-   void MsgHelper::initialize(StatusMsg* aMsg)
-   {
-      aMsg->mCode1 = 901;
-      aMsg->mCode2 = 902;
-      aMsg->mCode3 = 903;
-      aMsg->mCode4 = 904;
-   }
+void MsgHelper::initialize(FirstMessageMsg* aMsg)
+{
+   aMsg->mCode1 = 201;
+}
 
-   void MsgHelper::show(StatusMsg* aMsg)
-   {
-      Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
-      Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
-      Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
-      Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
-      Prn::print(Prn::ThreadRun3, "");
-   }
+void MsgHelper::show(FirstMessageMsg* aMsg)
+{
+   Prn::print(Prn::ThreadRun1, "TestMsg");
+   Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "");
+}
 
-   //****************************************************************************
+//****************************************************************************
 
-   void MsgHelper::initialize(Data1Msg* aMsg)
-   {
-      aMsg->mCode1 = 101;
-      aMsg->mCode2 = 102;
-      aMsg->mCode3 = 103;
-      aMsg->mCode4 = 104;
-   }
+void MsgHelper::initialize(StatusRequestMsg* aMsg)
+{
+   aMsg->mCode1 = 301;
+   aMsg->mCode2 = 302;
+   aMsg->mCode3 = 303;
+   aMsg->mCode4 = 304;
+}
 
-   void MsgHelper::show(Data1Msg* aMsg)
-   {
-      Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
-      Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
-      Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
-      Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
-      Prn::print(Prn::ThreadRun3, "");
-   }
+void MsgHelper::show(StatusRequestMsg* aMsg)
+{
+   Prn::print(Prn::ThreadRun1, "TestMsg");
+   Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "Code2      %d", aMsg->mCode2);
+   Prn::print(Prn::ThreadRun1, "Code3      %d", aMsg->mCode3);
+   Prn::print(Prn::ThreadRun1, "Code4      %d", aMsg->mCode4);
+   Prn::print(Prn::ThreadRun1, "");
+}
+
+//****************************************************************************
+
+void MsgHelper::initialize(StatusResponseMsg* aMsg)
+{
+   aMsg->mCode1 = 401;
+   aMsg->mCode2 = 402;
+   aMsg->mCode3 = 403;
+   aMsg->mCode4 = 404;
+}
+
+void MsgHelper::show(StatusResponseMsg* aMsg)
+{
+   Prn::print(Prn::ThreadRun1, "TestMsg");
+   Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "Code2      %d", aMsg->mCode2);
+   Prn::print(Prn::ThreadRun1, "Code3      %d", aMsg->mCode3);
+   Prn::print(Prn::ThreadRun1, "Code4      %d", aMsg->mCode4);
+   Prn::print(Prn::ThreadRun1, "");
+}
+
+//****************************************************************************
+
+void MsgHelper::initialize(DataRecord* aMsg)
+{
+   aMsg->mCode1 = 501;
+   aMsg->mCode2 = 502;
+   aMsg->mCode3 = 503;
+   aMsg->mCode4 = 504;
+}
+
+void MsgHelper::show(DataRecord* aMsg)
+{
+   Prn::print(Prn::ThreadRun1, "DataRecord");
+   Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "Code2      %d", aMsg->mCode2);
+   Prn::print(Prn::ThreadRun1, "Code3      %d", aMsg->mCode3);
+   Prn::print(Prn::ThreadRun1, "Code4      %d", aMsg->mCode4);
+   Prn::print(Prn::ThreadRun1, "");
+}
+
+//****************************************************************************
+
+void MsgHelper::initialize(DataMsg* aMsg)
+{
+   aMsg->mUChar  = 0xA1;
+   aMsg->mUShort = 0xBBB2;
+   aMsg->mUInt   = 0xCCCCCCC3;
+   aMsg->mUInt64 = 0xDDDDDDD4EEEEEEE5;
+   aMsg->mChar   = 101;
+   aMsg->mShort  = 10001;
+   aMsg->mInt    = 1000000001;
+   aMsg->mInt64  = 10000000000001;
+   aMsg->mFloat  = 1.2345f;
+   aMsg->mDouble = 2.34567;
+   aMsg->mBool   = false;
 
 
-   //****************************************************************************
+   strcpy(aMsg->mString1,"String1");
+   strcpy(aMsg->mString2,"String2");
 
-   void MsgHelper::initialize(Data2Msg* aMsg)
-   {
-      aMsg->mCode1 = 201;
-      aMsg->mCode2 = 202;
-      aMsg->mCode3 = 203;
-      aMsg->mCode4 = 204;
-      MsgHelper::initialize(&aMsg->mData1);
-   }
+   initialize(&aMsg->mDataRecord);
+}
 
-   void MsgHelper::show(Data2Msg* aMsg)
-   {
-      Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
-      Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
-      Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
-      Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
-      MsgHelper::show(&aMsg->mData1);
-      Prn::print(Prn::ThreadRun3, "");
-   }
+void MsgHelper::show(DataMsg* aMsg)
+{
+   Prn::print(Prn::ThreadRun1, "DataMsg");
+   Prn::print(Prn::ThreadRun1, "UShort     %X",    aMsg->mUShort);
+   Prn::print(Prn::ThreadRun1, "UInt       %X",    aMsg->mUInt);
+   Prn::print(Prn::ThreadRun1, "UInt64     %llX",  aMsg->mUInt64);
+   Prn::print(Prn::ThreadRun1, "Char       %d",    aMsg->mChar);
+   Prn::print(Prn::ThreadRun1, "Short      %d",    aMsg->mShort);
+   Prn::print(Prn::ThreadRun1, "Int        %d",    aMsg->mInt);
+   Prn::print(Prn::ThreadRun1, "Int64      %lld",  aMsg->mInt64);
+   Prn::print(Prn::ThreadRun1, "Float      %f",    aMsg->mFloat);
+   Prn::print(Prn::ThreadRun1, "Double     %f",    aMsg->mDouble);
+   Prn::print(Prn::ThreadRun1, "Bool       %d",    aMsg->mBool);
 
-   //****************************************************************************
+   Prn::print(Prn::ThreadRun1, "String1    %s",    aMsg->mString1);
+   Prn::print(Prn::ThreadRun1, "String2    %s",    aMsg->mString2);
 
-   void MsgHelper::initialize(Data3Msg* aMsg)
-   {
-      aMsg->mCode1 = 201;
-      aMsg->mCode2 = 202;
-      aMsg->mCode3 = 203;
-      aMsg->mCode4 = 204;
-      strcpy(aMsg->mString1,"ABCDEFGH");
-      aMsg->mCode5Loop = 4;
-      for (int i = 0; i < 4; i++)
-      {
-         aMsg->mCode5[i]=1001+i;
-      }
-   }
+   show(&aMsg->mDataRecord);
+}
 
-   void MsgHelper::show(Data3Msg* aMsg)
-   {
-      Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
-      Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
-      Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
-      Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
-      Prn::print(Prn::ThreadRun3, "String1    %s", aMsg->mString1);
-      aMsg->mCode5Loop = 4;
-      for (int i = 0; i < 4; i++)
-      {
-      Prn::print(Prn::ThreadRun3, "Code5      %d", aMsg->mCode5[i]);
-      }
-      Prn::print(Prn::ThreadRun3, "");
-   }
 
-   //****************************************************************************
-
-   void MsgHelper::initialize(Data4Msg* aMsg)
-   {
-      aMsg->mCode1 = 201;
-      aMsg->mCode2 = 202;
-      aMsg->mCode3 = 203;
-      aMsg->mCode4 = 204;
-      aMsg->mData1Loop = 4;
-      for (int i = 0; i < 4; i++)
-      {
-         initialize(&aMsg->mData1[i]);
-      }
-   }
-
-   void MsgHelper::show(Data4Msg* aMsg)
-   {
-      Prn::print(Prn::ThreadRun3, "Code1      %d", aMsg->mCode1);
-      Prn::print(Prn::ThreadRun3, "Code2      %d", aMsg->mCode2);
-      Prn::print(Prn::ThreadRun3, "Code3      %d", aMsg->mCode3);
-      Prn::print(Prn::ThreadRun3, "Code4      %d", aMsg->mCode4);
-      aMsg->mData1Loop = 4;
-      for (int i = 0; i < 4; i++)
-      {
-         show(&aMsg->mData1[i]);
-      }
-      Prn::print(Prn::ThreadRun3, "");
-   }
 }//namespace

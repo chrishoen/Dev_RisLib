@@ -22,6 +22,12 @@ to the base class.
 These messages all have the same common form, they all contain a
 common message header. The base class has a Header member object that
 encapsulates the header.
+
+These are the messages:
+
+Test
+FirstMessage
+StatusRequest
 ==============================================================================*/
 
 //******************************************************************************

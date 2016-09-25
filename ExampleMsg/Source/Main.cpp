@@ -4,6 +4,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
+#include "exampleSettings.h"
 #include "exampleNetworkThread.h"
 
 #include "MainInit.h"

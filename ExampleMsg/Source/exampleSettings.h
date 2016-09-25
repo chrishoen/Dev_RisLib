@@ -18,7 +18,7 @@ namespace ExampleMsg
 //**********************************************************************
 //**********************************************************************
 //**********************************************************************
-// ExampleSettings class, inherits from BaseCmdLineExec to process
+// ExampleMsgSettings class, inherits from BaseCmdLineExec to process
 // command lines from a command line file.
 // Each application reads its own print settings from a common settings
 // file. 
@@ -30,9 +30,17 @@ public:
    //---------------------------------------------------------------------------
    // Settings members.
 
-   static const int cMaxStringSize=30;
+   static const int cTcpServer = 1;
+   static const int cTcpClient = 2;
+   static const int cUdpPeer   = 3;
+
+   static const int cMaxStringSize = 30;
 
    int  mMyAppNumber;
+   int  mMyAppRole;
+
+   char mTcpServerIPAddress[cMaxStringSize];
+   int  mTcpServerPort;
 
    char mMyUdpIPAddress[cMaxStringSize];
    int  mMyUdpPort;
@@ -53,8 +61,10 @@ public:
    void execute(Ris::CmdLineCmd* aCmd);
 
    // Specific execute
-   void executeOnMyUdp     (Ris::CmdLineCmd* aCmd);
-   void executeOnOtherUdp  (Ris::CmdLineCmd* aCmd);
+   void executeOnMyAppRole  (Ris::CmdLineCmd* aCmd);
+   void executeOnTcpServer  (Ris::CmdLineCmd* aCmd);
+   void executeOnMyUdp      (Ris::CmdLineCmd* aCmd);
+   void executeOnOtherUdp   (Ris::CmdLineCmd* aCmd);
 
    // Initialize.
    // aSettingsFileName is the settings filename. aSection is the settings

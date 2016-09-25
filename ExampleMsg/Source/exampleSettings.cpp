@@ -17,11 +17,15 @@ namespace ExampleMsg
 
 //******************************************************************************
 
-Settings::Settings()
+   Settings::Settings()
 {
    mSection[0]=0;
 
    mMyAppNumber = 0;
+   mMyAppRole = 0;
+
+   mTcpServerIPAddress[0]=0;
+   mTcpServerPort = 0;
 
    mMyUdpIPAddress[0]=0;
    mMyUdpPort = 0;
@@ -35,6 +39,9 @@ void Settings::show()
    printf("Settings ******* %s\n", mSection);
 
    printf("MyAppNumber               %d\n", mMyAppNumber);
+   printf("MyAppRole                 %d\n", mMyAppRole);
+
+   printf("TcpServer  %-12s   %d\n",mTcpServerIPAddress,mTcpServerPort);
 
    printf("MyUdp      %-12s   %d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp   %-12s   %d\n",mOtherUdpIPAddress,mOtherUdpPort);
@@ -89,6 +96,9 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
    // Only process commands for the section specified in initialize.
 
    if(aCmd->isCmd("MyAppNumber"     ))   mMyAppNumber = aCmd->argInt(1);
+   if(aCmd->isCmd("MyAppRole"       ))   executeOnMyAppRole (aCmd);
+
+   if(aCmd->isCmd("TcpServer"       ))   executeOnTcpServer (aCmd);
    if(aCmd->isCmd("MyUdp"           ))   executeOnMyUdp     (aCmd);
    if(aCmd->isCmd("OtherUdp"        ))   executeOnOtherUdp  (aCmd);
 }
@@ -99,6 +109,19 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 // Specific execute 
+
+void Settings::executeOnMyAppRole(Ris::CmdLineCmd* aCmd)
+{
+   if (aCmd->isArgString(1, "TcpServer")) mMyAppRole = cTcpServer;
+   if (aCmd->isArgString(1, "TcpClient")) mMyAppRole = cTcpClient;
+   if (aCmd->isArgString(1, "UdpPeer"))   mMyAppRole = cUdpPeer;
+}
+
+void Settings::executeOnTcpServer(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->copyArgString(1, mTcpServerIPAddress,cMaxStringSize);
+   mTcpServerPort = aCmd->argInt(2);
+}
 
 void Settings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
 {

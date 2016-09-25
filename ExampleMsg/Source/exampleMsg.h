@@ -1,216 +1,221 @@
 #ifndef _EXAMPLEMSG_H_
 #define _EXAMPLEMSG_H_
+/*==============================================================================
+This file contains a set of classes that encapsulate a message set.
 
+There is a class for each particular message in the set and there is a
+base class that all of the messages inherit from.
+
+These messages follow the ByteContent pattern, where they all inherit
+from ByteContent so that they can be copied to/from ByteBuffers.
+
+The base class is used to specify set membership, any inheriting class
+is a member of the message set, and message objects can be referenced
+anonymously via pointers to the the base class.
+
+The base class provides a member function, makeFromByteBuffer, that
+extracts particular messages from a byte buffer and returns a pointer
+to the base class.
+
+These messages all have the same common form, they all contain a
+common message header. The base class has a Header member object that
+encapsulates the header.
+==============================================================================*/
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 #include "exampleMsgBase.h"
 
 namespace ExampleMsg
 {
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Message Types
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
-    // Msg Types
+class MsgIdT
+{
+public:
 
-    class TypeIdT
-    {
-    public:
-        static const int cUnspecified  = 0;
-        static const int cTestMsg   = 1;
-        static const int cStatusMsg = 2;
-        static const int cData1Msg  = 3;
-        static const int cData2Msg  = 4;
-        static const int cData3Msg  = 5;
-        static const int cData4Msg  = 6;
-    };
+   static const int   cUnspecifiedMsg    = 0;
+   static const int   cTestMsg           = 1;
+   static const int   cFirstMessageMsg   = 2;
+   static const int   cStatusRequestMsg  = 3;
+   static const int   cStatusResponseMsg = 4;
+   static const int   cDataMsg           = 5;
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
+};
 
-    class TestMsg : public Ris::ByteMsg
-    {
-    public:
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Particular message classes.
+// There is one class for each message in the message set.
 
-       //***********************************************************************
-       // Members
+class TestMsg : public BaseMsg
+{
+public:
 
-       int mCode1;
-       int mCode2;
-       int mCode3;
-       int mCode4;
+   //***************************************************************************
+   // Members:
 
-       //***********************************************************************
-       // Constructor
+   int mCode1;
+   int mCode2;
+   int mCode3;
+   int mCode4;
 
-       TestMsg();
+   //***************************************************************************
+   // Methods:
 
-    };
+   TestMsg();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
+};
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-    class StatusMsg : public Ris::ByteMsg
-    {
-    public:
+class FirstMessageMsg : public BaseMsg
+{
+public:
 
-       //***********************************************************************
-       // Members
+   //***************************************************************************
+   // Members:
 
-       int mCode1;
-       int mCode2;
-       int mCode3;
-       int mCode4;
+   int mCode1;
 
-       //***********************************************************************
-       // Constructor
+   //***************************************************************************
+   // Methods:
 
-       StatusMsg();
-    };
+   FirstMessageMsg();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
+};
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-    class Data1Msg : public Ris::ByteMsg
-    {
-    public:
+class StatusRequestMsg : public BaseMsg
+{
+public:
 
-       //***********************************************************************
-       // Members
+   //***************************************************************************
+   // Members:
 
-       int mCode1;
-       int mCode2;
-       int mCode3;
-       int mCode4;
+   int    mCode1;
+   int    mCode2;
+   int    mCode3;
+   int    mCode4;
 
-       //***********************************************************************
-       // Constructor
+   enum {MaxWords=1000};
+   int  mNumOfWords;
+   int  mWords[MaxWords];
 
-       Data1Msg();
+   //***************************************************************************
+   // Methods:
 
-    };
+   StatusRequestMsg();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
+};
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
+class StatusResponseMsg : public BaseMsg
+{
+public:
 
-    class Data2Msg : public Ris::ByteMsg
-    {
-    public:
+   //***************************************************************************
+   // Members:
 
-       //***********************************************************************
-       // Members
+   int   mCode1;
+   int   mCode2;
+   int   mCode3;
+   int   mCode4;
 
-       int mCode1;
-       int mCode2;
-       int mCode3;
-       int mCode4;
-       Data1Msg mData1;
+   enum { MaxWords = 1000 };
+   int   mNumOfWords;
+   int   mWords[MaxWords];
 
-       //***********************************************************************
-       // Constructor
+   //***************************************************************************
+   // Methods:
 
-       Data2Msg();
+   StatusResponseMsg();
+   void copyToFrom(Ris::ByteBuffer* aBuffer);
+};
 
-    };
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
+class DataRecord : public Ris::ByteContent
+{
+public:
 
-    class Data3Msg : public Ris::ByteMsg
-    {
-    public:
+   //***************************************************************************
+   // Members:
 
-       //***********************************************************************
-       // Members
+   int mCode1;
+   int mCode2;
+   int mCode3;
+   int mCode4;
 
-       int       mCode1;
-       int       mCode2;
-       int       mCode3;
-       int       mCode4;
-       char      mString1[40];
+   //***************************************************************************
+   // Methods:
 
-       static const int cMaxLoop=4;
-       int       mCode5Loop;
-       int       mCode5[cMaxLoop];
+   DataRecord();
+   void copyToFrom (Ris::ByteBuffer* aBuffer);
+};
 
-       //***********************************************************************
-       // Constructor
+class DataMsg : public BaseMsg
+{
+public:
 
-       Data3Msg();
+   //***************************************************************************
+   // Members:
 
-    };
+   unsigned char       mUChar;
+   unsigned short      mUShort;
+   unsigned int        mUInt;
+   unsigned long long  mUInt64;
+   char                mChar;
+   short               mShort;
+   int                 mInt;
+   long long           mInt64;
+   float               mFloat;
+   double              mDouble;
+   bool                mBool;
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
+   char                mString1[100];
+   char                mString2[100];
 
-    class Data4Msg : public Ris::ByteMsg
-    {
-    public:
+   DataRecord          mDataRecord;
 
-       //***********************************************************************
-       // Members
+   //***************************************************************************
+   // Methods:
 
-       int       mCode1;
-       int       mCode2;
-       int       mCode3;
-       int       mCode4;
+   DataMsg();
+   void copyToFrom(Ris::ByteBuffer* aBuffer);
+};
 
-       static const int cMaxLoop=4;
-       int       mData1Loop;
-       Data1Msg  mData1[cMaxLoop];
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Message creator:
 
-       //***********************************************************************
-       // Constructor
+class MsgCreator : public Ris::BaseMsgCreator
+{
+public:
+   //***********************************************************************
+   // Create a new message, based on a message type.
 
-       Data4Msg();
+   Ris::ByteContent* createMsg (int aMessageType) override;
+};
 
-    };
-
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
-
-    class MsgCreator : public Ris::BaseMsgCreator
-    {
-    public:
-
-       //***********************************************************************
-       // Create a new record, based on a record type
-
-       Ris::ByteMsg* createMsg(int aMsgType) override;
-
-    };
-
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
-
-    class MsgCopier : public Ris::BaseMsgCopier
-    {
-    public:
-
-       //***********************************************************************
-       // Copy a record to/from a byte buffer. 
-
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Ris::ByteMsg* aMsg) override;
-
-       //***********************************************************************
-       // Copy a record to/from a byte buffer. 
-
-       void copyToFrom (Ris::ByteBuffer* aBuffer, TestMsg*   aMsg);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, StatusMsg* aMsg);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Data1Msg*  aMsg);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Data2Msg*  aMsg);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Data3Msg*  aMsg);
-       void copyToFrom (Ris::ByteBuffer* aBuffer, Data4Msg*  aMsg);
-
-    };
-}
+}//namespace
 #endif
+

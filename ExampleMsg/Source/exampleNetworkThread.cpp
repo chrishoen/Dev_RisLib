@@ -45,17 +45,21 @@ void NetworkThread::configure()
 {
    Prn::print(Prn::ThreadInit1, "NetworkThread::configure");
 
+   //--------------------------------------------------------------------------- 
+   // Configure message monkey
+
+   mMonkeyCreator.configure(gSettings.mMyAppNumber);
+
    //---------------------------------------------------------------------------
-   // Configure socket thread
+   // Configure message thread
 
    mUdpMsgThread->configure(
+      &mMonkeyCreator,
       gSettings.mMyUdpIPAddress,
       gSettings.mMyUdpPort,
       gSettings.mOtherUdpIPAddress,
       gSettings.mOtherUdpPort,
-      &mMonkey,
       &mRxMsgQCall);
-
 }
 
 //******************************************************************************
@@ -87,106 +91,72 @@ void  NetworkThread::threadExitFunction()
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeRxMessage(Ris::ByteMsg* aMsg)
+void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
 {
+   ExampleMsg::BaseMsg* tMsg = (ExampleMsg::BaseMsg*)aMsg;
+
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
-   switch (aMsg->mMessageType)
+   switch (tMsg->mMessageType)
    {
-      case TypeIdT::cTestMsg :
-         processRxMsg((TestMsg*)aMsg);
+      case ExampleMsg::MsgIdT::cTestMsg :
+         processRxMsg((ExampleMsg::TestMsg*)tMsg);
          break;
-      case TypeIdT::cStatusMsg :
-         processRxMsg((StatusMsg*)aMsg);
+      case ExampleMsg::MsgIdT::cStatusRequestMsg :
+         processRxMsg((ExampleMsg::StatusRequestMsg*)tMsg);
          break;
-      case TypeIdT::cData1Msg :
-         processRxMsg((Data1Msg*)aMsg);
+      case ExampleMsg::MsgIdT::cStatusResponseMsg :
+         processRxMsg((ExampleMsg::StatusResponseMsg*)tMsg);
          break;
-      case TypeIdT::cData2Msg :
-         processRxMsg((Data2Msg*)aMsg);
-         break;
-      case TypeIdT::cData3Msg :
-         processRxMsg((Data3Msg*)aMsg);
-         break;
-      case TypeIdT::cData4Msg :
-         processRxMsg((Data4Msg*)aMsg);
+      case ExampleMsg::MsgIdT::cDataMsg :
+         processRxMsg((ExampleMsg::DataMsg*)tMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",aMsg->mMessageType);
-         delete aMsg;
+         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",tMsg->mMessageType);
+         delete tMsg;
          break;
    }
 }
 
 //******************************************************************************
-// Message handler
+// Message handler for TestMsg.
 
-void NetworkThread::processRxMsg(TestMsg* aMsg)
+void NetworkThread::processRxMsg(ExampleMsg::TestMsg*  aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_TestMsg" );
-
    MsgHelper::show(aMsg);
-
    delete aMsg;
 }
 
 //******************************************************************************
-// Message handler
+// Rx message handler - StatusRequestMsg
 
-void NetworkThread::processRxMsg(StatusMsg* aMsg)
+void NetworkThread::processRxMsg(ExampleMsg::StatusRequestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_StatusMsg %d",mStatusCount1++);
+   if (true)
+   {
+      ExampleMsg::StatusResponseMsg* tMsg = new ExampleMsg::StatusResponseMsg;
+      mUdpMsgThread->sendMsg(tMsg);
+   }
 
    MsgHelper::show(aMsg);
-
    delete aMsg;
 }
 
 //******************************************************************************
-// Message handler
+// Rx message handler - StatusResponseMsg
 
-void NetworkThread::processRxMsg(Data1Msg* aMsg)
+void NetworkThread::processRxMsg(ExampleMsg::StatusResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data1Msg");
-
    MsgHelper::show(aMsg);
-
    delete aMsg;
 }
 
 //******************************************************************************
-// Message handler
+// Rx message handler - DataMsg
 
-void NetworkThread::processRxMsg(Data2Msg* aMsg)
+void NetworkThread::processRxMsg(ExampleMsg::DataMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data2Msg");
-
    MsgHelper::show(aMsg);
-
-   delete aMsg;
-}
-
-//******************************************************************************
-// Message handler
-
-void NetworkThread::processRxMsg(Data3Msg* aMsg)
-{
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data3Msg");
-
-   MsgHelper::show(aMsg);
-
-   delete aMsg;
-}
-
-//******************************************************************************
-// Message handler
-
-void NetworkThread::processRxMsg(Data4Msg* aMsg)
-{
-   Prn::print(Prn::ThreadRun1, "NetworkThread::processRxMsg_Data4Msg");
-
-   MsgHelper::show(aMsg);
-
    delete aMsg;
 }
 
@@ -199,16 +169,16 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 
    return;
 
-   TestMsg* tx = new TestMsg;
+   ExampleMsg::TestMsg* tx = new ExampleMsg::TestMsg;
    tx->mCode1=101;
 
-   sendMsg(tx);
+   mUdpMsgThread->sendMsg(tx);
 }
 
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void NetworkThread::sendMsg (Ris::ByteMsg* aMsg)
+void NetworkThread::sendMsg (ExampleMsg::BaseMsg* aMsg)
 {
    mUdpMsgThread->sendMsg(aMsg);
 }
@@ -218,8 +188,7 @@ void NetworkThread::sendMsg (Ris::ByteMsg* aMsg)
 
 void NetworkThread::sendTestMsg()
 {
-   TestMsg* tMsg = new TestMsg;
-   tMsg->mCode1=201;
+   ExampleMsg::TestMsg* tMsg = new ExampleMsg::TestMsg;
  
    mUdpMsgThread->sendMsg(tMsg);
 }

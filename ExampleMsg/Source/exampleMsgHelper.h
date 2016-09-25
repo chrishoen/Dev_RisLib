@@ -6,29 +6,30 @@
 namespace ExampleMsg
 {
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-    class MsgHelper
-    {
-    public:
+class MsgHelper
+{
+public:
 
-       static void initialize (TestMsg*   aMsg);
-       static void initialize (StatusMsg* aMsg);
-       static void initialize (Data1Msg*  aMsg);
-       static void initialize (Data2Msg*  aMsg);
-       static void initialize (Data3Msg*  aMsg);
-       static void initialize (Data4Msg*  aMsg);
+   static void initialize (TestMsg* aMsg);
+   static void initialize (FirstMessageMsg* aMsg);
+   static void initialize (StatusRequestMsg* aMsg);
+   static void initialize (StatusResponseMsg* aMsg);
 
-       static void show (TestMsg*   aMsg);
-       static void show (StatusMsg* aMsg);
-       static void show (Data1Msg*  aMsg);
-       static void show (Data2Msg*  aMsg);
-       static void show (Data3Msg*  aMsg);
-       static void show (Data4Msg*  aMsg);
+   static void initialize (DataRecord* aMsg);
+   static void initialize (DataMsg* aMsg);
 
-    };
+   static void show (TestMsg* aMsg);
+   static void show (FirstMessageMsg* aMsg);
+   static void show (StatusRequestMsg* aMsg);
+   static void show (StatusResponseMsg* aMsg);
+   static void show (DataRecord* aMsg);
+   static void show (DataMsg* aMsg);
+
+};
 
 
 }

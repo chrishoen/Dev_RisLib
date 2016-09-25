@@ -1,16 +1,18 @@
 #ifndef _EXAMPLENETWORKTHREAD_H_
 #define _EXAMPLENETWORKTHREAD_H_
 
+/*==============================================================================
+==============================================================================*/
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 #include "risContainers.h"
-#include "risNetUdpMsgSocket.h"
 #include "risNetUdpMsgThread.h"
+#include "risNetUdpMsgSocket.h"
 #include "risThreadsQCallThread.h"
 
 #include "exampleMsg.h"
-#include "exampleMsgMonkey.h"
 
 namespace ExampleMsg
 {
@@ -49,7 +51,7 @@ public:
    Ris::Net::UdpMsgThread*  mUdpMsgThread;
 
    // Message monkey used by mUdpMsgThread
-   MsgMonkey mMonkey;
+   ExampleMsg::MsgMonkeyCreator mMonkeyCreator;
 
    //--------------------------------------------------------------
    // QCall:
@@ -60,31 +62,28 @@ public:
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxMessage   (Ris::ByteMsg* aMsg);
+   void executeRxMessage   (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    // Rx message handlers
 
-   void processRxMsg (TestMsg*   aMsg);
-   void processRxMsg (StatusMsg* aMsg);
-   void processRxMsg (Data1Msg*  aMsg);
-   void processRxMsg (Data2Msg*  aMsg);
-   void processRxMsg (Data3Msg*  aMsg);
-   void processRxMsg (Data4Msg*  aMsg);
+   void processRxMsg (ExampleMsg::TestMsg*  aMsg);
+   void processRxMsg (ExampleMsg::StatusRequestMsg* aMsg);
+   void processRxMsg (ExampleMsg::StatusResponseMsg* aMsg);
+   void processRxMsg (ExampleMsg::DataMsg* aMsg);
 
    int  mStatusCount1;
    int  mStatusCount2;
 
    //--------------------------------------------------------------
-   // Send a record
+   // Send a message
 
-   void sendMsg (Ris::ByteMsg* aMsg);
+   void sendMsg (ExampleMsg::BaseMsg* aMsg);
    void sendTestMsg();   
 
 };
-
 //******************************************************************************
 // Global instance
 

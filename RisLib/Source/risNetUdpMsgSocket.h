@@ -67,7 +67,7 @@ public:
    bool mValidFlag;
 
    // Metrics
-   int mRxMsgCount;
+   int mRxCount;
 };
 
 //******************************************************************************

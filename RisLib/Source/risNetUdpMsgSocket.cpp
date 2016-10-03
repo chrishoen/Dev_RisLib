@@ -22,8 +22,8 @@ namespace Net
 
 UdpRxMsgSocket::UdpRxMsgSocket()
 {
-   mRxLength   = 0;
-   mRxMsgCount = 0;
+   mRxLength = 0;
+   mRxCount = 0;
    mValidFlag  = false;
    mMonkey     = 0;
 }
@@ -49,7 +49,8 @@ void UdpRxMsgSocket::configure(
    char*                 aLocalIpAddr,
    int                   aLocalIpPort)
 {
-   mRxMsgCount=0;
+   mRxCount=0;
+   mRxLength=0;
 
    mLocal.set(aLocalIpAddr,aLocalIpPort);
    mMonkey = aMonkeyCreator->createMonkey();
@@ -151,7 +152,7 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
-   mRxMsgCount++;
+   mRxCount++;
    return true;
 }
 

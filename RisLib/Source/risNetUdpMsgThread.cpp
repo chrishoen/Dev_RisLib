@@ -101,9 +101,8 @@ void  UdpMsgThread::threadRunFunction()
       }
       else
       {
-         // Message was not correctly received, so
-         // Connection was lost
-         Prn::print(Prn::SocketRun1, "Recv failed, Connection lost");
+         // Message was not correctly received
+         Prn::print(Prn::SocketRun1, "Recv failed, socket error");
       }
       //-------------------------------------------------------------------------
       // If termination request, exit the loop

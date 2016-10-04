@@ -132,8 +132,9 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 
    mMonkey->extractMessageHeaderParms(&tBuffer);
    
-   Prn::print(Prn::SocketRun3, "UdpRxMsgSocket rx header %d",
-	   mMonkey->mHeaderValidFlag,mMonkey->mHeaderLength);
+   Prn::print(Prn::SocketRun3, "UdpRxMsgSocket rx header %d %d",
+	   mMonkey->mHeaderValidFlag,
+	   mMonkey->mHeaderLength);
 
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)

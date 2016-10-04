@@ -110,6 +110,7 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 
    if (mRxLength<=0)
    {
+      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR  %d %d",mStatus,mError);
       if (mStatus<0)
          switch (mError)
          {
@@ -120,6 +121,8 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
          return false;
    }
 
+   Prn::print(Prn::SocketRun2, "UdpRxMsgSocket rx message %d",mRxLength);
+
    // Set the buffer length.
    tBuffer.setLength(mRxLength);
 
@@ -128,11 +131,14 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // the header.
 
    mMonkey->extractMessageHeaderParms(&tBuffer);
+   
+   Prn::print(Prn::SocketRun3, "UdpRxMsgSocket rx header %d",
+	   mMonkey->mHeaderValidFlag,mMonkey->mHeaderLength);
 
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER ");
+      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR INVALID HEADER",mStatus,mError);
       return false;
    }
 
@@ -146,6 +152,7 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
+      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR INVALID MESSAGE",mStatus,mError);
       mStatus=tBuffer.getError();
       return false;
    }
@@ -238,6 +245,8 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    // Transmit the buffer.
    mTxLength=tBuffer.getLength();
    doSendTo(mRemote,tBuffer.getBaseAddress(),mTxLength);
+
+   Prn::print(Prn::SocketRun2, "UdpTxMsgSocket tx message %d",mTxLength);
 
    // Mutex.
    mTxMutex.unlock();

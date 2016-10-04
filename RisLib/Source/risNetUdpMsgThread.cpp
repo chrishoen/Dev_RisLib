@@ -94,15 +94,12 @@ void  UdpMsgThread::threadRunFunction()
       if (mRxSocket.doReceiveMsg(tMsg))
       {
          // Message was correctly received
-         Prn::print(Prn::SocketRun1, "Recv message %d",mRxSocket.mRxLength);
-
          // Call the receive method
          processRxMsg(tMsg);
       }
       else
       {
          // Message was not correctly received
-         Prn::print(Prn::SocketRun1, "Recv failed, socket error");
       }
       //-------------------------------------------------------------------------
       // If termination request, exit the loop
@@ -156,7 +153,6 @@ void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {
    mTxSocket.doSendMsg(aMsg);
-   Prn::print(Prn::SocketRun1, "Send message %d",mTxSocket.mTxLength);
 }
 
 //******************************************************************************

@@ -1,4 +1,5 @@
 #define _CRTDBG_MAP_ALLOC
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -21,6 +22,7 @@ int main(int argc,char** argv)
    while (tSocket.doRecvString())
    {
       puts(tSocket.mRxString);
+      if(strcmp("PRINTVIEW_SHUTDOWN",tSocket.mRxString)==0) return 0;
    }
    return 0;
 }

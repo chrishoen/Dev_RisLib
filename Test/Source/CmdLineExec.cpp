@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
+#include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -50,6 +51,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+	printf(">>>>>>>>>>>>>>>>>>>\n");
+	Ris::abortCmdLineConsole();
+	printf("<<<<<<<<<<<<<<<<<<<\n");
 }
 
 //******************************************************************************

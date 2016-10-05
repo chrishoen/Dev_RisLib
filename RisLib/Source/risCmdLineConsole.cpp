@@ -41,7 +41,7 @@ namespace Ris
    while(true)
    {
       // Read console input
-      fgets(tCommandLine, 200, stdin);
+      if(fgets(tCommandLine, 200, stdin)==0) return;
 
       // Remove cr/lf at end of line
       my_trimCRLF(tCommandLine);
@@ -106,7 +106,11 @@ namespace Ris
 void executeCmdLineConsole (BaseCmdLineExec* aExec)
 {
    gCmdLineConsole.execute(aExec);
+}
 
+void abortCmdLineConsole ()
+{
+   fclose(stdin);
 }
 
 //******************************************************************************

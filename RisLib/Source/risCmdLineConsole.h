@@ -21,7 +21,7 @@ namespace Ris
 // executive to each line that is entered by a user. The loop terminates when
 // the user exits.
 
-class  CmdLineConsole
+class CmdLineConsole
 {
 public:
    // Execute command line executive from console input.
@@ -31,6 +31,7 @@ public:
 
 // Nicknames
 void  executeCmdLineConsole (BaseCmdLineExec* aExec);
+void  abortCmdLineConsole ();
 void  setConsoleTitle(char* aTitle);
 
 //******************************************************************************

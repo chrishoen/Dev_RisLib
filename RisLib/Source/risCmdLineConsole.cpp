@@ -158,6 +158,8 @@ void executeCmdLineConsoleThread(BaseCmdLineExec* aExec)
 	gConsoleThread = new ConsoleThread(aExec);
 	gConsoleThread->launchThread();
 	gConsoleThread->waitForThreadTerminate();
+	delete gConsoleThread;
+	gConsoleThread=0;
 }
 
 //******************************************************************************

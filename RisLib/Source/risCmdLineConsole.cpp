@@ -41,10 +41,16 @@ namespace Ris
    while(true)
    {
       // Read console input
-      if(fgets(tCommandLine, 200, stdin)==0) return;
+	   if (fgets(tCommandLine, 200, stdin) == 0)
+	   {
+		   printf("CmdLineConsole closed\n");
+		   return;
+	   }
 
       // Remove cr/lf at end of line
       my_trimCRLF(tCommandLine);
+
+	  printf("fgets %s\n",tCommandLine);
 
       // Test for toggle suppress print
       if (strcmp(tCommandLine,"p")==0)

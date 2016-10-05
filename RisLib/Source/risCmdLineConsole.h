@@ -25,12 +25,14 @@ class CmdLineConsole
 {
 public:
    // Execute command line executive from console input.
-   // Returns when user exits
+   // Returns when user exits.
    void execute (BaseCmdLineExec* aExec);
 };
 
-// Nicknames
+// Helpers:
+
 void  executeCmdLineConsole (BaseCmdLineExec* aExec);
+void  executeCmdLineConsoleThread (BaseCmdLineExec* aExec);
 void  abortCmdLineConsole ();
 void  setConsoleTitle(char* aTitle);
 

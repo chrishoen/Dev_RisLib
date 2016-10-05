@@ -11,6 +11,7 @@
 #include <string.h>
 
 #include "risPortableCalls.h"
+#include "risThreadsThreads.h"
 #include "my_functions.h"
 #include "prnPrint.h"
 
@@ -43,14 +44,11 @@ namespace Ris
       // Read console input
 	   if (fgets(tCommandLine, 200, stdin) == 0)
 	   {
-		   printf("CmdLineConsole closed\n");
 		   return;
 	   }
 
       // Remove cr/lf at end of line
       my_trimCRLF(tCommandLine);
-
-	  printf("fgets %s\n",tCommandLine);
 
       // Test for toggle suppress print
       if (strcmp(tCommandLine,"p")==0)
@@ -114,11 +112,6 @@ void executeCmdLineConsole (BaseCmdLineExec* aExec)
    gCmdLineConsole.execute(aExec);
 }
 
-void abortCmdLineConsole ()
-{
-   fclose(stdin);
-}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -128,6 +121,55 @@ void setConsoleTitle(char* aTitle)
 {
    portableSetConsoleTitle(aTitle);
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Console thread:
+
+class ConsoleThread : public Ris::Threads::BaseThread
+{
+public:
+   BaseCmdLineExec* mExec;
+
+	ConsoleThread(BaseCmdLineExec* aExec)
+	{
+		mExec=aExec;
+	}
+
+	void threadRunFunction()
+	{
+		gCmdLineConsole.execute(mExec);
+	}
+
+	void shutdownThread()
+	{
+		forceTerminateThread();
+	}
+};
+
+//******************************************************************************
+ConsoleThread* gConsoleThread=0;
+
+//******************************************************************************
+
+void executeCmdLineConsoleThread(BaseCmdLineExec* aExec)
+{
+	gConsoleThread = new ConsoleThread(aExec);
+	gConsoleThread->launchThread();
+	gConsoleThread->waitForThreadTerminate();
+}
+
+//******************************************************************************
+
+void abortCmdLineConsole ()
+{
+	if (gConsoleThread)
+	{
+		gConsoleThread->shutdownThread();
+	}
+}
+
 
 }//namespace
 

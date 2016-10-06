@@ -31,6 +31,16 @@ namespace Ris
    const char* portableGetSettingsDir();
 
    //---------------------------------------------------------------------------
+   // This returns a pointer to the home folder.
+   // Use it like this:
+   //
+   //    char tFilePath[200];
+   //    strcpy(tFilePath,Ris::portableGetHomeDir());
+   //    strcat(tFilePath,"Data.txt");
+
+   const char* portableGetHomeDir();
+
+   //---------------------------------------------------------------------------
    // This returns a pointer to the current working directory.
 
    char* portableGetCurrentWorkingDir();

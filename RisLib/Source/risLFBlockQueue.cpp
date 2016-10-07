@@ -254,7 +254,8 @@ namespace Ris
          mListNext[aNode].store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
-         if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
+         atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mListHead;
+         if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
          if (++tLoopCount == 10000) throw 103;
       }
 

@@ -90,8 +90,6 @@ public:
    AtomicLFIndex     mListHead;
    std::atomic<int>  mListSize;
    
-   std::atomic<int>* mListHeadIndexPtr = (std::atomic<int>*)&mListHead;
-
    static const int  cInvalid = 0x80000000;
 
    //***************************************************************************

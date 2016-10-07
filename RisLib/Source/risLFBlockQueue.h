@@ -102,7 +102,6 @@ public:
    AtomicLFIndex*    mListNext;
    AtomicLFIndex     mListHead;
    std::atomic<int>  mListSize;
-   std::atomic<int>* mListHeadIndexPtr = (std::atomic<int>*)&mListHead;
 
    // Invalid node
    static const int  cInvalid = 0x80000000;

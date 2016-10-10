@@ -67,9 +67,6 @@
     <ClCompile Include="Source\risThreadsSynch_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risLFBlockQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risThreadsQCallThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -116,6 +113,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risNetUdpMsgThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risLMPacketQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -216,9 +216,6 @@
     <ClInclude Include="Source\risLFIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risLFBlockQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risThreadsQCall.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -259,6 +256,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetUdpMsgThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risLMPacketQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risMemoryPtr.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

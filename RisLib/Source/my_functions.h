@@ -89,6 +89,15 @@ My math functions
    }
 
    //---------------------------------------------------------------------------
+   // Round up to 16 byte boundary
+
+   inline int my_round_upto16(int aValue)
+   {
+      return ((aValue & 0xF) != 0) ? ((aValue & ~0xF) + 0x10) : aValue;
+
+   }
+
+   //---------------------------------------------------------------------------
    // File functions
 
    void my_strupr(char* aString);

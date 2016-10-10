@@ -27,5 +27,10 @@ My definitions for physical constants
 
 #define NOEXCEPT noexcept(true)
 
+// operator new[] adds extra bytes to store number of elements.
+static const int cNewArrayExtraMemory = 4;
+
+
+
 #endif
 

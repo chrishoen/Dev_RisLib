@@ -5,7 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 #if 0
-#include "risLFBlockQueue.h"
+#include "risLMPacketQueue.h"
 namespace Ris
 {
 namespace Threads
@@ -20,7 +20,7 @@ class BaseQCall;
 class BaseQCallTargetEx
 {
 public:
-   LFBlockQueue mCallQueue;
+   LMPacketQueue mCallQueue;
 
    virtual void notifyQCallAvailable()=0;
 };

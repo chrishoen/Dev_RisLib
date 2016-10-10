@@ -132,7 +132,7 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 #include <new>
-#include "risLFBlockQueue.h"
+#include "risLMPacketQueue.h"
 #include "risCallPointer.h"
 
 namespace Ris
@@ -155,7 +155,7 @@ public:
    // QCall invokations enqueue QCalls to this queue.
    // QCall targets dequeue from it.
 
-   LFBlockQueue mCallQueue;
+   LMPacketQueue mCallQueue;
 
    // Target inheritors provide an override for this method.
    // It is called after a QCall has been enqueued to the target queue.

@@ -53,21 +53,6 @@ void Thread1::threadRunFunction()
          gShare.mTimeMarker.doStop();
       }
       break;
-      case 3:
-      {
-         mCountingSem.get();
-         Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
-         gShare.mTimeMarker.doStop();
-      }
-      break;
-      case 4:
-      {
-         mCountingSem.get();
-         Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
-         if (tObject) delete tObject;
-         gShare.mTimeMarker.doStop();
-      }
-      break;
       default:
          threadSleep(200);
          break;

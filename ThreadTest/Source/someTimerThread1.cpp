@@ -94,20 +94,6 @@ void TimerThread1::executeOnTimer(int aTimeCount)
                gThread1->mCountingSem.put();
             }
             break;
-            case 3:
-            {
-               Class1A* tObject = 0;
-               gShare.mPointerQueue.writePtr(tObject);
-               gThread1->mCountingSem.put();
-            }
-            break;
-            case 4:
-            {
-               Class1A* tObject = new Class1A;
-               gShare.mPointerQueue.writePtr(tObject);
-               gThread1->mCountingSem.put();
-            }
-            break;
          }
       }
       break;

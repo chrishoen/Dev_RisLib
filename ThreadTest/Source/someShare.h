@@ -8,7 +8,6 @@
 //******************************************************************************
 //******************************************************************************
 #include "risTimeMarker.h"
-#include "risLFPointerQueue.h"
 
 namespace Some
 {
@@ -22,7 +21,6 @@ public:
    Share();
    
    Ris::PeriodicTimeMarker mTimeMarker;
-   Ris::LFPointerQueue mPointerQueue;
 };
 
 //******************************************************************************

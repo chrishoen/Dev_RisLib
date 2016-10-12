@@ -39,18 +39,15 @@ public:
 
    bool mTPFlag;
    int  mTestCode;
+   int  mFrequency;
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    // Members:
    
-   void executeTest0 (int aTimeCount);
    void executeTest1 (int aTimeCount);
    void executeTest2 (int aTimeCount);
-   void executeTest3 (int aTimeCount);
-   void executeTest4 (int aTimeCount);
-   void executeTest5 (int aTimeCount);
 };
 
 //******************************************************************************

@@ -55,22 +55,26 @@ void TimerThread::executeOnTimer(int aTimeCount)
 
 void TimerThread::executeTest1(int aTimeCount)
 {
+// Prn::print(Prn::ThreadRun2, "executeOnTimer %d",aTimeCount);
+
+   //---------------------------------------------------------------------------
+   // Time marker
+
    mTimeMarker.doStop();
+   mTimeMarker.doStart();
 
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      Prn::print(Prn::ThreadRun1, "TEST %1d %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
-         mTestCode,
+      double tPeriodUS = mTimerPeriod*1000.0;
+//    tPeriodUS=0.0;
+      Prn::print(Prn::ThreadRun1, "TEST %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
          mTimeMarker.mStatistics.mSize,
-         mTimeMarker.mStatistics.mMean,
+         mTimeMarker.mStatistics.mMean   - tPeriodUS,
          mTimeMarker.mStatistics.mStdDev,
-         mTimeMarker.mStatistics.mMinX,
-         mTimeMarker.mStatistics.mMaxX);
+         mTimeMarker.mStatistics.mMinX   - tPeriodUS,
+         mTimeMarker.mStatistics.mMaxX   - tPeriodUS);
          mTimeMarker.mStatistics.mEndOfPeriod = false;
-         return;
    }
-
-   mTimeMarker.doStart();
 }
 
 //******************************************************************************

@@ -36,7 +36,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   printf("12345678\n");
+   aCmd->setArgDefault(1,(int)1);
+   aCmd->setArgDefault(2,(int)2);
+
+
+   Prn::print(0, "NumArg %10d",aCmd->numArg());
+   Prn::print(0, "ARG1   %10d",aCmd->argInt(1));
+   Prn::print(0, "ARG2   %10d",aCmd->argInt(2));
+   Prn::print(0, "");
 }
 
 //******************************************************************************
@@ -45,11 +52,14 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-	printf(">>>>>>>>>>>>>>>>>>>\n");
+   aCmd->setArgDefault(1,1);
+   aCmd->setArgDefault(2,"default");
 
-	Ris::abortCmdLineConsole();
 
-	printf("<<<<<<<<<<<<<<<<<<<\n");
+   Prn::print(0, "NumArg %10d",aCmd->numArg());
+   Prn::print(0, "ARG1 %10d",aCmd->argInt(1));
+   Prn::print(0, "ARG2 %10s",aCmd->argString(2));
+   Prn::print(0, "");
 }
 
 //******************************************************************************

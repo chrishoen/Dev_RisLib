@@ -37,7 +37,6 @@ static char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr);
 CmdLineCmd::CmdLineCmd()
 {
    mGoodCmd=false;
-   mDefaultEnable=false;
 // strcpy(mDelimiters," ,\t");
    strcpy(mDelimiters," \t");
 
@@ -77,7 +76,6 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    }
 
    mArgNum      = 0;
-   mDefaultEnable = false;
    mValidFlag   = 0;
 
    //---------------------------------------------------------------------------
@@ -124,8 +122,6 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
       mArgNum++;
       tArgIndex++;
    }
-   mDefaultEnable = mArgNum==0;
-
 }
 
 //******************************************************************************
@@ -352,7 +348,7 @@ void CmdLineCmd::copyArgString (int aArgIndex,char* aString,int aMaxSize)
 
 void CmdLineCmd::setArgDefault(int aArgIndex, int aValue)
 {
-   if (!mDefaultEnable) return;
+   if (aArgIndex <= mArgNum) return;
 
    sprintf(mArgPtr[aArgIndex],"%d",aValue);
 
@@ -365,7 +361,7 @@ void CmdLineCmd::setArgDefault(int aArgIndex, int aValue)
 
 void CmdLineCmd::setArgDefaultUnsigned(int aArgIndex, unsigned int aValue)
 {
-   if (!mDefaultEnable) return;
+   if (aArgIndex <= mArgNum) return;
 
    sprintf(mArgPtr[aArgIndex],"%d",aValue);
 
@@ -377,7 +373,7 @@ void CmdLineCmd::setArgDefaultUnsigned(int aArgIndex, unsigned int aValue)
 
 void CmdLineCmd::setArgDefault(int aArgIndex, bool aValue)
 {
-   if (!mDefaultEnable) return;
+   if (aArgIndex <= mArgNum) return;
 
    strcpy(mArgPtr[aArgIndex],aValue?"TRUE":"FALSE");
 
@@ -389,7 +385,7 @@ void CmdLineCmd::setArgDefault(int aArgIndex, bool aValue)
 
 void CmdLineCmd::setArgDefault(int aArgIndex, double aValue)
 {
-   if (!mDefaultEnable) return;
+   if (aArgIndex <= mArgNum) return;
 
    sprintf(mArgPtr[aArgIndex],"%f",aValue);
 
@@ -397,11 +393,11 @@ void CmdLineCmd::setArgDefault(int aArgIndex, double aValue)
    mArgNum = aArgIndex;
 }
 
-//******************************************************************************
+//***************************************************************************
 
 void CmdLineCmd::setArgDefault(int aArgIndex, char* aValue)
 {
-   if (!mDefaultEnable) return;
+   if (aArgIndex <= mArgNum) return;
 
    strcpy(mArgPtr[aArgIndex],aValue);
 // r_myStrupr(mArgPtr[aArgIndex]);

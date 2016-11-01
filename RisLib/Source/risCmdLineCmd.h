@@ -104,8 +104,6 @@ public:
    bool   mArgFlag  [MaxNumOfArgs+1];
    // Number of arguments
    int    mArgNum;
-   // if number of arguments is zero then use defaults
-   bool   mDefaultEnable;
    // True if an isCmd returned true   
    bool   mGoodCmd;
    // True if struct is valid

@@ -176,9 +176,8 @@ void print(int aFilter, const char* aFormat, ...)
    // Get the console index assigned to the filter
    int tConsole = gSettings.mConsoleTable[aFilter];
 
-   // If suppressed and the filter is not zero and
-   // the console is zero then exit
-   if (rSuppressFlag && aFilter != 0 && tConsole == 0) return;
+   // If suppressed and the filter is not zero
+   if (rSuppressFlag && aFilter != 0) return;
 
    //-----------------------------------------------------
    // Print string pointer

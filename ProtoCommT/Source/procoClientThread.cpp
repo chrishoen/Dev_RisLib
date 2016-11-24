@@ -19,9 +19,12 @@ namespace ProtoComm
 
 ClientThread::ClientThread()
 {
+   BaseClass::setThreadPriorityHigh();
+   BaseClass::mTimerPeriod = 10;
+
    mTcpClientThread = new Ris::Net::TcpMsgClientThread;
    mConnectionFlag=false;
-   mPeriodicEnable=false;
+   mPeriodicEnable=true;
    mPeriodicCount=0;
    mStatusCount1=0;
    mStatusCount2=0;
@@ -58,17 +61,6 @@ void ClientThread::configure()
       gSettings.mTcpServerPort,
       &mSessionQCall,
       &mRxMsgQCall);
-}
-
-//******************************************************************************
-// This sets base thread configuration members
-
-void ClientThread::configureThread()
-{
-   // Set base class configuration members to defaults
-   BaseThread::configureThread();
-
-   BaseClass::mTimerPeriod=1000;
 }
 
 //******************************************************************************
@@ -163,7 +155,11 @@ void ClientThread::processRxMsg(ProtoComm::TestMsg* aRxMsg)
 void ClientThread::executeOnTimer(int aTimerCount)
 {
    if (!mPeriodicEnable) return;
-   Prn::print(Prn::ThreadRun1, "ClientThread::executeOnTimer %d",mPeriodicCount++);
+   Prn::print(Prn::ThreadRun3, "ClientThread::executeOnTimer %d", aTimerCount);
+
+   ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
+   tMsg->mCode1 = aTimerCount;
+   sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -171,14 +167,13 @@ void ClientThread::executeOnTimer(int aTimerCount)
 
 void ClientThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
 {
+   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
 
    if (true)
    {
       ProtoComm::StatusResponseMsg* tTxMsg = new ProtoComm::StatusResponseMsg;
       sendMsg(tTxMsg);
    }
-
-   Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
 
    delete aRxMsg;
 }
@@ -188,7 +183,7 @@ void ClientThread::processRxMsg(ProtoComm::StatusRequestMsg* aRxMsg)
 
 void ClientThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg_StatusResponseMsg");
+   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_StatusResponseMsg %d",aRxMsg->mCode1);
    delete aRxMsg;
 }
 

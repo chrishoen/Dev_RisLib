@@ -29,7 +29,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::SocketRun4,false);
 
    Prn::setFilter(Prn::ThreadRun1,true);
-   Prn::setFilter(Prn::ThreadRun2,false);
+   Prn::setFilter(Prn::ThreadRun2,true);
    Prn::setFilter(Prn::ThreadRun3,false);
    Prn::setFilter(Prn::ThreadRun4,false);
 

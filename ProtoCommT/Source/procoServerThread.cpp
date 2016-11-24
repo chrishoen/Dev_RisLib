@@ -21,7 +21,8 @@ namespace ProtoComm
 
 ServerThread::ServerThread()
 {
-   BaseClass::mTimerPeriod=1000;
+   BaseClass::setThreadPriorityHigh();
+   BaseClass::mTimerPeriod = 1000;
 
    mPeriodicEnable=false;
    mPeriodicCount=0;
@@ -177,8 +178,7 @@ void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::FirstMessageMsg* aR
 
 void ServerThread::executeOnTimer(int aTimerCount)
 {
-   Prn::print(Prn::ThreadRun2, "ServerThread::executeOnTimer %d",mPeriodicCount++);
-   while(mPeriodicEnable) BaseClass::threadSleep(100);
+   Prn::print(Prn::ThreadRun3, "ServerThread::executeOnTimer %d",mPeriodicCount++);
 }
 
 //******************************************************************************
@@ -186,13 +186,14 @@ void ServerThread::executeOnTimer(int aTimerCount)
 
 void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusRequestMsg* aRxMsg)
 {
-   if (false)
+   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_StatusRequestMsg %d",aRxMsg->mCode1);
+
+   if (true)
    {
       ProtoComm::StatusResponseMsg* tTxMsg = new ProtoComm::StatusResponseMsg;
+      tTxMsg->mCode1 = aRxMsg->mCode1;
       sendMsg(aSessionIndex,tTxMsg);
    }
-
-   Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
 
    delete aRxMsg;
 }
@@ -202,7 +203,7 @@ void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusRequestMsg* a
 
 void ServerThread::processRxMsg(int aSessionIndex,ProtoComm::StatusResponseMsg* aRxMsg)
 {
-   Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg_StatusResponseMsg");
+   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_StatusResponseMsg");
    delete aRxMsg;
 }
 

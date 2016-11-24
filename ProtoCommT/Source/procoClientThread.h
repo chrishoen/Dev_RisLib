@@ -70,7 +70,6 @@ public:
    // threadInitFunction sets up the base class multiple objects.
    // threadExitFunction shuts down the child thread
    // executeOnTimer sends a periodic status message.
-   void configureThread();
    void launchThread();
    void threadExitFunction(); 
    void executeOnTimer(int);

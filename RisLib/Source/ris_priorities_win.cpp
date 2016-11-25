@@ -43,8 +43,8 @@ namespace Ris
    int get_default_short_timer_thread_priority()          { return THREAD_PRIORITY_TIME_CRITICAL; }
    int get_default_long_thread_priority()                 { return THREAD_PRIORITY_ABOVE_NORMAL; }
 
-   int get_default_udp_rx_thread_priority()               { return THREAD_PRIORITY_NORMAL; }
-   int get_default_tcp_server_thread_priority()           { return THREAD_PRIORITY_NORMAL; }
-   int get_default_tcp_client_thread_priority()           { return THREAD_PRIORITY_NORMAL; }
+   int get_default_udp_rx_thread_priority()               { return THREAD_PRIORITY_HIGHEST; }
+   int get_default_tcp_server_thread_priority()           { return THREAD_PRIORITY_HIGHEST; }
+   int get_default_tcp_client_thread_priority()           { return THREAD_PRIORITY_HIGHEST; }
 
 }//namespace

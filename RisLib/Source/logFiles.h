@@ -16,7 +16,8 @@ namespace Log
    // Initializes the log files facility.
 
    void reset    ();
-   bool openFile (int aLogNum,char* aFileName);
+   bool openFile       (int aLogNum,char* aFileName);
+   bool openFileAppend (int aLogNum,char* aFileName);
    void closeAllFiles ();
 
    //***************************************************************************
@@ -25,6 +26,14 @@ namespace Log
    // Write to log file
 
    void write (int aLogNum, const char* aFormat, ...);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Write to log file
+
+   void writeTimeStamp (int aLogNum, const char* aLabel);
+
 
 }//namespace
 #endif

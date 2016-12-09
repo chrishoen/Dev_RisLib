@@ -69,6 +69,9 @@ My math functions
    // Return "01:02:03" from seconds
    char*  my_string_from_time(double aTime, char* aBuffer);
 
+   // Return current timestamp
+   char*  my_timestamp(char* aBuffer);
+
    //---------------------------------------------------------------------------
    // Index arithmetic
 

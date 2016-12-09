@@ -203,6 +203,15 @@ char*  my_string_from_time(double aTime, char* aBuffer)
    return aBuffer;
 }
 
+char*  my_timestamp(char* aBuffer)
+{
+   time_t     now = time(0);
+   struct tm  tstruct;
+   tstruct = *localtime(&now);
+   strftime(aBuffer, 40, "%Y-%m-%d.%X", &tstruct);
+   return aBuffer;
+}
+
 
 //******************************************************************************
 //******************************************************************************

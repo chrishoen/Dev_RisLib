@@ -2,8 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "prnPrint.h"
+#include "my_functions.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
@@ -36,13 +38,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   aCmd->setArgDefault(2,2);
-
-
-   Prn::print(0, "NumArg %10d",aCmd->numArg());
-   Prn::print(0, "ARG1   %10d",aCmd->argInt(1));
-   Prn::print(0, "ARG2   %10d",aCmd->argInt(2));
 }
 
 //******************************************************************************
@@ -51,12 +46,17 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   aCmd->setArgDefault(2,"default");
+   time_t     now = time(0);
+   struct tm  tstruct;
+   char       buf[80];
+   tstruct = *localtime(&now);
+   strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+   printf ( "Current local time and date: %s\n", buf );
 
 
-   Prn::print(0, "ARG1 %10d",aCmd->argInt(1));
-   Prn::print(0, "ARG2 %10s",aCmd->argString(2));
+   char tBuffer[100];
+   printf ( "Current local time and date: %s\n", my_timestamp(tBuffer));
 }
 
 //******************************************************************************

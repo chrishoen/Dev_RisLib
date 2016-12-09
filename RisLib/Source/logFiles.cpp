@@ -11,6 +11,7 @@ Print utility
 #include <stdarg.h>
 
 #include "risPortableCalls.h"
+#include "my_functions.h"
 #include "logFiles.h"
 
 namespace Log
@@ -45,6 +46,22 @@ void reset()
 bool openFile(int aLogNum, char* aFileName)
 {            
    mFile[aLogNum] = fopen(aFileName,"w");
+
+   if (mFile[aLogNum]==0)
+   {
+      return false;
+   }
+
+   return true;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+bool openFileAppend(int aLogNum, char* aFileName)
+{            
+   mFile[aLogNum] = fopen(aFileName,"a");
 
    if (mFile[aLogNum]==0)
    {
@@ -103,6 +120,17 @@ void write (int aLogNum, const char* aFormat, ...)
    // Print the string
 
    fputs(tString,mFile[aLogNum]);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write to log file
+
+void writeTimeStamp(int aLogNum, const char* aLabel)
+{
+   char tBuffer[40];
+   write(aLogNum,"%s $$ %s",aLabel,my_timestamp(tBuffer));
 }
 
 } //namespace

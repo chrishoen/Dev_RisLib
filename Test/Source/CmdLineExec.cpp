@@ -3,9 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <io.h>
 
 #include "prnPrint.h"
 #include "my_functions.h"
+#include "risPortableCalls.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
@@ -38,6 +40,22 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   bool tFlag = Ris::portableFilePathExists ("C:\\Alpha\\Lib\\");
+
+   printf("tFlag %d\n",tFlag);
+
+   return;
+   char tFilePath[100];
+   strcpy(tFilePath,"C:\\Alpha\\Lib22\\");
+
+   if (_access(tFilePath, 0) == -1)
+   {
+      printf("NO\n");
+   }
+   else
+   {
+      printf("YES\n");
+   }
 }
 
 //******************************************************************************

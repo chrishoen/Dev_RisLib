@@ -49,7 +49,6 @@ namespace Ris
    // Wait for key pressed
 
    void  portableWaitForKbhit();
-   void  portableAbortWaitForKbhit();
    bool  portableKbhit(void);
 
    //---------------------------------------------------------------------------
@@ -68,6 +67,11 @@ namespace Ris
 
    void portableSetConsoleTitle(char* aTitle);
 
+   //---------------------------------------------------------------------------
+   // Get file exists
+
+   bool portableFilePathExists (char* aFilePath);
+  
 }//namespace
 
 #endif

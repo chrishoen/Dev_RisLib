@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <direct.h>
+#include <io.h>
 
 #include "risPortableCalls.h"
 
@@ -115,6 +116,13 @@ void portableStrupr(char* aString)
 void portableSetConsoleTitle(char* aTitle)
 {
    SetConsoleTitle(aTitle);
+}
+
+//******************************************************************************
+
+bool portableFilePathExists (char* aFilePath)
+{
+   return  _access(aFilePath, 0) == 0;
 }
 
 }//namespace

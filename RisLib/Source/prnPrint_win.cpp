@@ -243,6 +243,8 @@ HANDLE rCreatePrintView(int aConsole)
    ZeroMemory( &si, sizeof(si) );
    si.cb = sizeof(si);
    ZeroMemory( &pi, sizeof(pi) );
+   si.dwFlags = STARTF_USESHOWWINDOW;
+   si.wShowWindow = SW_SHOWNA;
 
    char tCommandLine[200];
 // sprintf(tCommandLine,"C:\\Alpha\\Bin\\PrintView.exe  %d",rConsolePort[aConsole]);

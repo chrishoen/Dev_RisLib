@@ -237,6 +237,39 @@ void toggleSuppressPrint()
 
 HANDLE rCreatePrintView(int aConsole)
 {
+   //---------------------------------------------------------------------------
+   // File path.
+
+   bool tFileFound = false;
+   char tFilePath[200];
+
+   strcpy(tFilePath,"C:\\Alpha\\Bin\\PrintView.exe");
+
+   if (Ris::portableFilePathExists(tFilePath))
+   {
+      tFileFound = true;
+   }
+
+   if (!tFileFound)
+   {
+      strcpy(tFilePath,"C:\\RedInc\\SDSAT\\Bin\\PrintView1.exe");
+   }
+
+   if (Ris::portableFilePathExists(tFilePath))
+   {
+      tFileFound = true;
+   }
+
+   if (!tFileFound)
+   {
+      printf("PrintView1.exe NOT FOUND");
+      rNumOfConsoles = 1;
+      return 0;
+   }
+
+   //---------------------------------------------------------------------------
+   // Create process.
+
    STARTUPINFO si;
    PROCESS_INFORMATION pi;
 
@@ -247,8 +280,7 @@ HANDLE rCreatePrintView(int aConsole)
    si.wShowWindow = SW_SHOWNA;
 
    char tCommandLine[200];
-// sprintf(tCommandLine,"C:\\Alpha\\Bin\\PrintView.exe  %d",rConsolePort[aConsole]);
-   sprintf(tCommandLine,"C:\\RedInc\\SDSAT\\Bin\\PrintView1.exe  %d",rConsolePort[aConsole]);
+   sprintf(tCommandLine,"%s  %d",tFilePath,rConsolePort[aConsole]);
 
    char tConsoleTitle[50];
    sprintf(tConsoleTitle,"PRINTVIEW%d",aConsole);

@@ -189,6 +189,14 @@ public:
    static const int  ViewRun2 = 86;
    static const int  ViewRun3 = 87;
    static const int  ViewRun4 = 88;
+   static const int  CamInit1 = 89;
+   static const int  CamInit2 = 90;
+   static const int  CamInit3 = 91;
+   static const int  CamInit4 = 92;
+   static const int  CamRun1 = 93;
+   static const int  CamRun2 = 94;
+   static const int  CamRun3 = 95;
+   static const int  CamRun4 = 96;
 
 //******************************************************************************
 //******************************************************************************

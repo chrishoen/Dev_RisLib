@@ -251,6 +251,10 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "CamRun2",     CamRun2     );
       tryFilterString (aCmd, "CamRun3",     CamRun3     );
       tryFilterString (aCmd, "CamRun4",     CamRun4     );
+      tryFilterString (aCmd, "CamErr1",     CamErr1     );
+      tryFilterString (aCmd, "CamErr2",     CamErr2     );
+      tryFilterString (aCmd, "CamErr3",     CamErr3     );
+      tryFilterString (aCmd, "CamErr4",     CamErr4     );
 
       // Set the stored try filter
       tryFilterSet(aCmd);

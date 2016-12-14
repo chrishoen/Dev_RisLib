@@ -197,6 +197,10 @@ public:
    static const int  CamRun2 = 94;
    static const int  CamRun3 = 95;
    static const int  CamRun4 = 96;
+   static const int  CamErr1 = 97;
+   static const int  CamErr2 = 98;
+   static const int  CamErr3 = 99;
+   static const int  CamErr4 = 100;
 
 //******************************************************************************
 //******************************************************************************

@@ -1,5 +1,5 @@
-#ifndef _SOMEPLANTTHREAD_H_
-#define _SOMEPLANTTHREAD_H_
+#ifndef _SOMESLAVETHREAD_H_
+#define _SOMESLAVETHREAD_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -14,15 +14,15 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is an example plant thread that receives commands from  a controller 
+// This is an example slave thread that receives commands from  a master 
 // thread and sends responses.
 
-class  PlantThread : public Ris::Threads::BaseQCallThread
+class  SlaveThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
 
-   PlantThread();
+   SlaveThread();
 
    void configureThreads();
    void threadInitFunction();
@@ -38,7 +38,7 @@ public:
    //--------------------------------------------------------------
    // QCalls:
 
-   // Receive command from controller thread
+   // Receive command from master thread
    Ris::Threads::QCall3<int,int,int>   mCommandQCall;
    void executeCommand (int aId,int aParm1,int aParm2);
 
@@ -53,10 +53,10 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _SOMEPLANTTHREAD_CPP_
-          PlantThread* gPlantThread;
+#ifdef _SOMESLAVETHREAD_CPP_
+          SlaveThread* gSlaveThread;
 #else
-   extern PlantThread* gPlantThread;
+   extern SlaveThread* gSlaveThread;
 #endif
 
 //******************************************************************************

@@ -177,14 +177,14 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\someControllerThread.cpp" />
-    <ClCompile Include="Source\somePlantThread.cpp" />
+    <ClCompile Include="Source\someMasterThread.cpp" />
+    <ClCompile Include="Source\someSlaveThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\someControllerThread.h" />
-    <ClInclude Include="Source\somePlantThread.h" />
+    <ClInclude Include="Source\someMasterThread.h" />
+    <ClInclude Include="Source\someSlaveThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,15 +8,15 @@ Description:
 
 #include "prnPrint.h"
 
-#include "somePlantThread.h"
+#include "someSlaveThread.h"
 
-#define  _SOMECONTROLLERTHREAD_CPP_
-#include "someControllerThread.h"
+#define  _SOMEMASTERTHREAD_CPP_
+#include "someMasterThread.h"
 
 namespace Some
 {
 
-ControllerThread::ControllerThread()
+MasterThread::MasterThread()
 {
    // Set base class thread priority
    BaseClass::mShortThread->setThreadPriorityHigh();
@@ -25,16 +25,16 @@ ControllerThread::ControllerThread()
    BaseClass::mShortThread->mTimerPeriod = 1000;
 
    // Base class call pointers
-   BaseClass::mShortThread->mThreadInitCallPointer.bind(this,&ControllerThread::threadInitFunction);
-   BaseClass::mShortThread->mThreadExitCallPointer.bind(this,&ControllerThread::threadExitFunction);
-   BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer.bind(this,&ControllerThread::executeOnTimer);
+   BaseClass::mShortThread->mThreadInitCallPointer.bind(this,&MasterThread::threadInitFunction);
+   BaseClass::mShortThread->mThreadExitCallPointer.bind(this,&MasterThread::threadExitFunction);
+   BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer.bind(this,&MasterThread::executeOnTimer);
 
    // QCall CallPointers
-   mTest1QCall.bind     (this->mLongThread, this,&ControllerThread::executeTest1);
-   mTest2QCall.bind     (this->mLongThread, this,&ControllerThread::executeTest2);
-   mSendQCall.bind      (this->mLongThread, this,&ControllerThread::executeSend);
-   mResponseQCall.bind  (this->mShortThread,this,&ControllerThread::executeResponse);
-   mSequenceQCall.bind  (this->mLongThread, this,&ControllerThread::executeSequence);
+   mTest1QCall.bind     (this->mLongThread, this,&MasterThread::executeTest1);
+   mTest2QCall.bind     (this->mLongThread, this,&MasterThread::executeTest2);
+   mSendQCall.bind      (this->mLongThread, this,&MasterThread::executeSend);
+   mResponseQCall.bind  (this->mShortThread,this,&MasterThread::executeResponse);
+   mSequenceQCall.bind  (this->mLongThread, this,&MasterThread::executeSequence);
 
    // Members
    mTPFlag = false;
@@ -44,20 +44,20 @@ ControllerThread::ControllerThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-void ControllerThread::threadInitFunction()
+void MasterThread::threadInitFunction()
 {
-   Prn::print(0,"ControllerThread::threadInitFunction");
+   Prn::print(0,"MasterThread::threadInitFunction");
 }
 
-void ControllerThread::threadExitFunction()
+void MasterThread::threadExitFunction()
 {
-   Prn::print(0,"ControllerThread::threadExitFunction");
+   Prn::print(0,"MasterThread::threadExitFunction");
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-void ControllerThread::executeOnTimer(int aTimerCount)
+void MasterThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
 // if (aTimerCount % 100 !=0) return;
@@ -71,25 +71,25 @@ void ControllerThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 
-void ControllerThread::executeTest1(int aN)
+void MasterThread::executeTest1(int aN)
 {
-   Prn::print(0,"ControllerThread::executeTest1 BEGIN %04d",aN);
+   Prn::print(0,"MasterThread::executeTest1 BEGIN %04d",aN);
    try
    {
       waitForTimer(aN);
    }
    catch(int aStatus)
    {
-      Prn::print(0, "Exception ControllerThread::executeTest1 ABORTED  %d",aStatus);
+      Prn::print(0, "Exception MasterThread::executeTest1 ABORTED  %d",aStatus);
    }
-   Prn::print(0,"ControllerThread::executeTest1 END   %04d",aN);
+   Prn::print(0,"MasterThread::executeTest1 END   %04d",aN);
 }
 
 //******************************************************************************
 
-void ControllerThread::executeTest2(int aN)
+void MasterThread::executeTest2(int aN)
 {
-   Prn::print(0,"ControllerThread::executeTest2 BEGIN %04d",aN);
+   Prn::print(0,"MasterThread::executeTest2 BEGIN %04d",aN);
    try
    {
       BaseClass::resetNotify();
@@ -97,30 +97,30 @@ void ControllerThread::executeTest2(int aN)
    }
    catch(int aStatus)
    {
-      Prn::print(0, "Exception ControllerThread::executeTest2 ABORTED  %d",aStatus);
+      Prn::print(0, "Exception MasterThread::executeTest2 ABORTED  %d",aStatus);
    }
-   Prn::print(0,"ControllerThread::executeTest2 END   %04d",aN);
+   Prn::print(0,"MasterThread::executeTest2 END   %04d",aN);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void ControllerThread::executeSend(int aId,int aParm1,int aParm2)
+void MasterThread::executeSend(int aId,int aParm1,int aParm2)
 {
    try
    {
-      Prn::print(0,"ControllerThread::executeSend BEGIN     %04d",aId);
+      Prn::print(0,"MasterThread::executeSend BEGIN     %04d",aId);
 
       BaseClass::resetNotify();
-      gPlantThread->mCommandQCall(aId,aParm1,aParm2);
+      gSlaveThread->mCommandQCall(aId,aParm1,aParm2);
       BaseClass::waitForNotify(-1,aId);
 
-      Prn::print(0,"ControllerThread::executeSend END       %04d",aId);
+      Prn::print(0,"MasterThread::executeSend END       %04d",aId);
    }
    catch(int aStatus)
    {
-      Prn::print(0, "Exception ControllerThread::executeSend ABORTED  %d",aStatus);
+      Prn::print(0, "Exception MasterThread::executeSend ABORTED  %d",aStatus);
    }
 }
 
@@ -128,53 +128,53 @@ void ControllerThread::executeSend(int aId,int aParm1,int aParm2)
 //******************************************************************************
 //******************************************************************************
 
-void ControllerThread::executeSequence(int aId,int aIterations,int aCommandTimeout,int aResponseDelay)
+void MasterThread::executeSequence(int aId,int aIterations,int aCommandTimeout,int aResponseDelay)
 {
    try
    {
-      Prn::print(0,"ControllerThread::executeSequence BEGIN %04d",aId);
+      Prn::print(0,"MasterThread::executeSequence BEGIN %04d",aId);
 
       switch(aId)
       {
       case 1 :
          {
             BaseClass::resetNotify();
-            gPlantThread->mCommandQCall(1,aResponseDelay,0);
+            gSlaveThread->mCommandQCall(1,aResponseDelay,0);
             BaseClass::waitForNotify(aCommandTimeout,1);
          }
          break;
       case 2 :
          {
             BaseClass::resetNotify();
-            gPlantThread->mCommandQCall(2,aResponseDelay,0);
+            gSlaveThread->mCommandQCall(2,aResponseDelay,0);
             BaseClass::waitForNotify(aCommandTimeout,2);
          }
          break;
       case 3 :
          {
             BaseClass::resetNotify();
-            gPlantThread->mCommandQCall(3,aResponseDelay,0);
+            gSlaveThread->mCommandQCall(3,aResponseDelay,0);
             BaseClass::waitForNotifyAny(aCommandTimeout,2,3,4);
          }
          break;
       case 5 :
          {
             BaseClass::resetNotify();
-            gPlantThread->mCommandQCall(5,aResponseDelay,0);
+            gSlaveThread->mCommandQCall(5,aResponseDelay,0);
             BaseClass::waitForNotifyAll(aCommandTimeout,2,5,6);
          }
          break;
       case 7 :
          {
             BaseClass::resetNotify();
-            gPlantThread->mCommandQCall(7,aResponseDelay,0);
+            gSlaveThread->mCommandQCall(7,aResponseDelay,0);
             BaseClass::waitForNotifyAny(aCommandTimeout,2,7,8);
          }
          break;
       case 9 :
          {
             BaseClass::resetNotify();
-            gPlantThread->mCommandQCall(9,aResponseDelay,0);
+            gSlaveThread->mCommandQCall(9,aResponseDelay,0);
             BaseClass::waitForNotifyAll(aCommandTimeout,2,9,10);
          }
          break;
@@ -183,7 +183,7 @@ void ControllerThread::executeSequence(int aId,int aIterations,int aCommandTimeo
             for (int i=0;i<aIterations;i++)
             {
                BaseClass::resetNotify();
-               gPlantThread->mCommandQCall(5,2,0);
+               gSlaveThread->mCommandQCall(5,2,0);
                BaseClass::waitForNotifyAll(10,2,5,6);
             }
          }
@@ -192,21 +192,21 @@ void ControllerThread::executeSequence(int aId,int aIterations,int aCommandTimeo
          {
             for (int i=0;i<aIterations;i++)
             {
-               Prn::print(0,"ControllerThread::executeSequence LOOP BEGIN %04d",i);
+               Prn::print(0,"MasterThread::executeSequence LOOP BEGIN %04d",i);
                BaseClass::resetNotify();
-               gPlantThread->mCommandQCall(9,aResponseDelay,0);
+               gSlaveThread->mCommandQCall(9,aResponseDelay,0);
                BaseClass::waitForNotifyAll(aCommandTimeout,2,9,10);
-               Prn::print(0,"ControllerThread::executeSequence LOOP END   %04d",i);
+               Prn::print(0,"MasterThread::executeSequence LOOP END   %04d",i);
             }
          }
          break;
       }
 
-      Prn::print(0,"ControllerThread::executeSequence END   %04d",aId);
+      Prn::print(0,"MasterThread::executeSequence END   %04d",aId);
    }
    catch(int aStatus)
    {
-      Prn::print(0, "Exception ControllerThread::executeSequence ABORTED  %d",aStatus);
+      Prn::print(0, "Exception MasterThread::executeSequence ABORTED  %d",aStatus);
    }
 }
 
@@ -214,9 +214,9 @@ void ControllerThread::executeSequence(int aId,int aIterations,int aCommandTimeo
 //******************************************************************************
 //******************************************************************************
 
-void ControllerThread::executeResponse(int aId)
+void MasterThread::executeResponse(int aId)
 {
-   Prn::print(0,"ControllerThread::executeResponse       %04d",aId);
+   Prn::print(0,"MasterThread::executeResponse       %04d",aId);
 
    BaseClass::notify(aId);
 }

@@ -3,8 +3,8 @@
 #include "CmdLineExec.h"
 #include "MainInit.h"
 
-#include "someControllerThread.h"
-#include "somePlantThread.h"
+#include "someMasterThread.h"
+#include "someSlaveThread.h"
 using namespace Some;
 
 //******************************************************************************
@@ -18,11 +18,11 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Launch Threads
 
-   gPlantThread = new PlantThread;
-   gPlantThread->launchThread();
+   gSlaveThread = new SlaveThread;
+   gSlaveThread->launchThread();
 
-   gControllerThread = new ControllerThread;
-   gControllerThread->launchThreads();
+   gMasterThread = new MasterThread;
+   gMasterThread->launchThreads();
 
    //--------------------------------------------------------------------
    // Start user command line executive,
@@ -35,12 +35,12 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Shutdown Threads
 
-   gControllerThread->shutdownThreads();
-   delete gControllerThread;
+   gMasterThread->shutdownThreads();
+   delete gMasterThread;
 
-   //gPlantThread->shutdownThread();
-   gPlantThread->forceTerminateThread();
-   delete gPlantThread;
+   //gSlaveThread->shutdownThread();
+   gSlaveThread->forceTerminateThread();
+   delete gSlaveThread;
 
    //--------------------------------------------------------------------
    // Finalize program

@@ -9,24 +9,24 @@ Description:
 
 #include "prnPrint.h"
 
-#include "someControllerThread.h"
+#include "someMasterThread.h"
 
-#define  _SOMEPLANTTHREAD_CPP_
-#include "somePlantThread.h"
+#define  _SOMESLAVETHREAD_CPP_
+#include "someSlaveThread.h"
 
 namespace Some
 {
 
-PlantThread::PlantThread()
+SlaveThread::SlaveThread()
 {
    // QCall CallPointers
-   mCommandQCall.bind (this,&PlantThread::executeCommand);
+   mCommandQCall.bind (this,&SlaveThread::executeCommand);
 }
 
 //******************************************************************************
 // This sets base thread configuration members
 
-void PlantThread::configureThreads()
+void SlaveThread::configureThreads()
 {
    // Set base class configuration members to defaults
    BaseClass::configureThread();
@@ -38,7 +38,7 @@ void PlantThread::configureThreads()
    BaseClass::mTimerPeriod = 1000;
 }
 
-void PlantThread::threadInitFunction()
+void SlaveThread::threadInitFunction()
 {
    BaseClass::threadInitFunction();
 }
@@ -50,60 +50,60 @@ void PlantThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 
-void PlantThread::executeOnTimer(int aCurrentTimeCount)
+void SlaveThread::executeOnTimer(int aCurrentTimeCount)
 {
 }
 
 //******************************************************************************
 
-void PlantThread::executeCommand(int aId,int aParm1,int aParm2)
+void SlaveThread::executeCommand(int aId,int aParm1,int aParm2)
 {
-   Prn::print(0,"PlantThread::executeCommand             %04d",aId);
+   Prn::print(0,"SlaveThread::executeCommand             %04d",aId);
 
    switch(aId)
    {
    case 1 :
       {
          wait(aParm1);
-         gControllerThread->mResponseQCall(1);
+         gMasterThread->mResponseQCall(1);
       }
       break;
    case 2 :
       {
          wait(aParm1);
-         gControllerThread->mResponseQCall(2);
+         gMasterThread->mResponseQCall(2);
       }
       break;
    case 3 :
       {
          wait(aParm1);
-         gControllerThread->mResponseQCall(3);
+         gMasterThread->mResponseQCall(3);
          wait(aParm1);
-         gControllerThread->mResponseQCall(4);
+         gMasterThread->mResponseQCall(4);
       }
       break;
    case 5 :
       {
          wait(aParm1);
-         gControllerThread->mResponseQCall(5);
+         gMasterThread->mResponseQCall(5);
          wait(aParm1);
-         gControllerThread->mResponseQCall(6);
+         gMasterThread->mResponseQCall(6);
       }
       break;
    case 7 :
       {
          wait(aParm1);
-         gControllerThread->mResponseQCall(7);
+         gMasterThread->mResponseQCall(7);
          wait(aParm1);
-         gControllerThread->mResponseQCall(8);
+         gMasterThread->mResponseQCall(8);
       }
       break;
    case 9 :
       {
          wait(aParm1);
-         gControllerThread->mResponseQCall(9);
+         gMasterThread->mResponseQCall(9);
          wait(aParm1);
-         gControllerThread->mResponseQCall(10);
+         gMasterThread->mResponseQCall(10);
       }
       break;
    }
@@ -111,7 +111,7 @@ void PlantThread::executeCommand(int aId,int aParm1,int aParm2)
 
 //******************************************************************************
 
-void PlantThread::wait(int aSeconds)
+void SlaveThread::wait(int aSeconds)
 {
    if (aSeconds==0)return;
    BaseClass::threadSleep(aSeconds*1000);

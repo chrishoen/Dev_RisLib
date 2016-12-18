@@ -1,5 +1,5 @@
-#ifndef _SOMECONTROLLERTHREAD_H_
-#define _SOMECONTROLLERTHREAD_H_
+#ifndef _SOMEMASTERTHREAD_H_
+#define _SOMEMASTERTHREAD_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -14,15 +14,15 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is an example controller thread that sends commands to a plant thread
+// This is an example master thread that sends commands to a slave thread
 // and waits for responses.
 
-class  ControllerThread : public Ris::Threads::BaseTwoThread
+class  MasterThread : public Ris::Threads::BaseTwoThread
 {
 public:
    typedef Ris::Threads::BaseTwoThread BaseClass;
 
-   ControllerThread();
+   MasterThread();
 
    void threadInitFunction();
    void threadExitFunction();
@@ -42,15 +42,15 @@ public:
    Ris::Threads::QCall1<int>   mTest2QCall;
    void executeTest2 (int aX=0);
 
-   // Send command to plant thread
+   // Send command to slave thread
    Ris::Threads::QCall3<int,int,int>   mSendQCall;
    void executeSend (int aId,int aParm1,int aParm2);
 
-   // Receive response from plant thread
+   // Receive response from slave thread
    Ris::Threads::QCall1<int>   mResponseQCall;
    void executeResponse (int aId=0);
 
-   // Sequence of interactions with plant thread
+   // Sequence of interactions with slave thread
    Ris::Threads::QCall4<int,int,int,int>   mSequenceQCall;
    void executeSequence (int aId,int aIterations,int aCommandTimeout,int aResponseDelay);
 
@@ -64,10 +64,10 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _SOMECONTROLLERTHREAD_CPP_
-          ControllerThread* gControllerThread;
+#ifdef _SOMEMASTERTHREAD_CPP_
+          MasterThread* gMasterThread;
 #else
-   extern ControllerThread* gControllerThread;
+   extern MasterThread* gMasterThread;
 #endif
 
 //******************************************************************************

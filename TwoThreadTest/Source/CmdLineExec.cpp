@@ -6,7 +6,7 @@
 
 #include "CmdLineExec.h"
 
-#include "someControllerThread.h"
+#include "someMasterThread.h"
 using namespace Some;
 
 //******************************************************************************
@@ -36,7 +36,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,true);
-   gControllerThread->mTPFlag=aCmd->argBool(1);
+   gMasterThread->mTPFlag=aCmd->argBool(1);
 }
 
 //******************************************************************************
@@ -44,7 +44,7 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,10);
-   gControllerThread->mTest1QCall(aCmd->argInt(1));
+   gMasterThread->mTest1QCall(aCmd->argInt(1));
 }
 
 //******************************************************************************
@@ -52,7 +52,7 @@ void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeTest2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,10);
-   gControllerThread->mTest2QCall(aCmd->argInt(1));
+   gMasterThread->mTest2QCall(aCmd->argInt(1));
 }
 
 //******************************************************************************
@@ -62,7 +62,7 @@ void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,1);
    aCmd->setArgDefault(2,2);
    aCmd->setArgDefault(3,12);
-   gControllerThread->mSendQCall(aCmd->argInt(1),aCmd->argInt(2),aCmd->argInt(3));
+   gMasterThread->mSendQCall(aCmd->argInt(1),aCmd->argInt(2),aCmd->argInt(3));
 }
 
 //******************************************************************************
@@ -70,7 +70,7 @@ void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeResponse(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,101);
-   gControllerThread->mResponseQCall(aCmd->argInt(1));
+   gMasterThread->mResponseQCall(aCmd->argInt(1));
 }
 
 //******************************************************************************
@@ -87,7 +87,7 @@ void CmdLineExec::executeSequence1(Ris::CmdLineCmd* aCmd)
    int tCommandTimeout  = aCmd->argInt(3);
    int tResponseDelay   = aCmd->argInt(4);
 
-   gControllerThread->mSequenceQCall(tId,tIterations,tCommandTimeout,tResponseDelay);
+   gMasterThread->mSequenceQCall(tId,tIterations,tCommandTimeout,tResponseDelay);
 }
 
 //******************************************************************************
@@ -104,14 +104,14 @@ void CmdLineExec::executeSequence2(Ris::CmdLineCmd* aCmd)
    int tCommandTimeout  = aCmd->argInt(3);
    int tResponseDelay   = aCmd->argInt(4);
 
-   gControllerThread->mSequenceQCall(tId,tIterations,tCommandTimeout,tResponseDelay);
+   gMasterThread->mSequenceQCall(tId,tIterations,tCommandTimeout,tResponseDelay);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 {
-   gControllerThread->abortWaitForNotify();
+   gMasterThread->abortWaitForNotify();
 }
 
 

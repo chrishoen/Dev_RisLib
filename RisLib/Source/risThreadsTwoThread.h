@@ -24,7 +24,7 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a thread that executes short term qcalls. That is, execution of
+// This is a thread that executes short term qcalls. That is, execution of its
 // thread qcalls is expected to take a short amount of time.
 
 class TwoThreadShortThread : public Ris::Threads::BaseQCallThread
@@ -87,6 +87,7 @@ public:
 
    // This forces a timer completion
    void threadForceTimerCompletion();
+
 };
 
 //******************************************************************************
@@ -109,7 +110,8 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Two thread, has a short term thread and a long term thread.
+// Base class for a two thread. It has a short term thread and a long term
+// thread.
 
 class BaseTwoThread
 {
@@ -207,8 +209,51 @@ public:
    // This aborts the wait for a timer completion.
    void abortWaitForNotify();
 
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Send notification qcall. This executes in the context of the short term
+   // thread to call notify(aIndex), which then notifies the long term thread.
+
+   typedef Ris::Threads::QCall1<int> SendNotifyQCall;
+   SendNotifyQCall mSendNotifyQCall;
+   void executeSendNotify(int aIndex);
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a notification callback. It invokes a two thread qcall that executes
+// in the context of the short term thread to notify the long term thread.
+// A two thread master can use this by passing it to a slave thread that it
+// sends a command to. The slave thread can then use it to notify the master
+// thread when the command is completed.
+
+class TwoThreadNotify
+{
+public:
+   //---------------------------------------------------------------------------
+   // Members.
+
+   BaseTwoThread* mTwoThread;
+   int            mIndex;
+
+   //---------------------------------------------------------------------------
+   // Constructors.
+
+   TwoThreadNotify();
+   TwoThreadNotify(BaseTwoThread* aTwoThread,int aIndex);
+
+   //---------------------------------------------------------------------------
+   // Send notify. This invokes the two thread qcall to execute in the 
+   // context of the short termm thread to notify the long term thread.
+
+   void notify();
+
+};
 //******************************************************************************
 }//namespace
 }//namespace

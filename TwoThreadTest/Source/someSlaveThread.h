@@ -8,6 +8,7 @@
 //******************************************************************************
 //******************************************************************************
 #include "risThreadsQCallThread.h"
+#include "risThreadsTwoThread.h"
 
 namespace Some
 {
@@ -39,8 +40,14 @@ public:
    // QCalls:
 
    // Receive command from master thread
-   Ris::Threads::QCall3<int,int,int>   mCommandQCall;
+   typedef Ris::Threads::QCall3<int,int,int> CommandQCall;
+   CommandQCall   mCommandQCall;
    void executeCommand (int aId,int aParm1,int aParm2);
+
+   // Receive work request from master thread
+   typedef Ris::Threads::QCall2<int,Ris::Threads::TwoThreadNotify> WorkRequestQCall;
+   WorkRequestQCall   mWorkRequestQCall;
+   void executeWorkRequest (int aParm1,Ris::Threads::TwoThreadNotify aCompletionNotify);
 
    //--------------------------------------------------------------
    //--------------------------------------------------------------

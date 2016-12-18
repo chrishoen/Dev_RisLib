@@ -30,11 +30,12 @@ MasterThread::MasterThread()
    BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer.bind(this,&MasterThread::executeOnTimer);
 
    // QCall CallPointers
-   mTest1QCall.bind     (this->mLongThread, this,&MasterThread::executeTest1);
-   mTest2QCall.bind     (this->mLongThread, this,&MasterThread::executeTest2);
-   mSendQCall.bind      (this->mLongThread, this,&MasterThread::executeSend);
-   mResponseQCall.bind  (this->mShortThread,this,&MasterThread::executeResponse);
-   mSequenceQCall.bind  (this->mLongThread, this,&MasterThread::executeSequence);
+   mTest1QCall.bind            (this->mLongThread, this,&MasterThread::executeTest1);
+   mTest2QCall.bind            (this->mLongThread, this,&MasterThread::executeTest2);
+   mSendCommandQCall.bind      (this->mLongThread, this,&MasterThread::executeSendCommand);
+   mSendWorkRequestQCall.bind  (this->mLongThread, this,&MasterThread::executeSendWorkRequest);
+   mResponseQCall.bind         (this->mShortThread,this,&MasterThread::executeResponse);
+   mSequenceQCall.bind         (this->mLongThread, this,&MasterThread::executeSequence);
 
    // Members
    mTPFlag = false;
@@ -106,21 +107,44 @@ void MasterThread::executeTest2(int aN)
 //******************************************************************************
 //******************************************************************************
 
-void MasterThread::executeSend(int aId,int aParm1,int aParm2)
+void MasterThread::executeSendCommand(int aId,int aParm1,int aParm2)
 {
    try
    {
-      Prn::print(0,"MasterThread::executeSend BEGIN     %04d",aId);
+      Prn::print(0,"MasterThread::executeSendCommand BEGIN     %04d",aId);
 
       BaseClass::resetNotify();
       gSlaveThread->mCommandQCall(aId,aParm1,aParm2);
       BaseClass::waitForNotify(-1,aId);
 
-      Prn::print(0,"MasterThread::executeSend END       %04d",aId);
+      Prn::print(0,"MasterThread::executeSendCommand END       %04d",aId);
    }
    catch(int aStatus)
    {
-      Prn::print(0, "Exception MasterThread::executeSend ABORTED  %d",aStatus);
+      Prn::print(0, "Exception MasterThread::executeSendCommand ABORTED  %d",aStatus);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void MasterThread::executeSendWorkRequest(int aParm1)
+{
+   try
+   {
+      Prn::print(0,"MasterThread::executeSendWorkRequest BEGIN     %04d",aParm1);
+
+      BaseClass::resetNotify();
+      Ris::Threads::TwoThreadNotify tNotify(this,1);
+      gSlaveThread->mWorkRequestQCall(aParm1,tNotify);
+      BaseClass::waitForNotify(-1,1);
+
+      Prn::print(0,"MasterThread::executeSend END       %04d",aParm1);
+   }
+   catch(int aStatus)
+   {
+      Prn::print(0, "Exception MasterThread::executeSendWorkRequest ABORTED  %d",aStatus);
    }
 }
 

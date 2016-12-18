@@ -43,8 +43,12 @@ public:
    void executeTest2 (int aX=0);
 
    // Send command to slave thread
-   Ris::Threads::QCall3<int,int,int>   mSendQCall;
-   void executeSend (int aId,int aParm1,int aParm2);
+   Ris::Threads::QCall3<int,int,int>   mSendCommandQCall;
+   void executeSendCommand (int aId,int aParm1,int aParm2);
+
+   // Send work request to slave thread
+   Ris::Threads::QCall1<int>   mSendWorkRequestQCall;
+   void executeSendWorkRequest (int aParm1);
 
    // Receive response from slave thread
    Ris::Threads::QCall1<int>   mResponseQCall;

@@ -21,14 +21,15 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("TP"    ))    executeTP        (aCmd);
-   if(aCmd->isCmd("T1"    ))    executeTest1     (aCmd);
-   if(aCmd->isCmd("T2"    ))    executeTest2     (aCmd);
-   if(aCmd->isCmd("SEND"  ))    executeSend      (aCmd);
-   if(aCmd->isCmd("RES"   ))    executeResponse  (aCmd);
-   if(aCmd->isCmd("S1"    ))    executeSequence1 (aCmd);
-   if(aCmd->isCmd("S2"    ))    executeSequence2 (aCmd);
-   if(aCmd->isCmd("X"     ))    executeAbort     (aCmd);
+   if(aCmd->isCmd("TP"    ))    executeTP          (aCmd);
+   if(aCmd->isCmd("T1"    ))    executeTest1       (aCmd);
+   if(aCmd->isCmd("T2"    ))    executeTest2       (aCmd);
+   if(aCmd->isCmd("SEND"  ))    executeSend        (aCmd);
+   if(aCmd->isCmd("RES"   ))    executeResponse    (aCmd);
+   if(aCmd->isCmd("S1"    ))    executeSequence1   (aCmd);
+   if(aCmd->isCmd("S2"    ))    executeSequence2   (aCmd);
+   if(aCmd->isCmd("X"     ))    executeAbort       (aCmd);
+   if(aCmd->isCmd("WORK"  ))    executeWorkRequest (aCmd);
 }
 
 //******************************************************************************
@@ -62,7 +63,7 @@ void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,1);
    aCmd->setArgDefault(2,2);
    aCmd->setArgDefault(3,12);
-   gMasterThread->mSendQCall(aCmd->argInt(1),aCmd->argInt(2),aCmd->argInt(3));
+   gMasterThread->mSendCommandQCall(aCmd->argInt(1),aCmd->argInt(2),aCmd->argInt(3));
 }
 
 //******************************************************************************
@@ -112,6 +113,14 @@ void CmdLineExec::executeSequence2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 {
    gMasterThread->abortWaitForNotify();
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeWorkRequest(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,101);
+   gMasterThread->mSendWorkRequestQCall(aCmd->argInt(1));
 }
 
 

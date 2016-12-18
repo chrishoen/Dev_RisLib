@@ -152,6 +152,9 @@ BaseTwoThread::BaseTwoThread()
    // Default exception codes
    mTimerCompletionAbortException   = 666;
    mTimerCompletionTimeoutException = 667;
+
+   // Bind qcall.
+   mSendNotifyQCall.bind(mShortThread,this,&BaseTwoThread::executeSendNotify);
 }
 
 BaseTwoThread::~BaseTwoThread()
@@ -350,5 +353,52 @@ void BaseTwoThread::notify(int aIndex)
       mShortThread->threadForceTimerCompletion();
    }
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This executes in the context of the short term thread to notify the 
+// long term thread.
+
+void BaseTwoThread::executeSendNotify(int aIndex)
+{
+   // Notify the long term thread.
+   notify(aIndex);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a notification callback. It invokes a two thread qcall that executes
+// in the context of the short term thread to notify the long term thread.
+// A two thread master can use this by passing it to a slave thread that it
+// sends a command to. The slave thread can then use it to notify the master
+// thread when the command is completed.
+
+TwoThreadNotify::TwoThreadNotify()
+{
+   mTwoThread = 0;
+   mIndex = 0;
+}
+
+TwoThreadNotify::TwoThreadNotify(BaseTwoThread* aTwoThread,int aIndex)
+{
+   mTwoThread = aTwoThread;
+   mIndex = aIndex;
+}
+
+//******************************************************************************
+// Send notify. This invokes the two thread qcall to execute in the 
+// context of the short termm thread to notify the long term thread.
+
+void TwoThreadNotify::notify()
+{
+   if (mTwoThread==0) return;
+   mTwoThread->mSendNotifyQCall(mIndex);
+}
+
 }//namespace
 }//namespace

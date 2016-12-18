@@ -140,7 +140,7 @@ void MasterThread::executeSendWorkRequest(int aParm1)
       gSlaveThread->mWorkRequestQCall(aParm1,tNotify);
       BaseClass::waitForNotify(-1,1);
 
-      Prn::print(0,"MasterThread::executeSend END       %04d",aParm1);
+      Prn::print(0,"MasterThread::executeSendWorkRequest END       %04d",aParm1);
    }
    catch(int aStatus)
    {

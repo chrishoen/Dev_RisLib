@@ -34,6 +34,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+void CmdLineExec::executeWorkRequest(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,0);
+   gMasterThread->mSendWorkRequestQCall(aCmd->argInt(1));
+}
+
+//******************************************************************************
+
 void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,true);
@@ -44,7 +52,7 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10);
+   aCmd->setArgDefault(1,10000);
    gMasterThread->mTest1QCall(aCmd->argInt(1));
 }
 
@@ -52,7 +60,7 @@ void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10);
+   aCmd->setArgDefault(1,10000);
    gMasterThread->mTest2QCall(aCmd->argInt(1));
 }
 
@@ -113,14 +121,6 @@ void CmdLineExec::executeSequence2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 {
    gMasterThread->abortWaitForNotify();
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeWorkRequest(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->setArgDefault(1,101);
-   gMasterThread->mSendWorkRequestQCall(aCmd->argInt(1));
 }
 
 

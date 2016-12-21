@@ -126,6 +126,8 @@ void SlaveThread::executeWorkRequest (int aParm1,Ris::Threads::TwoThreadNotify a
    Prn::print(0,"SlaveThread::executeWorkRequest                %04d",aParm1);
 
    wait(4);
+
+   aCompletionNotify.mStatus = aParm1;
    aCompletionNotify.notify();
 }
 

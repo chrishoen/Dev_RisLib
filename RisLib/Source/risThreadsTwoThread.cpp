@@ -132,6 +132,20 @@ void TwoThreadShortThread::threadForceTimerCompletion()
 }
 
 //******************************************************************************
+
+void TwoThreadShortThread::threadForceTimerCompletionWithError()
+{
+   // Set completion code
+   mTimerCompletionCode = TimerCompletion_ForcedError;
+   // Clear down counter
+   mTimerCompletionDownCounter = 0;
+
+   // Post to timer completion
+   // This wakes up the above wait
+   mTimerCompletionSem.put();
+}
+
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -151,7 +165,8 @@ BaseTwoThread::BaseTwoThread()
 
    // Default exception codes
    mTimerCompletionAbortException   = 666;
-   mTimerCompletionTimeoutException = 667;
+   mTimerCompletionTimeoutException = 667;   
+   mTimerCompletionErrorException   = 668;
 
    // Bind qcall.
    mSendNotifyQCall.bind(mShortThread,this,&BaseTwoThread::executeSendNotify);
@@ -215,6 +230,13 @@ int BaseTwoThread::waitForTimer(int aTimeout)
             throw mTimerCompletionAbortException;
          }
          break;
+      case TwoThreadShortThread::TimerCompletion_ForcedError :
+         // Throw exception for abort
+         if (mTimerCompletionErrorException != 0)
+         {
+            throw mTimerCompletionErrorException;
+         }
+         break;
    }
 
    // Return timer completion code
@@ -249,6 +271,13 @@ int BaseTwoThread::waitForNotify(int aTimeout)
          if (mTimerCompletionTimeoutException != 0)
          {
             throw mTimerCompletionTimeoutException;
+         }
+         break;
+      case TwoThreadShortThread::TimerCompletion_ForcedError :
+         // Throw exception for abort
+         if (mTimerCompletionErrorException != 0)
+         {
+            throw mTimerCompletionErrorException;
          }
          break;
    }
@@ -336,6 +365,13 @@ void BaseTwoThread::waitForNotifyAll(int aTimeout, int aNumArgs, ...)
 
 void BaseTwoThread::notify(int aIndex)
 {
+   // Test for notification error
+   if (aIndex == 999)
+   {
+      mShortThread->threadForceTimerCompletionWithError();
+      return;
+   }
+
    // Set notification latch element
    mNotifyLatch.setLatchBit(aIndex);
 
@@ -368,10 +404,20 @@ void BaseTwoThread::notify(int aIndex)
 // This executes in the context of the short term thread to notify the 
 // long term thread.
 
-void BaseTwoThread::executeSendNotify(int aIndex)
+void BaseTwoThread::executeSendNotify(int aIndex,int aStatus)
 {
-   // Notify the long term thread.
-   notify(aIndex);
+   // If the status is okay
+   if (aStatus == 0)
+   {
+      // Notify the long term thread.
+      notify(aIndex);
+   }
+   // If the status is an error
+   else
+   {   
+      // Notify the long term thread that there was an error.
+      notify(999);
+   }
 }
 
 //******************************************************************************
@@ -390,6 +436,7 @@ TwoThreadNotify::TwoThreadNotify()
 {
    mTwoThread = 0;
    mIndex = 0;
+   mStatus = 0;
 }
 
 TwoThreadNotify::TwoThreadNotify(BaseTwoThread* aTwoThread,int aIndex)
@@ -405,7 +452,7 @@ TwoThreadNotify::TwoThreadNotify(BaseTwoThread* aTwoThread,int aIndex)
 void TwoThreadNotify::notify()
 {
    if (mTwoThread==0) return;
-   mTwoThread->mSendNotifyQCall(mIndex);
+   mTwoThread->mSendNotifyQCall(mIndex,mStatus);
 }
 
 }//namespace

@@ -69,10 +69,11 @@ public:
    // The following method returns a status code
    enum
    {
-      TimerCompletion_None     = 0,
-      TimerCompletion_Timeout  = 1,
-      TimerCompletion_Aborted  = 2,
-      TimerCompletion_Forced   = 3,
+      TimerCompletion_None        = 0,
+      TimerCompletion_Timeout     = 1,
+      TimerCompletion_Aborted     = 2,
+      TimerCompletion_Forced      = 3,
+      TimerCompletion_ForcedError = 4,
    };
 
    // This waits for timer completions
@@ -87,6 +88,9 @@ public:
 
    // This forces a timer completion
    void threadForceTimerCompletion();
+
+   // This forces a timer completion with an error
+   void threadForceTimerCompletionWithError();
 
 };
 
@@ -156,6 +160,10 @@ public:
    // exception when a timer completion timeout happens.
    int mTimerCompletionTimeoutException;
 
+   // If this is nonzero, then it is used to throw an
+   // exception when an error is returned in a notification.
+   int mTimerCompletionErrorException;
+
    //--------------------------------------------------------------
    // Wait for timer
 
@@ -215,9 +223,9 @@ public:
    // Send notification qcall. This executes in the context of the short term
    // thread to call notify(aIndex), which then notifies the long term thread.
 
-   typedef Ris::Threads::QCall1<int> SendNotifyQCall;
+   typedef Ris::Threads::QCall2<int,int> SendNotifyQCall;
    SendNotifyQCall mSendNotifyQCall;
-   void executeSendNotify(int aIndex);
+   void executeSendNotify(int aIndex,int aStatus);
 };
 
 //******************************************************************************
@@ -240,6 +248,7 @@ public:
 
    BaseTwoThread* mTwoThread;
    int            mIndex;
+   int            mStatus;
 
    //---------------------------------------------------------------------------
    // Constructors.

@@ -446,6 +446,15 @@ TwoThreadNotify::TwoThreadNotify(BaseTwoThread* aTwoThread,int aIndex)
 }
 
 //******************************************************************************
+// This sets the status to a nonzero value. This will cause a notification 
+// error exception on the thread waiting for the notification.
+
+void TwoThreadNotify::setError()
+{
+   mStatus = 999;
+}
+
+//******************************************************************************
 // Send notify. This invokes the two thread qcall to execute in the 
 // context of the short termm thread to notify the long term thread.
 

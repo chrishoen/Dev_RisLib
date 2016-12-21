@@ -18,6 +18,9 @@ namespace Threads
 //******************************************************************************
 // This configures process properties
 
+void setProcessTimerResolution(int aTimerPeriod);
+int  getProcessTimerResolution();
+
 void enterProcessHigh();
 void exitProcess();
 

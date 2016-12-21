@@ -70,6 +70,7 @@
     <ClInclude Include="Source\risProgramTime.h" />
     <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\risStatistics.h" />
+    <ClInclude Include="Source\risThreadsProcess.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />
     <ClInclude Include="Source\risThreadsSynch.h" />

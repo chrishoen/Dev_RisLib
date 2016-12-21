@@ -14,26 +14,40 @@ namespace Ris
 namespace Threads
 {
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-   static const int cTimerPeriod = 10;
+static int mTimerPeriod = 10;
 
-   void enterProcessHigh()
-   {
-      // Set process priority class
-      int status = SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-      // Set process timer resolution to one millisecond
-      timeBeginPeriod(cTimerPeriod);
-   }
+void setProcessClockResolution(int aTimerPeriod)
+{
+   mTimerPeriod = aTimerPeriod;
+}
 
-   //******************************************************************************
+int  getProcessTimerResolution()
+{
+   return mTimerPeriod;
+}
 
-   void exitProcess()
-   {
-      timeEndPeriod(cTimerPeriod);
-   }
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void enterProcessHigh()
+{
+   // Set process priority class
+   int status = SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+   // Set process timer resolution to one millisecond
+   timeBeginPeriod(mTimerPeriod);
+}
+
+//******************************************************************************
+
+void exitProcess()
+{
+   timeEndPeriod(mTimerPeriod);
+}
 
 }//namespace
 }//namespace

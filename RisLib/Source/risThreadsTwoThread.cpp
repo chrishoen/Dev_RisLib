@@ -196,10 +196,14 @@ void BaseTwoThread::abortWaitForNotify()
 // Wait for timer.
 // This is abortable.
 
-int BaseTwoThread::waitForTimer(int aTimerCount)
+int BaseTwoThread::waitForTimer(int aTimeout)
 {
+   // Timer count from timeout
+   int tTimerCount = aTimeout/mShortThread->mTimerPeriod + 1;
+   if (aTimeout < 0) tTimerCount = -1;
+
    // Wait for timer completion
-   int tTimerCompletionCode = mShortThread->threadWaitForTimerCompletion(aTimerCount);
+   int tTimerCompletionCode = mShortThread->threadWaitForTimerCompletion(tTimerCount);
 
    // Process timer completion
    switch (tTimerCompletionCode)
@@ -223,8 +227,12 @@ int BaseTwoThread::waitForTimer(int aTimerCount)
 
 int BaseTwoThread::waitForNotify(int aTimeout)
 {
+   // Timer count from timeout
+   int tTimerCount = aTimeout/mShortThread->mTimerPeriod + 1;
+   if (aTimeout < 0) tTimerCount = -1;
+
    // Wait for timer completion
-   int tTimerCompletionCode = mShortThread->threadWaitForTimerCompletion(aTimeout);
+   int tTimerCompletionCode = mShortThread->threadWaitForTimerCompletion(tTimerCount);
 
    // Process timer completion
    switch (tTimerCompletionCode)

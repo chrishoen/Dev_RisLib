@@ -20,7 +20,7 @@ namespace Threads
 
 static int mTimerPeriod = 10;
 
-void setProcessClockResolution(int aTimerPeriod)
+void setProcessTimerResolution(int aTimerPeriod)
 {
    mTimerPeriod = aTimerPeriod;
 }

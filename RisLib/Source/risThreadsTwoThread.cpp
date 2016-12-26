@@ -443,6 +443,7 @@ TwoThreadNotify::TwoThreadNotify(BaseTwoThread* aTwoThread,int aIndex)
 {
    mTwoThread = aTwoThread;
    mIndex = aIndex;
+   mStatus = 0;
 }
 
 //******************************************************************************

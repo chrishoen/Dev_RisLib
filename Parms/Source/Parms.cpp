@@ -33,6 +33,7 @@ void Parms::reset()
    mSectionFlag=false;
 
    // Parameter member variables.
+   mLockFlag=false;
    mDuration = 10.0;
    mFs = 1.0;
    mFc = 1.0;
@@ -76,23 +77,24 @@ void Parms::show()
 {
    printf("Parms ******* %s\n", mSection);
 
-   printf("Code1               %d\n",mCode1);
-   printf("Code2               %d\n",mCode2);
+   printf("Code1              %10d\n",mCode1);
+   printf("Code2              %10d\n",mCode2);
 
-   printf("mDuration          %10.4f\n",mDuration);
-   printf("mFs                %10.4f\n",mFs);
-   printf("mFc                %10.4f\n",mFc);
-   printf("mEX                %10.4f\n",mEX);
-   printf("mUX                %10.4f\n",mUX);
+   printf("LockFlag           %10s\n",  my_string_from_bool(mLockFlag));
+   printf("Duration           %10.4f\n",mDuration);
+   printf("Fs                 %10.4f\n",mFs);
+   printf("Fc                 %10.4f\n",mFc);
+   printf("EX                 %10.4f\n",mEX);
+   printf("UX                 %10.4f\n",mUX);
 
-   printf("mFc1               %10.4f\n",mFc1);
-   printf("mFc2               %10.4f\n",mFc2);
-   printf("mFilterOrder       %10d\n",  mFilterOrder);
+   printf("Fc1                %10.4f\n",mFc1);
+   printf("Fc2                %10.4f\n",mFc2);
+   printf("FilterOrder        %10d\n",  mFilterOrder);
 
-   printf("mOutputFile        %10s\n",  mOutputFile);
+   printf("OutputFile         %10s\n",  mOutputFile);
 
-   printf("mHistoryMaxSamples %10d\n",  mHistoryMaxSamples);
-   printf("mHistoryDeltaT     %10.4f\n",mHistoryDeltaT);
+   printf("HistoryMaxSamples  %10d\n",  mHistoryMaxSamples);
+   printf("HistoryDeltaT      %10.4f\n",mHistoryDeltaT);
 
    mMyClassParms.show("MyClassParms");
 

@@ -56,6 +56,7 @@ public:
    //***************************************************************************
    // Lowpass filtered gaussian noise time series.
 
+   bool    mLockFlag;     // True if locked.
    double  mDuration;     // Trial duration
    double  mFs;           // Sampling frequency
    double  mFc;           // Cutoff frequency 

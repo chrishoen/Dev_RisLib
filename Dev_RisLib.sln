@@ -53,6 +53,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleMsg", "ExampleMsg\Ex
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\ConsoleTest.vcxproj", "{20A8CA29-27A8-429C-9E94-9EA888CD489A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Parms", "Parms\Parms.vcxproj", "{FBD99D78-D7B1-412E-9B70-02ADA80F4906}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{03F1F68A-FB5D-4388-95C7-E4EE406298C5}"
+	ProjectSection(SolutionItems) = preProject
+		Files\FilterCoefficients.txt = Files\FilterCoefficients.txt
+		Files\Parms.txt = Files\Parms.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -261,6 +269,14 @@ Global
 		{20A8CA29-27A8-429C-9E94-9EA888CD489A}.Release|Win32.Build.0 = Release|Win32
 		{20A8CA29-27A8-429C-9E94-9EA888CD489A}.Release|x64.ActiveCfg = Release|x64
 		{20A8CA29-27A8-429C-9E94-9EA888CD489A}.Release|x64.Build.0 = Release|x64
+		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Debug|Win32.Build.0 = Debug|Win32
+		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Debug|x64.ActiveCfg = Debug|x64
+		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Debug|x64.Build.0 = Debug|x64
+		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Release|Win32.ActiveCfg = Release|Win32
+		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Release|Win32.Build.0 = Release|Win32
+		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Release|x64.ActiveCfg = Release|x64
+		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

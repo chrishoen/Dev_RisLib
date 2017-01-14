@@ -122,12 +122,24 @@ bool BaseCmdLineParms::readSection(char* aSection)
       tGoing = true;
    }
 
-   // If file not found.
+   // If file not found then try open another file.
    if (!tGoing)
    {
-      // Try open other file.
       strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
       strcat(tFilePath, "..\\..\\Files\\");
+      strcat(tFilePath, mFileName);
+
+      if (tCmdLineFile.open(tFilePath))
+      {
+         // File found.
+         tGoing = true;
+      }
+   }
+
+   // If file not found then try open another file.
+   if (!tGoing)
+   {
+      strcpy(tFilePath, Ris::portableGetSettingsDir());
       strcat(tFilePath, mFileName);
 
       if (tCmdLineFile.open(tFilePath))

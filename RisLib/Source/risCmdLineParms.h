@@ -2,7 +2,7 @@
 #define _RISCMDLINEPARMS_H_
 /*==============================================================================
 
-Base class for parameters class whose values are read from a command file. 
+Base class for parameters classes whose values are read from a command file. 
 
 ==============================================================================*/
 
@@ -66,7 +66,7 @@ public:
    void execute(Ris::CmdLineCmd* aCmd)=0;
 
    // Calculate expanded member variables. This is called after the entire
-   // section of the command file has been processed.
+   // command file has been processed.
    virtual void expand() {}
 
    // Read a section of the command file and set member variables accordingly.

@@ -103,17 +103,11 @@ void Parms::show()
 //******************************************************************************
 //******************************************************************************
 // Base class override: Execute a command from the command file to set a 
-// member variable. This is called by the associated command file object
-// for each command in the file.
+// member variable.  Only process commands for the target section.This is
+// called by the associated command file object for each command in the file.
 
 void Parms::execute(Ris::CmdLineCmd* aCmd)
 {
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Jump table: Execute the command to set a member variable. Only process   
-   // commands for the target section.
-
    if (!isTargetSection(aCmd)) return;
 
    if(aCmd->isCmd("Code1"))  mCode1 = aCmd->argInt (1);

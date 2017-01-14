@@ -120,6 +120,9 @@ public:
    //***************************************************************************
    // Section variables.
 
+   // If true then use sections.
+   bool mUseSections;
+
    // The section to be read.
    char mSection[200];
 

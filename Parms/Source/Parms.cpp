@@ -29,6 +29,7 @@ Parms::Parms()
 void Parms::reset()
 {
    // File member variables.
+   mUseSections=true;
    mSection[0]=0;
    mSectionFlag=false;
 
@@ -115,11 +116,13 @@ void Parms::execute(Ris::CmdLineCmd* aCmd)
    //***************************************************************************
    // Section commands. If not in the section to be read then exit.
 
+   if (mUseSections)
+   {
+      if (aCmd->isCmd("SectionBegin"))  mSectionFlag = isMySection(aCmd);
+      if (aCmd->isCmd("SectionEnd"))    mSectionFlag = false;
 
-   if(aCmd->isCmd("SectionBegin"      ))  mSectionFlag=isMySection(aCmd);
-   if(aCmd->isCmd("SectionEnd"        ))  mSectionFlag=false;
-
-   if (!mSectionFlag) return;
+      if (!mSectionFlag) return;
+   }
 
    //***************************************************************************
    //***************************************************************************

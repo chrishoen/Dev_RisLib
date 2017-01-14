@@ -28,12 +28,9 @@ Parms::Parms()
 
 void Parms::reset()
 {
-   // File member variables.
-   mUseSections=true;
-   mSection[0]=0;
-   mSectionFlag=false;
+   BaseClass::reset();
+   strcpy(BaseClass::mFileName,"Parms.txt");
 
-   // Parameter member variables.
    mLockFlag=false;
    mDuration = 10.0;
    mFs = 1.0;
@@ -76,7 +73,7 @@ void Parms::expand()
 
 void Parms::show()
 {
-   printf("Parms ******* %s\n", mSection);
+   printf("Parms ***************** BEGIN %s\n", BaseClass::mTargetSection);
 
    printf("Code1              %10d\n",mCode1);
    printf("Code2              %10d\n",mCode2);
@@ -99,7 +96,7 @@ void Parms::show()
 
    mMyClassParms.show("MyClassParms");
 
-   printf("Parms ******* %s\n", mSection);
+   printf("Parms ******************* END %s\n", BaseClass::mTargetSection);
 }
 
 //******************************************************************************
@@ -118,10 +115,10 @@ void Parms::execute(Ris::CmdLineCmd* aCmd)
 
    if (mUseSections)
    {
-      if (aCmd->isCmd("SectionBegin"))  mSectionFlag = isMySection(aCmd);
-      if (aCmd->isCmd("SectionEnd"))    mSectionFlag = false;
+      if (aCmd->isCmd("SectionBegin"))  mTargetSectionFlag = isTargetSection(aCmd);
+      if (aCmd->isCmd("SectionEnd"))    mTargetSectionFlag = false;
 
-      if (!mSectionFlag) return;
+      if (!mTargetSectionFlag) return;
    }
 
    //***************************************************************************
@@ -149,79 +146,4 @@ void Parms::execute(Ris::CmdLineCmd* aCmd)
 
    if(aCmd->isCmd("MyClass")) nestedPush(aCmd, &mMyClassParms);
 }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Return true if the input command's first argument is equal to the
-// section that is to be read. This is called if the command is
-// "SectionBegin" and returns true if the section is equal to the section
-// that is to be read.
-
-bool Parms::isMySection(Ris::CmdLineCmd* aCmd)
-{
-   bool tFlag=false;
-
-   if (aCmd->numArg()==1)
-   {
-      if (aCmd->isArgString(1,mSection))
-      {
-         tFlag=true;
-      }
-   }
-
-   return tFlag;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Read a section of the command file and set member variables accordingly.
-// Create a command file object, open the file, pass this object to the file
-// object to read the file and apply this object's execution method to each
-// command in the file, and then close the file. This only reads variables for
-// a specific section in the file.
-
-bool Parms::readSection(char* aSection)
-{ 
-   // Store arguments.
-   strcpy(mSection,aSection);
-
-   // File path.
-   char tFilePath[200];
-
-   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
-   strcat(tFilePath, "..\\..\\Files\\Parms.txt");
-
-   // Temporary command line file object.   
-   Ris::CmdLineFile tCmdLineFile;
-
-   // Open the file.
-   if (tCmdLineFile.open(tFilePath))
-   {
-      // Pass this object to the file object to read the file and apply this
-      // object's execution method to each command in the file.
-      tCmdLineFile.execute(this);
-
-      // Close the file.
-      tCmdLineFile.close();
-
-      // Expand extra member variables.
-      expand();
-
-   //printf("Parms::file open PASS %s\n", tFilePath);
-      return true;
-   }
-   else
-   {
-      printf("Parms::file open FAIL %s\n",tFilePath);
-      return false;
-   }
-}
-
-
-
 

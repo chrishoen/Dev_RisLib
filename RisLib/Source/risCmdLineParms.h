@@ -73,8 +73,16 @@ public:
    // Create a command file object, open the file, pass this object to the file
    // object to read the file and apply this object's execution method to each
    // command in the file, and then close the file. This only reads variables
-   // for a specific section in the file.
+   // for a specific section in the file. If the input section is null or 
+   // empty then section logic is ignored and the entire file is read.
    bool readSection(char* aSection);
+
+   // This is the same as the above, but with an null section.    
+   // Read the entire command file and set member variables accordingly.
+   // Create a command file object, open the file, pass this object to the file
+   // object to read the file and apply this object's execution method to each
+   // command in the file, and then close the file.
+   bool readFile();
 
    //***************************************************************************
    //***************************************************************************

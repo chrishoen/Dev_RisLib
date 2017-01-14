@@ -81,8 +81,9 @@ bool BaseCmdLineParms::isTargetSection(Ris::CmdLineCmd* aCmd)
 // Read a section of the command file and set member variables accordingly.
 // Create a command file object, open the file, pass this object to the file
 // object to read the file and apply this object's execution method to each
-// command in the file, and then close the file. This only reads variables for
-// a specific section in the file.
+// command in the file, and then close the file. This only reads variables
+// for a specific section in the file. If the input section is null or 
+// empty then section logic is ignored and the entire file is read.
 
 bool BaseCmdLineParms::readSection(char* aSection)
 {
@@ -91,12 +92,19 @@ bool BaseCmdLineParms::readSection(char* aSection)
    //---------------------------------------------------------------------------
    // Initial.   
 
-   // Guard.
-   if (aSection==0)         return false;
-   if (strlen(aSection)==0) return false;
+   // If the input section is valid then use sections.
+   mUseSections = (aSection!=0) && (strlen(aSection)!=0);
 
    // Store arguments.
-   strcpy(mTargetSection, aSection);
+   if (mUseSections)
+   {
+      strcpy(mTargetSection, aSection);
+   }
+   else
+   {
+      strcpy(mTargetSection, "NO_SECTIONS");
+   }
+
 
    // Command line executive file object.   
    Ris::CmdLineFile tCmdLineFile;
@@ -105,7 +113,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
    char tFilePath[200];
 
    // Filepath found.
-   bool tGoing = false;
+   bool tFileFound = false;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -119,11 +127,11 @@ bool BaseCmdLineParms::readSection(char* aSection)
    if (tCmdLineFile.open(tFilePath))
    {
       // File found.
-      tGoing = true;
+      tFileFound = true;
    }
 
    // If file not found then try open another file.
-   if (!tGoing)
+   if (!tFileFound)
    {
       strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
       strcat(tFilePath, "..\\..\\Files\\");
@@ -132,12 +140,12 @@ bool BaseCmdLineParms::readSection(char* aSection)
       if (tCmdLineFile.open(tFilePath))
       {
          // File found.
-         tGoing = true;
+         tFileFound = true;
       }
    }
 
    // If file not found then try open another file.
-   if (!tGoing)
+   if (!tFileFound)
    {
       strcpy(tFilePath, Ris::portableGetSettingsDir());
       strcat(tFilePath, mFileName);
@@ -145,12 +153,12 @@ bool BaseCmdLineParms::readSection(char* aSection)
       if (tCmdLineFile.open(tFilePath))
       {
          // File found.
-         tGoing = true;
+         tFileFound = true;
       }
    }
 
    // Exit if file not found.
-   if (!tGoing)
+   if (!tFileFound)
    {
       printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
       return false;
@@ -174,6 +182,23 @@ bool BaseCmdLineParms::readSection(char* aSection)
    // Done.
    return true;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is the same as the above, but with an null section.    
+// Read the entire command file and set member variables accordingly.
+// Create a command file object, open the file, pass this object to the file
+// object to read the file and apply this object's execution method to each
+// command in the file, and then close the file.
+
+bool BaseCmdLineParms::readFile()
+{
+   // Read with a null section, this ignores sections and processes the entire
+   // file.
+   return readSection(0);
+}
+
 
 }//namespace
 

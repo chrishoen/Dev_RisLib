@@ -94,18 +94,15 @@ public:
    // If true then use sections.
    bool mUseSections;
 
-   // The section to be read.
+   // The target section, the section to be read from.
    char mTargetSection[200];
 
-   // True if the current section is the section to be read.
+   // True if the current command is in the target section.
    bool mTargetSectionFlag;
 
-   // Return true if the input command's first argument is equal to the
-   // target section . This is called if the command is "SectionBegin" and 
-   // returns true if the section is equal to the target section.
+   // Return true if the command is in the target section.
    bool isTargetSection(Ris::CmdLineCmd* aCmd);
 
-   // Return true if the current section is the target section.
 };
 
 //******************************************************************************

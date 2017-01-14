@@ -111,21 +111,10 @@ void Parms::execute(Ris::CmdLineCmd* aCmd)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Section commands. If not in the section to be read then exit.
-
-   if (mUseSections)
-   {
-      if (aCmd->isCmd("SectionBegin"))  mTargetSectionFlag = isTargetSection(aCmd);
-      if (aCmd->isCmd("SectionEnd"))    mTargetSectionFlag = false;
-
-      if (!mTargetSectionFlag) return;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Jump table: Execute the command to set a member variable. Only process   
-   // commands for the section to be read.
+   // commands for the target section.
+
+   if (!isTargetSection(aCmd)) return;
 
    if(aCmd->isCmd("Code1"))  mCode1 = aCmd->argInt (1);
    if(aCmd->isCmd("Code2"))  mCode2 = aCmd->argInt (1);

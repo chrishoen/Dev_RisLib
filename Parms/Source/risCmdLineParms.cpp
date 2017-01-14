@@ -42,24 +42,37 @@ void BaseCmdLineParms::reset()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return true if the input command's first argument is equal to the
-// section that is to be read. This is called if the command is
-// "SectionBegin" and returns true if the section is equal to the section
-// that is to be read.
+// Return true if the command is in the target section.
 
 bool BaseCmdLineParms::isTargetSection(Ris::CmdLineCmd* aCmd)
 {
-   bool tFlag = false;
+   // If not using sections then always in target section.
+   if (!mUseSections) return true;
 
-   if (aCmd->numArg() == 1)
+   // If the command is the beginning of a section. 
+   if (aCmd->isCmd("SectionBegin"))
    {
-      if (aCmd->isArgString(1, mTargetSection))
+      mTargetSectionFlag = false;
+
+      if (aCmd->numArg() == 1)
       {
-         tFlag = true;
+         // And the section is the target section then the 
+         // command is in the target section.
+         if (aCmd->isArgString(1, mTargetSection))
+         {
+            mTargetSectionFlag = true;
+         }
       }
    }
 
-   return tFlag;
+   // If the command is at the end of any section
+   if (aCmd->isCmd("SectionEnd"))
+   {
+      // Then the command is not in the target section.
+      mTargetSectionFlag = false;
+   }
+
+   return mTargetSectionFlag;
 }
 
 //******************************************************************************

@@ -178,7 +178,6 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\Parms.cpp" />
-    <ClCompile Include="Source\risCmdLineParms.cpp" />
     <ClCompile Include="Source\someMyClass.cpp" />
     <ClCompile Include="Source\someMyClass_Parms.cpp" />
   </ItemGroup>
@@ -186,7 +185,6 @@
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\Parms.h" />
-    <ClInclude Include="Source\risCmdLineParms.h" />
     <ClInclude Include="Source\someMyClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

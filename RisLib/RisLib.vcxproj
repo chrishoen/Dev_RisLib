@@ -22,6 +22,7 @@
     <ClCompile Include="Source\logFiles.cpp" />
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\risByteBuffer.cpp" />
+    <ClCompile Include="Source\risCmdLineParms.cpp" />
     <ClCompile Include="Source\risLMPacketQueue.cpp" />
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
     <ClCompile Include="Source\risProgramTime.cpp" />
@@ -62,6 +63,7 @@
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
     <ClInclude Include="Source\risByteBuffer.h" />
+    <ClInclude Include="Source\risCmdLineParms.h" />
     <ClInclude Include="Source\risLFIndex.h" />
     <ClInclude Include="Source\risLMPacketQueue.h" />
     <ClInclude Include="Source\risMemoryPtr.h" />

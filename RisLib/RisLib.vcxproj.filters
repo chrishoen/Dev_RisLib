@@ -118,6 +118,9 @@
     <ClCompile Include="Source\risLMPacketQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risCmdLineParms.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\my_functions.h">
@@ -265,6 +268,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsProcess.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risCmdLineParms.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

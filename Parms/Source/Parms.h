@@ -48,6 +48,7 @@ public:
    //***************************************************************************
    // Integrity checks.
 
+   int   mCode0;
    int   mCode1;
    int   mCode2;
 

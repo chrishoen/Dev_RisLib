@@ -35,7 +35,7 @@ void BaseCmdLineParms::reset()
    // File member variables.
    mUseSections = true;
    mTargetSection[0] = 0;
-   mTargetSectionFlag = false;
+   mTargetSectionFlag = true;
    strcpy(mFileName,"YOU_FORGOT_THE_FILENAME");
 }
 
@@ -86,40 +86,81 @@ bool BaseCmdLineParms::isTargetSection(Ris::CmdLineCmd* aCmd)
 
 bool BaseCmdLineParms::readSection(char* aSection)
 {
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initial.   
+
+   // Guard.
+   if (aSection==0)         return false;
+   if (strlen(aSection)==0) return false;
+
    // Store arguments.
    strcpy(mTargetSection, aSection);
 
-   // File path.
-   char tFilePath[200];
-
-   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
-   strcat(tFilePath, "..\\..\\Files\\");
-   strcat(tFilePath, mFileName);
-
-   // Temporary command line file object.   
+   // Command line executive file object.   
    Ris::CmdLineFile tCmdLineFile;
 
-   // Open the file.
+   // Filepath.
+   char tFilePath[200];
+
+   // Filepath found.
+   bool tGoing = false;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Open file.
+
+   // Try open file.
+   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcat(tFilePath, "Image_Parms.txt");
+
    if (tCmdLineFile.open(tFilePath))
    {
-      // Pass this object to the file object to read the file and apply this
-      // object's execution method to each command in the file.
-      tCmdLineFile.execute(this);
-
-      // Close the file.
-      tCmdLineFile.close();
-
-      // Expand extra member variables.
-      expand();
-
-      //printf("BaseCmdLineParms::file open PASS %s\n", tFilePath);
-      return true;
+      // File found.
+      tGoing = true;
    }
-   else
+
+   // If file not found.
+   if (!tGoing)
+   {
+      // Try open other file.
+      strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+      strcat(tFilePath, "..\\..\\Files\\");
+      strcat(tFilePath, mFileName);
+
+      if (tCmdLineFile.open(tFilePath))
+      {
+         // File found.
+         tGoing = true;
+      }
+   }
+
+   // Exit if file not found.
+   if (!tGoing)
    {
       printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
       return false;
    }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Execute commands in file.
+
+   // Pass this object to the file object to read the file and apply this
+   // object's execution method to each command in the file.
+   tCmdLineFile.execute(this);
+
+   // Close the file.
+   tCmdLineFile.close();
+
+   // Expand extra member variables.
+   expand();
+
+   // Done.
+   return true;
 }
 
 }//namespace

@@ -31,6 +31,10 @@ void Parms::reset()
    BaseClass::reset();
    strcpy(BaseClass::mFileName,"Parms.txt");
 
+   mCode0 = 0;
+   mCode1 = 0;
+   mCode2 = 0;
+
    mLockFlag=false;
    mDuration = 10.0;
    mFs = 1.0;
@@ -75,6 +79,7 @@ void Parms::show()
 {
    printf("Parms ***************** BEGIN %s\n", BaseClass::mTargetSection);
 
+   printf("Code0              %10d\n",mCode0);
    printf("Code1              %10d\n",mCode1);
    printf("Code2              %10d\n",mCode2);
 
@@ -110,6 +115,7 @@ void Parms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
+   if(aCmd->isCmd("Code0"))  mCode0 = aCmd->argInt (1);
    if(aCmd->isCmd("Code1"))  mCode1 = aCmd->argInt (1);
    if(aCmd->isCmd("Code2"))  mCode2 = aCmd->argInt (1);
 
@@ -127,6 +133,6 @@ void Parms::execute(Ris::CmdLineCmd* aCmd)
 
    if(aCmd->isCmd("OutputFile"  )) aCmd->copyArgString(1,mOutputFile,cMaxStringSize);
 
-   if(aCmd->isCmd("MyClass")) nestedPush(aCmd, &mMyClassParms);
+   if(aCmd->isCmd("MyClassparms")) nestedPush(aCmd, &mMyClassParms);
 }
 

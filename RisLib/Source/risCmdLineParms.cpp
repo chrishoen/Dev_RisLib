@@ -122,7 +122,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
 
    // Try open file.
    strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
-   strcat(tFilePath, "Image_Parms.txt");
+   strcat(tFilePath, mFileName);
 
    if (tCmdLineFile.open(tFilePath))
    {

@@ -6,6 +6,7 @@
 #include <string.h>
 #include <math.h>
 
+#include "prnPrint.h"
 #include "my_functions.h"
 #include "risCmdLineFile.h"
 #include "risPortableCalls.h"
@@ -85,15 +86,22 @@ bool BaseCmdLineParms::isTargetSection(Ris::CmdLineCmd* aCmd)
 // for a specific section in the file. If the input section is null or 
 // empty then section logic is ignored and the entire file is read.
 
-bool BaseCmdLineParms::readSection(char* aSection)
+bool BaseCmdLineParms::readSection(char* aFilePath, char* aSection)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Initial.   
+   // Section variables.   
 
-   // If the input section is valid then use sections.
-   mUseSections = (aSection!=0) && (strlen(aSection)!=0);
+   // If the input section is invalid then don't use sections.
+   if (aSection == 0)
+   {
+      mUseSections = false;
+   }
+   else if (strlen(aSection) == 0)
+   {
+      mUseSections = false;
+   }
 
    // Store arguments.
    if (mUseSections)
@@ -105,69 +113,24 @@ bool BaseCmdLineParms::readSection(char* aSection)
       strcpy(mTargetSection, "NO_SECTIONS");
    }
 
-
-   // Command line executive file object.   
-   Ris::CmdLineFile tCmdLineFile;
-
-   // Filepath.
-   char tFilePath[200];
-
-   // Filepath found.
-   bool tFileFound = false;
-
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    // Open file.
 
-   // Try open file.
-   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
-   strcat(tFilePath, mFileName);
+   // Command line executive file object.   
+   Ris::CmdLineFile tCmdLineFile;
 
-   if (tCmdLineFile.open(tFilePath))
+   if (!tCmdLineFile.open(aFilePath))
    {
-      // File found.
-      tFileFound = true;
-   }
-
-   // If file not found then try open another file.
-   if (!tFileFound)
-   {
-      strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
-      strcat(tFilePath, "..\\..\\Files\\");
-      strcat(tFilePath, mFileName);
-
-      if (tCmdLineFile.open(tFilePath))
-      {
-         // File found.
-         tFileFound = true;
-      }
-   }
-
-   // If file not found then try open another file.
-   if (!tFileFound)
-   {
-      strcpy(tFilePath, Ris::portableGetSettingsDir());
-      strcat(tFilePath, mFileName);
-
-      if (tCmdLineFile.open(tFilePath))
-      {
-         // File found.
-         tFileFound = true;
-      }
-   }
-
-   // Exit if file not found.
-   if (!tFileFound)
-   {
-      printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+      printf("BaseCmdLineParms::file open FAIL %s\n", aFilePath);
       return false;
    }
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Execute commands in file.
+   // Execute the commands in the file.
 
    // Pass this object to the file object to read the file and apply this
    // object's execution method to each command in the file.
@@ -186,11 +149,71 @@ bool BaseCmdLineParms::readSection(char* aSection)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is the same as the above, but with an null section.    
-// Read the entire command file and set member variables accordingly.
-// Create a command file object, open the file, pass this object to the file
-// object to read the file and apply this object's execution method to each
-// command in the file, and then close the file.
+// This is the same as above, but with a null filepath. The filepath is
+// searched amoung default filepaths.
+
+bool BaseCmdLineParms::readSection(char* aSection)
+{
+   char tFilePath[200];
+
+   // Filepath found.
+   bool tFileFound = false;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcat(tFilePath, mFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcat(tFilePath, "..\\..\\Files\\");
+   strcat(tFilePath, mFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      Prn::print(0,"LINE101 %s",aSection);
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetSettingsDir());
+   strcat(tFilePath, mFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // File not found.
+
+   printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+   return false;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is the same as the above, but with a null filepth and a null
+// section. The filepath is searched amoung default filepaths.    
 
 bool BaseCmdLineParms::readFile()
 {

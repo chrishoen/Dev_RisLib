@@ -93,7 +93,11 @@ public:
    // for each line in the corresponding table section of the file. It parses 
    // the file command line to read table values
 
+   // Execute.
    void execute(Ris::CmdLineCmd* aCmd);
+
+   // Execute again. reinitializes and calls execute.
+   void reexecute(Ris::CmdLineCmd* aCmd);
 
    // True if initialized
    bool mInitialized;

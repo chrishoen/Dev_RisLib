@@ -305,6 +305,15 @@ void CmdLineDoubleTable2D::show(char* aLabel)
 // Arg3    is at arg[3]
 
 
+void CmdLineDoubleTable2D::reexecute(Ris::CmdLineCmd* aCmd)
+{
+   mFirstCmd = true;
+   mIndex = 0;
+   mValidFlag = false;
+
+   execute(aCmd);
+}
+
 void CmdLineDoubleTable2D::execute(Ris::CmdLineCmd* aCmd)
 {
    // Argument variables

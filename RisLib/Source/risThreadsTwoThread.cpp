@@ -213,6 +213,9 @@ void BaseTwoThread::abortWaitForNotify()
 
 int BaseTwoThread::waitForTimer(int aTimeout)
 {
+   // Exit if zero.
+   if (aTimeout==0) return TwoThreadShortThread::TimerCompletion_Timeout;
+
    // Timer count from timeout
    int tTimerCount = aTimeout/mShortThread->mTimerPeriod + 1;
    if (aTimeout < 0) tTimerCount = -1;

@@ -261,6 +261,11 @@ int countsPerOneSecond()
 //******************************************************************************
 //******************************************************************************
 
+void threadSleep(int aTicks)
+{
+   Sleep(aTicks);
+}
+
 void halt(char* aPrintStr)
 {
    printf("HALTING %s\n",aPrintStr);

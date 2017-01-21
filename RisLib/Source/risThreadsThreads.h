@@ -231,6 +231,7 @@ protected:
 //******************************************************************************
 int countsPerOneSecond();
 
+void threadSleep(int aTicks);
 void halt(char* aPrintStr=0);
 
 }//namespace

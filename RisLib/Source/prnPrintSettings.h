@@ -201,6 +201,18 @@ public:
    static const int  CamError2 = 98;
    static const int  CamError3 = 99;
    static const int  CamError4 = 100;
+   static const int  SensorInit1 = 101;
+   static const int  SensorInit2 = 102;
+   static const int  SensorInit3 = 103;
+   static const int  SensorInit4 = 104;
+   static const int  SensorRun1 = 105;
+   static const int  SensorRun2 = 106;
+   static const int  SensorRun3 = 107;
+   static const int  SensorRun4 = 108;
+   static const int  SensorError1 = 109;
+   static const int  SensorError2 = 110;
+   static const int  SensorError3 = 111;
+   static const int  SensorError4 = 102;
 
 //******************************************************************************
 //******************************************************************************

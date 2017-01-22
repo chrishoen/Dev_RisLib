@@ -84,7 +84,7 @@ public:
    // aRxMsgQCall         is a qcall for receive messages
    // aSessionQCallChange is a qcall for session changes
 
-   typedef Ris::Threads::QCall1<bool>          SessionQCall;
+   typedef Ris::Threads::QCall1<bool>              SessionQCall;
    typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
 
    void configure(
@@ -115,13 +115,13 @@ public:
    // session has changed.
    //
    // It invokes the mSessionQCall that is passed in at configure.
-   void processSessionChange  (bool aEstablished);
+   virtual void processSessionChange  (bool aEstablished);
 
    // This is called by the TcpClientThread threadRunFunction 
    // to process a received message.
    //
    // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg (Ris::ByteContent* aMsg);
+   virtual void processRxMsg (Ris::ByteContent* aMsg);
 
    //--------------------------------------------------------------
    // QCall:

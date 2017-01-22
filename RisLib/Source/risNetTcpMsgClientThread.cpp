@@ -45,8 +45,15 @@ void TcpMsgClientThread::configure(
    mSocketAddress.set(aServerIpAddr,aServerIpPort);
    mMonkeyCreator = aMonkeyCreator;
 
-   mSessionQCall = *aSessionQCall;
-   mRxMsgQCall   = *aRxMsgQCall;
+   if (aSessionQCall)
+   {
+      mSessionQCall = *aSessionQCall;
+   }
+
+   if (aRxMsgQCall)
+   {
+      mRxMsgQCall = *aRxMsgQCall;
+   }
 }
 
 //******************************************************************************
@@ -200,6 +207,9 @@ void TcpMsgClientThread::sendMsg(ByteContent* aMsg)
 
 void TcpMsgClientThread::processSessionChange(bool aEstablished)
 {
+   // Guard.
+   if (!mSessionQCall.mExecuteCallPointer.isValid()) return;
+
    // Invoke the session qcall to notify that a session has
    // been established or disestablished
    // Create a new qcall, copied from the original, and invoke it.
@@ -212,6 +222,9 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
 
 void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
 {
+   // Guard.
+   if (!mRxMsgQCall.mExecuteCallPointer.isValid()) return;
+
    // Invoke the receive QCall
    // Create a new qcall, copied from the original, and invoke it.
    mRxMsgQCall(aMsg);

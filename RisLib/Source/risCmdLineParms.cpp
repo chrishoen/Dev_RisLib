@@ -183,7 +183,6 @@ bool BaseCmdLineParms::readSection(char* aSection)
 
    if (portableFilePathExists(tFilePath))
    {
-      Prn::print(0,"LINE101 %s",aSection);
       return readSection(tFilePath,aSection);
    }
 

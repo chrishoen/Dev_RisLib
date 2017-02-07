@@ -252,16 +252,6 @@ HANDLE rCreatePrintView(int aConsole)
 
    if (!tFileFound)
    {
-      strcpy(tFilePath,"C:\\RedInc\\SDSAT\\Bin\\PrintView1.exe");
-   }
-
-   if (Ris::portableFilePathExists(tFilePath))
-   {
-      tFileFound = true;
-   }
-
-   if (!tFileFound)
-   {
       printf("PrintView1.exe NOT FOUND");
       rNumOfConsoles = 1;
       return 0;

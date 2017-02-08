@@ -72,6 +72,9 @@ My math functions
    // Return current timestamp
    char*  my_timestamp(char* aBuffer);
 
+   // Convert seconds to millisecond ticks
+   int    my_ticks_from_time (double aTime);
+
    //---------------------------------------------------------------------------
    // Index arithmetic
 

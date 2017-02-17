@@ -33,13 +33,10 @@ public:
    //***************************************************************************
    // Members.
 
-   double  mDuration;     // History duration
-   double  mFs;           // Sampling frequency
-   double  mFc;           // Cutoff frequency 
-   int     mFilterOrder;  // Filter order
-
-   double  mEX;           // Desired expectation
-   double  mUX;           // Desired uncertainty
+   double  mEX1;          // Desired expectation
+   double  mEX2;          // Desired expectation
+   double  mEX3;          // Desired expectation
+   double  mEX4;          // Desired expectation
 
    //******************************************************************************
    //******************************************************************************

@@ -27,11 +27,10 @@ MyClassParms::MyClassParms()
 
 void MyClassParms::reset()
 {
-   mDuration = 10.0;
-   mFs = 1.0;
-   mFc = 1.0;
-   mEX = 0.0;
-   mUX = 1.0;
+   mEX1 = 0.0;
+   mEX2 = 0.0;
+   mEX3 = 0.0;
+   mEX4 = 0.0;
 }
 
 //******************************************************************************
@@ -45,12 +44,10 @@ void MyClassParms::reset()
 void MyClassParms::execute(Ris::CmdLineCmd* aCmd)
 {
    // Execute commands to read parameter members.
-   if(aCmd->isCmd("Duration"          )) mDuration           = aCmd->argDouble(1);
-   if(aCmd->isCmd("Fs"                )) mFs                 = aCmd->argDouble(1);
-   if(aCmd->isCmd("Fc"                )) mFc                 = aCmd->argDouble(1);
-   if(aCmd->isCmd("FilterOrder"       )) mFilterOrder        = aCmd->argInt(1);
-   if(aCmd->isCmd("EX"                )) mEX                 = aCmd->argDouble(1);
-   if(aCmd->isCmd("UX"                )) mUX                 = aCmd->argDouble(1);
+   if(aCmd->isCmd("EX1"               )) mEX1  = aCmd->argDouble(1);
+   if(aCmd->isCmd("EX2"               )) mEX2  = aCmd->argDouble(1);
+   if(aCmd->isCmd("EX3"               )) mEX3  = aCmd->argDouble(1);
+   if(aCmd->isCmd("EX4"               )) mEX4  = aCmd->argDouble(1);
 
    // Pop back out at the end.
    if(aCmd->isCmd("End"  ))  nestedPop(aCmd);
@@ -62,12 +59,10 @@ void MyClassParms::show(char* aLabel)
    printf("\n");
    printf("%-23s BEGIN\n", aLabel);
 
-   printf("mDuration          %10.4f\n",mDuration);
-   printf("mFs                %10.4f\n",mFs);
-   printf("mFc                %10.4f\n",mFc);
-   printf("mFilterOrder       %10d\n",  mFilterOrder);
-   printf("mEX                %10.4f\n",mEX);
-   printf("mUX                %10.4f\n",mUX);
+   printf("mEX1               %10.4f\n",mEX1);
+   printf("mEX2               %10.4f\n",mEX2);
+   printf("mEX3               %10.4f\n",mEX3);
+   printf("mEX4               %10.4f\n",mEX4);
 
    printf("%-25s END\n", aLabel);
    printf("\n");

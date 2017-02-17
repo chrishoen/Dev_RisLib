@@ -32,12 +32,10 @@ SectionBegin default
 
    MyClassParms
    {
-      Duration       100.0
-      Fs             100.0
-      Fc              0.10
-      FilterOrder        4
-      EX               0.0
-      UX               2.0
+      EX1              1.0
+      EX2              2.0
+      EX3              3.0
+      EX4              4.0
    }
 
    //-----------------------------------------------------------------

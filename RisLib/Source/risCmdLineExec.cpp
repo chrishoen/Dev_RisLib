@@ -25,6 +25,7 @@ namespace Ris
 BaseCmdLineExec::BaseCmdLineExec()
 {
    mExitFlag = false;
+   mNestedLevel = 0;
 }
 
 //******************************************************************************
@@ -62,6 +63,26 @@ void BaseCmdLineExec::nestedPop(CmdLineCmd* aCmd)
    aCmd->mNestedAnchor->nestedPop();
 }
 
+//******************************************************************************
+// Test the command for a brace change in the nested level.
+// If it is the end of a nested level then pop back out.
+
+void BaseCmdLineExec::testNestedLevel(CmdLineCmd* aCmd)
+{
+   // If it is the beginning of a nested level then increment the count.
+   if(aCmd->isCmd("{"    ))  mNestedLevel++;
+
+   // If it is the end of a nested level then decrement the count.
+   if (aCmd->isCmd("}"))
+   {
+      if (--mNestedLevel == 0)
+      {
+         // Pop back out at the end.
+         nestedPop(aCmd);
+      }
+   }
+
+}
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

@@ -50,6 +50,13 @@ public:
    void nestedPush (CmdLineCmd* aCmd, BaseCmdLineExec* aNextExec);
    void nestedPop  (CmdLineCmd* aCmd);
 
+   // Nested brace level.
+   int mNestedLevel;
+
+   // Test the command for a brace change in the nested level.
+   // If it is the end of a nested level then pop back out.
+   void testNestedLevel (CmdLineCmd* aCmd);
+
    //---------------------------------------------------------------------------
    // This can be called to indicate to the command line processor to exit a
    // sequence of commands, as if "EXIT" was the command.

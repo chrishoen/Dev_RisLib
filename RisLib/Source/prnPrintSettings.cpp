@@ -267,6 +267,18 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "SensorError2", SensorError2    );
       tryFilterString (aCmd, "SensorError3", SensorError3    );
       tryFilterString (aCmd, "SensorError4", SensorError4    );
+      tryFilterString (aCmd, "DspInit1",  DspInit1     );
+      tryFilterString (aCmd, "DspInit2",  DspInit2     );
+      tryFilterString (aCmd, "DspInit3",  DspInit3     );
+      tryFilterString (aCmd, "DspInit4",  DspInit4     );
+      tryFilterString (aCmd, "DspRun1",   DspRun1      );
+      tryFilterString (aCmd, "DspRun2",   DspRun2      );
+      tryFilterString (aCmd, "DspRun3",   DspRun3      );
+      tryFilterString (aCmd, "DspRun4",   DspRun4      );
+      tryFilterString (aCmd, "DspError1", DspError1    );
+      tryFilterString (aCmd, "DspError2", DspError2    );
+      tryFilterString (aCmd, "DspError3", DspError3    );
+      tryFilterString (aCmd, "DspError4", DspError4    );
 
       // Set the stored try filter
       tryFilterSet(aCmd);

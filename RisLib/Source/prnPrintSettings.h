@@ -213,6 +213,18 @@ public:
    static const int  SensorError2 = 110;
    static const int  SensorError3 = 111;
    static const int  SensorError4 = 102;
+   static const int  DspInit1 = 103;
+   static const int  DspInit2 = 104;
+   static const int  DspInit3 = 105;
+   static const int  DspInit4 = 106;
+   static const int  DspRun1 = 107;
+   static const int  DspRun2 = 108;
+   static const int  DspRun3 = 109;
+   static const int  DspRun4 = 110;
+   static const int  DspError1 = 111;
+   static const int  DspError2 = 112;
+   static const int  DspError3 = 113;
+   static const int  DspError4 = 114;
 
 //******************************************************************************
 //******************************************************************************

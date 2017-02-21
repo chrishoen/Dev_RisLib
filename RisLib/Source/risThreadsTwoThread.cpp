@@ -407,7 +407,7 @@ void BaseTwoThread::notify(int aIndex)
 // This executes in the context of the short term thread to notify the 
 // long term thread.
 
-void BaseTwoThread::executeSendNotify(int aIndex,int aStatus)
+void BaseTwoThread::executeSendNotify(int aIndex,int aStatus,void* aData)
 {
    // If the status is okay
    if (aStatus == 0)
@@ -440,6 +440,7 @@ TwoThreadNotify::TwoThreadNotify()
    mTwoThread = 0;
    mIndex = 0;
    mStatus = 0;
+   mData = 0;
 }
 
 TwoThreadNotify::TwoThreadNotify(BaseTwoThread* aTwoThread,int aIndex)
@@ -447,6 +448,7 @@ TwoThreadNotify::TwoThreadNotify(BaseTwoThread* aTwoThread,int aIndex)
    mTwoThread = aTwoThread;
    mIndex = aIndex;
    mStatus = 0;
+   mData = 0;
 }
 
 //******************************************************************************
@@ -459,13 +461,22 @@ void TwoThreadNotify::setError()
 }
 
 //******************************************************************************
+// This sets the status to a nonzero value. This will pass the data 
+// to the thread waiting for the notification.
+
+void TwoThreadNotify::setData(void* aData)
+{
+   mData = aData;
+}
+
+//******************************************************************************
 // Send notify. This invokes the two thread qcall to execute in the 
 // context of the short termm thread to notify the long term thread.
 
 void TwoThreadNotify::notify()
 {
    if (mTwoThread==0) return;
-   mTwoThread->mSendNotifyQCall(mIndex,mStatus);
+   mTwoThread->mSendNotifyQCall(mIndex,mStatus,mData);
 }
 
 }//namespace

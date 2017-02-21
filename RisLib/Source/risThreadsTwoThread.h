@@ -223,9 +223,8 @@ public:
    // Send notification qcall. This executes in the context of the short term
    // thread to call notify(aIndex), which then notifies the long term thread.
 
-   typedef Ris::Threads::QCall2<int,int> SendNotifyQCall;
-   SendNotifyQCall mSendNotifyQCall;
-   void executeSendNotify(int aIndex,int aStatus);
+   Ris::Threads::QCall3<int,int,void*> mSendNotifyQCall;
+   void executeSendNotify(int aIndex,int aStatus,void* aData);
 };
 
 //******************************************************************************
@@ -249,6 +248,7 @@ public:
    BaseTwoThread* mTwoThread;
    int            mIndex;
    int            mStatus;
+   void*          mData;
 
    //---------------------------------------------------------------------------
    // Constructors.
@@ -261,6 +261,12 @@ public:
    // error exception on the thread waiting for the notification.
 
    void setError();
+
+   //---------------------------------------------------------------------------
+   // This sets the data to a nonzero value. This will pass the data to  
+   // the thread waiting for the notification.
+
+   void setData(void* aData);
 
    //---------------------------------------------------------------------------
    // Send notify. This invokes the two thread qcall to execute in the 

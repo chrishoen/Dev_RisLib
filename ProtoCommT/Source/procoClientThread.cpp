@@ -24,7 +24,7 @@ ClientThread::ClientThread()
 
    mTcpClientThread = new Ris::Net::TcpMsgClientThread;
    mConnectionFlag=false;
-   mPeriodicEnable=true;
+   mPeriodicEnable=false;
    mPeriodicCount=0;
    mStatusCount1=0;
    mStatusCount2=0;
@@ -57,7 +57,8 @@ void ClientThread::configure()
 
    mTcpClientThread->configure(
       &mMonkeyCreator,
-      "127.0.0.1",
+//    "127.0.0.1",
+      gSettings.mTcpServerIPAddress,
       gSettings.mTcpServerPort,
       &mSessionQCall,
       &mRxMsgQCall);
@@ -192,6 +193,7 @@ void ClientThread::processRxMsg(ProtoComm::StatusResponseMsg* aRxMsg)
 
 void ClientThread::sendMsg (ProtoComm::BaseMsg* aTxMsg)
 {
+   return;
    mTcpClientThread->sendMsg(aTxMsg);
 }
 
@@ -200,6 +202,7 @@ void ClientThread::sendMsg (ProtoComm::BaseMsg* aTxMsg)
 
 void ClientThread::sendTestMsg()
 {
+   return;
    ProtoComm::TestMsg* msg = new ProtoComm::TestMsg;
    msg->mCode1=201;
  

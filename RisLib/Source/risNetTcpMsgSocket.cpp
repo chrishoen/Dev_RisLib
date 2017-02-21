@@ -162,8 +162,9 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    int   tHeaderLength = mMonkey->getHeaderLength();
    char* tHeaderBuffer = tBuffer.getBaseAddress();
 
+   Prn::print(Prn::SocketRun4, "doRecvH BEGIN");
    tRet = doRecv(tHeaderBuffer,tHeaderLength,tStatus);
-   Prn::print(Prn::SocketRun4, "doRecvH %d %d",mStatus,mError);
+   Prn::print(Prn::SocketRun4, "doRecvH END %d %d",mStatus,mError);
 
    // Guard
    // If bad status then return false.

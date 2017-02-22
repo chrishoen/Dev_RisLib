@@ -92,7 +92,6 @@ void TcpMsgClientThread::threadRunFunction()
       // If no connection
       if (!mConnectionFlag)
       {
-         Prn::print(Prn::SocketRun1, "Try to Connect");
          // Try to connect
          if (mSocket.doConnect())
          {
@@ -112,7 +111,6 @@ void TcpMsgClientThread::threadRunFunction()
             mConnectionFlag = false;
 
             // Close socket
-            Prn::print(Prn::SocketRun1, "Close, Reconfigure");
             mSocket.doClose();
             mSocket.reconfigure();
 
@@ -128,7 +126,6 @@ void TcpMsgClientThread::threadRunFunction()
          // If a message was received then process it.
          // If a message was not received then the connection was lost.  
          ByteContent* tMsg=0;
-         Prn::print(Prn::SocketRun1, "doReceiveMsg");
          if (mSocket.doReceiveMsg(tMsg))
          {
             // Message was correctly received
@@ -147,13 +144,6 @@ void TcpMsgClientThread::threadRunFunction()
             Prn::print(Prn::SocketRun1, "Recv failed, Connection lost");
             mConnectionFlag = false;
 
-            // Close socket
-            Prn::print(Prn::SocketRun1, "Close, Reconfigure");
-            mSocket.doClose();
-            mSocket.reconfigure();
-
-            // Sleep
-            threadSleep(500);
             // process a session change because a
             // new session has been disestablished
             processSessionChange(false);

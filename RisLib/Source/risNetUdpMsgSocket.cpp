@@ -32,7 +32,7 @@ UdpRxMsgSocket::UdpRxMsgSocket()
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
-   if (mMonkey == 0)
+   if (mMonkey != 0)
    {
       delete mMonkey;
       mMonkey = 0;

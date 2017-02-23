@@ -30,7 +30,11 @@ TcpMsgSocket::TcpMsgSocket()
 //******************************************************************************
 TcpMsgSocket::~TcpMsgSocket()
 {
-   if (mMonkey == 0) delete mMonkey;
+   if (mMonkey != 0)
+   {
+      delete mMonkey;
+      mMonkey = 0;
+   }
 }
 
 //******************************************************************************

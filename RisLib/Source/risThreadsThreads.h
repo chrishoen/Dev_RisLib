@@ -162,6 +162,13 @@ public:
    int    mThreadIdealProcessor;
    int    mThreadUseInitSem;
 
+   //Init semaphore.
+   //It is posted to after the end of threadInitFunction.
+   //launchThread waits for it.
+
+   bool             mThreadInitSemFlag;
+   BinarySemaphore  mThreadInitSem;
+
    //Exit semaphore.
    //It is posted to after the end of threadExitFunction.
    //waitForThreadTerminate waits for it.

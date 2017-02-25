@@ -52,6 +52,7 @@ BaseThread::BaseThread()
    mThreadIdealProcessor  = -1;
 
    mThreadStackSize = 0;
+   mThreadInitSemFlag = true;
 }
 
 //******************************************************************************
@@ -140,6 +141,15 @@ void BaseThread::launchThread()
    // the new thread,using configured priority and affinity
 
    ResumeThread(mBaseSpecific->mHandle);
+
+   //---------------------------------------------------------------------------
+   // Wait for the thread init function to complete.
+
+   if (mThreadInitSemFlag)
+   {
+      mThreadInitSem.get();
+   }
+
 }
 
 //******************************************************************************
@@ -166,6 +176,11 @@ void BaseThread::threadFunction()
       // Note that the timer starts after the initialization section
       // has completed 
       threadTimerInitFunction();
+      // Post to the thread init semaphore.
+      if (mThreadInitSemFlag)
+      {
+         mThreadInitSem.put();
+      }
       // Run section, overload provided by inheritors 
       threadRunFunction();
       // Exit section, overload provided by inheritors

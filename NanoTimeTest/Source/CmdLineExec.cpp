@@ -83,22 +83,22 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   Ris::TrialTimeMarker tMarker1;
-   Ris::TrialTimeMarker tMarker2;
-   tMarker1.doStart();
-   tMarker2.doStart();
-   tMarker2.doStop();
-   tMarker1.doStop();
+   Prn::print(0, "ProgramTime %8.4f", Ris::getCurrentProgramTime());
+   time_t rawtime;
+   struct tm * ptm;
 
+   time ( &rawtime );
 
-   Prn::print(0, "tMarker1.mTimeDifferenceUS %8.2f", tMarker1.mTimeDifferenceUS);
-   Prn::print(0, "tMarker2.mTimeDifferenceUS %8.2f", tMarker2.mTimeDifferenceUS);
+   ptm = gmtime ( &rawtime );
+
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "ProgramTime %8.4f", Ris::getCurrentProgramTime());
+   time_t rawtime;
+   time (&rawtime);  
+   printf ("The current local time is: %s", ctime (&rawtime));
 }
 

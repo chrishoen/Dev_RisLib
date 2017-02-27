@@ -61,6 +61,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{03F1F68A
 		Files\Parms.txt = Files\Parms.txt
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Program", "Program\Program.vcxproj", "{097D078A-F2C1-40F4-B84E-D8EFB30452A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -277,6 +279,14 @@ Global
 		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Release|Win32.Build.0 = Release|Win32
 		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Release|x64.ActiveCfg = Release|x64
 		{FBD99D78-D7B1-412E-9B70-02ADA80F4906}.Release|x64.Build.0 = Release|x64
+		{097D078A-F2C1-40F4-B84E-D8EFB30452A5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{097D078A-F2C1-40F4-B84E-D8EFB30452A5}.Debug|Win32.Build.0 = Debug|Win32
+		{097D078A-F2C1-40F4-B84E-D8EFB30452A5}.Debug|x64.ActiveCfg = Debug|x64
+		{097D078A-F2C1-40F4-B84E-D8EFB30452A5}.Debug|x64.Build.0 = Debug|x64
+		{097D078A-F2C1-40F4-B84E-D8EFB30452A5}.Release|Win32.ActiveCfg = Release|Win32
+		{097D078A-F2C1-40F4-B84E-D8EFB30452A5}.Release|Win32.Build.0 = Release|Win32
+		{097D078A-F2C1-40F4-B84E-D8EFB30452A5}.Release|x64.ActiveCfg = Release|x64
+		{097D078A-F2C1-40F4-B84E-D8EFB30452A5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

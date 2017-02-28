@@ -470,6 +470,49 @@ void ByteBuffer::copyS(unsigned char* aStringPtr) { copyS((char*)aStringPtr); }
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Copy operations for a block of memory.
+
+void ByteBuffer::copyBlock (void* aValue, int aSize) 
+{
+   if (isCopyTo())
+   {
+      //-----------------------------------------------------------------------
+      // Get string length
+
+      int tSize = aSize;
+
+      //-----------------------------------------------------------------------
+      // Guard
+      if (tSize + mWorkingIndex > mMaxLength)
+      {
+         setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
+
+      // Copy the block to the buffer
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(tWorkingPtr, aValue, tSize);
+
+      // Adjust buffer members
+      mWorkingIndex  += tSize;
+      mWorkingLength += tSize;
+   }
+   else
+   {
+      int tSize = aSize;
+
+      // Copy the value from the buffer
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(aValue, tWorkingPtr, tSize);
+
+      // Adjust buffer members
+      mWorkingIndex  += tSize;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Copy for object that inherits from ByteContent
 
 void ByteBuffer::copy (ByteContent* aContent) 

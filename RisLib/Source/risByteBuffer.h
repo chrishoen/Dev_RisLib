@@ -249,6 +249,7 @@ public:
    void copyS (unsigned char*      aString);
    void copyS (char*               aString);
 
+   void copyBlock (void* aValue, int aSize);
    //---------------------------------------------------------------------------
    // Copy an object that inherits from ByteContent to/from a byte buffer.
 

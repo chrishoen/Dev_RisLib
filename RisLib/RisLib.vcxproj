@@ -28,6 +28,7 @@
     <ClCompile Include="Source\risProgramTime.cpp" />
     <ClCompile Include="Source\risSerialPort.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
+    <ClCompile Include="Source\risSystemTime_win.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsSynch_win.cpp" />
     <ClCompile Include="Source\risThreadsTwoThread.cpp" />
@@ -72,6 +73,7 @@
     <ClInclude Include="Source\risProgramTime.h" />
     <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\risStatistics.h" />
+    <ClInclude Include="Source\risSystemTime.h" />
     <ClInclude Include="Source\risThreadsProcess.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />

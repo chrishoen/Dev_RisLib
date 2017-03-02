@@ -200,6 +200,16 @@ public:
    // Execute, it is called by the target thread to execute the QCall. 
 
    virtual void execute()=0;
+
+   //---------------------------------------------------------------------------
+   // Constructor.
+
+   BaseQCall()
+   {
+      mTarget=0;
+   }
+
+   bool isValid(){return mTarget !=0;}
 };
 
 //******************************************************************************

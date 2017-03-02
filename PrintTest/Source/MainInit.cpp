@@ -2,6 +2,7 @@
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
+#include "logFiles.h"
 
 #include "someTimerThread.h"
 using namespace Some;
@@ -44,7 +45,11 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ViewRun3,    false,1);
    Prn::setFilter(Prn::ViewRun4,    true, 1);
 
-   Prn::print(0,"ThreadTest*******************************************BEGIN");
+   Log::reset();
+   Log::openFile(0,"C:\\Alpha\\Log\\PrintTest.txt");
+
+   Prn::print(0,"PrintTest*******************************************BEGIN");
+   Log::write(0,"PrintTest*******************************************BEGIN");
 }
 
 //******************************************************************************
@@ -54,7 +59,9 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ThreadTest*******************************************END");
+   Prn::print(0,"PrintTest*******************************************END");
+   Log::write(0,"PrintTest*******************************************END");
+   Log::closeAllFiles();
 
    // Close print
    Prn::finalizePrint();

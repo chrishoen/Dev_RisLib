@@ -6,11 +6,13 @@ Print utility
 //******************************************************************************
 //******************************************************************************
 
+#include <windows.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
 
 #include "risPortableCalls.h"
+#include "risSystemTime.h"
 #include "my_functions.h"
 #include "logFiles.h"
 
@@ -103,23 +105,35 @@ void write (int aLogNum, const char* aFormat, ...)
    }
 
    //-----------------------------------------------------
+   // Get system time string.
+
+   char  tTimeString[40];
+
+   Ris::getCurrentSystemTimeAsString1(
+      tTimeString,
+      0,
+      " >> ");
+   //-----------------------------------------------------
    // Do a vsprintf with variable arg list into print string
 
-   char tString[cMaxStringSize];
+   char tPrintString[cMaxStringSize];
 
    int tPrintSize;
    va_list  ArgPtr;
    va_start(ArgPtr, aFormat);
-   tPrintSize = vsnprintf(tString, cMaxStringSize, aFormat, ArgPtr);
+   tPrintSize = vsnprintf(tPrintString, cMaxStringSize, aFormat, ArgPtr);
    va_end(ArgPtr);
 
-   tString[tPrintSize++] = '\n';
-   tString[tPrintSize++] = 0;
+   tPrintString[tPrintSize++] = '\n';
+   tPrintString[tPrintSize++] = 0;
 
    //-----------------------------------------------------
    // Print the string
 
-   fputs(tString,mFile[aLogNum]);
+   char tOutputString[cMaxStringSize];
+   strcpy(tOutputString,tTimeString);
+   strcat(tOutputString,tPrintString);
+   fputs(tOutputString,mFile[aLogNum]);
 }
 
 //******************************************************************************

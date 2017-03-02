@@ -73,9 +73,6 @@
     <ClCompile Include="Source\risThreadsTwoThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\logFiles.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risStatistics.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -122,6 +119,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risSystemTime_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\logFiles_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

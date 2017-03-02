@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\logFiles.cpp" />
+    <ClCompile Include="Source\logFiles_win.cpp" />
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\risByteBuffer.cpp" />
     <ClCompile Include="Source\risCmdLineParms.cpp" />

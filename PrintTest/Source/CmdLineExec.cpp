@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "prnPrint.h"
+#include "logFiles.h"
 
 #include "CmdLineExec.h"
 
@@ -31,6 +32,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO2"   ))  executeGo2     (aCmd);
    if(aCmd->isCmd("GO3"   ))  executeGo3     (aCmd);
    if(aCmd->isCmd("GO4"   ))  executeGo4     (aCmd);
+   if(aCmd->isCmd("GO5"   ))  executeGo4     (aCmd);
 }
 
 //******************************************************************************
@@ -41,8 +43,18 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0,"Go1");
+   Log::write(0,"Go1");
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(Prn::ProcRun1,"Go1 Prn::ProcRun1");
    Prn::print(Prn::ProcRun2,"Go1 Prn::ProcRun2");
@@ -52,7 +64,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(Prn::ViewRun3,"Go2 Prn::ViewRun3");
    Prn::print(Prn::ViewRun4,"Go2 Prn::ViewRun4");
@@ -60,14 +72,14 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(0,"Go3 ZERO");
 }
 
 //******************************************************************************
 
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::UdpTxStringSocket tSocket;
    tSocket.configure(Ris::Net::PortDef::cPrintView);

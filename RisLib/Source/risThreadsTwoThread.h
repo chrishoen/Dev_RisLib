@@ -130,8 +130,8 @@ public:
    //--------------------------------------------------------------
    // Thread methods
 
-   void launchThreads(); 
-   void shutdownThreads();
+   virtual void launchThreads(); 
+   virtual void shutdownThreads();
 
    //--------------------------------------------------------------
    // Thread methods, overloaded by inheritor

@@ -164,7 +164,7 @@ public:
    virtual void notifyQCallAvailable()=0;
 
    // Call queue block size, this is the maximum size of a QCall.
-   static const int cCallQueueBlockSize = 128;
+   static const int cCallQueueBlockSize = 256;
 
    // Initialize the call queue
    void initializeCallQueue(int aCallQueueSize)

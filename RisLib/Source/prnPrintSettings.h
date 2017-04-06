@@ -177,10 +177,10 @@ public:
    static const int  CalcRun2          =  74;
    static const int  CalcRun3          =  75;
    static const int  CalcRun4          =  76;
-   static const int  MsgTx1            =  77;
-   static const int  MsgTx2            =  78;
-   static const int  MsgTx3            =  79;
-   static const int  MsgTx4            =  80;
+   static const int  CalcError1        =  77;
+   static const int  CalcError2        =  78;
+   static const int  CalcError3        =  79;
+   static const int  CalcError4        =  80;
    static const int  MsgRx1            =  81;
    static const int  MsgRx2            =  82;
    static const int  MsgRx3            =  83;

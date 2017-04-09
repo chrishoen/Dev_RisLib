@@ -16,7 +16,7 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\FilterCo.cpp">
+    <ClCompile Include="Source\TableTestParms.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,7 +27,7 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\FilterCo.h">
+    <ClInclude Include="Source\TableTestParms.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,7 +6,7 @@
 
 #include "prnPrint.h"
 #include "CmdLineExec.h"
-#include "FilterCo.h"
+#include "TableTestParms.h"
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
@@ -31,9 +31,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   gFilterCo.reset();
-   gFilterCo.readSection("default");
-   gFilterCo.show();
+   gTableTestParms.reset();
+   gTableTestParms.readSection("default");
+   gTableTestParms.show();
 }
 
 //******************************************************************************

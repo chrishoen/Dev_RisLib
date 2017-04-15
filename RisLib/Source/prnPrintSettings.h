@@ -1,5 +1,4 @@
-#ifndef _PRNPRINTSETTINGS_H_
-#define _PRNPRINTSETTINGS_H_
+#pragma once
 /*==============================================================================
 
 This file contains a set of filters used by prnPrint.h
@@ -229,6 +228,14 @@ public:
    static const int  DspError2         = 126;
    static const int  DspError3         = 127;
    static const int  DspError4         = 128;
+   static const int  Result1           = 129;
+   static const int  Result2           = 130;
+   static const int  Result3           = 131;
+   static const int  Result4           = 132;
+   static const int  Result5           = 133;
+   static const int  Result6           = 134;
+   static const int  Result7           = 135;
+   static const int  Result8           = 136;
 
 //******************************************************************************
 //******************************************************************************
@@ -241,6 +248,8 @@ public:
         extern PrintSettings gSettings;
 #endif
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

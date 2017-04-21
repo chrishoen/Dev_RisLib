@@ -77,6 +77,38 @@ bool openFileAppend(int aLogNum, char* aFileName)
 //****************************************************************************
 //****************************************************************************
 
+bool openFile(int aLogNum, char* aFileDir,char* aFileName)
+{            
+   // Construct file path.
+   char tFilePath[cMaxStringSize];
+   strcpy(tFilePath,aFileDir);
+   strcat(tFilePath,"\\");
+   strcat(tFilePath,aFileName);
+
+   // Open file.
+   return openFile(aLogNum,tFilePath);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+bool openFileAppend(int aLogNum, char* aFileDir,char* aFileName)
+{            
+   // Construct file path.
+   char tFilePath[cMaxStringSize];
+   strcpy(tFilePath,aFileDir);
+   strcat(tFilePath,"\\");
+   strcat(tFilePath,aFileName);
+
+   // Open file.
+   return openFileAppend(aLogNum,tFilePath);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
 void closeAllFiles()
 {            
    for (int i = 0; i < cMaxNumFiles; i++)

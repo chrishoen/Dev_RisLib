@@ -21,13 +21,13 @@ namespace Log
 
 //****************************************************************************
 //****************************************************************************
-//****************************************************************************
 // Regional variables
 
    static const int cMaxStringSize = 400;
    static const int cMaxNumFiles = 200;
 
    FILE* mFile [cMaxNumFiles];
+   bool  mTimestampEnable [cMaxNumFiles];
 
 //****************************************************************************
 //****************************************************************************
@@ -38,6 +38,7 @@ void reset()
    for (int i = 0; i < cMaxNumFiles; i++)
    {
       mFile[i]=0;
+      mTimestampEnable [i] = false;
    }
 }
 
@@ -140,11 +141,16 @@ void write (int aLogNum, const char* aFormat, ...)
    // Get system time string.
 
    char  tTimeString[40];
+   tTimeString[0]=0;
 
-   Ris::getCurrentSystemTimeAsString1(
-      tTimeString,
-      0,
-      " >> ");
+   if (mTimestampEnable[aLogNum])
+   {
+      Ris::getCurrentSystemTimeAsString1(
+         tTimeString,
+         0,
+         " >> ");
+   }
+
    //-----------------------------------------------------
    // Do a vsprintf with variable arg list into print string
 
@@ -179,5 +185,16 @@ void writeTimeStamp(int aLogNum, const char* aLabel)
    write(aLogNum,"%s $$ %s",aLabel,my_timestamp(tBuffer));
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// 
+void enableTimeStamp(int aLogNum, bool aEnableFlag)
+{
+   mTimestampEnable [aLogNum] = aEnableFlag;
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 } //namespace
 

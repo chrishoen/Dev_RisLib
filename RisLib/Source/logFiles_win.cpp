@@ -110,6 +110,15 @@ bool openFileAppend(int aLogNum, char* aFileDir,char* aFileName)
 //****************************************************************************
 //****************************************************************************
 
+void closeFile(int aLogNum)
+{            
+   if (mFile[aLogNum] != 0)
+   {
+      fclose(mFile[aLogNum]);
+   }
+   mFile[aLogNum]=0;
+}
+
 void closeAllFiles()
 {            
    for (int i = 0; i < cMaxNumFiles; i++)
@@ -120,7 +129,6 @@ void closeAllFiles()
       }
       mFile[i]=0;
    }
-
 }
 
 //******************************************************************************

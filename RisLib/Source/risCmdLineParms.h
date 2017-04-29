@@ -53,6 +53,37 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Members.
+
+   // File name max size.
+   static const int cMaxStringSize = 400;
+
+   // File name for files that contain default paramters.
+   char mDefaultFileName[cMaxStringSize];
+
+   // File name for files that contain override paramters.
+   char mOverrideFileName[cMaxStringSize];
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // If true then use sections.
+   bool mUseSections;
+
+   // The target section, the section to be read from.
+   char mTargetSection[200];
+
+   // True if the current command is in the target section.
+   bool mTargetSectionFlag;
+
+   // Return true if the command is in the target section.
+   bool isTargetSection(Ris::CmdLineCmd* aCmd);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Infrastucture.
 
    // Constructor,
@@ -69,6 +100,11 @@ public:
    // command file has been processed.
    virtual void expand() {}
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
    // Read a section of the command file and set member variables accordingly.
    // Create a command file object, open the file, pass this object to the file
    // object to read the file and apply this object's execution method to each
@@ -84,32 +120,6 @@ public:
    // This is the same as the above, but with a null filepth and a null
    // section. The filepath is searched amoung default filepaths.    
    bool readFile();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Filepath variables.
-
-   // FileName.
-   static const int cMaxStringSize = 400;
-   char mFileName[cMaxStringSize];
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Section variables.
-
-   // If true then use sections.
-   bool mUseSections;
-
-   // The target section, the section to be read from.
-   char mTargetSection[200];
-
-   // True if the current command is in the target section.
-   bool mTargetSectionFlag;
-
-   // Return true if the command is in the target section.
-   bool isTargetSection(Ris::CmdLineCmd* aCmd);
 
 };
 

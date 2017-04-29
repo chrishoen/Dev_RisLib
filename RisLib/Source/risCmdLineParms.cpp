@@ -37,7 +37,8 @@ void BaseCmdLineParms::reset()
    mUseSections = true;
    mTargetSection[0] = 0;
    mTargetSectionFlag = true;
-   strcpy(mFileName,"YOU_FORGOT_THE_FILENAME");
+   strcpy(mDefaultFileName,"YOU_FORGOT_THE_DEFAULT_FILENAME");
+   strcpy(mOverrideFileName,"YOU_FORGOT_THE_OVERRIDE_FILENAME");
 }
 
 //******************************************************************************
@@ -165,7 +166,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
    // Search for file. If found then read it.
 
    strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
-   strcat(tFilePath, mFileName);
+   strcat(tFilePath, mDefaultFileName);
 
    if (portableFilePathExists(tFilePath))
    {
@@ -179,7 +180,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
 
    strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
    strcat(tFilePath, "..\\..\\Files\\");
-   strcat(tFilePath, mFileName);
+   strcat(tFilePath, mDefaultFileName);
 
    if (portableFilePathExists(tFilePath))
    {
@@ -192,7 +193,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
    // Search for file. If found then read it.
 
    strcpy(tFilePath, Ris::portableGetSettingsDir());
-   strcat(tFilePath, mFileName);
+   strcat(tFilePath, mDefaultFileName);
 
    if (portableFilePathExists(tFilePath))
    {

@@ -30,7 +30,7 @@ TableTestParms::TableTestParms()
 void TableTestParms::reset()
 {
    BaseClass::reset();
-   strcpy(BaseClass::mFileName, "TableTestParms.txt");
+   strcpy(BaseClass::mDefaultFileName, "TableTestParms.txt");
 
    mTable1d.initialize(4);
    mTable2d.initialize(4,2);

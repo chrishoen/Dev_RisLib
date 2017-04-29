@@ -111,6 +111,7 @@ public:
    // command in the file, and then close the file. This only reads variables
    // for a specific section in the file. If the input section is null or 
    // empty then section logic is ignored and the entire file is read.
+   // This reads from the default file name
    bool readSection(char* aFilepath,char* aSection);
    
    // This is the same as above, but with a null filepath. The filepath is
@@ -120,6 +121,10 @@ public:
    // This is the same as the above, but with a null filepth and a null
    // section. The filepath is searched amoung default filepaths.    
    bool readFile();
+
+   // This is the same as above, but it uses the override file name, instead
+   // of the default file name.
+   bool readOverride(char* aSection);
 
 };
 

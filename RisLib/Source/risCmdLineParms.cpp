@@ -212,6 +212,68 @@ bool BaseCmdLineParms::readSection(char* aSection)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This is the same as above, but it uses the override file name, instead
+// of the default file name.
+
+bool BaseCmdLineParms::readOverride(char* aSection)
+{
+   char tFilePath[200];
+
+   // Filepath found.
+   bool tFileFound = false;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcat(tFilePath, mOverrideFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcat(tFilePath, "..\\..\\Files\\");
+   strcat(tFilePath, mOverrideFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetSettingsDir());
+   strcat(tFilePath, mOverrideFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // File not found.
+
+   printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+   return false;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This is the same as the above, but with a null filepth and a null
 // section. The filepath is searched amoung default filepaths.    
 

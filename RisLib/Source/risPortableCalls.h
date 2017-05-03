@@ -33,7 +33,8 @@ namespace Ris
    //---------------------------------------------------------------------------
    // This returns a pointer to the current working directory.
 
-   char* portableGetCurrentWorkingDir();
+   char* portableGetProgramDir();
+   char* portableGetCurrentDir();
 
    //---------------------------------------------------------------------------
    // Wait for key pressed

@@ -50,6 +50,4 @@ void example()
 
    tX = getGSettings().mPLT.mOuterServoLoop.mK1;
 
-   printf("%d %f %d\ntN,tX,tF\n");
-
 }

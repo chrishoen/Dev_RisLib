@@ -165,7 +165,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
    //---------------------------------------------------------------------------
    // Search for file. If found then read it.
 
-   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcpy(tFilePath, Ris::portableGetProgramDir());
    strcat(tFilePath, mDefaultFileName);
 
    if (portableFilePathExists(tFilePath))
@@ -178,21 +178,35 @@ bool BaseCmdLineParms::readSection(char* aSection)
    //---------------------------------------------------------------------------
    // Search for file. If found then read it.
 
-   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcpy(tFilePath, Ris::portableGetCurrentDir());
+   strcat(tFilePath, mDefaultFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetCurrentDir());
+   strcat(tFilePath, "..\\Files\\");
+   strcat(tFilePath, mDefaultFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetProgramDir());
    strcat(tFilePath, "..\\..\\Files\\");
-   strcat(tFilePath, mDefaultFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetSettingsDir());
    strcat(tFilePath, mDefaultFileName);
 
    if (portableFilePathExists(tFilePath))
@@ -227,7 +241,7 @@ bool BaseCmdLineParms::readOverride(char* aSection)
    //---------------------------------------------------------------------------
    // Search for file. If found then read it.
 
-   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcpy(tFilePath, Ris::portableGetCurrentDir());
    strcat(tFilePath, mOverrideFileName);
 
    if (portableFilePathExists(tFilePath))
@@ -240,21 +254,22 @@ bool BaseCmdLineParms::readOverride(char* aSection)
    //---------------------------------------------------------------------------
    // Search for file. If found then read it.
 
-   strcpy(tFilePath, Ris::portableGetCurrentWorkingDir());
+   strcpy(tFilePath, Ris::portableGetCurrentDir());
+   strcat(tFilePath, "..\\Files\\");
+   strcat(tFilePath, mOverrideFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::portableGetProgramDir());
    strcat(tFilePath, "..\\..\\Files\\");
-   strcat(tFilePath, mOverrideFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetSettingsDir());
    strcat(tFilePath, mOverrideFileName);
 
    if (portableFilePathExists(tFilePath))

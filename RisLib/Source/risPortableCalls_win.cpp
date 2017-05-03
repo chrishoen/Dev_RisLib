@@ -44,22 +44,34 @@ const char* portableGetSettingsDir()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-static char rCurrentWorkingDir[200];
+static char rProgramDir[400];
 
-char* portableGetCurrentWorkingDir()
+char* portableGetProgramDir()
 {
-   int tIndex = GetModuleFileName(NULL, rCurrentWorkingDir, 200);
+   int tIndex = GetModuleFileName(NULL, rProgramDir, 400);
 
    while (--tIndex > 0)
    {
-      if (rCurrentWorkingDir[tIndex] == '\\')
+      if (rProgramDir[tIndex] == '\\')
       {
-         rCurrentWorkingDir[tIndex + 1] = 0;
+         rProgramDir[tIndex + 1] = 0;
          break;
       }
    }
 
-   return rCurrentWorkingDir;
+   return rProgramDir;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+static char rCurrentDir[400];
+
+char* portableGetCurrentDir()
+{
+   GetCurrentDirectory(400,rCurrentDir);
+   strcat(rCurrentDir,"\\");
+   return rCurrentDir;
 }
 
 //******************************************************************************

@@ -1,3 +1,4 @@
+#include <windows.h>
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
@@ -5,6 +6,7 @@
 #include <random>
 
 #include "prnPrint.h"
+#include "risPortableCalls.h"
 #include "CmdLineExec.h"
 #include "Parms.h"
 #include "someMyClass.h"
@@ -51,6 +53,13 @@ void CmdLineExec::executeRun1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   char tCurrentDir[400];
+   GetCurrentDirectory(400,tCurrentDir);
+
+    Prn::print(0,"GetCurrentDir     %s",tCurrentDir);
+
+    Prn::print(0,"RIS GetCurrentDir %s",Ris::portableGetCurrentDir());
+    Prn::print(0,"RIS GetProgramDir %s",Ris::portableGetProgramDir());
 }
 
 //******************************************************************************

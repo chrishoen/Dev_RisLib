@@ -64,12 +64,27 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+void my_local_function()
+{
+   printf("my_local_function\n");
+}
+
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   gParms.reset();
-   gParms.readSection("default");
-   gParms.readSection("run1");
-   gParms.show();
+   char path[400];
+   HMODULE hm = NULL;
+
+   if (!GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | 
+            GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+            (LPCSTR) &my_local_function, 
+            &hm))
+   {
+         int ret = GetLastError();
+         fprintf(stderr, "GetModuleHandle returned %d\n", ret);
+   }
+   GetModuleFileNameA(hm, path, sizeof(path));
+
+   Prn::print(0,"GetModuleFileNameA %s",path);
 }
 
 //******************************************************************************

@@ -58,6 +58,11 @@ public:
    // File name max size.
    static const int cMaxStringSize = 400;
 
+   // Explicit file directory for the parms files.
+   // If this is set then this is the first directory that is searched.
+   char mExplicitFileDir[cMaxStringSize];
+   bool mUseExplicitFileDir;
+
    // File name for files that contain default paramters.
    char mDefaultFileName[cMaxStringSize];
 
@@ -105,22 +110,28 @@ public:
    //***************************************************************************
    // Methods.
 
+   // Set the file dir that the parms file lives in.
+   // The following read functions search for the parms file in the 
+   // functions search first the current working directory and then the 
+   // current program directory.
+   // 1) the explicit file dir, if it is set
+   // 2) the current working directory
+   // 3) the current working directory + ..\Files
+   // 4) the current program directory + ..\..\Files
+   void setExplicitFileDir(char* aFileDir);
+
    // Read a section of the command file and set member variables accordingly.
    // Create a command file object, open the file, pass this object to the file
    // object to read the file and apply this object's execution method to each
    // command in the file, and then close the file. This only reads variables
    // for a specific section in the file. If the input section is null or 
    // empty then section logic is ignored and the entire file is read.
-   // This reads from the default file name
+   // This reads from the default file name.
    bool readSection(char* aFilepath,char* aSection);
    
    // This is the same as above, but with a null filepath. The filepath is
    // searched amoung default filepaths.
    bool readSection(char* aSection);
-
-   // This is the same as the above, but with a null filepth and a null
-   // section. The filepath is searched amoung default filepaths.    
-   bool readFile();
 
    // This is the same as above, but it uses the override file name, instead
    // of the default file name.

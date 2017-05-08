@@ -175,6 +175,9 @@ bool BaseCmdLineParms::readSection(char* aSection)
       {
          return readSection(tFilePath, aSection);
       }
+
+      printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+      return false;
    }
 
    //***************************************************************************
@@ -267,6 +270,9 @@ bool BaseCmdLineParms::readOverride(char* aSection)
       {
          return readSection(tFilePath, aSection);
       }
+
+      printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+      return false;
    }
 
    //***************************************************************************

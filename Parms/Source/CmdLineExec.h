@@ -21,7 +21,8 @@ public:
 
    void executeRun1 (Ris::CmdLineCmd* aCmd);
 
-   void executeParms (Ris::CmdLineCmd* aCmd);
+   void executeParms  (Ris::CmdLineCmd* aCmd);
+   void executeParms2 (Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

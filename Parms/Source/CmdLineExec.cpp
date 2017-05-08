@@ -25,10 +25,11 @@ void CmdLineExec::reset()
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("RESET")) reset();
-   if (aCmd->isCmd("GO1"))   executeGo1(aCmd);
-   if (aCmd->isCmd("GO2"))   executeGo2(aCmd);
-   if (aCmd->isCmd("Parms")) executeParms(aCmd);
+   if (aCmd->isCmd("RESET"))  reset();
+   if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
+   if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
+   if (aCmd->isCmd("Parms"))  executeParms(aCmd);
+   if (aCmd->isCmd("Parms2")) executeParms2(aCmd);
 
    if (aCmd->isCmd("RUN1"))  executeRun1(aCmd);
 }
@@ -96,6 +97,21 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,"Run1");
+   gParms.reset();
+   gParms.readSection("default");
+   gParms.readSection(aCmd->argString(1));
+   gParms.show();
+}
+
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeParms2(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,"Run1");
+   gParms.setExplicitFileDir("C:\\Alpha\\Work");
    gParms.reset();
    gParms.readSection("default");
    gParms.readSection(aCmd->argString(1));

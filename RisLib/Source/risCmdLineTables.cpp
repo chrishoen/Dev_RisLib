@@ -185,6 +185,15 @@ void CmdLineDoubleTable1D::execute(Ris::CmdLineCmd* aCmd)
    }
 }
 
+void CmdLineDoubleTable1D::reexecute(Ris::CmdLineCmd* aCmd)
+{
+   mFirstCmd = true;
+   mIndex = 0;
+   mValidFlag = false;
+
+   execute(aCmd);
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

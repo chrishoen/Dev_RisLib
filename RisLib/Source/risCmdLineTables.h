@@ -50,6 +50,9 @@ public:
 
    void execute(Ris::CmdLineCmd* aCmd);
 
+   // Execute again. reinitializes and calls execute.
+   void reexecute(Ris::CmdLineCmd* aCmd);
+
    // True if initialized
    bool mInitialized;
    // True if this is the first command line

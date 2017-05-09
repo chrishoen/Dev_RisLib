@@ -137,6 +137,8 @@ public:
    // of the default file name.
    bool readOverride(char* aSection);
 
+   // Alias for readSection(0);
+   bool readFile();
 };
 
 //******************************************************************************

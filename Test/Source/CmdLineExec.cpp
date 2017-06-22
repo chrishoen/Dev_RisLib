@@ -26,6 +26,12 @@ void CmdLineExec::reset()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This class is the program command line executive. It processes user
+// command line inputs and executes them. It inherits from the command line
+// command executive base class, which provides an interface for executing
+// command line commands. It provides an override execute function that is
+// called by a console executive when it receives a console command line input.
+// The execute function then executes the command.
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
@@ -48,12 +54,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,10);
-   aCmd->setArgDefault(1,11.1);
+   aCmd->setArgDefault(2,11.1);
 
-   double tInt    = aCmd->argInt(1);
-   double tDouble = aCmd->argDouble(1);
+   int    tInt    = aCmd->argInt(1);
+   double tDouble = aCmd->argDouble(2);
 
-   Prn::print(0,"Show %5d %10.6f",tInt,tDouble);
+   Prn::print(0,"Show2 %d %10.6f",tInt,tDouble);
 }
 
 //******************************************************************************

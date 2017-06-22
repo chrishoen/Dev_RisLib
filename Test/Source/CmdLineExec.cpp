@@ -12,14 +12,21 @@
 #include "CmdLineExec.h"
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 CmdLineExec::CmdLineExec()
 {
 }
-//******************************************************************************
+
 void CmdLineExec::reset()
 {
 }
+
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
@@ -39,6 +46,40 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,10);
+   aCmd->setArgDefault(1,11.1);
+
+   double tInt    = aCmd->argInt(1);
+   double tDouble = aCmd->argDouble(1);
+
+   Prn::print(0,"Show %5d %10.6f",tInt,tDouble);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   time_t     now = time(0);
+   struct tm  tstruct;
+   char       buf[80];
+   tstruct = *localtime(&now);
+   strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+   printf ( "Current local time and date: %s\n", buf );
+
+
+   char tBuffer[100];
+   printf ( "Current local time and date: %s\n", my_timestamp(tBuffer));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    bool tFlag = Ris::portableFilePathExists ("C:\\Alpha\\Lib\\");
 
@@ -62,47 +103,12 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
-{
-   time_t     now = time(0);
-   struct tm  tstruct;
-   char       buf[80];
-   tstruct = *localtime(&now);
-   strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
-
-   printf ( "Current local time and date: %s\n", buf );
-
-
-   char tBuffer[100];
-   printf ( "Current local time and date: %s\n", my_timestamp(tBuffer));
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->setArgDefault(1,10);
-   int tN = aCmd->argInt(1);
-
-   for (int i = 0; i < tN; i++)
-   {
-      Prn::print(0, "%d",i);
-   }
-
-   Prn::print(0, "");
-
-   for (int i = tN-1; i >= 0; i--)
-   {
-      Prn::print(0, "%d",i);
-   }
-}
-
-//******************************************************************************
-
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)

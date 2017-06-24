@@ -21,7 +21,7 @@ CmdLineString::CmdLineString()
 {
 }
 
-char* CmdLineString::execute (BaseCmdLineExec* aExec, char* aCmdLineString)
+void CmdLineString::execute (BaseCmdLineExec* aExec, char* aCmdLineString)
 {
    // Command
    CmdLineCmd  tCmd;
@@ -32,7 +32,7 @@ char* CmdLineString::execute (BaseCmdLineExec* aExec, char* aCmdLineString)
    // Test for exit command
    if(tCmd.isCmd("EXIT"))
    {
-      return 0;
+      return;
    }
 
    // Execute the executive with the command
@@ -42,18 +42,6 @@ char* CmdLineString::execute (BaseCmdLineExec* aExec, char* aCmdLineString)
    if(tCmd.isBadCmd())
    {
       Prn::print(0,"INVALID COMMAND\n");
-   }
-
-   // return command response
-
-   if (tCmd.getResponse()!=0)
-   {
-      strcpy(mResponseString,tCmd.getResponse());
-      return &mResponseString[0];
-   }
-   else
-   {
-      return 0;
    }
 }
 

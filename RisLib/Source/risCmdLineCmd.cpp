@@ -23,7 +23,7 @@ namespace Ris
 //******************************************************************************
 // Regional functions
 
-// Converts a string to all upper case
+// Convert a string to all upper case.
 static void r_myStrupr(char* aString);
 
 // Similar to strtok
@@ -32,12 +32,11 @@ static char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr);
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor
+// Constructor.
 
 CmdLineCmd::CmdLineCmd()
 {
    mGoodCmd=false;
-// strcpy(mDelimiters," ,\t");
    strcpy(mDelimiters," \t");
 
    for (int i=0;i<MaxNumOfArgs;i++)
@@ -45,15 +44,16 @@ CmdLineCmd::CmdLineCmd()
       mArgPtr[i] = &mArgStore[i][0];
    }
 
-   mResponseValid=false;
-
    mNestedAnchor = 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Parse command line string into command and argument members
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Parse command line string into command and argument members.
 
 void CmdLineCmd::parseCmdLine(char* aCommandLine)
 {
@@ -82,11 +82,6 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    // Guard
 
    if(strlen(aCommandLine)==0) return;
-
-   //---------------------------------------------------------------------------
-   // Convert command line to upper case
-
-// r_myStrupr(aCommandLine);
 
    //---------------------------------------------------------------------------
    // Parse command line into command and argument members
@@ -125,7 +120,9 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
 }
 
 //******************************************************************************
-// Compare arg[0] with a string
+//******************************************************************************
+//******************************************************************************
+// Compare arg[0] with a string.
 
 bool CmdLineCmd::isCmd(const char* aString)
 {
@@ -156,7 +153,9 @@ bool CmdLineCmd::isCmd(const char* aString)
 }
 
 //******************************************************************************
-// Return true if no call to isCmd returned true
+//******************************************************************************
+//******************************************************************************
+// Return true if no call to isCmd returned true.
 
 bool CmdLineCmd::isBadCmd()
 {
@@ -164,187 +163,205 @@ bool CmdLineCmd::isBadCmd()
 }
 
 //******************************************************************************
-// Return number of arguments
+//******************************************************************************
+//******************************************************************************
+// Return number of arguments.
 
 int CmdLineCmd::numArg()
 {
-   // Return number of arguments
+   // Return number of arguments.
    return mArgNum;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return argument value
+// Return argument value.
 
 int CmdLineCmd::argInt(int aArgIndex)
 {
    int tValue=0;
 
-   // Guard
+   // Guard.
    if(!mArgFlag[aArgIndex]) return 0;
 
-   // Convert argument string
+   // Convert argument string.
    sscanf(mArgPtr[aArgIndex],    "%d", &tValue);
    if (tValue==0)
    {
       sscanf(mArgPtr[aArgIndex], "%x", &tValue);
    }
 
-   // Return argument value
+   // Return argument value.
    return tValue;
 }
 
 //******************************************************************************
-// Return argument value
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
 
 unsigned int CmdLineCmd::argUnsigned(int aArgIndex)
 {
    unsigned int tValue=0;
 
-   // Guard
+   // Guard.
    if(!mArgFlag[aArgIndex]) return 0;
 
-   // Convert argument string
+   // Convert argument string.
    sscanf(mArgPtr[aArgIndex],    "%d", &tValue);
    if (tValue==0)
    {
       sscanf(mArgPtr[aArgIndex], "%x", &tValue);
    }
 
-   // Return argument value
+   // Return argument value.
    return tValue;
 }
 
 //******************************************************************************
-// Return argument value
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
 
 bool CmdLineCmd::argBool(int aArgIndex)
 {
-   // Guard
+   // Guard.
    if(!mArgFlag[aArgIndex]) return false;
 
    // Test for 1,0
 
-   // Convert argument string
+   // Convert argument string.
    if (strcmp(mArgPtr[aArgIndex],"1")==0)       return true;
    if (strcmp(mArgPtr[aArgIndex],"0")==0)       return false;
 
    // Test for true,false
 
-   // Copy to temp and convert to upper case
+   // Copy to temp and convert to upper case.
    char tArgN[80];
    my_strncpy(tArgN,mArgPtr[aArgIndex],80);
    r_myStrupr(tArgN);
 
-   // Copy to temp and convert to upper case
+   // Copy to temp and convert to upper case.
    char tString[80];
    strcpy(tString,"TRUE");
 
-   // Compare aString with argument string   
+   // Compare aString with argument string.
    return (strcmp(tArgN,tString)==0);
 }
 
 //******************************************************************************
-// Return argument value
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
 
 double CmdLineCmd::argDouble(int aArgIndex)
 {
    double tValue=0.0;
 
-   // Guard
+   // Guard.
    if(!mArgFlag[aArgIndex]) return 0;
 
-   // Convert argument string
+   // Convert argument string.
    tValue = atof(mArgPtr[aArgIndex]);
 
-   // Return argument value
+   // Return argument value.
    return tValue;
 }
 
 //******************************************************************************
-// Return argument value
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
 
 double CmdLineCmd::argAngle(int aArgIndex)
 {
    double tValue=0.0;
 
-   // Guard
+   // Guard.
    if(!mArgFlag[aArgIndex]) return 0;
 
-   // Convert argument string
+   // Convert argument string.
    tValue = atof(mArgPtr[aArgIndex]);
 
-   // Return argument value
-   // Convert from degrees to radians
+   // Return argument value.
+   // Convert from degrees to radians.
    return tValue*MY_RAD;
 }
 
 //******************************************************************************
-// Return argument value
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
 
-// char rCmdEmptyString[] = "NULL";
 const char* rCmdEmptyString = "NULL";
 
 char* CmdLineCmd::argString(int aArgIndex)
 {
    char* tValue = (char*)rCmdEmptyString;
 
-   // Guard
+   // Guard.
    if(!mArgFlag[aArgIndex]) return (char*)rCmdEmptyString;
 
-   // Convert argument string
+   // Convert argument string.
    tValue = mArgPtr[aArgIndex];
 
-   // Return char* argument
+   // Return char* argument.
    return tValue;
 }
 
 //******************************************************************************
-// Return argument value
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
 
 bool CmdLineCmd::isArgString (int aArgIndex,const char* aString)
 {
-   // Guard 
+   // Guard.
    if (!mValidFlag) return false;
 
-   // Guard
+   // Guard.
    if(!mArgFlag[aArgIndex]) return false;
 
-   // Copy to temp and convert to upper case
+   // Copy to temp and convert to upper case.
    char tArgN[80];
    my_strncpy(tArgN,mArgPtr[aArgIndex],80);
    r_myStrupr(tArgN);
 
-   // Copy to temp and convert to upper case
+   // Copy to temp and convert to upper case.
    char tString[80];
    my_strncpy(tString,aString,80);
    r_myStrupr(tString);
 
-   // Compare aString with argument string   
+   // Compare aString with argument string.
    return (strcmp(tArgN,tString)==0);
 }
 
 //******************************************************************************
-// Return argument value
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
 
 void CmdLineCmd::copyArgString (int aArgIndex,char* aString,int aMaxSize)
 {
-   // Guard
+   // Guard.
    if(!mArgFlag[aArgIndex])
    {
 	   aString[0]=0;
 	   return;
    }
 
-   // Copy argument to string
+   // Copy argument to string.
    my_strncpy(aString,mArgPtr[aArgIndex],aMaxSize);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Set default argument
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set default argument.
 
 void CmdLineCmd::setArgDefault(int aArgIndex, int aValue)
 {
@@ -357,9 +374,11 @@ void CmdLineCmd::setArgDefault(int aArgIndex, int aValue)
 }
 
 //******************************************************************************
-// Set default argument
+//******************************************************************************
+//******************************************************************************
+// Set default argument.
 
-void CmdLineCmd::setArgDefaultUnsigned(int aArgIndex, unsigned int aValue)
+void CmdLineCmd::setArgDefaultUnsigned(int aArgIndex, unsigned aValue)
 {
    if (aArgIndex <= mArgNum) return;
 
@@ -370,6 +389,9 @@ void CmdLineCmd::setArgDefaultUnsigned(int aArgIndex, unsigned int aValue)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set default argument.
 
 void CmdLineCmd::setArgDefault(int aArgIndex, bool aValue)
 {
@@ -382,6 +404,9 @@ void CmdLineCmd::setArgDefault(int aArgIndex, bool aValue)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set default argument.
 
 void CmdLineCmd::setArgDefault(int aArgIndex, double aValue)
 {
@@ -393,14 +418,16 @@ void CmdLineCmd::setArgDefault(int aArgIndex, double aValue)
    mArgNum = aArgIndex;
 }
 
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set default argument.
 
 void CmdLineCmd::setArgDefault(int aArgIndex, char* aValue)
 {
    if (aArgIndex <= mArgNum) return;
 
    strcpy(mArgPtr[aArgIndex],aValue);
-// r_myStrupr(mArgPtr[aArgIndex]);
 
    mArgFlag[aArgIndex] = true;
    mArgNum = aArgIndex;
@@ -409,7 +436,10 @@ void CmdLineCmd::setArgDefault(int aArgIndex, char* aValue)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Convert string to upper case
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Convert string to upper case.
 
 void r_myStrupr(char* aString)
 {
@@ -430,6 +460,8 @@ void r_myStrupr(char* aString)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// String token analog.
+
 char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
 {
    //---------------------------------------------------------------------------
@@ -563,28 +595,8 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
    return tToken;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-// Command response string
-
-void  CmdLineCmd::resetResponse ()
-{
-   mResponseValid=false;
-}
-//***************************************************************************
-void  CmdLineCmd::setResponse (char* aString)
-{
-   strcpy(mResponseString,aString);
-   mResponseValid=true;
-}
-//***************************************************************************
-char* CmdLineCmd::getResponse ()
-{
-   if (mResponseValid) return &mResponseString[0];
-   else                return 0; 
-}
-
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 }//namespace
 

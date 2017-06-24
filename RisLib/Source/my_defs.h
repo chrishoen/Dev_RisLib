@@ -1,8 +1,6 @@
-#ifndef _MY_DEFS_H_
-#define _MY_DEFS_H_
+#pragma once
 
 /*==============================================================================
-Description:
 My definitions for physical constants
 ==============================================================================*/
 
@@ -30,7 +28,6 @@ My definitions for physical constants
 // operator new[] adds extra bytes to store number of elements.
 static const int cNewArrayExtraMemory = 4;
 
-
-
-#endif
-
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************

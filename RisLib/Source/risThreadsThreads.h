@@ -1,22 +1,6 @@
-#ifndef _RISTHREADSTHREADS_H_
-#define _RISTHREADSTHREADS_H_
+#pragma once
 /*==============================================================================
-
-Realtime infastructure library Threads
-
-This file contains classes that encapsulate standard rtos multithreading
-synchronization constructs. It supplies events, semaphores, and threads.
-The purpose of the classes is to wrap the rtos api thread synchronization
-calls.
-
-class BinarySemaphore
-class CountingSemaphore
-class MutexSemaphore
-class WaitableTimer
-class BaseThread
-class BaseThreadWithTermFlag 
-class BaseThreadWithTermSem
-class BaseTimerThread
+Base thread classes
 ==============================================================================*/
 
 //******************************************************************************
@@ -26,11 +10,17 @@ class BaseTimerThread
 #include "risThreadsSynch.h"
 #include "ris_priorities.h"
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Ris
 {
 namespace Threads
 {
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // This is an abstract virtual base class for threads.
 // It encapsulates the win32 CreateThread call.
@@ -41,21 +31,63 @@ class BaseThread
 {
 public:
 
-   // Resets the handle to indicate a null thread.
-   // Sets the configuration variables to default values.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
+   //Configuration variables.
+   //Some of these are passed to the CreateThread in launch
+   //and some are used by threadFunction.
+   int    mThreadStackSize;
+   int    mThreadPriority;
+   int    mThreadAffinityMask;
+   int    mThreadIdealProcessor;
+   int    mThreadUseInitSem;
+
+   //Init semaphore.
+   //It is posted to after the end of threadInitFunction.
+   //launchThread waits for it.
+   bool             mThreadInitSemFlag;
+   BinarySemaphore  mThreadInitSem;
+
+   //Exit semaphore.
+   //It is posted to after the end of threadExitFunction.
+   //waitForThreadTerminate waits for it.
+   BinarySemaphore  mThreadExitSem;
+
+protected:
+   // Pimpl pattern. Used to hide details of the operating system specific
+   // variables, like the thread handle, from the .h file so that this
+   // include file can be complied by different compliers. The class is
+   // defined in the .cpp file, where there is a different version for
+   // different compilers.
+   class BaseSpecific;
+   BaseSpecific* mBaseSpecific;
+public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor.
    BaseThread(); 
    virtual ~BaseThread();
 
-   // Sets the configuration variables to default values.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Set the configuration variables to default values.
    // This can be overloaded to set them to specific values.
    // This is called by launch before the thread is created.
    // Note that launch uses the configuration variables when it
    // does the CreateThread.
-
    virtual void configureThread(); 
 
-   // This launches the thread.
+   // Launch the thread.
    // It calls win32 CreateThread and passes in the configuration variables
    // and the address of the c-function BaseThread_Execute and a this pointer.
    // The CreateThread call creates a new win32 thread with the configuration
@@ -76,7 +108,6 @@ public:
    // threadFunction is called (this is because that's the way win32
    // CreateThread does it). The first thing that threadFunction does is set
    // the priority.
-
    virtual void launchThread(); 
 
    // Thread function.
@@ -102,7 +133,6 @@ public:
    // This is the function that is run in the context of the new thread.
    // It calls the following four subfunctions. The thread launch doesn't 
    // return until the first two have completed.
-
    void threadFunction();
 
    // Thread function initialization and run sections.
@@ -111,19 +141,24 @@ public:
    // This is used by inheritors to initialize resources. This should be
    // overloaded by thread base classes and not by thread user classes.
    virtual void threadResourceInitFunction(){}
+
    // Initialization section, overload provided by inheritors
    // It is intended that this will be overloaded by 
    // inheriting thread base classes and by inheriting user classes
    virtual void threadInitFunction(){}
+
    // This is used by inheritors to initialize thread timers. This should be
    // overloaded by thread base classes and not by thread user classes.
    // The launching thread also waits for this to complete.
    virtual void threadTimerInitFunction(){}
+
    // This should be used by inheritors to do the actual work of the thread
    virtual void threadRunFunction(){}
+
    // This should be used by inheritors when the thread exits.It is used
    // for any thread cleanup
    virtual void threadExitFunction(){}
+
    // This is used by inheritors to finalize resources. This should be
    // overloaded by thread base classes and not by thread user classes.
    virtual void threadResourceExitFunction(){}
@@ -135,54 +170,34 @@ public:
    // This virtual is overloaded by inheritors to shutdown the thread
    virtual void shutdownThread() {}
 
-   // Here are some standard thread calls
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
-   void threadSleep(int ticks); 
+   // Sleep for some milliseconds.
+   void threadSleep(int aTicks); 
+
+   // Terminate the thread forcefully.
    void forceTerminateThread();
+
+   // Return the thread priority.
    int  getThreadPriority();
 
-   // Call this in the configureThread
+   // Set thread priority.
    void setThreadPriorityHigh();
    void setThreadPriorityLow();
    void setThreadPriority(int aThreadPriority);
 
-   //This waits forever for the threads' handle.
-   //It returns when the thread terminates.
-   //It can be used to wait for a thread to terminate.
-
+   //Wait for the thread to terminate.
    void waitForThreadTerminate();
 
-   //Configuration variables.
-   //Some of these are passed to the CreateThread in launch
-   //and some are used by threadFunction.
-
-   int    mThreadStackSize;
-   int    mThreadPriority;
-   int    mThreadAffinityMask;
-   int    mThreadIdealProcessor;
-   int    mThreadUseInitSem;
-
-   //Init semaphore.
-   //It is posted to after the end of threadInitFunction.
-   //launchThread waits for it.
-
-   bool             mThreadInitSemFlag;
-   BinarySemaphore  mThreadInitSem;
-
-   //Exit semaphore.
-   //It is posted to after the end of threadExitFunction.
-   //waitForThreadTerminate waits for it.
-
-   BinarySemaphore  mThreadExitSem;
-
-public:
+   // Get a pointer to the thread handle.
    void* getHandlePtr();
-
-protected:
-   class BaseSpecific;
-   BaseSpecific* mBaseSpecific;
 };
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // This is an extension of virtual base class for general purpose threads.
 // It provides a polled termination mechanism where an inheritor thread run
@@ -192,20 +207,36 @@ class BaseThreadWithTermFlag : public BaseThread
 {
 public:
 
-   BaseThreadWithTermFlag(); 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
+   //Termination Flag
+   bool mTerminateFlag;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   BaseThreadWithTermFlag(); 
    virtual ~BaseThreadWithTermFlag(){} 
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    //This sets the terminate flag and waits on the handle for the thread
    //to terminate. The inheritor thread run function should polls this
    //flag and terminate if it is true.
    virtual void shutdownThread();
 
-protected:
-   //Termination Flag
-   bool   mTerminateFlag;
 };
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // This is an extension of virtual base class for general purpose threads.
 // It provides a termination mechanism where an inheritor thread run
@@ -221,28 +252,50 @@ class BaseThreadWithTermSem : public BaseThread
 {
 public:
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Termination semaphore
+   BinarySemaphore mTerminateSem;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
    virtual ~BaseThreadWithTermSem(){} 
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    //This posts to the termination semaphore.
    //The inheritor thread run function should pend on the semaphore
    //and terminate if it is signaled.
    virtual void shutdownThread();
-
-protected:
-   // Termination semaphore
-   BinarySemaphore   mTerminateSem;
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Helpers.
+
+// Return the number of operation system ticks per second.
 int countsPerOneSecond();
 
+// Sleep.
 void threadSleep(int aTicks);
+
+// Halt the program.
 void halt(char* aPrintStr=0);
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
-#endif
 
 

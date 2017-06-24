@@ -189,9 +189,6 @@
     <ClInclude Include="Source\risCmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\prnDefs.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risPointerStack.h">
       <Filter>Source</Filter>
     </ClInclude>

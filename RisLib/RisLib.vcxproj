@@ -81,7 +81,6 @@
     <ClInclude Include="Source\risThreadsTwoThread.h" />
     <ClInclude Include="Source\risTimeMarker.h" />
     <ClInclude Include="Source\ris_priorities.h" />
-    <ClInclude Include="Source\prnDefs.h" />
     <ClInclude Include="Source\prnPrint.h" />
     <ClInclude Include="Source\prnPrintSettings.h" />
     <ClInclude Include="Source\risByteContent.h" />

@@ -1,8 +1,7 @@
-#ifndef _RISTHREADSTIMERTHREAD_H_
-#define _RISTHREADSTIMERTHREAD_H_
+#pragma once
 
 /*==============================================================================
-
+Timer thread base class
 ==============================================================================*/
 
 //******************************************************************************
@@ -28,37 +27,57 @@ public:
 
    typedef Ris::Threads::BaseThread BaseClass;
 
-   BaseTimerThread(); 
-  ~BaseTimerThread() {}; 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   //Base class overloads.
-   //Thread function run.
-   //This is an infinite loop that sleeps for the timer period
-   //and periodically calls the inheritor executeOnTimer.
-
-   void threadRunFunction  ();
-   void shutdownThread();
-   
-
-   //An overload of this is supplied by the inheritor.
-   //It is called periodically by the threadRunFunction
-
-   virtual void executeOnTimer(int aTimerCount)=0;
-
-   // Members
+   // The thread run function contains a loop that waits on this semaphore
+   // and times out after the timer period variable.
    Ris::Threads::BinarySemaphore mSemaphore;
+
+   // Timer period, milliseconds.
    int   mTimerPeriod;
+
+   // Timer count incremented at each timer execution.
    int   mTimerCount;
+
+   // If true then the thread run function loop terminates.
    bool  mTerminateFlag;
    
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor.
+   BaseTimerThread(); 
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Base class override.
+   // Execute an infinite loop that sleeps for the timer period and 
+   // periodically calls the inheritor executeOnTimer. The sleep is obtained
+   // by waiting on the semaphore member and timing out. The loop exits when the
+   // termination flag is true.
+   void threadRunFunction() override;
+
+   // Base class override.
+   // Set the termination flag and post to the semaphore member.
+   void shutdownThread()override;
+
+   // An overload of this is supplied by the inheritor.
+   // It is called periodically by the threadRunFunction
+   virtual void executeOnTimer(int aTimerCount)=0;
 };
 
-
 //******************************************************************************
-
-
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 
-#endif
 

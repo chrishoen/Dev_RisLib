@@ -1,7 +1,7 @@
-#ifndef _RISTHREADSTIMER_H_
-#define _RISTHREADSTIMER_H_
+#pragma once
 
 /*==============================================================================
+Thread timer.
 ==============================================================================*/
 
 //******************************************************************************
@@ -28,36 +28,57 @@ typedef CallPointer1<int> TimerCall;
 class ThreadTimer
 {
 public:
-   ThreadTimer();
-  ~ThreadTimer();
-
-   // Executes a timer call periodically, in milliseconds
-   void startTimer (TimerCall aTimerCall,int aTimerPeriod);
-
-   void cancel();
-
-   //---------------------------------------------------------------------------
-   // Members
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Pointer to function to execute periodically
    TimerCall  mTimerCall;
 
    // Period, in milliseconds
-   int        mTimerPeriod;
+   int  mTimerPeriod;
 
    // Current time count, incremented on every timer event.
    // Counts the number of timer events that have occurred
    // since the timer was created.
-   int        mCurrentTimeCount;
+   int  mCurrentTimeCount;
 
 protected:
-   // Platform specific implementation
+   // Pimpl pattern. Used to hide details of the operating system specific
+   // variables, like the timer handle, from the .h file so that this
+   // include file can be complied by different compliers. The class is
+   // defined in the .cpp file, where there is a different version for
+   // different compilers.
    class Specific;
    Specific* mSpecific;
+
+public:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor.
+   ThreadTimer();
+  ~ThreadTimer();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Execute a timer call periodically, in milliseconds
+   void startTimer (TimerCall aTimerCall,int aTimerPeriod);
+
+   // Cancel the timer call.
+   void cancel();
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 
-#endif
 

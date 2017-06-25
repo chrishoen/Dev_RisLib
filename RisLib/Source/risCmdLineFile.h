@@ -1,6 +1,12 @@
-#ifndef _RISCMDLINEFILE_H_
-#define _RISCMDLINEFILE_H_
+#pragma once
+
 /*==============================================================================
+
+LEGACY. THIS IS BEING PHASED OUT
+LEGACY. THIS IS BEING PHASED OUT
+LEGACY. THIS IS BEING PHASED OUT
+LEGACY. THIS IS BEING PHASED OUT
+LEGACY. THIS IS BEING PHASED OUT
 
 Command line file processor
 
@@ -57,5 +63,4 @@ public:
 
 //******************************************************************************
 }//namespace
-#endif
 

@@ -1,9 +1,9 @@
-#ifndef _RISRTABLE_H_
-#define _RISRTABLE_H_
+#pragma once
 /*==============================================================================
 
-These are some real valued table classes that can be used by command line file
-classes. They encapsulate 1 or 2 dimensional tables of doubles.
+Table classes that can be used by the command line file classes.
+One or two dimensional tables classes of doubles.
+One ddimensional talble of string.
 
 ==============================================================================*/
 
@@ -24,45 +24,61 @@ namespace Ris
 class CmdLineDoubleTable1D : public Ris::BaseCmdLineExec
 {
 public:
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // Vector components
+   // Vector components.
    double* mValues;
    int     mRows;
 
-   // Constructor
+   // True if initialized.
+   bool mInitialized;
+   // True if this is the first command line.
+   bool mFirstCmd;
+   // Number of doubles allocated in mValues.
+   int  mAlloc;
+   // Current index into mValues.
+   int  mIndex;
+   // True if all values were read in correctly.
+   bool mValidFlag;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor.
    CmdLineDoubleTable1D();
   ~CmdLineDoubleTable1D();
    void reset();
 
-   // Initialize and allocate memory for the table
+   // Initialize and allocate memory for the table.
    void initialize(int aRows);
 
-   // Access components
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Access components.
    double& e(int aRow);
    double& operator()(int aRow);
    void show(char* aLabel=0);
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
    // Execute, overload used to read from a command line file. This is called
    // for each line in the corresponding table section of the file. It parses 
    // the file command line to read table values
-
    void execute(Ris::CmdLineCmd* aCmd);
 
    // Execute again. reinitializes and calls execute.
    void reexecute(Ris::CmdLineCmd* aCmd);
-
-   // True if initialized
-   bool mInitialized;
-   // True if this is the first command line
-   bool mFirstCmd;
-   // Number of doubles allocated in mValues
-   int  mAlloc;
-   // Current index into mValues
-   int  mIndex;
-   // True if all values freqd in correctly
-   bool mValidFlag;
 };
 
 //******************************************************************************
@@ -73,45 +89,62 @@ public:
 class CmdLineDoubleTable2D : public Ris::BaseCmdLineExec
 {
 public:
-   // Matrix components
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Matrix components.
    double* mValues;
    int     mRows;
    int     mCols;
 
-   // Constructor
+   // True if initialized.
+   bool mInitialized;
+   // True if this is the first command line.
+   bool mFirstCmd;
+   // Number of doubles allocated in mValues.
+   int  mAlloc;
+   // Current index into mValues.
+   int  mIndex;
+   // True if all values were read in correctly.
+   bool mValidFlag;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor.
    CmdLineDoubleTable2D();
   ~CmdLineDoubleTable2D();
    void reset();
 
-   // Initialize and allocate memory for the table
+   // Initialize and allocate memory for the table.
    void initialize(int aRows,int aCols);
 
-   // Access components
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Access components.
    double& e(int aRow,int aCol);
    double& operator()(int aRow,int aCol);
    void show(char* aLabel=0);
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
    // Execute, overload used to read from a command line file. This is called
    // for each line in the corresponding table section of the file. It parses 
    // the file command line to read table values
-
-   // Execute.
    void execute(Ris::CmdLineCmd* aCmd);
 
    // Execute again. reinitializes and calls execute.
    void reexecute(Ris::CmdLineCmd* aCmd);
-
-   // True if initialized
-   bool mInitialized;
-   // True if this is the first command line
-   bool mFirstCmd;
-   // Number of doubles allocated in mValues
-   int  mAlloc;
-   // Current index into mValues
-   int  mIndex;
-   // True if all values freqd in correctly
-   bool mValidFlag;
 };
 
 //******************************************************************************
@@ -122,51 +155,69 @@ public:
 class CmdLineStringTable : public Ris::BaseCmdLineExec
 {
 public:
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
-   // String table components
+   // String table components.
    char*  mStringStore;
    char** mStringPtr;
    int    mRows;
    int    mStringSize;
 
-   // Constructor
+   // True if initialized.
+   bool mInitialized;
+   // True if this is the first command line.
+   bool mFirstCmd;
+   // Number of doubles allocated in mValues.
+   int  mAlloc;
+   // Current index into mValues.
+   int  mIndex;
+   // True if all values were read in correctly.
+   bool mValidFlag;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
    CmdLineStringTable();
   ~CmdLineStringTable();
 
-   // Initialize and allocate memory for the table
+   // Initialize and allocate memory for the table.
    void initialize(
       int     aRows,
       int     aStringSize);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    // Access components
    char* e(int aRow);
    char* operator()(int aRow);
    void show(char* aLabel=0);
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
    // Execute, overload used to read from a command line file. This is called
    // for each line in the corresponding table section of the file. It parses 
    // the file command line to read table values
-
    void execute(Ris::CmdLineCmd* aCmd);
-
-   // True if initialized
-   bool mInitialized;
-   // True if this is the first command line
-   bool mFirstCmd;
-   // Number of doubles allocated in mValues
-   int  mAlloc;
-   // Current index into mValues
-   int  mIndex;
-   // True if all values freqd in correctly
-   bool mValidFlag;
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 }//namespace
-#endif
+
 
 
 

@@ -1,5 +1,4 @@
-#ifndef _RISCALLPOINTER_H_
-#define _RISCALLPOINTER_H_
+#pragma once
 
 //*****************************************************************************
 //*****************************************************************************
@@ -2135,6 +2134,4 @@ CallPointer8<Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, FAS
 #undef FASTDLGT_RETTYPE
 
 } //namespace
-
-#endif
 

@@ -1,7 +1,6 @@
-#ifndef _RISBYTEMSGMONKEY_H_
-#define _RISBYTEMSGMONKEY_H_
+#pragma once
 /*==============================================================================
-ByteContent support classes for messages.
+ByteContent message monkey.
 ==============================================================================*/
 
 //******************************************************************************
@@ -31,6 +30,8 @@ public:
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This is an abstract base class for a message monkey. It can be used
 // by code that receives messages into byte buffers such that the message
 // classes don't have to be visible to the receiving code. Inheriting classes
@@ -45,36 +46,42 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Constructors and initialization:
-
-   BaseMsgMonkey(BaseMsgCreator* aCreator);
-   
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Header processisng:
-
-   // Extract message header parameters from a buffer and validate them
-   // Returns true if the header is valid
-   virtual bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)=0;
+   // Members.
 
    // Message header parameters, these are common to all message headers.
    // They are extracted from an actual received message header. In some
-   // form, all message headers contain these parameters.
-
+   // form, all message headers contain these parameters. These are extracted
+   // from a byte buffer.
    int  mHeaderLength;
    int  mMessageLength;
    int  mMessageType;
    int  mPayloadLength;
    bool mHeaderValidFlag;
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Message processisng:
+   // Message creator, this must be set by the inheritor.
+   BaseMsgCreator* mMsgCreator;
 
-   // Create a new message based on a message type
-   Ris::ByteContent* createMessage(int aMessageType);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor.
+   BaseMsgMonkey(BaseMsgCreator* aCreator);
+   
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, header processisng:
+
+   // Extract message header parameters from a buffer and validate them
+   // Returns true if the header is valid
+   virtual bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)=0;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, message processisng:
 
    // Preprocess a message before it is sent.
    virtual void processBeforeSend(Ris::ByteContent* aMsg){};
@@ -90,18 +97,15 @@ public:
    // This first extracts the header parms.
    Ris::ByteContent* makeMsgFromBuffer (Ris::ByteBuffer* aBuffer);
 
-   // Message creator, this must be set bythe inheritor.
-   BaseMsgCreator* mMsgCreator;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, buffer management:
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Buffer management:
-
-   // Return a contant header length
+   // Return a contant header length.
    virtual int getHeaderLength()=0;
 
-   // Return a contant max buffer size
+   // Return a contant max buffer size.
    virtual int getMaxBufferSize()=0;
 
    // Endianess for buffers associated with the monkey.
@@ -110,10 +114,12 @@ public:
    void setNetworkOrder (bool aNetworkOrder);
    bool mNetworkOrder;
 
-   // Configures a byte buffer endianess
+   // Configure a byte buffer endianess.
    void configureByteBuffer(ByteBuffer* aBuffer);
 };
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // This is an abstract base class for a message monkey creator. It defines
 // a method that inheriting classes overload to create new message monkeys.
@@ -126,6 +132,7 @@ public:
    virtual BaseMsgMonkey* createMonkey() = 0;
 };
 
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

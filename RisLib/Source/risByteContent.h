@@ -1,5 +1,5 @@
-#ifndef _RISBYTECONTENT_H_
-#define _RISBYTECONTENT_H_
+#pragma once
+
 /*==============================================================================
 
 ByteContent and ByteBuffer classes.
@@ -25,6 +25,10 @@ The binary encoding/decoding of a message class is defined by the copyToFrom.
 
 ==============================================================================*/
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 #include "risByteBuffer.h"
 
 //******************************************************************************
@@ -48,11 +52,11 @@ public:
    // buffer. The buffer has a direction flag. If it is true then the class
    // is copied to the buffer, writing it using a binary encode. If it is false 
    // then it is copied from the buffer, reading it using a binary decode.
-    
    virtual void copyToFrom(Ris::ByteBuffer* aBuffer)=0;
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

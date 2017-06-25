@@ -1,5 +1,4 @@
-#ifndef _RISNETTCPMSGCLIENTTHREAD_H_
-#define _RISNETTCPMSGCLIENTTHREAD_H_
+#pragma once
 
 /*==============================================================================
 Tcp client thread classes.
@@ -41,11 +40,17 @@ or callbacks in their configure calls.
 
 #include "risNetTcpMsgSocket.h"
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Ris
 {
 namespace Net
 {
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Base Tcp Client thread.
 //
@@ -69,23 +74,63 @@ namespace Net
 // The thread provides serialized access to the socket and associated 
 // state variables and it provides the context for the blocking of the 
 // recv call.
+//
 
 class TcpMsgClientThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
-   TcpMsgClientThread();
 
-   //--------------------------------------------------------------
-   // Configure:
-
-   // aServerIpAddr     is the server ip address
-   // aServerIpPort     is the server ip port
-   // aMonkey    is the message monkey to be used on receive messages
-   // aRxMsgQCall         is a qcall for receive messages
-   // aSessionQCallChange is a qcall for session changes
-
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+   
    typedef Ris::Threads::QCall1<bool>              SessionQCall;
    typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
+
+   // This is a qcall that is called when a session is established or
+   // disestablished.
+   SessionQCall mSessionQCall;
+
+   // This is a qcall that is called when a message is received.
+   RxMsgQCall   mRxMsgQCall;
+
+   // Socket instance.
+   TcpMsgSocket mSocket;
+
+   // Socket address that socket instance connects to.
+   Sockets::SocketAddress mSocketAddress;
+
+   // Message monkey creator, this is used by the socket to create an instance 
+   // of a message monkey.
+   BaseMsgMonkeyCreator* mMonkeyCreator;
+
+   // If this flag is true then a connection has been established with the 
+   // server and sendMsg can be called.
+   bool mConnectionFlag;
+
+   // Socket flags.
+   int  mFlags;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+   
+   // Constructor.
+   TcpMsgClientThread();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Configure. 
+   // aMonkey             is the message monkey to be used on received messages.
+   // aServerIpAddr       is the server ip address.
+   // aServerIpPort       is the server ip port.
+   // aRxMsgQCall         is a qcall for receive messages.
+   // aSessionQCallChange is a qcall for session changes.
 
    void configure(
       Ris::BaseMsgMonkeyCreator* aMonkey,
@@ -95,19 +140,29 @@ public:
       RxMsgQCall*                aRxMsgQCall,
       int                        aFlags=0); 
 
-   //--------------------------------------------------------------
-   // Thread base class overloads:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, thread base class overloads:
 
-   // threadInitFunction sets up the socket.
-   // threadRunFunction does a while loop that does connect and recv calls
-   // threadExitFunction shuts down the socket.
-   void threadInitFunction(); 
-   void threadRunFunction(); 
-   void threadExitFunction(); 
-   void shutdownThread(); 
+   // Setup the socket.
+   void threadInitFunction()override;
 
-   //--------------------------------------------------------------
-   // Process:
+   // Execute a while loop that does connect and recv calls. The loop exits
+   // when the socket is closed and the termination flag is true.
+   void threadRunFunction()override;
+
+   // Print.
+   void threadExitFunction()override;
+
+   // Set the termination flag, close the socket and wait for the thread to
+   // terminate.
+   void shutdownThread()override; 
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
    
    // This is called by the TcpClientThread threadRunFunction 
    // when a new session is established or an existing session is 
@@ -123,49 +178,20 @@ public:
    // It invokes the mRxMsgQCall that is passed in at configure.
    virtual void processRxMsg (Ris::ByteContent* aMsg);
 
-   //--------------------------------------------------------------
-   // QCall:
-
-   // This is a qcall that is called when a session is
-   // established or disestablished.
-   SessionQCall mSessionQCall;
-
-   // This is a qcall that is called when a message is received
-   RxMsgQCall   mRxMsgQCall;
-
-   //--------------------------------------------------------------
-   // Transmit message:
-
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+   
    // This sends a transmit message through the socket to the server
    // It executes a blocking send() call in the context of the caller.
    // It is protected by a mutex semaphore.
    void sendMsg(ByteContent* aTxMsg);
-
-   //--------------------------------------------------------------
-   // Sockets:
-
-   // Socket instance
-   TcpMsgSocket mSocket;
-
-   // Socket address that socket instance connects to
-   Sockets::SocketAddress mSocketAddress;
-
-   // Message monkey creator, this is used by the socket to
-   // create an instance of a message monkey
-   BaseMsgMonkeyCreator* mMonkeyCreator;
-
-   //--------------------------------------------------------------
-   // State:
-
-   // If this flag is true then a connection has been established 
-   // with the server and sendMsg can be called.
-   bool mConnectionFlag;
-
-   int  mFlags;
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
-#endif
 

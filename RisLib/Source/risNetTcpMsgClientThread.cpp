@@ -166,6 +166,7 @@ void TcpMsgClientThread::threadExitFunction()
 {
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadExitFunction");
 }
+
 //******************************************************************************
 // Shutdown, base class overload.
 // This sets the terminate request flag and closes the socket.

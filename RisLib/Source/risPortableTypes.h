@@ -1,5 +1,4 @@
-#ifndef  _RISPORTABLETYPES_H_
-#define  _RISPORTABLETYPES_H_
+#pragma once
 /*==============================================================================
 These types are intended to be portable across different
 software development environments.
@@ -23,6 +22,4 @@ typedef int      SocketT;
 
 #endif
 }
-
-#endif
 

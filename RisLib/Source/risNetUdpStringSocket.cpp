@@ -29,6 +29,8 @@ UdpRxStringSocket::UdpRxStringSocket()
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // configure the socket
 
 void UdpRxStringSocket::configure(int aPort)
@@ -65,6 +67,8 @@ void UdpRxStringSocket::configure(Sockets::SocketAddress aLocal)
    mValidFlag=mStatus==0;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
@@ -121,6 +125,8 @@ UdpTxStringSocket::UdpTxStringSocket()
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Configure the socket. Use with the next doSendMsg.
 
 void UdpTxStringSocket::configure(int aPort)
@@ -157,6 +163,8 @@ void UdpTxStringSocket::configure(Sockets::SocketAddress aRemote)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This copies a message into a byte buffer and then sends the byte buffer 
 // out the socket. Use with the previous configure.
 
@@ -181,6 +189,9 @@ bool UdpTxStringSocket::doSendString(char* aString)
    return true;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 

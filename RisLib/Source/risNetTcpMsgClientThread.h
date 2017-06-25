@@ -125,12 +125,13 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Configure. 
+   // Configure the thread. 
    // aMonkey             is the message monkey to be used on received messages.
    // aServerIpAddr       is the server ip address.
    // aServerIpPort       is the server ip port.
    // aRxMsgQCall         is a qcall for receive messages.
    // aSessionQCallChange is a qcall for session changes.
+   // aFlags              is some socket flags.
 
    void configure(
       Ris::BaseMsgMonkeyCreator* aMonkey,
@@ -164,18 +165,15 @@ public:
    //***************************************************************************
    // Methods.
    
-   // This is called by the TcpClientThread threadRunFunction 
-   // when a new session is established or an existing session is 
-   // disestablished. It notifies the user of this thread that a
-   // session has changed.
-   //
-   // It invokes the mSessionQCall that is passed in at configure.
+   // Notify the thread owner of this thread that a session has changed. This
+   // is  called by the threadRunFunction  when a new session is established 
+   // or an existing session is disestablished. It invokes the mSessionQCall
+   // that is passed in at configure.
    virtual void processSessionChange  (bool aEstablished);
 
-   // This is called by the TcpClientThread threadRunFunction 
+   // Pass a received message to the thread owner. It invokes the mRxMsgQCall
+   // that is passed in at configure. This is called by the threadRunFunction
    // to process a received message.
-   //
-   // It invokes the mRxMsgQCall that is passed in at configure.
    virtual void processRxMsg (Ris::ByteContent* aMsg);
 
    //***************************************************************************
@@ -183,9 +181,9 @@ public:
    //***************************************************************************
    // Methods.
    
-   // This sends a transmit message through the socket to the server
-   // It executes a blocking send() call in the context of the caller.
-   // It is protected by a mutex semaphore.
+   // Send a transmit message through the socket to the server. It executes a
+   // blocking send() call in the context of the caller. It is protected by a
+   // mutex semaphore.
    void sendMsg(ByteContent* aTxMsg);
 };
 

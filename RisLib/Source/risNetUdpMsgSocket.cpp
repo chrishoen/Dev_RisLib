@@ -1,6 +1,3 @@
-/*==============================================================================
-==============================================================================*/
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -24,10 +21,12 @@ UdpRxMsgSocket::UdpRxMsgSocket()
 {
    mRxLength = 0;
    mRxCount = 0;
-   mValidFlag  = false;
-   mMonkey     = 0;
+   mValidFlag = false;
+   mMonkey = 0;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
@@ -49,16 +48,16 @@ void UdpRxMsgSocket::configure(
    char*                 aLocalIpAddr,
    int                   aLocalIpPort)
 {
-   mRxCount=0;
-   mRxLength=0;
+   mRxCount = 0;
+   mRxLength = 0;
 
-   mLocal.set(aLocalIpAddr,aLocalIpPort);
+   mLocal.set(aLocalIpAddr, aLocalIpPort);
    mMonkey = aMonkeyCreator->createMonkey();
 
    doSocket();
    doBind();
 
-   if (mStatus==0)
+   if (mStatus == 0)
    {
       Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d",
          mLocal.mIpAddr.mString,
@@ -73,7 +72,7 @@ void UdpRxMsgSocket::configure(
          mError);
    }
 
-   mValidFlag=mStatus==0;
+   mValidFlag = mStatus == 0;
 }
 
 //******************************************************************************
@@ -82,11 +81,11 @@ void UdpRxMsgSocket::configure(
 // Receive a datagram from the socket into a byte buffer and then extract a 
 // message from it.
 
-bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
+bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 {
    //---------------------------------------------------------------------------
    // Initialize
-   aMsg=0;
+   aMsg = 0;
 
    // Guard.
    if (!mValidFlag) return false;
@@ -100,28 +99,28 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 
    //---------------------------------------------------------------------------
    // Read the message into the receive buffer.
-   
-   doRecvFrom  (mFromAddress,tBuffer.getBaseAddress(),mRxLength,mMonkey->getMaxBufferSize());
+
+   doRecvFrom(mFromAddress, tBuffer.getBaseAddress(), mRxLength, mMonkey->getMaxBufferSize());
 
    // Guard.
    // If bad status then return false.
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
 
-   if (mRxLength<=0)
+   if (mRxLength <= 0)
    {
-      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR  %d %d",mStatus,mError);
-      if (mStatus<0)
+      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR  %d %d", mStatus, mError);
+      if (mStatus < 0)
          switch (mError)
          {
-            case 0              : return false  ;break;
-            default             : return false  ;break;
-         }   
+         case 0: return false; break;
+         default: return false; break;
+         }
       else
          return false;
    }
 
-   Prn::print(Prn::SocketRun2, "UdpRxMsgSocket rx message %d",mRxLength);
+   Prn::print(Prn::SocketRun2, "UdpRxMsgSocket rx message %d", mRxLength);
 
    // Set the buffer length.
    tBuffer.setLength(mRxLength);
@@ -131,15 +130,15 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // the header.
 
    mMonkey->extractMessageHeaderParms(&tBuffer);
-   
+
    Prn::print(Prn::SocketRun3, "UdpRxMsgSocket rx header %d %d",
-	   mMonkey->mHeaderValidFlag,
-	   mMonkey->mHeaderLength);
+      mMonkey->mHeaderValidFlag,
+      mMonkey->mHeaderLength);
 
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR INVALID HEADER",mStatus,mError);
+      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR INVALID HEADER", mStatus, mError);
       return false;
    }
 
@@ -151,10 +150,10 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    aMsg = mMonkey->getMsgFromBuffer(&tBuffer);
 
    // Test for errors.
-   if (aMsg==0)
+   if (aMsg == 0)
    {
-      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR INVALID MESSAGE",mStatus,mError);
-      mStatus=tBuffer.getError();
+      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR INVALID MESSAGE", mStatus, mError);
+      mStatus = tBuffer.getError();
       return false;
    }
 
@@ -170,12 +169,14 @@ bool UdpRxMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 
 UdpTxMsgSocket::UdpTxMsgSocket()
 {
-   mTxCount=0;
-   mTxLength      = 0;
-   mValidFlag=false;
-   mMonkey=0;
+   mTxCount = 0;
+   mTxLength = 0;
+   mValidFlag = false;
+   mMonkey = 0;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 UdpTxMsgSocket::~UdpTxMsgSocket()
@@ -184,6 +185,8 @@ UdpTxMsgSocket::~UdpTxMsgSocket()
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Configure the socket.
 
 void UdpTxMsgSocket::configure(
@@ -191,14 +194,14 @@ void UdpTxMsgSocket::configure(
    char*                 aRemoteIpAddr,
    int                   aRemoteIpPort)
 {
-   mTxCount=0;
+   mTxCount = 0;
 
-   mRemote.set(aRemoteIpAddr,aRemoteIpPort);
+   mRemote.set(aRemoteIpAddr, aRemoteIpPort);
    mMonkey = aMonkeyCreator->createMonkey();
 
    doSocket();
 
-   if (mStatus==0)
+   if (mStatus == 0)
    {
       Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d",
          mRemote.mIpAddr.mString,
@@ -213,7 +216,7 @@ void UdpTxMsgSocket::configure(
          mError);
    }
 
-   mValidFlag=mStatus==0;
+   mValidFlag = mStatus == 0;
 }
 
 //******************************************************************************
@@ -235,7 +238,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    tBuffer.setCopyTo();
 
    // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tBuffer,aMsg);
+   mMonkey->putMsgToBuffer(&tBuffer, aMsg);
 
    // Delete the message.
    delete aMsg;
@@ -244,10 +247,10 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    mTxMutex.lock();
 
    // Transmit the buffer.
-   mTxLength=tBuffer.getLength();
-   doSendTo(mRemote,tBuffer.getBaseAddress(),mTxLength);
+   mTxLength = tBuffer.getLength();
+   doSendTo(mRemote, tBuffer.getBaseAddress(), mTxLength);
 
-   Prn::print(Prn::SocketRun2, "UdpTxMsgSocket tx message %d",mTxLength);
+   Prn::print(Prn::SocketRun2, "UdpTxMsgSocket tx message %d", mTxLength);
 
    // Mutex.
    mTxMutex.unlock();
@@ -257,7 +260,9 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    return true;
 }
 
-
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 

@@ -1,5 +1,4 @@
-#ifndef _RISNETTCPMSGSERVERTHREAD_H_
-#define _RISNETTCPMSGSERVERTHREAD_H_
+#pragma once
 
 /*==============================================================================
 
@@ -36,11 +35,17 @@ or callbacks in their configure calls.
 
 #include "risNetTcpMsgSocket.h"
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Ris
 {
 namespace Net
 {
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Tcp server hub socket, it is used to manage client connections.
 // It does listen and accept socket calls into tcp stream sockets in response
@@ -58,6 +63,8 @@ public:
    void reconfigure();
 };
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Server thread.
 // This is a single thread that provides the execution context for a tcp
@@ -99,84 +106,33 @@ public:
 class TcpMsgServerThread : public Threads::BaseThreadWithTermFlag
 {
 public:
-   TcpMsgServerThread();
-
-   //--------------------------------------------------------------
-   // Configure :
-
-   // aServerIpAddr     is the server ip address
-   // aServerIpPort     is the server ip port
-   // aMonkey    is the message monkey to be used on receive messages
-   // aRxMsgQCall         is a qcall for receive messages
-   // aSessionQCallChange is a qcall for session changes
-
-   typedef Ris::Threads::QCall2<int,bool>          SessionQCall;
-   typedef Ris::Threads::QCall2<int,Ris::ByteContent*> RxMsgQCall;
-
-   void configure(
-      BaseMsgMonkeyCreator* aMonkeyCreator,
-      char*                 aServerIpAddr,
-      int                   aServerIpPort,
-      int                   aMaxSessions, 
-      SessionQCall*         aSessionQCall,
-      RxMsgQCall*           aRxMsgQCall,
-      int                   aFlags=0);
-
-   //--------------------------------------------------------------
-   // Thread base class overloads:
-
-   // threadInitFunction sets up the hub socket.
-   // threadRunFunction does a select call to process accepts on the hub socket
-   // and recvs on the node sockets.
-
-   void threadInitFunction(); 
-   void threadRunFunction(); 
-   void threadExitFunction(); 
-
-   //--------------------------------------------------------------
-   // Process:
-   
-   // This is called by the BaseTcpClientThread threadRunFunction 
-   // when a new session is established or an existing session is 
-   // disestablished. It notifies the user of this thread that a
-   // session has changed.
-   //
-   // It invokes the mSessionQCall that is passed in at configure.
-   void processSessionChange  (int aSessionIndex,bool aEstablished);
-
-   // This is called by the BaseTcpClientThread threadRunFunction 
-   // to process a received message.
-   //
-   // It invokes the mRxMsgQCall that is passed in at configure.
-   void processRxMsg (int aSessionIndex,Ris::ByteContent* aMsg);
-
-   //--------------------------------------------------------------
-   // QCall:
-
-   // This is a qcall that is called when a session is
-   // established or disestablished.
-   SessionQCall mSessionQCall;
-
-   // This is a qcall that is called when a message is received
-   RxMsgQCall   mRxMsgQCall;
-
-   //--------------------------------------------------------------
-   // Transmit message:
-
-   // This is called by the user of this thread to transmit a message
-   // via the node socket at the session index. It executes a send 
-   // call in the context of the caller.
-   void sendMsg(int aSessionIndex,ByteContent* aMsg);
-
-   //--------------------------------------------------------------
-   // Sockets:
-
-   // Hub socket instance
-   TcpMsgServerHubSocket mHubSocket;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constants.
 
    // Maximum possible number of sessions
    enum {MaxSessions=20};
-   // Maximum configured number of sessions
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   typedef Ris::Threads::QCall2<int,bool>              SessionQCall;
+   typedef Ris::Threads::QCall2<int,Ris::ByteContent*> RxMsgQCall;
+
+   // This is a qcall that is called when a session is established or
+   // disestablished.
+   SessionQCall mSessionQCall;
+
+   // This is a qcall that is called when a message is received.
+   RxMsgQCall   mRxMsgQCall;
+
+   // Hub socket instance.
+   TcpMsgServerHubSocket mHubSocket;
+
+   // Maximum configured number of sessions.
    // 0 < mMaxSessions <= MaxSessions
    int mMaxSessions; 
 
@@ -185,14 +141,11 @@ public:
    // valid flag.
    TcpMsgSocket mNodeSocket[MaxSessions];
 
-   // Socket address that the hub socket binds to
+   // Socket address that the hub socket binds to.
    Sockets::SocketAddress mSocketAddress;
 
    // Message monkey creator for node sockets.
    BaseMsgMonkeyCreator* mMonkeyCreator;
-
-   //--------------------------------------------------------------
-   // State:
 
    // mSessionAllocator.get() allocates a new session index.
    // mSessionAllocator.put() deallocates a   session index.
@@ -210,11 +163,85 @@ public:
    // listening and new client connections will be refused.
    bool mListenFlag;
 
+   // Some socket flags.
    int mFlags;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor.
+   TcpMsgServerThread();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Configure the thread. 
+   // aMonkey             is the message monkey to be used on receive messages.
+   // aServerIpAddr       is the server ip address.
+   // aMaxSessions        is the max number of sessions allowed. 
+   // aServerIpPort       is the server ip port.
+   // aRxMsgQCall         is a qcall for receive messages.
+   // aSessionQCallChange is a qcall for session changes.
+   // aFlags              is some socket flags.
+
+   void configure(
+      BaseMsgMonkeyCreator* aMonkeyCreator,
+      char*                 aServerIpAddr,
+      int                   aServerIpPort,
+      int                   aMaxSessions, 
+      SessionQCall*         aSessionQCall,
+      RxMsgQCall*           aRxMsgQCall,
+      int                   aFlags=0);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, thread base class overloads:
+
+   // Setup the hub socket.
+   void threadInitFunction()override;
+
+   // Execute a select call to process accepts on the hub socket
+   // and recvs on the node sockets.
+   void threadRunFunction()override;
+
+   // Close the hub socekt and all open node sockets..
+   void threadExitFunction()override;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Notify the thread owner of this thread that a session has changed. This
+   // is  called by the threadRunFunction  when a new session is established 
+   // or an existing session is disestablished. It invokes the mSessionQCall
+   // that is passed in at configure.
+   void processSessionChange(int aSessionIndex,bool aEstablished);
+
+   // Pass a received message to the thread owner. It invokes the mRxMsgQCall
+   // that is passed in at configure. This is called by the threadRunFunction
+   // to process a received message.
+   void processRxMsg (int aSessionIndex,Ris::ByteContent* aMsg);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Send a transmit message through the node socket at the session index to the client. It executes
+   // a blocking send() call in the context of the caller. It is protected by a
+   // mutex semaphore.
+   void sendMsg(int aSessionIndex,ByteContent* aMsg);
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
-#endif
 

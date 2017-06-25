@@ -1,11 +1,8 @@
-#ifndef _RISNETUDPSTRINGSOCKET_H_
-#define _RISNETUDPSTRINGSOCKET_H_
+#pragma once
 
 /*==============================================================================
-
-UdpRxStringSocket -- udp receive socket
-UdpTxStringSocket -- udp transmit socket
-
+UDP receive  string socket.
+UDP transmit string socket.
 ==============================================================================*/
 
 //******************************************************************************
@@ -15,93 +12,134 @@ UdpTxStringSocket -- udp transmit socket
 #include "risThreadsThreads.h"
 #include "risSockets.h"
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Ris
 {
 namespace Net
 {
 
 //******************************************************************************
-// Udp receive message socket.
-// Messages are based on the ByteContent message encapsulation scheme.
+//******************************************************************************
+//******************************************************************************
+// Udp receive string socket.
+// Messages are a single string.
 
 class  UdpRxStringSocket : public Sockets::BaseUdpSocket
 {
 public:
-   UdpRxStringSocket(); 
-
-   //--------------------------------------------------------------
-   // Socket:
-
-   // These do socket and bind calls
-   void configure(int aPort);
-   void configure(Sockets::SocketAddress aLocal);
-
-   // This receives a string into the allocated receive buffer
-   // It returns true if successful.
-   // The recvfrom address is stored in mFromAddress.
-   bool doRecvString ();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    Sockets::SocketAddress mFromAddress;
 
-   // Buffer
+   // Buffer.
    static const int cStringSize = 1000;
    char  mRxString[cStringSize];
    int   mRxLength;
 
-   //--------------------------------------------------------------
-   // State:
-
-   // General purpose valid flag
+   // General purpose valid flag.
    bool mValidFlag;
 
-   // Metrics
+   // Metrics.
    int mRxCount;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastrcture.
+
+   // Constructor.
+   UdpRxStringSocket();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Configure the socket. This does socket and bind calls.
+   // These two should be used together
+   void configure(int aPort);
+   void configure(Sockets::SocketAddress aLocal);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Receive a string into the allocated receive buffer.
+   // It returns true if successful.
+   // The recvfrom address is stored in mFromAddress.
+   bool doRecvString ();
+
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Udp transmit message socket.
-// Messages are based on the ByteContent message encapsulation scheme.
+// Messages are a single string.
 
 class  UdpTxStringSocket : public Sockets::BaseUdpSocket
 {
 public:
-   UdpTxStringSocket(); 
 
-   //--------------------------------------------------------------
-   // Socket, these two should be used together
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // These create and configure the socket
-   void configure(int aPort);
-   void configure(Sockets::SocketAddress aRemote);
-
-   // This sends a message over the socket via a blocking send call.
-   // It returns true if successful.
-   // It is protected by the transmit mutex.
-   bool doSendString(char * aString);
-
-   //--------------------------------------------------------------
-
-   // Buffer
+   // Buffer.
    static const int cStringSize = 1000;
    char  mTxString[cStringSize];
    int   mTxLength;
 
-   //--------------------------------------------------------------
-   // Mutex:
-
    // Transmit mutex is used by doSendMsg for mutual exclusion.
    Threads::MutexSemaphore  mTxMutex;
 
-   //--------------------------------------------------------------
-   // State:
-
-   // General purpose valid flag
+   // General purpose valid flag.
    bool mValidFlag;
 
-   // Metrics
+   // Metrics.
    int mTxCount;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastrcture.
+
+   // Constructor.
+   UdpTxStringSocket(); 
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Configure the socket. This does socket and bind calls.
+   // These two should be used together
+   void configure(int aPort);
+   void configure(Sockets::SocketAddress aRemote);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Send a message over the socket via a blocking send call.
+   // It returns true if successful.
+   // It is protected by the transmit mutex.
+   bool doSendString(char * aString);
+
 };
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
-#endif
 

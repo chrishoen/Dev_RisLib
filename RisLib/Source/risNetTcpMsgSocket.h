@@ -1,10 +1,7 @@
-#ifndef _RISNETTCPMSGSOCKET_H_
-#define _RISNETTCPMSGSOCKET_H_
+#pragma once
 
 /*==============================================================================
-
 Tcp message socket class.
-
 ==============================================================================*/
 
 //******************************************************************************
@@ -18,11 +15,17 @@ Tcp message socket class.
 #include "risSockets.h"
 #include "risThreadsThreads.h"
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Ris
 {
 namespace Net
 {
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Tcp stream socket, blocking.
 //
@@ -40,58 +43,74 @@ namespace Net
 class TcpMsgSocket : public Sockets::BaseTcpStreamSocket
 {
 public:
-   TcpMsgSocket(); 
-  ~TcpMsgSocket(); 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   //--------------------------------------------------------------
-   // Socket:
-
-   // These do socket and bind calls
-   void configure(
-      BaseMsgMonkeyCreator*  aMonkeyCreator,
-      Sockets::SocketAddress aSocketAddress);
-
-   void configure(
-      BaseMsgMonkeyCreator*  aMonkeyCreator);
-
-   void reconfigure(); 
-
-   // This receives a message from the socket via blocking recv calls.
-   // It returns true if successful.
-   bool doReceiveMsg (ByteContent*& aRxMsg);
-
-   // This sends a message over the socket via a blocking send call.
-   // It returns true if successful.
-   // It is protected by the transmit mutex.
-   bool doSendMsg (ByteContent*  aTxMsg);
-
-   // These are message monkeys that are used to get details about 
-   // a message from a message header that is contained in a
-   // byte buffer. The receive message monkey allows the doRecvMsg
-   // method to receive and extract a message from a byte buffer 
-   // without the having the message code visible to it. The transmit
-   // message monkey allows the doSendMsg method to set header data
-   // before the message is sent.
-
+   // This a  message monkey that is used to get details about  a message from
+   // a message header that is contained in a byte buffer. For receive, the 
+   // message monkey allows the doRecvMsg method to receive and extract a
+   // message from a byte buffer without the having the message code visible
+   // to it. For transmit, message monkey allows the doSendMsg method to set
+   // header data before the message is sent.
    BaseMsgMonkey* mMonkey;
-
-   //--------------------------------------------------------------
-   // Mutex:
 
    // Transmit mutex is used by doSendMsg for mutual exclusion.
    Threads::MutexSemaphore  mTxMutex;
 
-   //--------------------------------------------------------------
-   // State:
-
-   // General purpose valid flag
+   // General purpose valid flag.
    bool mValidFlag;
 
-   // Metrics
+   // Metrics.
    int mTxMsgCount;
    int mRxMsgCount;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastrcture.
+
+   // Constructor.
+   TcpMsgSocket(); 
+  ~TcpMsgSocket(); 
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Do socket and bind calls.
+   void configure(
+      BaseMsgMonkeyCreator*  aMonkeyCreator,
+      Sockets::SocketAddress aSocketAddress);
+
+   // Do socket and bind calls.
+   void configure(
+      BaseMsgMonkeyCreator*  aMonkeyCreator);
+
+   // Reconfigure.
+   void reconfigure(); 
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Receive a message from the socket via blocking recv calls.
+   // It returns true if successful.
+   bool doReceiveMsg (ByteContent*& aRxMsg);
+
+   // Send a message over the socket via a blocking send call.
+   // It returns true if successful.
+   // It is protected by the transmit mutex.
+   bool doSendMsg (ByteContent*  aTxMsg);
+
 };
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
-#endif
 

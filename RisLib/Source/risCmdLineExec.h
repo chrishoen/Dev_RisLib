@@ -1,10 +1,7 @@
-#ifndef _RIS_CMDLINEEXEC_H_
-#define _RIS_CMDLINEEXEC_H_
+#pragma once
 
 /*==============================================================================
-
 Command line executive base class.
-
 ==============================================================================*/
 
 #include "risCmdLineCmd.h"
@@ -12,6 +9,9 @@ Command line executive base class.
 
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Ris
 {
 
@@ -30,40 +30,58 @@ class CmdLineExecNestedAnchor;
 class BaseCmdLineExec
 {
 public:
-   //---------------------------------------------------------------------------
-   // Constructor
-
-   BaseCmdLineExec();
-   virtual void reset (){};
-
-   //---------------------------------------------------------------------------
-   // This is overridden by inheriting classes to execute individual command
-   // lines. This is called by command line processors that process sequences
-   // of command lines.
-
-   virtual void execute(CmdLineCmd* aCmd)=0;
-
-   //---------------------------------------------------------------------------
-   // Nested anchor, used for processing nested records. The command contains
-   // a pointer to the nested anchor
-
-   void nestedPush (CmdLineCmd* aCmd, BaseCmdLineExec* aNextExec);
-   void nestedPop  (CmdLineCmd* aCmd);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Nested brace level.
    int mNestedLevel;
+
+   // If true then an exit has been entered or forced.
+   bool   mExitFlag;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor
+   BaseCmdLineExec();
+   virtual void reset (){};
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // This is overridden by inheriting classes to execute individual command
+   // lines. This is called by command line processors that process sequences
+   // of command lines.
+   virtual void execute(CmdLineCmd* aCmd)=0;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Nested anchor, used for processing nested records. The command contains
+   // a pointer to the nested anchor
+   void nestedPush (CmdLineCmd* aCmd, BaseCmdLineExec* aNextExec);
+   void nestedPop  (CmdLineCmd* aCmd);
 
    // Test the command for a brace change in the nested level.
    // If it is the end of a nested level then pop back out.
    void testNestedLevel (CmdLineCmd* aCmd);
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
    // This can be called to indicate to the command line processor to exit a
    // sequence of commands, as if "EXIT" was the command.
-
-   void   forceExit();
-   bool   mExitFlag;
-
+   void forceExit();
 };
 
 //******************************************************************************
@@ -79,27 +97,43 @@ public:
 class CmdLineExecNestedAnchor
 {
 public:
-   // Constructor
-   CmdLineExecNestedAnchor();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // Initialize 
-   void initialize(BaseCmdLineExec* aInitialExec);
-   // Push executive onto the stack and set current executive
-   void nestedPush(BaseCmdLineExec* aNextExec);
-   // Pop executive from the stack to set the current executive
-   void nestedPop();
-
-   // True if there was a push or pop
+   // True if there was a push or pop.
    bool mChangeFlag;
 
-   // Current executive
+   // Current executive.
    BaseCmdLineExec* mExec;
 
-   // Stack of nested executive pointers
+   // Stack of nested executive pointers.
    Ris::Containers::Stack<BaseCmdLineExec*,20> mExecStack;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infastructure.
+
+   // Constructor.
+   CmdLineExecNestedAnchor();
+   // Initialize.
+   void initialize(BaseCmdLineExec* aInitialExec);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Push executive onto the stack and set current executive.
+   void nestedPush(BaseCmdLineExec* aNextExec);
+   // Pop executive from the stack to set the current executive.
+   void nestedPop();
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

@@ -1,6 +1,3 @@
-/*==============================================================================
-==============================================================================*/
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -20,7 +17,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor
+// Constructor.
 
 BaseCmdLineExec::BaseCmdLineExec()
 {
@@ -31,38 +28,44 @@ BaseCmdLineExec::BaseCmdLineExec()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Exit
+// Exit.
 
 void BaseCmdLineExec::forceExit()
 {
-   // This can be used to cause and "EXIT" command for the executer
+   // This can be used to cause an "EXIT" command for the executer.
    mExitFlag=true;;
 }
 
 //******************************************************************************
-// Push the executive onto the nested executive stack
+//******************************************************************************
+//******************************************************************************
+// Push the executive onto the nested executive stack.
 
 void BaseCmdLineExec::nestedPush(CmdLineCmd* aCmd,BaseCmdLineExec* aNextExec)
 {
-   // Guard
+   // Guard.
    if (aCmd->mNestedAnchor == 0) return;
 
-   // Push the executive onto the nested executive stack
+   // Push the executive onto the nested executive stack.
    aCmd->mNestedAnchor->nestedPush(aNextExec);
 }
 
 //******************************************************************************
-// Pop the executive from the nested executive stack
+//******************************************************************************
+//******************************************************************************
+// Pop the executive from the nested executive stack.
 
 void BaseCmdLineExec::nestedPop(CmdLineCmd* aCmd)
 {
-   // Guard
+   // Guard.
    if (aCmd->mNestedAnchor == 0) return;
 
-   // Pop the executive from the nested executive stack
+   // Pop the executive from the nested executive stack.
    aCmd->mNestedAnchor->nestedPop();
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Test the command for a brace change in the nested level.
 // If it is the end of a nested level then pop back out.
@@ -83,10 +86,11 @@ void BaseCmdLineExec::testNestedLevel(CmdLineCmd* aCmd)
    }
 
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor
+// Constructor.
 
 CmdLineExecNestedAnchor::CmdLineExecNestedAnchor()
 {
@@ -95,39 +99,49 @@ CmdLineExecNestedAnchor::CmdLineExecNestedAnchor()
 }
 
 //******************************************************************************
-// Initialize 
+//******************************************************************************
+//******************************************************************************
+// Initialize.
+
 void CmdLineExecNestedAnchor::initialize(BaseCmdLineExec* aInitialExec)
 {
    mChangeFlag = false;
    mExec = aInitialExec;
 }
+
 //******************************************************************************
-// Push the executive onto the nested executive stack
+//******************************************************************************
+//******************************************************************************
+// Push the executive onto the nested executive stack.
 
 void CmdLineExecNestedAnchor::nestedPush(BaseCmdLineExec* aNextExec)
 {
-   // Push current executive onto the stack
+   // Push current executive onto the stack.
    mExecStack.push(mExec);
 
-   // Set the current executive
+   // Set the current executive.
    mExec = aNextExec;
 
-   // Change
+   // Change.
    mChangeFlag = true;
 }
 
 //******************************************************************************
-// Pop the executive from the nested executive stack
+//******************************************************************************
+//******************************************************************************
+// Pop the executive from the nested executive stack.
 
 void CmdLineExecNestedAnchor::nestedPop  ()
 {
-   // Pop from the stack to set the current executive 
+   // Pop from the stack to set the current executive.
    mExecStack.pop(mExec);
 
-   // Change
+   // Change.
    mChangeFlag = true;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 }//namespace
 

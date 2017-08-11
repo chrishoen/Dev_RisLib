@@ -6,6 +6,8 @@ Command line file base class. LEGACY.
 //******************************************************************************
 //******************************************************************************
 
+#include "stdafx.h"
+
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>

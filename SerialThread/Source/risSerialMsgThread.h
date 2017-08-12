@@ -10,7 +10,7 @@ Serial I/O message thread.
 
 #include "risThreadsThreads.h"
 #include "risThreadsQCall.h"
-#include "risSerialPort.h"
+#include "risSerialMsgPort.h"
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 
@@ -61,7 +61,7 @@ public:
    int       mRxTimeout;
 
    // Serial port.
-   SerialPort mSerialPort;
+   SerialMsgPort mSerialMsgPort;
 
    //***************************************************************************
    //***************************************************************************
@@ -72,7 +72,7 @@ public:
    // from a message header that is contained in a byte buffer. It allows the 
    // receive method to receive and extract a message from a byte buffer
    // without the having the message code visible to it.
-   BaseMsgMonkey* mMonkey;
+   BaseMsgMonkeyCreator* mMonkeyCreator;
 
    //***************************************************************************
    //***************************************************************************

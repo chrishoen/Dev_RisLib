@@ -24,14 +24,13 @@ SerialMsgThread::SerialMsgThread()
    mPortNumber = 0;
    mPortSetup[0]=0;
    mRxTimeout=0;
-   mMonkey = 0;
+   mMonkeyCreator = 0;
    mTxCount = 0;
    mTxLength = 0;
 }
 
 SerialMsgThread::~SerialMsgThread()
 {
-   if (mMonkey) delete mMonkey;
 }
 
 //******************************************************************************
@@ -50,7 +49,7 @@ void SerialMsgThread::configure(
    strcpy(mPortSetup,aPortSetup);
    mRxTimeout = aRxTimeout;
 
-   mMonkey = aMonkeyCreator->createMonkey();
+   mMonkeyCreator = aMonkeyCreator;
 
    mRxMsgQCall = *aRxMsgQCall;
 }
@@ -65,7 +64,11 @@ void SerialMsgThread::threadInitFunction()
 {
    Prn::print(Prn::SerialInit1, "SerialMsgThread::threadInitFunction");
 
-   mSerialPort.doOpen(mPortNumber,mPortSetup,mRxTimeout);
+   mSerialMsgPort.configure(
+      mMonkeyCreator,
+      mPortNumber,
+      mPortSetup,
+      mRxTimeout);
 }
 
 //******************************************************************************
@@ -81,8 +84,8 @@ void  SerialMsgThread::threadRunFunction()
    
    //----------------------------------------------------------------------------
    // Loop
-#if 0
-   bool tGoing=mSerialPort.mValidFlag;
+
+   bool tGoing=mSerialMsgPort.mValidFlag;
 
    while(tGoing)
    {
@@ -90,7 +93,7 @@ void  SerialMsgThread::threadRunFunction()
       // If a message was received then process it.
       // If a message was not received then the connection was lost.  
       ByteContent* tMsg=0;
-      if (mRxSocket.doReceiveMsg(tMsg))
+      if (mSerialMsgPort.doReceiveMsg(tMsg))
       {
          // Message was correctly received
          // Call the receive method
@@ -108,7 +111,7 @@ void  SerialMsgThread::threadRunFunction()
          tGoing=false;
       }  
    }         
-#endif
+
 }
 
 //******************************************************************************
@@ -136,7 +139,7 @@ void SerialMsgThread::shutdownThread()
 {
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
-   mSerialPort.doClose();
+   mSerialMsgPort.doClose();
 
    BaseThreadWithTermFlag::waitForThreadTerminate();
 }
@@ -160,29 +163,7 @@ void SerialMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 
 bool SerialMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {
-   // Guard.
-   if (!mSerialPort.mValidFlag) return false;
-
-   // Create a byte buffer.
-   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
-
-   // Configure the byte buffer.
-   mMonkey->configureByteBuffer(&tBuffer);
-   tBuffer.setCopyTo();
-
-   // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tBuffer, aMsg);
-
-   // Delete the message.
-   delete aMsg;
-
-   // Transmit the buffer.
-   mTxLength = tBuffer.getLength();
-   mSerialPort.doSendBytes(tBuffer.getBaseAddress(), mTxLength);
-
-   Prn::print(Prn::SocketRun2, "SerialMsgThread tx message %d", mTxLength);
-
-   return true;
+   return mSerialMsgPort.doSendMsg(aMsg);
 }
 
 //******************************************************************************

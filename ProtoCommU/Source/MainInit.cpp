@@ -41,7 +41,8 @@ void main_initialize(int argc,char** argv)
 
    if (argc > 1)
    {
-      ProtoComm::gSettings.initialize(argv[1]);
+      ProtoComm::gSettings.readSection("default");
+      ProtoComm::gSettings.readSection(argv[1]);
       ProtoComm::gSettings.show();
    }
 

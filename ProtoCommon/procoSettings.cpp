@@ -5,18 +5,36 @@
 #include "stdafx.h"
 
 #include "risCmdLineFile.h"
+#include "risPortableCalls.h"
+
 
 #define  _PROCOSETTINGS_CPP_
 #include "procoSettings.h"
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 namespace ProtoComm
 {
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
 
-   Settings::Settings()
+Settings::Settings()
 {
-   mSection[0]=0;
+   reset();
+}
+
+void Settings::reset()
+{
+   BaseClass::reset();
+   strcpy(BaseClass::mDefaultFileName, "ProtoCommSettings.txt");
 
    mMyAppNumber = 0;
    mMyAppRole = 0;
@@ -31,138 +49,95 @@ namespace ProtoComm
    mOtherUdpPort = 0;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Show.
+
 void Settings::show()
 {
-   printf("Settings ******* %s\n", mSection);
+   printf("\n");
+   printf("Settings************************************************ %s\n", mTargetSection);
 
    printf("MyAppNumber               %d\n", mMyAppNumber);
-   printf("MyAppRole                 %d\n", mMyAppRole);
+   printf("MyAppRole                 %s\n", asStringAppRole(mMyAppRole));
 
    printf("TcpServer  %-12s   %d\n",mTcpServerIPAddress,mTcpServerPort);
 
    printf("MyUdp      %-12s   %d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp   %-12s   %d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
-   printf("Settings ******* %s\n", mSection);
-}
-
-//******************************************************************************
-// For a given command line "Begin Section", this returns true
-// if "Section", the first command line argument, is the same as the section 
-// specified in initialize.
-
-bool Settings::isMySection(Ris::CmdLineCmd* aCmd)
-{
-   bool tFlag=false;
-
-   if (aCmd->numArg()==1)
-   {
-      if (aCmd->isArgString(1,mSection))
-      {
-         tFlag=true;
-      }
-   }
-
-   return tFlag;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is called for each command line in the settings file.
-// It processes commands, with arguments
-// BEGIN starts a section, END exits a section
-// Only commands for a section are processed
+// Base class override: Execute a command from the command file to set a 
+// member variable.  Only process commands for the target section.This is
+// called by the associated command file object for each command in the file.
 
 void Settings::execute(Ris::CmdLineCmd* aCmd)
 {
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Section commands
+   if (!isTargetSection(aCmd)) return;
 
-
-	if(aCmd->isCmd("SectionBegin"      ))  mSectionFlag=isMySection(aCmd);
-   if(aCmd->isCmd("SectionEnd"        ))  mSectionFlag=false;
-
-   if (!mSectionFlag) return;
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Only process commands for the section specified in initialize.
-
-   if(aCmd->isCmd("MyAppNumber"     ))   mMyAppNumber = aCmd->argInt(1);
-   if(aCmd->isCmd("MyAppRole"       ))   executeOnMyAppRole (aCmd);
-
-   if(aCmd->isCmd("TcpServer"       ))   executeOnTcpServer (aCmd);
-   if(aCmd->isCmd("MyUdp"           ))   executeOnMyUdp     (aCmd);
-   if(aCmd->isCmd("OtherUdp"        ))   executeOnOtherUdp  (aCmd);
-}
-
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Specific execute 
-
-void Settings::executeOnMyAppRole(Ris::CmdLineCmd* aCmd)
-{
-   if (aCmd->isArgString(1, "TcpServer")) mMyAppRole = cTcpServer;
-   if (aCmd->isArgString(1, "TcpClient")) mMyAppRole = cTcpClient;
-   if (aCmd->isArgString(1, "UdpPeer"))   mMyAppRole = cUdpPeer;
-}
-
-void Settings::executeOnTcpServer(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->copyArgString(1, mTcpServerIPAddress,cMaxStringSize);
-   mTcpServerPort = aCmd->argInt(2);
-}
-
-void Settings::executeOnMyUdp(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->copyArgString(1, mMyUdpIPAddress,cMaxStringSize);
-   mMyUdpPort = aCmd->argInt(2);
-}
-
-void Settings::executeOnOtherUdp(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->copyArgString(1, mOtherUdpIPAddress,cMaxStringSize);
-   mOtherUdpPort = aCmd->argInt(2);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool Settings::initialize(char* aSection)
-{ 
-   // File path
-   char tFilePath[200];
-
-   strcpy(tFilePath, Ris::portableGetSettingsDir());
-   strcat(tFilePath, "procoSettings.txt");
-
-   // Copy arguments
-   strcpy(mSection,aSection);
-   // Apply settings file to this executive   
-   Ris::CmdLineFile tCmdLineFile;
-
-   if (tCmdLineFile.open(tFilePath))
+   if (aCmd->isCmd("TcpServer"))
    {
-      tCmdLineFile.execute(this);
-      tCmdLineFile.close();
-      return true;
+      aCmd->copyArgString(1, mTcpServerIPAddress,cMaxStringSize);
+      mTcpServerPort = aCmd->argInt(2);
    }
-   else
+
+   if (aCmd->isCmd("MyUpd"))
    {
-      printf("Settings::file open failed\n");
-      return false;
+      aCmd->copyArgString(1, mMyUdpIPAddress,cMaxStringSize);
+      mMyUdpPort = aCmd->argInt(2);
+   }
+
+   if (aCmd->isCmd("OtherUpd"))
+   {
+      aCmd->copyArgString(1, mOtherUdpIPAddress,cMaxStringSize);
+      mOtherUdpPort = aCmd->argInt(2);
+   }
+
+   if (aCmd->isCmd("AppRole"))
+   {
+      if (aCmd->isArgString(1,asStringAppRole(cTcpServer)))   mMyAppRole = cTcpServer;
+      if (aCmd->isArgString(1,asStringAppRole(cTcpClient)))   mMyAppRole = cTcpClient;
+      if (aCmd->isArgString(1,asStringAppRole(cUdpPeer)))     mMyAppRole = cUdpPeer;
+   }
+
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Calculate expanded member variables. This is called after the entire
+// section of the command file has been processed.
+
+void Settings::expand()
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+char* Settings::asStringAppRole(int aX)
+{
+   switch (aX)
+   {
+   case cNone              : return "None";
+   case cTcpServer         : return "cTcpServer";
+   case cTcpClient         : return "cTcpClient";
+   case cUdpPeer           : return "cUdpPeer";
+   default : return "UNKNOWN";
    }
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-
-
-

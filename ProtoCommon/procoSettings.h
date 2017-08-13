@@ -1,104 +1,136 @@
-#ifndef _PROCOSETTINGS_H_
-#define _PROCOSETTINGS_H_
+#pragma once
+
 /*==============================================================================
-
-This file contains settings for protocomm. 
-
+Prototype communications message classes.
+Parameters class whose values are read from a command file. 
 ==============================================================================*/
 
-//**********************************************************************
-//**********************************************************************
-//**********************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-#include "risCmdLineFile.h"
+#include "risCmdLineParms.h"
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 namespace ProtoComm
 {
 
-//**********************************************************************
-//**********************************************************************
-//**********************************************************************
-// ProtoCommSettings class, inherits from BaseCmdLineExec to process
-// command lines from a command line file.
-// Each application reads its own print settings from a common settings
-// file. 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a class that contains parameter member variables. The values of
+// the parameters are set by reading a text file that contains command lines.
+// Each command line is of the form "command argument1 argument2 ...".
+// 
+// The command files are partitioned into different sections and only one
+// section can be read at a time to set member variables that are specified
+// in it.
+//
+// The command files are managed by a CmdLineFile object. This opens the 
+// file, reads each line in it, parses the line into a CmdLineCmd command 
+// object, passes the command object to this object for command execution,
+// and then closes the file. 
+//
+// This class inherits from BaseCmdLineParms, which inherits from 
+// BaseCmdLineExec. BaseCmdLineParms provides a method that uses a
+// CmdLineFile object to read and process the file. BaseCmdLineExec provides
+// an abstract execute(cmd) method to which inheritors provide an overload
+// that is called by the CmdLineFile object for each command in the file.
+// This execute method then sets a member variables, according to the
+// command.
+// 
+// This class can contain member variables that also inherit from
+// BaseCmdLineExec. This provides for command files that have a nested
+// structure. If so, then this class is the root.
+// 
 
-class Settings : public Ris::BaseCmdLineExec
+class Settings : public Ris::BaseCmdLineParms
 {
 public:
 
-   //---------------------------------------------------------------------------
-   // Settings members.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constants.
 
+   // Communications node type.
+   static const int cNone      = 0;
    static const int cTcpServer = 1;
    static const int cTcpClient = 2;
    static const int cUdpPeer   = 3;
 
    static const int cMaxStringSize = 30;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members that are read from the parms file.
+
+   // Application settings.
    int  mMyAppNumber;
    int  mMyAppRole;
 
+   // TCP server address and port.
    char mTcpServerIPAddress[cMaxStringSize];
    int  mTcpServerPort;
 
+   // UDP address and port.
    char mMyUdpIPAddress[cMaxStringSize];
    int  mMyUdpPort;
 
+   // UDP address and port.
    char mOtherUdpIPAddress[cMaxStringSize];
    int  mOtherUdpPort;
 
-   //---------------------------------------------------------------------------
-   // Infrastucture. Constructor and such
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Expanded members that are not read from the parms file.
 
-   typedef Ris::BaseCmdLineExec BaseClass;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infrastucture.
+
+   // Constructor,
+   typedef Ris::BaseCmdLineParms BaseClass;
    Settings();
+   void reset();
    void show();
 
-   // Baseclass override, executes for each line in the settings
-   // command line file
+   // Base class override: Execute a command from the command file to set a 
+   // member variable. This is called by the associated command file object
+   // for each command in the file.
+   void execute(Ris::CmdLineCmd* aCmd) override;
 
-   void execute(Ris::CmdLineCmd* aCmd);
+   // Calculate expanded member variables. This is called after the entire
+   // section of the command file has been processed.
+   void expand() override;
 
-   // Specific execute
-   void executeOnMyAppRole  (Ris::CmdLineCmd* aCmd);
-   void executeOnTcpServer  (Ris::CmdLineCmd* aCmd);
-   void executeOnMyUdp      (Ris::CmdLineCmd* aCmd);
-   void executeOnOtherUdp   (Ris::CmdLineCmd* aCmd);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Helpers.
 
-   // Initialize.
-   // aSettingsFileName is the settings filename. aSection is the settings
-   // file section that each application extracts its settings from. 
-   // aSectionMode specifies the section mode. Each section begins with a 
-   // command line, such as "Begin CmdFile Default", where "Begin" is the 
-   // command ,"CmdFile" is  first argument and denotes the section and
-   // "Default" is the second argument and denotes the section mode.
+   static char* asStringAppRole (int aX);
 
-   bool initialize(char* aSection);
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // Section
-
-   char mSection[200];
-   char mSectionMode[200];
-
-   bool isMySection(Ris::CmdLineCmd* aCmd);
-   bool mSectionFlag;
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Global instance
+// Global instance.
 
 #ifdef _PROCOSETTINGS_CPP_
-        Settings gSettings;
+   Settings gSettings;
 #else
-        extern Settings gSettings;
+   extern Settings gSettings;
 #endif
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
-

@@ -1,7 +1,7 @@
-#ifndef _PROCONETWORKTHREAD_H_
-#define _PROCONETWORKTHREAD_H_
+#pragma once
 
 /*==============================================================================
+ProtoComm serial thread.
 ==============================================================================*/
 
 //******************************************************************************
@@ -20,22 +20,48 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This is a qcall thread that obtains serial communications via a serial 
+// message thread member variable.
 
 class  SerialThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Tcp client thread, this manages session connections and 
+   // message transmission and reception
+   Ris::Net::UdpMsgThread*  mUdpMsgThread;
+
+   // Message monkey used by mUdpMsgThread
+   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Metrics.
+   int  mStatusCount1;
+   int  mStatusCount2;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Infrastructure.
+
    SerialThread();
   ~SerialThread();
-
-   //--------------------------------------------------------------
-   // Configure:
-
    void configure();
 
-   //--------------------------------------------------------------
-   // Thread base class overloads:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Thread base class overloads.
 
    // launch starts the child thread + this thread
    // threadExitFunction shuts down the child thread
@@ -44,17 +70,10 @@ public:
    void threadExitFunction(); 
    void executeOnTimer(int);
 
-   //--------------------------------------------------------------
-   // Tcp client thread, this manages session connections and 
-   // message transmission and reception
-
-   Ris::Net::UdpMsgThread*  mUdpMsgThread;
-
-   // Message monkey used by mUdpMsgThread
-   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
-
-   //--------------------------------------------------------------
-   // QCall:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    // QCalls registered to mUdpMsgThread
    Ris::Net::UdpMsgThread::RxMsgQCall    mRxMsgQCall;
@@ -64,38 +83,34 @@ public:
    // mTcpServerThread.
    void executeRxMessage   (Ris::ByteContent* aMsg);
 
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
    // Rx message handlers
-
    void processRxMsg (ProtoComm::TestMsg*  aMsg);
    void processRxMsg (ProtoComm::StatusRequestMsg* aMsg);
    void processRxMsg (ProtoComm::StatusResponseMsg* aMsg);
    void processRxMsg (ProtoComm::DataMsg* aMsg);
 
-   int  mStatusCount1;
-   int  mStatusCount2;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
-   //--------------------------------------------------------------
-   // Send a message
-
+   // Send a message.
    void sendMsg (ProtoComm::BaseMsg* aMsg);
    void sendTestMsg();   
 
 };
 //******************************************************************************
-// Global instance
+//******************************************************************************
+//******************************************************************************
+// Global singular instance.
 
-#ifdef _PROCONETWORKTHREAD_CPP_
+#ifdef _PROCOSERIALTHREAD_CPP_
          SerialThread* gSerialThread;
 #else
 extern   SerialThread* gSerialThread;
 #endif
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-
-
-#endif
-

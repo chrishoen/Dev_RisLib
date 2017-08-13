@@ -10,9 +10,8 @@
 #include "procoSettings.h"
 #include "procoMsgHelper.h"
 
-#define  _PROCONETWORKTHREAD_CPP_
+#define  _PROCOSERIALTHREAD_CPP_
 #include "procoSerialThread.h"
-
 
 namespace ProtoComm
 {
@@ -20,6 +19,7 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
 
 SerialThread::SerialThread()
 {
@@ -32,28 +32,24 @@ SerialThread::SerialThread()
    mRxMsgQCall.bind   (this,&SerialThread::executeRxMessage);
 }
 
-//******************************************************************************
-
 SerialThread::~SerialThread()
 {
    delete mUdpMsgThread;
 }
 
 //******************************************************************************
-// This configures members
+//******************************************************************************
+//******************************************************************************
+// This configures the serial port.
 
 void SerialThread::configure()
 {
    Prn::print(Prn::ThreadInit1, "SerialThread::configure");
 
-   //--------------------------------------------------------------------------- 
-   // Configure message monkey
-
+   // Configure the message monkey.
    mMonkeyCreator.configure(gSettings.mMyAppNumber);
 
-   //---------------------------------------------------------------------------
-   // Configure message thread
-
+   // Configure the message thread.
    mUdpMsgThread->configure(
       &mMonkeyCreator,
       gSettings.mMyUdpIPAddress,
@@ -63,6 +59,8 @@ void SerialThread::configure()
       &mRxMsgQCall);
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void SerialThread::launchThread()
@@ -77,7 +75,10 @@ void SerialThread::launchThread()
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Thread exit function, base class overload.
+
 void  SerialThread::threadExitFunction()
 {
    Prn::print(Prn::ThreadInit1, "SerialThread::threadExitFunction");
@@ -89,6 +90,8 @@ void  SerialThread::threadExitFunction()
    BaseClass::threadExitFunction();
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // QCall
 
@@ -120,6 +123,8 @@ void SerialThread::executeRxMessage(Ris::ByteContent* aMsg)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Message handler for TestMsg.
 
 void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
@@ -128,6 +133,8 @@ void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
    delete aMsg;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Rx message handler - StatusRequestMsg
 
@@ -144,6 +151,8 @@ void SerialThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Rx message handler - StatusResponseMsg
 
 void SerialThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
@@ -153,6 +162,8 @@ void SerialThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Rx message handler - DataMsg
 
 void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
@@ -161,6 +172,8 @@ void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
    delete aMsg;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // QCall
 
@@ -177,6 +190,8 @@ void SerialThread::executeOnTimer(int aTimerCount)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This sends a message via the tcp client thread
 
 void SerialThread::sendMsg (ProtoComm::BaseMsg* aMsg)
@@ -184,6 +199,8 @@ void SerialThread::sendMsg (ProtoComm::BaseMsg* aMsg)
    mUdpMsgThread->sendMsg(aMsg);
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // This sends a test message via the tcp client thread
 
@@ -194,4 +211,7 @@ void SerialThread::sendTestMsg()
    mUdpMsgThread->sendMsg(tMsg);
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace

@@ -50,6 +50,7 @@ void Settings::reset()
 
    mSerialPortNumber = 0;
    mSerialPortSetup[0] = 0;
+   mSerialRxTimeout = 0;
 }
 
 //******************************************************************************
@@ -71,6 +72,7 @@ void Settings::show()
    printf("OtherUdp           %-12s   %5d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
    printf("SerialPort         %5d     %-12s\n",mSerialPortNumber,mSerialPortSetup);
+   printf("SerialRxTimeout    %5d     %5d\n",  mSerialRxTimeout);
 }
 
 //******************************************************************************
@@ -113,6 +115,7 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("SerialPortNumber"))  mSerialPortNumber = aCmd->argInt(1);
    if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup,cMaxStringSize);
+   if (aCmd->isCmd("SerialRxTimeout"))   mSerialRxTimeout = aCmd->argInt(1);
 }
 
 //******************************************************************************

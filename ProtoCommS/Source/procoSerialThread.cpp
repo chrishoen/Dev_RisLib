@@ -26,7 +26,7 @@ SerialThread::SerialThread()
    mStatusCount1=0;
    mStatusCount2=0;
 
-   mUdpMsgThread = new Ris::Net::UdpMsgThread;
+   mSerialMsgThread = new Ris::SerialMsgThread;
 
    // Initialize QCalls
    mRxMsgQCall.bind   (this,&SerialThread::executeRxMessage);
@@ -34,7 +34,7 @@ SerialThread::SerialThread()
 
 SerialThread::~SerialThread()
 {
-   delete mUdpMsgThread;
+   delete mSerialMsgThread;
 }
 
 //******************************************************************************
@@ -50,12 +50,11 @@ void SerialThread::configure()
    mMonkeyCreator.configure(gSettings.mMyAppNumber);
 
    // Configure the message thread.
-   mUdpMsgThread->configure(
+   mSerialMsgThread->configure(
       &mMonkeyCreator,
-      gSettings.mMyUdpIPAddress,
-      gSettings.mMyUdpPort,
-      gSettings.mOtherUdpIPAddress,
-      gSettings.mOtherUdpPort,
+      gSettings.mSerialPortNumber,
+      gSettings.mSerialPortSetup,
+      gSettings.mSerialRxTimeout,
       &mRxMsgQCall);
 }
 
@@ -68,7 +67,7 @@ void SerialThread::launchThread()
    Prn::print(Prn::ThreadInit1, "SerialThread::launch");
 
    // Launch child thread
-   mUdpMsgThread->launchThread(); 
+   mSerialMsgThread->launchThread(); 
    
    // Launch this thread
    BaseClass::launchThread();
@@ -84,7 +83,7 @@ void  SerialThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "SerialThread::threadExitFunction");
 
    // Shutdown the tcp client thread
-   mUdpMsgThread->shutdownThread();
+   mSerialMsgThread->shutdownThread();
 
    // Base class exit
    BaseClass::threadExitFunction();
@@ -143,7 +142,7 @@ void SerialThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
    if (true)
    {
       ProtoComm::StatusResponseMsg* tMsg = new ProtoComm::StatusResponseMsg;
-      mUdpMsgThread->sendMsg(tMsg);
+      mSerialMsgThread->sendMsg(tMsg);
    }
 
    MsgHelper::show(aMsg);
@@ -186,7 +185,7 @@ void SerialThread::executeOnTimer(int aTimerCount)
    ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
    tx->mCode1=101;
 
-   mUdpMsgThread->sendMsg(tx);
+   mSerialMsgThread->sendMsg(tx);
 }
 
 //******************************************************************************
@@ -196,7 +195,7 @@ void SerialThread::executeOnTimer(int aTimerCount)
 
 void SerialThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 {
-   mUdpMsgThread->sendMsg(aMsg);
+   mSerialMsgThread->sendMsg(aMsg);
 }
 
 //******************************************************************************
@@ -208,7 +207,7 @@ void SerialThread::sendTestMsg()
 {
    ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
  
-   mUdpMsgThread->sendMsg(tMsg);
+   mSerialMsgThread->sendMsg(tMsg);
 }
 
 //******************************************************************************

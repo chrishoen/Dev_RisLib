@@ -89,6 +89,7 @@ public:
    // Serial setup and port.
    int  mSerialPortNumber;
    char mSerialPortSetup[cMaxStringSize];
+   int  mSerialRxTimeout;
 
    //***************************************************************************
    //***************************************************************************

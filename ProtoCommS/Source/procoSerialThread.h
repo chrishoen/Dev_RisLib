@@ -7,9 +7,7 @@ ProtoComm serial thread.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risContainers.h"
-#include "risNetUdpMsgThread.h"
-#include "risNetUdpMsgSocket.h"
+#include "risSerialMsgThread.h"
 #include "risThreadsQCallThread.h"
 
 #include "procoMsg.h"
@@ -33,11 +31,11 @@ public:
    //***************************************************************************
    // Members.
 
-   // Tcp client thread, this manages session connections and 
+   // Serial message thread. This manages serial communications and 
    // message transmission and reception
-   Ris::Net::UdpMsgThread*  mUdpMsgThread;
+   Ris::SerialMsgThread*  mSerialMsgThread;
 
-   // Message monkey used by mUdpMsgThread
+   // Message monkey creator used by the serial thread.
    ProtoComm::MsgMonkeyCreator mMonkeyCreator;
 
    //***************************************************************************
@@ -67,7 +65,7 @@ public:
    // threadExitFunction shuts down the child thread
    // executeOnTimer sends a periodic status message.
    void launchThread();
-   void threadExitFunction(); 
+   void threadExitFunction();
    void executeOnTimer(int);
 
    //***************************************************************************
@@ -76,7 +74,7 @@ public:
    // Methods.
 
    // QCalls registered to mUdpMsgThread
-   Ris::Net::UdpMsgThread::RxMsgQCall    mRxMsgQCall;
+   Ris::SerialMsgThread::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

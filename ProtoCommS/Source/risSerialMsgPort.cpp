@@ -82,7 +82,6 @@ void SerialMsgPort::configure(
 
 bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 {
-   Prn::print(0, "LINE101");
    // Guard.
    if (!BaseClass::mValidFlag)
    {
@@ -107,21 +106,18 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Mutex.
    mTxMutex.lock();
 
-   Prn::print(0, "LINE102");
-
    // Transmit the buffer
    int tRet = 0;
    int tLength=tBuffer.getLength();
    tRet = doSendBytes(tBuffer.getBaseAddress(),tLength);
    Prn::print(Prn::SerialRun4, "doSendM %d %d",tRet,tLength);
 
-   Prn::print(0, "LINE103");
    mTxMsgCount++;
 
    // Mutex
    mTxMutex.unlock();
 
-   if (!tRet)
+   if (tRet)
    {
       Prn::print(Prn::SerialRun2, "ERROR SerialMsgPort::doSendMsg FAIL");
    }

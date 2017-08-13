@@ -39,10 +39,16 @@ void main_initialize(int argc,char** argv)
    //---------------------------------------------------------------------------
    // Initialize Settings
 
-   if (argc > 1)
+   if (argc == 1)
    {
       ProtoComm::gSettings.readSection("default");
       ProtoComm::gSettings.readSection(argv[1]);
+      ProtoComm::gSettings.show();
+   }
+   else
+   {
+      ProtoComm::gSettings.readSection("default");
+      ProtoComm::gSettings.readSection("UdpPeer");
       ProtoComm::gSettings.show();
    }
 

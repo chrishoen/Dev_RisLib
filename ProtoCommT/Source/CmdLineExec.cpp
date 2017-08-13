@@ -1,9 +1,5 @@
 
-#include <windows.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "prnPrint.h"
+#include "stdafx.h"
 
 #include "procoSettings.h"
 #include "procoMsg.h"

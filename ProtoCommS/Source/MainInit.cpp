@@ -22,7 +22,7 @@ void main_initialize(int argc,char** argv)
    Prn::initializePrint();
 
    // Initialize print filters
-   Prn::setFilter(Prn::SocketInit1,false);
+   Prn::setFilter(Prn::SocketInit1,true);
    Prn::setFilter(Prn::SocketInit2,true);
    Prn::setFilter(Prn::SocketRun1, false);
    Prn::setFilter(Prn::SocketRun2, false);
@@ -33,9 +33,9 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::SerialInit1,false);
    Prn::setFilter(Prn::SerialInit2,true);
    Prn::setFilter(Prn::SerialRun1, true);
-   Prn::setFilter(Prn::SerialRun2, false);
-   Prn::setFilter(Prn::SerialRun3, false);
-   Prn::setFilter(Prn::SerialRun4, false);
+   Prn::setFilter(Prn::SerialRun2, true);
+   Prn::setFilter(Prn::SerialRun3, true);
+   Prn::setFilter(Prn::SerialRun4, true);
 
    Prn::setFilter(Prn::ThreadRun1, true);
    Prn::setFilter(Prn::ThreadRun2, false);

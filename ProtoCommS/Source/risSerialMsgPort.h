@@ -59,9 +59,6 @@ public:
    // Transmit mutex is used by doSendMsg for mutual exclusion.
    Threads::MutexSemaphore  mTxMutex;
 
-   // General purpose valid flag.
-   bool mValidFlag;
-
    // Metrics.
    int mTxMsgCount;
    int mRxMsgCount;

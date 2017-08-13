@@ -25,7 +25,6 @@ SerialMsgPort::SerialMsgPort()
 {
    mTxMsgCount=0;
    mRxMsgCount=0;
-   mValidFlag=false;
    mMonkey=0;
 }
 
@@ -55,7 +54,7 @@ void SerialMsgPort::configure(
    mPortNumber = aPortNumber;
    strcpy(mPortSetup,aPortSetup);
 
-   doOpen(mPortNumber,mPortSetup,aRxTimeout);
+   BaseClass::doOpen(mPortNumber,mPortSetup,aRxTimeout);
 
    mMonkey = aMonkeyCreator->createMonkey();
 
@@ -63,18 +62,16 @@ void SerialMsgPort::configure(
 
    if (BaseClass::mValidFlag)
    {
-      Prn::print(Prn::SerialInit2, "SerialMsgPort configure       $ %d : %16s",
+      Prn::print(Prn::SerialInit2, "SerialMsgPort configure PASS  $ %d : %16s",
          BaseClass::mPortNumber,
          BaseClass::mPortSetup);
    }
    else
    {
-      Prn::print(Prn::SerialInit2, "SerialMsgPort configure ERROR  $ %d : %16s",
+      Prn::print(Prn::SerialInit2, "SerialMsgPort configure FAIL  $ %d : %16s",
          BaseClass::mPortNumber,
          BaseClass::mPortSetup);
    }
-
-   mValidFlag=BaseClass::mPortHandle!=0;
 }
 
 //******************************************************************************
@@ -85,8 +82,9 @@ void SerialMsgPort::configure(
 
 bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 {
+   Prn::print(0, "LINE101");
    // Guard.
-   if (!mValidFlag)
+   if (!BaseClass::mValidFlag)
    {
       Prn::print(Prn::SerialRun2, "ERROR doSend when Invalid");
       delete aMsg;
@@ -109,12 +107,15 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Mutex.
    mTxMutex.lock();
 
+   Prn::print(0, "LINE102");
+
    // Transmit the buffer
    int tRet = 0;
    int tLength=tBuffer.getLength();
    tRet = doSendBytes(tBuffer.getBaseAddress(),tLength);
    Prn::print(Prn::SerialRun4, "doSendM %d %d",tRet,tLength);
 
+   Prn::print(0, "LINE103");
    mTxMsgCount++;
 
    // Mutex

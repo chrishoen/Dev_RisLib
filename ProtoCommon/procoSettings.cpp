@@ -50,7 +50,7 @@ void Settings::reset()
 
    mSerialPortNumber = 0;
    mSerialPortSetup[0] = 0;
-   mSerialRxTimeout = 0;
+   mSerialRxTimeout = -1;
 }
 
 //******************************************************************************

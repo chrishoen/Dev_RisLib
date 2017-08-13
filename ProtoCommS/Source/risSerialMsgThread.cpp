@@ -80,13 +80,14 @@ void SerialMsgThread::threadInitFunction()
 
 void  SerialMsgThread::threadRunFunction()
 {
-   Prn::print(Prn::SerialRun1, "SerialRxMsgThread::threadRunFunction");
+   Prn::print(Prn::SerialRun1, "SerialRxMsgThread::threadRunFunction %d",mSerialMsgPort.mValidFlag);
    
    //----------------------------------------------------------------------------
    // Loop
 
    bool tGoing=mSerialMsgPort.mValidFlag;
 
+ 
    while(tGoing)
    {
       // Try to receive a message with a blocking receive call.

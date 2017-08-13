@@ -42,11 +42,6 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
 
    Prn::print(Prn::SerialInit1,"SerialPort::doOpen %d",mPortNumber);
 
-   if (mValidFlag)
-   {
-      doClose();
-   }
-
    //--------------------------------------------------------------------------
    // Create file
    char tSerialPortName[24];
@@ -203,15 +198,18 @@ void SerialPort::doPurge()
 int SerialPort::doSendBytes(char* aData, int aNumBytes)
 {
    DWORD tNumWritten;
-
+   Prn::print(0,"LINE200");
    if (!isValid()) return cRetCodeError;
+   Prn::print(0,"LINE201 %d",aNumBytes);
 
    if (WriteFile(mPortHandle, aData, aNumBytes, &tNumWritten, NULL))
    {
+      Prn::print(0,"LINE202");
       return 0;
    }
    else
    {
+      Prn::print(0,"LINE203");
       Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR, %d", GetLastError());
       return cRetCodeError;
    }

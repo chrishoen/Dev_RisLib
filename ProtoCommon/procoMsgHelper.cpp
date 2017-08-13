@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-#include "prnPrint.h"
+#include "stdafx.h"
+
 #include "procoMsgHelper.h"
 
 namespace ProtoComm

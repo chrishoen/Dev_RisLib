@@ -34,6 +34,7 @@
     <ClCompile Include="..\ProtoCommon\procoMsgHelper.cpp">
       <Filter>ProtoCommon</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -57,5 +58,6 @@
     <ClInclude Include="..\ProtoCommon\procoMsgHelper.h">
       <Filter>ProtoCommon</Filter>
     </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
 </Project>

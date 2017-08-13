@@ -41,13 +41,11 @@ void main_initialize(int argc,char** argv)
 
    if (argc == 2)
    {
-      ProtoComm::gSettings.readSection("default");
       ProtoComm::gSettings.readSection(argv[1]);
       ProtoComm::gSettings.show();
    }
    else
    {
-      ProtoComm::gSettings.readSection("default");
       ProtoComm::gSettings.readSection("UdpPeer1");
       ProtoComm::gSettings.show();
    }

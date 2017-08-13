@@ -25,7 +25,7 @@ ClientThread::ClientThread()
 
    mTcpClientThread = new Ris::Net::TcpMsgClientThread;
    mConnectionFlag=false;
-   mPeriodicEnable=true;
+   mPeriodicEnable=false;
    mPeriodicCount=0;
    mStatusCount1=0;
    mStatusCount2=0;

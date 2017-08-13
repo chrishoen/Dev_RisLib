@@ -65,6 +65,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Program", "Program\Program.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialThread", "SerialThread\SerialThread.vcxproj", "{F1A98130-ADD5-4166-AAB6-6D8DE8680CB9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoCommS", "ProtoCommS\ProtoCommS.vcxproj", "{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -297,6 +299,14 @@ Global
 		{F1A98130-ADD5-4166-AAB6-6D8DE8680CB9}.Release|Win32.Build.0 = Release|Win32
 		{F1A98130-ADD5-4166-AAB6-6D8DE8680CB9}.Release|x64.ActiveCfg = Release|x64
 		{F1A98130-ADD5-4166-AAB6-6D8DE8680CB9}.Release|x64.Build.0 = Release|x64
+		{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}.Debug|Win32.Build.0 = Debug|Win32
+		{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}.Debug|x64.ActiveCfg = Debug|x64
+		{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}.Debug|x64.Build.0 = Debug|x64
+		{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}.Release|Win32.ActiveCfg = Release|Win32
+		{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}.Release|Win32.Build.0 = Release|Win32
+		{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}.Release|x64.ActiveCfg = Release|x64
+		{3F5875B0-E4C1-47DA-B3F2-7E6F0926906D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

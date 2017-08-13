@@ -34,12 +34,12 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ThreadRun3,false);
    Prn::setFilter(Prn::ThreadRun4,false);
 
-   Prn::print(0,"ProtoCommU*******************************************BEGIN");
+   Prn::print(0,"ProtoCommU*******************************************BEGIN %d %s",argc,argv[1]);
 
    //---------------------------------------------------------------------------
    // Initialize Settings
 
-   if (argc == 1)
+   if (argc == 2)
    {
       ProtoComm::gSettings.readSection("default");
       ProtoComm::gSettings.readSection(argv[1]);
@@ -48,7 +48,7 @@ void main_initialize(int argc,char** argv)
    else
    {
       ProtoComm::gSettings.readSection("default");
-      ProtoComm::gSettings.readSection("UdpPeer");
+      ProtoComm::gSettings.readSection("UdpPeer1");
       ProtoComm::gSettings.show();
    }
 

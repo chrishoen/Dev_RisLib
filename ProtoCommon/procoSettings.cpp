@@ -34,7 +34,7 @@ Settings::Settings()
 void Settings::reset()
 {
    BaseClass::reset();
-   strcpy(BaseClass::mDefaultFileName, "ProtoCommSettings.txt");
+   strcpy(BaseClass::mDefaultFileName, "ProtoComm_Settings.txt");
 
    mMyAppNumber = 0;
    mMyAppRole = 0;
@@ -80,29 +80,31 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
+   if (aCmd->isCmd("MyAppNumber"))   mMyAppNumber = aCmd->argInt(1);
+
+   if (aCmd->isCmd("MyAppRole"))
+   {
+      if (aCmd->isArgString(1,asStringAppRole(cTcpServer)))   mMyAppRole = cTcpServer;
+      if (aCmd->isArgString(1,asStringAppRole(cTcpClient)))   mMyAppRole = cTcpClient;
+      if (aCmd->isArgString(1,asStringAppRole(cUdpPeer)))     mMyAppRole = cUdpPeer;
+   }
+
    if (aCmd->isCmd("TcpServer"))
    {
       aCmd->copyArgString(1, mTcpServerIPAddress,cMaxStringSize);
       mTcpServerPort = aCmd->argInt(2);
    }
 
-   if (aCmd->isCmd("MyUpd"))
+   if (aCmd->isCmd("MyUdp"))
    {
       aCmd->copyArgString(1, mMyUdpIPAddress,cMaxStringSize);
       mMyUdpPort = aCmd->argInt(2);
    }
 
-   if (aCmd->isCmd("OtherUpd"))
+   if (aCmd->isCmd("OtherUdp"))
    {
       aCmd->copyArgString(1, mOtherUdpIPAddress,cMaxStringSize);
       mOtherUdpPort = aCmd->argInt(2);
-   }
-
-   if (aCmd->isCmd("AppRole"))
-   {
-      if (aCmd->isArgString(1,asStringAppRole(cTcpServer)))   mMyAppRole = cTcpServer;
-      if (aCmd->isArgString(1,asStringAppRole(cTcpClient)))   mMyAppRole = cTcpClient;
-      if (aCmd->isArgString(1,asStringAppRole(cUdpPeer)))     mMyAppRole = cUdpPeer;
    }
 
 }
@@ -126,9 +128,9 @@ char* Settings::asStringAppRole(int aX)
    switch (aX)
    {
    case cNone              : return "None";
-   case cTcpServer         : return "cTcpServer";
-   case cTcpClient         : return "cTcpClient";
-   case cUdpPeer           : return "cUdpPeer";
+   case cTcpServer         : return "TcpServer";
+   case cTcpClient         : return "TcpClient";
+   case cUdpPeer           : return "UdpPeer";
    default : return "UNKNOWN";
    }
 }

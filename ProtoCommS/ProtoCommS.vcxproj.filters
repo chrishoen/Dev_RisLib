@@ -16,9 +16,6 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\procoNetworkThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -35,12 +32,21 @@
       <Filter>ProtoCommon</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Source\procoSerialThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialHeaderBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialMsgPort.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialMsgThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\procoNetworkThread.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">
@@ -59,5 +65,17 @@
       <Filter>ProtoCommon</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Source\procoSerialThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialHeaderBuffer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialMsgPort.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialMsgThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -179,7 +179,10 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\procoNetworkThread.cpp" />
+    <ClCompile Include="Source\procoSerialThread.cpp" />
+    <ClCompile Include="Source\risSerialHeaderBuffer.cpp" />
+    <ClCompile Include="Source\risSerialMsgPort.cpp" />
+    <ClCompile Include="Source\risSerialMsgThread.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -192,7 +195,10 @@
     <ClInclude Include="..\ProtoCommon\procoSettings.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\procoNetworkThread.h" />
+    <ClInclude Include="Source\procoSerialThread.h" />
+    <ClInclude Include="Source\risSerialHeaderBuffer.h" />
+    <ClInclude Include="Source\risSerialMsgPort.h" />
+    <ClInclude Include="Source\risSerialMsgThread.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

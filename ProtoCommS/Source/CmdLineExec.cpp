@@ -5,7 +5,7 @@
 #include "procoMsg.h"
 #include "procoMsgHelper.h"
 
-#include "procoNetworkThread.h"
+#include "procoSerialThread.h"
 
 #include "CmdLineExec.h"
 
@@ -34,7 +34,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
 {
-   gNetworkThread->shutdownThread();
+   gSerialThread->shutdownThread();
 }
 
 //******************************************************************************
@@ -50,14 +50,14 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
       {
          ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
          MsgHelper::initialize(tMsg);
-         gNetworkThread->sendMsg(tMsg);
+         gSerialThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
          ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
          MsgHelper::initialize(tMsg);
-         gNetworkThread->sendMsg(tMsg);
+         gSerialThread->sendMsg(tMsg);
          break;
       }
    }
@@ -67,7 +67,7 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 {
-   gNetworkThread->sendTestMsg();
+   gSerialThread->sendTestMsg();
 }
 
 //******************************************************************************
@@ -76,7 +76,7 @@ void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
 
-   gNetworkThread->sendMsg(tMsg);
+   gSerialThread->sendMsg(tMsg);
 }
 
 
@@ -156,7 +156,7 @@ void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
    ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
    MsgHelper::initialize(tMsg);
 
-   gNetworkThread->sendMsg(tMsg);
+   gSerialThread->sendMsg(tMsg);
 }
 
 

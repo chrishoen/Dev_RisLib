@@ -21,13 +21,13 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 
-class  NetworkThread : public Ris::Threads::BaseQCallThread
+class  SerialThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
 
-   NetworkThread();
-  ~NetworkThread();
+   SerialThread();
+  ~SerialThread();
 
    //--------------------------------------------------------------
    // Configure:
@@ -88,9 +88,9 @@ public:
 // Global instance
 
 #ifdef _PROCONETWORKTHREAD_CPP_
-         NetworkThread* gNetworkThread;
+         SerialThread* gSerialThread;
 #else
-extern   NetworkThread* gNetworkThread;
+extern   SerialThread* gSerialThread;
 #endif
 
 //******************************************************************************

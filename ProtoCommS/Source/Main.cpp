@@ -4,7 +4,7 @@
 #include "CmdLineExec.h"
 
 #include "procoSettings.h"
-#include "procoNetworkThread.h"
+#include "procoSerialThread.h"
 
 #include "MainInit.h"
 
@@ -21,9 +21,9 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Launch threads
 
-   gNetworkThread = new NetworkThread;
-   gNetworkThread->configure();
-   gNetworkThread->launchThread();
+   gSerialThread = new SerialThread;
+   gSerialThread->configure();
+   gSerialThread->launchThread();
 
    //--------------------------------------------------------------------
    // Start user command line executive,
@@ -36,8 +36,8 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // End program
 
-   gNetworkThread->shutdownThread();
-   delete gNetworkThread;
+   gSerialThread->shutdownThread();
+   delete gSerialThread;
 
    main_finalize();
 

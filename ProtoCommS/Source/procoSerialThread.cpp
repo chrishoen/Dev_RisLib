@@ -11,7 +11,7 @@
 #include "procoMsgHelper.h"
 
 #define  _PROCONETWORKTHREAD_CPP_
-#include "procoNetworkThread.h"
+#include "procoSerialThread.h"
 
 
 namespace ProtoComm
@@ -21,7 +21,7 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 
-NetworkThread::NetworkThread()
+SerialThread::SerialThread()
 {
    mStatusCount1=0;
    mStatusCount2=0;
@@ -29,12 +29,12 @@ NetworkThread::NetworkThread()
    mUdpMsgThread = new Ris::Net::UdpMsgThread;
 
    // Initialize QCalls
-   mRxMsgQCall.bind   (this,&NetworkThread::executeRxMessage);
+   mRxMsgQCall.bind   (this,&SerialThread::executeRxMessage);
 }
 
 //******************************************************************************
 
-NetworkThread::~NetworkThread()
+SerialThread::~SerialThread()
 {
    delete mUdpMsgThread;
 }
@@ -42,9 +42,9 @@ NetworkThread::~NetworkThread()
 //******************************************************************************
 // This configures members
 
-void NetworkThread::configure()
+void SerialThread::configure()
 {
-   Prn::print(Prn::ThreadInit1, "NetworkThread::configure");
+   Prn::print(Prn::ThreadInit1, "SerialThread::configure");
 
    //--------------------------------------------------------------------------- 
    // Configure message monkey
@@ -65,9 +65,9 @@ void NetworkThread::configure()
 
 //******************************************************************************
 
-void NetworkThread::launchThread()
+void SerialThread::launchThread()
 {
-   Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
+   Prn::print(Prn::ThreadInit1, "SerialThread::launch");
 
    // Launch child thread
    mUdpMsgThread->launchThread(); 
@@ -78,9 +78,9 @@ void NetworkThread::launchThread()
 
 //******************************************************************************
 // Thread exit function, base class overload.
-void  NetworkThread::threadExitFunction()
+void  SerialThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
+   Prn::print(Prn::ThreadInit1, "SerialThread::threadExitFunction");
 
    // Shutdown the tcp client thread
    mUdpMsgThread->shutdownThread();
@@ -92,7 +92,7 @@ void  NetworkThread::threadExitFunction()
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
+void SerialThread::executeRxMessage(Ris::ByteContent* aMsg)
 {
    ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
@@ -113,7 +113,7 @@ void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
          processRxMsg((ProtoComm::DataMsg*)tMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",tMsg->mMessageType);
+         Prn::print(Prn::ThreadRun1, "SerialThread::executeServerRxMsg ??? %d",tMsg->mMessageType);
          delete tMsg;
          break;
    }
@@ -122,7 +122,7 @@ void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Message handler for TestMsg.
 
-void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
+void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;
@@ -131,7 +131,7 @@ void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 //******************************************************************************
 // Rx message handler - StatusRequestMsg
 
-void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 {
    if (true)
    {
@@ -146,7 +146,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 //******************************************************************************
 // Rx message handler - StatusResponseMsg
 
-void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;
@@ -155,7 +155,7 @@ void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
 //******************************************************************************
 // Rx message handler - DataMsg
 
-void NetworkThread::processRxMsg(ProtoComm::DataMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;
@@ -164,9 +164,9 @@ void NetworkThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 //******************************************************************************
 // QCall
 
-void NetworkThread::executeOnTimer(int aTimerCount)
+void SerialThread::executeOnTimer(int aTimerCount)
 {
-   Prn::print(Prn::ThreadRun2, "NetworkThread::executeRxMessage");
+   Prn::print(Prn::ThreadRun2, "SerialThread::executeRxMessage");
 
    return;
 
@@ -179,7 +179,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
+void SerialThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 {
    mUdpMsgThread->sendMsg(aMsg);
 }
@@ -187,7 +187,7 @@ void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 //******************************************************************************
 // This sends a test message via the tcp client thread
 
-void NetworkThread::sendTestMsg()
+void SerialThread::sendTestMsg()
 {
    ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
  

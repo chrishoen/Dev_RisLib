@@ -33,14 +33,11 @@ SectionEnd
 //********************************************************************
 SectionBegin UdpPeer1
 
-   MyAppNumber   3010
+   MyAppNumber   301
    MyAppRole     UdpPeer
    MyUdp         127.0.0.1 56001
    OtherUdp      127.0.0.1 56002
    
-   Test101       101
-   Test102       102
-
 SectionEnd
 
 //********************************************************************
@@ -51,4 +48,27 @@ SectionBegin UdpPeer2
    MyUdp         127.0.0.1 56002
    OtherUdp      127.0.0.1 56001
 
+SectionEnd
+
+//********************************************************************
+//********************************************************************
+//********************************************************************
+SectionBegin SerialPeer1
+
+   MyAppNumber         401
+   MyAppRole           SerialPeer
+   SerialPortNumber    1
+   SerialPortSetup     38400,N,8,1
+   
+SectionEnd
+
+//********************************************************************
+
+SectionBegin SerialPeer2
+
+   MyAppNumber         402
+   MyAppRole           SerialPeer
+   SerialPortNumber    2
+   SerialPortSetup     38400,N,8,1
+   
 SectionEnd

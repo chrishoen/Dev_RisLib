@@ -47,6 +47,9 @@ void Settings::reset()
 
    mOtherUdpIPAddress[0]=0;
    mOtherUdpPort = 0;
+
+   mSerialPortNumber = 0;
+   mSerialPortSetup[0] = 0;
 }
 
 //******************************************************************************
@@ -59,14 +62,15 @@ void Settings::show()
    printf("\n");
    printf("Settings************************************************ %s\n", mTargetSection);
 
-   printf("MyAppNumber               %d\n", mMyAppNumber);
-   printf("MyAppRole                 %s\n", asStringAppRole(mMyAppRole));
+   printf("MyAppNumber        %d\n", mMyAppNumber);
+   printf("MyAppRole          %s\n", asStringAppRole(mMyAppRole));
 
-   printf("TcpServer  %-12s   %d\n",mTcpServerIPAddress,mTcpServerPort);
+   printf("TcpServer          %-12s   %5d\n",mTcpServerIPAddress,mTcpServerPort);
 
-   printf("MyUdp      %-12s   %d\n",mMyUdpIPAddress,mMyUdpPort);
-   printf("OtherUdp   %-12s   %d\n",mOtherUdpIPAddress,mOtherUdpPort);
+   printf("MyUdp              %-12s   %5d\n",mMyUdpIPAddress,mMyUdpPort);
+   printf("OtherUdp           %-12s   %5d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
+   printf("SerialPort         %5d     %-12s\n",mSerialPortNumber,mSerialPortSetup);
 }
 
 //******************************************************************************
@@ -107,6 +111,8 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
       mOtherUdpPort = aCmd->argInt(2);
    }
 
+   if (aCmd->isCmd("SerialPortNumber"))  mSerialPortNumber = aCmd->argInt(1);
+   if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup,cMaxStringSize);
 }
 
 //******************************************************************************

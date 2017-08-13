@@ -63,16 +63,17 @@ void Settings::show()
    printf("\n");
    printf("Settings************************************************ %s\n", mTargetSection);
 
-   printf("MyAppNumber        %d\n", mMyAppNumber);
-   printf("MyAppRole          %s\n", asStringAppRole(mMyAppRole));
+   printf("MyAppNumber               %5d\n", mMyAppNumber);
+   printf("MyAppRole                 %5s\n", asStringAppRole(mMyAppRole));
 
    printf("TcpServer          %-12s   %5d\n",mTcpServerIPAddress,mTcpServerPort);
 
    printf("MyUdp              %-12s   %5d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp           %-12s   %5d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
-   printf("SerialPort         %5d     %-12s\n",mSerialPortNumber,mSerialPortSetup);
-   printf("SerialRxTimeout    %5d     %5d\n",  mSerialRxTimeout);
+   printf("SerialPort                 %5d\n",  mSerialPortNumber);
+   printf("SerialPort                 %-12s\n",mSerialPortSetup);
+   printf("SerialRxTimeout            %5d\n",  mSerialRxTimeout);
 }
 
 //******************************************************************************

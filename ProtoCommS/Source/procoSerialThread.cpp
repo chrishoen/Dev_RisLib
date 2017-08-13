@@ -6,7 +6,6 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "risSockets.h"
 #include "procoSettings.h"
 #include "procoMsgHelper.h"
 

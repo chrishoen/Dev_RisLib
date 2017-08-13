@@ -57,7 +57,7 @@ SectionBegin SerialPeer1
 
    MyAppNumber         401
    MyAppRole           SerialPeer
-   SerialPortNumber    1
+   SerialPortNumber    3
    SerialPortSetup     38400,N,8,1
    SerialRxTimeout     1000
    
@@ -69,7 +69,7 @@ SectionBegin SerialPeer2
 
    MyAppNumber         402
    MyAppRole           SerialPeer
-   SerialPortNumber    2
+   SerialPortNumber    4
    SerialPortSetup     38400,N,8,1
    SerialRxTimeout     1000
    

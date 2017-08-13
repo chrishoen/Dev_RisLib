@@ -24,17 +24,25 @@ void main_initialize(int argc,char** argv)
    // Initialize print filters
    Prn::setFilter(Prn::SocketInit1,false);
    Prn::setFilter(Prn::SocketInit2,true);
-   Prn::setFilter(Prn::SocketRun1,false);
-   Prn::setFilter(Prn::SocketRun2,false);
-   Prn::setFilter(Prn::SocketRun3,false);
-   Prn::setFilter(Prn::SocketRun4,false);
+   Prn::setFilter(Prn::SocketRun1, false);
+   Prn::setFilter(Prn::SocketRun2, false);
+   Prn::setFilter(Prn::SocketRun3, false);
 
-   Prn::setFilter(Prn::ThreadRun1,true);
-   Prn::setFilter(Prn::ThreadRun2,false);
-   Prn::setFilter(Prn::ThreadRun3,false);
-   Prn::setFilter(Prn::ThreadRun4,false);
+   Prn::setFilter(Prn::SocketRun4, false);
 
-   Prn::print(0,"ProtoCommU*******************************************BEGIN %d %s",argc,argv[1]);
+   Prn::setFilter(Prn::SerialInit1,false);
+   Prn::setFilter(Prn::SerialInit2,true);
+   Prn::setFilter(Prn::SerialRun1, true);
+   Prn::setFilter(Prn::SerialRun2, false);
+   Prn::setFilter(Prn::SerialRun3, false);
+   Prn::setFilter(Prn::SerialRun4, false);
+
+   Prn::setFilter(Prn::ThreadRun1, true);
+   Prn::setFilter(Prn::ThreadRun2, false);
+   Prn::setFilter(Prn::ThreadRun3, false);
+   Prn::setFilter(Prn::ThreadRun4, false);
+
+   Prn::print(0,"ProtoCommS*******************************************BEGIN %d %s",argc,argv[1]);
 
    //---------------------------------------------------------------------------
    // Initialize Settings
@@ -42,12 +50,10 @@ void main_initialize(int argc,char** argv)
    if (argc == 2)
    {
       ProtoComm::gSettings.readSection(argv[1]);
-      ProtoComm::gSettings.show();
    }
    else
    {
-      ProtoComm::gSettings.readSection("UdpPeer1");
-      ProtoComm::gSettings.show();
+      ProtoComm::gSettings.readSection("SerialPeer1");
    }
 
 }

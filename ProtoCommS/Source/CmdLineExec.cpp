@@ -30,6 +30,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"      ))  executeOnGo4 (aCmd);
    if (aCmd->isCmd("GO5"      ))  executeOnGo5 (aCmd);
    if (aCmd->isCmd("GO6"      ))  executeOnGo6 (aCmd);
+   if (aCmd->isCmd("Parms"    ))  executeParms (aCmd);
 }
 //******************************************************************************
 void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
@@ -150,6 +151,8 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
@@ -157,6 +160,20 @@ void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
    MsgHelper::initialize(tMsg);
 
    gSerialThread->sendMsg(tMsg);
+}
+
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,"SerialPeer1");
+
+   ProtoComm::gSettings.reset();
+   ProtoComm::gSettings.readSection(aCmd->argString(1));
+   ProtoComm::gSettings.show();
 }
 
 

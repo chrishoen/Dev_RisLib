@@ -80,7 +80,7 @@ void SerialMsgThread::threadInitFunction()
 
 void  SerialMsgThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketRun1, "SerialRxMsgThread::threadRunFunction");
+   Prn::print(Prn::SerialRun1, "SerialRxMsgThread::threadRunFunction");
    
    //----------------------------------------------------------------------------
    // Loop

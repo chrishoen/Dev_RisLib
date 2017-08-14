@@ -507,7 +507,6 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       return cRetCodeTimeout;
    }
 
-   Prn::print(0,"LINE101 %d",tBytesRead);
    return tBytesRead;
 }
 

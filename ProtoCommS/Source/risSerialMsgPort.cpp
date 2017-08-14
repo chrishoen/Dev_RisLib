@@ -182,6 +182,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
          // Copy from the byte buffer into the message monkey object
          // and validate the header.
          tByteBuffer.setCopyFrom();
+         tByteBuffer.rewind();
          mMonkey->extractMessageHeaderParms(&tByteBuffer);
 
          // If the header is valid then exit the loop.

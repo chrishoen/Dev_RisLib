@@ -20,7 +20,8 @@ namespace Ris
 
 SerialPort::SerialPort()
 {
-   mPortHandle=0;
+   mPortHandle = 0;
+   mRxEventHandle = 0;
 }
 
 SerialPort::~SerialPort(void)
@@ -150,6 +151,11 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
    doPurge();
 
    //--------------------------------------------------------------------------
+   // Create event.
+
+   mRxEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+   //--------------------------------------------------------------------------
    // Done
  
    mValidFlag=true;
@@ -166,6 +172,7 @@ void SerialPort::doClose()
       Prn::print(Prn::SerialInit1,"SerialPort::doClose %d",mPortNumber);
       CancelIoEx(mPortHandle,0);
       CloseHandle(mPortHandle);
+      CloseHandle(mRxEventHandle);
       mPortHandle = INVALID_HANDLE_VALUE;
       mValidFlag = false;
    } 
@@ -359,7 +366,7 @@ int  SerialPort::doReceiveOne(char *aData)
 //******************************************************************************
 // Receive
 
-int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
+int SerialPort::doReceiveBytes22(char *aData, int aNumBytes)
 {
    //---------------------------------------------------------------------------
    // Locals
@@ -371,6 +378,106 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Read from port.
 
    ReadFile(mPortHandle, aData, aNumBytes, &tBytesRead, NULL);
+
+   // If read error:
+   if (GetLastError() != ERROR_SUCCESS)
+   {
+     // Error in communications
+     Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR %d", GetLastError());
+
+     // If the read was aborted then clear hardware error.
+     if (GetLastError()==ERROR_OPERATION_ABORTED)
+     {
+        ClearCommError(mPortHandle,0,0);
+     }
+
+     return cRetCodeError;
+   }
+    
+   if (tBytesRead != aNumBytes)
+   {
+      return cRetCodeTimeout;
+   }
+
+   return 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Receive
+
+int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
+{
+   //---------------------------------------------------------------------------
+   // Locals
+
+   DWORD tRet  = 0;
+   DWORD tBytesRead  = 0;
+   int tBytesTotal = 0;
+
+   bool tReadSuccessful = false;
+   bool tWaitingOnRead = false;
+   OVERLAPPED tOverlapped = {0};
+
+   tOverlapped.hEvent = mRxEventHandle;
+
+   // Issue read operation.
+   if (!ReadFile(mPortHandle, aData, aNumBytes, &tBytesRead, &tOverlapped))
+   {
+      if (GetLastError() == ERROR_IO_PENDING)
+      {
+         tWaitingOnRead = true;
+      }
+      else
+      {
+         Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR 101 %d", GetLastError());
+         return -1;
+      }
+   }
+   else
+   {    
+      tWaitingOnRead = false;
+      tReadSuccessful = true;
+   }
+
+   Prn::print(0,"LINE102");
+   if (tWaitingOnRead)
+   {
+      // Wait for overlapped i/o completion.
+      tRet = WaitForSingleObject(tOverlapped.hEvent, -1);
+
+      // Select on the returned status code.
+      switch(tRet)
+      {
+         // Read completed.
+         case WAIT_OBJECT_0:
+         {
+            if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tBytesRead, FALSE))
+            {
+               Prn::print(Prn::SerialRun1, "SerialPort::doReceiveBytes ERROR 102 %d", GetLastError());
+               return -1;
+            }
+            else
+            {
+               tReadSuccessful = true;
+            }
+            tWaitingOnRead = false;
+         }
+         break;
+         // Read timeput.
+         case WAIT_TIMEOUT:
+         {
+            Prn::print(Prn::SerialRun1, "SerialPort::doReceiveBytes ERROR 103%d", GetLastError());
+            return -1;
+         }
+         default:
+         {
+            Prn::print(Prn::SerialRun1, "SerialPort::doReceiveBytes ERROR 104%d", GetLastError());
+            return -1;
+         }
+      }
+   }
 
    // If read error:
    if (GetLastError() != ERROR_SUCCESS)

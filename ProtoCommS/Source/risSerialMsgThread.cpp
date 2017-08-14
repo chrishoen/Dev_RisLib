@@ -84,9 +84,8 @@ void  SerialMsgThread::threadRunFunction()
    
    //----------------------------------------------------------------------------
    // Loop
-   return;
-   bool tGoing=mSerialMsgPort.mValidFlag;
 
+   bool tGoing=mSerialMsgPort.mValidFlag;
  
    while(tGoing)
    {

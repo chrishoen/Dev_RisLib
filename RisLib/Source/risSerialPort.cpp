@@ -227,9 +227,9 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
    tRet = WriteFile(mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped);
    Prn::print(Prn::SerialRun1, "SerialPort::doSendByte WRITE END");
 
-   if (!tRet)
+   if (tRet==TRUE)
    {
-      Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS, %d", tRet);
+      Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS1");
       return 0;
    }
 
@@ -240,10 +240,11 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
       // OVERLAPPED structure's event has been signaled. 
       case WAIT_OBJECT_0:
       {
-         if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tNumWritten, FALSE))
+         if (GetOverlappedResult(mPortHandle, &tOverlapped, &tNumWritten, FALSE))
          {
-            Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS");
+            Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS2");
             tWriteSuccessful = true;
+            return 0;
          }
          else
          {
@@ -261,6 +262,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
       }
       break;
    }
+   Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS3");
    return 0;
 }
 

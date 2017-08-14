@@ -209,7 +209,6 @@ void SerialPort::doPurge()
 
 int SerialPort::doSendBytes(char* aData, int aNumBytes)
 {
-   Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes START %d",aNumBytes);
    // Guard.
    if (!isValid()) return cRetCodeError;
 
@@ -223,13 +222,11 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
 
    tOverlapped.hEvent = mTxEventHandle;
 
-   Prn::print(Prn::SerialRun1, "SerialPort::doSendByte WRITE BEGIN");
-   tRet = WriteFile(mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped);
-   Prn::print(Prn::SerialRun1, "SerialPort::doSendByte WRITE END");
-
-   if (tRet==TRUE)
+   // Write bytes to the port.
+   if (WriteFile(mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped))
    {
-      Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS1");
+      // Write was successful.
+      Prn::print(Prn::SerialRun4, "SerialPort::doSendBytes PASS1 %d",aNumBytes);
       return 0;
    }
 
@@ -242,7 +239,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
       {
          if (GetOverlappedResult(mPortHandle, &tOverlapped, &tNumWritten, FALSE))
          {
-            Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS2");
+            Prn::print(Prn::SerialRun4, "SerialPort::doSendBytes PASS2 %d",aNumBytes);
             tWriteSuccessful = true;
             return 0;
          }
@@ -262,7 +259,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
       }
       break;
    }
-   Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS3");
+   Prn::print(Prn::SerialRun4, "SerialPort::doSendBytes PASS3 %d",aNumBytes);
    return 0;
 }
 
@@ -488,27 +485,23 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       }
    }
 
-   // If read error:
-// if (GetLastError() != ERROR_SUCCESS)
-   if (false)
+
+   // If the read was aborted then clear hardware error.
+   if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
-     // Error in communications
-     Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR 105 %d", GetLastError());
-
-     // If the read was aborted then clear hardware error.
-     if (GetLastError()==ERROR_OPERATION_ABORTED)
-     {
-        ClearCommError(mPortHandle,0,0);
-     }
-
-     return cRetCodeError;
+      Prn::print(Prn::SerialRun1, "SerialPort::doReceiveBytes ERROR 105 %d", GetLastError());
+      ClearCommError(mPortHandle, 0, 0);
+      return cRetCodeError;
    }
-    
+
+   // If the number of bytes read was wrong then error.
    if (tBytesRead != aNumBytes)
    {
+      Prn::print(Prn::SerialRun1, "SerialPort::doReceiveBytes ERROR 106 %d", GetLastError());
       return cRetCodeTimeout;
    }
 
+   // Done.
    return tBytesRead;
 }
 

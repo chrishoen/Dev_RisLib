@@ -209,6 +209,7 @@ void SerialPort::doPurge()
 
 int SerialPort::doSendBytes(char* aData, int aNumBytes)
 {
+   Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes START %d",aNumBytes);
    // Guard.
    if (!isValid()) return cRetCodeError;
 
@@ -222,7 +223,9 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
 
    tOverlapped.hEvent = mTxEventHandle;
 
+   Prn::print(Prn::SerialRun1, "SerialPort::doSendByte WRITE BEGIN");
    tRet = WriteFile(mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped);
+   Prn::print(Prn::SerialRun1, "SerialPort::doSendByte WRITE END");
 
    if (!tRet)
    {
@@ -239,12 +242,13 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
       {
          if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tNumWritten, FALSE))
          {
-            tWriteSuccessful = false;
+            Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS");
+            tWriteSuccessful = true;
          }
          else
          {
             tWriteSuccessful = false;
-            Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR, %d", GetLastError());
+            Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR 101, %d", GetLastError());
             return cRetCodeError;
          }
       }
@@ -252,7 +256,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
       default:
       {
          tWriteSuccessful = false;
-         Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR, %d", GetLastError());
+         Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR102, %d", GetLastError());
          return cRetCodeError;
       }
       break;

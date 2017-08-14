@@ -22,6 +22,14 @@ SerialHeaderBuffer::SerialHeaderBuffer()
    reset();
 }
 
+SerialHeaderBuffer::SerialHeaderBuffer(int aSize)
+{
+   mArray = new char[aSize];
+   mSize  = aSize;
+   mCount = 0;
+   mIndex = mSize-1;
+}
+
 SerialHeaderBuffer::~SerialHeaderBuffer()
 {
    finalize();
@@ -166,6 +174,7 @@ void SerialHeaderBuffer::show()
 
 void SerialHeaderBuffer::copyTo(Ris::ByteBuffer* aBuffer)
 {
+   // Copy header buffer to the byte buffer.
    for (int i=0;i<mSize;i++)
    {
       char tX = get(i);

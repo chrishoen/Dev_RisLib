@@ -45,6 +45,7 @@ public:
 
    // Constructors.
    SerialHeaderBuffer();
+   SerialHeaderBuffer(int aSize);
   ~SerialHeaderBuffer();
    void reset(); 
 
@@ -83,6 +84,14 @@ public:
 
    // Copy the entire header buffer to a byte buffer.
    void copyTo(Ris::ByteBuffer* aBuffer);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Return true if the buffer is full.
+   bool isFull() {return mCount==mSize;}
 
 };
 

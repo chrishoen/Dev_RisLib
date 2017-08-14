@@ -210,6 +210,10 @@ void  MsgMonkey::configure(int aSourceId)
 
 bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 {
+   // Guard.
+   mHeaderValidFlag = false;
+   if (aBuffer->mWorkingLength < Header::cLength) return false;
+
    // Extract header from buffer
    Header tHeader;
    tHeader.reset();
@@ -220,6 +224,8 @@ bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
    mMessageLength   = tHeader.mMessageLength;
    mMessageType     = tHeader.mMessageIdentifier;
    mPayloadLength   = tHeader.mMessageLength - Header::cLength;
+
+   Prn::print(Prn::SerialRun1, "HEADER101 %08X",tHeader.mSyncWord1);
 
    // Test for error
    bool tError =

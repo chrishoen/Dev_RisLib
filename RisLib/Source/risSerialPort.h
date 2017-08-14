@@ -100,7 +100,6 @@ public:
 
    // Receive data, fixed number of bytes.
    int  doReceiveBytes(char *aData, int aNumBytes);
-   int  doReceiveBytes22(char *aData, int aNumBytes);
 
    // Receive data, terminated with CR/LF.
    int  doReceiveUntilCRLF (char *aData, int aMaxNumBytes);

@@ -12,6 +12,7 @@
 #include "prnPrint.h"
 
 #include "risSerialMsgPort.h"
+#include "risSerialHeaderBuffer.h"
 
 namespace Ris
 {
@@ -91,14 +92,14 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    }
 
    // Create a byte buffer.
-   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
+   ByteBuffer tByteBuffer(mMonkey->getMaxBufferSize());
 
    // Configure the byte buffer.
-   mMonkey->configureByteBuffer(&tBuffer);
-   tBuffer.setCopyTo();
+   mMonkey->configureByteBuffer(&tByteBuffer);
+   tByteBuffer.setCopyTo();
 
    // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tBuffer,aMsg);
+   mMonkey->putMsgToBuffer(&tByteBuffer,aMsg);
 
    // Delete the message.
    delete aMsg;
@@ -108,8 +109,8 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 
    // Transmit the buffer
    int tRet = 0;
-   int tLength=tBuffer.getLength();
-   tRet = doSendBytes(tBuffer.getBaseAddress(),tLength);
+   int tLength=tByteBuffer.getLength();
+   tRet = doSendBytes(tByteBuffer.getBaseAddress(),tLength);
    Prn::print(Prn::SerialRun4, "doSendMsg %d %d",tRet,tLength);
 
    mTxMsgCount++;
@@ -133,63 +134,77 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 
 bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 {
-   //-------------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize.
+
    aMsg=0;
    int tRet=0;
 
    // Create a byte buffer.
-   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
+   ByteBuffer tByteBuffer(mMonkey->getMaxBufferSize());
 
    // Configure the byte buffer.
-   mMonkey->configureByteBuffer(&tBuffer);
-   tBuffer.setCopyTo();
+   mMonkey->configureByteBuffer(&tByteBuffer);
+   tByteBuffer.setCopyTo();
 
-   //-------------------------------------------------------------------------
-   // Read the message header into the receive buffer
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read from the serial port into a serial header buffer.
 
-   int   tHeaderLength = mMonkey->getHeaderLength();
-   char* tHeaderBuffer = tBuffer.getBaseAddress();
+   // Header length.
+   int tHeaderLength = mMonkey->getHeaderLength();
 
-   tRet = doReceiveBytes(tHeaderBuffer,tHeaderLength);
-   Prn::print(Prn::SerialRun4, "doRecvH %d",tRet);
+   // Serial header buffer.
+   SerialHeaderBuffer tHeaderBuffer(mMonkey->getHeaderLength());
 
-   // Guard
-   // If bad status then return false.
-
-   if (!tRet)
+   // Loop through received byte stream to extract the message header.
+   bool tGoing = true;
+   while (tGoing)
    {
-      return false;
+      // Read one byte.
+      char tByte;
+      BaseClass::doReceiveOne(&tByte);
+
+      // Put it to the header buffer.
+      tHeaderBuffer.put(tByte);
+       
+      // If the header buffer is full.
+      if (tHeaderBuffer.isFull())
+      {
+         // Copy the header buffer to the byte buffer.
+         tByteBuffer.setCopyTo();
+         tByteBuffer.reset();
+         tHeaderBuffer.copyTo(&tByteBuffer);
+
+         // Copy from the byte buffer into the message monkey object
+         // and validate the header.
+         tByteBuffer.setCopyFrom();
+         mMonkey->extractMessageHeaderParms(&tByteBuffer);
+
+         // If the header is valid then exit the loop.
+         if (mMonkey->mHeaderValidFlag)
+         {
+            Prn::print(Prn::SerialRun1, "doRecv1 HEADER PASS");
+            tGoing = false;
+         }
+      }
    }
-
-   // Set the buffer length
-   tBuffer.setLength(tHeaderLength);
-
-   //--------------------------------------------------------------
-   // Copy from the receive buffer into the message monkey object
-   // and validate the header
-
-   mMonkey->extractMessageHeaderParms(&tBuffer);
-
-   // If the header is not valid then error
-   if (!mMonkey->mHeaderValidFlag)
-   {
-      Prn::print(Prn::SerialRun1, "ERROR doRecv1 INVALID HEADER");
-      return false;
-   }
-
-   //-------------------------------------------------------------------------
-   // Read the message payload into the receive buffer
+   
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read the message payload into the receive buffer.
 
    int   tPayloadLength = mMonkey->mPayloadLength;
-   char* tPayloadBuffer = tBuffer.getBaseAddress() + tHeaderLength;
+   char* tPayloadBuffer = tByteBuffer.getBaseAddress() + tHeaderLength;
 
    tRet=doReceiveBytes(tPayloadBuffer,tPayloadLength);
    Prn::print(Prn::SerialRun4, "doRecvP %d %d",tRet,tPayloadLength);
 
-   // Guard
    // If bad status then return false.
-
    if (!tRet)
    {
       Prn::print(Prn::SerialRun1, "ERROR doRecv2 INVALID RECV");
@@ -197,15 +212,17 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    }
 
    // Set the buffer length
-   tBuffer.setLength(mMonkey->mMessageLength);
-
+   tByteBuffer.setLength(mMonkey->mMessageLength);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    //--------------------------------------------------------------
    // At this point the buffer contains the complete message.
    // Extract the message from the byte buffer into a new message
    // object and return it.
 
-   tBuffer.rewind();
-   aMsg = mMonkey->getMsgFromBuffer(&tBuffer);
+   tByteBuffer.rewind();
+   aMsg = mMonkey->getMsgFromBuffer(&tByteBuffer);
 
    // Test for errors.
    if (aMsg==0)

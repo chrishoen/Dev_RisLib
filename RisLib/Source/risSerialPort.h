@@ -42,8 +42,9 @@ public:
    // Serial port handle.
    HANDLE mPortHandle;
 
-   // Serial port receive event handle.
+   // Serial port event handles.
    HANDLE mRxEventHandle;
+   HANDLE mTxEventHandle;
 
    // COM1 = 1
    int  mPortNumber;

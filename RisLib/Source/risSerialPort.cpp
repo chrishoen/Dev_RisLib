@@ -22,6 +22,7 @@ SerialPort::SerialPort()
 {
    mPortHandle = 0;
    mRxEventHandle = 0;
+   mTxEventHandle = 0;
 }
 
 SerialPort::~SerialPort(void)
@@ -44,6 +45,12 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
    Prn::print(Prn::SerialInit1,"SerialPort::doOpen %d",mPortNumber);
 
    //--------------------------------------------------------------------------
+   // Create events.
+
+   mRxEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mTxEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+   //--------------------------------------------------------------------------
    // Create file
    char tSerialPortName[24];
    sprintf(tSerialPortName, "COM%u", mPortNumber);
@@ -53,7 +60,7 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
      0, 
      0, 
      OPEN_EXISTING,
-     0,
+     FILE_FLAG_OVERLAPPED,
      0);
 
    if (mPortHandle==INVALID_HANDLE_VALUE)
@@ -151,11 +158,6 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
    doPurge();
 
    //--------------------------------------------------------------------------
-   // Create event.
-
-   mRxEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
-
-   //--------------------------------------------------------------------------
    // Done
  
    mValidFlag=true;
@@ -173,7 +175,10 @@ void SerialPort::doClose()
       CancelIoEx(mPortHandle,0);
       CloseHandle(mPortHandle);
       CloseHandle(mRxEventHandle);
+      CloseHandle(mTxEventHandle);
       mPortHandle = INVALID_HANDLE_VALUE;
+      mRxEventHandle = INVALID_HANDLE_VALUE;
+      mTxEventHandle = INVALID_HANDLE_VALUE;
       mValidFlag = false;
    } 
 }
@@ -204,19 +209,55 @@ void SerialPort::doPurge()
 
 int SerialPort::doSendBytes(char* aData, int aNumBytes)
 {
-   DWORD tNumWritten;
-
+   // Guard.
    if (!isValid()) return cRetCodeError;
 
-   if (WriteFile(mPortHandle, aData, aNumBytes, &tNumWritten, NULL))
+   // Local variables.
+   DWORD tNumWritten;
+   DWORD tRet  = 0;
+
+   bool tWriteSuccessful = false;
+   bool tWaitingOnWrite = false;
+   OVERLAPPED tOverlapped = {0};
+
+   tOverlapped.hEvent = mTxEventHandle;
+
+   tRet = WriteFile(mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped);
+
+   if (!tRet)
    {
+      Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes PASS, %d", tRet);
       return 0;
    }
-   else
+
+   // Write is pending.
+   tRet = WaitForSingleObject(tOverlapped.hEvent, INFINITE);
+   switch(tRet)
    {
-      Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR, %d", GetLastError());
-      return cRetCodeError;
+      // OVERLAPPED structure's event has been signaled. 
+      case WAIT_OBJECT_0:
+      {
+         if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tNumWritten, FALSE))
+         {
+            tWriteSuccessful = false;
+         }
+         else
+         {
+            tWriteSuccessful = false;
+            Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR, %d", GetLastError());
+            return cRetCodeError;
+         }
+      }
+      break;
+      default:
+      {
+         tWriteSuccessful = false;
+         Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR, %d", GetLastError());
+         return cRetCodeError;
+      }
+      break;
    }
+   return 0;
 }
 
 //******************************************************************************
@@ -366,47 +407,6 @@ int  SerialPort::doReceiveOne(char *aData)
 //******************************************************************************
 // Receive
 
-int SerialPort::doReceiveBytes22(char *aData, int aNumBytes)
-{
-   //---------------------------------------------------------------------------
-   // Locals
-
-   DWORD tBytesRead  = 0;
-   int tBytesTotal = 0;
-
-   //---------------------------------------------------------------------------
-   // Read from port.
-
-   ReadFile(mPortHandle, aData, aNumBytes, &tBytesRead, NULL);
-
-   // If read error:
-   if (GetLastError() != ERROR_SUCCESS)
-   {
-     // Error in communications
-     Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR %d", GetLastError());
-
-     // If the read was aborted then clear hardware error.
-     if (GetLastError()==ERROR_OPERATION_ABORTED)
-     {
-        ClearCommError(mPortHandle,0,0);
-     }
-
-     return cRetCodeError;
-   }
-    
-   if (tBytesRead != aNumBytes)
-   {
-      return cRetCodeTimeout;
-   }
-
-   return 0;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Receive
-
 int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
 {
    //---------------------------------------------------------------------------
@@ -422,12 +422,16 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
 
    tOverlapped.hEvent = mRxEventHandle;
 
+   
    // Issue read operation.
-   if (!ReadFile(mPortHandle, aData, aNumBytes, &tBytesRead, &tOverlapped))
+   tRet = ReadFile(mPortHandle, aData, aNumBytes, &tBytesRead, &tOverlapped);
+
+   if (!tRet)
    {
       if (GetLastError() == ERROR_IO_PENDING)
       {
          tWaitingOnRead = true;
+
       }
       else
       {
@@ -441,7 +445,6 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       tReadSuccessful = true;
    }
 
-   Prn::print(0,"LINE102");
    if (tWaitingOnRead)
    {
       // Wait for overlapped i/o completion.
@@ -480,10 +483,11 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    }
 
    // If read error:
-   if (GetLastError() != ERROR_SUCCESS)
+// if (GetLastError() != ERROR_SUCCESS)
+   if (false)
    {
      // Error in communications
-     Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR %d", GetLastError());
+     Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR 105 %d", GetLastError());
 
      // If the read was aborted then clear hardware error.
      if (GetLastError()==ERROR_OPERATION_ABORTED)
@@ -499,7 +503,8 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       return cRetCodeTimeout;
    }
 
-   return 0;
+   Prn::print(0,"LINE101 %d",tBytesRead);
+   return tBytesRead;
 }
 
 //******************************************************************************

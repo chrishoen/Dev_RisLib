@@ -110,7 +110,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    int tRet = 0;
    int tLength=tBuffer.getLength();
    tRet = doSendBytes(tBuffer.getBaseAddress(),tLength);
-   Prn::print(Prn::SerialRun4, "doSendM %d %d",tRet,tLength);
+   Prn::print(Prn::SerialRun4, "doSendMsg %d %d",tRet,tLength);
 
    mTxMsgCount++;
 

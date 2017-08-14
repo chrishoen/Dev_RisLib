@@ -166,7 +166,12 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    {
       // Read one byte.
       char tByte;
-      BaseClass::doReceiveOne(&tByte);
+      tRet = BaseClass::doReceiveOne(&tByte);
+      if (tRet != 1)
+      {
+         Prn::print(Prn::SerialRun1, "doRecv1 HEADER FAIL 101 %d",tRet);
+         return false;
+      }
 
       // Put it to the header buffer.
       tHeaderBuffer.put(tByte);
@@ -188,7 +193,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
          // If the header is valid then exit the loop.
          if (mMonkey->mHeaderValidFlag)
          {
-            Prn::print(Prn::SerialRun1, "doRecv1 HEADER PASS");
+            Prn::print(Prn::SerialRun4, "doRecv1 HEADER PASS");
             tGoing = false;
          }
       }
@@ -212,12 +217,12 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       return false;
    }
 
-   // Set the buffer length
+   // Set the buffer length.
    tByteBuffer.setLength(mMonkey->mMessageLength);
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   //--------------------------------------------------------------
    // At this point the buffer contains the complete message.
    // Extract the message from the byte buffer into a new message
    // object and return it.

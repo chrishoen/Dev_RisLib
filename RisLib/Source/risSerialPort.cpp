@@ -254,7 +254,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
       default:
       {
          tWriteSuccessful = false;
-         Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR102, %d", GetLastError());
+         Prn::print(Prn::SerialRun1, "SerialPort::doSendBytes ERROR 102, %d", GetLastError());
          return cRetCodeError;
       }
       break;
@@ -434,12 +434,11 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       if (GetLastError() == ERROR_IO_PENDING)
       {
          tWaitingOnRead = true;
-
       }
       else
       {
-         Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR 101 %d", GetLastError());
-         return -1;
+//         Prn::print(Prn::SerialRun1,"SerialPort::doReceiveBytes ERROR 101 %d", GetLastError());
+         return cRetCodeError;
       }
    }
    else
@@ -462,7 +461,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
             if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tBytesRead, FALSE))
             {
                Prn::print(Prn::SerialRun1, "SerialPort::doReceiveBytes ERROR 102 %d", GetLastError());
-               return -1;
+               return cRetCodeError;
             }
             else
             {
@@ -475,12 +474,12 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
          case WAIT_TIMEOUT:
          {
             Prn::print(Prn::SerialRun1, "SerialPort::doReceiveBytes ERROR 103%d", GetLastError());
-            return -1;
+            return cRetCodeError;
          }
          default:
          {
             Prn::print(Prn::SerialRun1, "SerialPort::doReceiveBytes ERROR 104%d", GetLastError());
-            return -1;
+            return cRetCodeError;
          }
       }
    }

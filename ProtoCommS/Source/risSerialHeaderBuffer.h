@@ -7,6 +7,12 @@ Serial header buffer
 //******************************************************************************
 //******************************************************************************
 
+#include "risByteBuffer.h"
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Ris
 {
 
@@ -56,16 +62,27 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Shift right and put input value at the left end.
+   // Shift up and put input value at the bottom.
+   void put(char aX) { shiftUp(aX); }
+
+   // Shift up and put input value at the bottom.
    void shiftUp(char aX);
 
-   // Set the left end value
+   // Set the bottom value.
    void setBottom(char aX);
 
-   // Get value
+   // Get value.
    char get(int    aIndex);
    char getTop();
    char getBottom();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Copy the entire header buffer to a byte buffer.
+   void copyTo(Ris::ByteBuffer* aBuffer);
 
 };
 

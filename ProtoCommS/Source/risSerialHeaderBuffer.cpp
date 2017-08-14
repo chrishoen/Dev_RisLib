@@ -152,13 +152,27 @@ char SerialHeaderBuffer::getTop()
 void SerialHeaderBuffer::show()
 {
    printf("SerialHeaderBuffer:                   %3d %3d %1d $$",mIndex,mCount,mValid);
-   for (int j=0;j<mSize;j++)
+   for (int i=0;i<mSize;i++)
    {
-      printf("%3d ", (int)get(j));
+      printf("%3d ", (int)get(i));
    }
    printf("\n");
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy the entire header buffer to a byte buffer.
+
+void SerialHeaderBuffer::copyTo(Ris::ByteBuffer* aBuffer)
+{
+   for (int i=0;i<mSize;i++)
+   {
+      char tX = get(i);
+      aBuffer->copy(&tX);
+   }
+
+}
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

@@ -225,8 +225,6 @@ bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
    mMessageType     = tHeader.mMessageIdentifier;
    mPayloadLength   = tHeader.mMessageLength - Header::cLength;
 
-//   Prn::print(Prn::SerialRun1, "HEADER101 %08X",tHeader.mSyncWord1);
-
    // Test for error
    bool tError =
       tHeader.mSyncWord1 != 0x11111111 ||

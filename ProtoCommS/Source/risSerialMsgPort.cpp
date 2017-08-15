@@ -160,7 +160,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Serial header buffer.
    SerialHeaderBuffer tHeaderBuffer(mMonkey->getHeaderLength());
 
-   // Loop through received byte stream to extract the message header.
+   // Loop through the received byte stream to extract the message header.
    bool tGoing = true;
    while (tGoing)
    {
@@ -184,8 +184,8 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
          tByteBuffer.reset();
          tHeaderBuffer.copyTo(&tByteBuffer);
 
-         // Copy from the byte buffer into the message monkey object
-         // and validate the header.
+         // Copy from the byte buffer into the message monkey object,
+         // extract the header parameters and validate the header.
          tByteBuffer.setCopyFrom();
          tByteBuffer.rewind();
          mMonkey->extractMessageHeaderParms(&tByteBuffer);
@@ -242,6 +242,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    mRxMsgCount++;
    return true;
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

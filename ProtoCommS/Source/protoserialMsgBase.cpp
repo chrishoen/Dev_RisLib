@@ -323,9 +323,6 @@ void Footer::footerReCopyToFrom  (Ris::ByteBuffer* aBuffer)
 
    if (aBuffer->isCopyTo())
    {
-      Prn::print(0,"footerReCopyToFrom mInitialPosition2 %d", mInitialPosition);
-      Prn::print(0,"footerReCopyToFrom getPosition1      %d", aBuffer->getPosition());
-
       // Calculate the checksum of all of the bytes in the buffer before the 
       // footer.
       mCheckSum = 0;
@@ -336,10 +333,10 @@ void Footer::footerReCopyToFrom  (Ris::ByteBuffer* aBuffer)
 
       // Set the buffer position to the start of the footer.
       aBuffer->setPosition (mInitialPosition);
+      aBuffer->setLength   (mInitialPosition);
 
       // Copy the checksum to the buffer.
       aBuffer->copy( &mCheckSum );
-      Prn::print(0,"footerReCopyToFrom getPosition2      %d", aBuffer->getPosition());
    }
    else
    {

@@ -218,8 +218,11 @@ public:
    // Message type. 
    int mMessageType;
 
-   // Message Header 
+   // Message Header. 
    Header mHeader;
+
+   // Message Footer. 
+   Footer mFooter;
 
    // Constructor
    BaseMsg()

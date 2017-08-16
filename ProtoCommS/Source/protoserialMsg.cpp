@@ -34,7 +34,9 @@ void TestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
    aBuffer->copy( &mCode3 );
    aBuffer->copy( &mCode4 );
 
+   mFooter.footerCopyToFrom(aBuffer,this);
    mHeader.headerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer,this);
 }
 
 //******************************************************************************
@@ -53,7 +55,9 @@ void FirstMessageMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 
    aBuffer->copy( & mCode1 );
 
+   mFooter.footerCopyToFrom(aBuffer,this);
    mHeader.headerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer,this);
 }
 
 //******************************************************************************
@@ -88,7 +92,9 @@ void StatusRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
       aBuffer->copy     (& mWords[i] );
    }
 
+   mFooter.footerCopyToFrom(aBuffer,this);
    mHeader.headerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer,this);
 }
 
 //******************************************************************************
@@ -123,7 +129,9 @@ void StatusResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
       aBuffer->copy(&mWords[i]);
    }
 
-   mHeader.headerReCopyToFrom(aBuffer, this);
+   mFooter.footerCopyToFrom(aBuffer,this);
+   mHeader.headerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer,this);
 }
 
 //******************************************************************************
@@ -189,7 +197,9 @@ void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
    aBuffer->copyS( mString1 );
    aBuffer->copyS( mString2 );
 
-   mHeader.headerReCopyToFrom(aBuffer, this);
+   mFooter.footerCopyToFrom(aBuffer,this);
+   mHeader.headerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer,this);
 }
 
 //******************************************************************************
@@ -225,6 +235,9 @@ Ris::ByteContent* MsgCreator::createMsg (int aMessageType)
    return tMsg;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 
 

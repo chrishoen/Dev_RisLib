@@ -6,13 +6,13 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "procoSettings.h"
-#include "procoMsgHelper.h"
+#include "protoserialSettings.h"
+#include "protoserialMsgHelper.h"
 
 #define  _PROCOSERIALTHREAD_CPP_
-#include "procoSerialThread.h"
+#include "protoserialSerialThread.h"
 
-namespace ProtoComm
+namespace ProtoSerial
 {
 
 //******************************************************************************
@@ -95,23 +95,23 @@ void  SerialThread::threadExitFunction()
 
 void SerialThread::executeRxMessage(Ris::ByteContent* aMsg)
 {
-   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
+   ProtoSerial::BaseMsg* tMsg = (ProtoSerial::BaseMsg*)aMsg;
 
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
    switch (tMsg->mMessageType)
    {
-      case ProtoComm::MsgIdT::cTestMsg :
-         processRxMsg((ProtoComm::TestMsg*)tMsg);
+      case ProtoSerial::MsgIdT::cTestMsg :
+         processRxMsg((ProtoSerial::TestMsg*)tMsg);
          break;
-      case ProtoComm::MsgIdT::cStatusRequestMsg :
-         processRxMsg((ProtoComm::StatusRequestMsg*)tMsg);
+      case ProtoSerial::MsgIdT::cStatusRequestMsg :
+         processRxMsg((ProtoSerial::StatusRequestMsg*)tMsg);
          break;
-      case ProtoComm::MsgIdT::cStatusResponseMsg :
-         processRxMsg((ProtoComm::StatusResponseMsg*)tMsg);
+      case ProtoSerial::MsgIdT::cStatusResponseMsg :
+         processRxMsg((ProtoSerial::StatusResponseMsg*)tMsg);
          break;
-      case ProtoComm::MsgIdT::cDataMsg :
-         processRxMsg((ProtoComm::DataMsg*)tMsg);
+      case ProtoSerial::MsgIdT::cDataMsg :
+         processRxMsg((ProtoSerial::DataMsg*)tMsg);
          break;
       default :
          Prn::print(Prn::ThreadRun1, "SerialThread::executeServerRxMsg ??? %d",tMsg->mMessageType);
@@ -125,7 +125,7 @@ void SerialThread::executeRxMessage(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Message handler for TestMsg.
 
-void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
+void SerialThread::processRxMsg(ProtoSerial::TestMsg*  aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;
@@ -136,11 +136,11 @@ void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 //******************************************************************************
 // Rx message handler - StatusRequestMsg
 
-void SerialThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
+void SerialThread::processRxMsg(ProtoSerial::StatusRequestMsg* aMsg)
 {
    if (true)
    {
-      ProtoComm::StatusResponseMsg* tMsg = new ProtoComm::StatusResponseMsg;
+      ProtoSerial::StatusResponseMsg* tMsg = new ProtoSerial::StatusResponseMsg;
       mSerialMsgThread->sendMsg(tMsg);
    }
 
@@ -153,7 +153,7 @@ void SerialThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 //******************************************************************************
 // Rx message handler - StatusResponseMsg
 
-void SerialThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
+void SerialThread::processRxMsg(ProtoSerial::StatusResponseMsg* aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;
@@ -164,7 +164,7 @@ void SerialThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
 //******************************************************************************
 // Rx message handler - DataMsg
 
-void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
+void SerialThread::processRxMsg(ProtoSerial::DataMsg* aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;
@@ -181,7 +181,7 @@ void SerialThread::executeOnTimer(int aTimerCount)
 
    return;
 
-   ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
+   ProtoSerial::TestMsg* tx = new ProtoSerial::TestMsg;
    tx->mCode1=101;
 
    mSerialMsgThread->sendMsg(tx);
@@ -192,7 +192,7 @@ void SerialThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // This sends a message via the tcp client thread
 
-void SerialThread::sendMsg (ProtoComm::BaseMsg* aMsg)
+void SerialThread::sendMsg (ProtoSerial::BaseMsg* aMsg)
 {
    mSerialMsgThread->sendMsg(aMsg);
 }
@@ -204,7 +204,7 @@ void SerialThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 
 void SerialThread::sendTestMsg()
 {
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+   ProtoSerial::TestMsg* tMsg = new ProtoSerial::TestMsg;
  
    mSerialMsgThread->sendMsg(tMsg);
 }

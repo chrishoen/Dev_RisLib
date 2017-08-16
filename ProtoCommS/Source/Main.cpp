@@ -3,12 +3,12 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "procoSettings.h"
-#include "procoSerialThread.h"
+#include "protoserialSettings.h"
+#include "protoserialSerialThread.h"
 
 #include "MainInit.h"
 
-using namespace ProtoComm;
+using namespace ProtoSerial;
 
 //******************************************************************************
 int main(int argc,char** argv)

@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="ProtoCommon">
-      <UniqueIdentifier>{02bf2208-4a4d-44d7-ac5b-b5126377c729}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp">
@@ -19,22 +16,7 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\ProtoCommon\procoMsg.cpp">
-      <Filter>ProtoCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ProtoCommon\procoMsgBase.cpp">
-      <Filter>ProtoCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ProtoCommon\procoSettings.cpp">
-      <Filter>ProtoCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ProtoCommon\procoMsgHelper.cpp">
-      <Filter>ProtoCommon</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Source\procoSerialThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risSerialHeaderBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -42,6 +24,21 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risSerialMsgThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\protoserialMsg.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\protoserialMsgBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\protoserialMsgHelper.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\protoserialSerialThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\protoserialSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -52,22 +49,7 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\ProtoCommon\procoMsg.h">
-      <Filter>ProtoCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ProtoCommon\procoMsgBase.h">
-      <Filter>ProtoCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ProtoCommon\procoSettings.h">
-      <Filter>ProtoCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ProtoCommon\procoMsgHelper.h">
-      <Filter>ProtoCommon</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Source\procoSerialThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risSerialHeaderBuffer.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -75,6 +57,21 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risSerialMsgThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\protoserialMsg.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\protoserialMsgBase.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\protoserialMsgHelper.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\protoserialSerialThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\protoserialSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

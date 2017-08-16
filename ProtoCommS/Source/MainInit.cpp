@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
-#include "procoSettings.h"
+#include "protoserialSettings.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -42,18 +42,18 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ThreadRun3, false);
    Prn::setFilter(Prn::ThreadRun4, false);
 
-   Prn::print(0,"ProtoCommS*******************************************BEGIN %d %s",argc,argv[1]);
+   Prn::print(0,"ProtoSerialS*******************************************BEGIN %d %s",argc,argv[1]);
 
    //---------------------------------------------------------------------------
    // Initialize Settings
 
    if (argc == 2)
    {
-      ProtoComm::gSettings.readSection(argv[1]);
+      ProtoSerial::gSettings.readSection(argv[1]);
    }
    else
    {
-      ProtoComm::gSettings.readSection("SerialPeer1");
+      ProtoSerial::gSettings.readSection("SerialPeer1");
    }
 
 }
@@ -65,7 +65,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoCommU*******************************************END");
+   Prn::print(0,"ProtoSerialU*******************************************END");
 
    // Close print
    Prn::finalizePrint();

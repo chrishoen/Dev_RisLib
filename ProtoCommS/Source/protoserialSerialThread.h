@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-ProtoComm serial thread.
+ProtoSerial serial thread.
 ==============================================================================*/
 
 //******************************************************************************
@@ -10,9 +10,9 @@ ProtoComm serial thread.
 #include "risSerialMsgThread.h"
 #include "risThreadsQCallThread.h"
 
-#include "procoMsg.h"
+#include "protoserialMsg.h"
 
-namespace ProtoComm
+namespace ProtoSerial
 {
 
 //******************************************************************************
@@ -36,7 +36,7 @@ public:
    Ris::SerialMsgThread*  mSerialMsgThread;
 
    // Message monkey creator used by the serial thread.
-   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
+   ProtoSerial::MsgMonkeyCreator mMonkeyCreator;
 
    //***************************************************************************
    //***************************************************************************
@@ -82,10 +82,10 @@ public:
    void executeRxMessage   (Ris::ByteContent* aMsg);
 
    // Rx message handlers
-   void processRxMsg (ProtoComm::TestMsg*  aMsg);
-   void processRxMsg (ProtoComm::StatusRequestMsg* aMsg);
-   void processRxMsg (ProtoComm::StatusResponseMsg* aMsg);
-   void processRxMsg (ProtoComm::DataMsg* aMsg);
+   void processRxMsg (ProtoSerial::TestMsg*  aMsg);
+   void processRxMsg (ProtoSerial::StatusRequestMsg* aMsg);
+   void processRxMsg (ProtoSerial::StatusResponseMsg* aMsg);
+   void processRxMsg (ProtoSerial::DataMsg* aMsg);
 
    //***************************************************************************
    //***************************************************************************
@@ -93,7 +93,7 @@ public:
    // Methods.
 
    // Send a message.
-   void sendMsg (ProtoComm::BaseMsg* aMsg);
+   void sendMsg (ProtoSerial::BaseMsg* aMsg);
    void sendTestMsg();   
 
 };

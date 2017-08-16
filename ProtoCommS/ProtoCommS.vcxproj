@@ -105,7 +105,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\RisLib\Source;..\ProtoCommon;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\RisLib\Source;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -154,7 +154,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>..\RisLib\Source;..\ProtoCommon;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\RisLib\Source;$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -172,14 +172,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\ProtoCommon\procoMsg.cpp" />
-    <ClCompile Include="..\ProtoCommon\procoMsgBase.cpp" />
-    <ClCompile Include="..\ProtoCommon\procoMsgHelper.cpp" />
-    <ClCompile Include="..\ProtoCommon\procoSettings.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\procoSerialThread.cpp" />
+    <ClCompile Include="Source\protoserialMsg.cpp" />
+    <ClCompile Include="Source\protoserialMsgBase.cpp" />
+    <ClCompile Include="Source\protoserialMsgHelper.cpp" />
+    <ClCompile Include="Source\protoserialSerialThread.cpp" />
+    <ClCompile Include="Source\protoserialSettings.cpp" />
     <ClCompile Include="Source\risSerialHeaderBuffer.cpp" />
     <ClCompile Include="Source\risSerialMsgPort.cpp" />
     <ClCompile Include="Source\risSerialMsgThread.cpp" />
@@ -189,13 +189,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ProtoCommon\procoMsg.h" />
-    <ClInclude Include="..\ProtoCommon\procoMsgBase.h" />
-    <ClInclude Include="..\ProtoCommon\procoMsgHelper.h" />
-    <ClInclude Include="..\ProtoCommon\procoSettings.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\procoSerialThread.h" />
+    <ClInclude Include="Source\protoserialMsg.h" />
+    <ClInclude Include="Source\protoserialMsgBase.h" />
+    <ClInclude Include="Source\protoserialMsgHelper.h" />
+    <ClInclude Include="Source\protoserialSerialThread.h" />
+    <ClInclude Include="Source\protoserialSettings.h" />
     <ClInclude Include="Source\risSerialHeaderBuffer.h" />
     <ClInclude Include="Source\risSerialMsgPort.h" />
     <ClInclude Include="Source\risSerialMsgThread.h" />

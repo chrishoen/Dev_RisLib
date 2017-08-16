@@ -1,15 +1,15 @@
 
 #include "stdafx.h"
 
-#include "procoSettings.h"
-#include "procoMsg.h"
-#include "procoMsgHelper.h"
+#include "protoserialSettings.h"
+#include "protoserialMsg.h"
+#include "protoserialMsgHelper.h"
 
-#include "procoSerialThread.h"
+#include "protoserialSerialThread.h"
 
 #include "CmdLineExec.h"
 
-using namespace ProtoComm;
+using namespace ProtoSerial;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
@@ -49,14 +49,14 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
    {
       case 1:
       {
-         ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+         ProtoSerial::TestMsg* tMsg = new ProtoSerial::TestMsg;
          MsgHelper::initialize(tMsg);
          gSerialThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
-         ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+         ProtoSerial::DataMsg* tMsg = new ProtoSerial::DataMsg;
          MsgHelper::initialize(tMsg);
          gSerialThread->sendMsg(tMsg);
          break;
@@ -75,7 +75,7 @@ void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
+   ProtoSerial::StatusRequestMsg* tMsg = new ProtoSerial::StatusRequestMsg;
 
    gSerialThread->sendMsg(tMsg);
 }
@@ -87,15 +87,15 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
-   ProtoComm::TestMsg* tTxMsg = new ProtoComm::TestMsg;
-   ProtoComm::TestMsg* tRxMsg = 0;
+   ProtoSerial::TestMsg* tTxMsg = new ProtoSerial::TestMsg;
+   ProtoSerial::TestMsg* tRxMsg = 0;
    MsgHelper::initialize(tTxMsg);
 
-   ProtoComm::MsgMonkey tMonkey;
+   ProtoSerial::MsgMonkey tMonkey;
 
    tMonkey.putMsgToBuffer(&tBuffer,tTxMsg);
 
-   tRxMsg = (ProtoComm::TestMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
+   tRxMsg = (ProtoSerial::TestMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
 
    MsgHelper::show(tRxMsg);
 
@@ -109,15 +109,15 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
-   ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
-   ProtoComm::DataMsg* tRxMsg = 0;
+   ProtoSerial::DataMsg* tTxMsg = new ProtoSerial::DataMsg;
+   ProtoSerial::DataMsg* tRxMsg = 0;
    MsgHelper::initialize(tTxMsg);
 
-   ProtoComm::MsgMonkey tMonkey;
+   ProtoSerial::MsgMonkey tMonkey;
 
    tMonkey.putMsgToBuffer(&tBuffer,tTxMsg);
 
-   tRxMsg = (ProtoComm::DataMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
+   tRxMsg = (ProtoSerial::DataMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
 
    MsgHelper::show(tRxMsg);
 
@@ -131,8 +131,8 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
-   ProtoComm::DataRecord* tTxMsg = new ProtoComm::DataRecord;
-   ProtoComm::DataRecord* tRxMsg = new ProtoComm::DataRecord;
+   ProtoSerial::DataRecord* tTxMsg = new ProtoSerial::DataRecord;
+   ProtoSerial::DataRecord* tRxMsg = new ProtoSerial::DataRecord;
    MsgHelper::initialize(tTxMsg);
 
    tBuffer.putToBuffer((Ris::ByteContent*)tTxMsg);
@@ -156,7 +156,7 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+   ProtoSerial::DataMsg* tMsg = new ProtoSerial::DataMsg;
    MsgHelper::initialize(tMsg);
 
    gSerialThread->sendMsg(tMsg);
@@ -171,9 +171,9 @@ void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,"SerialPeer1");
 
-   ProtoComm::gSettings.reset();
-   ProtoComm::gSettings.readSection(aCmd->argString(1));
-   ProtoComm::gSettings.show();
+   ProtoSerial::gSettings.reset();
+   ProtoSerial::gSettings.readSection(aCmd->argString(1));
+   ProtoSerial::gSettings.show();
 }
 
 

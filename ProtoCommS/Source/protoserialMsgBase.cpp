@@ -13,10 +13,15 @@
 
 namespace ProtoSerial
 {
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-Header::Header()
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+   Header::Header()
 {
    mSyncWord1         = 0x11111111;
    mSyncWord2         = 0x22222222;
@@ -194,6 +199,148 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+   Footer::Footer()
+{
+   mCrcCode           = 0x00000000;
+   mInitialPosition   = 0;
+}
+
+void Footer::reset()
+{
+   mCrcCode           = 0x00000000;
+   mInitialPosition   = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//--------------------------------------------------------------------------
+// If the byte buffer is configured for put operations then this puts the
+// contents of the object into the byte buffer (it does a copy to, it
+// copies the object to the byte buffer).
+// If the byte buffer is configured for get operations then this gets the
+// contents of the object from the byte buffer (it does a copy from, it
+// copies the object from the byte buffer).
+// Copy To and Copy From are symmetrical.
+//--------------------------------------------------------------------------
+
+void Footer::copyToFrom (Ris::ByteBuffer* aBuffer)
+{
+   aBuffer->copy( &mCrcCode           );
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//--------------------------------------------------------------------------
+// For variable content messages, the message length cannot be known until
+// the entire message has been written to a byte buffer. Therefore, the 
+// message footer cannot be written to a byte buffer until the entire
+// message has been written and the length is known.
+//
+// The procedure to write a message to a byte buffer is to skip over the 
+// buffer segment where the footer is located, write the message payload
+// to the buffer, set the footer message length based on the now known
+// payload length, and write the footer to the buffer.
+//
+// These are called explicitly by inheriting messages at the
+// beginning and end of their copyToFrom's to manage the footers.
+// For "get" operations, footerCopyToFrom "gets" the footer and
+// footerReCopyToFrom does nothing. For "put" operations,
+// footerCopyToFrom stores the buffer pointer and advances past where the
+// footer will be written and footerReCopyToFrom "puts" the footer at the
+// stored position. Both functions are passed a byte buffer pointer to
+// where the copy is to take place. Both are also passed a MessageByte
+// pointer to where they can get and mMessageType
+// which they transfer into and out of the footers.
+//--------------------------------------------------------------------------
+
+void Footer::footerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
+{
+   //---------------------------------------------------------------------
+   // Instances of this class are members of parent message classes.
+   // A call to this function should be the first line of code in a
+   // containing parent message class's copyToFrom. It performs pre-copyToFrom
+   // operations. It's purpose is to copy footers to/from byte buffers. The
+   // corresponding function footerReCopyToFrom should be called as the last
+   // line of code in the containing message class' copyToFrom. Lines of code
+   // in between should copy individual data elements into/out of the buffer.
+
+   //---------------------------------------------------------------------
+   // for a "copy to" put
+   //
+   // If this is a "copy to" put operation then the footer copy will actually
+   // be done by the footerReCopyToFrom, after the rest of the message has been
+   // copied into the buffer. This is because some of the fields in the footer
+   // cannot be set until after the rest of the message has been put into the
+   // buffer. (You don't know the length of the message until you put all of
+   // the data into it, you also can't compute a checksum). This call stores
+   // the original buffer position that is passed to it when it is called for
+   // later use by the footerReCopyToFrom. The original buffer position points
+   // to where the footer should be copied. This call then forward advances
+   // the buffer to point past the footer. Forward advancing the buffer
+   // position to point just after where the footer should be is the same as
+   // doing a pretend copy of the footer. After this pretend copy of the
+   // footer, the buffer position points to where the data should be put into
+   // the buffer.
+   //
+   // Store the original buffer position for later use by the
+   // footerReCopyToFrom and advance the buffer position forward
+   // to point past the footer.
+
+   if (aBuffer->isCopyTo())
+   {
+      // Store the buffer parameters for later use by the
+      // footerReCopyToFrom
+      mInitialPosition = aBuffer->getPosition();
+
+      // Advance the buffer position to point past the footer.
+      aBuffer->forward(cLength);
+   }
+
+   //---------------------------------------------------------------------
+   // for a "copy from" get
+   //
+   // If this is a "copy from" get operation then copy the footer from the
+   // buffer into the footer member. Also set the message content type from
+   // the variable datum id
+
+   else
+   {
+      // Copy the buffer content into the footer object.
+      copyToFrom(aBuffer);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Footer::footerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
+{
+   // If this is a put operation then this actually copies the footer into
+   // the buffer.
+   // This sets some footer length parameters and copies the footer into the
+   // buffer position that was stored when footerCopyToFrom was called.
+
+   if (aBuffer->isCopyTo())
+   {
+   }
+   else
+   {
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 MsgMonkey::MsgMonkey()
    : Ris::BaseMsgMonkey(new MsgCreator)
@@ -206,6 +353,8 @@ void  MsgMonkey::configure(int aSourceId)
    mSourceId=aSourceId;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
@@ -240,6 +389,8 @@ bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
 {
@@ -251,6 +402,9 @@ void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
    }
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -279,8 +433,6 @@ Ris::BaseMsgMonkey* MsgMonkeyCreator::createMonkey()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-
 }//namespace
 
 

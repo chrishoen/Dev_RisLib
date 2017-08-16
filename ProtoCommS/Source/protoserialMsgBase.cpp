@@ -203,15 +203,15 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 //******************************************************************************
 //******************************************************************************
 
-   Footer::Footer()
+Footer::Footer()
 {
-   mCrcCode           = 0x00000000;
+   mCheckSum           = 0x00000000;
    mInitialPosition   = 0;
 }
 
 void Footer::reset()
 {
-   mCrcCode           = 0x00000000;
+   mCheckSum           = 0x00000000;
    mInitialPosition   = 0;
 }
 
@@ -230,7 +230,7 @@ void Footer::reset()
 
 void Footer::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
-   aBuffer->copy( &mCrcCode           );
+   aBuffer->copy( &mCheckSum           );
 }
 
 //******************************************************************************
@@ -259,7 +259,7 @@ void Footer::copyToFrom (Ris::ByteBuffer* aBuffer)
 // which they transfer into and out of the footers.
 //--------------------------------------------------------------------------
 
-void Footer::footerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
+void Footer::footerCopyToFrom (Ris::ByteBuffer* aBuffer)
 {
    //---------------------------------------------------------------------
    // Instances of this class are members of parent message classes.
@@ -297,9 +297,6 @@ void Footer::footerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
       // Store the buffer parameters for later use by the
       // footerReCopyToFrom
       mInitialPosition = aBuffer->getPosition();
-
-      // Advance the buffer position to point past the footer.
-      aBuffer->forward(cLength);
    }
 
    //---------------------------------------------------------------------
@@ -309,18 +306,15 @@ void Footer::footerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
    // buffer into the footer member. Also set the message content type from
    // the variable datum id
 
-   else
-   {
-      // Copy the buffer content into the footer object.
-      copyToFrom(aBuffer);
-   }
+   // Copy the buffer content into the footer object.
+   copyToFrom(aBuffer);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void Footer::footerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
+void Footer::footerReCopyToFrom  (Ris::ByteBuffer* aBuffer)
 {
    // If this is a put operation then this actually copies the footer into
    // the buffer.
@@ -329,6 +323,23 @@ void Footer::footerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 
    if (aBuffer->isCopyTo())
    {
+      Prn::print(0,"footerReCopyToFrom mInitialPosition2 %d", mInitialPosition);
+      Prn::print(0,"footerReCopyToFrom getPosition1      %d", aBuffer->getPosition());
+
+      // Calculate the checksum of all of the bytes in the buffer before the 
+      // footer.
+      mCheckSum = 0;
+      for (int i = 0; i < mInitialPosition; i++)
+      {
+         mCheckSum += aBuffer->mBaseBytes[i];
+      }
+
+      // Set the buffer position to the start of the footer.
+      aBuffer->setPosition (mInitialPosition);
+
+      // Copy the checksum to the buffer.
+      aBuffer->copy( &mCheckSum );
+      Prn::print(0,"footerReCopyToFrom getPosition2      %d", aBuffer->getPosition());
    }
    else
    {

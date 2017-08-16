@@ -34,9 +34,9 @@ void TestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
    aBuffer->copy( &mCode3 );
    aBuffer->copy( &mCode4 );
 
-   mFooter.footerCopyToFrom(aBuffer,this);
+   mFooter.footerCopyToFrom(aBuffer);
    mHeader.headerReCopyToFrom(aBuffer,this);
-   mFooter.footerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer);
 }
 
 //******************************************************************************
@@ -55,9 +55,9 @@ void FirstMessageMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 
    aBuffer->copy( & mCode1 );
 
-   mFooter.footerCopyToFrom(aBuffer,this);
+   mFooter.footerCopyToFrom(aBuffer);
    mHeader.headerReCopyToFrom(aBuffer,this);
-   mFooter.footerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer);
 }
 
 //******************************************************************************
@@ -92,9 +92,9 @@ void StatusRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
       aBuffer->copy     (& mWords[i] );
    }
 
-   mFooter.footerCopyToFrom(aBuffer,this);
+   mFooter.footerCopyToFrom(aBuffer);
    mHeader.headerReCopyToFrom(aBuffer,this);
-   mFooter.footerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer);
 }
 
 //******************************************************************************
@@ -129,9 +129,9 @@ void StatusResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
       aBuffer->copy(&mWords[i]);
    }
 
-   mFooter.footerCopyToFrom(aBuffer,this);
+   mFooter.footerCopyToFrom(aBuffer);
    mHeader.headerReCopyToFrom(aBuffer,this);
-   mFooter.footerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer);
 }
 
 //******************************************************************************
@@ -197,9 +197,9 @@ void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
    aBuffer->copyS( mString1 );
    aBuffer->copyS( mString2 );
 
-   mFooter.footerCopyToFrom(aBuffer,this);
+   mFooter.footerCopyToFrom(aBuffer);
    mHeader.headerReCopyToFrom(aBuffer,this);
-   mFooter.footerReCopyToFrom(aBuffer,this);
+   mFooter.footerReCopyToFrom(aBuffer);
 }
 
 //******************************************************************************

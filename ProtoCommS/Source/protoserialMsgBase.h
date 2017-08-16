@@ -150,7 +150,7 @@ public:
    //------------------------------------------------
    // Footer Content
 
-   unsigned short mCrcCode;
+   unsigned short mCheckSum;
 
    // Footer Content
    //------------------------------------------------
@@ -193,8 +193,8 @@ public:
    // which they transfer into and out of the headers.
    //--------------------------------------------------------------------------
 
-   void footerCopyToFrom   (Ris::ByteBuffer* aBuffer, BaseMsg* aParent);
-   void footerReCopyToFrom (Ris::ByteBuffer* aBuffer, BaseMsg* aParent);
+   void footerCopyToFrom   (Ris::ByteBuffer* aBuffer);
+   void footerReCopyToFrom (Ris::ByteBuffer* aBuffer);
 
    //---------------------------------------------------------------------------
    // These are set by headerCopyToFrom and used by headerReCopyToFrom,

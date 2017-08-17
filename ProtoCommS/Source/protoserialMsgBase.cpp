@@ -317,6 +317,29 @@ void Footer::footerReCopyToFrom  (Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Validate a received message by calculating the checksum of the bytes
+// contained in the byte buffer that the message was received in and
+// comparing it with the footer checksum member variable that was
+// transmitted with the message.
+
+bool Footer::validateMessage(Ris::ByteBuffer* aBuffer)
+{
+   // Calculate the checksum of all of the bytes in the buffer before the 
+   // footer.
+   int tLength = aBuffer->mWorkingLength - cLength;
+   unsigned short tRxCheckSum = 0;
+   for (int i = 0; i < tLength; i++)
+   {
+      tRxCheckSum += aBuffer->mBaseBytes[i];
+   }
+
+   // Compare the received checksum with the buffer checksum.
+   return mCheckSum == tRxCheckSum;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -382,6 +405,17 @@ void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Validate a message footer.
+
+bool MsgMonkey::validateMessageFooter(Ris::ByteBuffer* aBuffer, Ris::ByteContent* aMsg)
+{
+   BaseMsg* tMsg = (BaseMsg*)aMsg;
+   return tMsg->mFooter.validateMessage(aBuffer);
+}
+
+//************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

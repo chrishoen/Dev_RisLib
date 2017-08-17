@@ -201,6 +201,13 @@ public:
 
    int mInitialPosition;
 
+   //---------------------------------------------------------------------------
+   // Validate a received message by calculating the checksum of the bytes
+   // contained in the byte buffer that the message was received in and
+   // comparing it with the footer checksum member variable that was
+   // transmitted with the message.
+
+   bool validateMessage  (Ris::ByteBuffer* aBuffer);
 };
 
 //******************************************************************************
@@ -257,18 +264,21 @@ public:
    //-------------------------------------------------------
    // Base class overloads:
 
-   // Return a contant header length
+   // Return a contant header length.
    int  getHeaderLength() override {return Header::cLength;}
 
-   // Return a contant max buffer size
+   // Return a contant max buffer size.
    int getMaxBufferSize() override {return MsgDefT::cMsgBufferSize;}
 
    // Extract message header parameters from a buffer and validate them
-   // Returns true if the header is valid
+   // Returns true if the header is valid.
    bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer) override;
 
-   // Preprocess a message before it is sent
+   // Preprocess a message before it is sent.
    void processBeforeSend(Ris::ByteContent* aMsg) override;
+
+   // Validate a message footer.
+   bool validateMessageFooter(Ris::ByteBuffer* aBuffer,Ris::ByteContent* aMsg) override;
 };
 
 //*********************************************************************************

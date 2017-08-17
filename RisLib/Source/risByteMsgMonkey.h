@@ -58,6 +58,9 @@ public:
    int  mPayloadLength;
    bool mHeaderValidFlag;
 
+   // Endian network order.
+   bool mNetworkOrder;
+
    // Message creator, this must be set by the inheritor.
    BaseMsgCreator* mMsgCreator;
 
@@ -112,10 +115,22 @@ public:
    // If true then the messages will be sent in network order,
    // big endian. If false, then little endian.
    void setNetworkOrder (bool aNetworkOrder);
-   bool mNetworkOrder;
 
    // Configure a byte buffer endianess.
    void configureByteBuffer(ByteBuffer* aBuffer);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, footer processisng:
+
+   // Validate a message footer by comparing the contents of the byte buffer
+   // that the message was received into and the message itself. For example,
+   // the byte buffer can contain the message bytes and the message can contain
+   // a checksum and this function would calculate the checksum on the buffer
+   // bytes and then compare it with the checksum stored in the message footer.
+   virtual bool validateMessageFooter(Ris::ByteBuffer* aBuffer,Ris::ByteContent* aMsg) { return true; };
+
 };
 
 //******************************************************************************

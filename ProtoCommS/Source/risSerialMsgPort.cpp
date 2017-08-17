@@ -237,6 +237,13 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       return false;
    }
 
+   // Test for message footer errors.
+   if (!mMonkey->validateMessageFooter(&tByteBuffer,aMsg))
+   {
+      Prn::print(Prn::SerialRun1, "ERROR validateMessageFooter");
+      return false;
+   }
+
    // Returning true  means socket was not closed
    // Returning false means socket was closed
    mRxMsgCount++;

@@ -124,6 +124,15 @@
     <ClCompile Include="Source\risTimeMarker.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risSerialHeaderBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialMsgPort.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialMsgThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -275,6 +284,15 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risTimeMarker.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialHeaderBuffer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialMsgPort.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialMsgThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

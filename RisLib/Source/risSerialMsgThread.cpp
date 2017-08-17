@@ -7,6 +7,10 @@
 
 #include "stdafx.h"
 
+#include "my_functions.h"
+#include "risPortableCalls.h"
+#include "prnPrint.h"
+
 #include "ris_priorities.h"
 #include "risSerialMsgThread.h"
 

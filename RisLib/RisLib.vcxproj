@@ -162,6 +162,9 @@
     <ClInclude Include="Source\risPortableCalls.h" />
     <ClInclude Include="Source\risPortableTypes.h" />
     <ClInclude Include="Source\risProgramTime.h" />
+    <ClInclude Include="Source\risSerialHeaderBuffer.h" />
+    <ClInclude Include="Source\risSerialMsgPort.h" />
+    <ClInclude Include="Source\risSerialMsgThread.h" />
     <ClInclude Include="Source\risSerialPort.h" />
     <ClInclude Include="Source\risSockets.h" />
     <ClInclude Include="Source\risStatistics.h" />
@@ -206,6 +209,9 @@
     <ClCompile Include="Source\risPointerStack.cpp" />
     <ClCompile Include="Source\risPortableCalls_win.cpp" />
     <ClCompile Include="Source\risProgramTime.cpp" />
+    <ClCompile Include="Source\risSerialHeaderBuffer.cpp" />
+    <ClCompile Include="Source\risSerialMsgPort.cpp" />
+    <ClCompile Include="Source\risSerialMsgThread.cpp" />
     <ClCompile Include="Source\risSerialPort.cpp" />
     <ClCompile Include="Source\risSockets_win.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />

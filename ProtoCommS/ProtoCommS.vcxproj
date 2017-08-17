@@ -180,9 +180,6 @@
     <ClCompile Include="Source\protoserialMsgHelper.cpp" />
     <ClCompile Include="Source\protoserialSerialThread.cpp" />
     <ClCompile Include="Source\protoserialSettings.cpp" />
-    <ClCompile Include="Source\risSerialHeaderBuffer.cpp" />
-    <ClCompile Include="Source\risSerialMsgPort.cpp" />
-    <ClCompile Include="Source\risSerialMsgThread.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -196,9 +193,6 @@
     <ClInclude Include="Source\protoserialMsgHelper.h" />
     <ClInclude Include="Source\protoserialSerialThread.h" />
     <ClInclude Include="Source\protoserialSettings.h" />
-    <ClInclude Include="Source\risSerialHeaderBuffer.h" />
-    <ClInclude Include="Source\risSerialMsgPort.h" />
-    <ClInclude Include="Source\risSerialMsgThread.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

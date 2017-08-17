@@ -17,15 +17,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Source\risSerialHeaderBuffer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risSerialMsgPort.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risSerialMsgThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\protoserialMsg.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -50,15 +41,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Source\risSerialHeaderBuffer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risSerialMsgPort.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risSerialMsgThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\protoserialMsg.h">
       <Filter>Source</Filter>
     </ClInclude>

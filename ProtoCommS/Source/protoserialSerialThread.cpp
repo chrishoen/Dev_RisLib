@@ -22,6 +22,8 @@ namespace ProtoSerial
 
 SerialThread::SerialThread()
 {
+   BaseClass::mTimerPeriod = 1000;
+
    mStatusCount1=0;
    mStatusCount2=0;
 
@@ -39,11 +41,10 @@ SerialThread::~SerialThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This configures the serial port.
 
-void SerialThread::configure()
+void SerialThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SerialThread::configure");
+   Prn::print(Prn::ThreadInit1, "SerialThread::threadInitFunction BEGIN");
 
    // Configure the message monkey.
    mMonkeyCreator.configure(gSettings.mMyAppNumber);
@@ -55,21 +56,11 @@ void SerialThread::configure()
       gSettings.mSerialPortSetup,
       gSettings.mSerialRxTimeout,
       &mRxMsgQCall);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void SerialThread::launchThread()
-{
-   Prn::print(Prn::ThreadInit1, "SerialThread::launch");
 
    // Launch child thread
-   mSerialMsgThread->launchThread(); 
+   mSerialMsgThread->launchThread();
    
-   // Launch this thread
-   BaseClass::launchThread();
+   Prn::print(Prn::ThreadInit1, "SerialThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -86,6 +77,26 @@ void  SerialThread::threadExitFunction()
 
    // Base class exit
    BaseClass::threadExitFunction();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// QCall
+
+void SerialThread::executeOnTimer(int aTimerCount)
+{
+   if (gSettings.mMyAppNumber == 401)
+   {
+      Prn::print(Prn::ThreadRun1, "SerialThread::executeOnTimer");
+   }
+
+   return;
+
+   ProtoSerial::TestMsg* tx = new ProtoSerial::TestMsg;
+   tx->mCode1=101;
+
+   mSerialMsgThread->sendMsg(tx);
 }
 
 //******************************************************************************
@@ -168,23 +179,6 @@ void SerialThread::processRxMsg(ProtoSerial::DataMsg* aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// QCall
-
-void SerialThread::executeOnTimer(int aTimerCount)
-{
-   Prn::print(Prn::ThreadRun2, "SerialThread::executeRxMessage");
-
-   return;
-
-   ProtoSerial::TestMsg* tx = new ProtoSerial::TestMsg;
-   tx->mCode1=101;
-
-   mSerialMsgThread->sendMsg(tx);
 }
 
 //******************************************************************************

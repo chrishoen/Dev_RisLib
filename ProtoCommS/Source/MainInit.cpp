@@ -37,6 +37,8 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::SerialRun3, true);
    Prn::setFilter(Prn::SerialRun4, true);
 
+   Prn::setFilter(Prn::ThreadInit1, true);
+   Prn::setFilter(Prn::ThreadInit2, true);
    Prn::setFilter(Prn::ThreadRun1, true);
    Prn::setFilter(Prn::ThreadRun2, false);
    Prn::setFilter(Prn::ThreadRun3, false);

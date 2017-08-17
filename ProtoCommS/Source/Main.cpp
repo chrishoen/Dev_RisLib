@@ -22,7 +22,6 @@ int main(int argc,char** argv)
    // Launch threads
 
    gSerialThread = new SerialThread;
-   gSerialThread->configure();
    gSerialThread->launchThread();
 
    //--------------------------------------------------------------------

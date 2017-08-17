@@ -169,6 +169,9 @@ void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
+   ProtoSerial::gSettings.show();
+   return;
+
    aCmd->setArgDefault(1,"SerialPeer1");
 
    ProtoSerial::gSettings.reset();

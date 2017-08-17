@@ -54,7 +54,6 @@ public:
 
    SerialThread();
   ~SerialThread();
-   void configure();
 
    //***************************************************************************
    //***************************************************************************
@@ -64,7 +63,7 @@ public:
    // launch starts the child thread + this thread
    // threadExitFunction shuts down the child thread
    // executeOnTimer sends a periodic status message.
-   void launchThread();
+   void threadInitFunction();
    void threadExitFunction();
    void executeOnTimer(int);
 

@@ -1,5 +1,4 @@
-#ifndef _PROCOMSG_BASE_H_
-#define _PROCOMSG_BASE_H_
+#pragma once
 /*==============================================================================
 This file contains a set of classes that encapsulate the message set
 that is used to communicate with Intranet. The messages are specified
@@ -132,7 +131,6 @@ public:
 
    int mInitialPosition;
    int mInitialLength;
-
 };
 
 //******************************************************************************
@@ -173,34 +171,33 @@ public:
    //--------------------------------------------------------------------------
    // For variable content messages, the message length cannot be known until
    // the entire message has been written to a byte buffer. Therefore, the 
-   // message header cannot be written to a byte buffer until the entire
+   // message header footer be written to a byte buffer until the entire
    // message has been written and the length is known.
    //
-   // The procedure to write a message to a byte buffer is to skip over the 
-   // buffer segment where the header is located, write the message payload
-   // to the buffer, set the header message length based on the now known
-   // payload length, and write the header to the buffer.
-   //
+   // The procedure to write a message to a byte buffer is to write the entire 
+   // message header and payload to a buffer and then write the footer with 
+   // zeroed data. The header recopy is then called to obtain the correct
+   // message length. The last step is to call the footer recopy to fill
+   // in the footer checksum with the correct value.
+   // 
    // These are called explicitly by inheriting messages at the
-   // beginning and end of their copyToFrom's to manage the headers.
-   // For "get" operations, headerCopyToFrom "gets" the header and
-   // headerReCopyToFrom does nothing. For "put" operations,
-   // headerCopyToFrom stores the buffer pointer and advances past where the
-   // header will be written and headerReCopyToFrom "puts" the header at the
+   // end of their copyToFrom's to manage the footers.
+   // For "get" operations, footerCopyToFrom "gets" the footer and
+   // footerReCopyToFrom does nothing. For "put" operations,
+   // footerCopyToFrom stores the buffer pointer and advances past where the
+   // footer will be written and footerReCopyToFrom "puts" the footer at the
    // stored position. Both functions are passed a byte buffer pointer to
-   // where the copy is to take place. Both are also passed a ByteContent
-   // pointer to where they can get and mMessageType
-   // which they transfer into and out of the headers.
+   // where the copy is to take place.
    //--------------------------------------------------------------------------
 
    void footerCopyToFrom   (Ris::ByteBuffer* aBuffer);
    void footerReCopyToFrom (Ris::ByteBuffer* aBuffer);
 
    //---------------------------------------------------------------------------
-   // These are set by headerCopyToFrom and used by headerReCopyToFrom,
+   // These are set by footerCopyToFrom and used by footerReCopyToFrom,
    // for "put" operations.Theyt contain the buffer position and length of
-   // where the headerReCopyToFrom will take place, which should be
-   // where headerCopyToFrom was told to do the copy.
+   // where the footerReCopyToFrom will take place, which should be
+   // where footerCopyToFrom was told to do the copy.
 
    int mInitialPosition;
 
@@ -295,5 +292,4 @@ public:
 };
 
 }//namespace
-#endif
 

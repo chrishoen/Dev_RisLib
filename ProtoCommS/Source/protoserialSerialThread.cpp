@@ -22,7 +22,7 @@ namespace ProtoSerial
 
 SerialThread::SerialThread()
 {
-   BaseClass::mTimerPeriod = 1000;
+   BaseClass::mTimerPeriod = 250;
 
    mStatusCount1=0;
    mStatusCount2=0;
@@ -86,17 +86,12 @@ void  SerialThread::threadExitFunction()
 
 void SerialThread::executeOnTimer(int aTimerCount)
 {
-   if (gSettings.mMyAppNumber == 401)
-   {
-      Prn::print(Prn::ThreadRun1, "SerialThread::executeOnTimer");
-   }
+   if (!gSettings.mPeriodicTxFlag) return;
 
-   return;
+   ProtoSerial::TestMsg* tMsg = new ProtoSerial::TestMsg;
+   tMsg->mCode1=aTimerCount;
 
-   ProtoSerial::TestMsg* tx = new ProtoSerial::TestMsg;
-   tx->mCode1=101;
-
-   mSerialMsgThread->sendMsg(tx);
+   mSerialMsgThread->sendMsg(tMsg);
 }
 
 //******************************************************************************

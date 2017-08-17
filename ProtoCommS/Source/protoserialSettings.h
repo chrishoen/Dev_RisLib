@@ -71,6 +71,9 @@ public:
    char mSerialPortSetup[cMaxStringSize];
    int  mSerialRxTimeout;
 
+   // If true then transmit a test message periodically.
+   bool  mPeriodicTxFlag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

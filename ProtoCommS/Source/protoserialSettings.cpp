@@ -4,8 +4,7 @@
 
 #include "stdafx.h"
 
-#include "risCmdLineFile.h"
-#include "risPortableCalls.h"
+#include "my_functions.h"
 
 
 #define  _PROCOSETTINGS_CPP_
@@ -41,6 +40,8 @@ void Settings::reset()
    mSerialPortNumber = 0;
    mSerialPortSetup[0] = 0;
    mSerialRxTimeout = -1;
+
+   mPeriodicTxFlag = false;
 }
 
 //******************************************************************************
@@ -53,11 +54,13 @@ void Settings::show()
    printf("\n");
    printf("Settings************************************************ %s\n", mTargetSection);
 
-   printf("MyAppNumber               %5d\n", mMyAppNumber);
+   printf("MyAppNumber                %5d\n", mMyAppNumber);
 
    printf("SerialPort                 %5d\n",  mSerialPortNumber);
    printf("SerialPort                 %-12s\n",mSerialPortSetup);
    printf("SerialRxTimeout            %5d\n",  mSerialRxTimeout);
+
+   printf("PeriodicTxFlag             %s\n",  my_string_from_bool(mPeriodicTxFlag));
 }
 
 //******************************************************************************
@@ -71,11 +74,13 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
-   if (aCmd->isCmd("MyAppNumber"))   mMyAppNumber = aCmd->argInt(1);
+   if (aCmd->isCmd("MyAppNumber"))       mMyAppNumber = aCmd->argInt(1);
 
    if (aCmd->isCmd("SerialPortNumber"))  mSerialPortNumber = aCmd->argInt(1);
    if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup,cMaxStringSize);
    if (aCmd->isCmd("SerialRxTimeout"))   mSerialRxTimeout = aCmd->argInt(1);
+
+   if (aCmd->isCmd("PeriodicTxFlag"))    mPeriodicTxFlag = aCmd->argBool(1);
 }
 
 //******************************************************************************

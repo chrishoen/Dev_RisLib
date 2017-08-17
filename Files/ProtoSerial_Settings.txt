@@ -8,6 +8,7 @@ SectionBegin SerialPeer1
    SerialPortNumber    3
    SerialPortSetup     38400,N,8,1
    SerialRxTimeout     -1
+   PeriodicTxFlag      true
    
 SectionEnd
 
@@ -20,5 +21,6 @@ SectionBegin SerialPeer2
    SerialPortNumber    4
    SerialPortSetup     38400,N,8,1
    SerialRxTimeout     -1
-   
+   PeriodicTxFlag      false
+  
 SectionEnd

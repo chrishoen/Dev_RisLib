@@ -62,6 +62,9 @@ public:
    // Two diminsional table.
    Ris::CmdLineDoubleTable2D  mTable2d;
 
+   // Two diminsional table.
+   Ris::CmdLineIntTable2D  mIntTable2d;
+
    // File codes.
    int mCode1;
    int mCode2;

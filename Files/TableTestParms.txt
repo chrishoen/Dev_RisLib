@@ -21,6 +21,12 @@ SectionBegin Default
       1020.0   1021.0
       1030.0   1031.0
 
+   IntTable2d
+      1000   1001
+      1010   1011
+      1020   1021
+      1030   1031
+
    Code2     902
 
 SectionEnd

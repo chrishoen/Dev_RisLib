@@ -346,6 +346,9 @@ void BaseTwoThread::waitForNotify(int aTimeout, int aIndex)
    // Set flag to wait for any notification
    mWaitingForNotifyAny = true;
 
+   // Return if the latch bit is already set.
+   if (mNotifyLatch.isAny()) return;
+
    // Wait for notication
    waitForNotify(aTimeout);
 }

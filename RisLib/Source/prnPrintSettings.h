@@ -236,6 +236,14 @@ public:
    static const int  Result6           = 134;
    static const int  Result7           = 135;
    static const int  Result8           = 136;
+   static const int  Cal1              = 137;
+   static const int  Cal2              = 138;
+   static const int  Cal3              = 139;
+   static const int  Cal4              = 140;
+   static const int  Cal5              = 141;
+   static const int  Cal6              = 142;
+   static const int  Cal7              = 143;
+   static const int  Cal8              = 144;
 
 //******************************************************************************
 //******************************************************************************

@@ -97,8 +97,11 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   time_t rawtime;
-   time (&rawtime);  
-   printf ("The current local time is: %s", ctime (&rawtime));
+   Ris::ProgramTimeMarker tMarker;
+   tMarker.doStart();
+   Sleep(1000);
+   tMarker.doStop();
+   Prn::print(0, "ProgramTime %8.4f", tMarker.mElapsed);
+   
 }
 

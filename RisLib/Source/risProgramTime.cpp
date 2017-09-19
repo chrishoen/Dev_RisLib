@@ -66,7 +66,7 @@ void ProgramTimeMarker::doStart()
 void ProgramTimeMarker::doStop()
 {
    mStop = getCurrentProgramTime();
-   mElapsed = mStop = mStart;
+   mElapsed = mStop - mStart;
 }
 
 //******************************************************************************

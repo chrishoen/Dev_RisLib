@@ -39,8 +39,8 @@ namespace Prn
 // aSettingsFileSection is the settings file section that each application
 // extracts its settings from.
 //
-// aNumOfConsoles specifies the number of consoles to use. If it is greater
-// than one then additional PrintView console applications are launched
+// aConsole specifies a print view console to use. If it is greater
+// than zero then additional PrintView console applications are launched
 // and prints are redirected to them via sockets.
 
 void resetPrint              ();
@@ -48,7 +48,7 @@ void useSettingsFileDefault  ();
 void useSettingsFileName     (char* aSettingsFileName);
 void useSettingsFilePath     (char* aSettingsFilePath);
 void useSettingsFileSection  (char* aSettingsFileSection);
-void useConsoles             (int   aNumOfConsoles = 1);
+void useConsole              (int   aConsole);
 void initializePrint         ();
 void finalizePrint           ();
 

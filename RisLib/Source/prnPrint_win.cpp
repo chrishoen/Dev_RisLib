@@ -31,14 +31,14 @@ HANDLE rCreatePrintView(int aConsole);
 
    static const int cMaxPrintStringSize = 400;
    static const int cMaxNameSize = 200;
-   static const int cMaxConsoles = 5;
+   static const int cMaxConsoles = 8;
 
    bool    rUseSettingsFile;
    char    rSettingsFilePath    [cMaxNameSize];
    char    rSettingsFileSection [cMaxNameSize];
-   int     rNumOfConsoles;
    bool    rSuppressFlag;
 
+   bool                        rConsoleFlag [cMaxConsoles];
    Ris::Net::UdpTxStringSocket rConsoleSocket [cMaxConsoles];
    int                         rConsolePort   [cMaxConsoles];
    HANDLE                      rConsoleHandle [cMaxConsoles];
@@ -54,7 +54,6 @@ void resetPrint()
    rUseSettingsFile = false;
    rSettingsFilePath[0]=0;
    strcpy(rSettingsFileSection, "DEFAULT");
-   rNumOfConsoles=1;
    rSuppressFlag=true;
 
    strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
@@ -62,9 +61,11 @@ void resetPrint()
 
    for (int i=0;i<cMaxConsoles;i++)
    {
+      rConsoleFlag   [i] = false;
       rConsolePort   [i] = Ris::Net::PortDef::cPrintView + i;
       rConsoleHandle [i] = 0;
    }
+   rConsoleFlag[0] = true;
 }
 
 //****************************************************************************
@@ -97,10 +98,10 @@ void useSettingsFileSection(char*aSettingsFileSection)
    strncpy(rSettingsFileSection, aSettingsFileSection, cMaxNameSize);
 }
 
-void useConsoles(int aNumOfConsoles)
+void useConsole(int aConsole)
 {
-   rNumOfConsoles = aNumOfConsoles;
-   if (rNumOfConsoles > cMaxConsoles) rNumOfConsoles = cMaxConsoles;
+   if (aConsole > cMaxConsoles-1) return;
+   rConsoleFlag[aConsole] = true;
 }
 
 //****************************************************************************
@@ -126,10 +127,13 @@ void initializePrint()
    //-----------------------------------------------------
    // Console sockets
 
-   for (int i = 1; i < rNumOfConsoles; i++)
+   for (int i = 1; i < cMaxConsoles; i++)
    {
-      rConsoleSocket[i].configure(rConsolePort[i]);
-      rConsoleHandle[i] = rCreatePrintView(i);
+      if (rConsoleFlag[i])
+      {
+         rConsoleSocket[i].configure(rConsolePort[i]);
+         rConsoleHandle[i] = rCreatePrintView(i);
+      }
    }
 }
 
@@ -142,7 +146,7 @@ void finalizePrint()
    //-----------------------------------------------------
    // Terminate PrintView processes that were created 
 
-   for (int i = 1; i < rNumOfConsoles; i++)
+   for (int i = 1; i < cMaxConsoles; i++)
    {
       if (rConsoleHandle[i] != 0)
       {
@@ -255,7 +259,6 @@ HANDLE rCreatePrintView(int aConsole)
    if (!tFileFound)
    {
       printf("PrintView1.exe NOT FOUND");
-      rNumOfConsoles = 1;
       return 0;
    }
 

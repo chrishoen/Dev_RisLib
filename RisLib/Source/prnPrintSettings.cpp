@@ -309,6 +309,10 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "Cal6",         Cal6         );
       tryFilterString (aCmd, "Cal7",         Cal7         );
       tryFilterString (aCmd, "Cal8",         Cal8         );
+      tryFilterString (aCmd, "CalError1",    CalError1    );
+      tryFilterString (aCmd, "CalError2",    CalError2    );
+      tryFilterString (aCmd, "CalError3",    CalError3    );
+      tryFilterString (aCmd, "CalError4",    CalError4    );
 
       // Set the stored try filter
       tryFilterSet(aCmd);

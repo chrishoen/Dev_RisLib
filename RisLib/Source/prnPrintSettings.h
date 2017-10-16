@@ -244,6 +244,10 @@ public:
    static const int  Cal6              = 142;
    static const int  Cal7              = 143;
    static const int  Cal8              = 144;
+   static const int  CalError1         = 145;
+   static const int  CalError2         = 146;
+   static const int  CalError3         = 147;
+   static const int  CalError4         = 148;
 
 //******************************************************************************
 //******************************************************************************

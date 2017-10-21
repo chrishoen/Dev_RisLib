@@ -349,6 +349,21 @@ void BaseCmdLineParms::setExplicitFileDir(char* aFileDir)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Set the default file name.
+// Set the override file name.
+
+void BaseCmdLineParms::setDefaultFileName(char* aFileName)
+{
+   strcpy(mDefaultFileName, aFileName);
+}
+void BaseCmdLineParms::setOVerrideFileName(char* aFileName)
+{
+   strcpy(mOverrideFileName, aFileName);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Alias for readSection(0);
 
 bool BaseCmdLineParms::readFile()

@@ -118,6 +118,11 @@ public:
    // 4) the current program directory + ..\..\Files
    void setExplicitFileDir(char* aFileDir);
 
+   // Set the default file name.
+   // Set the override file name.
+   void setDefaultFileName(char* aFileName);
+   void setOVerrideFileName(char* aFileName);
+
    // Read a section of the command file and set member variables accordingly.
    // Create a command file object, open the file, pass this object to the file
    // object to read the file and apply this object's execution method to each

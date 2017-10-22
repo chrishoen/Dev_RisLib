@@ -40,6 +40,7 @@ void BaseCmdLineParms::reset()
    mUseSections = true;
    mTargetSection[0] = 0;
    mTargetSectionFlag = true;
+   strcpy(mName,"NO_NAME");
    strcpy(mDefaultFileName,"YOU_FORGOT_THE_DEFAULT_FILENAME");
    strcpy(mOverrideFileName,"YOU_FORGOT_THE_OVERRIDE_FILENAME");
 }
@@ -127,7 +128,7 @@ bool BaseCmdLineParms::readSection(char* aFilePath, char* aSection)
 
    if (!tCmdLineFile.open(aFilePath))
    {
-      printf("BaseCmdLineParms::file open FAIL %s\n", aFilePath);
+      printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,aFilePath);
       return false;
    }
 
@@ -178,7 +179,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
          return readSection(tFilePath, aSection);
       }
 
-      printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+      printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,tFilePath);
       return false;
    }
 
@@ -241,7 +242,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
    //***************************************************************************
    // File not found.
 
-   printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+   printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,tFilePath);
    return false;
 }
 
@@ -273,7 +274,7 @@ bool BaseCmdLineParms::readOverride(char* aSection)
          return readSection(tFilePath, aSection);
       }
 
-      printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+      printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,tFilePath);
       return false;
    }
 
@@ -323,7 +324,7 @@ bool BaseCmdLineParms::readOverride(char* aSection)
    //***************************************************************************
    // File not found.
 
-   printf("BaseCmdLineParms::file open FAIL %s\n", tFilePath);
+   printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,tFilePath);
    return false;
 }
 

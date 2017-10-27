@@ -248,6 +248,18 @@ public:
    static const int  CalError2         = 146;
    static const int  CalError3         = 147;
    static const int  CalError4         = 148;
+   static const int  BackInit1         = 149;
+   static const int  BackInit2         = 150;
+   static const int  BackInit3         = 151;
+   static const int  BackInit4         = 152;
+   static const int  BackRun1          = 153;
+   static const int  BackRun2          = 154;
+   static const int  BackRun3          = 155;
+   static const int  BackRun4          = 156;
+   static const int  BackError1        = 157;
+   static const int  BackError2        = 158;
+   static const int  BackError3        = 159;
+   static const int  BackError4        = 160;
 
 //******************************************************************************
 //******************************************************************************

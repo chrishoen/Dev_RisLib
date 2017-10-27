@@ -314,6 +314,19 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "CalError3",    CalError3    );
       tryFilterString (aCmd, "CalError4",    CalError4    );
 
+      tryFilterString (aCmd, "BackInit1",    BackInit1    );
+      tryFilterString (aCmd, "BackInit2",    BackInit2    );
+      tryFilterString (aCmd, "BackInit3",    BackInit3    );
+      tryFilterString (aCmd, "BackInit4",    BackInit4    );
+      tryFilterString (aCmd, "BackRun1",     BackRun1     );
+      tryFilterString (aCmd, "BackRun2",     BackRun2     );
+      tryFilterString (aCmd, "BackRun3",     BackRun3     );
+      tryFilterString (aCmd, "BackRun4",     BackRun4     );
+      tryFilterString (aCmd, "BackError1",   BackError1   );
+      tryFilterString (aCmd, "BackError2",   BackError2   );
+      tryFilterString (aCmd, "BackError3",   BackError3   );
+      tryFilterString (aCmd, "BackError4",   BackError4   );
+
       // Set the stored try filter
       tryFilterSet(aCmd);
    }

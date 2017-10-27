@@ -128,7 +128,7 @@ bool BaseCmdLineParms::readSection(char* aFilePath, char* aSection)
 
    if (!tCmdLineFile.open(aFilePath))
    {
-      printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,aFilePath);
+      printf("BaseCmdLineParms::file open FAIL001 %s %s\n", mName,aFilePath);
       return false;
    }
 
@@ -178,9 +178,11 @@ bool BaseCmdLineParms::readSection(char* aSection)
       {
          return readSection(tFilePath, aSection);
       }
-
-      printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,tFilePath);
-      return false;
+      else
+      {
+         printf("BaseCmdLineParms::file open FAIL101 %s %s\n", mName, tFilePath);
+         return false;
+      }
    }
 
    //***************************************************************************
@@ -240,9 +242,22 @@ bool BaseCmdLineParms::readSection(char* aSection)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, "C:\\Alpha\\Work\\");
+   strcat(tFilePath, mDefaultFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // File not found.
 
-   printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,tFilePath);
+   printf("BaseCmdLineParms::file open FAIL102 %s %s\n", mName,tFilePath);
    return false;
 }
 
@@ -273,9 +288,11 @@ bool BaseCmdLineParms::readOverride(char* aSection)
       {
          return readSection(tFilePath, aSection);
       }
-
-      printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,tFilePath);
-      return false;
+      else
+      {
+         printf("BaseCmdLineParms::file open FAIL201 %s %s\n", mName, tFilePath);
+         return false;
+      }
    }
 
    //***************************************************************************
@@ -322,9 +339,22 @@ bool BaseCmdLineParms::readOverride(char* aSection)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, "C:\\Alpha\\Work\\");
+   strcat(tFilePath, mOverrideFileName);
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath,aSection);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // File not found.
 
-   printf("BaseCmdLineParms::file open FAIL %s %s\n", mName,tFilePath);
+   printf("BaseCmdLineParms::file open FAIL202 %s %s\n", mName,tFilePath);
    return false;
 }
 

@@ -260,6 +260,14 @@ public:
    static const int  BackError2        = 158;
    static const int  BackError3        = 159;
    static const int  BackError4        = 160;
+   static const int  UnityInit1        = 161;
+   static const int  UnityInit2        = 162;
+   static const int  UnityInit3        = 163;
+   static const int  UnityInit4        = 164;
+   static const int  UnityRun1         = 165;
+   static const int  UnityRun2         = 166;
+   static const int  UnityRun3         = 167;
+   static const int  UnityRun4         = 168;
 
 //******************************************************************************
 //******************************************************************************

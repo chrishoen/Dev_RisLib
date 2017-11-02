@@ -327,6 +327,15 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "BackError3",   BackError3   );
       tryFilterString (aCmd, "BackError4",   BackError4   );
 
+      tryFilterString (aCmd, "UnityInit1",    UnityInit1    );
+      tryFilterString (aCmd, "UnityInit2",    UnityInit2    );
+      tryFilterString (aCmd, "UnityInit3",    UnityInit3    );
+      tryFilterString (aCmd, "UnityInit4",    UnityInit4    );
+      tryFilterString (aCmd, "UnityRun1",     UnityRun1     );
+      tryFilterString (aCmd, "UnityRun2",     UnityRun2     );
+      tryFilterString (aCmd, "UnityRun3",     UnityRun3     );
+      tryFilterString (aCmd, "UnityRun4",     UnityRun4     );
+
       // Set the stored try filter
       tryFilterSet(aCmd);
    }

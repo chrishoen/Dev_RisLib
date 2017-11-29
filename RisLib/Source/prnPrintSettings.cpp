@@ -327,15 +327,27 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "BackError3",   BackError3   );
       tryFilterString (aCmd, "BackError4",   BackError4   );
 
-      tryFilterString (aCmd, "UnityInit1",    UnityInit1    );
-      tryFilterString (aCmd, "UnityInit2",    UnityInit2    );
-      tryFilterString (aCmd, "UnityInit3",    UnityInit3    );
-      tryFilterString (aCmd, "UnityInit4",    UnityInit4    );
-      tryFilterString (aCmd, "UnityRun1",     UnityRun1     );
-      tryFilterString (aCmd, "UnityRun2",     UnityRun2     );
-      tryFilterString (aCmd, "UnityRun3",     UnityRun3     );
-      tryFilterString (aCmd, "UnityRun4",     UnityRun4     );
+      tryFilterString (aCmd, "UnityInit1",   UnityInit1    );
+      tryFilterString (aCmd, "UnityInit2",   UnityInit2    );
+      tryFilterString (aCmd, "UnityInit3",   UnityInit3    );
+      tryFilterString (aCmd, "UnityInit4",   UnityInit4    );
+      tryFilterString (aCmd, "UnityRun1",    UnityRun1     );
+      tryFilterString (aCmd, "UnityRun2",    UnityRun2     );
+      tryFilterString (aCmd, "UnityRun3",    UnityRun3     );
+      tryFilterString (aCmd, "UnityRun4",    UnityRun4     );
 
+      tryFilterString (aCmd, "CamCalInit1",  CamCalInit1     );
+      tryFilterString (aCmd, "CamCalInit2",  CamCalInit2     );
+      tryFilterString (aCmd, "CamCalInit3",  CamCalInit3     );
+      tryFilterString (aCmd, "CamCalInit4",  CamCalInit4     );
+      tryFilterString (aCmd, "CamCalRun1",   CamCalRun1      );
+      tryFilterString (aCmd, "CamCalRun2",   CamCalRun2      );
+      tryFilterString (aCmd, "CamCalRun3",   CamCalRun3      );
+      tryFilterString (aCmd, "CamCalRun4",   CamCalRun4      );
+      tryFilterString (aCmd, "CamCalError1", CamCalError1    );
+      tryFilterString (aCmd, "CamCalError2", CamCalError2    );
+      tryFilterString (aCmd, "CamCalError3", CamCalError3    );
+      tryFilterString (aCmd, "CamCalError4", CamCalError4    );
       // Set the stored try filter
       tryFilterSet(aCmd);
    }

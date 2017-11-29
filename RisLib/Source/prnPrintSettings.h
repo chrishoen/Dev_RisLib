@@ -268,6 +268,18 @@ public:
    static const int  UnityRun2         = 166;
    static const int  UnityRun3         = 167;
    static const int  UnityRun4         = 168;
+   static const int  CamCalInit1       = 169;
+   static const int  CamCalInit2       = 170;
+   static const int  CamCalInit3       = 171;
+   static const int  CamCalInit4       = 172;
+   static const int  CamCalRun1        = 173;
+   static const int  CamCalRun2        = 174;
+   static const int  CamCalRun3        = 175;
+   static const int  CamCalRun4        = 176;
+   static const int  CamCalError1      = 177;
+   static const int  CamCalError2      = 178;
+   static const int  CamCalError3      = 179;
+   static const int  CamCalError4      = 180;
 
 //******************************************************************************
 //******************************************************************************

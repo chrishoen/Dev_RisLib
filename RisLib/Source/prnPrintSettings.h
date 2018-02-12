@@ -280,6 +280,14 @@ public:
    static const int  CamCalError2      = 178;
    static const int  CamCalError3      = 179;
    static const int  CamCalError4      = 180;
+   static const int  UGrid1            = 181;
+   static const int  UGrid2            = 182;
+   static const int  UGrid3            = 183;
+   static const int  UGrid4            = 184;
+   static const int  UGrid5            = 185;
+   static const int  UGrid6            = 186;
+   static const int  UGrid7            = 187;
+   static const int  UGrid8            = 188;
 
 //******************************************************************************
 //******************************************************************************

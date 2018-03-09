@@ -349,14 +349,21 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "CamCalError3", CamCalError3    );
       tryFilterString (aCmd, "CamCalError4", CamCalError4    );
 
-      tryFilterString (aCmd, "UGrid1",       UGrid1         );
-      tryFilterString (aCmd, "UGrid2",       UGrid2         );
-      tryFilterString (aCmd, "UGrid3",       UGrid3         );
-      tryFilterString (aCmd, "UGrid4",       UGrid4         );
-      tryFilterString (aCmd, "UGrid5",       UGrid5         );
-      tryFilterString (aCmd, "UGrid6",       UGrid6         );
-      tryFilterString (aCmd, "UGrid7",       UGrid7         );
-      tryFilterString (aCmd, "UGrid8",       UGrid8         );
+      tryFilterString (aCmd, "PEst1",     PEst1         );
+      tryFilterString (aCmd, "PEst2",     PEst2         );
+      tryFilterString (aCmd, "PClimb",    PClimb        );
+      tryFilterString (aCmd, "PSearch1",  PSearch1      );
+      tryFilterString (aCmd, "PSearch2",  PSearch2      );
+      tryFilterString (aCmd, "PSearch3",  PSearch3      );
+      tryFilterString (aCmd, "PSearch4",  PSearch4      );
+      tryFilterString (aCmd, "PSlant",    PSlant        );
+      tryFilterString (aCmd, "UStage1",   UStage1       );
+      tryFilterString (aCmd, "UStage2",   UStage2       );
+      tryFilterString (aCmd, "UStage3",   UStage3       );
+      tryFilterString (aCmd, "UStage4",   UStage4       );
+      tryFilterString (aCmd, "UMove1",    UMove1        );
+      tryFilterString (aCmd, "UMove2",    UMove2        );
+      tryFilterString (aCmd, "UError",    UError        );
 
       // Set the stored try filter
       tryFilterSet(aCmd);

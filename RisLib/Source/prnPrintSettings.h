@@ -280,10 +280,23 @@ public:
    static const int  CamCalError2      = 178;
    static const int  CamCalError3      = 179;
    static const int  CamCalError4      = 180;
-   static const int  UGrid1            = 181;
-   static const int  UGrid2            = 182;
-   static const int  UGrid3            = 183;
-   static const int  UGrid4            = 184;
+   static const int  PEst1             = 181;
+   static const int  PEst2             = 182;
+   static const int  PClimb            = 183;
+   static const int  PSearch1          = 184;
+   static const int  PSearch2          = 185;
+   static const int  PSearch3          = 186;
+   static const int  PSearch4          = 187;
+   static const int  PSlant            = 188;
+   static const int  UStage1           = 189;
+   static const int  UStage2           = 190;
+   static const int  UStage3           = 191;
+   static const int  UStage4           = 192;
+   static const int  UMove1            = 193;
+   static const int  UMove2            = 194;
+   static const int  UError            = 195;
+
+
    static const int  UGrid5            = 185;
    static const int  UGrid6            = 186;
    static const int  UGrid7            = 187;

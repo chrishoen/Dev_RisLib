@@ -262,7 +262,7 @@ public:
    int mPutIndex;
    int mGetIndex;
 
-   Double()
+   DoubleBuffer()
    {
       reset();
    }

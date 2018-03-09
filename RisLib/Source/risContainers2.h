@@ -245,6 +245,56 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// class template Double <Element>
+
+//******************************************************************************
+// This class template implements a double buffer of type Element that
+// provides the an element to put to and an element to get, which is the
+// last element that was put to.
+
+template <class Element>
+class DoubleBuffer
+{
+public:
+
+   Element mDoubleBuffer[2];
+
+   int mPutIndex;
+   int mGetIndex;
+
+   Double()
+   {
+      reset();
+   }
+   
+   void reset ()
+   {
+      mPutIndex = 0;
+      mGetIndex = 1;
+   }
+
+//******************************************************************************
+// These return references to the current double buffer elements to
+// put to and get from.
+
+   Element& elementToPut(){return(mDoubleBuffer[mPutIndex]);}  
+   Element& elementToGet(){return(mDoubleBuffer[mGetIndex]);}
+
+//******************************************************************************
+// This swaps the put and get elements.
+
+   void nextPut()
+   {
+      int temp  = mPutIndex;
+      mPutIndex = mGetIndex;
+      mGetIndex = temp;
+   }
+
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 

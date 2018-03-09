@@ -295,12 +295,8 @@ public:
    static const int  UMove1            = 193;
    static const int  UMove2            = 194;
    static const int  UError            = 195;
-
-
-   static const int  UGrid5            = 185;
-   static const int  UGrid6            = 186;
-   static const int  UGrid7            = 187;
-   static const int  UGrid8            = 188;
+   static const int  PFind1            = 196;
+   static const int  PFind2            = 197;
 
 //******************************************************************************
 //******************************************************************************

@@ -364,6 +364,8 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "UMove1",    UMove1        );
       tryFilterString (aCmd, "UMove2",    UMove2        );
       tryFilterString (aCmd, "UError",    UError        );
+      tryFilterString (aCmd, "PFind1",    PFind1        );
+      tryFilterString (aCmd, "PFind2",    PFind2        );
 
       // Set the stored try filter
       tryFilterSet(aCmd);

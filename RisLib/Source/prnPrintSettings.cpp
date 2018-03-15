@@ -367,6 +367,15 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "PFind1",    PFind1        );
       tryFilterString (aCmd, "PFind2",    PFind2        );
 
+      tryFilterString (aCmd, "UGrid1",    UGrid1        );
+      tryFilterString (aCmd, "UGrid2",    UGrid2        );
+      tryFilterString (aCmd, "UGrid3",    UGrid3        );
+      tryFilterString (aCmd, "UGrid4",    UGrid4        );
+      tryFilterString (aCmd, "UGrid5",    UGrid5        );
+      tryFilterString (aCmd, "UGrid6",    UGrid6        );
+      tryFilterString (aCmd, "UGrid7",    UGrid7        );
+      tryFilterString (aCmd, "UGrid8",    UGrid8        );
+
       // Set the stored try filter
       tryFilterSet(aCmd);
    }

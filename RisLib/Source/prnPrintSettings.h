@@ -52,7 +52,7 @@ public:
    //--------------------------------------------------------------------------
    // Filter table
  
-   static const int cFilterTableSize = 200;
+   static const int cFilterTableSize = 300;
 
    bool mFilterTable  [cFilterTableSize];
    int  mConsoleTable [cFilterTableSize];
@@ -297,6 +297,14 @@ public:
    static const int  UError            = 195;
    static const int  PFind1            = 196;
    static const int  PFind2            = 197;
+   static const int  UGrid1            = 198;
+   static const int  UGrid2            = 199;
+   static const int  UGrid3            = 200;
+   static const int  UGrid4            = 201;
+   static const int  UGrid5            = 202;
+   static const int  UGrid6            = 203;
+   static const int  UGrid7            = 204;
+   static const int  UGrid8            = 205;
 
 //******************************************************************************
 //******************************************************************************

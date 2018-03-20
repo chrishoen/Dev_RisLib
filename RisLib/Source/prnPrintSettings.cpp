@@ -376,6 +376,11 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "UGrid7",    UGrid7        );
       tryFilterString (aCmd, "UGrid8",    UGrid8        );
 
+      tryFilterString (aCmd, "RO1",       RO1           );
+      tryFilterString (aCmd, "RO2",       RO2           );
+      tryFilterString (aCmd, "RO3",       RO3           );
+      tryFilterString (aCmd, "RO4",       RO4           );
+
       // Set the stored try filter
       tryFilterSet(aCmd);
    }

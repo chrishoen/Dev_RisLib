@@ -305,6 +305,10 @@ public:
    static const int  UGrid6            = 203;
    static const int  UGrid7            = 204;
    static const int  UGrid8            = 205;
+   static const int  RO1               = 206;
+   static const int  RO2               = 207;
+   static const int  RO3               = 208;
+   static const int  RO4               = 209;
 
 //******************************************************************************
 //******************************************************************************

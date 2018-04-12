@@ -191,6 +191,8 @@ BaseTwoThread::BaseTwoThread()
    mTimerCompletionTimeoutException = 667;   
    mTimerCompletionErrorException   = 668;
 
+   mShutdownLongShort = true;
+
    // Bind qcall.
    mSendNotifyQCall.bind(mShortThread,this,&BaseTwoThread::executeSendNotify);
 }
@@ -219,12 +221,21 @@ void BaseTwoThread::launchThreads()
 
 void BaseTwoThread::shutdownThreads() 
 {
-   // Abort any pending waits
+   // Abort any pending waits.
    mLongThread->mQCallAbortFlag = true;
    mShortThread->threadAbortTimerCompletion();
-   // Shutdown the threads
-   mShortThread->shutdownThread();
-   mLongThread->shutdownThread();
+   // Shutdown the threads.
+   if (mShutdownLongShort)
+   {
+      mLongThread->shutdownThread();
+      mShortThread->shutdownThread();
+   }
+   else
+   {
+      mShortThread->shutdownThread();
+      mLongThread->shutdownThread();
+   }
+
 }
 
 //******************************************************************************

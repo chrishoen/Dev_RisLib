@@ -200,7 +200,7 @@ public:
    TimerCall      mThreadTimerCall;
    
    // Set by threadExecuteOnTimer to indicate that a timer
-   // update has occurred
+   // update has occurred.
    bool  mTimerExecuteFlag;
 
    // Timer period in milliseconds.
@@ -211,6 +211,14 @@ public:
    // occurred since thread launch
    int   mCurrentTimeCount;
    int   mTimerCurrentTimeCount;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members, status.
+
+   // If true then abort the qcall.
+   bool mQCallAbortFlag;
 
    //***************************************************************************
    //***************************************************************************

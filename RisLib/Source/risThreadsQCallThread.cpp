@@ -23,6 +23,7 @@ BaseQCallThread::BaseQCallThread()
    // Logic
    mTerminateFlag = false;
    mCallQueSize=100;
+   mQCallAbortFlag = false;
 
    // Timer
    mTimerExecuteFlag = false;
@@ -152,6 +153,8 @@ void BaseQCallThread::threadRunFunction()
          // If there is a QCall available
          if (tQCall)
          {
+            // Set the abort flag false for each qcall.
+            mQCallAbortFlag = false;
             // Execute QCall
             tQCall->execute();
             // Release it

@@ -220,6 +220,7 @@ void BaseTwoThread::launchThreads()
 void BaseTwoThread::shutdownThreads() 
 {
    // Abort any pending waits
+   mLongThread->mQCallAbortFlag = true;
    mShortThread->threadAbortTimerCompletion();
    // Shutdown the threads
    mShortThread->shutdownThread();
@@ -233,6 +234,7 @@ void BaseTwoThread::shutdownThreads()
 
 void BaseTwoThread::abortWaitForNotify()
 {
+   mLongThread->mQCallAbortFlag = true;
    mShortThread->threadAbortTimerCompletion();
 }
 
@@ -244,6 +246,16 @@ void BaseTwoThread::abortWaitForNotify()
 
 int BaseTwoThread::waitForTimer(int aTimeout)
 {
+   // Test for abort flag.
+   if (mLongThread->mQCallAbortFlag)
+   {
+      // Throw exception for abort
+      if (mTimerCompletionAbortException != 0)
+      {
+         throw mTimerCompletionAbortException;
+      }
+   }
+
    // Exit if zero.
    if (aTimeout==0) return TwoThreadShortThread::TimerCompletion_Timeout;
 
@@ -283,6 +295,17 @@ int BaseTwoThread::waitForTimer(int aTimeout)
 
 void BaseTwoThread::resetNotify()
 {
+   // Test for abort flag.
+   if (mLongThread->mQCallAbortFlag)
+   {
+      // Throw exception for abort
+      if (mTimerCompletionAbortException != 0)
+      {
+         throw mTimerCompletionAbortException;
+      }
+   }
+
+   // Reset latch.
    mNotifyLatch.reset();
 }
 
@@ -294,6 +317,16 @@ void BaseTwoThread::resetNotify()
 
 int BaseTwoThread::waitForNotify(int aTimeout)
 {
+   // Test for abort flag.
+   if (mLongThread->mQCallAbortFlag)
+   {
+      // Throw exception for abort
+      if (mTimerCompletionAbortException != 0)
+      {
+         throw mTimerCompletionAbortException;
+      }
+   }
+
    // Timer count from timeout
    int tTimerCount = aTimeout/mShortThread->mTimerPeriod + 1;
    if (aTimeout < 0) tTimerCount = -1;

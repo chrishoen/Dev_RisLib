@@ -61,12 +61,6 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
       else
       {
          // Special case, nickname
-         // Abort
-         if (strcmp(tCommandLine,"a")==0)
-         {
-            return;
-         }
-         // Special case, nickname
          // Exit
          if (strcmp(tCommandLine,"e")==0)
          {

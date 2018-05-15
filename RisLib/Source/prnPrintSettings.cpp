@@ -336,18 +336,18 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "UnityRun3",    UnityRun3     );
       tryFilterString (aCmd, "UnityRun4",    UnityRun4     );
 
-      tryFilterString (aCmd, "CamCalInit1",  CamCalInit1     );
-      tryFilterString (aCmd, "CamCalInit2",  CamCalInit2     );
-      tryFilterString (aCmd, "CamCalInit3",  CamCalInit3     );
-      tryFilterString (aCmd, "CamCalInit4",  CamCalInit4     );
-      tryFilterString (aCmd, "CamCalRun1",   CamCalRun1      );
-      tryFilterString (aCmd, "CamCalRun2",   CamCalRun2      );
-      tryFilterString (aCmd, "CamCalRun3",   CamCalRun3      );
-      tryFilterString (aCmd, "CamCalRun4",   CamCalRun4      );
-      tryFilterString (aCmd, "CamCalError1", CamCalError1    );
-      tryFilterString (aCmd, "CamCalError2", CamCalError2    );
-      tryFilterString (aCmd, "CamCalError3", CamCalError3    );
-      tryFilterString (aCmd, "CamCalError4", CamCalError4    );
+      tryFilterString (aCmd, "ZCalInit1",  ZCalInit1     );
+      tryFilterString (aCmd, "ZCalInit2",  ZCalInit2     );
+      tryFilterString (aCmd, "ZCalInit3",  ZCalInit3     );
+      tryFilterString (aCmd, "ZCalInit4",  ZCalInit4     );
+      tryFilterString (aCmd, "ZCalRun1",   ZCalRun1      );
+      tryFilterString (aCmd, "ZCalRun2",   ZCalRun2      );
+      tryFilterString (aCmd, "ZCalRun3",   ZCalRun3      );
+      tryFilterString (aCmd, "ZCalRun4",   ZCalRun4      );
+      tryFilterString (aCmd, "ZCalError1", ZCalError1    );
+      tryFilterString (aCmd, "ZCalError2", ZCalError2    );
+      tryFilterString (aCmd, "ZCalError3", ZCalError3    );
+      tryFilterString (aCmd, "ZCalError4", ZCalError4    );
 
       tryFilterString (aCmd, "PEst1",     PEst1         );
       tryFilterString (aCmd, "PEst2",     PEst2         );

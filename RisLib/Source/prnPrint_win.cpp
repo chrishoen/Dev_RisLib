@@ -64,7 +64,7 @@ void resetPrint()
       rConsolePort   [i] = Ris::Net::PortDef::cPrintView + i;
       rConsoleHandle [i] = 0;
    }
-   rConsoleFlag[0] = true;
+// rConsoleFlag[0] = true;
 }
 
 //****************************************************************************
@@ -126,7 +126,7 @@ void initializePrint()
    //-----------------------------------------------------
    // Console sockets
 
-   for (int i = 1; i < cMaxConsoles; i++)
+   for (int i = 0; i < cMaxConsoles; i++)
    {
       if (rConsoleFlag[i])
       {
@@ -205,7 +205,7 @@ void print(int aFilter, const char* aFormat, ...)
    //-----------------------------------------------------
    // Print the string
 
-   if (tConsole == 0)
+   if (tConsole == 0 && !rConsoleFlag[0])
    {
       puts(tPrintStr);
    }

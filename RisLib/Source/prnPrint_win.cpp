@@ -29,20 +29,19 @@ HANDLE rCreatePrintView(int aConsole);
 //****************************************************************************
 // Regional variables
 
-   static const int cMaxPrintStringSize = 400;
-   static const int cMaxNameSize = 200;
-   static const int cMaxConsoles = 8;
+static const int cMaxPrintStringSize = 400;
+static const int cMaxNameSize = 200;
+static const int cMaxConsoles = 8;
 
-   bool    rUseSettingsFile;
-   char    rSettingsFilePath    [cMaxNameSize];
-   char    rSettingsFileSection [cMaxNameSize];
-   bool    rSuppressFlag;
+bool    rUseSettingsFile;
+char    rSettingsFilePath    [cMaxNameSize];
+char    rSettingsFileSection [cMaxNameSize];
+bool    rSuppressFlag;
 
-   bool                        rConsoleFlag [cMaxConsoles];
-   Ris::Net::UdpTxStringSocket rConsoleSocket [cMaxConsoles];
-   int                         rConsolePort   [cMaxConsoles];
-   HANDLE                      rConsoleHandle [cMaxConsoles];
-
+bool                        rConsoleFlag   [cMaxConsoles];
+Ris::Net::UdpTxStringSocket rConsoleSocket [cMaxConsoles];
+int                         rConsolePort   [cMaxConsoles];
+HANDLE                      rConsoleHandle [cMaxConsoles];
 
 //****************************************************************************
 //****************************************************************************

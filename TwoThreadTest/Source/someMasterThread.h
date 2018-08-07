@@ -47,8 +47,8 @@ public:
    void executeSendCommand (int aId,int aParm1,int aParm2);
 
    // Send work request to slave thread
-   Ris::Threads::QCall1<int>   mSendWorkRequestQCall;
-   void executeSendWorkRequest (int aParm1);
+   Ris::Threads::QCall2<int,int>   mSendWorkRequestQCall;
+   void executeSendWorkRequest (int aParm1,int aParm2);
 
    // Receive response from slave thread
    Ris::Threads::QCall1<int>   mResponseQCall;

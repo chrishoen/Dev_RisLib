@@ -21,7 +21,6 @@
 #include "my_functions.h"
 #include "prnPrint.h"
 #include "logFiles.h"
-#include "dsp_math.h"
 #include "risPortableCalls.h"
 
 // TODO: reference additional headers your program requires here

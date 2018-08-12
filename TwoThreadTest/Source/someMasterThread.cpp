@@ -129,7 +129,7 @@ void MasterThread::executeSendCommand(int aId,int aParm1,int aParm2)
 //******************************************************************************
 //******************************************************************************
 
-void MasterThread::executeSendWorkRequest(int aParm1)
+void MasterThread::executeSendWorkRequest(int aParm1,int aParm2)
 {
    try
    {
@@ -138,6 +138,7 @@ void MasterThread::executeSendWorkRequest(int aParm1)
       BaseClass::resetNotify();
       Ris::Threads::TwoThreadNotify tNotify(this,1);
       gSlaveThread->mWorkRequestQCall(aParm1,tNotify);
+      BaseClass::waitForTimer(aParm2);
       BaseClass::waitForNotify(-1,1);
 
       Prn::print(0,"MasterThread::executeSendWorkRequest END       %04d",aParm1);

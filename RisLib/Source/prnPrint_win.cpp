@@ -29,20 +29,19 @@ HANDLE rCreatePrintView(int aConsole);
 //****************************************************************************
 // Regional variables
 
-   static const int cMaxPrintStringSize = 400;
-   static const int cMaxNameSize = 200;
-   static const int cMaxConsoles = 8;
+static const int cMaxPrintStringSize = 400;
+static const int cMaxNameSize = 200;
+static const int cMaxConsoles = 8;
 
-   bool    rUseSettingsFile;
-   char    rSettingsFilePath    [cMaxNameSize];
-   char    rSettingsFileSection [cMaxNameSize];
-   bool    rSuppressFlag;
+bool    rUseSettingsFile;
+char    rSettingsFilePath    [cMaxNameSize];
+char    rSettingsFileSection [cMaxNameSize];
+bool    rSuppressFlag;
 
-   bool                        rConsoleFlag [cMaxConsoles];
-   Ris::Net::UdpTxStringSocket rConsoleSocket [cMaxConsoles];
-   int                         rConsolePort   [cMaxConsoles];
-   HANDLE                      rConsoleHandle [cMaxConsoles];
-
+bool                        rConsoleFlag   [cMaxConsoles];
+Ris::Net::UdpTxStringSocket rConsoleSocket [cMaxConsoles];
+int                         rConsolePort   [cMaxConsoles];
+HANDLE                      rConsoleHandle [cMaxConsoles];
 
 //****************************************************************************
 //****************************************************************************
@@ -65,7 +64,7 @@ void resetPrint()
       rConsolePort   [i] = Ris::Net::PortDef::cPrintView + i;
       rConsoleHandle [i] = 0;
    }
-   rConsoleFlag[0] = true;
+// rConsoleFlag[0] = true;
 }
 
 //****************************************************************************
@@ -127,7 +126,7 @@ void initializePrint()
    //-----------------------------------------------------
    // Console sockets
 
-   for (int i = 1; i < cMaxConsoles; i++)
+   for (int i = 0; i < cMaxConsoles; i++)
    {
       if (rConsoleFlag[i])
       {
@@ -206,7 +205,7 @@ void print(int aFilter, const char* aFormat, ...)
    //-----------------------------------------------------
    // Print the string
 
-   if (tConsole == 0)
+   if (tConsole == 0 && !rConsoleFlag[0])
    {
       puts(tPrintStr);
    }

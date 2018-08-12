@@ -345,6 +345,9 @@ public:
    //***************************************************************************
    // Methods.
 
+   // Clear the status and data to zero.
+   void clear();
+
    // Set the status to a nonzero value. This will cause a notification 
    // error exception on the thread waiting for the notification.
    void setError();

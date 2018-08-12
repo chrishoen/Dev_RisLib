@@ -37,7 +37,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeWorkRequest(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,0);
-   gMasterThread->mSendWorkRequestQCall(aCmd->argInt(1));
+   aCmd->setArgDefault(2,0);
+   gMasterThread->mSendWorkRequestQCall(aCmd->argInt(1),aCmd->argInt(2));
 }
 
 //******************************************************************************

@@ -1,12 +1,7 @@
-#include <windows.h>
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <random>
+#include "stdafx.h"
 
-#include "prnPrint.h"
-#include "risPortableCalls.h"
+#include <windows.h>
+
 #include "CmdLineExec.h"
 #include "Parms.h"
 #include "someMyClass.h"

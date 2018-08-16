@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include "stdafx.h"
 
 #include "MainInit.h"
 #include "prnPrint.h"

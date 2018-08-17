@@ -1,6 +1,7 @@
+#include "stdafx.h"
+
 #include <windows.h>
 
-#include "prnPrint.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 

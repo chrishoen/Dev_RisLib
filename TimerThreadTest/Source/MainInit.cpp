@@ -1,10 +1,8 @@
-#include "prnPrint.h"
-#include "risThreadsProcess.h"
-#include "risCmdLineConsole.h"
-#include "CmdLineExec.h"
+#include "stdafx.h"
 
-#include "someTimerThread.h"
-using namespace Some;
+#include "risThreadsProcess.h"
+
+
 
 //******************************************************************************
 //******************************************************************************

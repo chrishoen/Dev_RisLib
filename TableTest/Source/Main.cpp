@@ -1,9 +1,6 @@
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <stdio.h>
+#include "stdafx.h"
 
 #include "MainInit.h"
-#include "prnPrint.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 

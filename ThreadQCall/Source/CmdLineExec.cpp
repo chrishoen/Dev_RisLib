@@ -1,12 +1,7 @@
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "prnPrint.h"
+#include "stdafx.h"
 
 #include "CmdLineExec.h"
-
-#include "risPortableCalls.h"
 
 #include "someShare.h"
 #include "someQCallThread1.h"

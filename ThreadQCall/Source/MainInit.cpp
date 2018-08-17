@@ -1,8 +1,6 @@
-#include <windows.h>
+#include "stdafx.h"
 
-#include "prnPrint.h"
-#include "risCmdLineConsole.h"
-#include "CmdLineExec.h"
+#include <windows.h>
 
 #include "GSettings.h"
 

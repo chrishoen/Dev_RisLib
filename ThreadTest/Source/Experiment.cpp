@@ -1,5 +1,6 @@
+#include "stdafx.h"
+
 #include <windows.h>
-#include "prnPrint.h"
 
 #include "Experiment.h"
 

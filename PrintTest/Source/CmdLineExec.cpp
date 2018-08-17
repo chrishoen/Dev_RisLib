@@ -1,9 +1,5 @@
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "prnPrint.h"
-#include "logFiles.h"
+#include "stdafx.h"
 
 #include "CmdLineExec.h"
 

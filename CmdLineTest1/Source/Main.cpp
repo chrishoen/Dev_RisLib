@@ -1,4 +1,4 @@
-#include "prnPrint.h"
+#include "stdafx.h"
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"

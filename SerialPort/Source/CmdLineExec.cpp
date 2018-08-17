@@ -1,14 +1,8 @@
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "prnPrint.h"
+#include "stdafx.h"
 
 #include "CmdLineExec.h"
 
-#include "risPortableCalls.h"
-
-//Git test 310
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {

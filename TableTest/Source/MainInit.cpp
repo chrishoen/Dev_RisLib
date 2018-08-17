@@ -1,7 +1,5 @@
-#include <windows.h>
+#include "stdafx.h"
 
-#include "prnPrint.h"
-#include "logFiles.h"
 #include "risThreadsProcess.h"
 
 //******************************************************************************

@@ -1,7 +1,4 @@
-#define _CRTDBG_MAP_ALLOC
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "stdafx.h"
 
 #include "risNetPortDef.h"
 #include "risNetUdpStringSocket.h"

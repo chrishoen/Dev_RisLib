@@ -4,14 +4,10 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "stdafx.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "risCmdLineFile.h"
-#include "risPortableCalls.h"
-#include "prnPrint.h"
 
 #define  _GSETTINGS_CPP_
 #include "GSettings.h"

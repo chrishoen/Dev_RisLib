@@ -6,7 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include "prnPrint.h"
+#include "stdafx.h"
 
 #define  _SOMETIMERTHREAD_CPP_
 #include "someTimerThread.h"

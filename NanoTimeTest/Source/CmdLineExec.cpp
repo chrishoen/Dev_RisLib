@@ -1,11 +1,8 @@
+#include "stdafx.h"
+
 #include <windows.h>
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <time.h>
 
-#include "prnPrint.h"
 #include "risContainers.h"
 #include "risTimeMarker.h"
 #include "risProgramTime.h"

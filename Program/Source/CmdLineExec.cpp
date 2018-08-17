@@ -1,13 +1,8 @@
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "stdafx.h"
+
 #include <time.h>
 #include <io.h>
 
-#include "prnPrint.h"
-#include "my_functions.h"
-#include "risPortableCalls.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 

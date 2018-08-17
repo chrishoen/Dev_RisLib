@@ -1,6 +1,8 @@
-#include <stdio.h>
-#include <string.h>
-#include "prnPrint.h"
+#include "stdafx.h"
+
+
+
+
 #include "exampleMsgHelper.h"
 
 namespace ExampleMsg

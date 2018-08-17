@@ -2,13 +2,9 @@
 //******************************************************************************
 //******************************************************************************
 
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
+#include "stdafx.h"
 
-#include "my_functions.h"
 #include "risCmdLineFile.h"
-#include "risPortableCalls.h"
 
 #define  _IMAGETESTPARMS_CPP_
 #include "TableTestParms.h"

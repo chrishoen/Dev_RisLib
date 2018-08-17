@@ -1,14 +1,10 @@
+#include "stdafx.h"
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "prnPrint.h"
 
 #include "CmdLineExec.h"
 
 #include "risThreadsThreads.h"
 #include "risTimeMarker.h"
-#include "risPortableCalls.h"
 
 #include "someTimerThread.h"
 using namespace Some;

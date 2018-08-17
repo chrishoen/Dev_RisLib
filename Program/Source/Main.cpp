@@ -1,9 +1,8 @@
+#include "stdafx.h"
+
 #include <windows.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 #include "MainInit.h"
-#include "prnPrint.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 

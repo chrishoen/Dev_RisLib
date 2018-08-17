@@ -1,13 +1,10 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "stdafx.h"
 
-#include <stdio.h>
-#include <string.h>
 
-#include "my_functions.h"
 #include "risCmdLineFile.h"
-#include "risPortableCalls.h"
 
 #define  _EXAMPLESETTINGS_CPP_
 #include "exampleSettings.h"

@@ -133,6 +133,9 @@
     <ClCompile Include="Source\risSerialMsgThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risAlpha.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -293,6 +296,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risSerialMsgThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risAlpha.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

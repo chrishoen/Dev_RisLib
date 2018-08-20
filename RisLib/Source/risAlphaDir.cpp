@@ -53,10 +53,10 @@ char* getAlphaFilePath_X(char* aBuffer, char* aSubDirName, char* aFileName = 0)
    strcpy(aBuffer, rAlphaDirPath);
    strcat(aBuffer, "\\");
    strcat(aBuffer, aSubDirName);
+   strcat(aBuffer, "\\");
 
    if (aFileName == 0) return aBuffer;
 
-   strcat(aBuffer, "\\");
    strcat(aBuffer, aFileName);
    return aBuffer;
 }

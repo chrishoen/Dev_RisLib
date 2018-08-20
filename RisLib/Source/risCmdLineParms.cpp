@@ -4,14 +4,9 @@
 
 #include "stdafx.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-
-#include "prnPrint.h"
-#include "my_functions.h"
-#include "risCmdLineFile.h"
+#include "risAlphaDir.h"
 #include "risPortableCalls.h"
+#include "risCmdLineFile.h"
 
 #define  _RISCMDLINEPARMS_CPP_
 #include "risCmdLineParms.h"
@@ -244,8 +239,8 @@ bool BaseCmdLineParms::readSection(char* aSection)
    //***************************************************************************
    // Search for file. If found then read it.
 
-   strcpy(tFilePath, "C:\\Alpha\\Work\\");
-   strcat(tFilePath, mDefaultFileName);
+   char tBuffer[400];
+   strcpy(tFilePath, Ris::getAlphaFilePath_Work(tBuffer, mDefaultFileName));
 
    if (portableFilePathExists(tFilePath))
    {
@@ -341,8 +336,8 @@ bool BaseCmdLineParms::readOverride(char* aSection)
    //***************************************************************************
    // Search for file. If found then read it.
 
-   strcpy(tFilePath, "C:\\Alpha\\Work\\");
-   strcat(tFilePath, mOverrideFileName);
+   char tBuffer[400];
+   strcpy(tFilePath, Ris::getAlphaFilePath_Work(tBuffer, mOverrideFileName));
 
    if (portableFilePathExists(tFilePath))
    {

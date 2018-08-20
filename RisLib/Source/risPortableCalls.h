@@ -22,16 +22,6 @@ namespace Ris
 void portableSleep(int aTicks);
 
 //------------------------------------------------------------------------------
-// This returns a pointer to the settings folder.
-// Use it like this:
-//
-//    char tFilePath[200];
-//    strcpy(tFilePath,Ris::portableGetSettingsDir());
-//    strcat(tFilePath,"GSettings.txt");
-
-const char* portableGetSettingsDir();
-
-//------------------------------------------------------------------------------
 // This returns a pointer to the current working directory.
 
 char* portableGetProgramDir();

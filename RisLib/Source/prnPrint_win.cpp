@@ -56,8 +56,8 @@ void resetPrint()
    strcpy(rSettingsFileSection, "DEFAULT");
    rSuppressFlag=true;
 
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
-   strncat(rSettingsFilePath,"prnPrintSettings.txt",cMaxNameSize);
+   char tBuffer[400];
+   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "prnPrintSettings.txt"));
 
    for (int i=0;i<cMaxConsoles;i++)
    {
@@ -75,15 +75,17 @@ void resetPrint()
 
 void useSettingsFileDefault()
 {
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
-   strncat(rSettingsFilePath,"prnPrintSettings.txt",cMaxNameSize);
+   char tBuffer[400];
+   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "prnPrintSettings.txt"));
+
    rUseSettingsFile=true;
 }
 
 void useSettingsFileName(char* aSettingsFileName)
 {
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
-   strncat(rSettingsFilePath,aSettingsFileName,cMaxNameSize);
+   char tBuffer[400];
+   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aSettingsFileName));
+
    rUseSettingsFile=true;
 }
 

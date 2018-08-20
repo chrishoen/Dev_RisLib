@@ -5,7 +5,7 @@
 #include "CmdLineExec.h"
 #include "Parms.h"
 #include "someMyClass.h"
-#include "risAlpha.h"
+#include "risAlphaDir.h"
 
 using namespace Some;
 

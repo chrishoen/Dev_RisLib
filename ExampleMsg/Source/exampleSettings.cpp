@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 
+#include "risAlphaDir.h"
 #include "risCmdLineFile.h"
 
 #define  _EXAMPLESETTINGS_CPP_
@@ -141,8 +142,8 @@ bool Settings::initialize(char* aSection)
    // File path
    char tFilePath[200];
 
-   strcpy(tFilePath, Ris::portableGetSettingsDir());
-   strcat(tFilePath, "exampleSettings.txt");
+   char tBuffer[400];
+   strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "exampleSettings.txt"));
 
    // Copy arguments
    strcpy(mSection,aSection);

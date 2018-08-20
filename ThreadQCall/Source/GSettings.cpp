@@ -7,6 +7,8 @@
 
 #include "stdafx.h"
 
+#include "risAlphaDir.h"
+
 #define  _GSETTINGS_CPP_
 #include "GSettings.h"
 
@@ -47,17 +49,17 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
 
 void GSettings::readFromFileName(char* aFileName)
 {
-   char tFilePath[200];
-
-   strcpy(tFilePath, Ris::portableGetSettingsDir());
+   char tFilePath[400];
 
    if (aFileName != 0)
    {
-      strcat(tFilePath, aFileName);
+      char tBuffer[400];
+      strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aFileName));
    }
    else
    {
-      strcat(tFilePath, "ThreadTestSettings.txt");
+      char tBuffer[400];
+      strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "ThreadTestSettings.txt"));
    }
 
    readFromFilePath(tFilePath);

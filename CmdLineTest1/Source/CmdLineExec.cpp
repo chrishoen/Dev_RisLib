@@ -80,7 +80,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   printf("GetSettingsDir        %s\n",Ris::portableGetSettingsDir());
    printf("GetCurrentWorkingDir  %s\n",Ris::portableGetCurrentDir());
 }
 

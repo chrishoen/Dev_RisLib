@@ -7,6 +7,7 @@
 #include "stdafx.h"
 
 
+#include "risAlphaDir.h"
 #include "risCmdLineFile.h"
 
 #define  _GSETTINGS_CPP_
@@ -148,8 +149,9 @@ void GSettings::initialize()
    // Try opening settings file from settings directory
    if (tFileFound == 0)
    {
-      strcpy(tFilePath,Ris::portableGetSettingsDir());
-      strcat(tFilePath,"GSettings.txt");
+      char tBuffer[400];
+      strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "GSettings.txt"));
+
       if (tCmdLineFile.open(tFilePath))
       {
          tFileFound = 3;

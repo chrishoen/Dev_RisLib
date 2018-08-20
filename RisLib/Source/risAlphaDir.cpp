@@ -8,7 +8,7 @@ Print utility
 
 #include "stdafx.h"
 
-#include "risAlpha.h"
+#include "risAlphaDir.h"
 
 namespace Ris
 {

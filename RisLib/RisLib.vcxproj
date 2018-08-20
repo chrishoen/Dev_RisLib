@@ -132,7 +132,7 @@
     <ClInclude Include="Source\my_functions.h" />
     <ClInclude Include="Source\prnPrint.h" />
     <ClInclude Include="Source\prnPrintSettings.h" />
-    <ClInclude Include="Source\risAlpha.h" />
+    <ClInclude Include="Source\risAlphaDir.h" />
     <ClInclude Include="Source\risByteBuffer.h" />
     <ClInclude Include="Source\risByteContent.h" />
     <ClInclude Include="Source\risByteMsgMonkey.h" />
@@ -188,7 +188,7 @@
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\prnPrintSettings.cpp" />
     <ClCompile Include="Source\prnPrint_win.cpp" />
-    <ClCompile Include="Source\risAlpha.cpp" />
+    <ClCompile Include="Source\risAlphaDir.cpp" />
     <ClCompile Include="Source\risByteBuffer.cpp" />
     <ClCompile Include="Source\risByteMsgMonkey.cpp" />
     <ClCompile Include="Source\risCmdLineCmd.cpp" />

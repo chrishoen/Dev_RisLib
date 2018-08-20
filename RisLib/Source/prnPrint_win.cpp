@@ -13,6 +13,7 @@ Print utility
 #include <string.h>
 #include <stdarg.h>
 
+#include "risAlphaDir.h"
 #include "risPortableCalls.h"
 #include "risNetPortDef.h"
 #include "risNetUdpStringSocket.h"
@@ -247,8 +248,9 @@ HANDLE rCreatePrintView(int aConsole)
 
    bool tFileFound = false;
    char tFilePath[200];
+   char tBuffer[200];
 
-   strcpy(tFilePath,"C:\\Alpha\\Bin\\PrintView.exe");
+   strcpy(tFilePath, Ris::getAlphaFilePath_Bin(tBuffer,"PrintView.exe"));
 
    if (Ris::portableFilePathExists(tFilePath))
    {

@@ -424,15 +424,14 @@ int SerialPort::doReceiveUntilLF(char *aData, int aMaxNumBytes)
          // Read success
          // Store byte
          aData[tIndex] = tRxChar;
-         tIndex++;
 
          // If CR
          if (tRxChar == 10)
          {
-            // Terminator detected
+            // Terminator detected, strip if off
             tGoing = false;
             aData[tIndex] = 0;
-            tStatus = tIndex - 1;
+            tStatus = tIndex;
          }
          if (tIndex == aMaxNumBytes - 1)
          {
@@ -441,6 +440,9 @@ int SerialPort::doReceiveUntilLF(char *aData, int aMaxNumBytes)
             aData[tIndex] = 0;
             tStatus = tIndex;
          }
+
+         // Increment
+         tIndex++;
       }
       else
       {

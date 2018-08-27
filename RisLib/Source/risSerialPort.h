@@ -104,8 +104,11 @@ public:
    // Receive data, terminated with CR/LF.
    int  doReceiveUntilCRLF (char *aData, int aMaxNumBytes);
 
-   // Receive data, terminated with CR.
-   int  doReceiveUntilCR (char *aData, int aMaxNumBytes);
+   // Receive data, terminated with CR (\r,13).
+   int  doReceiveUntilCR(char *aData, int aMaxNumBytes);
+
+   // Receive data, terminated with LF(\n,10).
+   int  doReceiveUntilLF(char *aData, int aMaxNumBytes);
 
    // Receive one byte.
    int  doReceiveOne(char *aData);

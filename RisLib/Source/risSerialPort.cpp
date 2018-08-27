@@ -351,36 +351,36 @@ int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxNumBytes)
 
 int  SerialPort::doReceiveUntilCR(char *aData, int aMaxNumBytes)
 {
-   int  tStatus=0;
+   int  tStatus = 0;
    int  tIndex = 0;
-   int  tRxStatus=0;
-   char tRxChar=0;
-   bool tGoing=true;
+   int  tRxStatus = 0;
+   char tRxChar = 0;
+   bool tGoing = true;
 
-   aData[0]=0;
+   aData[0] = 0;
 
    // Loop to read single bytes, store them, and exit
    // when termination cr/lf is detected
-   while ( isValid() && tGoing )
+   while (isValid() && tGoing)
    {
       // Read one byte
       tRxStatus = doReceiveOne(&tRxChar);
       if (tRxStatus >= 0)
-      { 
+      {
          // Read success
          // Store byte
          aData[tIndex] = tRxChar;
          tIndex++;
 
          // If CR
-         if(tRxChar==13)
+         if (tRxChar == 13)
          {
             // Terminator detected
             tGoing = false;
-            aData[tIndex]=0;
-            tStatus = tIndex-1;
+            aData[tIndex] = 0;
+            tStatus = tIndex - 1;
          }
-         if(tIndex == aMaxNumBytes-1)
+         if (tIndex == aMaxNumBytes - 1)
          {
             // NumBytes limit was reached
             tGoing = false;
@@ -389,7 +389,61 @@ int  SerialPort::doReceiveUntilCR(char *aData, int aMaxNumBytes)
          }
       }
       else
-      {  
+      {
+         // Read failure
+         tStatus = tRxStatus;
+         tGoing = false;
+      }
+   }
+   return tStatus;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// receive until lf termination 
+
+int SerialPort::doReceiveUntilLF(char *aData, int aMaxNumBytes)
+{
+   int  tStatus = 0;
+   int  tIndex = 0;
+   int  tRxStatus = 0;
+   char tRxChar = 0;
+   bool tGoing = true;
+
+   aData[0] = 0;
+
+   // Loop to read single bytes, store them, and exit
+   // when termination cr/lf is detected
+   while (isValid() && tGoing)
+   {
+      // Read one byte
+      tRxStatus = doReceiveOne(&tRxChar);
+      if (tRxStatus >= 0)
+      {
+         // Read success
+         // Store byte
+         aData[tIndex] = tRxChar;
+         tIndex++;
+
+         // If CR
+         if (tRxChar == 10)
+         {
+            // Terminator detected
+            tGoing = false;
+            aData[tIndex] = 0;
+            tStatus = tIndex - 1;
+         }
+         if (tIndex == aMaxNumBytes - 1)
+         {
+            // NumBytes limit was reached
+            tGoing = false;
+            aData[tIndex] = 0;
+            tStatus = tIndex;
+         }
+      }
+      else
+      {
          // Read failure
          tStatus = tRxStatus;
          tGoing = false;

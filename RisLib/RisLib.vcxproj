@@ -192,7 +192,7 @@
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\prnPrintSettings.cpp" />
     <ClCompile Include="Source\prnPrint_win.cpp" />
-    <ClCompile Include="Source\risAlphaDir.cpp" />
+    <ClCompile Include="Source\risAlphaDir_win.cpp" />
     <ClCompile Include="Source\risByteBuffer.cpp" />
     <ClCompile Include="Source\risByteMsgMonkey.cpp" />
     <ClCompile Include="Source\risCmdLineCmd.cpp" />

@@ -132,10 +132,10 @@
     <ClCompile Include="Source\risSerialMsgThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risAlphaDir.cpp">
+    <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\stdafx.cpp">
+    <ClCompile Include="Source\risAlphaDir_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

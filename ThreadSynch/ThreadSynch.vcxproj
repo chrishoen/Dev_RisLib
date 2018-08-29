@@ -180,7 +180,7 @@
     <ClCompile Include="Source\someShare.cpp" />
     <ClCompile Include="Source\someThread1.cpp" />
     <ClCompile Include="Source\someTimerThread.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -192,7 +192,7 @@
     <ClInclude Include="Source\someShare.h" />
     <ClInclude Include="Source\someThread1.h" />
     <ClInclude Include="Source\someTimerThread.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

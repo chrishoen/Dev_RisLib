@@ -27,9 +27,9 @@
     <ClCompile Include="Source\risSerialMsgThread.cpp" />
     <ClCompile Include="Source\someSerialRxThread.cpp" />
     <ClCompile Include="Source\someSerialTxThread.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,7 +40,7 @@
     <ClInclude Include="Source\risSerialMsgThread.h" />
     <ClInclude Include="Source\someSerialRxThread.h" />
     <ClInclude Include="Source\someSerialTxThread.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RisLib\RisLib.vcxproj">

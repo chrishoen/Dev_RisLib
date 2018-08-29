@@ -6,7 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Source\logFiles_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -136,9 +135,11 @@
     <ClCompile Include="Source\risAlphaDir.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Source\logFiles.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -299,6 +300,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risAlphaDir.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stdafx.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

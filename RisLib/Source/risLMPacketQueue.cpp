@@ -72,7 +72,8 @@ public:
    int mMemorySize;
 
    // Calculate and store memory sizes.
-   MemorySize::MemorySize(int aNumElements,int aElementSize)
+// MemorySize::MemorySize(int aNumElements, int aElementSize)
+   MemorySize(int aNumElements, int aElementSize)
    {
       mStateSize         = LMPacketQueueState::getMemorySize();
       mQueueArraySize    = my_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(int));

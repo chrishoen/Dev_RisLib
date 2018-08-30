@@ -88,8 +88,6 @@ public:
    // aRemoteIpPort   is the ip port    of the remote interface bound to
    // aRxMsgQCall     is a qcall for receive messages
 
-   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
-
    void configure(
       Ris::BaseMsgMonkeyCreator* aMonkeyCreator, 
       char*                      aLocalIpAddress,

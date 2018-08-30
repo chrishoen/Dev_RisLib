@@ -4,9 +4,6 @@
 
 #include "stdafx.h"
 
-#include <stdio.h>
-#include <string.h>
-
 
 #define  _PRNPRINTSETTINGS_CPP_
 #include "prnPrintSettings.h"

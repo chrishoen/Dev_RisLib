@@ -8,7 +8,6 @@
 #include "stdafx.h"
 
 #include <windows.h> 
-#include <stdio.h>
 #include <assert.h>
 
 #include "my_functions.h"

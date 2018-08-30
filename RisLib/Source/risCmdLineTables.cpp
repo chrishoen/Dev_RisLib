@@ -8,10 +8,6 @@ Description:
 
 #include "stdafx.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
 #include "my_functions.h"
 
 #include "risCmdLineTables.h"

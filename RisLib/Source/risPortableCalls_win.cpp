@@ -8,11 +8,7 @@
 #include "stdafx.h"
 
 #include <windows.h> 
-#include <direct.h> 
-#include <string.h> 
-#include <stdio.h>
 #include <conio.h>
-#include <direct.h>
 #include <io.h>
 
 #include "risPortableCalls.h"

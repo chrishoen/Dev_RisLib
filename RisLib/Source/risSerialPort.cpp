@@ -4,8 +4,6 @@
 
 #include "stdafx.h"
 
-#include <stdio.h>
-
 #include "my_functions.h"
 #include "risPortableCalls.h"
 #include "prnPrint.h"

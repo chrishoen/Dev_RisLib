@@ -4,8 +4,6 @@
 
 #include "stdafx.h"
 
-#include <stdlib.h>
-
 #include "prnPrint.h"
 
 #include "risNetUdpMsgSocket.h"

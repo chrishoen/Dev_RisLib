@@ -8,8 +8,6 @@ Description:
 
 #include "stdafx.h"
 
-#include <stdlib.h>
-#include <stdio.h>
 #include "my_functions.h"
 
 #include <math.h>

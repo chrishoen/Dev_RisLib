@@ -7,8 +7,6 @@
 
 #include "stdafx.h"
 
-#include <stdio.h>
-
 #include "risPortableCalls.h"
 #include "risTimeMarker.h"
 

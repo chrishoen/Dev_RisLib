@@ -12,9 +12,6 @@
 #include <mstcpip.h>
 #include <assert.h>
 
-#include <string.h>
-#include <stdio.h>
-
 #include "risSockets.h"
 
 #pragma unmanaged

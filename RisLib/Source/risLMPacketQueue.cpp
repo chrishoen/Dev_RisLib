@@ -9,8 +9,6 @@ Description:
 #include "stdafx.h"
 
 #include <new>
-#include <stdio.h>
-#include <stdlib.h>
 
 #include "my_functions.h"
 #include "my_defs.h"

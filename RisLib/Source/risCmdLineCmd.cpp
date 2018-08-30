@@ -7,12 +7,6 @@
 
 #include "stdafx.h"
 
-#include <stdlib.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "my_functions.h"
 #include "my_defs.h"
 #include "risCmdLineCmd.h"

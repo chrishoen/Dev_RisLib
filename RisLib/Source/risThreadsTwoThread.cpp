@@ -8,6 +8,7 @@
 #include "stdafx.h"
 
 #include <stdarg.h>
+
 #include "prnPrint.h"
 
 #include "risThreadsTwoThread.h"

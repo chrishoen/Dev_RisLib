@@ -188,7 +188,7 @@
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\logFiles_win.cpp" />
+    <ClCompile Include="Source\logFiles.cpp" />
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\prnPrintSettings.cpp" />
     <ClCompile Include="Source\prnPrint_win.cpp" />

@@ -6,9 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\logFiles_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\my_functions.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -136,6 +133,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risAlphaDir_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\logFiles.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

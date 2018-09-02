@@ -5,13 +5,12 @@
 #include "stdafx.h"
 
 #include <windows.h>
-#include <stdio.h>
-#include <string.h>
 #include <stdarg.h>
 
 #include "risPortableCalls.h"
 #include "risSystemTime.h"
 #include "my_functions.h"
+#include "risAlphaDir.h"
 #include "logFiles.h"
 
 namespace Log
@@ -47,7 +46,8 @@ void reset()
 
 bool openFile(int aLogNum, char* aFileName)
 {            
-   mFile[aLogNum] = fopen(aFileName,"w");
+   char tBuf[400];
+   mFile[aLogNum] = fopen(Ris::getAlphaFilePath_Log(tBuf,aFileName),"w");
 
    if (mFile[aLogNum]==0)
    {
@@ -63,7 +63,8 @@ bool openFile(int aLogNum, char* aFileName)
 
 bool openFileAppend(int aLogNum, char* aFileName)
 {            
-   mFile[aLogNum] = fopen(aFileName,"a");
+   char tBuf[400];
+   mFile[aLogNum] = fopen(Ris::getAlphaFilePath_Log(tBuf, aFileName), "a");
 
    if (mFile[aLogNum]==0)
    {
@@ -71,38 +72,6 @@ bool openFileAppend(int aLogNum, char* aFileName)
    }
 
    return true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool openFile(int aLogNum, char* aFileDir,char* aFileName)
-{            
-   // Construct file path.
-   char tFilePath[cMaxStringSize];
-   strcpy(tFilePath,aFileDir);
-   strcat(tFilePath,"\\");
-   strcat(tFilePath,aFileName);
-
-   // Open file.
-   return openFile(aLogNum,tFilePath);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool openFileAppend(int aLogNum, char* aFileDir,char* aFileName)
-{            
-   // Construct file path.
-   char tFilePath[cMaxStringSize];
-   strcpy(tFilePath,aFileDir);
-   strcat(tFilePath,"\\");
-   strcat(tFilePath,aFileName);
-
-   // Open file.
-   return openFileAppend(aLogNum,tFilePath);
 }
 
 //******************************************************************************

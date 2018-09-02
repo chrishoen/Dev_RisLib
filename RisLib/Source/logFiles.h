@@ -19,9 +19,6 @@ namespace Log
    bool openFile       (int aLogNum,char* aFileName);
    bool openFileAppend (int aLogNum,char* aFileName);
 
-   bool openFile       (int aLogNum,char* aFileDir,char* aFileName);
-   bool openFileAppend (int aLogNum,char* aFileDir,char* aFileName);
-
    void closeFile      (int aLogNum);
    void closeAllFiles ();
 

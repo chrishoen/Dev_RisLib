@@ -45,7 +45,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ViewRun4,       true   ,1);
 
    Log::reset();
-   Log::openFile(0,"C:\\Alpha\\Log\\LogPrintTest.txt");
+   Log::openFile(0,"LogPrintTest.txt");
 
    Prn::print(0,"Program PrintTest***********************************BEGIN");
    Log::write(0,"Program PrintTest***********************************BEGIN");

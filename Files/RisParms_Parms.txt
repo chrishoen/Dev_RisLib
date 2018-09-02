@@ -21,7 +21,7 @@ SectionBegin default
    EX               0.0
    UX               1.0
 
-   Outputfile     C:\Alpha\Data\SignalHistory.csv
+   Outputfile     SignalHistory.csv
 
    HistoryMaxSamples   10000
    HistoryDeltaT       0.045

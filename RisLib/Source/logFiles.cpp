@@ -4,7 +4,6 @@
 
 #include "stdafx.h"
 
-#include <windows.h>
 #include <stdarg.h>
 
 #include "risPortableCalls.h"

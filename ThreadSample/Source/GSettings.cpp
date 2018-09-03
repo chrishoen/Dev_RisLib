@@ -61,7 +61,7 @@ void GSettings::readFromFileName(char* aFileName)
    else
    {
       char tBuffer[400];
-      strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "ThreadTestSettings.txt"));
+      strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "ThreadSampleSettings.txt"));
    }
 
    readFromFilePath(tFilePath);

@@ -255,7 +255,16 @@ void BaseThread::forceTerminateThread()
 
 int BaseThread::getThreadPriority()
 {
-    return GetThreadPriority(mBaseSpecific->mHandle);
+   return GetThreadPriority(mBaseSpecific->mHandle);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+int BaseThread::getThreadProcessorNumber()
+{
+   return GetCurrentProcessorNumber();
 }
 
 //******************************************************************************

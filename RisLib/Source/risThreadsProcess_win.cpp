@@ -35,9 +35,10 @@ int  getProcessTimerResolution()
 
 void enterProcessHigh()
 {
-   // Set process priority class
+   // Set process priority class.
    int status = SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-   // Set process timer resolution to one millisecond
+
+   // Set process timer resolution.
    timeBeginPeriod(mTimerPeriod);
 }
 
@@ -47,7 +48,21 @@ void enterProcessHigh()
 
 void exitProcess()
 {
+   // Restore the  process timer resolution.
    timeEndPeriod(mTimerPeriod);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void setProcessAffinityMask(unsigned aMask)
+{
+   // Convert.
+   DWORD_PTR tMask = (DWORD_PTR)aMask;
+
+   // Set the process affinity mask.
+   SetProcessAffinityMask(GetCurrentProcess(), aMask);
 }
 
 //******************************************************************************

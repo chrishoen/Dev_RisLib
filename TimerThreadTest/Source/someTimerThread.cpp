@@ -37,11 +37,18 @@ TimerThread::TimerThread()
 
    // Members
    mTPFlag = false;
-   mTestCode = 1;
+   mTestCode = 3;
+}
 
-   // Overrides.
-   mFrequency = 10;
-   mTestCode  = 2;
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TimerThread::threadInitFunction()
+{
+   if (mTestCode !=3) return;
+
+   BaseClass::threadShowInfo("TimerThread");
 }
 
 //******************************************************************************

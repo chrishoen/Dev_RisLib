@@ -166,13 +166,6 @@ void BaseThread::launchThread()
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Seed thread random number.
-
-   my_srand();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Resume thread, this starts the thread function within the context of
    // the new thread,using configured priority and affinity.
 
@@ -200,6 +193,8 @@ void BaseThread::threadFunction()
    // Thread execution
    try
    {
+      // Seed thread random number.
+      my_srand();
       // This is used by inheritors to initialize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
       threadResourceInitFunction();
@@ -269,24 +264,6 @@ void BaseThread::forceTerminateThread()
 //******************************************************************************
 //******************************************************************************
 
-int BaseThread::getThreadPriority()
-{
-   return GetThreadPriority(mBaseSpecific->mHandle);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-int BaseThread::getThreadProcessorNumber()
-{
-   return GetCurrentProcessorNumber();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void BaseThread::waitForThreadTerminate()
 {
    WaitForSingleObject(mBaseSpecific->mHandle,INFINITE);
@@ -328,6 +305,55 @@ void BaseThreadWithTermSem::shutdownThread()
 int countsPerOneSecond()
 {
    return 1000;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+int BaseThread::getThreadPriority()
+{
+   return GetThreadPriority(mBaseSpecific->mHandle);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+int BaseThread::getThreadProcessorNumber()
+{
+   return GetCurrentProcessorNumber();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void BaseThread::threadShowInfo(char* aLabel)
+{
+   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", aLabel);
+
+   unsigned tPriorityClass = GetPriorityClass(GetCurrentProcess());
+   int tThreadPriority = GetThreadPriority(mBaseSpecific->mHandle);
+   int tCurrentProcessorNumber = GetCurrentProcessorNumber();
+
+   unsigned long long tProcessAffinityMask = 0;
+   unsigned long long tSystemAffinityMask = 0;
+
+   GetProcessAffinityMask(
+      GetCurrentProcess(),
+      &tProcessAffinityMask,
+      &tSystemAffinityMask);
+
+   printf("PriorityClass           %8d\n", tPriorityClass);
+   printf("ThreadPriority          %8d\n", tThreadPriority);
+   printf("ProcessAffinityMask     %8X\n", (unsigned)tProcessAffinityMask);
+   printf("SystemAffinityMask      %8X\n", (unsigned)tSystemAffinityMask);
+   printf("ThreadAffinityMask      %8X\n", mThreadAffinityMask);
+   printf("ThreadIdealProcessor    %8d\n", mThreadIdealProcessor);
+   printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
+
+   printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");
 }
 
 //******************************************************************************

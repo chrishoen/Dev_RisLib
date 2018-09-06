@@ -57,8 +57,7 @@ BaseThread::BaseThread()
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle    = 0;
    mThreadPriority = get_default_thread_priority();
-   mThreadAffinityMask    = 0;
-   mThreadIdealProcessor  = -1;
+   mThreadSingleProcessor  = -1;
 
    mThreadStackSize = 0;
    mThreadInitSemFlag = true;
@@ -154,13 +153,11 @@ void BaseThread::launchThread()
       halt(tStr);
    }
 
-   if (mThreadAffinityMask != 0)
+   if (mThreadSingleProcessor != -1)
    {
-      if( SetThreadAffinityMask(mBaseSpecific->mHandle,mThreadAffinityMask) == -1 ) throw "Bad Thread Affinity";
-   }
-   if (mThreadIdealProcessor != -1)
-   {
-      if( SetThreadIdealProcessor(mBaseSpecific->mHandle,mThreadIdealProcessor) == -1 ) throw "Bad Ideal Processor";
+      int tAffinityMask = 1 << mThreadSingleProcessor;
+      if( SetThreadAffinityMask(mBaseSpecific->mHandle,tAffinityMask) == -1 ) throw "Bad Thread Affinity";
+      if( SetThreadIdealProcessor(mBaseSpecific->mHandle,mThreadSingleProcessor) == -1 ) throw "Bad Ideal Processor";
    }
 
    //***************************************************************************
@@ -347,10 +344,9 @@ void BaseThread::threadShowInfo(char* aLabel)
 
    printf("PriorityClass           %8d\n", tPriorityClass);
    printf("ThreadPriority          %8d\n", tThreadPriority);
-   printf("ProcessAffinityMask     %8X\n", (unsigned)tProcessAffinityMask);
    printf("SystemAffinityMask      %8X\n", (unsigned)tSystemAffinityMask);
-   printf("ThreadAffinityMask      %8X\n", mThreadAffinityMask);
-   printf("ThreadIdealProcessor    %8d\n", mThreadIdealProcessor);
+   printf("ProcessAffinityMask     %8X\n", (unsigned)tProcessAffinityMask);
+   printf("SingleProcessor         %8d\n", mThreadSingleProcessor);
    printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
 
    printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");

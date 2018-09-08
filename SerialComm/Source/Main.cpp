@@ -21,13 +21,13 @@ int main(int argc,char** argv)
    // Launch threads
 
    gSerialRxThread = new SerialRxThread();
-   gSerialRxThread->configure(5,"38400,N,8,1",4000);
+   gSerialRxThread->configure(6,"115200,N,8,1",4000);
    gSerialRxThread->launchThread();
-
+#if 0
    gSerialTxThread = new SerialTxThread();
-   gSerialTxThread->configure(6,"38400,N,8,1",0);
+   gSerialTxThread->configure(5,"115200,N,8,1",0);
    gSerialTxThread->launchThread();
-
+#endif
    //--------------------------------------------------------------------
    // Start user command line executive,
    // It returns when user exits

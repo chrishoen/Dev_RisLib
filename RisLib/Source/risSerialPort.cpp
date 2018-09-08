@@ -45,33 +45,48 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
 
    Prn::print(Prn::SerialInit1,"SerialPort::doOpen %d",mPortNumber);
 
-   //--------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Create events.
 
    mRxEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
    mTxEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-   //--------------------------------------------------------------------------
-   // Create file
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Create file.
+
    char tSerialPortName[24];
    sprintf(tSerialPortName, "COM%u", mPortNumber);
 
-   mPortHandle = CreateFile(tSerialPortName,  
-     GENERIC_READ | GENERIC_WRITE, 
-     0, 
-     0, 
-     OPEN_EXISTING,
-     FILE_FLAG_OVERLAPPED,
-     0);
-
-   if (mPortHandle==INVALID_HANDLE_VALUE)
+   while (1)
    {
-      Prn::print(Prn::SerialInit2,"serial_create_error_1 %d", GetLastError());
-      return;
+      mPortHandle = CreateFile(tSerialPortName,
+         GENERIC_READ | GENERIC_WRITE,
+         0,
+         0,
+         OPEN_EXISTING,
+         FILE_FLAG_OVERLAPPED,
+         0);
+
+      if (mPortHandle == INVALID_HANDLE_VALUE)
+      {
+         Prn::print(Prn::SerialInit2, "serial_create_error_1 %d", GetLastError());
+         Sleep(2000);
+      }
+      else
+      {
+         break;
+      }
    }
 
    SetupComm(mPortHandle,2048,2048);
-   //--------------------------------------------------------------------------
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Purge 
 
    Sleep(100);
@@ -88,53 +103,61 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
  
    Sleep(100);
 
-   //--------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // DCB
 
-   DCB dcb;
-
-   memset(&dcb, 0, sizeof(dcb));
-   dcb.DCBlength = sizeof(dcb);
-
-   GetCommState(mPortHandle, &dcb);
-
-   BuildCommDCB(mPortSetup, &dcb);
-  
-   dcb.fNull         = FALSE;
-   dcb.fAbortOnError = TRUE;
-
-   // SetCommState
-   // This might not work if data is being received while initializing.
-   // So loop, retry if not successful
-   
-   int  count=1;
-   bool going=true;
-   while (going)
+   // If the port setup string is not null then setup with a dcb.
+   if (mPortSetup)
    {
-      if (SetCommState(mPortHandle, &dcb))
+      DCB dcb;
+
+      memset(&dcb, 0, sizeof(dcb));
+      dcb.DCBlength = sizeof(dcb);
+
+      GetCommState(mPortHandle, &dcb);
+
+      BuildCommDCB(mPortSetup, &dcb);
+
+      dcb.fNull = FALSE;
+      dcb.fAbortOnError = TRUE;
+
+      // SetCommState
+      // This might not work if data is being received while initializing.
+      // So loop, retry if not successful
+
+      int  count = 1;
+      bool going = true;
+      while (going)
       {
-         // Successful, exit loop
-         going=false;
-      }
-      else
-      {
-         // Failed, continue to retry
-         Prn::print(Prn::SerialInit2,"serial_create_retry %d", GetLastError());
-         doPurge();
-         Sleep(100);
-         // Retry failed, abort initialization
-         if(count++ == 10)
+         if (SetCommState(mPortHandle, &dcb))
          {
-            Prn::print(Prn::SerialInit2,"serial_create_error_3 %d", GetLastError());
-            CloseHandle(mPortHandle);
-            mPortHandle=INVALID_HANDLE_VALUE;
-            return;
+            // Successful, exit loop
+            going = false;
+         }
+         else
+         {
+            // Failed, continue to retry
+            Prn::print(Prn::SerialInit2, "serial_create_retry %d", GetLastError());
+            doPurge();
+            Sleep(100);
+            // Retry failed, abort initialization
+            if (count++ == 10)
+            {
+               Prn::print(Prn::SerialInit2, "serial_create_error_3 %d", GetLastError());
+               CloseHandle(mPortHandle);
+               mPortHandle = INVALID_HANDLE_VALUE;
+               return;
+            }
          }
       }
    }
 
-   //--------------------------------------------------------------------------
-   // Set timeout
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Set timeout.
 
    COMMTIMEOUTS tComTimeout={0};
 
@@ -152,14 +175,18 @@ void SerialPort::doOpen(int aPortNumber,char* aPortSetup,int aRxTimeout)
       return;
    }
 
-   //--------------------------------------------------------------------------
-   // Purge 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Purge.
 
    Sleep(100);
    doPurge();
 
-   //--------------------------------------------------------------------------
-   // Done
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Done.
  
    mValidFlag=true;
 }
@@ -469,9 +496,7 @@ int  SerialPort::doReceiveOne(char *aData)
 
 int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
 {
-   //---------------------------------------------------------------------------
-   // Locals
-
+   // Locals.
    DWORD tRet  = 0;
    DWORD tBytesRead  = 0;
    int tBytesTotal = 0;

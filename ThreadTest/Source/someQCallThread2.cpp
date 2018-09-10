@@ -25,8 +25,7 @@ QCallThread2::QCallThread2()
 {
    // Set base class
    BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadAffinityMask = 0x20;
-   BaseClass::mThreadIdealProcessor = 5;
+   BaseClass::mThreadSingleProcessor = 2;
    BaseClass::mTimerPeriod=0;
 
    // QCall CallPointers

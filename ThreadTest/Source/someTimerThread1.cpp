@@ -29,8 +29,7 @@ TimerThread1::TimerThread1()
    if (gGSettings.mTestThread == GSettings::cTestThread_None)
    {
       BaseClass::setThreadPriorityHigh();
-      BaseClass::mThreadAffinityMask = 0x20;
-      BaseClass::mThreadIdealProcessor = 5;
+      BaseClass::mThreadSingleProcessor = 2;
       mTimerPeriod = 1000;
    }
    else

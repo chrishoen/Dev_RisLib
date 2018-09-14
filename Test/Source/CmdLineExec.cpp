@@ -59,7 +59,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-  
+   Log::openFile(4, "DasProcGammaDiff.txt");
+   Log::write(4, "GammaDiff %12.10f", 1.234);
+   Log::closeFile(4);
 }
 
 //******************************************************************************

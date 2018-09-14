@@ -27,8 +27,7 @@ Thread1::Thread1()
 {
    // Set base class thread priority
    BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadAffinityMask = 0x20;
-   BaseClass::mThreadIdealProcessor = 5;
+   BaseClass::mThreadSingleProcessor = 2;
 }
 
 //******************************************************************************

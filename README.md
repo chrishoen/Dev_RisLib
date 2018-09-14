@@ -57,10 +57,9 @@ risThreadsTwoThread.h         -- two thread base class, for threads that send a 
 risTimeMarker.h               -- time marker used to measure software timing
 ris_priorities.h              -- default thread priorities
 stdafx.h                      -- used for precompiled header files
-``` markdown
+```
 
 ## Solution Projects
-
 ``` markdown
 ByteContent     -- unit test for byte content
 CallPointer1    -- experiments for call pointers
@@ -93,5 +92,5 @@ ThreadSynch     -- experiments for thread synchronization
 ThreadTest      -- experiments for threads
 TimerThreadTest -- unit test for timer threads and priorites and cores
 TwoThreadTest   -- unit test for two threads
-~~~
+```
  

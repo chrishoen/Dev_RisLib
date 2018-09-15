@@ -87,7 +87,7 @@ Parms           -- unit test for parms files
 PrintTest       -- unit test for print facility
 PrintView       -- PrintView.exe build
 Program         -- unit test for program configuration
-ProtoCommon     -- prototype for byte content message common
+ProtoCommon     -- prototype for byte content message, common
 ProtoCommS      -- prototype for byte content message, tcp server
 ProtoCommT      -- prototype for byte content message, tcp client
 ProtoCommU      -- prototype for byte content message, udp peer

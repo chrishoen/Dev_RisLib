@@ -1,6 +1,18 @@
 # Dev_RisLib
 ### real time infrastructure library, C++, vstudio
 
+This is a library of C++ classes that provides some realtime functionality. Features include:
+   1. Thread base classes.
+   2. QCall threads. These are threads that service queues that contain calls (class function pointers).
+   3. ByteContent, a scheme to encapsulate binary messages with C++ classes and pack/unpack them into byte buffers.
+   4. Socket classes. Serial port classes.
+   5. Threads for TCP server and client, UDP, and serial that are used to communicate binary messages.
+   6. Command line executive classes for console and parameter and script files.
+   7. A filtered print facility that can redirect to separate windows.
+   8. Miscellaneous utility functions.
+
+This library is written for Windows in Visual Studio. The classes are based on Win32 realtime functions for threads and sockets and such. The library is portable. The details of the provided functionality that are specific to Win32 are contained in a small set of `*_win.cpp` files. There is a corresponding library for Linux, RisLibLx, with a corresponding small set of `*_linux.cpp` files that are specific to Linux. It is the intention of the library that programs built under Windows can be rebuilt seamlessly under Linux.
+
 ## Classes
 ``` markdown
 logFiles.h                    -- log file facility
@@ -80,7 +92,7 @@ ProtoCommS      -- prototype for byte content message, tcp server
 ProtoCommT      -- prototype for byte content message, tcp client
 ProtoCommU      -- prototype for byte content message, udp peer
 RegHelper       -- register helpers
-RisLib          -- realtime infrastructure library
+RisLib          -- realtime infrastructure library -- this is the library
 Scratch         -- temp project
 SerialComm      -- unit test for serial communications
 SerialThread    -- unit test for byte content serial messages

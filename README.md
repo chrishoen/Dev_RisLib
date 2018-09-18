@@ -1,5 +1,5 @@
 # Dev_RisLib
-### real time infrastructure library, C++, vstudio
+### real time infrastructure library, C++, vstudio, windows
 
 This is a library of C++ classes that provides some realtime functionality. Features include:
    1. Thread base classes.

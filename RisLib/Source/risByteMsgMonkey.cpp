@@ -15,9 +15,19 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor
+// Destroy a message, default deletes the message.
 
-   BaseMsgMonkey::BaseMsgMonkey(BaseMsgCreator* aCreator)
+void BaseMsgCreator::destroyMsg(Ris::ByteContent* aMsg)
+{
+   if (aMsg) delete aMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
+
+BaseMsgMonkey::BaseMsgMonkey(BaseMsgCreator* aCreator)
 {
    mMsgCreator = aCreator;
 
@@ -32,7 +42,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Buffer management
+// Buffer management.
 
 void BaseMsgMonkey::setNetworkOrder (bool aNetworkOrder)
 {
@@ -64,7 +74,7 @@ void BaseMsgMonkey::putMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteContent* a
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy a message from a byte buffer
+// Copy a message from a byte buffer.
 //
 // 1) Create a new message object of the type specifed by the identifiers 
 //    that were extracted from the header
@@ -96,7 +106,7 @@ Ris::ByteContent* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy a message from a byte buffer
+// Copy a message from a byte buffer.
 //
 // 1) Extract the header parameters.
 // 2) Create a new message object of the type specifed by the identifiers 
@@ -131,6 +141,8 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
    return aMsg;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 }//namespace
 

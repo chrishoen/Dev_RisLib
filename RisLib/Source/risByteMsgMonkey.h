@@ -23,9 +23,15 @@ class BaseMsgCreator
 public:
 
    //***********************************************************************
-   // Create a new message, based on a message type.
+   //***********************************************************************
+   //***********************************************************************
+   // Methods.
 
-   virtual Ris::ByteContent* createMsg (int aMessageType)=0;
+   // Create a new message, based on a message type.
+   virtual Ris::ByteContent* createMsg(int aMessageType) = 0;
+
+   // Destroy a message, default deletes the message.
+   virtual void destroyMsg(Ris::ByteContent* aMsg);
 
 };
 

@@ -22,9 +22,9 @@ class BaseMsgCreator
 {
 public:
 
-   //***********************************************************************
-   //***********************************************************************
-   //***********************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Methods.
 
    // Create a new message, based on a message type.
@@ -73,7 +73,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constructor.
    BaseMsgMonkey(BaseMsgCreator* aCreator);
@@ -81,7 +81,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods, header processisng:
+   // Methods, header processing.
 
    // Extract message header parameters from a buffer and validate them
    // Returns true if the header is valid
@@ -90,7 +90,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods, message processisng:
+   // Methods, message processing.
 
    // Preprocess a message before it is sent.
    virtual void processBeforeSend(Ris::ByteContent* aMsg){};
@@ -109,7 +109,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods, buffer management:
+   // Methods, buffer management.
 
    // Return a contant header length.
    virtual int getHeaderLength()=0;
@@ -128,15 +128,15 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods, footer processisng:
+   // Methods, footer processing.
 
    // Validate a message footer by comparing the contents of the byte buffer
    // that the message was received into and the message itself. For example,
    // the byte buffer can contain the message bytes and the message can contain
    // a checksum and this function would calculate the checksum on the buffer
    // bytes and then compare it with the checksum stored in the message footer.
-   virtual bool validateMessageFooter(Ris::ByteBuffer* aBuffer,Ris::ByteContent* aMsg) { return true; };
-
+   virtual bool validateMessageFooter(Ris::ByteBuffer* aBuffer,Ris::ByteContent* aMsg)
+   { return true; };
 };
 
 //******************************************************************************
@@ -153,6 +153,7 @@ public:
    virtual BaseMsgMonkey* createMonkey() = 0;
 };
 
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace

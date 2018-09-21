@@ -7,6 +7,8 @@
 
 #include "stdafx.h"
 
+
+
 #include "procoMsg.h"
 #include "procoMsgBase.h"
 
@@ -16,6 +18,7 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
 Header::Header()
 {
    mSyncWord1         = 0x11111111;
@@ -44,7 +47,6 @@ void Header::reset()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//--------------------------------------------------------------------------
 // If the byte buffer is configured for put operations then this puts the
 // contents of the object into the byte buffer (it does a copy to, it
 // copies the object to the byte buffer).
@@ -52,7 +54,6 @@ void Header::reset()
 // contents of the object from the byte buffer (it does a copy from, it
 // copies the object from the byte buffer).
 // Copy To and Copy From are symmetrical.
-//--------------------------------------------------------------------------
 
 void Header::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
@@ -67,7 +68,6 @@ void Header::copyToFrom (Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//--------------------------------------------------------------------------
 // For variable content messages, the message length cannot be known until
 // the entire message has been written to a byte buffer. Therefore, the 
 // message header cannot be written to a byte buffer until the entire
@@ -88,11 +88,9 @@ void Header::copyToFrom (Ris::ByteBuffer* aBuffer)
 // where the copy is to take place. Both are also passed a MessageByte
 // pointer to where they can get and mMessageType
 // which they transfer into and out of the headers.
-//--------------------------------------------------------------------------
 
 void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 {
-   //---------------------------------------------------------------------
    // Instances of this class are members of parent message classes.
    // A call to this function should be the first line of code in a
    // containing parent message class's copyToFrom. It performs pre-copyToFrom
@@ -101,7 +99,6 @@ void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
    // line of code in the containing message class' copyToFrom. Lines of code
    // in between should copy individual data elements into/out of the buffer.
 
-   //---------------------------------------------------------------------
    // for a "copy to" put
    //
    // If this is a "copy to" put operation then the header copy will actually
@@ -122,7 +119,6 @@ void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
    // Store the original buffer position for later use by the
    // headerReCopyToFrom and advance the buffer position forward
    // to point past the header.
-
    if (aBuffer->isCopyTo())
    {
       // Store the buffer parameters for later use by the
@@ -134,13 +130,11 @@ void Header::headerCopyToFrom (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
       aBuffer->forward(cLength);
    }
 
-   //---------------------------------------------------------------------
    // for a "copy from" get
    //
    // If this is a "copy from" get operation then copy the header from the
    // buffer into the header member. Also set the message content type from
    // the variable datum id
-
    else
    {
       // Copy the buffer content into the header object.
@@ -160,7 +154,6 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
    // the buffer.
    // This sets some header length parameters and copies the header into the
    // buffer position that was stored when headerCopyToFrom was called.
-
    if (aBuffer->isCopyTo())
    {
       // Store the buffer parameters for later use by the
@@ -196,7 +189,7 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 //******************************************************************************
 
 MsgMonkey::MsgMonkey()
-   : Ris::BaseMsgMonkey(new MsgCreator)
+   : Ris::BaseMsgMonkey(createMsg)
 {
    mSourceId=0;
 }
@@ -207,13 +200,11 @@ void  MsgMonkey::configure(int aSourceId)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 {
-   // Guard.
-   mHeaderValidFlag = false;
-   if (aBuffer->mWorkingLength < Header::cLength) return false;
-
    // Extract header from buffer
    Header tHeader;
    tHeader.reset();
@@ -239,6 +230,8 @@ bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
    return mHeaderValidFlag;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
@@ -279,8 +272,6 @@ Ris::BaseMsgMonkey* MsgMonkeyCreator::createMonkey()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-
 }//namespace
 
 

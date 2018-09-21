@@ -1,5 +1,5 @@
-#ifndef _PROCOMSG_BASE_H_
-#define _PROCOMSG_BASE_H_
+#pragma once
+
 /*==============================================================================
 This file contains a set of classes that encapsulate the message set
 that is used to communicate with Intranet. The messages are specified
@@ -46,9 +46,7 @@ namespace ProtoComm
 
 namespace MsgDefT
 {
-   //***************************************************************************
-   // Use this for a buffer size for these messages
-
+   // Use this for a buffer size for these messages.
    static const int cMsgBufferSize = 20000;
 
 }//namespace
@@ -63,13 +61,20 @@ class BaseMsg;
 class Header : public Ris::ByteContent
 {
 public:
-   // Constructor
-   Header();
-   void reset();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constants.
 
-   //------------------------------------------------
-   // Header Content
+   // Header length.
+   static const int cLength = 24;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Header Content.
    int   mSyncWord1;
    int   mSyncWord2;
    int   mMessageIdentifier;
@@ -77,13 +82,27 @@ public:
    int   mSourceId;
    int   mDestinationId;
 
-   // Header Content
-   //------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // Header length
-   static const int cLength = 24;
+   // These are set by headerCopyToFrom and used by headerReCopyToFrom,
+   // for "put" operations.Theyt contain the buffer position and length of
+   // where the headerReCopyToFrom will take place, which should be
+   // where headerCopyToFrom was told to do the copy.
+   int mInitialPosition;
+   int mInitialLength;
 
-   //--------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   Header();
+   void reset();
+
    // If the byte buffer is configured for put operations then this puts the
    // contents of the object into the byte buffer (it does a copy to, it
    // copies the object to the byte buffer).
@@ -91,11 +110,8 @@ public:
    // contents of the object from the byte buffer (it does a copy from, it
    // copies the object from the byte buffer).
    // Copy To and Copy From are symmetrical.
-   //--------------------------------------------------------------------------
-
    void copyToFrom(Ris::ByteBuffer* aBuffer);
 
-   //--------------------------------------------------------------------------
    // For variable content messages, the message length cannot be known until
    // the entire message has been written to a byte buffer. Therefore, the 
    // message header cannot be written to a byte buffer until the entire
@@ -116,20 +132,8 @@ public:
    // where the copy is to take place. Both are also passed a ByteContent
    // pointer to where they can get and mMessageType
    // which they transfer into and out of the headers.
-   //--------------------------------------------------------------------------
-
    void headerCopyToFrom   (Ris::ByteBuffer* aBuffer, BaseMsg* aParent);
    void headerReCopyToFrom (Ris::ByteBuffer* aBuffer, BaseMsg* aParent);
-
-   //---------------------------------------------------------------------------
-   // These are set by headerCopyToFrom and used by headerReCopyToFrom,
-   // for "put" operations.Theyt contain the buffer position and length of
-   // where the headerReCopyToFrom will take place, which should be
-   // where headerCopyToFrom was told to do the copy.
-
-   int mInitialPosition;
-   int mInitialLength;
-
 };
 
 //******************************************************************************
@@ -141,19 +145,34 @@ public:
 class BaseMsg : public Ris::ByteContent
 {
 public:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
    // Message type. 
    int mMessageType;
 
-   // Message Header 
+   // Message Header. 
    Header mHeader;
 
-   // Constructor
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
    BaseMsg()
    {
       mMessageType = 0;
    }
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // This is the message monkey. It is used by code that receives messages into
 // byte buffers such that the message classes don't have to be visible to the
@@ -168,35 +187,42 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members:
+   // Members.
 
    int mSourceId;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Constructors and initialization:
+   // Methods.
 
    MsgMonkey();
    void configure(int aSourceId);
 
-   //-------------------------------------------------------
-   // Base class overloads:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Base class overloads:
 
-   // Return a contant header length
+   // Return a contant header length.
    int  getHeaderLength() override {return Header::cLength;}
 
-   // Return a contant max buffer size
+   // Return a contant max buffer size.
    int getMaxBufferSize() override {return MsgDefT::cMsgBufferSize;}
 
    // Extract message header parameters from a buffer and validate them
-   // Returns true if the header is valid
+   // Returns true if the header is valid.
    bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer) override;
 
-   // Preprocess a message before it is sent
+   // Preprocess a message before it is sent.
    void processBeforeSend(Ris::ByteContent* aMsg) override;
 };
 
+//*********************************************************************************
+//*********************************************************************************
+//*********************************************************************************
+//*********************************************************************************
+//*********************************************************************************
 //*********************************************************************************
 // This is a message monkey creator. It defines a method that creates a new
 // message monkey. It is used by transmitters and receivers to create new
@@ -205,18 +231,34 @@ public:
 class MsgMonkeyCreator : public  Ris::BaseMsgMonkeyCreator
 {
 public:
-   // Constructor
-   MsgMonkeyCreator();
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Members.
 
-   // Members
-   void configure(int aSourceId);
    int  mSourceId;
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Methods.
+
+   // Constructor.
+   MsgMonkeyCreator();
+   void configure(int aSourceId);
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Methods.
 
    // Base class overload, creates a new message monkey and sets some of its 
    // member variables.
    Ris::BaseMsgMonkey* createMonkey();
 };
 
+//*********************************************************************************
+//*********************************************************************************
+//*********************************************************************************
 }//namespace
-#endif
 

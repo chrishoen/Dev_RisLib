@@ -7,33 +7,11 @@ ByteContent message monkey.
 //******************************************************************************
 //******************************************************************************
 
+#include <functional>
 #include "risByteContent.h"
 
 namespace Ris
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is an abstract base class for a message creator. Inheriting classes 
-// are used to create messages for a specific message set.
-
-class BaseMsgCreator
-{
-public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Create a new message, based on a message type.
-   virtual Ris::ByteContent* createMsg(int aMessageType) = 0;
-
-   // Destroy a message, default deletes the message.
-   virtual void destroyMsg(Ris::ByteContent* aMsg);
-
-};
 
 //******************************************************************************
 //******************************************************************************
@@ -67,8 +45,20 @@ public:
    // Endian network order.
    bool mNetworkOrder;
 
-   // Message creator, this must be set by the inheritor.
-   BaseMsgCreator* mMsgCreator;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Create message function pointer.
+   // void* createMsg(int aMessageType);
+   typedef std::function<void*(int)> CreateMsgFunctionT;
+   CreateMsgFunctionT mCreateMsgFunction;
+
+   // Destroy message function pointer. If null then uses delete.
+   // void destroyMsg(void* aMsg);
+   typedef std::function<void(void*)> DestroyMsgFunctionT;
+   DestroyMsgFunctionT mDestroyMsgFunction;
 
    //***************************************************************************
    //***************************************************************************
@@ -76,8 +66,8 @@ public:
    // Methods.
 
    // Constructor.
-   BaseMsgMonkey(BaseMsgCreator* aCreator);
-   
+   BaseMsgMonkey(CreateMsgFunctionT aCreate,DestroyMsgFunctionT aDestroy = 0);
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -105,6 +95,9 @@ public:
    // Copy a message from a byte buffer.
    // This first extracts the header parms.
    Ris::ByteContent* makeMsgFromBuffer (Ris::ByteBuffer* aBuffer);
+
+   // Destroy a message.
+   void destroyMsg(Ris::ByteContent* aMsg);
 
    //***************************************************************************
    //***************************************************************************

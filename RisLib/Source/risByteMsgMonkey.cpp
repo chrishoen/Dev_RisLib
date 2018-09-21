@@ -15,28 +15,31 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Destroy a message, default deletes the message.
-
-void BaseMsgCreator::destroyMsg(Ris::ByteContent* aMsg)
-{
-   if (aMsg) delete aMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Constructor.
 
-BaseMsgMonkey::BaseMsgMonkey(BaseMsgCreator* aCreator)
+void defaultDestroy(void*aMsg)
 {
-   mMsgCreator = aCreator;
-
+   delete aMsg;
+}
+BaseMsgMonkey::BaseMsgMonkey(CreateMsgFunctionT aCreate, DestroyMsgFunctionT aDestroy)
+{
    mHeaderLength=0;
    mMessageLength=0;
    mMessageType=0;
    mPayloadLength=0;
    mHeaderValidFlag=false;
    mNetworkOrder=false;
+
+   mCreateMsgFunction = aCreate;
+
+   if (aDestroy)
+   {
+      mDestroyMsgFunction = aDestroy;
+   }
+   else
+   {
+      mDestroyMsgFunction = &defaultDestroy;
+   }
 }
 
 //******************************************************************************
@@ -88,7 +91,7 @@ Ris::ByteContent* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 
    // Call inheritor's creator to create a new message based on the
    // message type that was extracted from the header.
-   Ris::ByteContent* aMsg = mMsgCreator->createMsg(mMessageType);
+   Ris::ByteContent* aMsg = (Ris::ByteContent*)mCreateMsgFunction(mMessageType);
 
    // Guard
    if (!aMsg) return 0;
@@ -129,7 +132,7 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 
    // Call inheritor's creator to create a new message based on the
    // message type that was extracted from the header.
-   Ris::ByteContent* aMsg = mMsgCreator->createMsg(mMessageType);
+   Ris::ByteContent* aMsg = (Ris::ByteContent*)mCreateMsgFunction(mMessageType);
 
    // Guard
    if (!aMsg) return 0;
@@ -139,6 +142,16 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 
    // Done.
    return aMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Destroy a message.
+
+void BaseMsgMonkey::destroyMsg(Ris::ByteContent* aMsg)
+{
+   mDestroyMsgFunction(aMsg);
 }
 
 //******************************************************************************

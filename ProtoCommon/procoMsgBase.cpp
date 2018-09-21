@@ -189,7 +189,7 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 //******************************************************************************
 
 MsgMonkey::MsgMonkey()
-   : Ris::BaseMsgMonkey(createMsg)
+   : Ris::BaseMsgMonkey(ProtoComm::createMsg)
 {
    mSourceId=0;
 }

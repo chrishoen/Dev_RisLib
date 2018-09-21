@@ -7,7 +7,6 @@ ByteContent message monkey.
 //******************************************************************************
 //******************************************************************************
 
-#include <functional>
 #include "risByteContent.h"
 
 namespace Ris
@@ -52,12 +51,12 @@ public:
 
    // Create message function pointer.
    // void* createMsg(int aMessageType);
-   typedef std::function<void*(int)> CreateMsgFunctionT;
+   typedef void*(*CreateMsgFunctionT)(int);
    CreateMsgFunctionT mCreateMsgFunction;
 
    // Destroy message function pointer. If null then uses delete.
    // void destroyMsg(void* aMsg);
-   typedef std::function<void(void*)> DestroyMsgFunctionT;
+   typedef void(*DestroyMsgFunctionT)(void*);
    DestroyMsgFunctionT mDestroyMsgFunction;
 
    //***************************************************************************

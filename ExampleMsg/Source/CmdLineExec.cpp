@@ -128,7 +128,7 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
-   ExampleMsg::DataMsg* tTxMsg = new ExampleMsg::DataMsg;
+   ExampleMsg::DataMsg* tTxMsg = (ExampleMsg::DataMsg*)ExampleMsg::createMsg(ExampleMsg::MsgIdT::cDataMsg);
    ExampleMsg::DataMsg* tRxMsg = 0;
    MsgHelper::initialize(tTxMsg);
 
@@ -140,8 +140,10 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
 
    MsgHelper::show(tRxMsg);
 
-   delete tTxMsg;
-   delete tRxMsg;
+// delete tTxMsg;
+// delete tRxMsg;
+   ExampleMsg::destroyMsg(tTxMsg);
+   ExampleMsg::destroyMsg(tRxMsg);
 }
 
 //******************************************************************************

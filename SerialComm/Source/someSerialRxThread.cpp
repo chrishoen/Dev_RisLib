@@ -21,34 +21,15 @@ namespace Some
 
 SerialRxThread::SerialRxThread()
 {
-   //---------------------------------------------------------------------------
    // Initialize base class members.
-
    BaseClass::setThreadPriorityHigh();
 
-   //---------------------------------------------------------------------------
-   // Defaults.
-
-   mPortNumber = 0;
-   mPortSetup[0]=0;
-   mRxTimeout=0;
+   // Initialize member variables.
    mCount=0;
 }
 
 //******************************************************************************
-// Configure:
-
-void SerialRxThread::configure(
-   int     aPortNumber,
-   char*   aPortSetup,
-   int     aRxTimeout)
-{
-   // Store configuration parameters.
-   mPortNumber = aPortNumber;
-   strcpy(mPortSetup,aPortSetup);
-   mRxTimeout = aRxTimeout;
-}
-
+//******************************************************************************
 //******************************************************************************
 // Thread init function, base class overload.
 // It configures the serial port.
@@ -57,35 +38,36 @@ void SerialRxThread::threadInitFunction()
 {
    Prn::print(Prn::ThreadInit1, "SerialRxThread::threadInitFunction");
 
-   mSerialPort.doOpen(mPortNumber,mPortSetup,mRxTimeout);
-   
+   // Instance of serial port settings.
+   Ris::SerialSettings tSettings;
+
+   tSettings.setPortDevice("COM6");
+   tSettings.setPortSetup("9600,N,8,1");
+   tSettings.mRxTimeout = 2000;
+
+   // Initialize and open the serial port.
+   mSerialPort.initialize(tSettings);
+   mSerialPort.doOpen();
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Thread run function, base class overload.
-// It receives serial data from the sensor and passes it to the owner thread
-// via the qcall.
+// Receive a string from the serial port and print it.
 
 void  SerialRxThread::threadRunFunction()
 {
-   //---------------------------------------------------------------------------
-   // Loop
-
    while(true)
    {
-      //------------------------------------------------------------------------
-      // Read sample data from sensor via the serial port and send to consumer.
-
+      // Read a string from the serial port.
       char tString[100];
       int tStatus = mSerialPort.doReceiveUntilCR(tString,100);
 
-      //------------------------------------------------------------------------
       // If termination request, exit the loop.
       if (mTerminateFlag) break;
 
-      //------------------------------------------------------------------------
-      // Test returned status.
-
+      // Test returned status and print the string.
       if (tStatus >= 0)
       {
          Prn::print(Prn::ThreadRun1,"SerialRxThread receive $$ %d  %d$ %s",mCount++,tStatus,tString);
@@ -102,6 +84,8 @@ void  SerialRxThread::threadRunFunction()
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Thread exit function, base class overload.
 
 void SerialRxThread::threadExitFunction()
@@ -109,6 +93,8 @@ void SerialRxThread::threadExitFunction()
    Prn::print(Prn::ThreadInit1, "SerialRxThread::threadExitFunction");
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Shutdown, base class overload.
 // This sets the terminate request flag and closes the socket.
@@ -128,6 +114,7 @@ void SerialRxThread::shutdownThread()
 }
 
 //******************************************************************************
-
+//******************************************************************************
+//******************************************************************************
 }//namespace
 

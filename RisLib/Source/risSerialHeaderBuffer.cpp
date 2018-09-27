@@ -8,6 +8,8 @@ Description:
 
 #include "stdafx.h"
 
+#include "my_functions.h"
+
 #include "risSerialHeaderBuffer.h"
 
 namespace Ris
@@ -20,6 +22,14 @@ namespace Ris
 SerialHeaderBuffer::SerialHeaderBuffer()
 {
    reset();
+}
+
+SerialHeaderBuffer::SerialHeaderBuffer(int aSize)
+{
+   mArray = new char[aSize];
+   mSize  = aSize;
+   mCount = 0;
+   mIndex = mSize-1;
 }
 
 SerialHeaderBuffer::~SerialHeaderBuffer()
@@ -152,13 +162,28 @@ char SerialHeaderBuffer::getTop()
 void SerialHeaderBuffer::show()
 {
    printf("SerialHeaderBuffer:                   %3d %3d %1d $$",mIndex,mCount,mValid);
-   for (int j=0;j<mSize;j++)
+   for (int i=0;i<mSize;i++)
    {
-      printf("%3d ", (int)get(j));
+      printf("%3d ", (int)get(i));
    }
    printf("\n");
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy the entire header buffer to a byte buffer.
+
+void SerialHeaderBuffer::copyTo(Ris::ByteBuffer* aBuffer)
+{
+   // Copy header buffer to the byte buffer.
+   for (int i=0;i<mSize;i++)
+   {
+      char tX = get(i);
+      aBuffer->copy(&tX);
+   }
+
+}
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

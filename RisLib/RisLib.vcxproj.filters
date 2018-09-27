@@ -126,6 +126,21 @@
     <ClCompile Include="Source\logFiles.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risSerialHeaderBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialMsgPort_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialMsgThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialPort_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialSettings.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">
@@ -279,6 +294,21 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\stdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialHeaderBuffer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialMsgPort.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialMsgThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialPort.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risSerialSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

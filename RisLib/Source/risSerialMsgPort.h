@@ -1,19 +1,17 @@
 #pragma once
 
 /*==============================================================================
-Tcp message socket class.
+Byte content message serial port class.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
-#include "risContainers.h"
+#include "risSerialHeaderBuffer.h"
 #include "risSerialPort.h"
-#include "risThreadsThreads.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -25,15 +23,11 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Tcp stream socket, blocking.
+// Message serial port, blocking.
 //
-// For a client, it connects (connect) to a Tcp server hub socket and
-// exchanges messages (send and recv) with a server stream socket.
+// It exchanges byte content messages (send and recv) via a serial port.
 //
-// For a server, it exchanges messages (send and recv) with a client stream
-// socket.
-//
-// It inherits from BaseTcpStreamSocket for stream socket functionality and
+// It inherits from SerialPort for serial functionality and
 // provides methods that can be used to transport messages.
 //
 // Messages are based on the ByteContent message encapsulation scheme.
@@ -42,6 +36,27 @@ class SerialMsgPort : public SerialPort
 {
 public:
    typedef SerialPort BaseClass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constants.
+
+   static const int cHeaderReadOne = 1;
+   static const int cHeaderReadAll = 2;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // These are transmit and receive memory. They are allocated when the 
+   // message port is opened.
+   char* mTxMemory;
+   char* mRxMemory;
+
+   // Size of allocated memory.
+   int mMemorySize;
 
    //***************************************************************************
    //***************************************************************************
@@ -56,15 +71,33 @@ public:
    // header data before the message is sent.
    BaseMsgMonkey* mMonkey;
 
-   // Transmit mutex is used by doSendMsg for mutual exclusion.
-   Threads::MutexSemaphore  mTxMutex;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // General purpose valid flag.
-   bool mValidFlag;
+   // Header read state. This determines if the header is read one byte at 
+   // a time and the header buffer is used to detect a header or if it is
+   // read all bytes at once.
+   int mHeaderReadState;
+
+   // Message header length.
+   int mHeaderLength;
+
+   // Serial header buffer. This is used to detect a header and synchronize
+   // to it.
+   SerialHeaderBuffer mHeaderBuffer;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Metrics.
    int mTxMsgCount;
    int mRxMsgCount;
+   int mHeaderAllCount;
+   int mHeaderOneCount;
 
    //***************************************************************************
    //***************************************************************************
@@ -75,32 +108,25 @@ public:
    SerialMsgPort(); 
   ~SerialMsgPort(); 
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Do socket and bind calls.
-   void configure(
-      BaseMsgMonkeyCreator*  aMonkeyCreator,
-      int                    aPortNumber,
-      char*                  aPortSetup,
-      int                    aRxTimeout);
+   // Initialize and open the serial port.
+   void initialize(SerialSettings& aSettings) override;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Receive a message from the socket via blocking recv calls.
-   // It returns true if successful.
-   bool doReceiveMsg (ByteContent*& aRxMsg);
-
-   // Send a message over the socket via a blocking send call.
+   // Copy a message into a byte buffer and send the byte buffer via the
+   // serial port.
    // It returns true if successful.
    // It is protected by the transmit mutex.
-   bool doSendMsg (ByteContent*  aTxMsg);
+   bool doSendMsg(ByteContent*  aTxMsg);
 
+   // Receive data from the serial port into a byte buffer and then extract
+   // a message from the byte buffer. Return the message and true if
+   // successful. As part of the termination process, returning false means
+   // that the serial port was closed or that there was an error.
+   bool doReceiveMsg (ByteContent*& aRxMsg);
 };
 
 //******************************************************************************

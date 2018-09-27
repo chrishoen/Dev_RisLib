@@ -7,6 +7,10 @@
 
 #include "stdafx.h"
 
+#include "my_functions.h"
+#include "risPortableCalls.h"
+#include "prnPrint.h"
+
 #include "ris_priorities.h"
 #include "risSerialMsgThread.h"
 
@@ -16,17 +20,19 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
 
-SerialMsgThread::SerialMsgThread()
+SerialMsgThread::SerialMsgThread(SerialSettings aSettings)
 {
    BaseClass::mThreadPriority = get_default_udp_rx_thread_priority();
 
-   mPortNumber = 0;
-   mPortSetup[0]=0;
-   mRxTimeout=0;
-   mMonkeyCreator = 0;
+   mSettings = aSettings;
+   mRxMsgQCall = aSettings.mRxMsgQCall;
+
    mTxCount = 0;
    mTxLength = 0;
+   mRxCount = 0;
+   mRxError = 0;
 }
 
 SerialMsgThread::~SerialMsgThread()
@@ -36,82 +42,60 @@ SerialMsgThread::~SerialMsgThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Configure:
-
-void SerialMsgThread::configure(
-   Ris::BaseMsgMonkeyCreator* aMonkeyCreator, 
-   int                        aPortNumber,
-   char*                      aPortSetup,
-   int                        aRxTimeout,
-   RxMsgQCall*                aRxMsgQCall)
-{
-   mPortNumber = aPortNumber;
-   strcpy(mPortSetup,aPortSetup);
-   mRxTimeout = aRxTimeout;
-
-   mMonkeyCreator = aMonkeyCreator;
-
-   mRxMsgQCall = *aRxMsgQCall;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Thread init function, base class overload.
-// It configures the socket.
+// Initialize and open the serial port.
 
 void SerialMsgThread::threadInitFunction()
 {
    Prn::print(Prn::SerialInit1, "SerialMsgThread::threadInitFunction");
 
-   mSerialMsgPort.configure(
-      mMonkeyCreator,
-      mPortNumber,
-      mPortSetup,
-      mRxTimeout);
+   // Initialize and open the serial port.
+   mSerialMsgPort.initialize(mSettings);
+   mSerialMsgPort.doOpen();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Thread run function, base class overload.
-// It contains a while loop that manages the connection to the server
-// and receives messages.
+// It contains a while loop that receives messages and passes them to the
+// attached message handler.
 
 void  SerialMsgThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketRun1, "SerialRxMsgThread::threadRunFunction");
+   Prn::print(Prn::SerialRun1, "SerialRxMsgThread::threadRunFunction %d",mSerialMsgPort.mValidFlag);
    
-   //----------------------------------------------------------------------------
-   // Loop
-
    bool tGoing=mSerialMsgPort.mValidFlag;
-
+ 
    while(tGoing)
    {
       // Try to receive a message with a blocking receive call.
       // If a message was received then process it.
-      // If a message was not received then the connection was lost.  
+      // If a message was not received then the serial port was closed or 
+      // an error occurred.  
       ByteContent* tMsg=0;
       if (mSerialMsgPort.doReceiveMsg(tMsg))
       {
-         // Message was correctly received
-         // Call the receive method
-         processRxMsg(tMsg);
+         // Metrics.
+         mRxCount++;
+         // Message was correctly received.
+         // Invoke the receive qcall callback, passing the received message
+         // to the thread owner.
+         mRxMsgQCall(tMsg);
       }
       else
       {
-         // Message was not correctly received
+         // Message was not correctly received.
+         mRxError++;
       }
-      //-------------------------------------------------------------------------
-      // If termination request, exit the loop
+
+      // If termination request, exit the loop.
       // This is set by shutdown, see below.
       if (mTerminateFlag)
       {
-         tGoing=false;
-      }  
-   }         
-
+         tGoing = false;
+      }
+   }
 }
 
 //******************************************************************************
@@ -128,10 +112,10 @@ void SerialMsgThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 // Shutdown, base class overload.
-// This sets the terminate request flag and closes the socket.
+// This sets the terminate request flag and closes the serial port.
 //
 // If the while loop in the threadRunFunction is blocked on doReceiveMsg then
-// closing the socket will cause doReceiveMsg to return with false and 
+// closing the serial port will cause doReceiveMsg to return with false and 
 // then the terminate request flag will be polled and the threadRunFunction 
 // will exit.
 
@@ -147,23 +131,15 @@ void SerialMsgThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Invoke the qcall callback.
-
-void SerialMsgThread::processRxMsg(Ris::ByteContent* aMsg)
-{
-   // Invoke the receive qcall callback, passes the received message to the
-   // thread owner.
-   mRxMsgQCall(aMsg);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This sends a message via the tcp client thread
+// Send a transmit message via the serial port. It executes a blocking
+// send call in the context of the caller.
 
 bool SerialMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {
-   return mSerialMsgPort.doSendMsg(aMsg);
+   mTxMutex.lock();
+   bool tRet = mSerialMsgPort.doSendMsg(aMsg);
+   mTxMutex.unlock();
+   return tRet;
 }
 
 //******************************************************************************

@@ -1,52 +1,55 @@
+
 #include "stdafx.h"
 
+#include "MainInit.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
 #include "someSerialRxThread.h"
-#include "someSerialTxThread.h"
-#include "MainInit.h"
-
-using namespace Some;
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 int main(int argc,char** argv)
 {
-   //--------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Begin program.
 
    main_initialize(argc,argv);
 
-   //--------------------------------------------------------------------
-   // Launch threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Launch program threads.
 
-   gSerialRxThread = new SerialRxThread();
-   gSerialRxThread->configure(6,"115200,N,8,1",4000);
-   gSerialRxThread->launchThread();
-#if 0
-   gSerialTxThread = new SerialTxThread();
-   gSerialTxThread->configure(5,"115200,N,8,1",0);
-   gSerialTxThread->launchThread();
-#endif
-   //--------------------------------------------------------------------
-   // Start user command line executive,
-   // It returns when user exits
+   Some::gSerialRxThread = new Some::SerialRxThread;
+   Some::gSerialRxThread->launchThread();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Execute console command line executive, wait for user to exit.
 
    CmdLineExec* tExec = new CmdLineExec;
-   Ris::executeCmdLineConsole(tExec);
+   Ris::gCmdLineConsole.execute(tExec);
    delete tExec;
 
-   //--------------------------------------------------------------------
-   // Shutdown threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Shutdown program threads.
 
-   gSerialTxThread->shutdownThread();
-   gSerialRxThread->shutdownThread();
+   Some::gSerialRxThread->shutdownThread();
+   delete Some::gSerialRxThread;
 
-   //--------------------------------------------------------------------
-   // Exit
-   
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // End program.
+
    main_finalize();
-
    return 0;
 }
-

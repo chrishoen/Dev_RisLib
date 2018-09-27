@@ -1,7 +1,16 @@
 #pragma once
+
 /*==============================================================================
-Serial header buffer
-=============================================================================*/
+Byte content message serial port class.
+==============================================================================*/
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+#include "risByteContent.h"
+#include "risByteMsgMonkey.h"
+#include "risThreadsQCall.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -13,60 +22,46 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encalsulates a buffer of bytes that is used to detect serial 
-// communications message headers. It is a shift register of bytes, it shifts
-// up. The top element is the oldest and the bottom element is the most recent.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This class encapsulates serial port settings. They are used to configure
+// the various serial port classes.
 
-class SerialHeaderBuffer
+class SerialSettings
 {
 public:
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   char    mX;         // Input value
-   int     mSize;      // Array size
-   int     mIndex;     // Index of bottom element
-   int     mCount;     // Number of occupied elements
-   bool    mValid;     // Valid
-   char*   mArray;     // Value array
+   // "COM1"
+   char mPortDevice[16];
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Infrastucture.
+   // "9600,N,8,1". If empty string then use system defaults.
+   char mPortSetup[16];
 
-   // Constructors.
-   SerialHeaderBuffer();
-  ~SerialHeaderBuffer();
-   void reset(); 
+   // Receive timeout. Milliseconds, 0==no timeout
+   int mRxTimeout;
 
-   // Allocate memory and initialize.
-   void initialize(int aSize);
-   // Initialize, but reuse memory.
-   void reinitialize();
-   // Deallocate memory.
-   void finalize();
-   // Show.
-   void show();
+   // Message monkey creator.
+   BaseMsgMonkeyCreator* mMonkeyCreator;
+
+   // Receive byte content message callback qcall.
+   Ris::Threads::QCall1<Ris::ByteContent*> mRxMsgQCall;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Shift right and put input value at the left end.
-   void shiftUp(char aX);
+   // Constructor.
+   SerialSettings();
 
-   // Set the left end value
-   void setBottom(char aX);
-
-   // Get value
-   char get(int    aIndex);
-   char getTop();
-   char getBottom();
-
+   void setPortDevice(char* aPortDevice);
+   void setPortSetup(char* aPortSetup);
 };
 
 //******************************************************************************

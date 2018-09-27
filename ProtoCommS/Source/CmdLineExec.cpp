@@ -1,167 +1,143 @@
 
 #include "stdafx.h"
 
-#include "protoserialSettings.h"
-#include "protoserialMsg.h"
-#include "protoserialMsgHelper.h"
+#include "fcomSettings.h"
+#include "fcomMsg.h"
+#include "fcomSerialThread.h"
 
-#include "protoserialSerialThread.h"
-
+#include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-using namespace ProtoSerial;
-
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 CmdLineExec::CmdLineExec()
 {
 }
-//******************************************************************************
+
 void CmdLineExec::reset()
 {
 }
+
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This class is the program command line executive. It processes user
+// command line inputs and executes them. It inherits from the command line
+// command executive base class, which provides an interface for executing
+// command line commands. It provides an override execute function that is
+// called by a console executive when it receives a console command line input.
+// The execute function then executes the command.
+
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("SHUTDOWN" ))  executeOnShutdown (aCmd);
-   if (aCmd->isCmd("TX"       ))  executeOnTx  (aCmd);
-   if (aCmd->isCmd("GO1"      ))  executeOnGo1 (aCmd);
-   if (aCmd->isCmd("GO2"      ))  executeOnGo2 (aCmd);
-   if (aCmd->isCmd("GO3"      ))  executeOnGo3 (aCmd);
-   if (aCmd->isCmd("GO4"      ))  executeOnGo4 (aCmd);
-   if (aCmd->isCmd("GO5"      ))  executeOnGo5 (aCmd);
-   if (aCmd->isCmd("GO6"      ))  executeOnGo6 (aCmd);
-   if (aCmd->isCmd("Parms"    ))  executeParms (aCmd);
+   if (aCmd->isCmd("RESET"))     reset();
+   if (aCmd->isCmd("TP"))        FCom::gSerialThread->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
+   if (aCmd->isCmd("SETTINGS"))  executeSettings(aCmd);
+   if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
+   if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
+   if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
+   if (aCmd->isCmd("GO4"))       executeGo4(aCmd);
+   if (aCmd->isCmd("GO5"))       executeGo5(aCmd);
+   if (aCmd->isCmd("GO5"))       executeGo5(aCmd);
+   if (aCmd->isCmd("Show"))      executeShow(aCmd);
+   if (aCmd->isCmd("Parms"))     executeParms(aCmd);
 }
+
 //******************************************************************************
-void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
+//******************************************************************************
+//******************************************************************************
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 {
-   gSerialThread->shutdownThread();
+   aCmd->setArgDefault(1, 11);
+
+   FCom::EchoRequestMsg* tMsg = (FCom::EchoRequestMsg*)FCom::createMsg(FCom::cEchoRequestMsg);
+   tMsg->mCode1 = aCmd->argInt(1);
+   FCom::gSerialThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeSettings(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   int tMsgType= aCmd->argInt(1);
+   FCom::gSettings.reset();
+   FCom::gSettings.readSection("default");
 
-   switch (tMsgType)
-   {
-      case 1:
-      {
-         ProtoSerial::TestMsg* tMsg = new ProtoSerial::TestMsg;
-         MsgHelper::initialize(tMsg);
-         gSerialThread->sendMsg(tMsg);
-         break;
-      }
-      case 5:
-      {
-         ProtoSerial::DataMsg* tMsg = new ProtoSerial::DataMsg;
-         MsgHelper::initialize(tMsg);
-         gSerialThread->sendMsg(tMsg);
-         break;
-      }
-   }
+   FCom::gSerialThread->sendSettingsMsg();
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   gSerialThread->sendTestMsg();
+   // Set defaults if no arguments were entered.
+   aCmd->setArgDefault(1, 10);
+   aCmd->setArgDefault(2, 11.1);
+
+   // Set variables from arguments.
+   int    tInt = aCmd->argInt(1);
+   double tDouble = aCmd->argDouble(2);
+
+   // Show variables.
+   Prn::print(0, "Show2 %d %10.6f", tInt, tDouble);
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   ProtoSerial::StatusRequestMsg* tMsg = new ProtoSerial::StatusRequestMsg;
+   // Set defaults if no arguments were entered.
+   aCmd->setArgDefault(1,"something");
 
-   gSerialThread->sendMsg(tMsg);
+   // Show arguments.
+   Prn::print(0,"Go2 %s %10.6f",aCmd->argString(1));
 }
 
-
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Ris::ByteBuffer tBuffer(20000);
-
-   ProtoSerial::TestMsg* tTxMsg = new ProtoSerial::TestMsg;
-   ProtoSerial::TestMsg* tRxMsg = 0;
-   MsgHelper::initialize(tTxMsg);
-
-   ProtoSerial::MsgMonkey tMonkey;
-
-   tMonkey.putMsgToBuffer(&tBuffer,tTxMsg);
-
-   tRxMsg = (ProtoSerial::TestMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
-
-   MsgHelper::show(tRxMsg);
-
-   delete tTxMsg;
-   delete tRxMsg;
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   Ris::ByteBuffer tBuffer(20000);
-
-   ProtoSerial::DataMsg* tTxMsg = new ProtoSerial::DataMsg;
-   ProtoSerial::DataMsg* tRxMsg = 0;
-   MsgHelper::initialize(tTxMsg);
-
-   ProtoSerial::MsgMonkey tMonkey;
-
-   tMonkey.putMsgToBuffer(&tBuffer,tTxMsg);
-
-   tRxMsg = (ProtoSerial::DataMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
-
-   MsgHelper::show(tRxMsg);
-
-   delete tTxMsg;
-   delete tRxMsg;
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   Ris::ByteBuffer tBuffer(20000);
-
-   ProtoSerial::DataRecord* tTxMsg = new ProtoSerial::DataRecord;
-   ProtoSerial::DataRecord* tRxMsg = new ProtoSerial::DataRecord;
-   MsgHelper::initialize(tTxMsg);
-
-   tBuffer.putToBuffer((Ris::ByteContent*)tTxMsg);
-   printf("Buffer1 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
-
-   tBuffer.rewind();
-   printf("Buffer2 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
-
-   tBuffer.getFromBuffer((Ris::ByteContent*)tRxMsg);
-   printf("Buffer3 %3d %3d %3d\n", tBuffer.getError(),tBuffer.getLength(),tBuffer.getPosition());
-
-   MsgHelper::show(tRxMsg);
-
-   delete tTxMsg;
-   delete tRxMsg;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
-   ProtoSerial::DataMsg* tMsg = new ProtoSerial::DataMsg;
-   MsgHelper::initialize(tMsg);
-
-   gSerialThread->sendMsg(tMsg);
+   FCom::gSerialThread->show();
 }
-
 
 //******************************************************************************
 //******************************************************************************
@@ -169,14 +145,6 @@ void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoSerial::gSettings.show();
-   return;
-
-   aCmd->setArgDefault(1,"SerialPeer1");
-
-   ProtoSerial::gSettings.reset();
-   ProtoSerial::gSettings.readSection(aCmd->argString(1));
-   ProtoSerial::gSettings.show();
+   FCom::gSettings.show();
 }
-
 

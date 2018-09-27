@@ -1,44 +1,57 @@
+
 #include "stdafx.h"
 
+#include "MainInit.h"
+#include "MainMemory.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "protoserialSettings.h"
-#include "protoserialSerialThread.h"
-
-#include "MainInit.h"
-
-using namespace ProtoSerial;
+#include "fcomSerialThread.h"
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 int main(int argc,char** argv)
 {
-   //--------------------------------------------------------------------
-   // Begin program
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Begin program.
 
    main_initialize(argc,argv);
+   main_memory_initialize();
 
-   //--------------------------------------------------------------------
-   // Launch threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Launch program threads.
 
-   gSerialThread = new SerialThread;
-   gSerialThread->launchThread();
+   FCom::gSerialThread = new FCom::SerialThread;
+   FCom::gSerialThread->launchThread();
 
-   //--------------------------------------------------------------------
-   // Start user command line executive,
-   // Wait for user to exit
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Execute console command line executive, wait for user to exit.
 
-   CmdLineExec* exec = new CmdLineExec;
-   Ris::gCmdLineConsole.execute(exec);
-   delete exec;
+   CmdLineExec* tExec = new CmdLineExec;
+   Ris::gCmdLineConsole.execute(tExec);
+   delete tExec;
 
-   //--------------------------------------------------------------------
-   // End program
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Shutdown program threads.
 
-   gSerialThread->shutdownThread();
-   delete gSerialThread;
+   FCom::gSerialThread->shutdownThread();
+   delete FCom::gSerialThread;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // End program.
 
    main_finalize();
-
    return 0;
 }

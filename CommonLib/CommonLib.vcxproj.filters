@@ -7,39 +7,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\CmdLineExec.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\procoClientThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\procoServerThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MainInit.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\procoMsg.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\procoMsgBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\procoMsgHelper.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\procoSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\CmdLineExec.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\procoClientThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\procoServerThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MainInit.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\stdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\procoMsg.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\procoMsgBase.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\procoMsgHelper.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\procoSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

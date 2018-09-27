@@ -1,79 +1,95 @@
+
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
-#include "protoserialSettings.h"
+
+#include "fcomSettings.h"
+
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Initialize.
 
 void main_initialize(int argc,char** argv)
 {
-   //---------------------------------------------------------------------------
-   // Enter process
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Enter process.
 
    Ris::Threads::enterProcessHigh();
 
-   //---------------------------------------------------------------------------
-   // Initialize print facility
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize print facility.
 
    Prn::resetPrint();
+   Prn::useConsole(1);
    Prn::initializePrint();
 
-   // Initialize print filters
-   Prn::setFilter(Prn::SocketInit1,true);
-   Prn::setFilter(Prn::SocketInit2,true);
-   Prn::setFilter(Prn::SocketRun1, false);
-   Prn::setFilter(Prn::SocketRun2, false);
-   Prn::setFilter(Prn::SocketRun3, false);
-
-   Prn::setFilter(Prn::SocketRun4, false);
-
-   Prn::setFilter(Prn::SerialInit1,false);
-   Prn::setFilter(Prn::SerialInit2,true);
-   Prn::setFilter(Prn::SerialRun1, true);
-   Prn::setFilter(Prn::SerialRun2, true);
-   Prn::setFilter(Prn::SerialRun3, true);
-   Prn::setFilter(Prn::SerialRun4, true);
+   // Initialize print filters.
+   Prn::setFilter(Prn::SerialInit1, true);
+   Prn::setFilter(Prn::SerialInit2, true);
+   Prn::setFilter(Prn::SerialRun1,  true);
+   Prn::setFilter(Prn::SerialRun2,  true);
+   Prn::setFilter(Prn::SerialRun3,  false);
+   Prn::setFilter(Prn::SerialRun4,  false);
 
    Prn::setFilter(Prn::ThreadInit1, true);
-   Prn::setFilter(Prn::ThreadInit2, true);
-   Prn::setFilter(Prn::ThreadRun1, true);
-   Prn::setFilter(Prn::ThreadRun2, false);
-   Prn::setFilter(Prn::ThreadRun3, false);
-   Prn::setFilter(Prn::ThreadRun4, false);
+   Prn::setFilter(Prn::ThreadInit1, true);
+   Prn::setFilter(Prn::ThreadRun1,  true);
+   Prn::setFilter(Prn::ThreadRun2,  true);
+   Prn::setFilter(Prn::ThreadRun3,  true);
+   Prn::setFilter(Prn::ThreadRun4,  true);
 
-   Prn::print(0,"ProtoSerialS*******************************************BEGIN %d %s",argc,argv[1]);
+   Prn::setFilter(Prn::ProcRun1,    true);
+   Prn::setFilter(Prn::ProcRun2,    true);
+   Prn::setFilter(Prn::ProcRun3,    false);
+   Prn::setFilter(Prn::ProcRun4,    true);
 
-   //---------------------------------------------------------------------------
-   // Initialize Settings
+   Prn::setFilter(Prn::ViewRun1,    true, 1);
+   Prn::setFilter(Prn::ViewRun2,    true, 1);
+   Prn::setFilter(Prn::ViewRun3,    false,1);
+   Prn::setFilter(Prn::ViewRun4,    true, 1);
 
-   if (argc == 2)
-   {
-      ProtoSerial::gSettings.readSection(argv[1]);
-   }
-   else
-   {
-      ProtoSerial::gSettings.readSection("SerialPeer1");
-   }
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read parameters files.
+
+   FCom::gSettings.reset();
+   FCom::gSettings.readSection("default");
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Done.
+
+   Prn::print(0,"FComm Program**********************************************BEGIN");
 
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Finalize
+// Finalize.
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoSerialU*******************************************END");
+   Prn::print(0,"FComm Program**********************************************END");
 
    // Close print
    Prn::finalizePrint();
 
    // Exit process
    Ris::Threads::exitProcess();
-
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************

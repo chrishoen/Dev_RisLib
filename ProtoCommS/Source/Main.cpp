@@ -2,11 +2,10 @@
 #include "stdafx.h"
 
 #include "MainInit.h"
-#include "MainMemory.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "fcomSerialThread.h"
+#include "procoSerialThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -20,15 +19,14 @@ int main(int argc,char** argv)
    // Begin program.
 
    main_initialize(argc,argv);
-   main_memory_initialize();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Launch program threads.
 
-   FCom::gSerialThread = new FCom::SerialThread;
-   FCom::gSerialThread->launchThread();
+   ProtoComm::gSerialThread = new ProtoComm::SerialThread;
+   ProtoComm::gSerialThread->launchThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -44,8 +42,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   FCom::gSerialThread->shutdownThread();
-   delete FCom::gSerialThread;
+   ProtoComm::gSerialThread->shutdownThread();
+   delete ProtoComm::gSerialThread;
 
    //***************************************************************************
    //***************************************************************************

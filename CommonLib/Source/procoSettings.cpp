@@ -48,9 +48,9 @@ void Settings::reset()
    mOtherUdpIPAddress[0]=0;
    mOtherUdpPort = 0;
 
-   mSerialPortNumber = 0;
+   mSerialPortDevice[0] = 0;
    mSerialPortSetup[0] = 0;
-   mSerialRxTimeout = -1;
+   mSerialRxTimeout = 0;
 }
 
 //******************************************************************************
@@ -71,9 +71,9 @@ void Settings::show()
    printf("MyUdp              %-12s   %5d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp           %-12s   %5d\n",mOtherUdpIPAddress,mOtherUdpPort);
 
-   printf("SerialPort                 %5d\n",  mSerialPortNumber);
-   printf("SerialPort                 %-12s\n",mSerialPortSetup);
-   printf("SerialRxTimeout            %5d\n",  mSerialRxTimeout);
+   printf("SerialPortDevice           %-12s\n", mSerialPortDevice);
+   printf("SerialPortSetup            %-12s\n", mSerialPortSetup);
+   printf("SerialRxTimeout            %5d\n",   mSerialRxTimeout);
 }
 
 //******************************************************************************
@@ -114,8 +114,8 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
       mOtherUdpPort = aCmd->argInt(2);
    }
 
-   if (aCmd->isCmd("SerialPortNumber"))  mSerialPortNumber = aCmd->argInt(1);
-   if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup,cMaxStringSize);
+   if (aCmd->isCmd("SerialPortDevice"))  aCmd->copyArgString(1, mSerialPortDevice, cMaxStringSize);
+   if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup, cMaxStringSize);
    if (aCmd->isCmd("SerialRxTimeout"))   mSerialRxTimeout = aCmd->argInt(1);
 }
 

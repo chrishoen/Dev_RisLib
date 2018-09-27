@@ -1,9 +1,9 @@
 
 #include "stdafx.h"
 
-#include "fcomSettings.h"
-#include "fcomMsg.h"
-#include "fcomSerialThread.h"
+#include "procoSettings.h"
+#include "procoMsg.h"
+#include "procoSerialThread.h"
 
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
@@ -33,9 +33,8 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("RESET"))     reset();
-   if (aCmd->isCmd("TP"))        FCom::gSerialThread->mTPFlag = aCmd->argBool(1);
-   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
-   if (aCmd->isCmd("SETTINGS"))  executeSettings(aCmd);
+   if (aCmd->isCmd("TP"))        ProtoComm::gSerialThread->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("STATUS"))    executeStatus(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -54,25 +53,13 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeStatus(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 11);
 
-   FCom::EchoRequestMsg* tMsg = (FCom::EchoRequestMsg*)FCom::createMsg(FCom::cEchoRequestMsg);
+   ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
    tMsg->mCode1 = aCmd->argInt(1);
-   FCom::gSerialThread->sendMsg(tMsg);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeSettings(Ris::CmdLineCmd* aCmd)
-{
-   FCom::gSettings.reset();
-   FCom::gSettings.readSection("default");
-
-   FCom::gSerialThread->sendSettingsMsg();
+   ProtoComm::gSerialThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -136,7 +123,7 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
-   FCom::gSerialThread->show();
+   ProtoComm::gSerialThread->show();
 }
 
 //******************************************************************************
@@ -145,6 +132,6 @@ void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   FCom::gSettings.show();
+   ProtoComm::gSettings.show();
 }
 

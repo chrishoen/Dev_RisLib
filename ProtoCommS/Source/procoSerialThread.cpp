@@ -6,12 +6,13 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "fcomSettings.h"
+#include "procoMsgHelper.h"
+#include "procoSettings.h"
 
-#define  _FCOMSERIALTHREAD_CPP_
-#include "fcomSerialThread.h"
+#define  _PROCOSERIALTHREAD_CPP_
+#include "procoSerialThread.h"
 
-namespace FCom
+namespace ProtoComm
 {
 
 //******************************************************************************
@@ -25,7 +26,6 @@ SerialThread::SerialThread()
 
    // Set timer period.
    BaseClass::mTimerPeriod = 1000;
-   if (gSettings.mThreadTimerPeriod)BaseClass::mTimerPeriod = gSettings.mThreadTimerPeriod;
 
    // Initialize QCalls.
    mRxMsgQCall.bind   (this,&SerialThread::executeRxMsg);
@@ -67,9 +67,9 @@ void SerialThread::threadInitFunction()
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
 
-   tSerialSettings.setPortDevice(gSettings.mPortDevice);
-   tSerialSettings.setPortSetup(gSettings.mPortSetup);
-   tSerialSettings.mRxTimeout     = gSettings.mPortTimeout;
+   tSerialSettings.setPortDevice(gSettings.mSerialPortDevice);
+   tSerialSettings.setPortSetup(gSettings.mSerialPortSetup);
+   tSerialSettings.mRxTimeout     = gSettings.mSerialRxTimeout;
    tSerialSettings.mMonkeyCreator = &mMonkeyCreator;
    tSerialSettings.mRxMsgQCall    = mRxMsgQCall;
 
@@ -103,7 +103,7 @@ void  SerialThread::threadExitFunction()
 
 void SerialThread::executeTest1(int  aCode)
 {
-   FCom::TestMsg* msg = new FCom::TestMsg;
+   TestMsg* msg = new TestMsg;
    msg->mCode1 = 201;
 
    mSerialMsgThread->sendMsg(msg);
@@ -118,7 +118,7 @@ void SerialThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
 
-   EchoRequestMsg* tMsg = (EchoRequestMsg*)FCom::createMsg(cEchoRequestMsg);
+   StatusRequestMsg* tMsg = new StatusRequestMsg;
    tMsg->mCode1 = aTimerCount;
    sendMsg(tMsg);
 }
@@ -130,62 +130,79 @@ void SerialThread::executeOnTimer(int aTimerCount)
 
 void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
-   if(!aMsg) return;
-
-   // Put the message to the message processor
-   FCom::BaseMsg* tMsg = (FCom::BaseMsg*)aMsg;
+   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
    // Message jump table based on message type.
    // Calls corresponding specfic message handler method.
    switch (tMsg->mMessageType)
    {
-      case FCom::cTestMsg :
-         processRxMsg((FCom::TestMsg*)tMsg);
-         break;
-      case FCom::cEchoResponseMsg:
-         processRxMsg((FCom::EchoResponseMsg*)tMsg);
-         break;
-      case FCom::cSampleMsg:
-         processRxMsg((FCom::SampleMsg*)tMsg);
-         break;
-      default :
-         Prn::print(Prn::ThreadRun1, "SerialThread::processRxMsg %d",tMsg->mMessageType);
-         destroyMsg(tMsg);
-         break;
+   case ProtoComm::MsgIdT::cTestMsg:
+      processRxMsg((ProtoComm::TestMsg*)tMsg);
+      break;
+   case ProtoComm::MsgIdT::cStatusRequestMsg:
+      processRxMsg((ProtoComm::StatusRequestMsg*)tMsg);
+      break;
+   case ProtoComm::MsgIdT::cStatusResponseMsg:
+      processRxMsg((ProtoComm::StatusResponseMsg*)tMsg);
+      break;
+   case ProtoComm::MsgIdT::cDataMsg:
+      processRxMsg((ProtoComm::DataMsg*)tMsg);
+      break;
+   default:
+      Prn::print(Prn::ThreadRun1, "SerialThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
+      delete tMsg;
+      break;
    }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - TestMsg
+// Message handler for TestMsg.
 
-void SerialThread::processRxMsg(FCom::TestMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "SerialThread::processRxMsg_TestMsg %d",aMsg->mCode1);
-   destroyMsg(aMsg);
+   MsgHelper::show(aMsg);
+   delete aMsg;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - SampleMsg
+// Rx message handler - StatusRequestMsg
 
-void SerialThread::processRxMsg(FCom::SampleMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 {
-   Prn::print(Prn::ViewRun1, "SampleMsg %d", aMsg->mTimerCount);
-   destroyMsg(aMsg);
+   if (true)
+   {
+      ProtoComm::StatusResponseMsg* tMsg = new ProtoComm::StatusResponseMsg;
+      mSerialMsgThread->sendMsg(tMsg);
+   }
+
+   MsgHelper::show(aMsg);
+   delete aMsg;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoResponseMsg
+// Rx message handler - StatusResponseMsg
 
-void SerialThread::processRxMsg(FCom::EchoResponseMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "EchoResponseMsg %d", aMsg->mCode1);
-   destroyMsg(aMsg);
+   MsgHelper::show(aMsg);
+   delete aMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Rx message handler - DataMsg
+
+void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
+{
+   MsgHelper::show(aMsg);
+   delete aMsg;
 }
 
 //******************************************************************************
@@ -193,7 +210,7 @@ void SerialThread::processRxMsg(FCom::EchoResponseMsg* aMsg)
 //******************************************************************************
 // Sends a message via the serial thread.
 
-void SerialThread::sendMsg (FCom::BaseMsg* aTxMsg)
+void SerialThread::sendMsg(BaseMsg* aTxMsg)
 {
    mSerialMsgThread->sendMsg(aTxMsg);
 }
@@ -205,30 +222,15 @@ void SerialThread::sendMsg (FCom::BaseMsg* aTxMsg)
 
 void SerialThread::sendTestMsg()
 {
-   TestMsg* tMsg = (TestMsg*)FCom::createMsg(FCom::cTestMsg);
-   tMsg->mCode1=201;
- 
+   TestMsg* tMsg = new TestMsg;
+   tMsg->mCode1 = 201;
+
    mSerialMsgThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via the serial thread.
-
-void SerialThread::sendSettingsMsg()
-{
-   // Create settings message.
-   SettingsMsg* tMsg = (SettingsMsg*)FCom::createMsg(cSettingsMsg);
-
-   // Copy settings variables.
-   tMsg->mEnable = gSettings.mCSenEnable;
-   tMsg->mTimerModulo = gSettings.mCSenTimerModulo;
-
-   // Send settings message.
-   mSerialMsgThread->sendMsg(tMsg);
-}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

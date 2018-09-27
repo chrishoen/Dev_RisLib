@@ -54,7 +54,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{03F1F68A-FB5D-4388-95C7-E4EE406298C5}"
 	ProjectSection(SolutionItems) = preProject
 		Files\ProtoComm_Settings.txt = Files\ProtoComm_Settings.txt
-		Files\ProtoSerial_Settings.txt = Files\ProtoSerial_Settings.txt
 		Files\RisParms_Parms.txt = Files\RisParms_Parms.txt
 		Files\TableTestParms.txt = Files\TableTestParms.txt
 	EndProjectSection
@@ -66,6 +65,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonLib", "CommonLib\CommonLib.vcxproj", "{3E6C24B5-CB8E-4FBA-B359-FBFB64D6B42D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoCommS", "ProtoCommS\ProtoCommS.vcxproj", "{3EDEB3ED-9272-451D-8144-8DA096878109}"
+	ProjectSection(ProjectDependencies) = postProject
+		{740DD552-6B3B-4A1B-9B22-B6F516E458AB} = {740DD552-6B3B-4A1B-9B22-B6F516E458AB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

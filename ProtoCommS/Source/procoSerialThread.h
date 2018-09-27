@@ -11,13 +11,13 @@ FCom serial thread class.
 #include "risThreadsQCallthread.h"
 #include "risSerialMsgThread.h"
 
-#include "fcomMsg.h"
+#include "procoMsg.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-namespace FCom
+namespace ProtoComm
 {
 
 //******************************************************************************
@@ -66,7 +66,7 @@ public:
    Ris::SerialMsgThread*  mSerialMsgThread;
 
    // Message monkey used by mSerialMsgThread.
-   FCom::MsgMonkeyCreator mMonkeyCreator;
+   MsgMonkeyCreator mMonkeyCreator;
 
    //***************************************************************************
    //***************************************************************************
@@ -129,7 +129,7 @@ public:
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 
    // mTcpServerThread.
-   void executeRxMsg   (Ris::ByteContent* aRxMsg);
+   void executeRxMsg (Ris::ByteContent* aRxMsg);
 
    //***************************************************************************
    //***************************************************************************
@@ -137,9 +137,10 @@ public:
    // Methods.
 
    // Receive message handlers.
-   void processRxMsg (FCom::TestMsg* aRxMsg);
-   void processRxMsg(FCom::SampleMsg* aRxMsg);
-   void processRxMsg(FCom::EchoResponseMsg* aRxMsg);
+   void processRxMsg(ProtoComm::TestMsg*  aMsg);
+   void processRxMsg(ProtoComm::StatusRequestMsg* aMsg);
+   void processRxMsg(ProtoComm::StatusResponseMsg* aMsg);
+   void processRxMsg(ProtoComm::DataMsg* aMsg);
 
    //***************************************************************************
    //***************************************************************************
@@ -147,7 +148,7 @@ public:
    // Methods.
 
    // Send a message via mSerialMsgThread:
-   void sendMsg (FCom::BaseMsg* aTxMsg);
+   void sendMsg (BaseMsg* aTxMsg);
    void sendTestMsg();
    void sendSettingsMsg();
 };
@@ -157,7 +158,7 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _FCOMSERIALTHREAD_CPP_
+#ifdef _PROCOSERIALTHREAD_CPP_
          SerialThread* gSerialThread;
 #else
 extern   SerialThread* gSerialThread;

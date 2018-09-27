@@ -3,8 +3,7 @@
 
 #include "risThreadsProcess.h"
 
-#include "fcomSettings.h"
-
+#include "procoSettings.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -62,15 +61,15 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Read parameters files.
 
-   FCom::gSettings.reset();
-   FCom::gSettings.readSection("default");
+   ProtoComm::gSettings.reset();
+   ProtoComm::gSettings.readSection("default");
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Done.
 
-   Prn::print(0,"FComm Program**********************************************BEGIN");
+   Prn::print(0,"ProtoCommS Program**********************************************BEGIN");
 
 }
 
@@ -81,7 +80,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"FComm Program**********************************************END");
+   Prn::print(0,"ProtoCommS Program**********************************************END");
 
    // Close print
    Prn::finalizePrint();

@@ -53,8 +53,7 @@ public:
    // Methods.
 
    // Execute specific commands.
-   void executeEcho     (Ris::CmdLineCmd* aCmd);
-   void executeSettings (Ris::CmdLineCmd* aCmd);
+   void executeStatus   (Ris::CmdLineCmd* aCmd);
    void executeGo1      (Ris::CmdLineCmd* aCmd);
    void executeGo2      (Ris::CmdLineCmd* aCmd);
    void executeGo3      (Ris::CmdLineCmd* aCmd);

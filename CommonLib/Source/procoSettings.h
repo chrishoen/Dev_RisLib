@@ -87,7 +87,7 @@ public:
    int  mOtherUdpPort;
 
    // Serial setup and port.
-   int  mSerialPortNumber;
+   char mSerialPortDevice[cMaxStringSize];
    char mSerialPortSetup[cMaxStringSize];
    int  mSerialRxTimeout;
 

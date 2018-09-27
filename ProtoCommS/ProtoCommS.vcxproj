@@ -37,6 +37,9 @@
     <ProjectReference Include="..\CommonLib\CommonLib.vcxproj">
       <Project>{3e6c24b5-cb8e-4fba-b359-fbfb64d6b42d}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\RisLib\RisLib.vcxproj">
+      <Project>{740dd552-6b3b-4a1b-9b22-b6f516e458ab}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3edeb3ed-9272-451d-8144-8da096878109}</ProjectGuid>

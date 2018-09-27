@@ -20,18 +20,29 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
 
 NetworkThread::NetworkThread()
 {
+   // Set base class thread priority.
+   BaseClass::setThreadPriorityHigh();
+
+   // Set timer period.
+   BaseClass::mTimerPeriod = 1000;
+
+   // Initialize QCalls.
+   mRxMsgQCall.bind(this, &NetworkThread::executeRxMsg);
+
+   // Initialize variables.
+   mMonkeyCreator.configure(gSettings.mMyAppNumber);
+   mUdpMsgThread = 0;
+   mTPFlag = false;
    mStatusCount1=0;
    mStatusCount2=0;
-
-   mUdpMsgThread = new Ris::Net::UdpMsgThread;
-
-   // Initialize QCalls
-   mRxMsgQCall.bind   (this,&NetworkThread::executeRxMessage);
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 NetworkThread::~NetworkThread()
@@ -40,44 +51,36 @@ NetworkThread::~NetworkThread()
 }
 
 //******************************************************************************
-// This configures members
-
-void NetworkThread::configure()
-{
-   Prn::print(Prn::ThreadInit1, "NetworkThread::configure");
-
-   //--------------------------------------------------------------------------- 
-   // Configure message monkey
-
-   mMonkeyCreator.configure(gSettings.mMyAppNumber);
-
-   //---------------------------------------------------------------------------
-   // Configure message thread
-
-   mUdpMsgThread->configure(
-      &mMonkeyCreator,
-      gSettings.mMyUdpIPAddress,
-      gSettings.mMyUdpPort,
-      gSettings.mOtherUdpIPAddress,
-      gSettings.mOtherUdpPort,
-      &mRxMsgQCall);
-}
-
 //******************************************************************************
-
-void NetworkThread::launchThread()
-{
-   Prn::print(Prn::ThreadInit1, "NetworkThread::launch");
-
-   // Launch child thread
-   mUdpMsgThread->launchThread(); 
-   
-   // Launch this thread
-   BaseClass::launchThread();
-}
-
 //******************************************************************************
 // Thread exit function, base class overload.
+
+void NetworkThread::threadInitFunction()
+{
+   Prn::print(Prn::ThreadInit1, "SerialThread::threadInitFunction");
+
+   // Instance of network socket settings.
+   Ris::Net::Settings tSettings;
+
+   tSettings.setLocalIpAddr(gSettings.mMyUdpIPAddress);
+   tSettings.mLocalIpPort = gSettings.mMyUdpPort;
+   tSettings.setRemoteIpAddr(gSettings.mOtherUdpIPAddress);
+   tSettings.mRemoteIpPort = gSettings.mOtherUdpPort;
+   tSettings.mMonkeyCreator = &mMonkeyCreator;
+   tSettings.mRxMsgQCall = mRxMsgQCall;
+
+   // Create child thread.
+   mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);
+
+   // Launch child thread.
+   mUdpMsgThread->launchThread();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread exit function, base class overload.
+
 void  NetworkThread::threadExitFunction()
 {
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
@@ -90,9 +93,12 @@ void  NetworkThread::threadExitFunction()
 }
 
 //******************************************************************************
-// QCall
+//******************************************************************************
+//******************************************************************************
+// QCall registered to mUdpMsgThread. This is invoked by mUdpMsgThread
+// when it receives a message. It process the received messages.
 
-void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
+void NetworkThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
    ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
@@ -120,6 +126,8 @@ void NetworkThread::executeRxMessage(Ris::ByteContent* aMsg)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Message handler for TestMsg.
 
 void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
@@ -128,6 +136,8 @@ void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
    delete aMsg;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Rx message handler - StatusRequestMsg
 
@@ -144,6 +154,8 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Rx message handler - StatusResponseMsg
 
 void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
@@ -152,6 +164,8 @@ void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
    delete aMsg;
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 // Rx message handler - DataMsg
 
@@ -162,22 +176,24 @@ void NetworkThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 }
 
 //******************************************************************************
-// QCall
+//******************************************************************************
+//******************************************************************************
+// Periodic timer execution, base class overload.
 
 void NetworkThread::executeOnTimer(int aTimerCount)
 {
-   Prn::print(Prn::ThreadRun2, "NetworkThread::executeRxMessage");
+   if (!mTPFlag) return;
 
-   return;
-
+   // Send a test message.
    ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
-   tx->mCode1=101;
-
+   tx->mCode1 = aTimerCount;
    mUdpMsgThread->sendMsg(tx);
 }
 
 //******************************************************************************
-// This sends a message via the tcp client thread
+//******************************************************************************
+//******************************************************************************
+// Send a message via the socket thread.
 
 void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 {
@@ -185,7 +201,9 @@ void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 }
 
 //******************************************************************************
-// This sends a test message via the tcp client thread
+//******************************************************************************
+//******************************************************************************
+// Send a message via the socket thread.
 
 void NetworkThread::sendTestMsg()
 {
@@ -194,4 +212,7 @@ void NetworkThread::sendTestMsg()
    mUdpMsgThread->sendMsg(tMsg);
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace

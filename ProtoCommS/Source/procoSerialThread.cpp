@@ -62,7 +62,7 @@ void SerialThread::show()
 
 void SerialThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SerialThread::launch");
+   Prn::print(Prn::ThreadInit1, "SerialThread::threadInitFunction");
 
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;

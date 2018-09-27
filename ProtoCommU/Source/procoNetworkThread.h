@@ -1,7 +1,7 @@
-#ifndef _PROCONETWORKTHREAD_H_
-#define _PROCONETWORKTHREAD_H_
+#pragma once
 
 /*==============================================================================
+Prototype message thread.
 ==============================================================================*/
 
 //******************************************************************************
@@ -20,72 +20,97 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This thread class transmits and receives byte content messages via
+// a member udp message thread which is based on a udp message socket.
+// It provides the capability to send messages via the socket and it
+// provides handlers for received messages.
 
 class  NetworkThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Udp message thread, this manages message transmission and reception
+   // via a udp message socket.
+   Ris::Net::UdpMsgThread* mUdpMsgThread;
+
+   // Message monkey used by mUdpMsgThread.
+   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // State variables.
+   bool mTPFlag;
+
+   // Metrics.
+   int  mStatusCount1;
+   int  mStatusCount2;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
    NetworkThread();
   ~NetworkThread();
 
-   //--------------------------------------------------------------
-   // Configure:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Thread base class overloads:
 
-   void configure();
-
-   //--------------------------------------------------------------
-   // Thread base class overloads:
-
-   // launch starts the child thread + this thread
-   // threadExitFunction shuts down the child thread
+   // threadInitFunction starts the child thread.
+   // threadExitFunction shuts down the child thread.
    // executeOnTimer sends a periodic status message.
-   void launchThread();
-   void threadExitFunction(); 
-   void executeOnTimer(int);
+   void threadInitFunction()override;
+   void threadExitFunction()override; 
+   void executeOnTimer(int)override;
 
-   //--------------------------------------------------------------
-   // Tcp client thread, this manages session connections and 
-   // message transmission and reception
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Receive message qcall.
 
-   Ris::Net::UdpMsgThread*  mUdpMsgThread;
+   // QCall registered to mUdpMsgThread. This is invoked by mUdpMsgThread
+   // when it receives a message.  It process the received messages.
+   Ris::Net::UdpMsgThread::RxMsgQCall mRxMsgQCall;
 
-   // Message monkey used by mUdpMsgThread
-   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
+   // Associated QCall method. It calls one of the specific message handlers.
+   void executeRxMsg (Ris::ByteContent* aMsg);
 
-   //--------------------------------------------------------------
-   // QCall:
-
-   // QCalls registered to mUdpMsgThread
-   Ris::Net::UdpMsgThread::RxMsgQCall    mRxMsgQCall;
-
-   // Associated QCall methods, these are called by the
-   // threadRunFunction to process conditions sent from 
-   // mTcpServerThread.
-   void executeRxMessage   (Ris::ByteContent* aMsg);
-
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   //--------------------------------------------------------------
-   // Rx message handlers
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Specific receive message handlers.
 
    void processRxMsg (ProtoComm::TestMsg*  aMsg);
    void processRxMsg (ProtoComm::StatusRequestMsg* aMsg);
    void processRxMsg (ProtoComm::StatusResponseMsg* aMsg);
    void processRxMsg (ProtoComm::DataMsg* aMsg);
 
-   int  mStatusCount1;
-   int  mStatusCount2;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
-   //--------------------------------------------------------------
    // Send a message
-
    void sendMsg (ProtoComm::BaseMsg* aMsg);
    void sendTestMsg();   
-
 };
+
 //******************************************************************************
-// Global instance
+//******************************************************************************
+//******************************************************************************
+// Global singular instance.
 
 #ifdef _PROCONETWORKTHREAD_CPP_
          NetworkThread* gNetworkThread;
@@ -94,8 +119,6 @@ extern   NetworkThread* gNetworkThread;
 #endif
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-
-
-#endif
-

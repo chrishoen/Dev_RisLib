@@ -12,34 +12,49 @@
 using namespace ProtoComm;
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 CmdLineExec::CmdLineExec()
 {
 }
-//******************************************************************************
 void CmdLineExec::reset()
 {
 }
+
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("SHUTDOWN" ))  executeOnShutdown (aCmd);
-   if (aCmd->isCmd("TX"       ))  executeOnTx  (aCmd);
-   if (aCmd->isCmd("GO1"      ))  executeOnGo1 (aCmd);
-   if (aCmd->isCmd("GO2"      ))  executeOnGo2 (aCmd);
-   if (aCmd->isCmd("GO3"      ))  executeOnGo3 (aCmd);
-   if (aCmd->isCmd("GO4"      ))  executeOnGo4 (aCmd);
-   if (aCmd->isCmd("GO5"      ))  executeOnGo5 (aCmd);
-   if (aCmd->isCmd("GO6"      ))  executeOnGo6 (aCmd);
+   if (aCmd->isCmd("SHUTDOWN"))  executeShutdown (aCmd);
+   if (aCmd->isCmd("TP"))        ProtoComm::gNetworkThread->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("TX"))        executeTx  (aCmd);
+   if (aCmd->isCmd("GO1"))       executeGo1 (aCmd);
+   if (aCmd->isCmd("GO2"))       executeGo2 (aCmd);
+   if (aCmd->isCmd("GO3"))       executeGo3 (aCmd);
+   if (aCmd->isCmd("GO4"))       executeGo4 (aCmd);
+   if (aCmd->isCmd("GO5"))       executeGo5 (aCmd);
+   if (aCmd->isCmd("GO6"))       executeGo6(aCmd);
+   if (aCmd->isCmd("GO6"))       executeGo6(aCmd);
+   if (aCmd->isCmd("Parms"))     executeParms(aCmd);
 }
+
 //******************************************************************************
-void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeShutdown (Ris::CmdLineCmd* aCmd)
 {
    gNetworkThread->shutdownThread();
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1);
    int tMsgType= aCmd->argInt(1);
@@ -64,25 +79,30 @@ void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
    gNetworkThread->sendTestMsg();
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
 
    gNetworkThread->sendMsg(tMsg);
 }
 
-
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
@@ -103,8 +123,10 @@ void CmdLineExec::executeOnGo3(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
@@ -125,8 +147,10 @@ void CmdLineExec::executeOnGo4(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
@@ -150,8 +174,10 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
    MsgHelper::initialize(tMsg);
@@ -159,4 +185,16 @@ void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
    gNetworkThread->sendMsg(tMsg);
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
+{
+   ProtoComm::gSettings.show();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 

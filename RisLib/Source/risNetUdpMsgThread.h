@@ -8,12 +8,9 @@ Udp receiver thread.
 //******************************************************************************
 //******************************************************************************
 
-#include "risCallPointer.h"
-#include "risContainers.h"
-#include "risSockets.h"
-#include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
 #include "risNetUdpMsgSocket.h"
+#include "risNetSettings.h"
 
 namespace Ris
 {
@@ -48,53 +45,24 @@ public:
    //***************************************************************************
    // Members.
 
-   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
-
-   // This is a qcall callback that is called when a message is received.
-   RxMsgQCall mRxMsgQCall;
-
-   // Socket address that socket instance connects to.
-   char  mLocalIpAddress[40];
-   int   mLocalIpPort;
-   char  mRemoteIpAddress[40];
-   int   mRemoteIpPort;
+   // Settings.
+   Settings mSettings;
 
    // Socket instance.
    UdpRxMsgSocket mRxSocket;
    UdpTxMsgSocket mTxSocket;
 
-   // Message monkey creator, this is used by the two sockets to create an
-   // instance of a message monkey.
-   BaseMsgMonkeyCreator* mMonkeyCreator;
+   // This is a qcall callback that is called when a message is received.
+   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
+   RxMsgQCall mRxMsgQCall;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Infastrcture.
+   // Members.
 
    // Constructor.
-   UdpMsgThread();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Configure the thread.
-   // aMonkeyCreator  creates a message monkey to be used on messages
-   // aLocalIpAddr    is the ip address of the local  interface bound to
-   // aLocalIpPort    is the ip port    of the local  interface bound to
-   // aRemoteIpAddr   is the ip address of the remote interface bound to
-   // aRemoteIpPort   is the ip port    of the remote interface bound to
-   // aRxMsgQCall     is a qcall for receive messages
-
-   void configure(
-      Ris::BaseMsgMonkeyCreator* aMonkeyCreator, 
-      char*                      aLocalIpAddress,
-      int                        aLocalIpPort,
-      char*                      aRemoteIpAddress,
-      int                        aRemoteIpPort,
-      RxMsgQCall*                aRxMsgQCall);
+   UdpMsgThread(Settings& aSettings);
 
    //***************************************************************************
    //***************************************************************************
@@ -120,15 +88,9 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Process a received message. This is called by the threadRunFunction.
-   // It invokes the mRxMsgQCall that is passed in at configure to pass the
-   // message to the thread owner.
-   void processRxMsg (Ris::ByteContent* aMsg);
-
    // Send a transmit message through the socket. It executes a blocking send
    // call in the context of the caller.
-   void sendMsg (Ris::ByteContent* aMsg);
-
+   void sendMsg(Ris::ByteContent* aMsg);
 };
 
 //******************************************************************************

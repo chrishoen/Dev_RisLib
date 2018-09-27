@@ -27,12 +27,9 @@ or callbacks in their configure calls.
 //******************************************************************************
 //******************************************************************************
 
-#include "risCallPointer.h"
-#include "risContainers.h"
-#include "risSockets.h"
-#include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
-
+#include "risNetSettings.h"
+#include "risNetTcpMsgServerHubSocket.h"
 #include "risNetTcpMsgSocket.h"
 
 //******************************************************************************
@@ -43,25 +40,6 @@ namespace Ris
 {
 namespace Net
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Tcp server hub socket, it is used to manage client connections.
-// It does listen and accept socket calls into tcp stream sockets in response
-// to client connect calls. 
-
-class TcpMsgServerHubSocket : public Sockets::BaseTcpServerHubSocket
-{
-public:
-   // Socket setup
-
-   // This stores the socket address and does socket and bind calls.
-   void configure(Sockets::SocketAddress aSocketAddress);
-
-   // This does socket and bind calls.
-   void reconfigure();
-};
 
 //******************************************************************************
 //******************************************************************************
@@ -119,33 +97,32 @@ public:
    //***************************************************************************
    // Members.
 
-   typedef Ris::Threads::QCall2<int,bool>              SessionQCall;
-   typedef Ris::Threads::QCall2<int,Ris::ByteContent*> RxMsgQCall;
-
-   // This is a qcall that is called when a session is established or
-   // disestablished.
-   SessionQCall mSessionQCall;
-
-   // This is a qcall that is called when a message is received.
-   RxMsgQCall   mRxMsgQCall;
+   // Settings.
+   Settings mSettings;
 
    // Hub socket instance.
    TcpMsgServerHubSocket mHubSocket;
-
-   // Maximum configured number of sessions.
-   // 0 < mMaxSessions <= MaxSessions
-   int mMaxSessions; 
 
    // Node socket instances.
    // Access this array with a session index and test the node socket
    // valid flag.
    TcpMsgSocket mNodeSocket[MaxSessions];
 
+   // This is a qcall that is called when a session is established or
+   // disestablished.
+   typedef Ris::Threads::QCall2<int, bool> SessionQCall;
+   SessionQCall mSessionQCall;
+
+   // This is a qcall that is called when a message is received.
+   typedef Ris::Threads::QCall2<int,Ris::ByteContent*> RxMsgQCall;
+   RxMsgQCall mRxMsgQCall;
+
+   // Maximum configured number of sessions.
+   // 0 < mMaxSessions <= MaxSessions
+   int mMaxSessions; 
+
    // Socket address that the hub socket binds to.
    Sockets::SocketAddress mSocketAddress;
-
-   // Message monkey creator for node sockets.
-   BaseMsgMonkeyCreator* mMonkeyCreator;
 
    // mSessionAllocator.get() allocates a new session index.
    // mSessionAllocator.put() deallocates a   session index.
@@ -163,16 +140,13 @@ public:
    // listening and new client connections will be refused.
    bool mListenFlag;
 
-   // Some socket flags.
-   int mFlags;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constructor.
-   TcpMsgServerThread();
+   TcpMsgServerThread(Settings& aSettings);
 
    //***************************************************************************
    //***************************************************************************
@@ -233,9 +207,9 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a transmit message through the node socket at the session index to the client. It executes
-   // a blocking send() call in the context of the caller. It is protected by a
-   // mutex semaphore.
+   // Send a transmit message through the node socket at the session index
+   // to the client. It executes a blocking send() call in the context of
+   // the caller. It is protected by a mutex semaphore.
    void sendMsg(int aSessionIndex,ByteContent* aMsg);
 };
 

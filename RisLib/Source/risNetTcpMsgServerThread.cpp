@@ -20,89 +20,23 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This initializes the socket. It stores the socket address to which the
-// socket will be bound and calls socket and bind.
+// Constructor.
 
-void TcpMsgServerHubSocket::configure(Sockets::SocketAddress aSocketAddress)
+TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
 {
-   reset();
-   mLocal = aSocketAddress;
-   
-   doSocket();
-   setOptionReuseAddr();
-   doBind();
-
-   if (mStatus==0)
-   {
-      Prn::print(Prn::SocketInit2, "TcpServerHubSocket $ %16s : %d",
-         mLocal.mIpAddr.mString,
-         mLocal.mPort);
-   }
-   else
-   {
-      Prn::print(Prn::SocketInit2, "TcpServerHubSocket $ %16s : %d $ %d %d",
-         mLocal.mIpAddr.mString,
-         mLocal.mPort,
-         mStatus,
-         mError);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This re-initializes the socket.
-
-void TcpMsgServerHubSocket::reconfigure()
-{
-   doSocket();
-   setOptionReuseAddr();
-   doBind();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-TcpMsgServerThread::TcpMsgServerThread()
-{
+   // Base class variables.
    mThreadPriority = get_default_tcp_server_thread_priority();
 
+   // Store settings.
+   mSettings = aSettings;
+   mSessionQCall = aSettings.mServerSessionQCall;
+   mRxMsgQCall = aSettings.mServerRxMsgQCall;
+   mMaxSessions = aSettings.mMaxSessions;
+
+   // Member variables.
    mNumSessions=0;
    mMaxSessions=0;
    mListenFlag=false;
-   mFlags=0;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Configure:
-
-void TcpMsgServerThread::configure(
-   BaseMsgMonkeyCreator* aMonkeyCreator,
-   char*                 aServerIpAddr,
-   int                   aServerIpPort,
-   int                   aMaxSessions, 
-   SessionQCall*         aSessionQCall,
-   RxMsgQCall*           aRxMsgQCall,
-   int                   aFlags)
-{
-   Prn::print(Prn::SocketInit1, "TcpClientThread::configure");
-
-   mSocketAddress.set(aServerIpAddr,aServerIpPort);
-   mMaxSessions = aMaxSessions;
-   mMonkeyCreator = aMonkeyCreator;
-   mFlags = aFlags;
-
-   mSessionQCall = *aSessionQCall;
-   mRxMsgQCall   = *aRxMsgQCall;
 }
 
 //******************************************************************************
@@ -115,13 +49,14 @@ void TcpMsgServerThread::threadInitFunction()
 {
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction BEGIN");
 
-   // Configure the hub socket
-   mHubSocket.configure(mSocketAddress);
+   // Initialize and configure the hub socket.
+   mHubSocket.initialize(&mSettings);
+   mHubSocket.configure();
 
-   // Register the message monkey for the node sockets
+   // Initialize the node sockets.
    for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
    {
-      mNodeSocket[sessionIndex].configure(mMonkeyCreator);
+      mNodeSocket[sessionIndex].initialize(&mSettings);
    }
 
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");
@@ -138,9 +73,6 @@ void TcpMsgServerThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun1, "TcpServerThread::threadRunFunction");
    
-   //-------------------------------------------------------------------------
-   // Loop
-
    // Do a nonblocking listen to put the hub socket in listen mode
    mHubSocket.doListen();
    mListenFlag=true;
@@ -150,8 +82,10 @@ void TcpMsgServerThread::threadRunFunction()
 
    while(going)
    {
-      //----------------------------------------------------------------------
-      // setup for the select call
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Setup for the select call.
 
       // The read set is a set of sockets that is passed to the select
       // call. If a socket in the set gets a read condition then the
@@ -178,12 +112,12 @@ void TcpMsgServerThread::threadRunFunction()
          }
       }
 
-      //----------------------------------------------------------------------
-      //----------------------------------------------------------------------
-      //----------------------------------------------------------------------
-      // Call select with the read set
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Call select with the read set.
       // This blocks until the timeout or until one of the 
-      // sockets in the read set has a read condition
+      // sockets in the read set has a read condition.
 
       int retVal = mHubSocket.selectOnReadSet();
 
@@ -197,7 +131,9 @@ void TcpMsgServerThread::threadRunFunction()
       // read set has at least one socket in it
       else if (retVal > 0)
       {
-         //--------------------------------------------------------------------
+         //*********************************************************************
+         //*********************************************************************
+         //*********************************************************************
          // Test for accept available.
          // If the hub socket is still in the read set then an accept
          // call will not block, so a client is trying to establish
@@ -250,10 +186,13 @@ void TcpMsgServerThread::threadRunFunction()
                }
          }
    
-         //-------------------------------------------------------------------
+         //*********************************************************************
+         //*********************************************************************
+         //*********************************************************************
          // Test for recv available, for each valid session.
          // If the node socket is still in the read set then a recv
          // call will not block.
+
          for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
          {
             if(mNodeSocket[sessionIndex].mValidFlag)
@@ -310,7 +249,7 @@ void TcpMsgServerThread::threadRunFunction()
             }
          }
       }
-      // Test if the select call failed
+      // Test if the select call failed.
       else if (retVal<0)
       {
          Prn::print(Prn::SocketRun1, "ERROR TcpServerThread::threadRunFunction select fail %d",retVal);
@@ -367,7 +306,7 @@ void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aMsg)
 void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
 {
    // Invoke the session qcall to notify that a session has
-   // been established or disestablished
+   // been established or disestablished.
    // Create a new qcall, copied from the original, and invoke it.
    mSessionQCall(aSessionIndex,aEstablished);
 }
@@ -378,8 +317,7 @@ void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablishe
 
 void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 {
-   // Invoke the receive QCall
-   // Create a new qcall, copied from the original, and invoke it.
+   // Invoke the receive QCall.
    mRxMsgQCall(aSessionIndex,aMsg);
 }
 

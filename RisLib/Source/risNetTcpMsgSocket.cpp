@@ -28,6 +28,9 @@ TcpMsgSocket::TcpMsgSocket()
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 TcpMsgSocket::~TcpMsgSocket()
 {
    if (mMonkey != 0)
@@ -38,63 +41,80 @@ TcpMsgSocket::~TcpMsgSocket()
 }
 
 //******************************************************************************
-// Configure the socket
+//******************************************************************************
+//******************************************************************************
+// Initialize variables.
 
-void TcpMsgSocket::configure(
-   BaseMsgMonkeyCreator*  aMonkeyCreator,
-   Sockets::SocketAddress aSocketAddress)
+void TcpMsgSocket::initialize(Settings* aSettings)
 {
-   mTxMsgCount=0;
-   mRxMsgCount=0;
+   // Store the settings pointer.
+   mSettings = aSettings;
 
-   reset();
-   mRemote = aSocketAddress;
+   // Create a message monkey.
+   mMonkey = mSettings->mMonkeyCreator->createMonkey();
 
-   if (mMonkey==0) mMonkey = aMonkeyCreator->createMonkey();
+   // Metrics.
+   mTxMsgCount = 0;
+   mRxMsgCount = 0;
+}
 
-   doSocket();
-   setOptionKeepAlive();
-   setOptionNoDelay();
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Configure the socket.
 
-   if (mStatus==0)
+void TcpMsgSocket::configure()
+{
+   // Configure the socket.
+   BaseClass::reset();
+   BaseClass::mRemote.set(mSettings->mRemoteIpAddr, mSettings->mRemoteIpPort);
+   BaseClass::doSocket();
+   BaseClass::setOptionKeepAlive();
+   BaseClass::setOptionNoDelay();
+
+   // Set valid flag from base class results.
+   mValidFlag = BaseClass::mStatus == 0;
+
+   // Show.
+   if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "TcpMsgSocket       $ %16s : %d",
-         aSocketAddress.mIpAddr.mString,
-         aSocketAddress.mPort);
+      Prn::print(Prn::SocketInit2, "TcpMsgSocket     $ %16s : %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "TcpMsgSocket       $ %16s : %d $ %d %d",
-         aSocketAddress.mIpAddr.mString,
-         aSocketAddress.mPort,
-         mStatus,
-         mError);
+      Prn::print(Prn::SocketInit2, "TcpMsgSocket     $ %16s : %d $ %d %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
    }
-
-   mValidFlag=mStatus==0;
-}
-
-void TcpMsgSocket::configure(
-   BaseMsgMonkeyCreator* aMonkeyCreator)
-{
-   if (mMonkey == 0) mMonkey = aMonkeyCreator->createMonkey();
 }
 
 //******************************************************************************
-// Reconfigure the socket
+//******************************************************************************
+//******************************************************************************
+// Reconfigure the socket.
 
 void TcpMsgSocket::reconfigure()
 {
-   mTxMsgCount=0;
-   mRxMsgCount=0;
+   // Configure the socket.
+   BaseClass::doSocket();
+   BaseClass::setOptionKeepAlive();
+   BaseClass::setOptionNoDelay();
 
-   doSocket();
-   setOptionKeepAlive();
+   // Metrics.
+   mTxMsgCount = 0;
+   mRxMsgCount = 0;
 }
 
 //******************************************************************************
-// This copies a message into a byte buffer and then sends the byte buffer 
-// out the socket.
+//******************************************************************************
+//******************************************************************************
+// Copy a message into a byte buffer and then send the byte buffer 
+// via the socket.
+// Return true if successful.
 
 bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 {
@@ -142,13 +162,20 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 }
 
 //******************************************************************************
-// This receives data from the socket into a byte buffer and then
-// extracts a message from the byte buffer
+//******************************************************************************
+//******************************************************************************
+// Receive a message from the socket via blocking recv calls into a
+// byte buffer and extract a message from the byte buffer.
+// Return true if successful.
 
 bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 {
-   //-------------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize a receive byte buffer.
+
+   // Do this forst.
    aMsg=0;
    bool tRet=false;
    int tStatus=0;
@@ -158,66 +185,70 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 
    // Configure the byte buffer.
    mMonkey->configureByteBuffer(&tBuffer);
-   tBuffer.setCopyTo();
 
-   //-------------------------------------------------------------------------
-   // Read the message header into the receive buffer
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read the message header into the receive buffer.
 
+   // Header varaibles.
    int   tHeaderLength = mMonkey->getHeaderLength();
    char* tHeaderBuffer = tBuffer.getBaseAddress();
 
-   tRet = doRecv(tHeaderBuffer,tHeaderLength,tStatus);
+   // Read the header from the socket.
+   tBuffer.setCopyTo();
+   tRet = BaseClass::doRecv(tHeaderBuffer,tHeaderLength,tStatus);
    Prn::print(Prn::SocketRun4, "doRecvH %d %d",mStatus,mError);
 
-   // Guard
    // If bad status then return false.
-
    if (!tRet || tStatus<=0)
    {
       return false;
    }
 
-   // Set the buffer length
+   // Set the buffer length.
    tBuffer.setLength(tHeaderLength);
 
-   //--------------------------------------------------------------
    // Copy from the receive buffer into the message monkey object
-   // and validate the header
-
+   // and validate the header.
    mMonkey->extractMessageHeaderParms(&tBuffer);
 
-   // If the header is not valid then error
+   // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
       Prn::print(Prn::SocketRun1, "ERROR doRecv1 INVALID HEADER");
       return false;
    }
 
-   //-------------------------------------------------------------------------
-   // Read the message payload into the receive buffer
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read the message payload into the receive buffer.
 
+   // Payload variables.
    int   tPayloadLength = mMonkey->mPayloadLength;
    char* tPayloadBuffer = tBuffer.getBaseAddress() + tHeaderLength;
 
-   tRet=doRecv(tPayloadBuffer,tPayloadLength,tStatus);
+   // Read the payload from the socket.
+   tBuffer.setCopyTo();
+   tRet = BaseClass::doRecv(tPayloadBuffer,tPayloadLength,tStatus);
    Prn::print(Prn::SocketRun4, "doRecvP %d %d %d",mStatus,mError,tPayloadLength);
 
-   // Guard
    // If bad status then return false.
-
    if (!tRet || tStatus<=0)
    {
       Prn::print(Prn::SocketRun1, "ERROR doRecv2 INVALID RECV");
       return false;
    }
 
-   // Set the buffer length
+   // Set the buffer length.
    tBuffer.setLength(mMonkey->mMessageLength);
 
-   //--------------------------------------------------------------
-   // At this point the buffer contains the complete message.
-   // Extract the message from the byte buffer into a new message
-   // object and return it.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // At this point the buffer contains the complete message. Extract the 
+   // message from the byte buffer into a new message object and return it.
 
    tBuffer.rewind();
    aMsg = mMonkey->getMsgFromBuffer(&tBuffer);
@@ -236,6 +267,9 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    return true;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 

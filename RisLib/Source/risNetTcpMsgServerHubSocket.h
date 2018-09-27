@@ -1,20 +1,18 @@
 #pragma once
 
 /*==============================================================================
-Tcp message socket class.
+
+Tcp message server hub socket.
+
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
-#include "risByteContent.h"
-#include "risByteMsgMonkey.h"
-#include "risContainers.h"
-#include "risSockets.h"
+#include "risThreadsQCallThread.h"
 #include "risNetSettings.h"
-#include "risThreadsThreads.h"
+#include "risNetTcpMsgSocket.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -28,23 +26,14 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Tcp stream socket, blocking.
-//
-// For a client, it connects (connect) to a Tcp server hub socket and
-// exchanges messages (send and recv) with a server stream socket.
-//
-// For a server, it exchanges messages (send and recv) with a client stream
-// socket.
-//
-// It inherits from BaseTcpStreamSocket for stream socket functionality and
-// provides methods that can be used to transport messages.
-//
-// Messages are based on the ByteContent message encapsulation scheme.
+// Tcp server hub socket, it is used to manage client connections.
+// It does listen and accept socket calls into tcp stream sockets in response
+// to client connect calls. 
 
-class TcpMsgSocket : public Sockets::BaseTcpStreamSocket
+class TcpMsgServerHubSocket : public Sockets::BaseTcpServerHubSocket
 {
 public:
-   typedef Sockets::BaseTcpStreamSocket BaseClass;
+   typedef Sockets::BaseTcpServerHubSocket BaseClass;
 
    //***************************************************************************
    //***************************************************************************
@@ -54,23 +43,8 @@ public:
    // Settings.
    Settings* mSettings;
 
-   // This a  message monkey that is used to get details about  a message from
-   // a message header that is contained in a byte buffer. For receive, the 
-   // message monkey allows the doRecvMsg method to receive and extract a
-   // message from a byte buffer without the having the message code visible
-   // to it. For transmit, message monkey allows the doSendMsg method to set
-   // header data before the message is sent.
-   BaseMsgMonkey* mMonkey;
-
-   // Transmit mutex is used by doSendMsg for mutual exclusion.
-   Threads::MutexSemaphore  mTxMutex;
-
    // General purpose valid flag.
    bool mValidFlag;
-
-   // Metrics.
-   int mTxMsgCount;
-   int mRxMsgCount;
 
    //***************************************************************************
    //***************************************************************************
@@ -78,8 +52,7 @@ public:
    // Members.
 
    // Constructor.
-   TcpMsgSocket(); 
-  ~TcpMsgSocket(); 
+   TcpMsgServerHubSocket();
 
    // Initialize variables.
    void initialize(Settings* aSettings);
@@ -89,22 +62,6 @@ public:
 
    // Reconfigure the socket. This does socket and bind calls.
    void reconfigure();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Copy a message into a byte buffer and then send the byte buffer 
-   // via the socket.
-   // Return true if successful.
-   bool doSendMsg(ByteContent*  aTxMsg);
-
-   // Receive a message from the socket via blocking recv calls into a
-   // byte buffer and extract a message from the byte buffer.
-   // Return true if successful.
-   bool doReceiveMsg (ByteContent*& aRxMsg);
-
 };
 
 //******************************************************************************

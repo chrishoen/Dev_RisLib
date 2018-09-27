@@ -141,6 +141,12 @@
     <ClCompile Include="Source\risSerialSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risNetSettings.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risNetTcpMsgServerHubSocket.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">
@@ -309,6 +315,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risSerialSettings.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetSettings.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risNetTcpMsgServerHubSocket.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

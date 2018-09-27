@@ -12,6 +12,7 @@ UDP transmit message socket.
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 #include "risSockets.h"
+#include "risNetSettings.h"
 #include "risThreadsThreads.h"
 
 //******************************************************************************
@@ -26,17 +27,25 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Udp receive message socket.
-// Messages are based on the ByteContent message encapsulation scheme.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Udp receive message socket. This class encapsulates a udp socket that
+// receives messages that are based on the byte content message encapsulation
+// scheme.
 
 class UdpRxMsgSocket : public Sockets::BaseUdpSocket
 {
 public:
+   typedef Sockets::BaseUdpSocket BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   // Settings.
+   Settings* mSettings;
 
    // The recvfrom address is stored here.
    Sockets::SocketAddress mFromAddress;
@@ -59,22 +68,17 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Infastrcture.
+   // Methods.
 
    // Constructor.
    UdpRxMsgSocket(); 
    ~UdpRxMsgSocket(); 
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
+   // Initialize variables.
+   void initialize(Settings* aSettings);
 
    // Configure the socket. This does socket and bind calls.
-   void configure(
-      BaseMsgMonkeyCreator* aMonkeyCreator,
-      char*                 aLocalIpAddr,
-      int                   aLocalIpPort);
+   void configure();
 
    //***************************************************************************
    //***************************************************************************
@@ -84,22 +88,30 @@ public:
    // Receive a message from the socket via blocking recvfrom calls.
    // Return true if successful.
    bool doReceiveMsg (ByteContent*& aRxMsg);
-
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Udp transmit message socket.
-// Messages are based on the ByteContent message encapsulation scheme.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Udp transmit message socket. This class encapsulates a udp socket that
+// transmits messages that are based on the byte content message encapsulation
+// scheme.
 
 class UdpTxMsgSocket : public Sockets::BaseUdpSocket
 {
 public:
+   typedef Sockets::BaseUdpSocket BaseClass;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   // Settings.
+   Settings* mSettings;
 
    // This is a message monkey that is used to get details about a message 
    // from a message header that is contained in a byte buffer. It allows the 
@@ -120,22 +132,17 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Infastrcture.
+   // Methods.
 
    // Constructor.
    UdpTxMsgSocket(); 
    ~UdpTxMsgSocket(); 
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
+   // Initialize variables.
+   void initialize(Settings* aSettings);
 
    // Configure the socket. This does socket and bind calls.
-   void configure(
-      BaseMsgMonkeyCreator* aMonkeyCreator,
-      char*                 aRemoteIpAddr,
-      int                   aRemoteIpPort);
+   void configure();
 
    //***************************************************************************
    //***************************************************************************
@@ -146,7 +153,6 @@ public:
    // Return true if successful.
    // It is protected by the transmit mutex.
    bool doSendMsg(ByteContent* aMsg);
-
 };
 
 //******************************************************************************

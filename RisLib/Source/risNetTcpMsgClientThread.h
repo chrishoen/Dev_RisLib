@@ -31,13 +31,8 @@ or callbacks in their configure calls.
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
-#include "risCallPointer.h"
-#include "risContainers.h"
-#include "risSockets.h"
-#include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
-
+#include "risNetSettings.h"
 #include "risNetTcpMsgSocket.h"
 
 //******************************************************************************
@@ -85,61 +80,32 @@ public:
    //***************************************************************************
    // Members.
    
-   typedef Ris::Threads::QCall1<bool>              SessionQCall;
-   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
-
-   // This is a qcall that is called when a session is established or
-   // disestablished.
-   SessionQCall mSessionQCall;
-
-   // This is a qcall that is called when a message is received.
-   RxMsgQCall   mRxMsgQCall;
+   // Settings.
+   Settings mSettings;
 
    // Socket instance.
    TcpMsgSocket mSocket;
 
-   // Socket address that socket instance connects to.
-   Sockets::SocketAddress mSocketAddress;
+   // This is a qcall that is called when a session is established or
+   // disestablished.
+   typedef Ris::Threads::QCall1<bool> SessionQCall;
+   SessionQCall mSessionQCall;
 
-   // Message monkey creator, this is used by the socket to create an instance 
-   // of a message monkey.
-   BaseMsgMonkeyCreator* mMonkeyCreator;
+   // This is a qcall that is called when a message is received.
+   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
+   RxMsgQCall   mRxMsgQCall;
 
    // If this flag is true then a connection has been established with the 
    // server and sendMsg can be called.
    bool mConnectionFlag;
 
-   // Socket flags.
-   int  mFlags;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Intrastructure.
-   
-   // Constructor.
-   TcpMsgClientThread();
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
-
-   // Configure the thread. 
-   // aMonkey             is the message monkey to be used on received messages.
-   // aServerIpAddr       is the server ip address.
-   // aServerIpPort       is the server ip port.
-   // aRxMsgQCall         is a qcall for receive messages.
-   // aSessionQCallChange is a qcall for session changes.
-   // aFlags              is some socket flags.
-
-   void configure(
-      Ris::BaseMsgMonkeyCreator* aMonkey,
-      char*                      aServerIpAddr,
-      int                        aServerIpPort,
-      SessionQCall*              aSessionQCall,
-      RxMsgQCall*                aRxMsgQCall,
-      int                        aFlags=0); 
+   
+   // Constructor.
+   TcpMsgClientThread(Settings& aSettings);
 
    //***************************************************************************
    //***************************************************************************

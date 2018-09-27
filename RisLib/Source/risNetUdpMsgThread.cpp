@@ -21,37 +21,14 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 
-UdpMsgThread::UdpMsgThread()
+UdpMsgThread::UdpMsgThread(Settings& aSettings)
 {
+   // Base class variables.
    mThreadPriority = get_default_udp_rx_thread_priority();
-   mLocalIpAddress[0]=0;
-   mLocalIpPort=0;
-   mRemoteIpAddress[0]=0;
-   mRemoteIpPort=0;
-}
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Configure:
-
-void UdpMsgThread::configure(
-   BaseMsgMonkeyCreator* aMonkeyCreator,
-   char*                 aLocalIpAddress,
-   int                   aLocalIpPort,
-   char*                 aRemoteIpAddress,
-   int                   aRemoteIpPort,
-   RxMsgQCall*           aMessageQCall)
-{
-   strcpy(mLocalIpAddress,aLocalIpAddress);
-   mLocalIpPort = aLocalIpPort;
-
-   strcpy(mRemoteIpAddress, aRemoteIpAddress);
-   mRemoteIpPort = aRemoteIpPort;
-
-   mMonkeyCreator = aMonkeyCreator;
-
-   mRxMsgQCall = *aMessageQCall;
+   // Store settings.
+   mSettings = aSettings;
+   mRxMsgQCall = aSettings.mRxMsgQCall;
 }
 
 //******************************************************************************
@@ -64,15 +41,11 @@ void UdpMsgThread::threadInitFunction()
 {
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction BEGIN");
 
-   mRxSocket.configure(
-      mMonkeyCreator,
-      mLocalIpAddress,
-      mLocalIpPort);
-
-   mTxSocket.configure(
-      mMonkeyCreator,
-      mRemoteIpAddress,
-      mRemoteIpPort);
+   // Initialize and configure the sockets.
+   mRxSocket.initialize(&mSettings);
+   mRxSocket.configure();
+   mTxSocket.initialize(&mSettings);
+   mTxSocket.configure();
 
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction END");
 }
@@ -88,9 +61,6 @@ void  UdpMsgThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun1, "UdpRxMsgThread::threadRunFunction");
    
-   //----------------------------------------------------------------------------
-   // Loop
-
    bool tGoing=mRxSocket.mValidFlag;
 
    while(tGoing)
@@ -101,15 +71,15 @@ void  UdpMsgThread::threadRunFunction()
       ByteContent* tMsg=0;
       if (mRxSocket.doReceiveMsg(tMsg))
       {
-         // Message was correctly received
-         // Call the receive method
-         processRxMsg(tMsg);
+         // Message was correctly received.
+         // Call the receive callback qcall.
+         mRxMsgQCall(tMsg);
       }
       else
       {
-         // Message was not correctly received
+         // Message was not correctly received.
       }
-      //-------------------------------------------------------------------------
+
       // If termination request, exit the loop
       // This is set by shutdown, see below.
       if (mTerminateFlag)
@@ -147,18 +117,6 @@ void UdpMsgThread::shutdownThread()
    mRxSocket.doClose();
 
    BaseThreadWithTermFlag::waitForThreadTerminate();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Invoke the qcall callback.
-
-void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
-{
-   // Invoke the receive qcall callback, passes the received message to the
-   // thread owner.
-   mRxMsgQCall(aMsg);
 }
 
 //******************************************************************************

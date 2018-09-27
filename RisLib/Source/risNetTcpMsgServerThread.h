@@ -151,29 +151,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
-
-   // Configure the thread. 
-   // aMonkey             is the message monkey to be used on receive messages.
-   // aServerIpAddr       is the server ip address.
-   // aMaxSessions        is the max number of sessions allowed. 
-   // aServerIpPort       is the server ip port.
-   // aRxMsgQCall         is a qcall for receive messages.
-   // aSessionQCallChange is a qcall for session changes.
-   // aFlags              is some socket flags.
-
-   void configure(
-      BaseMsgMonkeyCreator* aMonkeyCreator,
-      char*                 aServerIpAddr,
-      int                   aServerIpPort,
-      int                   aMaxSessions, 
-      SessionQCall*         aSessionQCall,
-      RxMsgQCall*           aRxMsgQCall,
-      int                   aFlags=0);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Methods, thread base class overloads:
 
    // Setup the hub socket.
@@ -191,6 +168,16 @@ public:
    //***************************************************************************
    // Methods.
 
+   // Send a transmit message through the node socket at the session index
+   // to the client. It executes a blocking send() call in the context of
+   // the caller. It is protected by a mutex semaphore.
+   void sendMsg(int aSessionIndex, ByteContent* aMsg);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
    // Notify the thread owner of this thread that a session has changed. This
    // is  called by the threadRunFunction  when a new session is established 
    // or an existing session is disestablished. It invokes the mSessionQCall
@@ -201,16 +188,6 @@ public:
    // that is passed in at configure. This is called by the threadRunFunction
    // to process a received message.
    void processRxMsg (int aSessionIndex,Ris::ByteContent* aMsg);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Send a transmit message through the node socket at the session index
-   // to the client. It executes a blocking send() call in the context of
-   // the caller. It is protected by a mutex semaphore.
-   void sendMsg(int aSessionIndex,ByteContent* aMsg);
 };
 
 //******************************************************************************

@@ -54,9 +54,9 @@ void TcpMsgServerThread::threadInitFunction()
    mHubSocket.configure();
 
    // Initialize the node sockets.
-   for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
+   for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
    {
-      mNodeSocket[sessionIndex].initialize(&mSettings);
+      mNodeSocket[tSessionIndex].initialize(&mSettings);
    }
 
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");
@@ -78,9 +78,8 @@ void TcpMsgServerThread::threadRunFunction()
    mListenFlag=true;
    Prn::print(Prn::SocketRun1, "doListen %d %d",mHubSocket.mStatus,mHubSocket.mError);
 
-   bool going=true;
-
-   while(going)
+   bool tGoing=true;
+   while(tGoing)
    {
       //************************************************************************
       //************************************************************************
@@ -104,11 +103,11 @@ void TcpMsgServerThread::threadRunFunction()
 
       // For each valid session, add the node socket to the read set
       // The socket will signal if a recv is available.
-      for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
+      for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
       {
-         if (mNodeSocket[sessionIndex].mValidFlag)
+         if (mNodeSocket[tSessionIndex].mValidFlag)
          {
-            mHubSocket.addToReadSet(&mNodeSocket[sessionIndex]);
+            mHubSocket.addToReadSet(&mNodeSocket[tSessionIndex]);
          }
       }
 
@@ -124,7 +123,7 @@ void TcpMsgServerThread::threadRunFunction()
       // Test for a termination request 
       if (mTerminateFlag)
       {
-         going=false;
+         tGoing=false;
       }   
 
       // Test if the select call was successful and that the
@@ -146,25 +145,25 @@ void TcpMsgServerThread::threadRunFunction()
                // call and that an accept call will be successful.
 
                // Allocate a new session index
-               int sessionIndex; 
-               mSessionAllocator.pop(sessionIndex); 
+               int tSessionIndex; 
+               mSessionAllocator.pop(tSessionIndex); 
 
                // Call accept into the node socket at the new session index
-               mHubSocket.doAccept(mNodeSocket[sessionIndex]);
+               mHubSocket.doAccept(mNodeSocket[tSessionIndex]);
 
                // Test the accept call
                if (mHubSocket.mStatus>=0)
                {  
                   // The accept call passed.
                   // Set the new socket valid and update the session state.
-                  mNodeSocket[sessionIndex].mValidFlag=true;
+                  mNodeSocket[tSessionIndex].mValidFlag=true;
                   mNumSessions++;
 
                   // process a session change because a
                   // new session has been established
-                  processSessionChange(sessionIndex,true);
+                  processSessionChange(tSessionIndex,true);
 
-                  Prn::print(Prn::SocketRun1, "doAccept %d",sessionIndex);
+                  Prn::print(Prn::SocketRun1, "doAccept %d",tSessionIndex);
 
                   // Test if the number of sessions has reached the maximum
                   if (mNumSessions==mMaxSessions)
@@ -181,8 +180,8 @@ void TcpMsgServerThread::threadRunFunction()
                else
                {
                   // The accept call failed
-                  Prn::print(Prn::SocketRun1, "ERROR doAccept FAILED %d %d %d",mHubSocket.mStatus,mHubSocket.mError,sessionIndex);
-                  mSessionAllocator.push(sessionIndex); 
+                  Prn::print(Prn::SocketRun1, "ERROR doAccept FAILED %d %d %d",mHubSocket.mStatus,mHubSocket.mError,tSessionIndex);
+                  mSessionAllocator.push(tSessionIndex); 
                }
          }
    
@@ -193,46 +192,46 @@ void TcpMsgServerThread::threadRunFunction()
          // If the node socket is still in the read set then a recv
          // call will not block.
 
-         for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
+         for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
          {
-            if(mNodeSocket[sessionIndex].mValidFlag)
+            if(mNodeSocket[tSessionIndex].mValidFlag)
             {
                // Test if the node socket is in the read set
-               if(mHubSocket.isInReadSet(&mNodeSocket[sessionIndex]))
+               if(mHubSocket.isInReadSet(&mNodeSocket[tSessionIndex]))
                {
                   // The node socket is in the read list. This means that 
                   // there is a data available to be read from the socket.
  
                   // Attempt to receive a message on the node socket.
                   ByteContent* tMsg=0;
-                  if (mNodeSocket[sessionIndex].doReceiveMsg (tMsg))
+                  if (mNodeSocket[tSessionIndex].doReceiveMsg (tMsg))
                   {
                      // A valid message was received 
                      Prn::print(Prn::SocketRun2, "Recv message %d %d",
-                        sessionIndex,
-                        mNodeSocket[sessionIndex].mRxMsgCount);
+                        tSessionIndex,
+                        mNodeSocket[tSessionIndex].mRxMsgCount);
 
                      // process the received message
                      if (tMsg)
                      {
-                        processRxMsg(sessionIndex,tMsg);
+                        processRxMsg(tSessionIndex,tMsg);
                      } 
                   }
                   else 
                   {
                      // The receive failed, so the connection was shutdown by the client.
                      // Therefore, disestablish the session.  
-                     Prn::print(Prn::SocketRun1, "Recv failed, closing session %d",sessionIndex);
+                     Prn::print(Prn::SocketRun1, "Recv failed, closing session %d",tSessionIndex);
                      // Reset the socket
-                     mNodeSocket[sessionIndex].doClose();
-                     mNodeSocket[sessionIndex].reset();
-                     mNodeSocket[sessionIndex].mValidFlag=false;
+                     mNodeSocket[tSessionIndex].doClose();
+                     mNodeSocket[tSessionIndex].reset();
+                     mNodeSocket[tSessionIndex].mValidFlag=false;
                      // Dealloacte the session index
-                     mSessionAllocator.push(sessionIndex);
+                     mSessionAllocator.push(tSessionIndex);
 
                      // process a session change because a
                      // session has been disestablished
-                     processSessionChange(sessionIndex,false);
+                     processSessionChange(tSessionIndex,false);
 
                      // If not listening because the number of sessions had
                      // reached the limit then start listening again
@@ -268,11 +267,11 @@ void TcpMsgServerThread::threadExitFunction()
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadExitFunction");
 
    mHubSocket.doClose();
-   for (int sessionIndex=0;sessionIndex<mMaxSessions;sessionIndex++)
+   for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
    {
-      if (mNodeSocket[sessionIndex].mValidFlag)
+      if (mNodeSocket[tSessionIndex].mValidFlag)
       {
-         mNodeSocket[sessionIndex].doClose();
+         mNodeSocket[tSessionIndex].doClose();
       }
    }
 }
@@ -280,6 +279,9 @@ void TcpMsgServerThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Send a transmit message through the node socket at the session index
+// to the client. It executes a blocking send() call in the context of
+// the caller. It is protected by a mutex semaphore.
 
 void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aMsg)
 {
@@ -288,9 +290,8 @@ void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aMsg)
    // Test if the session is valid
    if (mNodeSocket[aSessionIndex].mValidFlag)
    {
-      // Send the message and update the state
+      // Send the message via the socket.
       mNodeSocket[aSessionIndex].doSendMsg(aMsg);
-      mNodeSocket[aSessionIndex].mTxMsgCount++;
    }
    else
    {
@@ -302,18 +303,24 @@ void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Notify the thread owner of this thread that a session has changed. This
+// is  called by the threadRunFunction  when a new session is established 
+// or an existing session is disestablished. It invokes the mSessionQCall
+// that is passed in at configure.
 
 void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
 {
    // Invoke the session qcall to notify that a session has
    // been established or disestablished.
-   // Create a new qcall, copied from the original, and invoke it.
    mSessionQCall(aSessionIndex,aEstablished);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Pass a received message to the thread owner. It invokes the mRxMsgQCall
+// that is passed in at configure. This is called by the threadRunFunction
+// to process a received message.
 
 void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 {

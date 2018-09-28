@@ -3,7 +3,6 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "procoSettings.h"
 #include "procoNetworkThread.h"
 
 #include "MainInit.h"

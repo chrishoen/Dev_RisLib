@@ -30,14 +30,13 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("SHUTDOWN"))  executeShutdown (aCmd);
    if (aCmd->isCmd("TP"))        ProtoComm::gNetworkThread->mTPFlag = aCmd->argBool(1);
-   if (aCmd->isCmd("TX"))        executeTx  (aCmd);
-   if (aCmd->isCmd("GO1"))       executeGo1 (aCmd);
-   if (aCmd->isCmd("GO2"))       executeGo2 (aCmd);
-   if (aCmd->isCmd("GO3"))       executeGo3 (aCmd);
-   if (aCmd->isCmd("GO4"))       executeGo4 (aCmd);
-   if (aCmd->isCmd("GO5"))       executeGo5 (aCmd);
-   if (aCmd->isCmd("GO6"))       executeGo6(aCmd);
-   if (aCmd->isCmd("GO6"))       executeGo6(aCmd);
+   if (aCmd->isCmd("TX"))        executeTx   (aCmd);
+   if (aCmd->isCmd("GO1"))       executeGo1  (aCmd);
+   if (aCmd->isCmd("GO2"))       executeGo2  (aCmd);
+   if (aCmd->isCmd("GO3"))       executeGo3  (aCmd);
+   if (aCmd->isCmd("GO4"))       executeGo4  (aCmd);
+   if (aCmd->isCmd("GO5"))       executeGo5  (aCmd);
+   if (aCmd->isCmd("GO6"))       executeGo6  (aCmd);
    if (aCmd->isCmd("Parms"))     executeParms(aCmd);
 }
 

@@ -53,6 +53,9 @@ void TcpMsgSocket::initialize(Settings* aSettings)
    // Create a message monkey.
    mMonkey = mSettings->mMonkeyCreator->createMonkey();
 
+   // Not valid until configured.
+   mValidFlag = false;
+
    // Metrics.
    mTxMsgCount = 0;
    mRxMsgCount = 0;

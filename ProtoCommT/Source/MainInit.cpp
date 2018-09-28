@@ -24,8 +24,8 @@ void main_initialize(int argc,char** argv)
    // Initialize print filters
    Prn::setFilter(Prn::SocketInit1,false);
    Prn::setFilter(Prn::SocketInit2,true);
-   Prn::setFilter(Prn::SocketRun1,false);
-   Prn::setFilter(Prn::SocketRun2,false);
+   Prn::setFilter(Prn::SocketRun1, true);//
+   Prn::setFilter(Prn::SocketRun2, true);//
    Prn::setFilter(Prn::SocketRun3,false);
    Prn::setFilter(Prn::SocketRun4,false);
 

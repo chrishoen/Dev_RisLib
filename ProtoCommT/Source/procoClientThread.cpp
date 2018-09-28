@@ -58,6 +58,7 @@ void ClientThread::threadInitFunction()
 
    tSettings.setRemoteIp(gSettings.mTcpServerIPAddress, gSettings.mTcpServerPort);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
+   tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;
 
    // Create the child thread with the settings.
@@ -198,6 +199,7 @@ void ClientThread::sendMsg (BaseMsg* aTxMsg)
 
 void ClientThread::sendTestMsg()
 {
+   Prn::print(Prn::ThreadRun1, "ClientThread::sendTestMsg");
    TestMsg* msg = new TestMsg;
    msg->mCode1=201;
  

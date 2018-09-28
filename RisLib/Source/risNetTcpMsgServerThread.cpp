@@ -196,11 +196,11 @@ void TcpMsgServerThread::threadRunFunction()
          {
             if(mNodeSocket[tSessionIndex].mValidFlag)
             {
-               // Test if the node socket is in the read set
+               // Test if the node socket is in the read set.
                if(mHubSocket.isInReadSet(&mNodeSocket[tSessionIndex]))
                {
                   // The node socket is in the read list. This means that 
-                  // there is a data available to be read from the socket.
+                  // there is data available to be read from the socket.
  
                   // Attempt to receive a message on the node socket.
                   ByteContent* tMsg=0;

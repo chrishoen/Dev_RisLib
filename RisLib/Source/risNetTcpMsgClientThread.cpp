@@ -209,7 +209,11 @@ void TcpMsgClientThread::sendMsg(ByteContent* aMsg)
 void TcpMsgClientThread::processSessionChange(bool aEstablished)
 {
    // Guard.
-   if (!mSessionQCall.mExecuteCallPointer.isValid()) return;
+   if (!mSessionQCall.mExecuteCallPointer.isValid())
+   {
+      Prn::print(Prn::SocketRun1, "ERROR processSessionChange qcall invalid");
+      return;
+   }
 
    // Invoke the session qcall to notify that a session has
    // been established or disestablished.

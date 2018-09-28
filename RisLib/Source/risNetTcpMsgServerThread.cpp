@@ -35,7 +35,6 @@ TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
 
    // Member variables.
    mNumSessions=0;
-   mMaxSessions=0;
    mListenFlag=false;
 }
 
@@ -61,6 +60,7 @@ void TcpMsgServerThread::threadInitFunction()
 
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");
 }
+
 
 //******************************************************************************
 //******************************************************************************

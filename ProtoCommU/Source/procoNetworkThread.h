@@ -19,10 +19,16 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This thread class transmits and receives byte content messages via
-// a udp message child thread which manages a udp message socket. It 
-// provides the capability to send messages via the socket and it
-// provides handlers for messages received via the socket.
+// This is a udp message thread that transmits and receives byte content
+// messages via a udp message child thread which manages a udp message socket.
+//
+// It provides the capability to send messages via the child thread socket and
+// it provides handlers for messages received via the child thread socket.
+// When the child thread receives a message it invokes a qcall that was
+// registered by this thread to defer execution of a message handler.
+//   
+// It inherits from BaseQCallThread to obtain a call queue based thread
+// functionality.
 
 class  NetworkThread : public Ris::Threads::BaseQCallThread
 {

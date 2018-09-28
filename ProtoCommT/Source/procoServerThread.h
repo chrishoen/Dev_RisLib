@@ -1,16 +1,13 @@
-#ifndef _PROCOSERVERTHREAD_H_
-#define _PROCOSERVERTHREAD_H_
+#pragma once
 
 /*==============================================================================
-ProtoComm server thread class.
+Prototype tcp server thread message thread.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "prnPrint.h"
 
-#include "risContainers.h"
 #include "risNetTcpMsgServerThread.h"
 #include "risNetSessionStateList.h"
 #include "risThreadsQCallThread.h"
@@ -21,112 +18,133 @@ namespace ProtoComm
 {
 
 //******************************************************************************
-// Server Thread.
-//
-// This is the server thread class. It inherits from BaseQCallThread to
-// obtain a call queue based thread functionality.
-//
-// The server thread acts in conjunction with the server message processor
-// object. It passes received messages to the processor and gets back messages
-// to transmit from the processor. The server thread provides the execution
-// context for the message processor to process the messages.
-// 
-// The server thread has a member, mTcpServerThread that is an instance of
-// Ris::Net::TcpServerThreadWithQCall. It is a child thread that manages
-// connection session changes and receives messages as a Tcp server. So, there
-// are two threads structured as two layers: The server thread and its member
-// child thread mTcpServerThread.
-//
-// The server thread is based on a call queue and it uses QCalls to interface
-// its mTcpServerThread. When mTcpServerThread detects a session change it
-// invokes the server thread's mSessionQCall, which defers execution of its
-// executeSession member function. Likewise, when mTcpServerThread receives
-// a message it invokes the server thread's mRxMsgQCall, which defers 
-// execution of its executeRxMsg member function. 
-//
-// mTcpServerThread provides the execution context for actually managing
-// session changes and receiving messages. The session thread the provides
-// the execution context for processing the session changes and the received 
-// messages. The processing is done by the message processor object.
-//
 //******************************************************************************
+//******************************************************************************
+// This is a tcp server message thread that connects to multiple tcp client
+// message threads via a tcp server message child thread which manages a tcp
+// server hub socket and multiple tcp message sockets. It then communicates
+// byte content messages with the multiple clients.
+//
+// It provides the capability to establish tcp connections with the tcp
+// clients via the child thread. When the child thread connects or disconnects
+// to a client it invokes a qcall that was registered by this thread to defer 
+// execution of a session notification handler.
+//
+// It provides the capability to send messages via the child thread socket and
+// it provides handlers for messages received via the child thread socket.
+// When the child thread receives a message it invokes a qcall that was
+// registered by this thread to defer execution of a message handler.
+// 
+// It inherits from BaseQCallThread to obtain a call queue based thread
+// functionality.
 
 class ServerThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
 
-   ServerThread();
-  ~ServerThread();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   //--------------------------------------------------------------
-   // Configure:
+   // Tcp server thread, this manages session connections and message
+   // transmission and reception via a tcp server hub socket and a tcp
+   // message socket.
+   Ris::Net::TcpMsgServerThread* mTcpMsgServerThread;
 
-   void configure();
-
-   //--------------------------------------------------------------
-   // Thread base class overloads:
-
-   // launch starts the child threads + this thread
-   // threadInitFunction sets up the base class multiple objects.
-   // threadExitFunction shuts down the child thread
-   // shutdown shuts down child threads + this thread
-
-   void launchThread();
-   void threadExitFunction(); 
-   void executeOnTimer(int);
-
-   //--------------------------------------------------------------
-   // Tcp server thread, this manages session connections and 
-   // message transmission and reception
-
-   Ris::Net::TcpMsgServerThread* mTcpServerThread;
-
-   // Maximum number of sessions for mTcpServerThread
-   enum {MaxSessions=10};
-
-   // Message monkey used by mTcpServerThread
+   // Message monkey creator used by mTcpServerThread.
    ProtoComm::MsgMonkeyCreator mMonkeyCreator;
 
-   //--------------------------------------------------------------
-   // QCall:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // QCalls registered to mTcpServerThread
-   Ris::Net::TcpMsgServerThread::SessionQCall  mSessionQCall;
-   Ris::Net::TcpMsgServerThread::RxMsgQCall    mRxMsgQCall;
-
-   // Associated QCall methods, these are called by the
-   // threadRunFunction to process conditions sent from 
-   // mTcpServerThread.
-   void executeSession (int aSessionIndex,bool aConnected);
-   void executeRxMsg   (int aSessionIndex,Ris::ByteContent* aRxMsg);
-
-   //--------------------------------------------------------------
-   // Receive message handlers:
-
-   void processRxMsg (int aSessionIndex,ProtoComm::TestMsg* aRxMsg);
-   void processRxMsg (int aSessionIndex,ProtoComm::FirstMessageMsg* aRxMsg);
-   void processRxMsg (int aSessionIndex,ProtoComm::StatusRequestMsg* aRxMsg);
-   void processRxMsg (int aSessionIndex,ProtoComm::StatusResponseMsg* aRxMsg);
-
-   //--------------------------------------------------------------
-   // Session state lists:
-   // These contain state about each session
-
+   // Session state list. This contains state for each connected session.
    Ris::Net::SessionStateList mSessionStateList;
-   bool mPeriodicEnable;
+
+   // Control variables.
+   bool mTPFlag;
+
+   // Metrics.
    int  mPeriodicCount;
    int  mStatusCount1;
    int  mStatusCount2;
 
-   //--------------------------------------------------------------
-   // Send a message via mTcpServerThread:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
-   void sendMsg (int aSessionIndex,ProtoComm::BaseMsg* aTxMsg);
-   void sendTestMsg (int aAppNumber);
+   // Constructor.
+   ServerThread();
+   ~ServerThread();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Thread base class overloads:
+
+   // threadInitFunction starts the child thread.
+   // threadExitFunction shuts down the child thread.
+   // executeOnTimer sends a periodic status message.
+   void threadInitFunction()override;
+   void threadExitFunction()override;
+   void executeOnTimer(int)override;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Session qcall.
+
+   // QCall registered to the mTcpMsgThread child thread. It is invoked when
+   // a session is established or disestablished (when a client connects or
+   // disconnects). 
+   Ris::Net::TcpMsgServerThread::SessionQCall mSessionQCall;
+
+   // Associated QCall methods. It maintains session state variables. When
+   // a connection is established it sends a FirstMessage to the server to
+   // inform it of it's identity.
+   void executeSession(int aSessionIndex, bool aConnected);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Receive message qcall.
+
+   // QCall registered to the mTcpMsgThread child thread. It is invoked when
+   // a message is received. It process the received messages.
+   Ris::Net::TcpMsgServerThread::RxMsgQCall mRxMsgQCall;
+
+   // Associated QCall method. It calls one of the specific receive message
+   // handlers.
+   void executeRxMsg(int aSessionIndex,Ris::ByteContent* aMsg);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Specific receive message handlers.
+
+   void processRxMsg(int aSessionIndex, TestMsg* aMsg);
+   void processRxMsg(int aSessionIndex, FirstMessageMsg* aMsg);
+   void processRxMsg(int aSessionIndex, StatusRequestMsg* aMsg);
+   void processRxMsg(int aSessionIndex, StatusResponseMsg* aMsg);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Send a message.
+   void sendMsg(int aSessionIndex, ProtoComm::BaseMsg* aMsg);
+   void sendTestMsg(int aAppNumber);
 };
+
 //******************************************************************************
-// Global instance
+//******************************************************************************
+//******************************************************************************
+// Global singular instance.
 
 #ifdef _PROCOSERVERTHREAD_CPP_
          ServerThread* gServerThread;
@@ -134,10 +152,8 @@ public:
 extern   ServerThread* gServerThread;
 #endif
 
-
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 }//namespace
-
-
-#endif
 

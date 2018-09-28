@@ -28,12 +28,10 @@ int main(int argc,char** argv)
    {
       case ProtoComm::Settings::cTcpServer:
          ProtoComm::gServerThread = new ProtoComm::ServerThread;
-         ProtoComm::gServerThread->configure();
          ProtoComm::gServerThread->launchThread();
          break;
       case ProtoComm::Settings::cTcpClient:
          ProtoComm::gClientThread = new ProtoComm::ClientThread;
-         ProtoComm::gClientThread->configure();
          ProtoComm::gClientThread->launchThread();
          break;
    }

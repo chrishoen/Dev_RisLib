@@ -29,14 +29,16 @@ Settings::Settings()
    mMonkeyCreator = 0;
 }
 
-void Settings::setLocalIpAddr(char* aIpAddr)
+void Settings::setLocalIp(char* aIpAddr, int aIpPort)
 {
    strcpy(mLocalIpAddr, aIpAddr);
+   mLocalIpPort = aIpPort;
 }
 
-void Settings::setRemoteIpAddr(char* aIpAddr)
+void Settings::setRemoteIp(char* aIpAddr, int aIpPort)
 {
    strcpy(mRemoteIpAddr, aIpAddr);
+   mRemoteIpPort = aIpPort;
 }
 
 //******************************************************************************

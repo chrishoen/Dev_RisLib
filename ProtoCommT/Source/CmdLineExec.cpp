@@ -103,10 +103,10 @@ void CmdLineExec::executePeriodic(Ris::CmdLineCmd* aCmd)
    switch (ProtoComm::gSettings.mMyAppRole)
    {
       case ProtoComm::Settings::cTcpServer:
-         gServerThread->mPeriodicEnable = tPeriodicEnable;
+         gServerThread->mTPFlag = tPeriodicEnable;
          break;
       case ProtoComm::Settings::cTcpClient:
-         gClientThread->mPeriodicEnable = tPeriodicEnable;
+         gClientThread->mTPFlag = tPeriodicEnable;
          break;
    }
 }

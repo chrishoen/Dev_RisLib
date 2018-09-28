@@ -33,8 +33,8 @@ NetworkThread::NetworkThread()
    mRxMsgQCall.bind(this, &NetworkThread::executeRxMsg);
 
    // Initialize variables.
-   mMonkeyCreator.configure(gSettings.mMyAppNumber);
    mUdpMsgThread = 0;
+   mMonkeyCreator.configure(gSettings.mMyAppNumber);
    mTPFlag = false;
    mStatusCount1=0;
    mStatusCount2=0;
@@ -52,26 +52,24 @@ NetworkThread::~NetworkThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread exit function, base class overload.
+// Thread init function, base class overload.
 
 void NetworkThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SerialThread::threadInitFunction");
+   Prn::print(Prn::ThreadInit1, "NetworkThread::threadInitFunction");
 
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setLocalIpAddr(gSettings.mMyUdpIPAddress);
-   tSettings.mLocalIpPort = gSettings.mMyUdpPort;
-   tSettings.setRemoteIpAddr(gSettings.mOtherUdpIPAddress);
-   tSettings.mRemoteIpPort = gSettings.mOtherUdpPort;
+   tSettings.setLocalIp  (gSettings.mMyUdpIPAddress,    gSettings.mMyUdpPort);
+   tSettings.setRemoteIp (gSettings.mOtherUdpIPAddress, gSettings.mOtherUdpPort);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mRxMsgQCall = mRxMsgQCall;
 
-   // Create child thread with the settings.
+   // Create the child thread with the settings.
    mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);
 
-   // Launch child thread.
+   // Launch the child thread.
    mUdpMsgThread->launchThread();
 }
 
@@ -84,7 +82,7 @@ void  NetworkThread::threadExitFunction()
 {
    Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
 
-   // Shutdown the tcp client thread
+   // Shutdown the child thread.
    mUdpMsgThread->shutdownThread();
 }
 
@@ -174,21 +172,6 @@ void NetworkThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Periodic timer execution, base class overload.
-
-void NetworkThread::executeOnTimer(int aTimerCount)
-{
-   if (!mTPFlag) return;
-
-   // Send a test message.
-   ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
-   tx->mCode1 = aTimerCount;
-   mUdpMsgThread->sendMsg(tx);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Send a message via the child socket thread.
 
 void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
@@ -206,6 +189,21 @@ void NetworkThread::sendTestMsg()
    ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
  
    mUdpMsgThread->sendMsg(tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Periodic timer execution, base class overload.
+
+void NetworkThread::executeOnTimer(int aTimerCount)
+{
+   if (!mTPFlag) return;
+
+   // Send a test message.
+   ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
+   tx->mCode1 = aTimerCount;
+   mUdpMsgThread->sendMsg(tx);
 }
 
 //******************************************************************************

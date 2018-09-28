@@ -58,6 +58,7 @@ void ServerThread::threadInitFunction()
 
    tSettings.setLocalIp(gSettings.mTcpServerIPAddress, gSettings.mTcpServerPort);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
+   tSettings.mMaxSessions = gSettings.mTcpMaxSessions;
    tSettings.mServerSessionQCall = mSessionQCall;
    tSettings.mServerRxMsgQCall = mRxMsgQCall;
 

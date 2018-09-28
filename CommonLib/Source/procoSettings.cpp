@@ -41,6 +41,7 @@ void Settings::reset()
 
    mTcpServerIPAddress[0]=0;
    mTcpServerPort = 0;
+   mTcpMaxSessions = 0;
 
    mMyUdpIPAddress[0]=0;
    mMyUdpPort = 0;
@@ -66,7 +67,8 @@ void Settings::show()
    printf("MyAppNumber               %5d\n", mMyAppNumber);
    printf("MyAppRole                 %5s\n", asStringAppRole(mMyAppRole));
 
-   printf("TcpServer          %-12s   %5d\n",mTcpServerIPAddress,mTcpServerPort);
+   printf("TcpServer          %-12s   %5d\n", mTcpServerIPAddress, mTcpServerPort);
+   printf("TcpMaxSessions             %5d\n", mTcpMaxSessions);
 
    printf("MyUdp              %-12s   %5d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp           %-12s   %5d\n",mOtherUdpIPAddress,mOtherUdpPort);
@@ -74,6 +76,8 @@ void Settings::show()
    printf("SerialPortDevice           %-12s\n", mSerialPortDevice);
    printf("SerialPortSetup            %-12s\n", mSerialPortSetup);
    printf("SerialRxTimeout            %5d\n",   mSerialRxTimeout);
+   printf("Settings************************************************\n");
+   printf("\n");
 }
 
 //******************************************************************************
@@ -101,6 +105,8 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
       aCmd->copyArgString(1, mTcpServerIPAddress,cMaxStringSize);
       mTcpServerPort = aCmd->argInt(2);
    }
+
+   if (aCmd->isCmd("TcpMaxSessions")) mTcpMaxSessions = aCmd->argInt(1);
 
    if (aCmd->isCmd("MyUdp"))
    {

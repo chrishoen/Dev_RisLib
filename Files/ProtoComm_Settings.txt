@@ -4,27 +4,28 @@
 
 SectionBegin TcpServer
 
-   MyAppNumber   101 
-   MyAppRole     TcpServer 
-   TcpServer     0.0.0.0 55001
+   MyAppNumber       101 
+   MyAppRole         TcpServer 
+   TcpServer         0.0.0.0 55001
+   TcpMaxSessions    4
 
 SectionEnd
 
 //********************************************************************
 SectionBegin TcpClient1
 
-   MyAppNumber   201 
-   MyAppRole     TcpClient 
-   TcpServer     127.0.0.1 55001
+   MyAppNumber       201 
+   MyAppRole         TcpClient 
+   TcpServer         127.0.0.1 55001
 
 SectionEnd
 
 //********************************************************************
 SectionBegin TcpClient2
 
-   MyAppNumber   202 
-   MyAppRole     TcpClient 
-   TcpServer     127.0.0.1 55001
+   MyAppNumber       202 
+   MyAppRole         TcpClient 
+   TcpServer         127.0.0.1 55001
 
 SectionEnd
 
@@ -33,20 +34,20 @@ SectionEnd
 //********************************************************************
 SectionBegin UdpPeer1
 
-   MyAppNumber   301
-   MyAppRole     UdpPeer
-   MyUdp         127.0.0.1 56001
-   OtherUdp      127.0.0.1 56002
+   MyAppNumber       301
+   MyAppRole         UdpPeer
+   MyUdp             127.0.0.1 56001
+   OtherUdp          127.0.0.1 56002
    
 SectionEnd
 
 //********************************************************************
 SectionBegin UdpPeer2
 
-   MyAppNumber   302 
-   MyAppRole     UdpPeer 
-   MyUdp         127.0.0.1 56002
-   OtherUdp      127.0.0.1 56001
+   MyAppNumber       302 
+   MyAppRole         UdpPeer 
+   MyUdp             127.0.0.1 56002
+   OtherUdp          127.0.0.1 56001
 
 SectionEnd
 

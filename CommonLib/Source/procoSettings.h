@@ -77,6 +77,7 @@ public:
    // TCP server address and port.
    char mTcpServerIPAddress[cMaxStringSize];
    int  mTcpServerPort;
+   int  mTcpMaxSessions;
 
    // UDP address and port.
    char mMyUdpIPAddress[cMaxStringSize];

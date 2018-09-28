@@ -1,15 +1,14 @@
 #pragma once
 
 /*==============================================================================
-Prototype message thread.
+Prototype udp message thread.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risContainers.h"
+
 #include "risNetUdpMsgThread.h"
-#include "risNetUdpMsgSocket.h"
 #include "risThreadsQCallThread.h"
 
 #include "procoMsg.h"
@@ -21,9 +20,9 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 // This thread class transmits and receives byte content messages via
-// a member udp message thread which is based on a udp message socket.
-// It provides the capability to send messages via the socket and it
-// provides handlers for received messages.
+// a udp message child thread which manages a udp message socket. It 
+// provides the capability to send messages via the socket and it
+// provides handlers for messages received via the socket.
 
 class  NetworkThread : public Ris::Threads::BaseQCallThread
 {
@@ -35,11 +34,11 @@ public:
    //***************************************************************************
    // Members.
 
-   // Udp message thread, this manages message transmission and reception
-   // via a udp message socket.
+   // Udp message child thread, this manages message transmission and
+   // reception via a udp message socket.
    Ris::Net::UdpMsgThread* mUdpMsgThread;
 
-   // Message monkey used by mUdpMsgThread.
+   // Message monkey creator used by mUdpMsgThread.
    ProtoComm::MsgMonkeyCreator mMonkeyCreator;
 
    //***************************************************************************
@@ -47,7 +46,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // State variables.
+   // Control variables.
    bool mTPFlag;
 
    // Metrics.
@@ -80,11 +79,12 @@ public:
    //***************************************************************************
    // Methods. Receive message qcall.
 
-   // QCall registered to mUdpMsgThread. This is invoked by mUdpMsgThread
-   // when it receives a message.  It process the received messages.
+   // QCall registered to the mUdpMsgThread child thread. It is invoked when
+   // a message is received. It process the received messages.
    Ris::Net::UdpMsgThread::RxMsgQCall mRxMsgQCall;
 
-   // Associated QCall method. It calls one of the specific message handlers.
+   // Associated QCall method. It calls one of the specific receive message
+   // handlers.
    void executeRxMsg (Ris::ByteContent* aMsg);
 
    //***************************************************************************
@@ -102,7 +102,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a message
+   // Send a message.
    void sendMsg (ProtoComm::BaseMsg* aMsg);
    void sendTestMsg();   
 };

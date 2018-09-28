@@ -13,7 +13,6 @@
 #define  _PROCONETWORKTHREAD_CPP_
 #include "procoNetworkThread.h"
 
-
 namespace ProtoComm
 {
 
@@ -27,10 +26,10 @@ NetworkThread::NetworkThread()
    // Set base class thread priority.
    BaseClass::setThreadPriorityHigh();
 
-   // Set timer period.
+   // Set base class timer period.
    BaseClass::mTimerPeriod = 1000;
 
-   // Initialize QCalls.
+   // Initialize qcalls.
    mRxMsgQCall.bind(this, &NetworkThread::executeRxMsg);
 
    // Initialize variables.
@@ -69,7 +68,7 @@ void NetworkThread::threadInitFunction()
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mRxMsgQCall = mRxMsgQCall;
 
-   // Create child thread.
+   // Create child thread with the settings.
    mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);
 
    // Launch child thread.
@@ -87,16 +86,13 @@ void  NetworkThread::threadExitFunction()
 
    // Shutdown the tcp client thread
    mUdpMsgThread->shutdownThread();
-
-   // Base class exit
-   BaseClass::threadExitFunction();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall registered to mUdpMsgThread. This is invoked by mUdpMsgThread
-// when it receives a message. It process the received messages.
+// QCall registered to the mUdpMsgThread child thread. It is invoked when
+// a message is received. It process the received messages.
 
 void NetworkThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
@@ -128,7 +124,7 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Message handler for TestMsg.
+// Rx message handler - TestMsg.
 
 void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 {
@@ -193,7 +189,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via the socket thread.
+// Send a message via the child socket thread.
 
 void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 {
@@ -203,7 +199,7 @@ void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via the socket thread.
+// Send a message via the child socket thread.
 
 void NetworkThread::sendTestMsg()
 {

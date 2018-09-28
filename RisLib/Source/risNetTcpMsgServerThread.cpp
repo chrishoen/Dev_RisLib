@@ -73,12 +73,12 @@ void TcpMsgServerThread::threadRunFunction()
 {
    Prn::print(Prn::SocketRun1, "TcpServerThread::threadRunFunction");
    
-   // Do a nonblocking listen to put the hub socket in listen mode
+   // Do a nonblocking listen to put the hub socket in listen mode.
    mHubSocket.doListen();
-   mListenFlag=true;
+   mListenFlag = true;
    Prn::print(Prn::SocketRun1, "doListen %d %d",mHubSocket.mStatus,mHubSocket.mError);
 
-   bool tGoing=true;
+   bool tGoing = true;
    while(tGoing)
    {
       //************************************************************************
@@ -136,53 +136,53 @@ void TcpMsgServerThread::threadRunFunction()
          // Test for accept available.
          // If the hub socket is still in the read set then an accept
          // call will not block, so a client is trying to establish
-         // a connection with a connect call
+         // a connection with a connect call.
          
          if(mHubSocket.isSelfInReadSet())
          {
-               // The hub socket is still in the read set. This means that a
-               // client is trying to establish a connection with a connect 
-               // call and that an accept call will be successful.
+            // The hub socket is still in the read set. This means that a
+            // client is trying to establish a connection with a connect 
+            // call and that an accept call will be successful.
 
-               // Allocate a new session index
-               int tSessionIndex; 
-               mSessionAllocator.pop(tSessionIndex); 
+            // Allocate a new session index
+            int tSessionIndex; 
+            mSessionAllocator.pop(tSessionIndex); 
 
-               // Call accept into the node socket at the new session index
-               mHubSocket.doAccept(mNodeSocket[tSessionIndex]);
+            // Call accept into the node socket at the new session index.
+            mHubSocket.doAccept(mNodeSocket[tSessionIndex]);
 
-               // Test the accept call
-               if (mHubSocket.mStatus>=0)
-               {  
-                  // The accept call passed.
-                  // Set the new socket valid and update the session state.
-                  mNodeSocket[tSessionIndex].mValidFlag=true;
-                  mNumSessions++;
+            // Test the accept call.
+            if (mHubSocket.mStatus>=0)
+            {  
+               // The accept call passed.
+               // Set the new socket valid and update the session state.
+               mNodeSocket[tSessionIndex].mValidFlag = true;
+               mNumSessions++;
 
-                  // process a session change because a
-                  // new session has been established
-                  processSessionChange(tSessionIndex,true);
+               // Process a session change because a new session
+               // has been established.
+               processSessionChange(tSessionIndex,true);
 
-                  Prn::print(Prn::SocketRun1, "doAccept %d",tSessionIndex);
+               Prn::print(Prn::SocketRun1, "doAccept %d",tSessionIndex);
 
-                  // Test if the number of sessions has reached the maximum
-                  if (mNumSessions==mMaxSessions)
-                  {
-                     // The session limit was reached.
-                     // Close the hub socket and set the listening state false.
-                     // This will cause any client connect calls to be refused.
-                     // The hub socket will be reopened when one of the sessions is closed.
-                     Prn::print(Prn::SocketRun1, "Session limit was reached, closing listener %d",mNumSessions);
-                     mHubSocket.doClose();
-                     mListenFlag=false;
-                  }
-               }
-               else
+               // Test if the number of sessions has reached the maximum.
+               if (mNumSessions == mMaxSessions)
                {
-                  // The accept call failed
-                  Prn::print(Prn::SocketRun1, "ERROR doAccept FAILED %d %d %d",mHubSocket.mStatus,mHubSocket.mError,tSessionIndex);
-                  mSessionAllocator.push(tSessionIndex); 
+                  // The session limit was reached.
+                  // Close the hub socket and set the listening state false.
+                  // This will cause any client connect calls to be refused.
+                  // The hub socket will be reopened when one of the sessions is closed.
+                  Prn::print(Prn::SocketRun1, "Session limit was reached, closing listener %d",mNumSessions);
+                  mHubSocket.doClose();
+                  mListenFlag=false;
                }
+            }
+            else
+            {
+               // The accept call failed. Dealloacte the session index.
+               Prn::print(Prn::SocketRun1, "ERROR doAccept FAILED %d %d %d",mHubSocket.mStatus,mHubSocket.mError,tSessionIndex);
+               mSessionAllocator.push(tSessionIndex); 
+            }
          }
    
          //*********************************************************************
@@ -192,7 +192,7 @@ void TcpMsgServerThread::threadRunFunction()
          // If the node socket is still in the read set then a recv
          // call will not block.
 
-         for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
+         for (int tSessionIndex = 0; tSessionIndex < mMaxSessions; tSessionIndex++)
          {
             if(mNodeSocket[tSessionIndex].mValidFlag)
             {
@@ -211,7 +211,7 @@ void TcpMsgServerThread::threadRunFunction()
                         tSessionIndex,
                         mNodeSocket[tSessionIndex].mRxMsgCount);
 
-                     // process the received message
+                     // Process the received message.
                      if (tMsg)
                      {
                         processRxMsg(tSessionIndex,tMsg);
@@ -222,19 +222,19 @@ void TcpMsgServerThread::threadRunFunction()
                      // The receive failed, so the connection was shutdown by the client.
                      // Therefore, disestablish the session.  
                      Prn::print(Prn::SocketRun1, "Recv failed, closing session %d",tSessionIndex);
-                     // Reset the socket
+                     // Reset the socket.
                      mNodeSocket[tSessionIndex].doClose();
                      mNodeSocket[tSessionIndex].reset();
-                     mNodeSocket[tSessionIndex].mValidFlag=false;
+                     mNodeSocket[tSessionIndex].mValidFlag = false;
                      // Dealloacte the session index
                      mSessionAllocator.push(tSessionIndex);
 
-                     // process a session change because a
-                     // session has been disestablished
+                     // Process a session change because a session has been 
+                     // disestablished.
                      processSessionChange(tSessionIndex,false);
 
                      // If not listening because the number of sessions had
-                     // reached the limit then start listening again
+                     // reached the limit then start listening again.
                      mNumSessions--;
                      if (!mListenFlag)
                      {

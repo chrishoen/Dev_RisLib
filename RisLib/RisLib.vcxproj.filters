@@ -144,7 +144,7 @@
     <ClCompile Include="Source\risNetSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risNetTcpMsgServerHubSocket.cpp">
+    <ClCompile Include="Source\risNetTcpServerHubSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -320,7 +320,7 @@
     <ClInclude Include="Source\risNetSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risNetTcpMsgServerHubSocket.h">
+    <ClInclude Include="Source\risNetTcpServerHubSocket.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

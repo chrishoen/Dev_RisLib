@@ -87,7 +87,7 @@ void TcpMsgSocket::configure()
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "TcpMsgSocket     $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "TcpMsgSocket FAIL $ %16s : %d $ %d %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,

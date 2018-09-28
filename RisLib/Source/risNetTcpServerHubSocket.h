@@ -30,7 +30,7 @@ namespace Net
 // It does listen and accept socket calls into tcp stream sockets in response
 // to client connect calls. 
 
-class TcpMsgServerHubSocket : public Sockets::BaseTcpServerHubSocket
+class TcpServerHubSocket : public Sockets::BaseTcpServerHubSocket
 {
 public:
    typedef Sockets::BaseTcpServerHubSocket BaseClass;
@@ -52,7 +52,7 @@ public:
    // Members.
 
    // Constructor.
-   TcpMsgServerHubSocket();
+   TcpServerHubSocket();
 
    // Initialize variables.
    void initialize(Settings* aSettings);

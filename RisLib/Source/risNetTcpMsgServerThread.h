@@ -29,7 +29,7 @@ or callbacks in their configure calls.
 
 #include "risThreadsQCallThread.h"
 #include "risNetSettings.h"
-#include "risNetTcpMsgServerHubSocket.h"
+#include "risNetTcpServerHubSocket.h"
 #include "risNetTcpMsgSocket.h"
 
 //******************************************************************************
@@ -101,7 +101,7 @@ public:
    Settings mSettings;
 
    // Hub socket instance.
-   TcpMsgServerHubSocket mHubSocket;
+   TcpServerHubSocket mHubSocket;
 
    // Node socket instances.
    // Access this array with a session index and test the node socket

@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "risNetTcpMsgServerHubSocket.h"
+#include "risNetTcpServerHubSocket.h"
 
 namespace Ris
 {
@@ -21,7 +21,7 @@ namespace Net
 //******************************************************************************
 // Constructor.
 
-TcpMsgServerHubSocket::TcpMsgServerHubSocket()
+TcpServerHubSocket::TcpServerHubSocket()
 {
    mSettings = 0;
    mValidFlag = false;
@@ -32,7 +32,7 @@ TcpMsgServerHubSocket::TcpMsgServerHubSocket()
 //******************************************************************************
 // Initialize variables.
 
-void TcpMsgServerHubSocket::initialize(Settings* aSettings)
+void TcpServerHubSocket::initialize(Settings* aSettings)
 {
    // Store the settings pointer.
    mSettings = aSettings;
@@ -43,7 +43,7 @@ void TcpMsgServerHubSocket::initialize(Settings* aSettings)
 //******************************************************************************
 // Configure the socket.
 
-void TcpMsgServerHubSocket::configure()
+void TcpServerHubSocket::configure()
 {
    // Configure the socket.
    BaseClass::reset();
@@ -56,7 +56,7 @@ void TcpMsgServerHubSocket::configure()
    mValidFlag = BaseClass::mStatus == 0;
 
    // Show.
-   if (mValidFlag == 0)
+   if (mValidFlag)
    {
       Prn::print(Prn::SocketInit2, "TcpServerHubSocket $ %16s : %d",
          BaseClass::mLocal.mIpAddr.mString,
@@ -64,7 +64,7 @@ void TcpMsgServerHubSocket::configure()
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "TcpServerHubSocket $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "TcpServerHubSocket FAIL $ %16s : %d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -77,7 +77,7 @@ void TcpMsgServerHubSocket::configure()
 //******************************************************************************
 // This re-initializes the socket.
 
-void TcpMsgServerHubSocket::reconfigure()
+void TcpServerHubSocket::reconfigure()
 {
    BaseClass::doSocket();
    BaseClass::setOptionReuseAddr();

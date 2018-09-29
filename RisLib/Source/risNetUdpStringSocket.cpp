@@ -26,7 +26,6 @@ namespace Net
 
 UdpRxStringSocket::UdpRxStringSocket()
 {
-   mSettings = 0;
    mRxString[0] = 0;
    mRxLength = 0;
    mRxCount = 0;
@@ -38,7 +37,7 @@ UdpRxStringSocket::UdpRxStringSocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpRxStringSocket::initialize(Settings* aSettings)
+void UdpRxStringSocket::initialize(Settings& aSettings)
 {
    // Store the settings pointer.
    mSettings = aSettings;
@@ -58,7 +57,7 @@ void UdpRxStringSocket::initialize(Settings* aSettings)
 void UdpRxStringSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mLocal.set(mSettings->mLocalIpAddr, mSettings->mLocalIpPort);
+   BaseClass::mLocal.set(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    BaseClass::doSocket();
    BaseClass::doBind();
 
@@ -182,7 +181,6 @@ bool UdpRxStringSocket::doRecvString ()
 
 UdpTxStringSocket::UdpTxStringSocket()
 {
-   mSettings = 0;
    mValidFlag = false;
    mTxLength = 0;
    mTxCount = 0;
@@ -193,7 +191,7 @@ UdpTxStringSocket::UdpTxStringSocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpTxStringSocket::initialize(Settings* aSettings)
+void UdpTxStringSocket::initialize(Settings& aSettings)
 {
    // Store the settings pointer.
    mSettings = aSettings;
@@ -212,7 +210,7 @@ void UdpTxStringSocket::initialize(Settings* aSettings)
 void UdpTxStringSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mRemote.set(mSettings->mRemoteIpAddr, mSettings->mRemoteIpPort);
+   BaseClass::mRemote.set(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
 
    // Set valid flag from base class results.

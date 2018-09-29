@@ -50,7 +50,7 @@ void SerialMsgThread::threadInitFunction()
    Prn::print(Prn::SerialInit1, "SerialMsgThread::threadInitFunction");
 
    // Initialize and open the serial port.
-   mSerialMsgPort.initialize(&mSettings);
+   mSerialMsgPort.initialize(mSettings);
    mSerialMsgPort.doOpen();
 }
 

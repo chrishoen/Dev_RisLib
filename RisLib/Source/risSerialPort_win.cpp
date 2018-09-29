@@ -48,7 +48,7 @@ SerialPort::~SerialPort(void)
    delete mSpecific;
 }
 
-void SerialPort::initialize(SerialSettings* aSettings)
+void SerialPort::initialize(SerialSettings& aSettings)
 {
    mSettings = aSettings;
 }
@@ -63,7 +63,7 @@ void SerialPort::doOpen()
 {
    mValidFlag=false;
 
-   Prn::print(Prn::SerialInit1,"SerialPort::doOpen %s",mSettings->mPortDevice);
+   Prn::print(Prn::SerialInit1,"SerialPort::doOpen %s",mSettings.mPortDevice);
 
    //***************************************************************************
    //***************************************************************************
@@ -81,7 +81,7 @@ void SerialPort::doOpen()
 
    while (1)
    {
-      mSpecific->mPortHandle = CreateFile(mSettings->mPortDevice,
+      mSpecific->mPortHandle = CreateFile(mSettings.mPortDevice,
          GENERIC_READ | GENERIC_WRITE,
          0,
          0,
@@ -127,7 +127,7 @@ void SerialPort::doOpen()
    // DCB
 
    // If the port setup string is not empty then setup with a dcb.
-   if (strlen(mSettings->mPortSetup))
+   if (strlen(mSettings.mPortSetup))
    {
       DCB dcb;
 
@@ -136,7 +136,7 @@ void SerialPort::doOpen()
 
       GetCommState(mSpecific->mPortHandle, &dcb);
 
-      BuildCommDCB(mSettings->mPortSetup, &dcb);
+      BuildCommDCB(mSettings.mPortSetup, &dcb);
 
       dcb.fNull = FALSE;
       dcb.fAbortOnError = TRUE;
@@ -181,7 +181,7 @@ void SerialPort::doOpen()
 
    tComTimeout.ReadIntervalTimeout         = 0;
    tComTimeout.ReadTotalTimeoutMultiplier  = 0;
-   tComTimeout.ReadTotalTimeoutConstant    = mSettings->mRxTimeout;
+   tComTimeout.ReadTotalTimeoutConstant    = mSettings.mRxTimeout;
    tComTimeout.WriteTotalTimeoutMultiplier = 0;
    tComTimeout.WriteTotalTimeoutConstant   = 0;
 
@@ -209,8 +209,8 @@ void SerialPort::doOpen()
    mValidFlag=true;
 
    Prn::print(Prn::SerialInit2, "SerialMsgPort initialize PASS  $ %s : %16s",
-      mSettings->mPortDevice,
-      mSettings->mPortSetup);
+      mSettings.mPortDevice,
+      mSettings.mPortSetup);
 }
 
 //******************************************************************************
@@ -221,7 +221,7 @@ void SerialPort::doClose()
 {
    if (mValidFlag)
    {
-      Prn::print(Prn::SerialInit1,"SerialPort::doClose %s", mSettings->mPortDevice);
+      Prn::print(Prn::SerialInit1,"SerialPort::doClose %s", mSettings.mPortDevice);
       CancelIoEx(mSpecific->mPortHandle,0);
       CloseHandle(mSpecific->mPortHandle);
       CloseHandle(mSpecific->mRxEventHandle);

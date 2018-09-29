@@ -20,7 +20,6 @@ namespace Net
 
 UdpRxMsgSocket::UdpRxMsgSocket()
 {
-   mSettings = 0;
    mRxLength = 0;
    mRxCount = 0;
    mValidFlag = false;
@@ -41,13 +40,13 @@ UdpRxMsgSocket::~UdpRxMsgSocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpRxMsgSocket::initialize(Settings* aSettings)
+void UdpRxMsgSocket::initialize(Settings& aSettings)
 {
    // Store the settings pointer.
    mSettings = aSettings;
 
    // Create a message monkey.
-   mMonkey = mSettings->mMonkeyCreator->createMonkey();
+   mMonkey = mSettings.mMonkeyCreator->createMonkey();
 
    // Metrics.
    mRxCount = 0;
@@ -62,7 +61,7 @@ void UdpRxMsgSocket::initialize(Settings* aSettings)
 void UdpRxMsgSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mLocal.set(mSettings->mLocalIpAddr, mSettings->mLocalIpPort);
+   BaseClass::mLocal.set(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    BaseClass::doSocket();
    BaseClass::doBind();
 
@@ -193,7 +192,6 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 
 UdpTxMsgSocket::UdpTxMsgSocket()
 {
-   mSettings = 0;
    mTxCount = 0;
    mTxLength = 0;
    mValidFlag = false;
@@ -214,13 +212,13 @@ UdpTxMsgSocket::~UdpTxMsgSocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpTxMsgSocket::initialize(Settings* aSettings)
+void UdpTxMsgSocket::initialize(Settings& aSettings)
 {
    // Store the settings.
    mSettings = aSettings;
 
    // Create a message monkey.
-   mMonkey = mSettings->mMonkeyCreator->createMonkey();
+   mMonkey = mSettings.mMonkeyCreator->createMonkey();
 
    // Metrics.
    mTxCount = 0;
@@ -235,7 +233,7 @@ void UdpTxMsgSocket::initialize(Settings* aSettings)
 void UdpTxMsgSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mRemote.set(mSettings->mRemoteIpAddr, mSettings->mRemoteIpPort);
+   BaseClass::mRemote.set(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
 
    // Set valid flag from base class results.

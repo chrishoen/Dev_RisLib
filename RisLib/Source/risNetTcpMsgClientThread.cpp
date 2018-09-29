@@ -47,7 +47,7 @@ void TcpMsgClientThread::threadInitFunction()
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction BEGIN");
 
    // Initialize and configure the socket.
-   mSocket.initialize(&mSettings);
+   mSocket.initialize(mSettings);
    mSocket.configure();
 
    Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction END");

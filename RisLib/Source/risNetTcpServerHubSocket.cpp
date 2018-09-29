@@ -23,7 +23,6 @@ namespace Net
 
 TcpServerHubSocket::TcpServerHubSocket()
 {
-   mSettings = 0;
    mValidFlag = false;
 }
 
@@ -32,7 +31,7 @@ TcpServerHubSocket::TcpServerHubSocket()
 //******************************************************************************
 // Initialize variables.
 
-void TcpServerHubSocket::initialize(Settings* aSettings)
+void TcpServerHubSocket::initialize(Settings& aSettings)
 {
    // Store the settings pointer.
    mSettings = aSettings;
@@ -47,7 +46,7 @@ void TcpServerHubSocket::configure()
 {
    // Configure the socket.
    BaseClass::reset();
-   BaseClass::mLocal.set(mSettings->mLocalIpAddr, mSettings->mLocalIpPort);
+   BaseClass::mLocal.set(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    BaseClass::doSocket();
    BaseClass::setOptionReuseAddr();
    BaseClass::doBind();

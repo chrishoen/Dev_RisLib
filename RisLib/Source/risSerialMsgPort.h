@@ -113,7 +113,7 @@ public:
   ~SerialMsgPort(); 
 
    // Initialize and open the serial port.
-   void initialize(SerialSettings* aSettings) override;
+   void initialize(SerialSettings& aSettings) override;
 
    //***************************************************************************
    //***************************************************************************

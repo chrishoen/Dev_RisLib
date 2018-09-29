@@ -45,7 +45,7 @@ public:
    // Members.
 
    // Settings.
-   SerialSettings* mSettings;
+   SerialSettings mSettings;
 
    // Validity.
    bool mValidFlag;
@@ -64,7 +64,7 @@ public:
   ~SerialPort(void);
 
    // Initialize with settings.
-   virtual void initialize(SerialSettings* aSettings);
+   virtual void initialize(SerialSettings& aSettings);
 
    //***************************************************************************
    //***************************************************************************

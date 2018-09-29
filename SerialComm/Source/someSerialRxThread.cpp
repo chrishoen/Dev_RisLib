@@ -45,7 +45,7 @@ void SerialRxThread::threadInitFunction()
    mSettings.mRxTimeout = 2000;
 
    // Initialize and open the serial port.
-   mSerialPort.initialize(&mSettings);
+   mSerialPort.initialize(mSettings);
    mSerialPort.doOpen();
 }
 

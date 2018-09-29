@@ -45,7 +45,7 @@ public:
    // Members.
 
    // Settings.
-   Settings* mSettings;
+   Settings mSettings;
 
    // The recvfrom address is stored here.
    Sockets::SocketAddress mFromAddress;
@@ -79,7 +79,7 @@ public:
    ~UdpRxMsgSocket(); 
 
    // Initialize variables.
-   void initialize(Settings* aSettings);
+   void initialize(Settings& aSettings);
 
    // Configure the socket. This does socket and bind calls.
    void configure();
@@ -118,7 +118,7 @@ public:
    // Members.
 
    // Settings.
-   Settings* mSettings;
+   Settings mSettings;
 
    // This is a message monkey that is used to get details about a message 
    // from a message header that is contained in a byte buffer. It allows the 
@@ -146,7 +146,7 @@ public:
    ~UdpTxMsgSocket(); 
 
    // Initialize variables.
-   void initialize(Settings* aSettings);
+   void initialize(Settings& aSettings);
 
    // Configure the socket. This does socket and bind calls.
    void configure();

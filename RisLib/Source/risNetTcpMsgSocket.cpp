@@ -43,13 +43,13 @@ TcpMsgSocket::~TcpMsgSocket()
 //******************************************************************************
 // Initialize variables.
 
-void TcpMsgSocket::initialize(Settings* aSettings)
+void TcpMsgSocket::initialize(Settings& aSettings)
 {
    // Store the settings pointer.
    mSettings = aSettings;
 
    // Create a message monkey.
-   mMonkey = mSettings->mMonkeyCreator->createMonkey();
+   mMonkey = mSettings.mMonkeyCreator->createMonkey();
 
    // Not valid until configured.
    mValidFlag = false;
@@ -68,7 +68,7 @@ void TcpMsgSocket::configure()
 {
    // Configure the socket.
    BaseClass::reset();
-   BaseClass::mRemote.set(mSettings->mRemoteIpAddr, mSettings->mRemoteIpPort);
+   BaseClass::mRemote.set(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
    BaseClass::setOptionKeepAlive();
    BaseClass::setOptionNoDelay();

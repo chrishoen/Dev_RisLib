@@ -49,13 +49,13 @@ void TcpMsgServerThread::threadInitFunction()
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction BEGIN");
 
    // Initialize and configure the hub socket.
-   mHubSocket.initialize(&mSettings);
+   mHubSocket.initialize(mSettings);
    mHubSocket.configure();
 
    // Initialize the node sockets.
    for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
    {
-      mNodeSocket[tSessionIndex].initialize(&mSettings);
+      mNodeSocket[tSessionIndex].initialize(mSettings);
    }
 
    Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");

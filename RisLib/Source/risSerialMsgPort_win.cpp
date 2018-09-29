@@ -52,13 +52,13 @@ SerialMsgPort::~SerialMsgPort()
 //******************************************************************************
 // Initialize the serial port variables.
 
-void SerialMsgPort::initialize(SerialSettings* aSettings)
+void SerialMsgPort::initialize(SerialSettings& aSettings)
 {
    // Initialize the base class.
    BaseClass::initialize(aSettings);
 
    // Create a message monkey.
-   mMonkey = BaseClass::mSettings->mMonkeyCreator->createMonkey();
+   mMonkey = BaseClass::mSettings.mMonkeyCreator->createMonkey();
 
    // Allocate memory for byte buffers.
    mMemorySize = mMonkey->getMaxBufferSize();

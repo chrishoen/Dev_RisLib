@@ -43,9 +43,9 @@ void UdpMsgThread::threadInitFunction()
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction BEGIN");
 
    // Initialize and configure the sockets.
-   mRxSocket.initialize(&mSettings);
+   mRxSocket.initialize(mSettings);
    mRxSocket.configure();
-   mTxSocket.initialize(&mSettings);
+   mTxSocket.initialize(mSettings);
    mTxSocket.configure();
 
    Prn::print(Prn::SocketInit1, "UdpMsgThread::threadInitFunction END");

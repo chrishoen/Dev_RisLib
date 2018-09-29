@@ -52,7 +52,7 @@ public:
    // Members.
 
    // Settings.
-   Settings* mSettings;
+   Settings mSettings;
 
    // This a message monkey that is used to manage the details about messages
    // and message headers while hiding the underlying specific message set code.
@@ -84,7 +84,7 @@ public:
   ~TcpMsgSocket(); 
 
    // Initialize variables.
-   void initialize(Settings* aSettings);
+   void initialize(Settings& aSettings);
 
    // Configure the socket. This does socket and bind calls.
    void configure();

@@ -50,7 +50,7 @@ public:
    // Members.
 
    // Settings.
-   Settings* mSettings;
+   Settings mSettings;
 
    // The recvfrom address is stored here.
    Sockets::SocketAddress mFromAddress;
@@ -76,7 +76,7 @@ public:
    UdpRxStringSocket();
 
    // Initialize variables.
-   void initialize(Settings* aSettings);
+   void initialize(Settings& aSettings);
 
    // Configure the socket. This does socket and bind calls.
    void configure();
@@ -93,7 +93,6 @@ public:
    // It returns true if successful.
    // The recvfrom address is stored in mFromAddress.
    bool doRecvString ();
-
 };
 
 //******************************************************************************
@@ -124,7 +123,7 @@ public:
    // Members.
 
    // Settings.
-   Settings* mSettings;
+   Settings mSettings;
 
    // The recvfrom address is stored here.
    Sockets::SocketAddress mFromAddress;
@@ -150,7 +149,7 @@ public:
    UdpTxStringSocket();
 
    // Initialize variables.
-   void initialize(Settings* aSettings);
+   void initialize(Settings& aSettings);
 
    // Configure the socket. This does socket and bind calls.
    void configure();

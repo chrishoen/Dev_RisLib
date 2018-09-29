@@ -206,7 +206,7 @@ void TcpMsgServerThread::threadRunFunction()
                   ByteContent* tMsg=0;
                   if (mNodeSocket[tSessionIndex].doReceiveMsg (tMsg))
                   {
-                     // A valid message was received 
+                     // A valid message was received.
                      Prn::print(Prn::SocketRun2, "Recv message %d %d",
                         tSessionIndex,
                         mNodeSocket[tSessionIndex].mRxMsgCount);
@@ -279,34 +279,10 @@ void TcpMsgServerThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a transmit message through the node socket at the session index
-// to the client. It executes a blocking send() call in the context of
-// the caller. It is protected by a mutex semaphore.
-
-void TcpMsgServerThread::sendMsg(int aSessionIndex,ByteContent* aMsg)
-{
-   if (!aMsg) return;
-
-   // Test if the session is valid
-   if (mNodeSocket[aSessionIndex].mValidFlag)
-   {
-      // Send the message via the socket.
-      mNodeSocket[aSessionIndex].doSendMsg(aMsg);
-   }
-   else
-   {
-      Prn::print(Prn::SocketRun1, "ERROR doSendMsg FAIL session invalid %d",aSessionIndex);
-      delete aMsg;
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Notify the thread owner of this thread that a session has changed. This
-// is  called by the threadRunFunction  when a new session is established 
-// or an existing session is disestablished. It invokes the mSessionQCall
-// that is passed in at configure.
+// Notify the parent thread that a session has changed. This is called by
+// the threadRunFunction when a new session is established or an existing
+// session is disestablished. It invokes the mSessionQCall that is
+// registered at initialization.
 
 void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
 {
@@ -318,14 +294,38 @@ void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablishe
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Pass a received message to the thread owner. It invokes the mRxMsgQCall
-// that is passed in at configure. This is called by the threadRunFunction
-// to process a received message.
+// Pass a received message to the parent thread. This is called by the
+// threadRunFunction when a message is received. It invokes the
+// mRxMsgQCall that is registered at initialization.
 
 void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall.
    mRxMsgQCall(aSessionIndex,aMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a transmit message through the node socket at the session index
+// to the client. It executes a blocking send() call in the context of
+// the calling thread. It is protected by a mutex semaphore.
+
+void TcpMsgServerThread::sendMsg(int aSessionIndex, ByteContent* aMsg)
+{
+   if (!aMsg) return;
+
+   // Test if the session is valid
+   if (mNodeSocket[aSessionIndex].mValidFlag)
+   {
+      // Send the message via the socket.
+      mNodeSocket[aSessionIndex].doSendMsg(aMsg);
+   }
+   else
+   {
+      Prn::print(Prn::SocketRun1, "ERROR doSendMsg FAIL session invalid %d", aSessionIndex);
+      delete aMsg;
+   }
 }
 
 //******************************************************************************

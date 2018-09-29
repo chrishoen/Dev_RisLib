@@ -57,8 +57,8 @@ void TcpMsgClientThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread run function, base class overload.
-// It contains a while loop that manages the connection to the server
-// and receives messages.
+// It contains a while loop that manages the connection to the server and
+// receives messages.
 
 void TcpMsgClientThread::threadRunFunction()
 {
@@ -72,7 +72,7 @@ void TcpMsgClientThread::threadRunFunction()
       //************************************************************************
       //************************************************************************
       //************************************************************************
-      // If no connection.
+      // If not connected.
 
       if (!mConnectionFlag)
       {
@@ -83,7 +83,7 @@ void TcpMsgClientThread::threadRunFunction()
             Prn::print(Prn::SocketRun1, "Connected");
             mConnectionFlag = true;
 
-            // process a session change because a
+            // Process a session change because a
             // new session has been established.
             processSessionChange(true);
          }
@@ -94,7 +94,7 @@ void TcpMsgClientThread::threadRunFunction()
 
             mConnectionFlag = false;
 
-            // Close socket and reconfigure.
+            // Close the socket and reconfigure.
             mSocket.doClose();
             mSocket.reconfigure();
 
@@ -106,10 +106,10 @@ void TcpMsgClientThread::threadRunFunction()
       //************************************************************************
       //************************************************************************
       //************************************************************************
-      // If connection.
+      // If connected.
       else
       {
-         // Try to receive a message with a blocking receive call
+         // Try to receive a message with a blocking receive call.
          // If a message was received then process it.
          // If a message was not received then the connection was lost.  
          ByteContent* tMsg=0;
@@ -131,8 +131,8 @@ void TcpMsgClientThread::threadRunFunction()
             Prn::print(Prn::SocketRun1, "Recv failed, Connection lost");
             mConnectionFlag = false;
 
-            // process a session change because a
-            // new session has been disestablished.
+            // Process a session change because a
+            // session has been disestablished.
             processSessionChange(false);
          }
       }
@@ -142,6 +142,7 @@ void TcpMsgClientThread::threadRunFunction()
       //************************************************************************
       // If termination request, exit the loop
       // This is set by shutdown, see below.
+
       if (mTerminateFlag)
       {
          going=false;
@@ -182,6 +183,47 @@ void TcpMsgClientThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Notify the parent thread that a session has changed. This is called by
+// the threadRunFunction when a new session is established or an existing
+// session is disestablished. It invokes the mSessionQCall that is
+// registered at initialization.
+
+void TcpMsgClientThread::processSessionChange(bool aEstablished)
+{
+   // Guard.
+   if (!mSessionQCall.mExecuteCallPointer.isValid())
+   {
+      Prn::print(Prn::SocketRun1, "ERROR processSessionChange qcall invalid");
+      return;
+   }
+
+   // Invoke the session qcall to notify that a session has been established
+   // or disestablished.
+   mSessionQCall(aEstablished);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Pass a received message to the parent thread. This is called by the
+// threadRunFunction when a message is received. It invokes the
+// mRxMsgQCall that is registered at initialization.
+
+void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
+{
+   // Guard.
+   if (!mRxMsgQCall.mExecuteCallPointer.isValid()) return;
+
+   // Invoke the receive callback qcall.
+   mRxMsgQCall(aMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a transmit message through the socket to the server. It executes a
+// blocking send call in the context of the calling thread. It is protected
+// by a mutex semaphore.
 
 void TcpMsgClientThread::sendMsg(ByteContent* aMsg)
 {
@@ -196,44 +238,6 @@ void TcpMsgClientThread::sendMsg(ByteContent* aMsg)
       Prn::print(Prn::SocketRun1, "ERROR doSendMsg FAIL session invalid");
       delete aMsg;
    }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Notify the thread owner of this thread that a session has changed. This
-// is  called by the threadRunFunction  when a new session is established 
-// or an existing session is disestablished. It invokes the mSessionQCall
-// that is passed in at configure.
-
-void TcpMsgClientThread::processSessionChange(bool aEstablished)
-{
-   // Guard.
-   if (!mSessionQCall.mExecuteCallPointer.isValid())
-   {
-      Prn::print(Prn::SocketRun1, "ERROR processSessionChange qcall invalid");
-      return;
-   }
-
-   // Invoke the session qcall to notify that a session has
-   // been established or disestablished.
-   mSessionQCall(aEstablished);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Pass a received message to the thread owner. It invokes the mRxMsgQCall
-// that is passed in at configure. This is called by the threadRunFunction
-// to process a received message.
-
-void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
-{
-   // Guard.
-   if (!mRxMsgQCall.mExecuteCallPointer.isValid()) return;
-
-   // Invoke the receive callback qcall.
-   mRxMsgQCall(aMsg);
 }
 
 //******************************************************************************

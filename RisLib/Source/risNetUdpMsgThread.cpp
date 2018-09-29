@@ -54,8 +54,7 @@ void UdpMsgThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread run function, base class overload.
-// It contains a while loop that manages the connection to the server
-// and receives messages.
+// It contains a while loop that receives messages.
 
 void  UdpMsgThread::threadRunFunction()
 {
@@ -67,20 +66,19 @@ void  UdpMsgThread::threadRunFunction()
    {
       // Try to receive a message with a blocking receive call.
       // If a message was received then process it.
-      // If a message was not received then the connection was lost.  
       ByteContent* tMsg=0;
       if (mRxSocket.doReceiveMsg(tMsg))
       {
          // Message was correctly received.
          // Call the receive callback qcall.
-         mRxMsgQCall(tMsg);
+         processRxMsg(tMsg);
       }
       else
       {
          // Message was not correctly received.
       }
 
-      // If termination request, exit the loop
+      // If termination request then exit the loop.
       // This is set by shutdown, see below.
       if (mTerminateFlag)
       {
@@ -122,7 +120,25 @@ void UdpMsgThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This sends a message via the tcp client thread
+// Pass a received message to the parent thread. This is called by the
+// threadRunFunction when a message is received. It invokes the
+// mRxMsgQCall that is registered at initialization.
+
+void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
+{
+   // Guard.
+   if (!mRxMsgQCall.mExecuteCallPointer.isValid()) return;
+
+   // Invoke the receive callback qcall.
+   mRxMsgQCall(aMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a transmit message through the socket to the peer. It executes a
+// blocking send call in the context of the calling thread. It is protected
+// by a mutex semaphore.
 
 void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {

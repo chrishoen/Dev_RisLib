@@ -8,13 +8,11 @@ Tcp message socket class.
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
-#include "risContainers.h"
-#include "risSockets.h"
+#include "risThreadsSynch.h"
 #include "risNetSettings.h"
-#include "risThreadsThreads.h"
+#include "risSockets.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -56,12 +54,14 @@ public:
    // Settings.
    Settings* mSettings;
 
-   // This a  message monkey that is used to get details about  a message from
-   // a message header that is contained in a byte buffer. For receive, the 
-   // message monkey allows the doRecvMsg method to receive and extract a
-   // message from a byte buffer without the having the message code visible
-   // to it. For transmit, message monkey allows the doSendMsg method to set
-   // header data before the message is sent.
+   // This a message monkey that is used to manage the details about messages
+   // and message headers while hiding the underlying specific message set code.
+   // For received  messages, the message monkey allows the receive method to
+   // extract message header details from a byte buffer and it allows it to 
+   // then extract full messages from the byte buffer. For transmited messages,
+   // the message monkey allows the send method to set header data before the
+   // message is sent. A specific message monkey is provided by the parent 
+   // thread at initialization.
    BaseMsgMonkey* mMonkey;
 
    // Transmit mutex is used by doSendMsg for mutual exclusion.
@@ -97,14 +97,16 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Copy a message into a byte buffer and then send the byte buffer 
-   // via the socket.
-   // Return true if successful.
+   // Copy a message into a byte buffer and then send the byte buffer to the
+   // socket with a blocking send call. Return true if successful.
+   // It is protected by the transmit mutex.
    bool doSendMsg(ByteContent*  aTxMsg);
 
-   // Receive a message from the socket via a blocking recv call into a
-   // byte buffer and extract a message from the byte buffer.
-   // Return true if successful.
+   // Receive a message from the socket with a blocking recv call into a
+   // byte buffer and extract a message from the byte buffer. Return the
+   // message and true if successful. As part of the termination process,
+   // returning false means that the socket was closed or that there was
+   // an error.
    bool doReceiveMsg (ByteContent*& aRxMsg);
 };
 

@@ -19,6 +19,8 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
+   
 TcpMsgSocket::TcpMsgSocket()
 {
    mTxMsgCount=0;
@@ -26,10 +28,6 @@ TcpMsgSocket::TcpMsgSocket()
    mValidFlag=false;
    mMonkey=0;
 }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
 TcpMsgSocket::~TcpMsgSocket()
 {
@@ -115,9 +113,63 @@ void TcpMsgSocket::reconfigure()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive a message from the socket via blocking recv calls into a
-// byte buffer and extract a message from the byte buffer.
-// Return true if successful.
+// Copy a message into a byte buffer and then send the byte buffer to the
+// socket with a blocking send call. Return true if successful.
+// It is protected by the transmit mutex.
+
+bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
+{
+   // Guard.
+   if (!mValidFlag)
+   {
+      Prn::print(Prn::SocketRun2, "ERROR doSend when Invalid");
+      delete aMsg;
+      return false;
+   }
+
+   // Create a byte buffer.
+   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
+
+   // Configure the byte buffer.
+   mMonkey->configureByteBuffer(&tBuffer);
+   tBuffer.setCopyTo();
+
+   // Copy the message to the buffer.
+   mMonkey->putMsgToBuffer(&tBuffer, aMsg);
+
+   // Delete the message.
+   delete aMsg;
+
+   // Mutex.
+   mTxMutex.lock();
+
+   // Transmit the buffer
+   bool tRet = false;
+   int tLength = tBuffer.getLength();
+   tRet = doSend(tBuffer.getBaseAddress(), tLength);
+   Prn::print(Prn::SocketRun4, "doSendM %d %d %d", mStatus, mError, tLength);
+
+   mTxMsgCount++;
+
+   // Mutex
+   mTxMutex.unlock();
+
+   if (!tRet)
+   {
+      Prn::print(Prn::SocketRun2, "ERROR TcpMsgSocket::doSendMsg FAIL");
+   }
+
+   return true;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Receive a message from the socket with a blocking recv call into a
+// byte buffer and extract a message from the byte buffer. Return the
+// message and true if successful. As part of the termination process,
+// returning false means that the socket was closed or that there was
+// an error.
 
 bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 {
@@ -215,58 +267,6 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Returning true  means socket was not closed
    // Returning false means socket was closed
    mRxMsgCount++;
-   return true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Copy a message into a byte buffer and then send the byte buffer 
-// via the socket.
-// Return true if successful.
-
-bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
-{
-   // Guard.
-   if (!mValidFlag)
-   {
-      Prn::print(Prn::SocketRun2, "ERROR doSend when Invalid");
-      delete aMsg;
-      return false;
-   }
-
-   // Create a byte buffer.
-   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
-
-   // Configure the byte buffer.
-   mMonkey->configureByteBuffer(&tBuffer);
-   tBuffer.setCopyTo();
-
-   // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tBuffer, aMsg);
-
-   // Delete the message.
-   delete aMsg;
-
-   // Mutex.
-   mTxMutex.lock();
-
-   // Transmit the buffer
-   bool tRet = false;
-   int tLength = tBuffer.getLength();
-   tRet = doSend(tBuffer.getBaseAddress(), tLength);
-   Prn::print(Prn::SocketRun4, "doSendM %d %d %d", mStatus, mError, tLength);
-
-   mTxMsgCount++;
-
-   // Mutex
-   mTxMutex.unlock();
-
-   if (!tRet)
-   {
-      Prn::print(Prn::SocketRun2, "ERROR TcpMsgSocket::doSendMsg FAIL");
-   }
-
    return true;
 }
 

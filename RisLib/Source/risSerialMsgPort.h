@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Byte content message serial port class.
+Message serial port class.
 ==============================================================================*/
 
 //******************************************************************************
@@ -10,6 +10,8 @@ Byte content message serial port class.
 
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
+#include "risThreadsSynch.h"
+#include "risSerialSettings.h"
 #include "risSerialHeaderBuffer.h"
 #include "risSerialPort.h"
 
@@ -23,14 +25,16 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Message serial port, blocking.
+// Message serial port. This class encapsulates a serial port that
+// communicates messages that are based on the byte content message
+// encapsulation scheme.
 //
-// It exchanges byte content messages (send and recv) via a serial port.
+// It exchanges byte content messages (send and receive) via a serial port.
 //
 // It inherits from SerialPort for serial functionality and
-// provides methods that can be used to transport messages.
+// provides methods that can be used to send and receive messages.
 //
-// Messages are based on the ByteContent message encapsulation scheme.
+// Messages are based on the byte content message encapsulation scheme.
 
 class SerialMsgPort : public SerialPort
 {
@@ -50,8 +54,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // These are transmit and receive memory. They are allocated when the 
-   // message port is opened.
+   // These are transmit and receive memory. They are allocated
+   // at initialization.
    char* mTxMemory;
    char* mRxMemory;
 
@@ -63,13 +67,27 @@ public:
    //***************************************************************************
    // Members.
 
-   // This a  message monkey that is used to get details about  a message from
-   // a message header that is contained in a byte buffer. For receive, the 
-   // message monkey allows the doRecvMsg method to receive and extract a
-   // message from a byte buffer without the having the message code visible
-   // to it. For transmit, message monkey allows the doSendMsg method to set
-   // header data before the message is sent.
+   // Settings.
+   SerialSettings* mSettings;
+
+   // This a message monkey that is used to manage the details about messages
+   // and message headers while hiding the underlying specific message set code.
+   // For received  messages, the message monkey allows the receive method to
+   // extract message header details from a byte buffer and it allows it to 
+   // then extract full messages from the byte buffer. For transmited messages,
+   // the message monkey allows the send method to set header data before the
+   // message is sent. A specific message monkey is provided by the parent 
+   // thread at initialization.
    BaseMsgMonkey* mMonkey;
+
+   // Transmit mutex is used by doSendMsg for mutual exclusion.
+   Threads::MutexSemaphore mTxMutex;
+
+   // Metrics.
+   int mTxMsgCount;
+   int mRxMsgCount;
+   int mHeaderAllCount;
+   int mHeaderOneCount;
 
    //***************************************************************************
    //***************************************************************************
@@ -91,18 +109,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members.
-
-   // Metrics.
-   int mTxMsgCount;
-   int mRxMsgCount;
-   int mHeaderAllCount;
-   int mHeaderOneCount;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Infastrcture.
+   // Methods.
 
    // Constructor.
    SerialMsgPort(); 
@@ -116,16 +123,16 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Copy a message into a byte buffer and send the byte buffer via the
-   // serial port.
-   // It returns true if successful.
+   // Copy a message into a byte buffer and then send the byte buffer to the
+   // serial port with a blocking write call. Return true if successful.
    // It is protected by the transmit mutex.
    bool doSendMsg(ByteContent*  aTxMsg);
 
-   // Receive data from the serial port into a byte buffer and then extract
-   // a message from the byte buffer. Return the message and true if
-   // successful. As part of the termination process, returning false means
-   // that the serial port was closed or that there was an error.
+   // Receive a message from the serial port with a blocking read call into a
+   // byte buffer and extract a message from the byte buffer. Return the
+   // message and true if successful. As part of the termination process,
+   // returning false means that the serial port was closed or that there was
+   // an error.
    bool doReceiveMsg (ByteContent*& aRxMsg);
 };
 

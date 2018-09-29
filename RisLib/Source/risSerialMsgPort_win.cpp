@@ -82,9 +82,8 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy a message into a byte buffer and send the byte buffer via the
-// serial port.
-// It returns true if successful.
+// Copy a message into a byte buffer and then send the byte buffer to the
+// serial port with a blocking write call. Return true if successful.
 // It is protected by the transmit mutex.
 
 bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
@@ -129,10 +128,11 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive data from the serial port into a byte buffer and then extract
-// a message from the byte buffer. Return the message and true if
-// successful. As part of the termination process, returning false means
-// that the serial port was closed or that there was an error.
+// Receive a message from the serial port with a blocking read call into a
+// byte buffer and extract a message from the byte buffer. Return the
+// message and true if successful. As part of the termination process,
+// returning false means that the serial port was closed or that there was
+// an error.
 
 bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 {

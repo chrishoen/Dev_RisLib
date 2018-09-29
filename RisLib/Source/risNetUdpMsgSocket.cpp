@@ -16,6 +16,7 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
 
 UdpRxMsgSocket::UdpRxMsgSocket()
 {
@@ -24,10 +25,6 @@ UdpRxMsgSocket::UdpRxMsgSocket()
    mValidFlag = false;
    mMonkey = 0;
 }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
@@ -91,8 +88,11 @@ void UdpRxMsgSocket::configure()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive a datagram from the socket into a byte buffer and then extract a 
-// message from it. Return true if successful.
+// Receive a message from the socket with a blocking recv call into a
+// byte buffer and extract a message from the byte buffer. Return the
+// message and true if successful. As part of the termination process,
+// returning false means that the socket was closed or that there was
+// an error.
 
 bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 {
@@ -259,8 +259,9 @@ void UdpTxMsgSocket::configure()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy a message into a byte buffer and then send the byte buffer out the 
-// socket.
+// Copy a message into a byte buffer and then send the byte buffer to the
+// socket with a blocking send call. Return true if successful.
+// It is protected by the transmit mutex.
 
 bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 {

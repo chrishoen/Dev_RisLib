@@ -27,12 +27,22 @@ namespace Ris
 //
 // It contains a serial message port.
 //
+// The data that is communicated via the serial port is encapsulated according
+// to the byte content messaging scheme. It sends and receives byte content
+// messages.
+//
 // The thread is structured around a while loop that does a read call to
 // receive a message on the serial port.
 //
 // The thread provides serialized access to the serial port and associated 
 // state variables and it provides the context for the blocking of the 
 // read call.
+//
+// An instance of this thread is created as a child thread of a parent thread
+// that performs message processing. The parent creates the child and
+// registers a receive message qcall callback to it. When the child thread
+// receives a message it invokes the message qcall to pass it to the parent
+// for processing.
 
 class SerialMsgThread : public Ris::Threads::BaseThreadWithTermFlag
 {
@@ -50,18 +60,9 @@ public:
    // Serial message port.
    SerialMsgPort mSerialMsgPort;
 
-   // Transmit mutex is used by doSendMsg for mutual exclusion.
-   Threads::MutexSemaphore  mTxMutex;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
    // This is a qcall callback that is called when a message is received.
+   // It is registered by the parent thread at initialzation.
    typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
-
-   // This is a qcall callback that is called when a message is received.
    RxMsgQCall mRxMsgQCall;
 
    //***************************************************************************
@@ -108,9 +109,20 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a transmit message via the serial port. It executes a blocking
-   // send call in the context of the caller.
-   bool sendMsg (Ris::ByteContent* aMsg);
+   // Pass a received message to the parent thread. This is called by the
+   // threadRunFunction when a message is received. It invokes the
+   // mRxMsgQCall that is registered at initialization.
+   virtual void processRxMsg(Ris::ByteContent* aMsg);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Send a transmit message through the socket to the peer. It executes a
+   // blocking send call in the context of the calling thread. It is protected
+   // by a mutex semaphore.
+   void sendMsg (Ris::ByteContent* aMsg);
 };
 
 //******************************************************************************

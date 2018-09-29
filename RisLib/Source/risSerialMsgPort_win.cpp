@@ -37,7 +37,7 @@ SerialMsgPort::SerialMsgPort()
 
 SerialMsgPort::~SerialMsgPort()
 {
-   if (mMonkey != 0)
+   if (mMonkey)
    {
       delete mMonkey;
       mMonkey = 0;
@@ -52,19 +52,13 @@ SerialMsgPort::~SerialMsgPort()
 //******************************************************************************
 // Initialize the serial port variables.
 
-void SerialMsgPort::initialize(SerialSettings& aSettings)
+void SerialMsgPort::initialize(SerialSettings* aSettings)
 {
    // Initialize the base class.
    BaseClass::initialize(aSettings);
 
-   // Initialize variables.
-   mTxMsgCount = 0;
-   mRxMsgCount = 0;
-   mHeaderAllCount = 0;
-   mHeaderOneCount = 0;
-
    // Create a message monkey.
-   mMonkey = aSettings.mMonkeyCreator->createMonkey();
+   mMonkey = BaseClass::mSettings->mMonkeyCreator->createMonkey();
 
    // Allocate memory for byte buffers.
    mMemorySize = mMonkey->getMaxBufferSize();
@@ -77,6 +71,12 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
 
    // Initialize the header buffer and allocate memory for it.
    mHeaderBuffer.initialize(mHeaderLength);
+
+   // Initialize variables.
+   mTxMsgCount = 0;
+   mRxMsgCount = 0;
+   mHeaderAllCount = 0;
+   mHeaderOneCount = 0;
 }
 
 //******************************************************************************
@@ -95,6 +95,9 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
       mMonkey->destroyMsg(aMsg);
       return false;
    }
+
+   // Mutex.
+   mTxMutex.lock();
 
    // Create a byte buffer from preallocated memory.
    ByteBuffer tByteBuffer(mTxMemory,mMemorySize);
@@ -117,11 +120,17 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 
    mTxMsgCount++;
 
+   // Mutex.
+   mTxMutex.unlock();
+
+   // Test for errors.
    if (tRet)
    {
       Prn::print(Prn::SerialRun2, "ERROR SerialMsgPort::doSendMsg FAIL");
+      return false;
    }
 
+   // Success.
    return true;
 }
 

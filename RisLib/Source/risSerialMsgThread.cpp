@@ -50,7 +50,7 @@ void SerialMsgThread::threadInitFunction()
    Prn::print(Prn::SerialInit1, "SerialMsgThread::threadInitFunction");
 
    // Initialize and open the serial port.
-   mSerialMsgPort.initialize(mSettings);
+   mSerialMsgPort.initialize(&mSettings);
    mSerialMsgPort.doOpen();
 }
 
@@ -81,7 +81,7 @@ void  SerialMsgThread::threadRunFunction()
          // Message was correctly received.
          // Invoke the receive qcall callback, passing the received message
          // to the thread owner.
-         mRxMsgQCall(tMsg);
+         processRxMsg(tMsg);
       }
       else
       {
@@ -131,15 +131,29 @@ void SerialMsgThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a transmit message via the serial port. It executes a blocking
-// send call in the context of the caller.
+// Pass a received message to the parent thread. This is called by the
+// threadRunFunction when a message is received. It invokes the
+// mRxMsgQCall that is registered at initialization.
 
-bool SerialMsgThread::sendMsg (Ris::ByteContent* aMsg)
+void SerialMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
-   mTxMutex.lock();
-   bool tRet = mSerialMsgPort.doSendMsg(aMsg);
-   mTxMutex.unlock();
-   return tRet;
+   // Guard.
+   if (!mRxMsgQCall.mExecuteCallPointer.isValid()) return;
+
+   // Invoke the receive callback qcall.
+   mRxMsgQCall(aMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a transmit message through the socket to the peer. It executes a
+// blocking send call in the context of the calling thread. It is protected
+// by a mutex semaphore.
+
+void SerialMsgThread::sendMsg (Ris::ByteContent* aMsg)
+{
+   mSerialMsgPort.doSendMsg(aMsg);
 }
 
 //******************************************************************************

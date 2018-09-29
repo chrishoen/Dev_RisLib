@@ -54,6 +54,23 @@ public:
    // Settings.
    Settings mSettings;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Transmit and receive memory. Allocated at initialization.
+   char* mTxMemory;
+   char* mRxMemory;
+
+   // Size of allocated memory.
+   int mMemorySize;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
    // This a message monkey that is used to manage the details about messages
    // and message headers while hiding the underlying specific message set code.
    // For received  messages, the message monkey allows the receive method to
@@ -71,8 +88,10 @@ public:
    bool mValidFlag;
 
    // Metrics.
-   int mTxMsgCount;
-   int mRxMsgCount;
+   int mTxLength;
+   int mRxLength;
+   int mTxCount;
+   int mRxCount;
 
    //***************************************************************************
    //***************************************************************************

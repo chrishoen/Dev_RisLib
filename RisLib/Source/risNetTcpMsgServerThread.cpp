@@ -209,7 +209,7 @@ void TcpMsgServerThread::threadRunFunction()
                      // A valid message was received.
                      Prn::print(Prn::SocketRun2, "Recv message %d %d",
                         tSessionIndex,
-                        mNodeSocket[tSessionIndex].mRxMsgCount);
+                        mNodeSocket[tSessionIndex].mRxCount);
 
                      // Process the received message.
                      if (tMsg)

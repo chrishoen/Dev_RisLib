@@ -37,14 +37,9 @@ SerialMsgPort::SerialMsgPort()
 
 SerialMsgPort::~SerialMsgPort()
 {
-   if (mMonkey)
-   {
-      delete mMonkey;
-      mMonkey = 0;
-   }
-
    if (mTxMemory) free(mTxMemory);
    if (mRxMemory) free(mRxMemory);
+   if (mMonkey) delete mMonkey;
 }
 
 //******************************************************************************
@@ -159,7 +154,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      Prn::print(Prn::SerialRun2, "ERROR doReceiveMsg when Invalid");
+      Prn::print(Prn::SerialRun2, "ERROR SerialMsgPort::doReceiveMsg when Invalid");
       return false;
    }
 

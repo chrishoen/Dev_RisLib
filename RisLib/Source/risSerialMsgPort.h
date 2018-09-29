@@ -54,8 +54,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // These are transmit and receive memory. They are allocated
-   // at initialization.
+   // Transmit and receive memory. Allocated at initialization.
    char* mTxMemory;
    char* mRxMemory;
 

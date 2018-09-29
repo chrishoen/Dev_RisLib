@@ -47,11 +47,21 @@ public:
    // Settings.
    Settings mSettings;
 
-   // The recvfrom address is stored here.
-   Sockets::SocketAddress mFromAddress;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // Number of bytes received.
-   int mRxLength;
+   // Receive memory. Allocated at initialization.
+   char* mRxMemory;
+
+   // Size of allocated memory.
+   int mMemorySize;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // This a message monkey that is used to manage the details about messages
    // and message headers while hiding the underlying specific message set code.
@@ -66,7 +76,11 @@ public:
    // True if the socket is valid.
    bool mValidFlag;
 
+   // The recvfrom address is stored here.
+   Sockets::SocketAddress mFromAddress;
+
    // Metrics.
+   int mRxLength;
    int mRxCount;
 
    //***************************************************************************
@@ -120,6 +134,22 @@ public:
    // Settings.
    Settings mSettings;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Transmit memory. Allocated at initialization.
+   char* mTxMemory;
+
+   // Size of allocated memory.
+   int mMemorySize;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
    // This is a message monkey that is used to get details about a message 
    // from a message header that is contained in a byte buffer. It allows the 
    // receive method to receive and extract a message from a byte buffer
@@ -133,8 +163,8 @@ public:
    bool mValidFlag;
 
    // Metrics.
-   int mTxCount;
    int mTxLength;
+   int mTxCount;
 
    //***************************************************************************
    //***************************************************************************

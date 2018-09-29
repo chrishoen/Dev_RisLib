@@ -116,7 +116,7 @@ void TcpMsgClientThread::threadRunFunction()
          if (mSocket.doReceiveMsg(tMsg))
          {
             // Message was correctly received.
-            Prn::print(Prn::SocketRun2, "Recv message %d",mSocket.mRxMsgCount);
+            Prn::print(Prn::SocketRun2, "Recv message %d",mSocket.mRxCount);
 
             // Process the receive message.
             if (tMsg)

@@ -22,7 +22,7 @@ namespace Ris
 //******************************************************************************
 // Constructor.
 
-SerialMsgThread::SerialMsgThread(SerialSettings aSettings)
+SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
 {
    BaseClass::mThreadPriority = get_default_udp_rx_thread_priority();
 

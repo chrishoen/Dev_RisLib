@@ -131,7 +131,7 @@ void initializePrint()
    {
       if (rConsoleFlag[i])
       {
-         rConsoleSocket[i].configure(rConsolePort[i]);
+         rConsoleSocket[i].configureLocal(rConsolePort[i]);
          rConsoleHandle[i] = rCreatePrintView(i);
       }
    }

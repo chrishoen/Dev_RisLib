@@ -14,7 +14,7 @@ int main(int argc,char** argv)
    }
 
    Ris::Net::UdpRxStringSocket tSocket;
-   tSocket.configure(tPort);
+   tSocket.configureLocal(tPort);
 
    while (tSocket.doRecvString())
    {

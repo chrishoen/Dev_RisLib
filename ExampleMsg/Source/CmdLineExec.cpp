@@ -1,11 +1,8 @@
 
 #include "stdafx.h"
 
-#include "exampleSettings.h"
 #include "exampleMsg.h"
 #include "exampleMsgHelper.h"
-
-#include "exampleNetworkThread.h"
 
 #include "CmdLineExec.h"
 
@@ -29,8 +26,6 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("SHUTDOWN" ))  executeOnShutdown (aCmd);
-   if (aCmd->isCmd("TX"       ))  executeOnTx  (aCmd);
    if (aCmd->isCmd("GO1"      ))  executeOnGo1 (aCmd);
    if (aCmd->isCmd("GO2"      ))  executeOnGo2 (aCmd);
    if (aCmd->isCmd("GO3"      ))  executeOnGo3 (aCmd);
@@ -43,46 +38,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeOnShutdown (Ris::CmdLineCmd* aCmd)
-{
-   gNetworkThread->shutdownThread();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeOnTx (Ris::CmdLineCmd* aCmd)
-{
-   aCmd->setArgDefault(1,1);
-   int tMsgType= aCmd->argInt(1);
-
-   switch (tMsgType)
-   {
-      case 1:
-      {
-         ExampleMsg::TestMsg* tMsg = new ExampleMsg::TestMsg;
-         MsgHelper::initialize(tMsg);
-         gNetworkThread->sendMsg(tMsg);
-         break;
-      }
-      case 5:
-      {
-         ExampleMsg::DataMsg* tMsg = new ExampleMsg::DataMsg;
-         MsgHelper::initialize(tMsg);
-         gNetworkThread->sendMsg(tMsg);
-         break;
-      }
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 {
-   gNetworkThread->sendTestMsg();
 }
 
 //******************************************************************************
@@ -91,9 +48,6 @@ void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
-   ExampleMsg::StatusRequestMsg* tMsg = new ExampleMsg::StatusRequestMsg;
-
-   gNetworkThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -179,10 +133,6 @@ void CmdLineExec::executeOnGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo6(Ris::CmdLineCmd* aCmd)
 {
-   ExampleMsg::DataMsg* tMsg = new ExampleMsg::DataMsg;
-   MsgHelper::initialize(tMsg);
-
-   gNetworkThread->sendMsg(tMsg);
 }
 
 //******************************************************************************

@@ -18,6 +18,11 @@ namespace Ris
 
 SerialSettings::SerialSettings()
 {
+   reset();
+}
+
+void SerialSettings::reset()
+{
    mPortDevice[0] = 0;
    mPortSetup[0] = 0;
    mRxTimeout = 0;

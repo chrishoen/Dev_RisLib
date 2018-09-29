@@ -79,7 +79,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::UdpTxStringSocket tSocket;
-   tSocket.configure(Ris::Net::PortDef::cPrintView);
+   tSocket.configureLocal(Ris::Net::PortDef::cPrintView);
 
    tSocket.doSendString("ABCDEFG");
    tSocket.doClose();

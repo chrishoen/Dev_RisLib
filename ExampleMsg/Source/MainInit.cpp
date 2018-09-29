@@ -2,66 +2,54 @@
 
 
 #include "risThreadsProcess.h"
-#include "exampleSettings.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize
+// Initialize.
 
 void main_initialize(int argc,char** argv)
 {
-   //---------------------------------------------------------------------------
-   // Enter process
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize print facility.
 
-   Ris::Threads::enterProcessHigh();
-
-   //---------------------------------------------------------------------------
-   // Initialize print facility
-
+   // Initialize print.
    Prn::resetPrint();
    Prn::initializePrint();
 
-   // Initialize print filters
-   Prn::setFilter(Prn::SocketInit1,false);
-   Prn::setFilter(Prn::SocketInit2,true);
-   Prn::setFilter(Prn::SocketRun1,false);
-   Prn::setFilter(Prn::SocketRun2,false);
-   Prn::setFilter(Prn::SocketRun3,false);
-   Prn::setFilter(Prn::SocketRun4,false);
+   // Initialize print filters.
+   Prn::setFilter(Prn::SocketInit1, false);
+   Prn::setFilter(Prn::SocketInit2, true);
+   Prn::setFilter(Prn::SocketRun1, false);
+   Prn::setFilter(Prn::SocketRun2, false);
+   Prn::setFilter(Prn::SocketRun3, false);
+   Prn::setFilter(Prn::SocketRun4, false);
 
-   Prn::setFilter(Prn::ThreadRun1,true);
-   Prn::setFilter(Prn::ThreadRun2,false);
-   Prn::setFilter(Prn::ThreadRun3,false);
-   Prn::setFilter(Prn::ThreadRun4,false);
+   Prn::setFilter(Prn::ThreadRun1, true);
+   Prn::setFilter(Prn::ThreadRun2, false);
+   Prn::setFilter(Prn::ThreadRun3, false);
+   Prn::setFilter(Prn::ThreadRun4, false);
 
-   Prn::print(0,"ExampleMsgU*******************************************BEGIN");
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Done.
 
-   //---------------------------------------------------------------------------
-   // Initialize Settings
-
-   if (argc > 1)
-   {
-      ExampleMsg::gSettings.initialize(argv[1]);
-      ExampleMsg::gSettings.show();
-   }
-
+   Prn::print(0,"ExampleMsg Program*******************************************BEGIN");
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Finalize
+// Finalize.
 
 void main_finalize()
 {
-   Prn::print(0,"ExampleMsgU*******************************************END");
+   Prn::print(0,"ExampleMsg Program*******************************************END");
 
-   // Close print
+   // Close print facility.
    Prn::finalizePrint();
-
-   // Exit process
-   Ris::Threads::exitProcess();
-
 }
 

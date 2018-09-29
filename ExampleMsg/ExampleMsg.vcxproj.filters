@@ -15,12 +15,6 @@
     <ClCompile Include="Source\exampleMsgHelper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\exampleNetworkThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\exampleSettings.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -42,12 +36,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\exampleMsgHelper.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\exampleNetworkThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\exampleSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">

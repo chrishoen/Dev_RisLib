@@ -10,6 +10,7 @@ Sensor receiver thread classes.
 
 #include "risThreadsThreads.h"
 #include "risSerialPort.h"
+#include "risSerialSettings.h"
 
 namespace Some
 {
@@ -28,6 +29,9 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   // Serial port settings.
+   Ris::SerialSettings mSettings;
 
    // Serial port.
    Ris::SerialPort mSerialPort;

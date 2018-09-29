@@ -67,9 +67,6 @@ public:
    //***************************************************************************
    // Members.
 
-   // Settings.
-   SerialSettings* mSettings;
-
    // This a message monkey that is used to manage the details about messages
    // and message headers while hiding the underlying specific message set code.
    // For received  messages, the message monkey allows the receive method to

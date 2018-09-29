@@ -179,8 +179,6 @@
     <ClCompile Include="Source\exampleMsg.cpp" />
     <ClCompile Include="Source\exampleMsgBase.cpp" />
     <ClCompile Include="Source\exampleMsgHelper.cpp" />
-    <ClCompile Include="Source\exampleNetworkThread.cpp" />
-    <ClCompile Include="Source\exampleSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
@@ -193,8 +191,6 @@
     <ClInclude Include="Source\exampleMsg.h" />
     <ClInclude Include="Source\exampleMsgBase.h" />
     <ClInclude Include="Source\exampleMsgHelper.h" />
-    <ClInclude Include="Source\exampleNetworkThread.h" />
-    <ClInclude Include="Source\exampleSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>

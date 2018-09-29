@@ -82,7 +82,7 @@ public:
    // Methods.
 
    // Constructor.
-   SerialMsgThread(SerialSettings aSettings);
+   SerialMsgThread(SerialSettings& aSettings);
    ~SerialMsgThread();
 
    //***************************************************************************

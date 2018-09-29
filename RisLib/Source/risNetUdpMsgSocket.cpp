@@ -20,6 +20,7 @@ namespace Net
 
 UdpRxMsgSocket::UdpRxMsgSocket()
 {
+   mSettings = 0;
    mRxLength = 0;
    mRxCount = 0;
    mValidFlag = false;
@@ -192,6 +193,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 
 UdpTxMsgSocket::UdpTxMsgSocket()
 {
+   mSettings = 0;
    mTxCount = 0;
    mTxLength = 0;
    mValidFlag = false;

@@ -59,6 +59,7 @@ public:
 
    // Constructor.
    SerialSettings();
+   void reset();
 
    void setPortDevice(char* aPortDevice);
    void setPortSetup(char* aPortSetup);

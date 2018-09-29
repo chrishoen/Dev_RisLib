@@ -38,15 +38,14 @@ void SerialRxThread::threadInitFunction()
 {
    Prn::print(Prn::ThreadInit1, "SerialRxThread::threadInitFunction");
 
-   // Instance of serial port settings.
-   Ris::SerialSettings tSettings;
-
-   tSettings.setPortDevice("COM6");
-   tSettings.setPortSetup("9600,N,8,1");
-   tSettings.mRxTimeout = 2000;
+   // Serial port settings.
+   mSettings.reset();
+   mSettings.setPortDevice("COM6");
+   mSettings.setPortSetup("9600,N,8,1");
+   mSettings.mRxTimeout = 2000;
 
    // Initialize and open the serial port.
-   mSerialPort.initialize(tSettings);
+   mSerialPort.initialize(&mSettings);
    mSerialPort.doOpen();
 }
 

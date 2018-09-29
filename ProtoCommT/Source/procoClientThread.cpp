@@ -199,7 +199,6 @@ void ClientThread::sendMsg (BaseMsg* aTxMsg)
 
 void ClientThread::sendTestMsg()
 {
-   Prn::print(Prn::ThreadRun1, "ClientThread::sendTestMsg");
    TestMsg* msg = new TestMsg;
    msg->mCode1=201;
  

@@ -10,34 +10,39 @@
 
 void main_initialize(int argc,char** argv)
 {
-   //---------------------------------------------------------------------------
-   // Enter process
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Enter process.
 
    Ris::Threads::enterProcessHigh();
 
-   //---------------------------------------------------------------------------
-   // Initialize print facility
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize print facility.
 
+   // Initialize print.
    Prn::resetPrint();
    Prn::initializePrint();
 
-   // Initialize print filters
+   // Initialize print filters.
    Prn::setFilter(Prn::SocketInit1, false);
    Prn::setFilter(Prn::SocketInit2,  true);
-   Prn::setFilter(Prn::SocketRun1,  false);//
-   Prn::setFilter(Prn::SocketRun2,  false);//
+   Prn::setFilter(Prn::SocketRun1,  false);
+   Prn::setFilter(Prn::SocketRun2,  false);
    Prn::setFilter(Prn::SocketRun3,  false);
    Prn::setFilter(Prn::SocketRun4,  false);
 
    Prn::setFilter(Prn::ThreadRun1,   true);
-   Prn::setFilter(Prn::ThreadRun2,   true);
+   Prn::setFilter(Prn::ThreadRun2,  false);
    Prn::setFilter(Prn::ThreadRun3,  false);
    Prn::setFilter(Prn::ThreadRun4,  false);
 
-   Prn::print(0,"ProtoCommT*******************************************BEGIN %d %s",argc,argv[1]);
-
-   //---------------------------------------------------------------------------
-   // Initialize Settings
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read parameters files.
 
    if (argc == 2)
    {
@@ -49,6 +54,13 @@ void main_initialize(int argc,char** argv)
       ProtoComm::gSettings.readSection("TcpClient1");
       ProtoComm::gSettings.show();
    }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Done.
+
+   Prn::print(0, "ProtoCommT*******************************************BEGIN %d %s", argc, argv[1]);
 }
 
 //******************************************************************************
@@ -60,11 +72,13 @@ void main_finalize()
 {
    Prn::print(0,"ProtoCommT*******************************************END");
 
-   // Close print
+   // Close print.
    Prn::finalizePrint();
 
-   // Exit process
+   // Exit process.
    Ris::Threads::exitProcess();
-
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************

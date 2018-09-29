@@ -85,7 +85,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Receive a message from the socket via blocking recvfrom calls.
+   // Receive a message from the socket via a blocking recvfrom call.
    // Return true if successful.
    bool doReceiveMsg (ByteContent*& aRxMsg);
 };
@@ -150,8 +150,7 @@ public:
    // Methods.
 
    // Send a message over the socket via a blocking send call.
-   // Return true if successful.
-   // It is protected by the transmit mutex.
+   // Return true if successful. It is protected by the transmit mutex.
    bool doSendMsg(ByteContent* aMsg);
 };
 

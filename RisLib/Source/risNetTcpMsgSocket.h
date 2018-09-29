@@ -28,7 +28,9 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Tcp stream socket, blocking.
+// Tcp message socket. This class encapsulates a tcp stream socket that
+// communicates messages that are based on the byte content message
+// encapsulation scheme.
 //
 // For a client, it connects (connect) to a Tcp server hub socket and
 // exchanges messages (send and recv) with a server stream socket.
@@ -37,9 +39,9 @@ namespace Net
 // socket.
 //
 // It inherits from BaseTcpStreamSocket for stream socket functionality and
-// provides methods that can be used to transport messages.
+// provides methods that can be used to send and receive messages.
 //
-// Messages are based on the ByteContent message encapsulation scheme.
+// Messages are based on the byte content message encapsulation scheme.
 
 class TcpMsgSocket : public Sockets::BaseTcpStreamSocket
 {
@@ -100,11 +102,10 @@ public:
    // Return true if successful.
    bool doSendMsg(ByteContent*  aTxMsg);
 
-   // Receive a message from the socket via blocking recv calls into a
+   // Receive a message from the socket via a blocking recv call into a
    // byte buffer and extract a message from the byte buffer.
    // Return true if successful.
    bool doReceiveMsg (ByteContent*& aRxMsg);
-
 };
 
 //******************************************************************************

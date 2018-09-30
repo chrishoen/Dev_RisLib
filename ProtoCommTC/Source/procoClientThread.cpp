@@ -6,6 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include "procoMsgHelper.h"
 #include "procoTcpSettings.h"
 
 #define  _PROCOCLIENTTHREAD_CPP_
@@ -139,7 +140,7 @@ void ClientThread::executeRxMsg(Ris::ByteContent* aMsg)
          processRxMsg((DataMsg*)tMsg);
          break;
       default :
-         Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg %d",tMsg->mMessageType);
+         Prn::print(Prn::ThreadRun1, "processRxMsg %d",tMsg->mMessageType);
          delete aMsg;
          break;
    }
@@ -152,7 +153,7 @@ void ClientThread::executeRxMsg(Ris::ByteContent* aMsg)
 
 void ClientThread::processRxMsg(TestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg_TestMsg");
+   Prn::print(Prn::ThreadRun1, "processRxMsg_TestMsg");
    delete aMsg;
 }
 
@@ -163,7 +164,7 @@ void ClientThread::processRxMsg(TestMsg* aMsg)
 
 void ClientThread::processRxMsg(EchoRequestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_EchoRequestMsg %d",mStatusCount1++);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoRequestMsg %d",aMsg->mCode1);
 
    EchoResponseMsg* tTxMsg = new EchoResponseMsg;
    tTxMsg->mCode1 = aMsg->mCode1;
@@ -179,7 +180,7 @@ void ClientThread::processRxMsg(EchoRequestMsg* aMsg)
 
 void ClientThread::processRxMsg(EchoResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_EchoResponseMsg %d",aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoResponseMsg %d",aMsg->mCode1);
    delete aMsg;
 }
 
@@ -190,7 +191,8 @@ void ClientThread::processRxMsg(EchoResponseMsg* aMsg)
 
 void ClientThread::processRxMsg(DataMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_DataMsg");
+   Prn::print(Prn::ThreadRun1, "processRxMsg_DataMsg");
+   MsgHelper::show(aMsg);
    delete aMsg;
 }
 

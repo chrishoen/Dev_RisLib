@@ -6,6 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include "procoMsgHelper.h"
 #include "procoTcpSettings.h"
 
 #define  _PROCOSERVERTHREAD_CPP_
@@ -128,10 +129,10 @@ void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
          processRxMsg(aSessionIndex,(EchoRequestMsg*)tMsg);
          break;
       case MsgIdT::cEchoResponseMsg:
-         processRxMsg(aSessionIndex, (EchoResponseMsg*)tMsg);
+         processRxMsg(aSessionIndex,(EchoResponseMsg*)tMsg);
          break;
       case MsgIdT::cDataMsg:
-         processRxMsg(aSessionIndex, (DataMsg*)tMsg);
+         processRxMsg(aSessionIndex,(DataMsg*)tMsg);
          break;
       default :
          Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg %d",tMsg->mMessageType);
@@ -143,18 +144,18 @@ void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - TestMsg
+// Rx message handler - TestMsg.
 
 void ServerThread::processRxMsg(int aSessionIndex,TestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg_TestMsg");
+   Prn::print(Prn::ThreadRun1, "processRxMsg_TestMsg");
    delete aMsg;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - FirstMessageMsg
+// Rx message handler - FirstMessageMsg.
 //
 // Specfic message handler for a FirstMessage. It adds the session to the 
 // session state list. This message is sent by the client when a connection
@@ -162,7 +163,7 @@ void ServerThread::processRxMsg(int aSessionIndex,TestMsg* aMsg)
 
 void ServerThread::processRxMsg(int aSessionIndex,FirstMessageMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg_FirstMessageMsg %d %d",aSessionIndex,aMsg->mHeader.mSourceId);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_FirstMessageMsg %d %d",aSessionIndex,aMsg->mHeader.mSourceId);
 
    // Add session to state list.
    mSessionStateList.add(aSessionIndex,aMsg->mHeader.mSourceId);
@@ -174,11 +175,11 @@ void ServerThread::processRxMsg(int aSessionIndex,FirstMessageMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoRequestMsg
+// Rx message handler - EchoRequestMsg.
 
 void ServerThread::processRxMsg(int aSessionIndex,EchoRequestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_EchoRequestMsg %d",aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoRequestMsg %d",aMsg->mCode1);
 
    EchoResponseMsg* tTxMsg = new EchoResponseMsg;
    tTxMsg->mCode1 = aMsg->mCode1;
@@ -190,22 +191,23 @@ void ServerThread::processRxMsg(int aSessionIndex,EchoRequestMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoResponseMsg
+// Rx message handler - EchoResponseMsg.
 
 void ServerThread::processRxMsg(int aSessionIndex, EchoResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_EchoResponseMsg %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoResponseMsg %d", aMsg->mCode1);
    delete aMsg;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - DataMsg
+// Rx message handler - DataMsg.
 
 void ServerThread::processRxMsg(int aSessionIndex, DataMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_DataMsg");
+   Prn::print(Prn::ThreadRun1, "processRxMsg_DataMsg");
+   MsgHelper::show(aMsg);
    delete aMsg;
 }
 
@@ -232,10 +234,10 @@ void ServerThread::sendTestMsg(int aAppNumber)
    if (tSessionIndex == Ris::Net::SessionStateList::InvalidValue) return;
 
    // Send a message on socket at the session index.
-   TestMsg* msg = new TestMsg;
-   msg->mCode1=201;
+   TestMsg* tMsg = new TestMsg;
+   tMsg->mCode1=201;
 
-   mTcpMsgServerThread->sendMsg(tSessionIndex,msg);
+   mTcpMsgServerThread->sendMsg(tSessionIndex,tMsg);
 }
 
 //******************************************************************************

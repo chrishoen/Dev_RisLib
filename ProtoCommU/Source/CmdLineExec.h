@@ -16,7 +16,6 @@ public:
   void reset();
   void execute      (Ris::CmdLineCmd* aCmd);
 
-  void executeShutdown  (Ris::CmdLineCmd* aCmd);
   void executeTx        (Ris::CmdLineCmd* aCmd);
   void executeEcho      (Ris::CmdLineCmd* aCmd);
   void executeGo1       (Ris::CmdLineCmd* aCmd);

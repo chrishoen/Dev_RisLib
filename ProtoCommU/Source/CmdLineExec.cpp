@@ -28,7 +28,6 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("SHUTDOWN"))  executeShutdown (aCmd);
    if (aCmd->isCmd("TP"))        ProtoComm::gNetworkThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("TX"))        executeTx(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho (aCmd);
@@ -39,15 +38,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO5"))       executeGo5  (aCmd);
    if (aCmd->isCmd("GO6"))       executeGo6  (aCmd);
    if (aCmd->isCmd("Parms"))     executeParms(aCmd);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeShutdown (Ris::CmdLineCmd* aCmd)
-{
-   gNetworkThread->shutdownThread();
 }
 
 //******************************************************************************

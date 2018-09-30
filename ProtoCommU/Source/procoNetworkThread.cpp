@@ -120,45 +120,47 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Rx message handler - TestMsg.
 
-void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
+void NetworkThread::processRxMsg(TestMsg* aMsg)
 {
-   MsgHelper::show(aMsg);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_TestMsg");
    delete aMsg;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoRequestMsg
+// Rx message handler - EchoRequestMsg.
 
-void NetworkThread::processRxMsg(ProtoComm::EchoRequestMsg* aMsg)
+void NetworkThread::processRxMsg(EchoRequestMsg* aMsg)
 {
-   ProtoComm::EchoResponseMsg* tMsg = new ProtoComm::EchoResponseMsg;
-   tMsg->mCode1 = aMsg->mCode1;
-   mUdpMsgThread->sendMsg(tMsg);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoRequestMsg %d", aMsg->mCode1);
 
-   MsgHelper::show(aMsg);
+   EchoResponseMsg* tTxMsg = new EchoResponseMsg;
+   tTxMsg->mCode1 = aMsg->mCode1;
+   sendMsg(tTxMsg);
+
    delete aMsg;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoResponseMsg
+// Rx message handler - EchoResponseMsg.
 
-void NetworkThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
+void NetworkThread::processRxMsg(EchoResponseMsg* aMsg)
 {
-   MsgHelper::show(aMsg);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoResponseMsg %d", aMsg->mCode1);
    delete aMsg;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - DataMsg
+// Rx message handler - DataMsg.
 
-void NetworkThread::processRxMsg(ProtoComm::DataMsg* aMsg)
+void NetworkThread::processRxMsg(DataMsg* aMsg)
 {
+   Prn::print(Prn::ThreadRun1, "processRxMsg_DataMsg");
    MsgHelper::show(aMsg);
    delete aMsg;
 }

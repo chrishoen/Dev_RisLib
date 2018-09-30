@@ -27,7 +27,6 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("SHUTDOWN"))  executeShutdown(aCmd);
    if (aCmd->isCmd("TP"))        gServerThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("TX"))        executeTx(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
@@ -99,15 +98,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeShutdown (Ris::CmdLineCmd* aCmd)
-{
-   gServerThread->shutdownThread();
 }
 
 //******************************************************************************

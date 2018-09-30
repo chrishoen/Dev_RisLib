@@ -74,13 +74,13 @@ void UdpRxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket          %16s : %5d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -257,13 +257,13 @@ void UdpTxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d",
+      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket          %16s : %5d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,

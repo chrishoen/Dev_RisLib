@@ -90,9 +90,9 @@ void  ServerThread::threadExitFunction()
 // disconnects). It maintains session state variables.
 
 void ServerThread::executeSession (int aSessionIndex,bool aConnected)
-{
-   if (aConnected) Prn::print(Prn::ThreadRun1, "ServerThread CLIENT  CONNECTED     %d",aSessionIndex);
-   else            Prn::print(Prn::ThreadRun1, "ServerThread CLIENT  DISCONNECTED  %d",aSessionIndex);
+{                                                            
+   if (aConnected) Prn::print(Prn::ThreadRun1, "ServerThread CONNECTED     %d",aSessionIndex);
+   else            Prn::print(Prn::ThreadRun1, "ServerThread DISCONNECTED  %d",aSessionIndex);
 
    if(!aConnected)
    {

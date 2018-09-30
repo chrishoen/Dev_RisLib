@@ -41,8 +41,9 @@ public:
    //***************************************************************************
    // Members.
 
-   // Udp message child thread, this manages message transmission and
-   // reception via a udp message socket.
+   // Udp message socket child thread. It provides the thread execution
+   // context for a udp message socket and uses it to provide message
+   // communication.
    Ris::Net::UdpMsgThread* mUdpMsgThread;
 
    // Message monkey creator used by mUdpMsgThread.
@@ -97,8 +98,9 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. Specific receive message handlers.
+   // Methods.
 
+   // Specific receive message handlers.
    void processRxMsg (ProtoComm::TestMsg*  aMsg);
    void processRxMsg (ProtoComm::EchoRequestMsg* aMsg);
    void processRxMsg (ProtoComm::EchoResponseMsg* aMsg);
@@ -109,7 +111,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a message.
+   // Send a message via mSerialMsgThread:
    void sendMsg (ProtoComm::BaseMsg* aMsg);
    void sendTestMsg();   
 };

@@ -44,13 +44,13 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 
 void TcpMsgClientThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInit2, "TcpClientThread::threadInitFunction BEGIN");
 
    // Initialize and configure the socket.
    mSocket.initialize(mSettings);
    mSocket.configure();
 
-   Prn::print(Prn::SocketInit1, "TcpClientThread::threadInitFunction END");
+   Prn::print(Prn::SocketInit2, "TcpClientThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -157,7 +157,7 @@ void TcpMsgClientThread::threadRunFunction()
 
 void TcpMsgClientThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit1, "TcpClientThread::threadExitFunction");
+   Prn::print(Prn::SocketInit2, "TcpClientThread::threadExitFunction");
 }
 
 //******************************************************************************

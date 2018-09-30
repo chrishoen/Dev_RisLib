@@ -232,7 +232,7 @@ void ServerThread::sendTestMsg(int aAppNumber)
 {
    // Get the session index associated with the application number.
    int tSessionIndex = mSessionStateList.getIndex(aAppNumber);
-   if (tSessionIndex == Ris::Net::SessionStateList::InvalidValue) return;
+   if (tSessionIndex == Ris::Net::SessionStateList::cInvalidValue) return;
 
    // Send a message on socket at the session index.
    TestMsg* tMsg = new TestMsg;

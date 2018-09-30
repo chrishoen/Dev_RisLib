@@ -74,13 +74,13 @@ void UdpRxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket          %16s : %5d",
+      Prn::print(Prn::SocketInit1, "UdpRxMsgSocket          %16s : %5d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
+      Prn::print(Prn::SocketError1, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -110,7 +110,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "ERROR UdpRxMsgSocket INVALID SOCKET");
+      Prn::print(Prn::SocketError1, "ERROR UdpRxMsgSocket INVALID SOCKET");
       return false;
    }
 
@@ -132,10 +132,9 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // If bad status then return false.
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
-
    if (mRxLength <= 0)
    {
-      Prn::print(Prn::SocketRun1, "ERROR UdpRxMsgSocket %d %d", mStatus, mError);
+      Prn::print(Prn::SocketRun2, "ERROR UdpRxMsgSocket %d %d", mStatus, mError);
       if (BaseClass::mStatus < 0)
          switch (mError)
          {
@@ -167,7 +166,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "ERROR UdpRxMsgSocket INVALID HEADER", mStatus, mError);
+      Prn::print(Prn::SocketError1, "ERROR UdpRxMsgSocket INVALID HEADER", mStatus, mError);
       return false;
    }
 
@@ -184,7 +183,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Test for errors.
    if (aMsg == 0)
    {
-      Prn::print(Prn::SocketRun1, "ERROR UdpRxMsgSocket INVALID MESSAGE", mStatus, mError);
+      Prn::print(Prn::SocketError1, "ERROR UdpRxMsgSocket INVALID MESSAGE", mStatus, mError);
       mStatus = tByteBuffer.getError();
       return false;
    }
@@ -257,13 +256,13 @@ void UdpTxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket          %16s : %5d",
+      Prn::print(Prn::SocketInit1, "UdpTxMsgSocket          %16s : %5d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
+      Prn::print(Prn::SocketError1, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
@@ -283,7 +282,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "ERROR UdpTxMsgSocket INVALID SOCKET");
+      Prn::print(Prn::SocketError1, "ERROR UdpTxMsgSocket INVALID SOCKET");
       delete aMsg;
       return false;
    }
@@ -318,7 +317,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    }
    else
    {
-      Prn::print(Prn::SocketRun1, "ERROR UdpTxMsgSocket INVALID SEND");
+      Prn::print(Prn::SocketError1, "ERROR UdpTxMsgSocket INVALID SEND");
    }
 
    // Done.

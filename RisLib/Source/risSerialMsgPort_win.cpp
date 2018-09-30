@@ -86,7 +86,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      Prn::print(Prn::SerialRun2, "ERROR doSend when Invalid");
+      Prn::print(Prn::SerialError1, "ERROR doSend when Invalid");
       mMonkey->destroyMsg(aMsg);
       return false;
    }
@@ -121,7 +121,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Test for errors.
    if (tRet)
    {
-      Prn::print(Prn::SerialRun2, "ERROR SerialMsgPort::doSendMsg FAIL");
+      Prn::print(Prn::SerialError2, "ERROR SerialMsgPort::doSendMsg FAIL");
       return false;
    }
 
@@ -154,7 +154,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      Prn::print(Prn::SerialRun2, "ERROR SerialMsgPort::doReceiveMsg when Invalid");
+      Prn::print(Prn::SerialError1, "ERROR SerialMsgPort::doReceiveMsg when Invalid");
       return false;
    }
 
@@ -314,14 +314,14 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
-      Prn::print(Prn::SerialRun1, "ERROR getMsgFromBuffer");
+      Prn::print(Prn::SerialError1, "ERROR getMsgFromBuffer");
       return false;
    }
 
    // Test for message footer errors.
    if (!mMonkey->validateMessageFooter(&tByteBuffer,aMsg))
    {
-      Prn::print(Prn::SerialRun1, "ERROR validateMessageFooter");
+      Prn::print(Prn::SerialError1, "ERROR validateMessageFooter");
       return false;
    }
 

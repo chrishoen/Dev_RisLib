@@ -83,13 +83,13 @@ void TcpMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "TcpMsgSocket            %16s : %5d",
+      Prn::print(Prn::SocketInit1, "TcpMsgSocket            %16s : %5d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "TcpMsgSocket       FAIL %16s : %5d $ %d %d",
+      Prn::print(Prn::SocketError1, "TcpMsgSocket       FAIL %16s : %5d $ %d %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
@@ -122,7 +122,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "ERROR TcpMsgSocket INVALID SOCKET");
+      Prn::print(Prn::SocketError1, "ERROR TcpMsgSocket INVALID SOCKET");
       delete aMsg;
       return false;
    }
@@ -157,7 +157,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    }
    else
    {
-      Prn::print(Prn::SocketRun1, "ERROR TcpMsgSocket INVALID SEND");
+      Prn::print(Prn::SocketError1, "ERROR TcpMsgSocket INVALID SEND");
    }
 
    // Done.
@@ -188,7 +188,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "ERROR TcpMsgSocket INVALID SOCKET");
+      Prn::print(Prn::SocketError1, "ERROR TcpMsgSocket INVALID SOCKET");
       return false;
    }
 
@@ -212,9 +212,13 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    tRet = BaseClass::doRecv(tHeaderBuffer,tHeaderLength,tStatus);
    Prn::print(Prn::SocketRun4, "doRecvH %d %d",mStatus,mError);
 
+   // Guard.
    // If bad status then return false.
+   // Returning true  means socket was not closed.
+   // Returning false means socket was closed.
    if (!tRet || tStatus<=0)
    {
+      Prn::print(Prn::SocketRun2, "ERROR TcpMsgSocket INVALID READ");
       return false;
    }
 
@@ -228,7 +232,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "ERROR TcpMsgSocket INVALID HEADER");
+      Prn::print(Prn::SocketError1, "ERROR TcpMsgSocket INVALID HEADER");
       return false;
    }
 
@@ -249,7 +253,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // If bad status then return false.
    if (!tRet || tStatus<=0)
    {
-      Prn::print(Prn::SocketRun1, "ERROR doRecv2 INVALID RECV");
+      Prn::print(Prn::SocketError1, "ERROR doRecv2 INVALID RECV");
       return false;
    }
 
@@ -269,7 +273,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
-      Prn::print(Prn::SocketRun1, "ERROR TcpMsgSocket INVALID MESSAGE");
+      Prn::print(Prn::SocketError1, "ERROR TcpMsgSocket INVALID MESSAGE");
       mStatus=tByteBuffer.getError();
       return false;
    }

@@ -108,6 +108,7 @@ public:
    static const int  PrintRun2         =   6;
    static const int  PrintRun3         =   7;
    static const int  PrintRun4         =   8;
+
    static const int  SocketInit1       =   9;
    static const int  SocketInit2       =  10;
    static const int  SocketInit3       =  11;
@@ -116,26 +117,24 @@ public:
    static const int  SocketRun2        =  14;
    static const int  SocketRun3        =  15;
    static const int  SocketRun4        =  16;
-   static const int  SerialInit1       =  17;
-   static const int  SerialInit2       =  18;
-   static const int  SerialInit3       =  19;
-   static const int  SerialInit4       =  20;
-   static const int  SerialRun1        =  21;
-   static const int  SerialRun2        =  22;
-   static const int  SerialRun3        =  23;
-   static const int  SerialRun4        =  24;
-   static const int  FileInit1         =  25;
-   static const int  FileInit2         =  26;
-   static const int  FileInit3         =  27;
-   static const int  FileInit4         =  28;
-   static const int  FileRun1          =  29;
-   static const int  FileRun2          =  30;
-   static const int  FileRun3          =  31;
-   static const int  FileRun4          =  32;
-   static const int  FileError1        =  33;
-   static const int  FileError2        =  34;
-   static const int  FileError3        =  35;
-   static const int  FileError4        =  36;
+   static const int  SocketError1      =  17;
+   static const int  SocketError2      =  18;
+   static const int  SocketError3      =  19;
+   static const int  SocketError4      =  20;
+
+   static const int  SerialInit1       =  21;
+   static const int  SerialInit2       =  22;
+   static const int  SerialInit3       =  23;
+   static const int  SerialInit4       =  24;
+   static const int  SerialRun1        =  25;
+   static const int  SerialRun2        =  26;
+   static const int  SerialRun3        =  27;
+   static const int  SerialRun4        =  28;
+   static const int  SerialError1      =  29;
+   static const int  SerialError2      =  30;
+   static const int  SerialError3      =  31;
+   static const int  SerialError4      =  32;
+
    static const int  ThreadInit1       =  37;
    static const int  ThreadInit2       =  38;
    static const int  ThreadInit3       =  39;

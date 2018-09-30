@@ -46,7 +46,7 @@ TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
 
 void TcpMsgServerThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInit2, "TcpServerThread::threadInitFunction BEGIN");
 
    // Initialize and configure the hub socket.
    mHubSocket.initialize(mSettings);
@@ -58,7 +58,7 @@ void TcpMsgServerThread::threadInitFunction()
       mNodeSocket[tSessionIndex].initialize(mSettings);
    }
 
-   Prn::print(Prn::SocketInit1, "TcpServerThread::threadInitFunction END");
+   Prn::print(Prn::SocketInit2, "TcpServerThread::threadInitFunction END");
 }
 
 
@@ -264,7 +264,7 @@ void TcpMsgServerThread::threadRunFunction()
 
 void TcpMsgServerThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit1, "TcpServerThread::threadExitFunction");
+   Prn::print(Prn::SocketInit2, "TcpServerThread::threadExitFunction");
 
    mHubSocket.doClose();
    for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)

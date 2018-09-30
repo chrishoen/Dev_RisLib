@@ -188,14 +188,6 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       tryFilterString (aCmd, "SerialRun2",   SerialRun2   );
       tryFilterString (aCmd, "SerialRun3",   SerialRun3   );
       tryFilterString (aCmd, "SerialRun4",   SerialRun4   );
-      tryFilterString (aCmd, "FileInit1",    FileInit1    );
-      tryFilterString (aCmd, "FileInit2",    FileInit2    );
-      tryFilterString (aCmd, "FileInit3",    FileInit3    );
-      tryFilterString (aCmd, "FileInit4",    FileInit4    );
-      tryFilterString (aCmd, "FileRun1",     FileRun1     );
-      tryFilterString (aCmd, "FileRun2",     FileRun2     );
-      tryFilterString (aCmd, "FileRun3",     FileRun3     );
-      tryFilterString (aCmd, "FileRun4",     FileRun4     );
       tryFilterString (aCmd, "ThreadInit1",  ThreadInit1  );
       tryFilterString (aCmd, "ThreadInit2",  ThreadInit2  );
       tryFilterString (aCmd, "ThreadInit3",  ThreadInit3  );

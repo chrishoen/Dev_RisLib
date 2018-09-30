@@ -57,13 +57,13 @@ void TcpServerHubSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "TcpServerHubSocket      %16s : %5d",
+      Prn::print(Prn::SocketInit1, "TcpServerHubSocket      %16s : %5d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "TcpServerHubSocket FAIL %16s : %d $ %d %d",
+      Prn::print(Prn::SocketError1, "TcpServerHubSocket FAIL %16s : %d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,

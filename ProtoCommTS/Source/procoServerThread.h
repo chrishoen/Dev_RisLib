@@ -33,7 +33,8 @@ namespace ProtoComm
 // It provides the capability to send messages via the child thread socket and
 // it provides handlers for messages received via the child thread socket.
 // When the child thread receives a message it invokes a qcall that was
-// registered by this thread to defer execution of a message handler.
+// registered by this thread to defer execution of a message handler that is 
+// a member of this thread.
 // 
 // It inherits from BaseQCallThread to obtain a call queue based thread
 // functionality.
@@ -128,8 +129,9 @@ public:
 
    void processRxMsg(int aSessionIndex, TestMsg* aMsg);
    void processRxMsg(int aSessionIndex, FirstMessageMsg* aMsg);
-   void processRxMsg(int aSessionIndex, StatusRequestMsg* aMsg);
-   void processRxMsg(int aSessionIndex, StatusResponseMsg* aMsg);
+   void processRxMsg(int aSessionIndex, EchoRequestMsg* aMsg);
+   void processRxMsg(int aSessionIndex, EchoResponseMsg* aMsg);
+   void processRxMsg(int aSessionIndex, DataMsg* aMsg);
 
    //***************************************************************************
    //***************************************************************************

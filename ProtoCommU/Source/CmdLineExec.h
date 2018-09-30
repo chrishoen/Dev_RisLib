@@ -18,6 +18,7 @@ public:
 
   void executeShutdown  (Ris::CmdLineCmd* aCmd);
   void executeTx        (Ris::CmdLineCmd* aCmd);
+  void executeEcho      (Ris::CmdLineCmd* aCmd);
   void executeGo1       (Ris::CmdLineCmd* aCmd);
   void executeGo2       (Ris::CmdLineCmd* aCmd);
   void executeGo3       (Ris::CmdLineCmd* aCmd);

@@ -31,6 +31,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("SHUTDOWN"))  executeShutdown(aCmd);
    if (aCmd->isCmd("TP"))        gClientThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("TX"))        executeTx(aCmd);
+   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("T1"))        executeTest1(aCmd);
@@ -50,12 +51,23 @@ void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
+{
+   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
+   tMsg->mCode1 = 777;
+   gClientThread->sendMsg(tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
+   aCmd->setArgDefault(1, 1);
 
    ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
- 
+
    gClientThread->sendMsg(tMsg);
 }
 
@@ -70,7 +82,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    for (int i=0;i<tN;i++)
    {
-      ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
+      ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
  
       gClientThread->sendMsg(tMsg);
       gClientThread->threadSleep(10);

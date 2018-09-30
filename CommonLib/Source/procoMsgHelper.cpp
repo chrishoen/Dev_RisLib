@@ -5,6 +5,8 @@
 namespace ProtoComm
 {
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
 void MsgHelper::initialize(TestMsg* aMsg)
 {
@@ -25,6 +27,8 @@ void MsgHelper::show(TestMsg* aMsg)
 }
 
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
 void MsgHelper::initialize(FirstMessageMsg* aMsg)
 {
@@ -33,14 +37,16 @@ void MsgHelper::initialize(FirstMessageMsg* aMsg)
 
 void MsgHelper::show(FirstMessageMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "TestMsg");
+   Prn::print(Prn::ThreadRun1, "FirstMsg");
    Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
    Prn::print(Prn::ThreadRun1, "");
 }
 
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
-void MsgHelper::initialize(StatusRequestMsg* aMsg)
+void MsgHelper::initialize(EchoRequestMsg* aMsg)
 {
    aMsg->mCode1 = 301;
    aMsg->mCode2 = 302;
@@ -48,19 +54,18 @@ void MsgHelper::initialize(StatusRequestMsg* aMsg)
    aMsg->mCode4 = 304;
 }
 
-void MsgHelper::show(StatusRequestMsg* aMsg)
+void MsgHelper::show(EchoRequestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "TestMsg");
+   Prn::print(Prn::ThreadRun1, "EchoRequestMsg");
    Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
-   Prn::print(Prn::ThreadRun1, "Code2      %d", aMsg->mCode2);
-   Prn::print(Prn::ThreadRun1, "Code3      %d", aMsg->mCode3);
-   Prn::print(Prn::ThreadRun1, "Code4      %d", aMsg->mCode4);
    Prn::print(Prn::ThreadRun1, "");
 }
 
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
-void MsgHelper::initialize(StatusResponseMsg* aMsg)
+void MsgHelper::initialize(EchoResponseMsg* aMsg)
 {
    aMsg->mCode1 = 401;
    aMsg->mCode2 = 402;
@@ -68,16 +73,15 @@ void MsgHelper::initialize(StatusResponseMsg* aMsg)
    aMsg->mCode4 = 404;
 }
 
-void MsgHelper::show(StatusResponseMsg* aMsg)
+void MsgHelper::show(EchoResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "TestMsg");
+   Prn::print(Prn::ThreadRun1, "EchoResponseMsg");
    Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
-   Prn::print(Prn::ThreadRun1, "Code2      %d", aMsg->mCode2);
-   Prn::print(Prn::ThreadRun1, "Code3      %d", aMsg->mCode3);
-   Prn::print(Prn::ThreadRun1, "Code4      %d", aMsg->mCode4);
    Prn::print(Prn::ThreadRun1, "");
 }
 
+//****************************************************************************
+//****************************************************************************
 //****************************************************************************
 
 void MsgHelper::initialize(DataRecord* aMsg)
@@ -98,6 +102,8 @@ void MsgHelper::show(DataRecord* aMsg)
    Prn::print(Prn::ThreadRun1, "");
 }
 
+//****************************************************************************
+//****************************************************************************
 //****************************************************************************
 
 void MsgHelper::initialize(DataMsg* aMsg)
@@ -141,5 +147,7 @@ void MsgHelper::show(DataMsg* aMsg)
    show(&aMsg->mDataRecord);
 }
 
-
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 }//namespace

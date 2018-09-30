@@ -40,10 +40,6 @@ NetworkThread::NetworkThread()
    mStatusCount2=0;
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 NetworkThread::~NetworkThread()
 {
    delete mUdpMsgThread;
@@ -103,11 +99,11 @@ void NetworkThread::executeRxMsg(Ris::ByteContent* aMsg)
       case ProtoComm::MsgIdT::cTestMsg :
          processRxMsg((ProtoComm::TestMsg*)tMsg);
          break;
-      case ProtoComm::MsgIdT::cStatusRequestMsg :
-         processRxMsg((ProtoComm::StatusRequestMsg*)tMsg);
+      case ProtoComm::MsgIdT::cEchoRequestMsg :
+         processRxMsg((ProtoComm::EchoRequestMsg*)tMsg);
          break;
-      case ProtoComm::MsgIdT::cStatusResponseMsg :
-         processRxMsg((ProtoComm::StatusResponseMsg*)tMsg);
+      case ProtoComm::MsgIdT::cEchoResponseMsg :
+         processRxMsg((ProtoComm::EchoResponseMsg*)tMsg);
          break;
       case ProtoComm::MsgIdT::cDataMsg :
          processRxMsg((ProtoComm::DataMsg*)tMsg);
@@ -133,15 +129,13 @@ void NetworkThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - StatusRequestMsg
+// Rx message handler - EchoRequestMsg
 
-void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
+void NetworkThread::processRxMsg(ProtoComm::EchoRequestMsg* aMsg)
 {
-   if (true)
-   {
-      ProtoComm::StatusResponseMsg* tMsg = new ProtoComm::StatusResponseMsg;
-      mUdpMsgThread->sendMsg(tMsg);
-   }
+   ProtoComm::EchoResponseMsg* tMsg = new ProtoComm::EchoResponseMsg;
+   tMsg->mCode1 = aMsg->mCode1;
+   mUdpMsgThread->sendMsg(tMsg);
 
    MsgHelper::show(aMsg);
    delete aMsg;
@@ -150,9 +144,9 @@ void NetworkThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - StatusResponseMsg
+// Rx message handler - EchoResponseMsg
 
-void NetworkThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
+void NetworkThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;
@@ -200,8 +194,7 @@ void NetworkThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
 
-   // Send a test message.
-   ProtoComm::TestMsg* tx = new ProtoComm::TestMsg;
+   ProtoComm::EchoRequestMsg* tx = new ProtoComm::EchoRequestMsg;
    tx->mCode1 = aTimerCount;
    mUdpMsgThread->sendMsg(tx);
 }

@@ -60,9 +60,9 @@ void FirstMessageMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 
-StatusRequestMsg::StatusRequestMsg ()
+EchoRequestMsg::EchoRequestMsg ()
 {
-   mMessageType = MsgIdT::cStatusRequestMsg;
+   mMessageType = MsgIdT::cEchoRequestMsg;
 
    mCode1 = 101;
    mCode2 = 102;
@@ -73,7 +73,7 @@ StatusRequestMsg::StatusRequestMsg ()
    mNumOfWords=MaxWords;
 } 
 
-void StatusRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
+void EchoRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
    mHeader.headerCopyToFrom(aBuffer,this);
 
@@ -95,9 +95,9 @@ void StatusRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 
-StatusResponseMsg::StatusResponseMsg()
+EchoResponseMsg::EchoResponseMsg()
 {
-   mMessageType = MsgIdT::cStatusResponseMsg;
+   mMessageType = MsgIdT::cEchoResponseMsg;
 
    mCode1 = 201;
    mCode2 = 202;
@@ -108,7 +108,7 @@ StatusResponseMsg::StatusResponseMsg()
    mNumOfWords = MaxWords;
 }
 
-void StatusResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
+void EchoResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 {
    mHeader.headerCopyToFrom(aBuffer, this);
 
@@ -209,11 +209,11 @@ void* createMsg (int aMessageType)
    case MsgIdT::cFirstMessageMsg :
       tMsg = new FirstMessageMsg;
       break;
-   case MsgIdT::cStatusRequestMsg :
-      tMsg = new StatusRequestMsg;
+   case MsgIdT::cEchoRequestMsg :
+      tMsg = new EchoRequestMsg;
       break;
-   case MsgIdT::cStatusResponseMsg :
-      tMsg = new StatusResponseMsg;
+   case MsgIdT::cEchoResponseMsg :
+      tMsg = new EchoResponseMsg;
       break;
    case MsgIdT::cDataMsg :
       tMsg = new DataMsg;

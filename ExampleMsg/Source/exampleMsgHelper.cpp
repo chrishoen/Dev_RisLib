@@ -43,7 +43,7 @@ void MsgHelper::show(FirstMessageMsg* aMsg)
 
 //****************************************************************************
 
-void MsgHelper::initialize(StatusRequestMsg* aMsg)
+void MsgHelper::initialize(EchoRequestMsg* aMsg)
 {
    aMsg->mCode1 = 301;
    aMsg->mCode2 = 302;
@@ -51,7 +51,7 @@ void MsgHelper::initialize(StatusRequestMsg* aMsg)
    aMsg->mCode4 = 304;
 }
 
-void MsgHelper::show(StatusRequestMsg* aMsg)
+void MsgHelper::show(EchoRequestMsg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "TestMsg");
    Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);
@@ -63,7 +63,7 @@ void MsgHelper::show(StatusRequestMsg* aMsg)
 
 //****************************************************************************
 
-void MsgHelper::initialize(StatusResponseMsg* aMsg)
+void MsgHelper::initialize(EchoResponseMsg* aMsg)
 {
    aMsg->mCode1 = 401;
    aMsg->mCode2 = 402;
@@ -71,7 +71,7 @@ void MsgHelper::initialize(StatusResponseMsg* aMsg)
    aMsg->mCode4 = 404;
 }
 
-void MsgHelper::show(StatusResponseMsg* aMsg)
+void MsgHelper::show(EchoResponseMsg* aMsg)
 {
    Prn::print(Prn::ThreadRun1, "TestMsg");
    Prn::print(Prn::ThreadRun1, "Code1      %d", aMsg->mCode1);

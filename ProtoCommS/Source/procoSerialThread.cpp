@@ -118,7 +118,7 @@ void SerialThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
 
-   StatusRequestMsg* tMsg = new StatusRequestMsg;
+   EchoRequestMsg* tMsg = new EchoRequestMsg;
    tMsg->mCode1 = aTimerCount;
    sendMsg(tMsg);
 }
@@ -139,11 +139,11 @@ void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
    case ProtoComm::MsgIdT::cTestMsg:
       processRxMsg((ProtoComm::TestMsg*)tMsg);
       break;
-   case ProtoComm::MsgIdT::cStatusRequestMsg:
-      processRxMsg((ProtoComm::StatusRequestMsg*)tMsg);
+   case ProtoComm::MsgIdT::cEchoRequestMsg:
+      processRxMsg((ProtoComm::EchoRequestMsg*)tMsg);
       break;
-   case ProtoComm::MsgIdT::cStatusResponseMsg:
-      processRxMsg((ProtoComm::StatusResponseMsg*)tMsg);
+   case ProtoComm::MsgIdT::cEchoResponseMsg:
+      processRxMsg((ProtoComm::EchoResponseMsg*)tMsg);
       break;
    case ProtoComm::MsgIdT::cDataMsg:
       processRxMsg((ProtoComm::DataMsg*)tMsg);
@@ -169,13 +169,13 @@ void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - StatusRequestMsg
+// Rx message handler - EchoRequestMsg
 
-void SerialThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aMsg)
 {
    if (true)
    {
-      ProtoComm::StatusResponseMsg* tMsg = new ProtoComm::StatusResponseMsg;
+      ProtoComm::EchoResponseMsg* tMsg = new ProtoComm::EchoResponseMsg;
       mSerialMsgThread->sendMsg(tMsg);
    }
 
@@ -186,9 +186,9 @@ void SerialThread::processRxMsg(ProtoComm::StatusRequestMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - StatusResponseMsg
+// Rx message handler - EchoResponseMsg
 
-void SerialThread::processRxMsg(ProtoComm::StatusResponseMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 {
    MsgHelper::show(aMsg);
    delete aMsg;

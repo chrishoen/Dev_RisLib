@@ -53,7 +53,7 @@ void CmdLineExec::executeStatus(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 11);
 
-   ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
+   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
    tMsg->mCode1 = aCmd->argInt(1);
    ProtoComm::gSerialThread->sendMsg(tMsg);
 }

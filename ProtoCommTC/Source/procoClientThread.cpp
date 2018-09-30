@@ -129,11 +129,14 @@ void ClientThread::executeRxMsg(Ris::ByteContent* aMsg)
       case MsgIdT::cTestMsg :
          processRxMsg((TestMsg*)tMsg);
          break;
-      case MsgIdT::cStatusRequestMsg :
-         processRxMsg((StatusRequestMsg*)tMsg);
+      case MsgIdT::cEchoRequestMsg :
+         processRxMsg((EchoRequestMsg*)tMsg);
          break;
-      case MsgIdT::cStatusResponseMsg :
-         processRxMsg((StatusResponseMsg*)tMsg);
+      case MsgIdT::cEchoResponseMsg:
+         processRxMsg((EchoResponseMsg*)tMsg);
+         break;
+      case MsgIdT::cDataMsg:
+         processRxMsg((DataMsg*)tMsg);
          break;
       default :
          Prn::print(Prn::ThreadRun1, "ClientThread::processRxMsg %d",tMsg->mMessageType);
@@ -145,7 +148,7 @@ void ClientThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - TestMsg
+// Rx message handler - TestMsg.
 
 void ClientThread::processRxMsg(TestMsg* aMsg)
 {
@@ -156,17 +159,15 @@ void ClientThread::processRxMsg(TestMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - StatusRequestMsg
+// Rx message handler - EchoRequestMsg.
 
-void ClientThread::processRxMsg(StatusRequestMsg* aMsg)
+void ClientThread::processRxMsg(EchoRequestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_StatusRequestMsg %d",mStatusCount1++);
+   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_EchoRequestMsg %d",mStatusCount1++);
 
-   if (true)
-   {
-      StatusResponseMsg* tTxMsg = new StatusResponseMsg;
-      sendMsg(tTxMsg);
-   }
+   EchoResponseMsg* tTxMsg = new EchoResponseMsg;
+   tTxMsg->mCode1 = aMsg->mCode1;
+   sendMsg(tTxMsg);
 
    delete aMsg;
 }
@@ -174,11 +175,22 @@ void ClientThread::processRxMsg(StatusRequestMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - StatusResponseMsg
+// Rx message handler - EchoResponseMsg.
 
-void ClientThread::processRxMsg(StatusResponseMsg* aMsg)
+void ClientThread::processRxMsg(EchoResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_StatusResponseMsg %d",aMsg->mCode1);
+   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_EchoResponseMsg %d",aMsg->mCode1);
+   delete aMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Rx message handler - DataMsg.
+
+void ClientThread::processRxMsg(DataMsg* aMsg)
+{
+   Prn::print(Prn::ThreadRun2, "ClientThread::processRxMsg_DataMsg");
    delete aMsg;
 }
 
@@ -216,7 +228,7 @@ void ClientThread::executeOnTimer(int aTimerCount)
    Prn::print(Prn::ThreadRun3, "ClientThread::executeOnTimer %d", aTimerCount);
 
    // Send a status request message.
-   StatusRequestMsg* tMsg = new StatusRequestMsg;
+   EchoRequestMsg* tMsg = new EchoRequestMsg;
    tMsg->mCode1 = aTimerCount;
    sendMsg(tMsg);
 }

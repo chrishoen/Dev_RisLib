@@ -30,6 +30,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("SHUTDOWN"))  executeShutdown(aCmd);
    if (aCmd->isCmd("TP"))        gServerThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("TX"))        executeTx(aCmd);
+   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("T1"))        executeTest1(aCmd);
@@ -45,6 +46,20 @@ void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,201);
 
    gServerThread->sendTestMsg(aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 0);
+   int tSessionIndex = aCmd->argInt(1);
+
+   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
+   tMsg->mCode1 = 777;
+   gServerThread->sendMsg(tSessionIndex,tMsg);
 }
 
 //******************************************************************************
@@ -71,7 +86,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    for (int i=0;i<tN;i++)
    {
-      ProtoComm::StatusRequestMsg* tMsg = new ProtoComm::StatusRequestMsg;
+      ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
  
       gServerThread->sendMsg(0,tMsg);
       gServerThread->threadSleep(10);

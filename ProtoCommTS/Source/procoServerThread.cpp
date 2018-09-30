@@ -124,11 +124,14 @@ void ServerThread::executeRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
       case MsgIdT::cFirstMessageMsg :
          processRxMsg(aSessionIndex,(FirstMessageMsg*)tMsg);
          break;
-      case MsgIdT::cStatusRequestMsg :
-         processRxMsg(aSessionIndex,(StatusRequestMsg*)tMsg);
+      case MsgIdT::cEchoRequestMsg :
+         processRxMsg(aSessionIndex,(EchoRequestMsg*)tMsg);
          break;
-      case MsgIdT::cStatusResponseMsg :
-         processRxMsg(aSessionIndex,(StatusResponseMsg*)tMsg);
+      case MsgIdT::cEchoResponseMsg:
+         processRxMsg(aSessionIndex, (EchoResponseMsg*)tMsg);
+         break;
+      case MsgIdT::cDataMsg:
+         processRxMsg(aSessionIndex, (DataMsg*)tMsg);
          break;
       default :
          Prn::print(Prn::ThreadRun1, "ServerThread::processRxMsg %d",tMsg->mMessageType);
@@ -171,18 +174,15 @@ void ServerThread::processRxMsg(int aSessionIndex,FirstMessageMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - StatusRequestMsg
+// Rx message handler - EchoRequestMsg
 
-void ServerThread::processRxMsg(int aSessionIndex,StatusRequestMsg* aMsg)
+void ServerThread::processRxMsg(int aSessionIndex,EchoRequestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_StatusRequestMsg %d",aMsg->mCode1);
+   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_EchoRequestMsg %d",aMsg->mCode1);
 
-   if (true)
-   {
-      StatusResponseMsg* tTxMsg = new StatusResponseMsg;
-      tTxMsg->mCode1 = aMsg->mCode1;
-      sendMsg(aSessionIndex,tTxMsg);
-   }
+   EchoResponseMsg* tTxMsg = new EchoResponseMsg;
+   tTxMsg->mCode1 = aMsg->mCode1;
+   sendMsg(aSessionIndex,tTxMsg);
 
    delete aMsg;
 }
@@ -190,11 +190,22 @@ void ServerThread::processRxMsg(int aSessionIndex,StatusRequestMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - StatusResponseMsg
+// Rx message handler - EchoResponseMsg
 
-void ServerThread::processRxMsg(int aSessionIndex,StatusResponseMsg* aMsg)
+void ServerThread::processRxMsg(int aSessionIndex, EchoResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_StatusResponseMsg");
+   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_EchoResponseMsg %d", aMsg->mCode1);
+   delete aMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Rx message handler - DataMsg
+
+void ServerThread::processRxMsg(int aSessionIndex, DataMsg* aMsg)
+{
+   Prn::print(Prn::ThreadRun2, "ServerThread::processRxMsg_DataMsg");
    delete aMsg;
 }
 
@@ -234,7 +245,13 @@ void ServerThread::sendTestMsg(int aAppNumber)
 
 void ServerThread::executeOnTimer(int aTimerCount)
 {
+   if (!mTPFlag) return;
    Prn::print(Prn::ThreadRun3, "ServerThread::executeOnTimer %d", mPeriodicCount++);
+
+   // Send a status request message.
+   EchoRequestMsg* tMsg = new EchoRequestMsg;
+   tMsg->mCode1 = aTimerCount;
+   sendMsg(0,tMsg);
 }
 
 //******************************************************************************

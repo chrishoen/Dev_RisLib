@@ -43,8 +43,8 @@ public:
    static const int   cUnspecifiedMsg    = 0;
    static const int   cTestMsg           = 1;
    static const int   cFirstMessageMsg   = 2;
-   static const int   cStatusRequestMsg  = 3;
-   static const int   cStatusResponseMsg = 4;
+   static const int   cEchoRequestMsg  = 3;
+   static const int   cEchoResponseMsg = 4;
    static const int   cDataMsg           = 5;
 
 };
@@ -106,7 +106,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-class StatusRequestMsg : public BaseMsg
+class EchoRequestMsg : public BaseMsg
 {
 public:
 
@@ -129,7 +129,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   StatusRequestMsg();
+   EchoRequestMsg();
    void copyToFrom (Ris::ByteBuffer* aBuffer);
 };
 
@@ -137,7 +137,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-class StatusResponseMsg : public BaseMsg
+class EchoResponseMsg : public BaseMsg
 {
 public:
 
@@ -160,7 +160,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   StatusResponseMsg();
+   EchoResponseMsg();
    void copyToFrom(Ris::ByteBuffer* aBuffer);
 };
 

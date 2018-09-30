@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 
-#include "procoSettings.h"
+#include "procoUdpSettings.h"
 #include "procoMsg.h"
 #include "procoMsgHelper.h"
 
@@ -190,7 +190,7 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gSettings.show();
+   ProtoComm::gUdpSettings.show();
 }
 
 //******************************************************************************

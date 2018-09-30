@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 
-#include "procoSettings.h"
+#include "procoTcpSettings.h"
 #include "procoMsg.h"
 
 #include "procoServerThread.h"
@@ -101,7 +101,7 @@ void CmdLineExec::executeShutdown (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gSettings.show();
+   ProtoComm::gTcpSettings.show();
 }
 
 //******************************************************************************

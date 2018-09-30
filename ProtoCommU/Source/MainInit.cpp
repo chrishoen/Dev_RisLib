@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
-#include "procoSettings.h"
+#include "procoUdpSettings.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -46,13 +46,13 @@ void main_initialize(int argc,char** argv)
 
    if (argc == 2)
    {
-      ProtoComm::gSettings.readSection(argv[1]);
-      ProtoComm::gSettings.show();
+      ProtoComm::gUdpSettings.readSection(argv[1]);
+      ProtoComm::gUdpSettings.show();
    }
    else
    {
-      ProtoComm::gSettings.readSection("UdpPeer1");
-      ProtoComm::gSettings.show();
+      ProtoComm::gUdpSettings.readSection("UdpPeer1");
+      ProtoComm::gUdpSettings.show();
    }
 
    //***************************************************************************

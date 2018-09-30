@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "procoMsgHelper.h"
-#include "procoSettings.h"
+#include "procoSerialSettings.h"
 
 #define  _PROCOSERIALTHREAD_CPP_
 #include "procoSerialThread.h"
@@ -67,9 +67,9 @@ void SerialThread::threadInitFunction()
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
 
-   tSerialSettings.setPortDevice(gSettings.mSerialPortDevice);
-   tSerialSettings.setPortSetup(gSettings.mSerialPortSetup);
-   tSerialSettings.mRxTimeout     = gSettings.mSerialRxTimeout;
+   tSerialSettings.setPortDevice(gSerialSettings.mSerialPortDevice);
+   tSerialSettings.setPortSetup(gSerialSettings.mSerialPortSetup);
+   tSerialSettings.mRxTimeout     = gSerialSettings.mSerialRxTimeout;
    tSerialSettings.mMonkeyCreator = &mMonkeyCreator;
    tSerialSettings.mRxMsgQCall    = mRxMsgQCall;
 

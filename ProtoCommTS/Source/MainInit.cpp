@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
-#include "procoSettings.h"
+#include "procoTcpSettings.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -44,8 +44,8 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Read parameters files.
 
-   ProtoComm::gSettings.readSection("TcpServer");
-   ProtoComm::gSettings.show();
+   ProtoComm::gTcpSettings.readSection("TcpServer");
+   ProtoComm::gTcpSettings.show();
 
    //***************************************************************************
    //***************************************************************************

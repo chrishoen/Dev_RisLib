@@ -3,7 +3,7 @@
 
 #include "risThreadsProcess.h"
 
-#include "procoSettings.h"
+#include "procoSerialSettings.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -61,8 +61,8 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Read parameters files.
 
-   ProtoComm::gSettings.reset();
-   ProtoComm::gSettings.readSection("default");
+   ProtoComm::gSerialSettings.reset();
+   ProtoComm::gSerialSettings.readSection("default");
 
    //***************************************************************************
    //***************************************************************************

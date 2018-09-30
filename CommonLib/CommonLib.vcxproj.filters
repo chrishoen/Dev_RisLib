@@ -19,7 +19,13 @@
     <ClCompile Include="Source\procoMsgHelper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\procoSettings.cpp">
+    <ClCompile Include="Source\procoSerialSettings.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\procoTcpSettings.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\procoUdpSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,7 +42,13 @@
     <ClInclude Include="Source\procoMsgHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\procoSettings.h">
+    <ClInclude Include="Source\procoSerialSettings.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\procoTcpSettings.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\procoUdpSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

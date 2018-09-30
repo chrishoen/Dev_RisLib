@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "risSockets.h"
-#include "procoSettings.h"
+#include "procoUdpSettings.h"
 #include "procoMsgHelper.h"
 
 #define  _PROCONETWORKTHREAD_CPP_
@@ -34,7 +34,7 @@ NetworkThread::NetworkThread()
 
    // Initialize variables.
    mUdpMsgThread = 0;
-   mMonkeyCreator.configure(gSettings.mMyAppNumber);
+   mMonkeyCreator.configure(gUdpSettings.mMyAppNumber);
    mTPFlag = false;
    mStatusCount1=0;
    mStatusCount2=0;
@@ -61,8 +61,8 @@ void NetworkThread::threadInitFunction()
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setLocalIp  (gSettings.mMyUdpIPAddress,    gSettings.mMyUdpPort);
-   tSettings.setRemoteIp (gSettings.mOtherUdpIPAddress, gSettings.mOtherUdpPort);
+   tSettings.setLocalIp  (gUdpSettings.mMyUdpIPAddress,    gUdpSettings.mMyUdpPort);
+   tSettings.setRemoteIp (gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mRxMsgQCall = mRxMsgQCall;
 

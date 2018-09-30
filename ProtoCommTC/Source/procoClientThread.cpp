@@ -6,7 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "procoSettings.h"
+#include "procoTcpSettings.h"
 
 #define  _PROCOCLIENTTHREAD_CPP_
 #include "procoClientThread.h"
@@ -33,7 +33,7 @@ ClientThread::ClientThread()
 
    // Initialize variables.
    mTcpMsgClientThread = 0;
-   mMonkeyCreator.configure(gSettings.mMyAppNumber);
+   mMonkeyCreator.configure(gTcpSettings.mMyAppNumber);
    mTPFlag = false;
    mStatusCount1 = 0;
    mStatusCount2 = 0;
@@ -56,7 +56,7 @@ void ClientThread::threadInitFunction()
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setRemoteIp(gSettings.mTcpServerIPAddress, gSettings.mTcpServerPort);
+   tSettings.setRemoteIp(gTcpSettings.mTcpServerIPAddress, gTcpSettings.mTcpServerPort);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;

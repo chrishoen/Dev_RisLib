@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
-#include "procoSettings.h"
+#include "procoTcpSettings.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -46,13 +46,13 @@ void main_initialize(int argc,char** argv)
 
    if (argc == 2)
    {
-      ProtoComm::gSettings.readSection(argv[1]);
-      ProtoComm::gSettings.show();
+      ProtoComm::gTcpSettings.readSection(argv[1]);
+      ProtoComm::gTcpSettings.show();
    }
    else
    {
-      ProtoComm::gSettings.readSection("TcpClient1");
-      ProtoComm::gSettings.show();
+      ProtoComm::gTcpSettings.readSection("TcpClient1");
+      ProtoComm::gTcpSettings.show();
    }
 
    //***************************************************************************

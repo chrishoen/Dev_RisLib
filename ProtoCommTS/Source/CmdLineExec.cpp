@@ -3,6 +3,7 @@
 
 #include "procoTcpSettings.h"
 #include "procoMsg.h"
+#include "procoMsgHelper.h"
 
 #include "procoServerThread.h"
 
@@ -30,6 +31,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TP"))        gServerThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("TX"))        executeTx(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
+   if (aCmd->isCmd("DATA"))      executeData(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("T1"))        executeTest1(aCmd);
@@ -59,6 +61,18 @@ void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
    ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
    tMsg->mCode1 = 777;
    gServerThread->sendMsg(tSessionIndex,tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
+{
+   ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+   MsgHelper::initialize(tMsg);
+
+   gServerThread->sendMsg(0,tMsg);
 }
 
 //******************************************************************************

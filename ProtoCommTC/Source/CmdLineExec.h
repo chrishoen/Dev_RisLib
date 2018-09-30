@@ -17,6 +17,7 @@ public:
 
   void executeTx        (Ris::CmdLineCmd* aCmd);
   void executeEcho      (Ris::CmdLineCmd* aCmd);
+  void executeData      (Ris::CmdLineCmd* aCmd);
   void executeGo1       (Ris::CmdLineCmd* aCmd);
   void executeGo2       (Ris::CmdLineCmd* aCmd);
   void executeTest1     (Ris::CmdLineCmd* aCmd);

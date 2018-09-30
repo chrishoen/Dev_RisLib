@@ -49,6 +49,12 @@ public:
 
    // Tcp client thread, this manages session connections and message
    // transmission and reception via a tcp message socket.
+
+
+   // Tcp client message socket child thread. It provides the thread execution
+   // context for a tcp message socket and uses it to provide message
+   // communication. It interfaces to this thread via the session and receive
+   // message qcall callbacks.
    Ris::Net::TcpMsgClientThread* mTcpMsgClientThread;
 
    // Message monkey creator used by mTcpClientThread.
@@ -84,12 +90,17 @@ public:
    //***************************************************************************
    // Methods. Thread base class overloads:
 
-   // threadInitFunction starts the child thread.
-   // threadExitFunction shuts down the child thread.
-   // executeOnTimer sends a periodic status message.
-   void threadInitFunction()override;
-   void threadExitFunction()override;
-   void executeOnTimer(int)override;
+   // Thread init function. This is called by the base class immediately 
+   // after the thread starts running. It starts the child thread.
+   void threadInitFunction() override;
+
+   // Thread exit function. This is called by the base class immediately
+   // before the thread is terminated. It shuts down the child thread.
+   void threadExitFunction() override;
+
+   // Execute periodically. This is called by the base class timer. It
+   // sends an echo request message.
+   void executeOnTimer(int aTimerCount) override;
 
    //***************************************************************************
    //***************************************************************************
@@ -134,7 +145,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a message.
+   // Send a message via the child thread.
    void sendMsg(ProtoComm::BaseMsg* aMsg);
    void sendTestMsg();
 };

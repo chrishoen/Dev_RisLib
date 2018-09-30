@@ -48,7 +48,8 @@ ServerThread::~ServerThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread init function, base class overload.
+// Thread init function. This is called by the base class immediately 
+// after the thread starts running. It starts the child thread.
 
 void ServerThread::threadInitFunction()
 {
@@ -73,7 +74,8 @@ void ServerThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread exit function, base class overload.
+// Thread exit function. This is called by the base class immediately
+// before the thread is terminated. It shuts down the child thread.
 
 void  ServerThread::threadExitFunction()
 {
@@ -244,7 +246,8 @@ void ServerThread::sendTestMsg(int aAppNumber)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// executeOnTimer, base class overload.
+// Execute periodically. This is called by the base class timer. It
+// sends an echo request message.
 
 void ServerThread::executeOnTimer(int aTimerCount)
 {

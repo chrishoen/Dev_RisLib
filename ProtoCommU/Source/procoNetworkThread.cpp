@@ -48,7 +48,8 @@ NetworkThread::~NetworkThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread init function, base class overload.
+// Thread init function. This is called by the base class immediately 
+// after the thread starts running. It starts the child thread.
 
 void NetworkThread::threadInitFunction()
 {
@@ -191,7 +192,8 @@ void NetworkThread::sendTestMsg()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Periodic timer execution, base class overload.
+// Execute periodically. This is called by the base class timer. It
+// sends an echo request message.
 
 void NetworkThread::executeOnTimer(int aTimerCount)
 {

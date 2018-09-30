@@ -99,14 +99,12 @@ public:
    //***************************************************************************
    // Methods. Session qcall.
 
-   // QCall registered to the mTcpMsgThread child thread. It is invoked when
+   // qcall registered to the mTcpMsgThread child thread. It is invoked when
    // a session is established or disestablished (when a client connects or
    // disconnects). 
    Ris::Net::TcpMsgServerThread::SessionQCall mSessionQCall;
 
-   // Associated QCall methods. It maintains session state variables. When
-   // a connection is established it sends a FirstMessage to the server to
-   // inform it of it's identity.
+   // Maintain the session state list. This is bound to the qcall.
    void executeSession(int aSessionIndex, bool aConnected);
 
    //***************************************************************************
@@ -114,12 +112,12 @@ public:
    //***************************************************************************
    // Methods. Receive message qcall.
 
-   // QCall registered to the mTcpMsgThread child thread. It is invoked when
+   // qcall registered to the mTcpMsgThread child thread. It is invoked when
    // a message is received. It process the received messages.
    Ris::Net::TcpMsgServerThread::RxMsgQCall mRxMsgQCall;
 
-   // Associated QCall method. It calls one of the specific receive message
-   // handlers.
+   // Call one of the specific receive message handlers. This is bound to the
+   // qcall.
    void executeRxMsg(int aSessionIndex,Ris::ByteContent* aMsg);
 
    //***************************************************************************

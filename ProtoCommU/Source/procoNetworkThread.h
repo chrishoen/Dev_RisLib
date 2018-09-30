@@ -86,12 +86,12 @@ public:
    //***************************************************************************
    // Methods. Receive message qcall.
 
-   // QCall registered to the mUdpMsgThread child thread. It is invoked when
+   // qcall registered to the mUdpMsgThread child thread. It is invoked when
    // a message is received. It process the received messages.
    Ris::Net::UdpMsgThread::RxMsgQCall mRxMsgQCall;
 
-   // Associated QCall method. It calls one of the specific receive message
-   // handlers.
+   // Call one of the specific receive message handlers. This is bound to the
+   // qcall.
    void executeRxMsg (Ris::ByteContent* aMsg);
 
    //***************************************************************************

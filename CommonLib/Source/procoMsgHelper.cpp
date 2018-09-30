@@ -46,12 +46,13 @@ void MsgHelper::show(FirstMessageMsg* aMsg)
 //****************************************************************************
 //****************************************************************************
 
-void MsgHelper::initialize(EchoRequestMsg* aMsg)
+void MsgHelper::initialize(EchoRequestMsg* aMsg,int aNumWords)
 {
    aMsg->mCode1 = 301;
    aMsg->mCode2 = 302;
    aMsg->mCode3 = 303;
    aMsg->mCode4 = 304;
+   aMsg->mNumWords = aNumWords;
 }
 
 void MsgHelper::show(EchoRequestMsg* aMsg)

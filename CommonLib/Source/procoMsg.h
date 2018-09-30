@@ -120,8 +120,8 @@ public:
    int    mCode3;
    int    mCode4;
 
-   enum {MaxWords=1000};
-   int  mNumOfWords;
+   enum {MaxWords=10000};
+   int  mNumWords;
    int  mWords[MaxWords];
 
    //***************************************************************************
@@ -152,7 +152,7 @@ public:
    int   mCode4;
 
    enum { MaxWords = 1000 };
-   int   mNumOfWords;
+   int   mNumWords;
    int   mWords[MaxWords];
 
    //***************************************************************************

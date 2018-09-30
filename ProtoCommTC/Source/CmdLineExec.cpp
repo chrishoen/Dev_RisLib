@@ -54,8 +54,11 @@ void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, 0);
+   int tNumWords = aCmd->argInt(1);
+
    ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-   tMsg->mCode1 = 777;
+   MsgHelper::initialize(tMsg, tNumWords);
    gClientThread->sendMsg(tMsg);
 }
 

@@ -133,10 +133,11 @@ void NetworkThread::processRxMsg(TestMsg* aMsg)
 
 void NetworkThread::processRxMsg(EchoRequestMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoRequestMsg %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoRequestMsg %d %d", aMsg->mCode1, aMsg->mNumWords);
 
    EchoResponseMsg* tTxMsg = new EchoResponseMsg;
    tTxMsg->mCode1 = aMsg->mCode1;
+   tTxMsg->mNumWords = aMsg->mNumWords;
    sendMsg(tTxMsg);
 
    delete aMsg;
@@ -149,7 +150,7 @@ void NetworkThread::processRxMsg(EchoRequestMsg* aMsg)
 
 void NetworkThread::processRxMsg(EchoResponseMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoResponseMsg %d", aMsg->mCode1);
+   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoResponseMsg %d %d", aMsg->mCode1, aMsg->mNumWords);
    delete aMsg;
 }
 

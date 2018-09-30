@@ -56,11 +56,13 @@ void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 0);
+   aCmd->setArgDefault(2, 0);
    int tSessionIndex = aCmd->argInt(1);
+   int tNumWords = aCmd->argInt(2);
 
    ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-   tMsg->mCode1 = 777;
-   gServerThread->sendMsg(tSessionIndex,tMsg);
+   MsgHelper::initialize(tMsg, tNumWords);
+   gServerThread->sendMsg(tSessionIndex, tMsg);
 }
 
 //******************************************************************************

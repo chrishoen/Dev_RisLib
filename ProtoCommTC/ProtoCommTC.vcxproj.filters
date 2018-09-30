@@ -16,9 +16,6 @@
     <ClCompile Include="Source\procoClientThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\procoServerThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -31,9 +28,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\procoClientThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\procoServerThread.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">

@@ -44,23 +44,15 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Read parameters files.
 
-   if (argc == 2)
-   {
-      ProtoComm::gSettings.readSection(argv[1]);
-      ProtoComm::gSettings.show();
-   }
-   else
-   {
-      ProtoComm::gSettings.readSection("TcpClient1");
-      ProtoComm::gSettings.show();
-   }
+   ProtoComm::gSettings.readSection("TcpServer");
+   ProtoComm::gSettings.show();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Done.
 
-   Prn::print(0, "ProtoCommT*******************************************BEGIN %d %s", argc, argv[1]);
+   Prn::print(0, "ProtoCommTS Server***********************************BEGIN");
 }
 
 //******************************************************************************
@@ -70,7 +62,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoCommT*******************************************END");
+   Prn::print(0,"ProtoCommTS Server***********************************END");
 
    // Close print.
    Prn::finalizePrint();

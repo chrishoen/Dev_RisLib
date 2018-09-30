@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{787f40df-748e-4176-8496-877545d33f6d}</ProjectGuid>
-    <RootNamespace>ProtoCommT</RootNamespace>
+    <ProjectGuid>{ca9d50a4-8244-4d5c-bcac-af99c783ad9e}</ProjectGuid>
+    <RootNamespace>ProtoCommTS</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -180,7 +180,6 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\procoClientThread.cpp" />
     <ClCompile Include="Source\procoServerThread.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -190,7 +189,6 @@
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\procoClientThread.h" />
     <ClInclude Include="Source\procoServerThread.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>

@@ -5,7 +5,6 @@
 
 #include "procoSettings.h"
 #include "procoClientThread.h"
-#include "procoServerThread.h"
 
 #include "MainInit.h"
 
@@ -27,17 +26,8 @@ int main(int argc, char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   switch (ProtoComm::gSettings.mMyAppRole)
-   {
-      case ProtoComm::Settings::cTcpServer:
-         ProtoComm::gServerThread = new ProtoComm::ServerThread;
-         ProtoComm::gServerThread->launchThread();
-         break;
-      case ProtoComm::Settings::cTcpClient:
-         ProtoComm::gClientThread = new ProtoComm::ClientThread;
-         ProtoComm::gClientThread->launchThread();
-         break;
-   }
+   ProtoComm::gClientThread = new ProtoComm::ClientThread;
+   ProtoComm::gClientThread->launchThread();
       
    //***************************************************************************
    //***************************************************************************
@@ -53,17 +43,8 @@ int main(int argc, char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   switch (ProtoComm::gSettings.mMyAppRole)
-   {
-      case ProtoComm::Settings::cTcpServer:
-         ProtoComm::gServerThread->shutdownThread();
-         delete ProtoComm::gServerThread;
-         break;
-      case ProtoComm::Settings::cTcpClient:
-         ProtoComm::gClientThread->shutdownThread();
-         delete ProtoComm::gClientThread;
-         break;
-   }
+   ProtoComm::gClientThread->shutdownThread();
+   delete ProtoComm::gClientThread;
       
    //***************************************************************************
    //***************************************************************************
@@ -74,3 +55,7 @@ int main(int argc, char** argv)
 
    return 0;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************

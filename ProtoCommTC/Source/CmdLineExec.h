@@ -20,7 +20,6 @@ public:
   void executeGo1       (Ris::CmdLineCmd* aCmd);
   void executeGo2       (Ris::CmdLineCmd* aCmd);
   void executeTest1     (Ris::CmdLineCmd* aCmd);
-  void executePeriodic  (Ris::CmdLineCmd* aCmd);
   void executeParms     (Ris::CmdLineCmd* aCmd);
 };
 

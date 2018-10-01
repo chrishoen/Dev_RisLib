@@ -29,22 +29,35 @@ HANDLE rCreatePrintView(int aConsole);
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Regional variables
+// Constants.
 
 static const int cMaxPrintStringSize = 400;
-static const int cMaxConsoles = 8;
+static const int cMaxConsoles = PrintFilterTable::cMaxConsoles;
 
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Regional variables.
+
+// Suppress any prints that do not have a filter of zero.
 bool rSuppressFlag;
 
-bool                        rConsoleFlag   [cMaxConsoles];
+// If true then a print view console is used.
+bool rConsoleFlag [cMaxConsoles];
+
+// The socket for the print view console.
 Ris::Net::UdpTxStringSocket rConsoleSocket[cMaxConsoles];
-int                         rConsolePort[cMaxConsoles];
-HANDLE                      rConsoleHandle [cMaxConsoles];
+
+// The port number for the print view console.
+int rConsolePort[cMaxConsoles];
+
+// The process handle for the print view console.
+HANDLE rConsoleHandle [cMaxConsoles];
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// reset variables.
+// Reset variables.
 
 void resetVariables()
 {
@@ -59,18 +72,26 @@ void resetVariables()
    // rConsoleFlag[0] = true;
 }
 
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Reset print facility.
+
 void resetPrint()
 {
+   // Read from settings file.
    gPrintSettings.reset();
    gPrintSettings.readSection("default");
 
+   // Reset variables.
    resetVariables();
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// 
+// Set console flag. A print view console for the index will be created and
+// used.
 
 void useConsole(int aConsole)
 {
@@ -127,17 +148,22 @@ void finalizePrint()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Set filter table entry
+// Set a filter in the filter table.
+//
+// aFilter is the index of the filter.
+// aEnable is the value stored in the table at the filter index.
+// aConsole is the console index stored in the table at the filter index.
 
-void setFilter(int aFilter, bool aEnablePrint, int aConsole)
+void setFilter(int aFilter, bool aEnable, int aConsole)
 {
-   gPrintFilterTable.setFilter(aFilter,aEnablePrint, aConsole);
+   gPrintFilterTable.setFilter(aFilter,aEnable, aConsole);
 }   	
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Print
+// Filtered print, if the corresponding entry in the filter table is true
+// then the print is executed.
 
 void print(int aFilter, const char* aFormat, ...)
 {
@@ -197,7 +223,7 @@ void print(int aFilter, const char* aFormat, ...)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Suppress.
+// Suppress any prints that do not have a filter of zero.
 
 void suppressPrint()
 {

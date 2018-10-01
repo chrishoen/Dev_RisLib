@@ -1,13 +1,6 @@
 #pragma once
 
 /*==============================================================================
-
-LEGACY. THIS IS BEING PHASED OUT
-LEGACY. THIS IS BEING PHASED OUT
-LEGACY. THIS IS BEING PHASED OUT
-LEGACY. THIS IS BEING PHASED OUT
-LEGACY. THIS IS BEING PHASED OUT
-
 Command line file processor
 
 This processes text files that contain a sequence of command lines.
@@ -23,6 +16,8 @@ line executive to it.
 #include "risCmdLineExec.h"
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This class is a command line processor for text files that contain a sequence
 // of command lines. It opens a command line file and applies an executive
 // to process all of the commands in the file, one at a time, as if they were
@@ -32,35 +27,41 @@ line executive to it.
 namespace Ris
 {
 
-class  CmdLineFile
+class CmdLineFile
 {
 public:
-   //---------------------------------------------------------------------------
-   // Open the command line file
-   bool open      (char* aFilename);
-
-   // Apply a command line executive to process all of the command lines in the
-   // file
-   void execute   (BaseCmdLineExec* aExec);
-
-   // Close the command line file
-   void close     ();
-
-   //---------------------------------------------------------------------------
-   // Members
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members. 
 
    // File handle
    FILE*  mFile;
 
-   // Current line number
+   // Current line number.
    int  mLineNumber;
 
    // Nested anchor. This is used to manage files that contain nested records,
    // which are processed by nested executives.
    CmdLineExecNestedAnchor mNestedAnchor;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. 
+
+   // Open the command line file.
+   bool open (char* aFilename);
+
+   // Apply a command line executive to each of the command lines in the file.
+   void execute (BaseCmdLineExec* aExec);
+
+   // Close the command line file/
+   void close ();
 };
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 }//namespace
 

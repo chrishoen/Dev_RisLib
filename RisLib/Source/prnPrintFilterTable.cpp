@@ -38,7 +38,7 @@ void PrintFilterTable::reset()
 // Set a filter in the filter table.
 //
 // aFilter is the index of the filter.
-// aEnablePrint is the value stored in the table at the filter index.
+// aEnable is the value stored in the table at the filter index.
 // aConsole is the console index stored in the table at the filter index.
 
 void PrintFilterTable::setFilter(int aFilter, bool aEnable, int aConsole)

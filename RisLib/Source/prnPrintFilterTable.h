@@ -33,7 +33,7 @@ public:
    static const int cFilterTableSize = 300;
 
    // Max number of print view consoles.
-   static const int cMaxNumConsoles = 5;
+   static const int cMaxConsoles = 5;
 
    //***************************************************************************
    //***************************************************************************
@@ -44,8 +44,8 @@ public:
    bool mEnable[cFilterTableSize];
 
    // Array of print consoles numbers for each filter. If zero then stdout is
-   // used for the console to print to. If nonzero then it is the print view
-   // console number.
+   // used for the console to print to. If nonzero the print view console with
+   // that number is printed to.
    int  mConsole[cFilterTableSize];
 
    //***************************************************************************
@@ -65,9 +65,9 @@ public:
    // Set a filter in the filter table.
    //
    // aFilter is the index of the filter.
-   // aEnablePrint is the value stored in the table at the filter index.
+   // aEnable is the value stored in the table at the filter index.
    // aConsole is the console index stored in the table at the filter index.
-   void setFilter(int aFilter, bool aEnablePrint, int aConsole = 0);
+   void setFilter(int aFilter, bool aEnable, int aConsole = 0);
 };
 
 //******************************************************************************

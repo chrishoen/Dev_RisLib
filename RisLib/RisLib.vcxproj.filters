@@ -209,9 +209,6 @@
     <ClInclude Include="Source\risContainers2.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risLFIndex.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risLMPacketQueue.h">
       <Filter>Source</Filter>
     </ClInclude>

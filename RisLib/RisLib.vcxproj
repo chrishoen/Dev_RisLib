@@ -152,7 +152,6 @@
     <ClInclude Include="Source\risCmdLineTables.h" />
     <ClInclude Include="Source\risContainers.h" />
     <ClInclude Include="Source\risContainers2.h" />
-    <ClInclude Include="Source\risLFIndex.h" />
     <ClInclude Include="Source\risLMPacketQueue.h" />
     <ClInclude Include="Source\risLogic.h" />
     <ClInclude Include="Source\risMemoryPtr.h" />

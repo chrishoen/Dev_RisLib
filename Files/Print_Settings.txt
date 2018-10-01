@@ -1,0 +1,8 @@
+SectionBegin Default
+
+   // UDP address of the host that print view consoles run on.
+   // 127.0.0.1 is the local address.
+   PrintViewHostIPAddress   127.0.0.1   
+
+SectionEnd
+

@@ -5,7 +5,6 @@
 SectionBegin TcpServer
 
    MyAppNumber       101 
-   MyAppRole         TcpServer 
    TcpServer         0.0.0.0 55001
    TcpMaxSessions    4
 
@@ -15,7 +14,6 @@ SectionEnd
 SectionBegin TcpClient1
 
    MyAppNumber       201 
-   MyAppRole         TcpClient 
    TcpServer         127.0.0.1 55001
 
 SectionEnd

@@ -69,20 +69,19 @@ EchoRequestMsg::EchoRequestMsg ()
    mCode3 = 103;
    mCode4 = 104;
 
-   mNumWords=0;
-   mNumWords=MaxWords;
+   mNumWords = 0;
 } 
 
 void EchoRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
 {
    mHeader.headerCopyToFrom(aBuffer,this);
 
-   aBuffer->copy        (& mCode1  );
-   aBuffer->copy        (& mCode2  );
-   aBuffer->copy        (& mCode3  );
-   aBuffer->copy        (& mCode4  );
+   aBuffer->copy        (& mCode1    );
+   aBuffer->copy        (& mCode2    );
+   aBuffer->copy        (& mCode3    );
+   aBuffer->copy        (& mCode4    );
 
-   aBuffer->copy        (& mNumWords  );
+   aBuffer->copy        (& mNumWords );
    for (int i=0;i<mNumWords;i++)
    {
       aBuffer->copy     (& mWords[i] );

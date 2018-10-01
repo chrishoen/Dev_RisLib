@@ -252,11 +252,12 @@ void ServerThread::sendTestMsg(int aAppNumber)
 void ServerThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
-   Prn::print(Prn::ThreadRun3, "ServerThread::executeOnTimer %d", mPeriodicCount++);
+   Prn::print(Prn::ThreadRun3, "ServerThread::executeOnTimer %d", aTimerCount);
 
    // Send a status request message.
    EchoRequestMsg* tMsg = new EchoRequestMsg;
    tMsg->mCode1 = aTimerCount;
+   tMsg->mNumWords = 1000;
    sendMsg(0,tMsg);
 }
 

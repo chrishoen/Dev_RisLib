@@ -43,8 +43,8 @@ public:
    static const int   cUnspecifiedMsg    = 0;
    static const int   cTestMsg           = 1;
    static const int   cFirstMessageMsg   = 2;
-   static const int   cEchoRequestMsg  = 3;
-   static const int   cEchoResponseMsg = 4;
+   static const int   cEchoRequestMsg    = 3;
+   static const int   cEchoResponseMsg   = 4;
    static const int   cDataMsg           = 5;
 
 };
@@ -120,9 +120,9 @@ public:
    int    mCode3;
    int    mCode4;
 
-   enum {MaxWords=10000};
+   static const int cMaxWords=10000;
    int  mNumWords;
-   int  mWords[MaxWords];
+   int  mWords[cMaxWords];
 
    //***************************************************************************
    //***************************************************************************

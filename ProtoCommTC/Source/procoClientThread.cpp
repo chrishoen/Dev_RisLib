@@ -236,6 +236,7 @@ void ClientThread::executeOnTimer(int aTimerCount)
    // Send a status request message.
    EchoRequestMsg* tMsg = new EchoRequestMsg;
    tMsg->mCode1 = aTimerCount;
+   tMsg->mNumWords = 1000;
    sendMsg(tMsg);
 }
 

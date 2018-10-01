@@ -47,7 +47,7 @@ namespace ProtoComm
 namespace MsgDefT
 {
    // Use this for a buffer size for these messages.
-   static const int cMsgBufferSize = 20000;
+   static const int cMsgBufferSize = 100000;
 
 }//namespace
 

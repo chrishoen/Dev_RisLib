@@ -19,7 +19,7 @@ filter index are stored in the filter table.
 //******************************************************************************
 //******************************************************************************
 
-#include "prnPrintSettings.h"
+#include "prnPrintFilters.h"
 
 namespace Prn
 {
@@ -33,21 +33,11 @@ namespace Prn
 // The Initialize method does the initialization.
 // The Finalize method shuts down any PrintView processes that were launched.
 //
-// aSettingsFileName is read from the default settings directory. 
-// aSettingsFilePath is read from an absolute filepath. 
-//
-// aSettingsFileSection is the settings file section that each application
-// extracts its settings from.
-//
-// aConsole specifies a print view console to use. If it is greater
+// useConsole specifies a print view console to use. If it is greater
 // than zero then additional PrintView console applications are launched
 // and prints are redirected to them via sockets.
 
 void resetPrint              ();
-void useSettingsFileDefault  ();
-void useSettingsFileName     (char* aSettingsFileName);
-void useSettingsFilePath     (char* aSettingsFilePath);
-void useSettingsFileSection  (char* aSettingsFileSection);
 void useConsole              (int   aConsole);
 void initializePrint         ();
 void finalizePrint           ();

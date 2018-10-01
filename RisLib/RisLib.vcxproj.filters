@@ -147,6 +147,9 @@
     <ClCompile Include="Source\risNetTcpServerHubSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\prnPrintFilterTable.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">
@@ -321,6 +324,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetTcpServerHubSocket.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\prnPrintFilters.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\prnPrintFilterTable.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

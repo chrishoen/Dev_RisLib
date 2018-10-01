@@ -1,8 +1,8 @@
 SectionBegin Default
 
-   // UDP address of the host that print view consoles run on.
-   // 127.0.0.1 is the local address.
-   PrintViewHostIPAddress   127.0.0.1   
+   // UDP address and port of the host that print view consoles run on.
+   // Default is 127.0.0.1 58001.
+   PrintViewHostIPAddress   127.0.0.1   58001
 
 SectionEnd
 

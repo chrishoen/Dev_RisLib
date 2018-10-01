@@ -135,6 +135,8 @@
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
     <ClInclude Include="Source\prnPrint.h" />
+    <ClInclude Include="Source\prnPrintFilters.h" />
+    <ClInclude Include="Source\prnPrintFilterTable.h" />
     <ClInclude Include="Source\prnPrintSettings.h" />
     <ClInclude Include="Source\risAlphaDir.h" />
     <ClInclude Include="Source\risByteBuffer.h" />
@@ -193,6 +195,7 @@
   <ItemGroup>
     <ClCompile Include="Source\logFiles.cpp" />
     <ClCompile Include="Source\my_functions.cpp" />
+    <ClCompile Include="Source\prnPrintFilterTable.cpp" />
     <ClCompile Include="Source\prnPrintSettings.cpp" />
     <ClCompile Include="Source\prnPrint_win.cpp" />
     <ClCompile Include="Source\risAlphaDir_win.cpp" />

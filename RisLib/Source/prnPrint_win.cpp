@@ -15,7 +15,10 @@ Print utility
 #include "risPortableCalls.h"
 #include "risNetPortDef.h"
 #include "risNetUdpStringSocket.h"
+#include "risNetSettings.h"
 
+#include "prnPrintSettings.h"
+#include "prnPrintFilterTable.h"
 #include "prnPrint.h"
 
 namespace Prn
@@ -29,38 +32,31 @@ HANDLE rCreatePrintView(int aConsole);
 // Regional variables
 
 static const int cMaxPrintStringSize = 400;
-static const int cMaxNameSize = 200;
+//static const int cMaxNameSize = 200;
 static const int cMaxConsoles = 8;
 
-bool    rUseSettingsFile;
-char    rSettingsFilePath    [cMaxNameSize];
-char    rSettingsFileSection [cMaxNameSize];
-bool    rSuppressFlag;
+bool rSuppressFlag;
 
 bool                        rConsoleFlag   [cMaxConsoles];
-Ris::Net::UdpTxStringSocket rConsoleSocket [cMaxConsoles];
-int                         rConsolePort   [cMaxConsoles];
+Ris::Net::UdpTxStringSocket rConsoleSocket[cMaxConsoles];
+int                         rConsolePort[cMaxConsoles];
 HANDLE                      rConsoleHandle [cMaxConsoles];
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Initialize settings to defaults
+// reset variables.
 
 void resetPrint()
 {
-   rUseSettingsFile = false;
-   rSettingsFilePath[0]=0;
-   strcpy(rSettingsFileSection, "DEFAULT");
-   rSuppressFlag=true;
+   gPrintSettings.readSection("default");
 
-   char tBuffer[400];
-   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "prnPrintSettings.txt"));
+   rSuppressFlag=true;
 
    for (int i=0;i<cMaxConsoles;i++)
    {
       rConsoleFlag   [i] = false;
-      rConsolePort   [i] = Ris::Net::PortDef::cPrintView + i;
+      rConsolePort   [i] = gPrintSettings.mPrintViewHostIPPort + i;
       rConsoleHandle [i] = 0;
    }
 // rConsoleFlag[0] = true;
@@ -69,34 +65,7 @@ void resetPrint()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Override defaults
-
-void useSettingsFileDefault()
-{
-   char tBuffer[400];
-   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "prnPrintSettings.txt"));
-
-   rUseSettingsFile=true;
-}
-
-void useSettingsFileName(char* aSettingsFileName)
-{
-   char tBuffer[400];
-   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aSettingsFileName));
-
-   rUseSettingsFile=true;
-}
-
-void useSettingsFilePath(char* aSettingsFilePath)
-{
-   strncpy(rSettingsFilePath,aSettingsFilePath,cMaxNameSize);
-   rUseSettingsFile=true;
-}
-
-void useSettingsFileSection(char*aSettingsFileSection)
-{
-   strncpy(rSettingsFileSection, aSettingsFileSection, cMaxNameSize);
-}
+// 
 
 void useConsole(int aConsole)
 {
@@ -107,32 +76,27 @@ void useConsole(int aConsole)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Initialize
+// Initialize print facility.
 
 void initializePrint()
 {
-   //-----------------------------------------------------
-   // Settings
-
-   if (rUseSettingsFile)
-   {
-      gSettings.initialize(rSettingsFilePath, rSettingsFileSection);
-   }
-
-   //-----------------------------------------------------
-   // Regionals
-
    rSuppressFlag = false;
 
-   //-----------------------------------------------------
-   // Console sockets
-
+   // For each print view console, create a PrintView process
+   // and initialize and configure a socket to send the print to.
    for (int i = 0; i < cMaxConsoles; i++)
    {
       if (rConsoleFlag[i])
       {
-         rConsoleSocket[i].configureLocal(rConsolePort[i]);
+         // Create a process for the PrintView console.
          rConsoleHandle[i] = rCreatePrintView(i);
+         // Create a socket to send to the PrintView console.
+         Ris::Net::Settings tSettings;
+         tSettings.setRemoteIp(
+            gPrintSettings.mPrintViewHostIPAddress,
+            rConsolePort[i]);
+         rConsoleSocket[i].initialize(tSettings);
+         rConsoleSocket[i].configure();
       }
    }
 }
@@ -140,12 +104,11 @@ void initializePrint()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Finalize
+// Finalize the print facility.
+
 void finalizePrint()
 {
-   //-----------------------------------------------------
-   // Terminate PrintView processes that were created 
-
+   // Terminate PrintView processes that were created. 
    for (int i = 1; i < cMaxConsoles; i++)
    {
       if (rConsoleHandle[i] != 0)
@@ -163,7 +126,7 @@ void finalizePrint()
 
 void setFilter(int aFilter, bool aEnablePrint, int aConsole)
 {
-   gSettings.setFilter(aFilter,aEnablePrint, aConsole);
+   gPrintFilterTable.setFilter(aFilter,aEnablePrint, aConsole);
 }   	
 
 //****************************************************************************
@@ -173,28 +136,31 @@ void setFilter(int aFilter, bool aEnablePrint, int aConsole)
 
 void print(int aFilter, const char* aFormat, ...)
 {
-   //-----------------------------------------------------
-   // Guard for print not enabled
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Exit if print not enabled.
 
-   // Test filter table entry
-   if (gSettings.mFilterTable[aFilter] == false) return;
-
-   // Get the console index assigned to the filter
-   int tConsole = gSettings.mConsoleTable[aFilter];
-
-   // If suppressed and the filter is not zero
+   // Exit if suppressed and the filter is not zero.
    if (rSuppressFlag && aFilter != 0) return;
 
-   //-----------------------------------------------------
-   // Print string pointer
+   // Exit if the filter table entry is disabled.
+   if (gPrintFilterTable.mEnable[aFilter] == false) return;
+
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Instantiate a print string buffer and a pointer.
 
    char* tPrintStr = 0;
    char  tPrintBuffer[cMaxPrintStringSize];
    int   tPrintStrSize;
    tPrintStr = &tPrintBuffer[0];
 
-   //-----------------------------------------------------
-   // Do a vsprintf with variable arg list into print string pointer
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Do a vsprintf with variable arg list into print string pointer.
 
    va_list  ArgPtr;
    va_start(ArgPtr, aFormat);
@@ -203,15 +169,22 @@ void print(int aFilter, const char* aFormat, ...)
 
    tPrintStr[tPrintStrSize++] = 0;
 
-   //-----------------------------------------------------
-   // Print the string
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Print the string.
+
+   // Get the console index assigned to the filter.
+   int tConsole = gPrintFilterTable.mConsole[aFilter];
 
    if (tConsole == 0 && !rConsoleFlag[0])
    {
+      // Print to stdout.
       puts(tPrintStr);
    }
    else
    {
+      // Print to the PrintView console.
       rConsoleSocket[tConsole].doSendString(tPrintStr);
    }
 }
@@ -219,7 +192,7 @@ void print(int aFilter, const char* aFormat, ...)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Suppress
+// Suppress.
 
 void suppressPrint()
 {
@@ -239,11 +212,13 @@ void toggleSuppressPrint()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Launch a new process for a PrintView console application
+// Launch a new process for a PrintView console application.
 
 HANDLE rCreatePrintView(int aConsole)
 {
-   //---------------------------------------------------------------------------
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
    // File path.
 
    bool tFileFound = false;
@@ -263,7 +238,9 @@ HANDLE rCreatePrintView(int aConsole)
       return 0;
    }
 
-   //---------------------------------------------------------------------------
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
    // Create process.
 
    STARTUPINFO si;
@@ -311,7 +288,7 @@ HANDLE rCreatePrintView(int aConsole)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize the regional variables when program is loaded
+// Initialize the regional variables when program is loaded.
 
 class PrintResetClass
 {

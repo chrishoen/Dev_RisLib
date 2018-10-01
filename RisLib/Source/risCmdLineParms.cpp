@@ -175,7 +175,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
       }
       else
       {
-         printf("BaseCmdLineParms::file open FAIL101 %s %s\n", mName, tFilePath);
+         printf("BaseCmdLineParms::file open FAIL101 %s %s\n", mDefaultFileName, tFilePath);
          return false;
       }
    }
@@ -245,6 +245,18 @@ bool BaseCmdLineParms::readSection(char* aSection)
    if (portableFilePathExists(tFilePath))
    {
       return readSection(tFilePath,aSection);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Search for file. If found then read it.
+
+   strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, mDefaultFileName));
+
+   if (portableFilePathExists(tFilePath))
+   {
+      return readSection(tFilePath, aSection);
    }
 
    //***************************************************************************

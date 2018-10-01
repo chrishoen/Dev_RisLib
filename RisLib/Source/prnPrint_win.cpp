@@ -32,7 +32,6 @@ HANDLE rCreatePrintView(int aConsole);
 // Regional variables
 
 static const int cMaxPrintStringSize = 400;
-//static const int cMaxNameSize = 200;
 static const int cMaxConsoles = 8;
 
 bool rSuppressFlag;
@@ -47,19 +46,25 @@ HANDLE                      rConsoleHandle [cMaxConsoles];
 //****************************************************************************
 // reset variables.
 
+void resetVariables()
+{
+   rSuppressFlag = true;
+
+   for (int i = 0; i < cMaxConsoles; i++)
+   {
+      rConsoleFlag[i] = false;
+      rConsolePort[i] = gPrintSettings.mPrintViewHostIPPort + i;
+      rConsoleHandle[i] = 0;
+   }
+   // rConsoleFlag[0] = true;
+}
+
 void resetPrint()
 {
+   gPrintSettings.reset();
    gPrintSettings.readSection("default");
 
-   rSuppressFlag=true;
-
-   for (int i=0;i<cMaxConsoles;i++)
-   {
-      rConsoleFlag   [i] = false;
-      rConsolePort   [i] = gPrintSettings.mPrintViewHostIPPort + i;
-      rConsoleHandle [i] = 0;
-   }
-// rConsoleFlag[0] = true;
+   resetVariables();
 }
 
 //****************************************************************************
@@ -295,7 +300,7 @@ class PrintResetClass
 public:
    PrintResetClass()
    {
-      resetPrint();
+      resetVariables();
    }
 };
 

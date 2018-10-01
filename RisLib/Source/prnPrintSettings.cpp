@@ -5,6 +5,7 @@
 #include "stdafx.h"
 
 #include "risCmdLineFile.h"
+#include "risAlphaDir.h"
 #include "risNetPortDef.h"
 
 
@@ -25,12 +26,15 @@ namespace Prn
 
 PrintSettings::PrintSettings()
 {
-   reset();
+   strcpy(mPrintViewHostIPAddress, "none");
+   mPrintViewHostIPPort = 99;
 }
 
 void PrintSettings::reset()
 {
+   char tBuffer[200];
    BaseClass::reset();
+   BaseClass::setExplicitFileDir(Ris::getAlphaFilePath_Settings(tBuffer));
    strcpy(BaseClass::mDefaultFileName, "Print_Settings.txt");
 
    strcpy(mPrintViewHostIPAddress,"127.0.0.1");

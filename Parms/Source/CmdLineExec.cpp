@@ -10,15 +10,20 @@
 using namespace Some;
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 CmdLineExec::CmdLineExec()
 {
 }
-//******************************************************************************
 void CmdLineExec::reset()
 {
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("RESET"))  reset();
@@ -42,10 +47,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    char tBuffer[400];
 
-   Prn::print(0, "AlphaDir         %s", Ris::getAlphaDirectory());
-   Prn::print(0, "Alpha Bin        %s", Ris::getAlphaFilePath_Work(tBuffer));
-   Prn::print(0, "Alpha Bin        %s", Ris::getAlphaFilePath_Work(tBuffer, "BackEnd.cs"));
-
+   Prn::print(0, "AlphaDir            %s", Ris::getAlphaDirectory());
+   Prn::print(0, "Alpha Work          %s", Ris::getAlphaFilePath_Work(tBuffer));
+   Prn::print(0, "Alpha Work          %s", Ris::getAlphaFilePath_Work(tBuffer, "BackEnd.cs"));
 }
 
 //******************************************************************************

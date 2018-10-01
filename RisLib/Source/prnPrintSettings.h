@@ -99,7 +99,7 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _PROCOPRINTSETTINGS_CPP_
+#ifdef _PRNPRINTSETTINGS_CPP_
    PrintSettings gPrintSettings;
 #else
    extern PrintSettings gPrintSettings;

@@ -36,7 +36,8 @@ void BaseCmdLineParms::reset()
    mEnablePrint = true;
    mTargetSection[0] = 0;
    mTargetSectionFlag = true;
-   strcpy(mDefaultFileName,"NO_DEFAULT_FILENAME");
+   strcpy(mName, "NO_NAME");
+   strcpy(mDefaultFileName, "NO_DEFAULT_FILENAME");
    strcpy(mOverrideFileName,"NO_OVERRIDE_FILENAME");
 }
 

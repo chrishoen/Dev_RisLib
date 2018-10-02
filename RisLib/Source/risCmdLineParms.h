@@ -61,6 +61,9 @@ public:
    char mExplicitFileDir[cMaxStringSize];
    bool mUseExplicitFileDir;
 
+   // General name.
+   char mName[cMaxStringSize];
+
    // File name for files that contain default paramters.
    char mDefaultFileName[cMaxStringSize];
 

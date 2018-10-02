@@ -224,7 +224,20 @@ namespace Prn
    static const int  RO3               = 208;
    static const int  RO4               = 209;
 
-//******************************************************************************
+   static const int  FileInit1 = 220;
+   static const int  FileInit2 = 221;
+   static const int  FileInit3 = 222;
+   static const int  FileInit4 = 223;
+   static const int  FileRun1 = 224;
+   static const int  FileRun2 = 225;
+   static const int  FileRun3 = 226;
+   static const int  FileRun4 = 227;
+   static const int  FileError1 = 228;
+   static const int  FileError2 = 229;
+   static const int  FileError3 = 230;
+   static const int  FileError4 = 231;
+
+   //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace

@@ -163,6 +163,19 @@ void setFilter(int aFilter, bool aEnable, int aConsole)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Enable a filter in the filter table.
+//
+// aFilter is the index of the filter.
+// aEnable is the value stored in the table at the filter index.
+
+void enableFilter(int aFilter, bool aEnable)
+{
+   gPrintFilterTable.enableFilter(aFilter, aEnable);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 // Filtered print, if the corresponding entry in the filter table is true
 // then the print is executed.
 

@@ -61,14 +61,14 @@ public:
    char mExplicitFileDir[cMaxStringSize];
    bool mUseExplicitFileDir;
 
-   // Name, used as an identifier.
-   char mName[cMaxStringSize];
-
    // File name for files that contain default paramters.
    char mDefaultFileName[cMaxStringSize];
 
    // File name for files that contain override paramters.
    char mOverrideFileName[cMaxStringSize];
+
+   // Enable error prints.
+   bool mEnablePrint;
 
    //***************************************************************************
    //***************************************************************************

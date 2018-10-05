@@ -26,7 +26,7 @@ ClientThread::ClientThread()
    BaseClass::setThreadPriorityHigh();
 
    // Set base class timer period.
-   BaseClass::mTimerPeriod = 1000;
+   BaseClass::mTimerPeriod = gTcpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.
    mSessionQCall.bind(this, &ClientThread::executeSession);
@@ -236,7 +236,7 @@ void ClientThread::executeOnTimer(int aTimerCount)
    // Send a status request message.
    EchoRequestMsg* tMsg = new EchoRequestMsg;
    tMsg->mCode1 = aTimerCount;
-   tMsg->mNumWords = 1000;
+   tMsg->mNumWords = gTcpSettings.mNumWords;
    sendMsg(tMsg);
 }
 

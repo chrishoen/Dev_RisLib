@@ -38,6 +38,9 @@ void TcpSettings::reset()
    mTcpServerIPAddress[0]=0;
    mTcpServerPort = 0;
    mTcpMaxSessions = 0;
+
+   mThreadTimerPeriod = 0;
+   mNumWords = 0;
 }
 
 //******************************************************************************
@@ -54,6 +57,10 @@ void TcpSettings::show()
 
    printf("TcpServer               %16s : %5d\n", mTcpServerIPAddress, mTcpServerPort);
    printf("TcpMaxSessions          %16d\n",       mTcpMaxSessions);
+
+   printf("\n");
+   printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
+   printf("NumWords                %16d\n", mNumWords);
 
    printf("TcpSettings************************************************\n");
    printf("\n");
@@ -79,6 +86,9 @@ void TcpSettings::execute(Ris::CmdLineCmd* aCmd)
    }
 
    if (aCmd->isCmd("TcpMaxSessions")) mTcpMaxSessions = aCmd->argInt(1);
+
+   if (aCmd->isCmd("ThreadTimerPeriod"))   mThreadTimerPeriod = aCmd->argInt(1);
+   if (aCmd->isCmd("NumWords"))            mNumWords = aCmd->argInt(1);
 }
 
 //******************************************************************************

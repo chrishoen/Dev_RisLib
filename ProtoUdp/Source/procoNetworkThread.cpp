@@ -27,7 +27,7 @@ NetworkThread::NetworkThread()
    BaseClass::setThreadPriorityHigh();
 
    // Set base class timer period.
-   BaseClass::mTimerPeriod = 1000;
+   BaseClass::mTimerPeriod = gUdpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.
    mRxMsgQCall.bind(this, &NetworkThread::executeRxMsg);
@@ -198,10 +198,13 @@ void NetworkThread::sendTestMsg()
 void NetworkThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
+   Prn::print(Prn::ThreadRun3, "NetworkThread::executeOnTimer %d", aTimerCount);
 
-   ProtoComm::EchoRequestMsg* tx = new ProtoComm::EchoRequestMsg;
-   tx->mCode1 = aTimerCount;
-   mUdpMsgThread->sendMsg(tx);
+   // Send a status request message.
+   EchoRequestMsg* tMsg = new EchoRequestMsg;
+   tMsg->mCode1 = aTimerCount;
+   tMsg->mNumWords = gUdpSettings.mNumWords;
+   sendMsg(tMsg);
 }
 
 //******************************************************************************

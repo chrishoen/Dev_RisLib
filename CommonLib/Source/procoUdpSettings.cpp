@@ -39,6 +39,9 @@ void UdpSettings::reset()
    mMyUdpPort = 0;
    mOtherUdpIPAddress[0]=0;
    mOtherUdpPort = 0;
+
+   mThreadTimerPeriod = 0;
+   mNumWords = 0;
 }
 
 //******************************************************************************
@@ -55,6 +58,10 @@ void UdpSettings::show()
 
    printf("MyUdp                   %16s : %5d\n",mMyUdpIPAddress,mMyUdpPort);
    printf("OtherUdp                %16s : %5d\n",mOtherUdpIPAddress,mOtherUdpPort);
+
+   printf("\n");
+   printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
+   printf("NumWords                %16d\n", mNumWords);
 
    printf("UdpSettings************************************************\n");
    printf("\n");
@@ -84,6 +91,9 @@ void UdpSettings::execute(Ris::CmdLineCmd* aCmd)
       aCmd->copyArgString(1, mOtherUdpIPAddress,cMaxStringSize);
       mOtherUdpPort = aCmd->argInt(2);
    }
+
+   if (aCmd->isCmd("ThreadTimerPeriod"))   mThreadTimerPeriod = aCmd->argInt(1);
+   if (aCmd->isCmd("NumWords"))            mNumWords = aCmd->argInt(1);
 }
 
 //******************************************************************************

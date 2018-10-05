@@ -50,11 +50,15 @@ void main_initialize(int argc,char** argv)
 
    if (argc == 2)
    {
+      ProtoComm::gTcpSettings.reset();
+      ProtoComm::gTcpSettings.readSection("default");
       ProtoComm::gTcpSettings.readSection(argv[1]);
       ProtoComm::gTcpSettings.show();
    }
    else
    {
+      ProtoComm::gTcpSettings.reset();
+      ProtoComm::gTcpSettings.readSection("default");
       ProtoComm::gTcpSettings.readSection("TcpClient1");
       ProtoComm::gTcpSettings.show();
    }

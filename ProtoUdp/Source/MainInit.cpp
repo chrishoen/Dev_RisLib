@@ -50,11 +50,15 @@ void main_initialize(int argc,char** argv)
 
    if (argc == 2)
    {
+      ProtoComm::gUdpSettings.reset();
+      ProtoComm::gUdpSettings.readSection("default");
       ProtoComm::gUdpSettings.readSection(argv[1]);
       ProtoComm::gUdpSettings.show();
    }
    else
    {
+      ProtoComm::gUdpSettings.reset();
+      ProtoComm::gUdpSettings.readSection("default");
       ProtoComm::gUdpSettings.readSection("UdpPeer1");
       ProtoComm::gUdpSettings.show();
    }

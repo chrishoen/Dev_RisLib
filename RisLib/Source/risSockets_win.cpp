@@ -59,6 +59,9 @@ void IpAddress::reset()
 
 void IpAddress::set(char* aAddress)
 {
+   setByHostName(aAddress);
+   return;
+
    if(strlen(aAddress)>16) return;
    mValue = ntohl(inet_addr(aAddress));
    strncpy(mString,aAddress,16);

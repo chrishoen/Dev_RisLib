@@ -129,9 +129,6 @@
     <ClCompile Include="Source\risSerialHeaderBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risSerialMsgPort_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risSerialMsgThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -148,6 +145,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\prnPrintFilterTable.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risSerialMsgPort_wxlx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

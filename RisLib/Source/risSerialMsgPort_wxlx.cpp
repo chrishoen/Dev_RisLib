@@ -8,7 +8,7 @@
 #include "stdafx.h"
 
 #include "my_functions.h"
-#include "risPortableCalls.h"
+//#include "risPortableCalls.h"
 #include "prnPrint.h"
 
 #include "risSerialMsgPort.h"
@@ -110,7 +110,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Transmit the buffer.
    int tRet = 0;
    int tLength=tByteBuffer.getLength();
-   tRet = doSendBytes(tByteBuffer.getBaseAddress(),tLength);
+   tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(),tLength);
    Prn::print(Prn::SerialRun4, "doSendMsg %d %d",tRet,tLength);
 
    mTxMsgCount++;
@@ -180,7 +180,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    if (mHeaderReadState == cHeaderReadAll)
    {
       // Read the header from the serial port into the byte buffer.
-      tRet = doReceiveBytes(tByteBuffer.getBaseAddress(),mHeaderLength);
+      tRet = BaseClass::doReceiveBytes(tByteBuffer.getBaseAddress(),mHeaderLength);
 
       // If bad status then return false.
       if (tRet == mHeaderLength)
@@ -285,7 +285,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    int   tPayloadLength = mMonkey->mPayloadLength;
    char* tPayloadBuffer = tByteBuffer.getBaseAddress() + mHeaderLength;
 
-   tRet = doReceiveBytes(tPayloadBuffer,tPayloadLength);
+   tRet = BaseClass::doReceiveBytes(tPayloadBuffer,tPayloadLength);
 
    // If bad status then return false.
    if (tRet == tPayloadLength)

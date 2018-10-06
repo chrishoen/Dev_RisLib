@@ -223,7 +223,7 @@
     <ClCompile Include="Source\risPortableCalls_win.cpp" />
     <ClCompile Include="Source\risProgramTime.cpp" />
     <ClCompile Include="Source\risSerialHeaderBuffer.cpp" />
-    <ClCompile Include="Source\risSerialMsgPort_win.cpp" />
+    <ClCompile Include="Source\risSerialMsgPort_wxlx.cpp" />
     <ClCompile Include="Source\risSerialMsgThread.cpp" />
     <ClCompile Include="Source\risSerialPort_win.cpp" />
     <ClCompile Include="Source\risSerialSettings.cpp" />

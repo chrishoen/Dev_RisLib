@@ -147,7 +147,7 @@
     <ClCompile Include="Source\prnPrintFilterTable.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risSerialMsgPort_wxlx.cpp">
+    <ClCompile Include="Source\risSerialMsgPort.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

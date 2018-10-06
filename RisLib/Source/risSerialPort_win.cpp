@@ -337,120 +337,9 @@ int SerialPort::doSendOne(char aData)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// receive until cr/lf termination 
+// Receive until eond of line.
 
-int  SerialPort::doReceiveUntilCRLF(char *aData, int aMaxNumBytes)
-{
-   int  tStatus=0;
-   int  tIndex = 0;
-   int  tRxStatus=0;
-   char tRxChar=0;
-   char tRxCharLast=0;
-   bool tGoing=true;
-
-   aData[0]=0;
-
-   // Loop to read single bytes, store them, and exit
-   // when termination cr/lf is detected
-   while ( isValid() && tGoing )
-   {
-      // Store last byte
-      tRxCharLast = tRxChar;
-
-      // Read one byte
-      tRxStatus=doReceiveOne(&tRxChar);
-      if (tRxStatus >= 0)
-      { 
-         // Read success
-         // Store byte
-         aData[tIndex]=tRxChar;
-         tIndex++;
-
-         if(tRxCharLast==13 && tRxChar==10)
-         {
-            // Terminator detected
-            tGoing=false;
-            aData[tIndex-1]=0;
-            tStatus=tIndex-2;
-         }
-         if(tIndex==aMaxNumBytes-1)
-         {
-            // NumBytes limit was reached
-            tGoing=false;
-            aData[tIndex]=0;
-            tStatus = tIndex;
-         }
-      }
-      else
-      {  
-         // Read failure
-         tStatus = tRxStatus;
-         tGoing = false;
-      }
-   }
-   return tStatus;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// receive until cr termination 
-
-int  SerialPort::doReceiveUntilCR(char *aData, int aMaxNumBytes)
-{
-   int  tStatus = 0;
-   int  tIndex = 0;
-   int  tRxStatus = 0;
-   char tRxChar = 0;
-   bool tGoing = true;
-
-   aData[0] = 0;
-
-   // Loop to read single bytes, store them, and exit
-   // when termination cr/lf is detected
-   while (isValid() && tGoing)
-   {
-      // Read one byte
-      tRxStatus = doReceiveOne(&tRxChar);
-      if (tRxStatus >= 0)
-      {
-         // Read success
-         // Store byte
-         aData[tIndex] = tRxChar;
-         tIndex++;
-
-         // If CR
-         if (tRxChar == 13)
-         {
-            // Terminator detected
-            tGoing = false;
-            aData[tIndex] = 0;
-            tStatus = tIndex - 1;
-         }
-         if (tIndex == aMaxNumBytes - 1)
-         {
-            // NumBytes limit was reached
-            tGoing = false;
-            aData[tIndex] = 0;
-            tStatus = tIndex;
-         }
-      }
-      else
-      {
-         // Read failure
-         tStatus = tRxStatus;
-         tGoing = false;
-      }
-   }
-   return tStatus;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// receive until lf termination 
-
-int SerialPort::doReceiveUntilLF(char *aData, int aMaxNumBytes)
+int SerialPort::doReceiveUntilEOL(char *aData, int aMaxNumBytes)
 {
    int  tStatus = 0;
    int  tIndex = 0;
@@ -504,7 +393,7 @@ int SerialPort::doReceiveUntilLF(char *aData, int aMaxNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive one byte
+// Receive one byte.
 
 int  SerialPort::doReceiveOne(char *aData)
 {
@@ -514,7 +403,7 @@ int  SerialPort::doReceiveOne(char *aData)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive
+// Receive bytes.
 
 int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
 {

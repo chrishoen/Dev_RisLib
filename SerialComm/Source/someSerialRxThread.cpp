@@ -61,7 +61,7 @@ void  SerialRxThread::threadRunFunction()
    {
       // Read a string from the serial port.
       char tString[100];
-      int tStatus = mSerialPort.doReceiveUntilCR(tString,100);
+      int tStatus = mSerialPort.doReceiveUntilEOL(tString,100);
 
       // If termination request, exit the loop.
       if (mTerminateFlag) break;

@@ -19,6 +19,9 @@ logFiles.h                    -- log file facility
 my_defs.h                     -- some #defines
 my_functions.h                -- some string, index, time utilities
 prnPrint.h                    -- filtered print facility
+prnPrintFilter.h              -- filtered print facility, filter constants
+prnPrintFilterTable.h         -- filtered print facility, filter table
+prnPrint.h                    -- filtered print facility
 prnPrintSettings.h            -- filtered print facility, settings
 risAlphaDir.h                 -- relocatable Alpha directory for C:\Alpha\Bin, C:\Alpha\Settings, etc
 risByteBuffer.h               -- byte buffer for byte content binary message scheme
@@ -78,6 +81,7 @@ CallPointer1    -- experiments for call pointers
 CallPointer2    -- experiments for call pointers
 Classes         -- experiments for classes
 CmdLineTest1    -- experiments for command line commands
+CommonLib       -- common library -- byte content messages and settings 
 ConsoleTest     -- unit test for command line console
 ExampleMsg      -- example byte content message set
 Experiment      -- experiments
@@ -87,15 +91,14 @@ Parms           -- unit test for parms files
 PrintTest       -- unit test for print facility
 PrintView       -- PrintView.exe build
 Program         -- unit test for program configuration
-ProtoCommon     -- prototype for byte content message, common
-ProtoCommS      -- prototype for byte content message, tcp server
-ProtoCommT      -- prototype for byte content message, tcp client
-ProtoCommU      -- prototype for byte content message, udp peer
+ProtoSerial     -- prototype for byte content message, serial
+ProtoTcpClient  -- prototype for byte content message, tcp client
+ProtoTcpServer  -- prototype for byte content message, tcp client
+ProtoUdp        -- prototype for byte content message, udp peer
 RegHelper       -- register helpers
 RisLib          -- realtime infrastructure library -- this is the library
 Scratch         -- temp project
 SerialComm      -- unit test for serial communications
-SerialThread    -- unit test for byte content serial messages
 TableTest       -- unit est for lookup tables
 Test            -- general test project
 ThreadQCall     -- unit test for qcall threads

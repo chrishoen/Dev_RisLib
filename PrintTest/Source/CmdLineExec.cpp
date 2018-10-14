@@ -5,6 +5,7 @@
 
 #include "risNetPortDef.h"
 #include "risNetUdpStringSocket.h"
+#include "risNetSettings.h"
 
 #include "someTimerThread.h"
 
@@ -35,7 +36,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO2"   ))  executeGo2     (aCmd);
    if(aCmd->isCmd("GO3"   ))  executeGo3     (aCmd);
    if(aCmd->isCmd("GO4"   ))  executeGo4     (aCmd);
-   if(aCmd->isCmd("GO5"   ))  executeGo4     (aCmd);
+   if(aCmd->isCmd("GO5"   ))  executeGo5     (aCmd);
    if(aCmd->isCmd("PARMS" ))  executeParms   (aCmd);
 }
 
@@ -87,7 +88,17 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, 1);
+   int tConsole = aCmd->argInt(1);
+
    Ris::Net::UdpTxStringSocket tSocket;
+
+   Ris::Net::Settings tSettings;
+   tSettings.setRemoteIp(
+      Prn::gPrintSettings.mPrintViewHostIPAddress,
+      Prn::gPrintSettings.mPrintViewHostIPPort + tConsole);
+   tSocket.initialize(tSettings);
+   tSocket.configure();
 
    tSocket.doSendString("ABCDEFG");
    tSocket.doClose();

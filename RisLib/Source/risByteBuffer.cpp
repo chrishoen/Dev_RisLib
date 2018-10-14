@@ -276,7 +276,7 @@ bool ByteBuffer::isCopyFrom ()
 //******************************************************************************
 // Copy operations.
 
-static void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
+inline void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
 {
    //***************************************************************************
    //***************************************************************************
@@ -315,10 +315,10 @@ static void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
       // Source pointer.
       char* tSource = (char*)aValue;
 
-      // Destination Buffer pointer.
+      // Destination pointer.
       char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
 
-      // Copy bytes to buffer, not swapping bytes.
+      // Copy bytes to buffer.
       for (int i = 0; i < aSize; i++)
       {
          tBytes[i] = tSource[i];
@@ -333,14 +333,13 @@ static void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
    //***************************************************************************
    else
    {
+      // Source pointer.
+      char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
+
       // Destination pointer.
       char* tDestin = (char*)aValue;
 
-      // Source Buffer pointer.
-      char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
-      int   tWorkingIndex = aBuffer->mWorkingIndex;
-
-      // Copy bytes from bufferq.
+      // Copy bytes from buffer.
       for (int i = 0; i < aSize; i++)
       {
          tDestin[i] = tBytes[i];

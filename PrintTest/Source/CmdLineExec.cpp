@@ -8,6 +8,8 @@
 
 #include "someTimerThread.h"
 
+#include "prnPrint.h"
+#include "prnPrintSettings.h"
 
 using namespace Some;
 
@@ -34,6 +36,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO3"   ))  executeGo3     (aCmd);
    if(aCmd->isCmd("GO4"   ))  executeGo4     (aCmd);
    if(aCmd->isCmd("GO5"   ))  executeGo4     (aCmd);
+   if(aCmd->isCmd("PARMS" ))  executeParms   (aCmd);
 }
 
 //******************************************************************************
@@ -88,6 +91,17 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
    tSocket.doSendString("ABCDEFG");
    tSocket.doClose();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
+{
+   Prn::gPrintSettings.reset();
+   Prn::gPrintSettings.readSection("default");
+   Prn::gPrintSettings.show();
 }
 
 //******************************************************************************

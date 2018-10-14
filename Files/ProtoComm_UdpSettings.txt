@@ -14,8 +14,9 @@ SectionEnd
 SectionBegin UdpPeer1
 
    MyAppNumber                 301
-   MyUdp                       0.0.0.0   56001
-   OtherUdp                    127.0.0.1 56002
+   MyUdp                       0.0.0.0     56001
+   OtherUdp                    127.0.0.1   56002
+   OtherUdp                    192.168.1.9 56002
    
 SectionEnd
 

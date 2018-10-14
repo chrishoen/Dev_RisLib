@@ -40,6 +40,22 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 {
+   Ris::ByteBuffer tBuffer(20000);
+
+   ProtoComm::DataMsg* tTxMsg = new ProtoComm::DataMsg;
+   ProtoComm::DataMsg* tRxMsg = 0;
+   MsgHelper::initialize(tTxMsg);
+
+   ProtoComm::MsgMonkey tMonkey;
+
+   tMonkey.putMsgToBuffer(&tBuffer, tTxMsg);
+
+   tRxMsg = (ProtoComm::DataMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
+
+   MsgHelper::show(tRxMsg);
+
+   delete tTxMsg;
+   delete tRxMsg;
 }
 
 //******************************************************************************

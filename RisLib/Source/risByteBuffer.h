@@ -89,11 +89,6 @@ public:
    static const int cBadPointer       = 2;
    int mError;
 
-   // Byte swapping. This determines if copy operations do byte swapping. The 
-   // default for little endian machines is to not do byte swapping and the
-   // default for big endian machines is to do byte swapping.
-   bool mByteSwapping;
-
    // Memory allocation code, itdetermines if the destructor does a memFree.
    int mMemAllocCode;
 
@@ -186,26 +181,6 @@ public:
 
    bool isCopyTo ();
    bool isCopyFrom ();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods, network order.
-
-   // Set the network order (endianness) of the buffer and whether or
-   // not byte swapping happens.
-   //
-   // If network order is true then bytes are copied into the 
-   // buffer in network order, big endian. If false then little
-   // endian.
-   //
-   // If network order is true and the machine is little endian
-   // then byte swapping happens. If netwok order is true and
-   // the machine is big endian then byte swapping does not 
-   // happen. The other two cases follow.
-   //
-   // The default is non network order. (little endian)
-   void setNetworkOrder (bool aNetworkOrder);
 
    //***************************************************************************
    //***************************************************************************

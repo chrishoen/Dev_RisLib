@@ -102,12 +102,16 @@ namespace Prn
    static const int  FileError4        =  84;
    static const int  View11            =  85;
    static const int  View12            =  86;
-   static const int  View21            =  87;
-   static const int  View22            =  88;
-   static const int  View31            =  89;
-   static const int  View32            =  90;
-   static const int  View41            =  91;
-   static const int  View42            =  92;
+   static const int  View13            =  87;
+   static const int  View14            =  88;
+   static const int  View21            =  89;
+   static const int  View22            =  90;
+   static const int  View23            =  91;
+   static const int  View24            =  92;
+   static const int  View31            =  93;
+   static const int  View32            =  94;
+   static const int  View41            =  95;
+   static const int  View42            =  96;
 
    static const int  CalcInit1         = 200;
    static const int  CalcInit2         = 201;

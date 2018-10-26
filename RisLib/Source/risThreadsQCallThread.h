@@ -130,8 +130,6 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risPortableTypes.h"
-#include "risCallPointer.h"
 #include "risThreadsThreads.h"
 #include "risThreadsTimer.h"
 #include "risThreadsSynch.h"

@@ -10,8 +10,6 @@
 #include "risPortableCalls.h"
 #include "prnPrint.h"
 
-#include "risCallPointer.h"
-
 #include "risSerialPort.h"
 
 namespace Ris

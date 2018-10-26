@@ -39,6 +39,7 @@ void ThreadParms::reset()
 
    mDelayA1 = 0;
    mDelayA2 = 0;
+   mShowCode = 0;
 }
 
 //******************************************************************************
@@ -57,6 +58,8 @@ void ThreadParms::show()
 
    printf("\n");
    printf("DelayA                %-10d %-4d\n", mDelayA1, mDelayA2);
+   printf("\n");
+   printf("ShowCode              %-10d\n",      mShowCode);
 }
 
 //******************************************************************************
@@ -77,6 +80,8 @@ void ThreadParms::execute(Ris::CmdLineCmd* aCmd)
       mDelayA1 = aCmd->argInt(1);
       mDelayA2 = aCmd->argInt(2);
    }
+
+   if (aCmd->isCmd("ShowCode"))   mShowCode = aCmd->argInt(1);
 
    if (aCmd->isCmd("Filename"))   aCmd->copyArgString(1, mFilename,cMaxStringSize);
 }

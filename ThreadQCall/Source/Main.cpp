@@ -29,8 +29,11 @@ int main(int argc,char** argv)
    Some::gTestQCallThread = new Some::TestQCallThread;
    Some::gTestQCallThread->launchThread();
 
-   Some::gRandomTimerThread = new Some::RandomTimerThread;
-   Some::gRandomTimerThread->launchThread();
+   Some::gRandomTimerThread1 = new Some::RandomTimerThread(1);
+   Some::gRandomTimerThread1->launchThread();
+
+   Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
+   Some::gRandomTimerThread2->launchThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -46,9 +49,12 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   Some::gRandomTimerThread->shutdownThread();
+   Some::gRandomTimerThread1->shutdownThread();
+   Some::gRandomTimerThread2->shutdownThread();
    Some::gTestQCallThread->shutdownThread();
-   delete Some::gRandomTimerThread;
+
+   delete Some::gRandomTimerThread1;
+   delete Some::gRandomTimerThread2;
    delete Some::gTestQCallThread;
 
    //***************************************************************************

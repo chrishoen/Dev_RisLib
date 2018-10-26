@@ -6,6 +6,8 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include "someThreadParms.h"
+
 #define  _TESTQCALLTHREAD_CPP_
 #include "someTestQCallThread.h"
 
@@ -76,9 +78,12 @@ void TestQCallThread::executeOnTimer(int aTimerCount)
 // QCall registered to the mUdpMsgThread child thread. It is invoked when
 // a message is received. It process the received messages.
 
-void TestQCallThread::executeTest1(int aCode1)
+void TestQCallThread::executeTest1(int aSource,int aCode1)
 {
-   Prn::print(Prn::View21, "TestQCallThread::executeTest1 %d", aCode1);
+   if (gThreadParms.mShowCode == 1 || aSource == 7)
+   {
+      Prn::print(Prn::View21, "TestQCallThread::executeTest1 %d %d", aSource, aCode1);
+   }
    mStatusCount1++;
 }
 

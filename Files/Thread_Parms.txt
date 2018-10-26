@@ -13,5 +13,14 @@ SectionBegin default
    // Random delay bounds.
    DelayA                 100   200
 
+   // Print code.
+   ShowCode               1
+
+   DelayA                 100   200
+   ShowCode               1
+
+   DelayA                 10    20
+   ShowCode               0
+
 SectionEnd
 

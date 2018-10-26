@@ -32,7 +32,9 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        Some::gRandomTimerThread->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("TP1"))       Some::gRandomTimerThread1->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("TP2"))       Some::gRandomTimerThread2->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("TP"))        executeTP(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -50,7 +52,19 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 101);
 
-   Some::gTestQCallThread->mTest1QCall(aCmd->argInt(1));
+   Some::gTestQCallThread->mTest1QCall(7, aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, false);
+
+   Some::gRandomTimerThread1->mTPFlag = aCmd->argBool(1);
+   Some::gRandomTimerThread2->mTPFlag = aCmd->argBool(1);
 }
 
 //******************************************************************************

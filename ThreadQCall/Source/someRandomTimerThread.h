@@ -35,6 +35,9 @@ public:
    //***************************************************************************
    // Members.
 
+   // Ident.
+   int mIdent;
+
    // If true then execute periodic function.
    bool mTPFlag;
 
@@ -49,7 +52,7 @@ public:
    // Methods.
 
    // Constructor.
-   RandomTimerThread();
+   RandomTimerThread(int aIdent);
 
    //***************************************************************************
    //***************************************************************************
@@ -81,9 +84,11 @@ public:
 // Global singular instance.
 
 #ifdef _SOMETIMERTHREAD_CPP_
-         RandomTimerThread* gRandomTimerThread;
+         RandomTimerThread* gRandomTimerThread1;
+         RandomTimerThread* gRandomTimerThread2;
 #else
-extern   RandomTimerThread* gRandomTimerThread;
+extern   RandomTimerThread* gRandomTimerThread1;
+extern   RandomTimerThread* gRandomTimerThread2;
 #endif
 
 //******************************************************************************

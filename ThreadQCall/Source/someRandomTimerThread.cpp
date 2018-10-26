@@ -19,8 +19,9 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-RandomTimerThread::RandomTimerThread()
-   : mRandomGen(mRandomDevice()),
+RandomTimerThread::RandomTimerThread(int aIdent)
+   : mIdent(aIdent),
+     mRandomGen(mRandomDevice()),
      mRandomDis(gThreadParms.mDelayA1, gThreadParms.mDelayA2)
 {
    mTPFlag = false;
@@ -63,7 +64,7 @@ void RandomTimerThread::threadRunFunction()
       BaseClass::threadSleep(tDelay);
 
       // Send a qcall to the test thread.
-      if (mTPFlag) gTestQCallThread->mTest1QCall(tCount);
+      if (mTPFlag) gTestQCallThread->mTest1QCall(mIdent,tCount);
       tCount++;
    }
 

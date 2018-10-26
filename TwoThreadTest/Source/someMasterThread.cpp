@@ -16,22 +16,25 @@ Description:
 namespace Some
 {
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
+
 MasterThread::MasterThread()
 {
    using namespace std::placeholders;
 
-   // Set base class thread priority
+   // Set base class thread variables.
    BaseClass::mShortThread->setThreadPriorityHigh();
-
-   // Set timer period
    BaseClass::mShortThread->mTimerPeriod = 1000;
 
-   // Base class call pointers
+   // Set base class call pointers.
    BaseClass::mShortThread->mThreadInitCallPointer           = std::bind(&MasterThread::threadInitFunction, this);
    BaseClass::mShortThread->mThreadExitCallPointer           = std::bind(&MasterThread::threadExitFunction, this);
    BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer = std::bind(&MasterThread::executeOnTimer, this, _1);
 
-   // QCall CallPointers
+   // Set qcalls.
    mTest1QCall.bind            (this->mLongThread, this,&MasterThread::executeTest1);
    mTest2QCall.bind            (this->mLongThread, this,&MasterThread::executeTest2);
    mSendCommandQCall.bind      (this->mLongThread, this,&MasterThread::executeSendCommand);
@@ -39,17 +42,26 @@ MasterThread::MasterThread()
    mResponseQCall.bind         (this->mShortThread,this,&MasterThread::executeResponse);
    mSequenceQCall.bind         (this->mLongThread, this,&MasterThread::executeSequence);
 
-   // Members
+   // set member variables.
    mTPFlag = false;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Thread init function. This is called by the base class immediately 
+// before the thread starts running.
+
 void MasterThread::threadInitFunction()
 {
    Prn::print(0,"MasterThread::threadInitFunction");
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread exit function. This is called by the base class immediately 
+// after  the thread starts running.
 
 void MasterThread::threadExitFunction()
 {
@@ -59,6 +71,8 @@ void MasterThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Execute periodically. This is called by the base class timer.
+
 void MasterThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
@@ -87,6 +101,8 @@ void MasterThread::executeTest1(int aN)
    Prn::print(0,"MasterThread::executeTest1 END   %04d",aN);
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void MasterThread::executeTest2(int aN)

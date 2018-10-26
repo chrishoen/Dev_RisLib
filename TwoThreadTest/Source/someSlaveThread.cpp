@@ -17,31 +17,20 @@ Description:
 namespace Some
 {
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
+
 SlaveThread::SlaveThread()
 {
-   // QCall CallPointers
+   // Set base class thread variables.
+   BaseClass::setThreadPriorityHigh();
+   BaseClass::mTimerPeriod = 1000;
+
+   // Set qcalls.
    mCommandQCall.bind (this,&SlaveThread::executeCommand);
    mWorkRequestQCall.bind (this,&SlaveThread::executeWorkRequest);
-}
-
-//******************************************************************************
-// This sets base thread configuration members
-
-void SlaveThread::configureThreads()
-{
-   // Set base class configuration members to defaults
-   BaseClass::configureThread();
-
-   // Set base class thread priority
-   BaseClass::setThreadPriorityHigh();
-
-   // Set timer period
-   BaseClass::mTimerPeriod = 1000;
-}
-
-void SlaveThread::threadInitFunction()
-{
-   BaseClass::threadInitFunction();
 }
 
 //******************************************************************************
@@ -110,6 +99,8 @@ void SlaveThread::executeCommand(int aId,int aParm1,int aParm2)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void SlaveThread::wait(int aSeconds)
 {
@@ -131,6 +122,8 @@ void SlaveThread::executeWorkRequest (int aParm1,Ris::Threads::TwoThreadNotify a
    aCompletionNotify.notify();
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 }//namespace

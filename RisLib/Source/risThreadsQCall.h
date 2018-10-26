@@ -131,7 +131,7 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 #include <new>
-#include "risLMPacketQueue.h"
+#include "risLCPointerQueue.h"
 #include "risCallPointer.h"
 
 namespace Ris
@@ -154,7 +154,7 @@ public:
    // QCall invokations enqueue QCalls to this queue.
    // QCall targets dequeue from it.
 
-   LMPacketQueue mCallQueue;
+   LCPointerQueue mCallQueue;
 
    // Target inheritors provide an override for this method.
    // It is called after a QCall has been enqueued to the target queue.
@@ -168,7 +168,7 @@ public:
    // Initialize the call queue
    void initializeCallQueue(int aCallQueueSize)
    {
-      mCallQueue.initialize(aCallQueueSize,cCallQueueBlockSize);
+      mCallQueue.initialize(aCallQueueSize);
    }
 
    // Finalize the call queue
@@ -225,16 +225,20 @@ public:
 
    void operator()()
    {
-      // Start a write to the target queue, obtaining memory for a new QCall.
-      int tIndex;
-      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
-      if (tBlock==0) return;
-      // Create a copy of this QCall, using the new memory.
-      QCall0* tQCall = new(tBlock)QCall0(*this);
-      // Finish the write to the target queue.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      // Notify the target.
-      mTarget->notifyQCallAvailable();
+      // Create a new copy of this QCall.
+      QCall0* tQCall = new QCall0(*this);
+
+      // Try to write the copy to the target queue.
+      if (mTarget->mCallQueue.tryWrite(tQCall))
+      {
+         // Notify the target.
+         mTarget->notifyQCallAvailable();
+      }
+      else
+      {
+         // The target queue is full.
+         delete tQCall;
+      }
    }
 
    //---------------------------------------------------------------------------
@@ -290,17 +294,20 @@ public:
    void operator()(X1 aX1)
    {
       // Store arguments into this QCall.
-      mX1=aX1;
-      // Start a write to the target queue, obtaining memory for a new QCall.
-      int tIndex;
-      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
-      if (tBlock==0) return;
-      // Create a copy of this QCall, using the new memory.
-      QCall1* tQCall = new(tBlock)QCall1(*this);
-      // Finish the write to the target queue.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      // Notify the target.
-      mTarget->notifyQCallAvailable();
+      mX1 = aX1;
+      // Create a new copy of this QCall.
+      QCall1* tQCall = new QCall1(*this);
+      // Try to write the copy to the target queue.
+      if (mTarget->mCallQueue.tryWrite(tQCall))
+      {
+         // Notify the target.
+         mTarget->notifyQCallAvailable();
+      }
+      else
+      {
+         // The target queue is full.
+         delete tQCall;
+      }
    }
 
    //---------------------------------------------------------------------------
@@ -357,18 +364,21 @@ public:
    void operator()(X1 aX1,X2 aX2)
    {
       // Store arguments into this QCall.
-      mX1=aX1;
-      mX2=aX2;
-      // Start a write to the target queue, obtaining memory for a new QCall.
-      int tIndex;
-      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
-      if (tBlock==0) return;
-      // Create a copy of this QCall, using the new memory.
-      QCall2* tQCall = new(tBlock)QCall2(*this);
-      // Finish the write to the target queue.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      // Notify the target.
-      mTarget->notifyQCallAvailable();
+      mX1 = aX1;
+      mX2 = aX2;
+      // Create a new copy of this QCall.
+      QCall2* tQCall = new QCall2(*this);
+      // Try to write the copy to the target queue.
+      if (mTarget->mCallQueue.tryWrite(tQCall))
+      {
+         // Notify the target.
+         mTarget->notifyQCallAvailable();
+      }
+      else
+      {
+         // The target queue is full.
+         delete tQCall;
+      }
    }
 
    //---------------------------------------------------------------------------
@@ -423,22 +433,25 @@ public:
    // Function call overload. It enqueues a copy of this QCall to the target
    // queue and then notifies the target that a QCall is available.
 
-   void operator()(X1 aX1,X2 aX2,X3 aX3)
+   void operator()(X1 aX1, X2 aX2, X3 aX3)
    {
       // Store arguments into this QCall.
-      mX1=aX1;
-      mX2=aX2;
-      mX3=aX3;
-      // Start a write to the target queue, obtaining memory for a new QCall.
-      int tIndex;
-      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
-      if (tBlock==0) return;
-      // Create a copy of this QCall, using the new memory.
-      QCall3* tQCall = new(tBlock)QCall3(*this);
-      // Finish the write to the target queue.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      // Notify the target.
-      mTarget->notifyQCallAvailable();
+      mX1 = aX1;
+      mX2 = aX2;
+      mX3 = aX3;
+      // Create a new copy of this QCall.
+      QCall3* tQCall = new QCall3(*this);
+      // Try to write the copy to the target queue.
+      if (mTarget->mCallQueue.tryWrite(tQCall))
+      {
+         // Notify the target.
+         mTarget->notifyQCallAvailable();
+      }
+      else
+      {
+         // The target queue is full.
+         delete tQCall;
+      }
    }
 
    //---------------------------------------------------------------------------
@@ -494,23 +507,26 @@ public:
    // Function call overload. It enqueues a copy of this QCall to the target
    // queue and then notifies the target that a QCall is available.
 
-   void operator()(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
+   void operator()(X1 aX1, X2 aX2, X3 aX3, X4 aX4)
    {
       // Store arguments into this QCall.
-      mX1=aX1;
-      mX2=aX2;
-      mX3=aX3;
-      mX4=aX4;
-      // Start a write to the target queue, obtaining memory for a new QCall.
-      int tIndex;
-      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
-      if (tBlock==0) return;
-      // Create a copy of this QCall, using the new memory.
-      QCall4* tQCall = new(tBlock)QCall4(*this);
-      // Finish the write to the target queue.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      // Notify the target.
-      mTarget->notifyQCallAvailable();
+      mX1 = aX1;
+      mX2 = aX2;
+      mX3 = aX3;
+      mX4 = aX4;
+      // Create a new copy of this QCall.
+      QCall4* tQCall = new QCall4(*this);
+      // Try to write the copy to the target queue.
+      if (mTarget->mCallQueue.tryWrite(tQCall))
+      {
+         // Notify the target.
+         mTarget->notifyQCallAvailable();
+      }
+      else
+      {
+         // The target queue is full.
+         delete tQCall;
+      }
    }
 
    //---------------------------------------------------------------------------
@@ -567,24 +583,27 @@ public:
    // Function call overload. It enqueues a copy of this QCall to the target
    // queue and then notifies the target that a QCall is available.
 
-   void operator()(X1 aX1,X2 aX2,X3 aX3,X4 aX4,X5 aX5)
+   void operator()(X1 aX1, X2 aX2, X3 aX3, X4 aX4,X5 aX5)
    {
       // Store arguments into this QCall.
-      mX1=aX1;
-      mX2=aX2;
-      mX3=aX3;
-      mX4=aX4;
-      mX5=aX5;
-      // Start a write to the target queue, obtaining memory for a new QCall.
-      int tIndex;
-      void* tBlock = mTarget->mCallQueue.startWrite(&tIndex);
-      if (tBlock==0) return;
-      // Create a copy of this QCall, using the new memory.
-      QCall5* tQCall = new(tBlock)QCall5(*this);
-      // Finish the write to the target queue.
-      mTarget->mCallQueue.finishWrite(tIndex);
-      // Notify the target.
-      mTarget->notifyQCallAvailable();
+      mX1 = aX1;
+      mX2 = aX2;
+      mX3 = aX3;
+      mX4 = aX4;
+      mX5 = aX5;
+      // Create a new copy of this QCall.
+      QCall5* tQCall = new QCall5(*this);
+      // Try to write the copy to the target queue.
+      if (mTarget->mCallQueue.tryWrite(tQCall))
+      {
+         // Notify the target.
+         mTarget->notifyQCallAvailable();
+      }
+      else
+      {
+         // The target queue is full.
+         delete tQCall;
+      }
    }
 
    //---------------------------------------------------------------------------

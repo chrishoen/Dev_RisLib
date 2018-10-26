@@ -142,8 +142,7 @@ void BaseQCallThread::threadRunFunction()
          //----------------------------------------------------------
          // Get QCall from queue
 
-         int tIndex;
-         BaseQCall* tQCall = (BaseQCall*)mCallQueue.startRead(&tIndex);
+         BaseQCall* tQCall = (BaseQCall*)mCallQueue.tryRead();
 
          //----------------------------------------------------------
          //----------------------------------------------------------
@@ -157,8 +156,6 @@ void BaseQCallThread::threadRunFunction()
             mQCallAbortFlag = false;
             // Execute QCall
             tQCall->execute();
-            // Release it
-            mCallQueue.finishRead(tIndex);
          }
       }
    }

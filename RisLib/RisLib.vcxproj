@@ -152,6 +152,8 @@
     <ClInclude Include="Source\risCmdLineTables.h" />
     <ClInclude Include="Source\risContainers.h" />
     <ClInclude Include="Source\risContainers2.h" />
+    <ClInclude Include="Source\risLCCriticalSection.h" />
+    <ClInclude Include="Source\risLCPointerQueue.h" />
     <ClInclude Include="Source\risLMPacketQueue.h" />
     <ClInclude Include="Source\risLogic.h" />
     <ClInclude Include="Source\risMemoryPtr.h" />
@@ -207,6 +209,8 @@
     <ClCompile Include="Source\risCmdLineParms.cpp" />
     <ClCompile Include="Source\risCmdLineString.cpp" />
     <ClCompile Include="Source\risCmdLineTables.cpp" />
+    <ClCompile Include="Source\risLCCritcalSection_win.cpp" />
+    <ClCompile Include="Source\risLCPointerQueue.cpp" />
     <ClCompile Include="Source\risLMPacketQueue.cpp" />
     <ClCompile Include="Source\risLogic.cpp" />
     <ClCompile Include="Source\risNanoTime.cpp" />

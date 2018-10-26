@@ -150,6 +150,12 @@
     <ClCompile Include="Source\risSerialMsgPort.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\risLCPointerQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risLCCritcalSection_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">
@@ -327,6 +333,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\prnPrintFilterTable.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risLCPointerQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risLCCriticalSection.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

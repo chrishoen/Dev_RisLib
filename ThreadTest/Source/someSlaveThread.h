@@ -1,33 +1,39 @@
 #pragma once
 
 /*==============================================================================
-Program command line executive.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risCmdLineExec.h"
+#include <random>
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This class is the program command line executive. It processes user
-// command line inputs and executes them. It inherits from the command line
-// command executive base class, which provides an interface for executing
-// command line commands. It provides an override execute function that is
-// called by a console executive when it receives a console command line input.
-// The execute function then executes the command.
+#include "risThreadsQCallThread.h"
+#include "risThreadsTwoThread.h"
 
-class CmdLineExec : public Ris::BaseCmdLineExec
+namespace Some
+{
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is an example slave thread that receives commands from  a master 
+// thread and sends responses.
+
+class  SlaveThread : public Ris::Threads::BaseQCallThread
 {
 public:
+   typedef Ris::Threads::BaseQCallThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   // Random number generator for random timer delay.
+   std::random_device mRandomDevice;
+   std::mt19937       mRandomGen;
+   std::uniform_int_distribution<> mRandomDis;
 
    //***************************************************************************
    //***************************************************************************
@@ -35,36 +41,49 @@ public:
    // Methods.
 
    // Constructor.
-   CmdLineExec();
-   void reset();
+   SlaveThread();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Base class override. Execute a command line command. It calls one of
-   // the following specific command execution functions. This is called by
-   // the owner of this object to pass command line commands to it. 
-   void execute(Ris::CmdLineCmd* aCmd) override;
+   // Thread init function. This is called by the base class immediately 
+   // after the thread starts running.
+   void threadInitFunction() override;
+
+   // Thread exit function. This is called by the base class immediately
+   // before the thread is terminated.
+   void threadExitFunction() override;
+
+   // Execute periodically. This is called by the base class timer.
+   void executeOnTimer(int aCurrentTimeCount) override;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Execute specific commands.
-   void executeTP       (Ris::CmdLineCmd* aCmd);
-   void executeGo1      (Ris::CmdLineCmd* aCmd);
-   void executeGo2      (Ris::CmdLineCmd* aCmd);
-   void executeGo3      (Ris::CmdLineCmd* aCmd);
-   void executeGo4      (Ris::CmdLineCmd* aCmd);
-   void executeGo5      (Ris::CmdLineCmd* aCmd);
+   // Work request qcall from master thread.
+   Ris::Threads::QCall2<int,Ris::Threads::TwoThreadNotify> mWorkRequestQCall;
 
-   void executeParms    (Ris::CmdLineCmd* aCmd);
+   // Work request function. This is bound to the qcall.
+   void executeWorkRequest (int aParm1,Ris::Threads::TwoThreadNotify aCompletionNotify);
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Global instance
+
+#ifdef _SOMESLAVETHREAD_CPP_
+          SlaveThread* gSlaveThread;
+#else
+   extern SlaveThread* gSlaveThread;
+#endif
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+}//namespace
 

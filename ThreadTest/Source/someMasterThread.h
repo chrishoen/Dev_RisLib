@@ -1,33 +1,37 @@
 #pragma once
 
 /*==============================================================================
-Program command line executive.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "risThreadsTwoThread.h"
 
-#include "risCmdLineExec.h"
-
+namespace Some
+{
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class is the program command line executive. It processes user
-// command line inputs and executes them. It inherits from the command line
-// command executive base class, which provides an interface for executing
-// command line commands. It provides an override execute function that is
-// called by a console executive when it receives a console command line input.
-// The execute function then executes the command.
+// This is an example master thread that sends commands to a slave thread
+// and waits for responses.
 
-class CmdLineExec : public Ris::BaseCmdLineExec
+class MasterThread : public Ris::Threads::BaseTwoThread
 {
 public:
+   typedef Ris::Threads::BaseTwoThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   // If true the execute periodically.
+   bool mTPFlag;
+
+   // Metrics.
+   int  mStatusCount1;
+   int  mStatusCount2;
 
    //***************************************************************************
    //***************************************************************************
@@ -35,36 +39,49 @@ public:
    // Methods.
 
    // Constructor.
-   CmdLineExec();
-   void reset();
+   MasterThread();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods. Thread base class overloads.
 
-   // Base class override. Execute a command line command. It calls one of
-   // the following specific command execution functions. This is called by
-   // the owner of this object to pass command line commands to it. 
-   void execute(Ris::CmdLineCmd* aCmd) override;
+   // Thread init function. This is called by the base class immediately 
+   // before the thread starts running.
+   void threadInitFunction() override;
+
+   // Thread exit function. This is called by the base class immediately 
+   // after the thread starts running.
+   void threadExitFunction() override;
+
+   // Execute periodically. This is called by the base class timer.
+   void executeOnTimer(int aTimerCount) override;
+
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods.qcalls.
 
-   // Execute specific commands.
-   void executeTP       (Ris::CmdLineCmd* aCmd);
-   void executeGo1      (Ris::CmdLineCmd* aCmd);
-   void executeGo2      (Ris::CmdLineCmd* aCmd);
-   void executeGo3      (Ris::CmdLineCmd* aCmd);
-   void executeGo4      (Ris::CmdLineCmd* aCmd);
-   void executeGo5      (Ris::CmdLineCmd* aCmd);
+   // Test qcall. It is invoked by the timer thread.
+   Ris::Threads::QCall2<int, int> mTest1QCall;
 
-   void executeParms    (Ris::CmdLineCmd* aCmd);
+   // Test function. This is bound to the qcall.
+   void executeTest1(int aSource, int aCode);
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Global instance.
 
+#ifdef _SOMEMASTERTHREAD_CPP_
+          MasterThread* gMasterThread;
+#else
+   extern MasterThread* gMasterThread;
+#endif
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+}//namespace

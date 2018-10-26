@@ -19,7 +19,8 @@ SectionBegin default
    DelayA                 100   200
    ShowCode               1
 
-   DelayA                 10    20
+   DelayA                 100   200
+   DelayB                 10    20
    ShowCode               0
 
 SectionEnd

@@ -76,6 +76,8 @@ public:
    // Random delay bounds.
    int mDelayA1;
    int mDelayA2;
+   int mDelayB1;
+   int mDelayB2;
 
    // Print code.
    int mShowCode;

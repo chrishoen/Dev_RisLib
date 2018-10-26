@@ -10,34 +10,19 @@
     <ClCompile Include="Source\CmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Experiment.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GSettings.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someShare.cpp">
+    <ClCompile Include="Source\someMasterThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someThread1.cpp">
+    <ClCompile Include="Source\someRandomTimerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someQCallThread1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someTimerThread1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someClass1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someQCallThread2.cpp">
+    <ClCompile Include="Source\someSlaveThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
@@ -48,31 +33,16 @@
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Experiment.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GSettings.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someShare.h">
+    <ClInclude Include="Source\someMasterThread.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someThread1.h">
+    <ClInclude Include="Source\someRandomTimerThread.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someQCallThread1.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someTimerThread1.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someClass1.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someQCallThread2.h">
+    <ClInclude Include="Source\someSlaveThread.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\stdafx.h">

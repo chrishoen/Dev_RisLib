@@ -54,6 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{03F1F68A
 		Files\ProtoComm_UdpSettings.txt = Files\ProtoComm_UdpSettings.txt
 		Files\RisParms_Parms.txt = Files\RisParms_Parms.txt
 		Files\TableTestParms.txt = Files\TableTestParms.txt
+		Files\Thread_Parms.txt = Files\Thread_Parms.txt
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Program", "Program\Program.vcxproj", "{097D078A-F2C1-40F4-B84E-D8EFB30452A5}"

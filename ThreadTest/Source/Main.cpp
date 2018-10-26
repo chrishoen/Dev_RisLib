@@ -2,93 +2,81 @@
 
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
-
-#include "someThread1.h"
-#include "someQCallThread1.h"
-#include "someQCallThread2.h"
-#include "someTimerThread1.h"
-#include "Experiment.h"
-#include "GSettings.h"
 #include "MainInit.h"
+
+#include "someMasterThread.h"
+#include "someSlaveThread.h"
+#include "someRandomTimerThread.h"
 
 using namespace Some;
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 int main(int argc,char** argv)
 {
-   //--------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize program.
 
    main_initialize(argc,argv);
-   Experiment::initialize();
 
-   //--------------------------------------------------------------------
-   // Launch threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Launch program threads.
 
-   if (gGSettings.mTestThread == GSettings::cTestThread_Thread1)
-   {
-      gThread1 = new Thread1;
-      gThread1->launchThread();
-   }
+   Some::gSlaveThread = new Some::SlaveThread;
+   Some::gSlaveThread->launchThread();
 
-   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
-   {
-      gQCallThread1 = new QCallThread1;
-      gQCallThread1->launchThread();
-   }
+   Some::gMasterThread = new Some::MasterThread;
+   Some::gMasterThread->launchThreads();
 
-   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread2)
-   {
-      gQCallThread2 = new QCallThread2;
-      gQCallThread2->launchThread();
-   }
+   Some::gRandomTimerThread1 = new Some::RandomTimerThread(1);
+   Some::gRandomTimerThread1->launchThread();
 
-   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
-   {
-      gTimerThread1 = new TimerThread1;
-      gTimerThread1->launchThread();
-   }
+   Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
+   Some::gRandomTimerThread2->launchThread();
 
-   //--------------------------------------------------------------------
-   // Start user command line executive,
-   // It returns when user exits
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Start user command line executive, wait for user to exit.
 
-   CmdLineExec* tExec = new CmdLineExec;
-   Ris::executeCmdLineConsole(tExec);
-   delete tExec;
+   CmdLineExec* exec = new CmdLineExec;
+   Ris::executeCmdLineConsole(exec);
+   delete exec;
 
-   //--------------------------------------------------------------------
-   // Shutdown threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Shutdown program Threads.
 
-   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
-   {
-      gTimerThread1->shutdownThread();
-      delete gTimerThread1;
-   }
+   Some::gRandomTimerThread1->shutdownThread();
+   Some::gRandomTimerThread2->shutdownThread();
+   Some::gMasterThread->shutdownThreads();
+   Some::gSlaveThread->shutdownThread();
 
-   if (gGSettings.mTestThread == GSettings::cTestThread_Thread1)
-   {
-      gThread1->shutdownThread();
-      delete gThread1;
-   }
+   delete Some::gRandomTimerThread1;
+   delete Some::gRandomTimerThread2;
+   delete Some::gMasterThread;
+   delete Some::gSlaveThread;
 
-   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
-   {
-      gQCallThread1->shutdownThread();
-      delete gQCallThread1;
-   }
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Finalize program.
 
-   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread2)
-   {
-      gQCallThread2->shutdownThread();
-      delete gQCallThread2;
-   }
-
-   //--------------------------------------------------------------------
-   // Exit
-   
    main_finalize();
+
+   printf("press enter\n");
+   getchar();
 
    return 0;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************

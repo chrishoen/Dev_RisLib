@@ -106,7 +106,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\RisLib\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\RisLib\Source;..\CommonLib\Source</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -155,7 +155,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>None</DebugInformationFormat>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>..\RisLib\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\RisLib\Source;..\CommonLib\Source</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
@@ -167,6 +167,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonLib\CommonLib.vcxproj">
+      <Project>{3e6c24b5-cb8e-4fba-b359-fbfb64d6b42d}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\RisLib\RisLib.vcxproj">
       <Project>{740dd552-6b3b-4a1b-9b22-b6f516e458ab}</Project>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
@@ -175,32 +178,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\Experiment.cpp" />
-    <ClCompile Include="Source\GSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\someClass1.cpp" />
-    <ClCompile Include="Source\someQCallThread1.cpp" />
-    <ClCompile Include="Source\someQCallThread2.cpp" />
-    <ClCompile Include="Source\someShare.cpp" />
-    <ClCompile Include="Source\someThread1.cpp" />
-    <ClCompile Include="Source\someTimerThread1.cpp" />
-    <ClCompile Include="Source\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="Source\someMasterThread.cpp" />
+    <ClCompile Include="Source\someRandomTimerThread.cpp" />
+    <ClCompile Include="Source\someSlaveThread.cpp" />
+    <ClCompile Include="Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\Experiment.h" />
-    <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\someClass1.h" />
-    <ClInclude Include="Source\someQCallThread1.h" />
-    <ClInclude Include="Source\someQCallThread2.h" />
-    <ClInclude Include="Source\someShare.h" />
-    <ClInclude Include="Source\someThread1.h" />
-    <ClInclude Include="Source\someTimerThread1.h" />
+    <ClInclude Include="Source\someMasterThread.h" />
+    <ClInclude Include="Source\someRandomTimerThread.h" />
+    <ClInclude Include="Source\someSlaveThread.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

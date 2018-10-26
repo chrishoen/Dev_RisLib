@@ -1,4 +1,4 @@
-start "UDP1" C:\Prime\DevelopMine\Dev_VS_Ris\x64\Debug\ThreadQCall.exe
+start "ThreadTest" C:\Prime\DevelopLib\Dev_RisLib\x64\Release\ThreadTest.exe
 
 
 

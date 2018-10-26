@@ -167,7 +167,6 @@
     <ClInclude Include="Source\risNetUdpMsgSocket.h" />
     <ClInclude Include="Source\risNetUdpMsgThread.h" />
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
-    <ClInclude Include="Source\risPointerStack.h" />
     <ClInclude Include="Source\risPortableCalls.h" />
     <ClInclude Include="Source\risPortableTypes.h" />
     <ClInclude Include="Source\risProgramTime.h" />
@@ -221,7 +220,6 @@
     <ClCompile Include="Source\risNetUdpMsgSocket.cpp" />
     <ClCompile Include="Source\risNetUdpMsgThread.cpp" />
     <ClCompile Include="Source\risNetUdpStringSocket.cpp" />
-    <ClCompile Include="Source\risPointerStack.cpp" />
     <ClCompile Include="Source\risPortableCalls_win.cpp" />
     <ClCompile Include="Source\risProgramTime.cpp" />
     <ClCompile Include="Source\risSerialHeaderBuffer.cpp" />

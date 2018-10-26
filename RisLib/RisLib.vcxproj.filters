@@ -72,9 +72,6 @@
     <ClCompile Include="Source\risNetUdpStringSocket.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risPointerStack.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risPortableCalls_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -243,9 +240,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risNetUdpStringSocket.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risPointerStack.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risPortableCalls.h">

@@ -18,6 +18,8 @@ namespace Some
 
 MasterThread::MasterThread()
 {
+   using namespace std::placeholders;
+
    // Set base class thread priority
    BaseClass::mShortThread->setThreadPriorityHigh();
 
@@ -25,9 +27,9 @@ MasterThread::MasterThread()
    BaseClass::mShortThread->mTimerPeriod = 1000;
 
    // Base class call pointers
-   BaseClass::mShortThread->mThreadInitCallPointer.bind(this,&MasterThread::threadInitFunction);
-   BaseClass::mShortThread->mThreadExitCallPointer.bind(this,&MasterThread::threadExitFunction);
-   BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer.bind(this,&MasterThread::executeOnTimer);
+   BaseClass::mShortThread->mThreadInitCallPointer           = std::bind(&MasterThread::threadInitFunction, this);
+   BaseClass::mShortThread->mThreadExitCallPointer           = std::bind(&MasterThread::threadExitFunction, this);
+   BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer = std::bind(&MasterThread::executeOnTimer, this, _1);
 
    // QCall CallPointers
    mTest1QCall.bind            (this->mLongThread, this,&MasterThread::executeTest1);
@@ -39,7 +41,6 @@ MasterThread::MasterThread()
 
    // Members
    mTPFlag = false;
-
 }
 
 //******************************************************************************

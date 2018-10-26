@@ -3,64 +3,68 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "someQCallThread1.h"
-#include "someTimerThread1.h"
-#include "GSettings.h"
+#include "someTestQCallThread.h"
+#include "someRandomTimerThread.h"
+
 #include "MainInit.h"
 
-using namespace Some;
-
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 int main(int argc,char** argv)
 {
-   //--------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Begin program.
 
    main_initialize(argc,argv);
 
-   //--------------------------------------------------------------------
-   // Launch threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Launch program threads.
 
-   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
-   {
-      gQCallThread1 = new QCallThread1;
-      gQCallThread1->launchThread();
-   }
+   Some::gTestQCallThread = new Some::TestQCallThread;
+   Some::gTestQCallThread->launchThread();
 
-   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
-   {
-      gTimerThread1 = new TimerThread1;
-      gTimerThread1->launchThread();
-   }
+   Some::gRandomTimerThread = new Some::RandomTimerThread;
+   Some::gRandomTimerThread->launchThread();
 
-   //--------------------------------------------------------------------
-   // Start user command line executive,
-   // It returns when user exits
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Execute user command line executive, wait for user to exit.
 
    CmdLineExec* tExec = new CmdLineExec;
-   Ris::executeCmdLineConsole(tExec);
+   Ris::gCmdLineConsole.execute(tExec);
    delete tExec;
 
-   //--------------------------------------------------------------------
-   // Shutdown threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Shutdown program threads.
 
-   if (gGSettings.mTimerThread == GSettings::cTimerThread_Thread1)
-   {
-      gTimerThread1->shutdownThread();
-      delete gTimerThread1;
-   }
+   Some::gRandomTimerThread->shutdownThread();
+   Some::gTestQCallThread->shutdownThread();
+   delete Some::gRandomTimerThread;
+   delete Some::gTestQCallThread;
 
-   if (gGSettings.mTestThread == GSettings::cTestThread_QCallThread1)
-   {
-      gQCallThread1->shutdownThread();
-      delete gQCallThread1;
-   }
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // End program.
 
-   //--------------------------------------------------------------------
-   // Exit
-   
    main_finalize();
+ //return 0;
 
+   printf("press enter\n");
+   getchar();
    return 0;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 

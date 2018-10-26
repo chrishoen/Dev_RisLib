@@ -1,28 +1,30 @@
 #pragma once
 
 /*==============================================================================
-Program command line executive.
+Test qcall thread.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risCmdLineExec.h"
+#include "risThreadsQCallThread.h"
+
+namespace Some
+{
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class is the program command line executive. It processes user
-// command line inputs and executes them. It inherits from the command line
-// command executive base class, which provides an interface for executing
-// command line commands. It provides an override execute function that is
-// called by a console executive when it receives a console command line input.
-// The execute function then executes the command.
+// This is a test qcall thread.
+//   
+// It inherits from BaseQCallThread to obtain a call queue based thread
+// functionality.
 
-class CmdLineExec : public Ris::BaseCmdLineExec
+class  TestQCallThread : public Ris::Threads::BaseQCallThread
 {
 public:
+   typedef Ris::Threads::BaseQCallThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
@@ -32,36 +34,65 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Members.
+
+   // Control variables.
+   bool mTPFlag;
+
+   // Metrics.
+   int  mStatusCount1;
+   int  mStatusCount2;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Methods.
 
    // Constructor.
-   CmdLineExec();
-   void reset();
+   TestQCallThread();
+  ~TestQCallThread();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods. Thread base class overloads.
 
-   // Base class override. Execute a command line command. It calls one of
-   // the following specific command execution functions. This is called by
-   // the owner of this object to pass command line commands to it. 
-   void execute(Ris::CmdLineCmd* aCmd) override;
+   // Thread init function. This is called by the base class immediately 
+   // after the thread starts running.
+   void threadInitFunction() override;
 
+   // Thread exit function. This is called by the base class immediately
+   // before the thread is terminated.
+   void threadExitFunction() override;
+
+   // Execute periodically. This is called by the base class timer.
+   void executeOnTimer(int aTimerCount) override;
+  
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods.qcalls.
 
-   // Execute specific commands.
-   void executeGo1      (Ris::CmdLineCmd* aCmd);
-   void executeGo2      (Ris::CmdLineCmd* aCmd);
-   void executeGo3      (Ris::CmdLineCmd* aCmd);
-   void executeGo4      (Ris::CmdLineCmd* aCmd);
-   void executeGo5      (Ris::CmdLineCmd* aCmd);
+   // Test qcall. It is invoked by the timer thread.
+   Ris::Threads::QCall1<int> mTest1QCall;
+
+   // Test function. This is bound to the qcall.
+   void executeTest1 (int aCode);
+
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Global singular instance.
 
+#ifdef _TESTQCALLTHREAD_CPP_
+         TestQCallThread* gTestQCallThread;
+#else
+extern   TestQCallThread* gTestQCallThread;
+#endif
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+}//namespace

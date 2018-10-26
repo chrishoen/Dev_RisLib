@@ -175,13 +175,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\GSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\someClass1.cpp" />
-    <ClCompile Include="Source\someQCallThread1.cpp" />
-    <ClCompile Include="Source\someShare.cpp" />
-    <ClCompile Include="Source\someTimerThread1.cpp" />
+    <ClCompile Include="Source\someRandomTimerThread.cpp" />
+    <ClCompile Include="Source\someTestQCallThread.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -189,12 +186,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\someClass1.h" />
-    <ClInclude Include="Source\someQCallThread1.h" />
-    <ClInclude Include="Source\someShare.h" />
-    <ClInclude Include="Source\someTimerThread1.h" />
+    <ClInclude Include="Source\someRandomTimerThread.h" />
+    <ClInclude Include="Source\someTestQCallThread.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,72 +1,48 @@
 #include "stdafx.h"
 
-#include <windows.h>
-
-#include "GSettings.h"
+#include "risThreadsProcess.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Process.
-
-static const int cTimerPeriod = 10;
-
-void enterProcessHigh()
-{
-   // Set process priority class
-   SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-   SetProcessAffinityMask(GetCurrentProcess(), 0x20);
-
-   // Set process timer resolution to one millisecond
-   timeBeginPeriod(cTimerPeriod);
-}
-
-void exitProcess()
-{
-   timeEndPeriod(cTimerPeriod);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Initialize.
+// Initialize
 
 void main_initialize(int argc,char** argv)
 {
-   // Enter process
-   enterProcessHigh();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Enter process.
 
-   // Initialize print facility
+   Ris::Threads::enterProcessHigh();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize print facility.
+
+   // Initialize print.
    Prn::resetPrint();
+   Prn::useConsole(1);
+   Prn::useConsole(2);
    Prn::initializePrint();
 
-   // Initialize print filters
-   Prn::setFilter(Prn::ThreadRun1,  true);
-   Prn::setFilter(Prn::ThreadRun2,  false);
-   Prn::setFilter(Prn::ThreadRun3,  true);
-   Prn::setFilter(Prn::ThreadRun4,  true);
+   // Initialize print filters.
+   Prn::setFilter(Prn::ThreadInit1,     true);
+   Prn::setFilter(Prn::ThreadRun1,      true);
+   Prn::setFilter(Prn::ThreadRun2,      false);
+   Prn::setFilter(Prn::View11,          true,  1);
+   Prn::setFilter(Prn::View12,          false, 1);
 
-   Prn::setFilter(Prn::ProcRun1,    true);
-   Prn::setFilter(Prn::ProcRun2,    true);
-   Prn::setFilter(Prn::ProcRun3,    false);
-   Prn::setFilter(Prn::ProcRun4,    true);
+   Prn::setFilter(Prn::View21,          true,  2);
+   Prn::setFilter(Prn::View22,          false, 2);
 
-   Prn::setFilter(Prn::ViewRun1,    true, 1);
-   Prn::setFilter(Prn::ViewRun2,    true, 1);
-   Prn::setFilter(Prn::ViewRun3,    false,1);
-   Prn::setFilter(Prn::ViewRun4,    true, 1);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Done.
 
-   Prn::setFilter(Prn::QCallInit1, true);
-   Prn::setFilter(Prn::QCallInit2, true);
-   Prn::setFilter(Prn::QCallRun1,  false);
-   Prn::setFilter(Prn::QCallRun2,  false);
-   Prn::setFilter(Prn::QCallRun3,  false);
-   Prn::setFilter(Prn::QCallRun4,  false);
-
-   gGSettings.readFromFileName();
-   gGSettings.show();
-
-   Prn::print(0,"ThreadQCall*******************************************BEGIN");
+   Prn::print(0, "ThreadQCall Program************************************BEGIN");
 }
 
 //******************************************************************************
@@ -76,13 +52,13 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ThreadQCall*******************************************END");
+   Prn::print(0, "ThreadQCall Program************************************END");
 
-   // Close print
+   // Close print.
    Prn::finalizePrint();
 
-   // Exit process
-   exitProcess();
+   // Exit process.
+   Ris::Threads::exitProcess();
 }
 
 //******************************************************************************

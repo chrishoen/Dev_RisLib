@@ -1,33 +1,45 @@
 #pragma once
 
 /*==============================================================================
-Program command line executive.
+Some timer thread class.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risCmdLineExec.h"
+#include "risThreadsThreads.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class is the program command line executive. It processes user
-// command line inputs and executes them. It inherits from the command line
-// command executive base class, which provides an interface for executing
-// command line commands. It provides an override execute function that is
-// called by a console executive when it receives a console command line input.
-// The execute function then executes the command.
 
-class CmdLineExec : public Ris::BaseCmdLineExec
+namespace Some
+{
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a test timer thread that drives the test qcall thread.
+//   
+
+class RandomTimerThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
+
+   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   // If true then execute periodic function.
+   bool mTPFlag;
+
+   // Random delay bounds.
+   int mDelayA1;
+   int mDelayA2;
 
    //***************************************************************************
    //***************************************************************************
@@ -35,33 +47,44 @@ public:
    // Methods.
 
    // Constructor.
-   CmdLineExec();
-   void reset();
+   RandomTimerThread();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods. Thread base class overloads.
 
-   // Base class override. Execute a command line command. It calls one of
-   // the following specific command execution functions. This is called by
-   // the owner of this object to pass command line commands to it. 
-   void execute(Ris::CmdLineCmd* aCmd) override;
+   // Thread init function. This is called by the base class immediately 
+   // after the thread starts running.
+   void threadInitFunction() override;
+
+   // Thread run function. This is called by the base class immediately 
+   // after the thread init function. It runs a loop that sends a qcall
+   // to the qcall test thread and waits for a random time.
+   void threadRunFunction() override;
+
+   // Thread exit function. This is called by the base class immediately
+   // before the thread is terminated.
+   void threadExitFunction() override;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
-
-   // Execute specific commands.
-   void executeGo1      (Ris::CmdLineCmd* aCmd);
-   void executeGo2      (Ris::CmdLineCmd* aCmd);
-   void executeGo3      (Ris::CmdLineCmd* aCmd);
-   void executeGo4      (Ris::CmdLineCmd* aCmd);
-   void executeGo5      (Ris::CmdLineCmd* aCmd);
+   // Methods. 
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Global singular instance.
 
+#ifdef _SOMETIMERTHREAD_CPP_
+         RandomTimerThread* gRandomTimerThread;
+#else
+extern   RandomTimerThread* gRandomTimerThread;
+#endif
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+}//namespace

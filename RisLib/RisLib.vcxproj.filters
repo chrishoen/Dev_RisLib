@@ -45,9 +45,6 @@
     <ClCompile Include="Source\risCmdLineTables.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risLMPacketQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risLogic.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -213,9 +210,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risContainers2.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risLMPacketQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risLogic.h">

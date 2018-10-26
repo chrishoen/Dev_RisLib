@@ -215,6 +215,7 @@ public:
       mTarget=0;
    }
 
+   // Return true if this qcall was bound.
    bool isValid(){return mTarget !=0;}
 
    //***************************************************************************
@@ -229,7 +230,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall0 is a class template for a QCall with no arguments
+// QCall0 is a class template for a qcall with no arguments
 
 class  QCall0 : public BaseQCall
 {
@@ -239,8 +240,9 @@ public:
    //***************************************************************************
    // Members.
 
-   // Execute CallPointer, it contains the address of the function to be called.
-   // This typically contains the address of a target class member function.
+   // Execution call pointer, it contains the address of the function to be
+   // called. This typically contains the address of a target class member
+   // function.
    std::function<void(void)> mExecuteCallPointer;
 
    //***************************************************************************
@@ -253,13 +255,13 @@ public:
    // queue and then notifies the target thread that a qcall is available.
    void operator()()
    {
-      // Create a new copy of this QCall.
+      // Create a new copy of the qcall.
       QCall0* tQCall = new QCall0(*this);
 
       // Try to write the copy to the target queue.
       if (mTarget->mCallQueue.tryWrite(tQCall))
       {
-         // Notify the target.
+         // Notify the target thread that a qcall is available.
          mTarget->notifyQCallAvailable();
       }
       else
@@ -303,7 +305,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall1 is a class template for a QCall with 1 argument
+// QCall1 is a class template for a qcall with 1 argument
 
 template <class X1>
 class  QCall1 : public BaseQCall
@@ -317,8 +319,9 @@ public:
    // Queued procedure call arguments:
    X1 mX1;
 
-   // Execute CallPointer, it contains the address of the function to be called.
-   // This typically contains the address of a target class member function.
+   // Execution call pointer, it contains the address of the function to be
+   // called. This typically contains the address of a target class member
+   // function.
    std::function<void(X1)> mExecuteCallPointer;
 
    //***************************************************************************
@@ -331,14 +334,14 @@ public:
    // queue and then notifies the target thread that a qcall is available.
    void operator()(X1 aX1)
    {
-      // Store arguments for this QCall.
+      // Store arguments for the qcall.
       mX1 = aX1;
-      // Create a new copy of this QCall.
+      // Create a new copy of the qcall.
       QCall1* tQCall = new QCall1(*this);
       // Try to write the copy to the target queue.
       if (mTarget->mCallQueue.tryWrite(tQCall))
       {
-         // Notify the target.
+         // Notify the target thread that a qcall is available.
          mTarget->notifyQCallAvailable();
       }
       else
@@ -382,7 +385,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall2 is a class template for a QCall with 2 arguments
+// QCall2 is a class template for a qcall with 2 arguments
 
 template <class X1,class X2>
 class  QCall2 : public BaseQCall
@@ -397,8 +400,9 @@ public:
    X1 mX1;
    X2 mX2;
 
-   // Execute CallPointer, it contains the address of the function to be called.
-   // This typically contains the address of a target class member function.
+   // Execution call pointer, it contains the address of the function to be
+   // called. This typically contains the address of a target class member
+   // function.
    std::function<void(X1,X2)> mExecuteCallPointer;
 
    //***************************************************************************
@@ -411,15 +415,15 @@ public:
    // queue and then notifies the target thread that a qcall is available.
    void operator()(X1 aX1,X2 aX2)
    {
-      // Store arguments for this QCall.
+      // Store arguments for the qcall.
       mX1 = aX1;
       mX2 = aX2;
-      // Create a new copy of this QCall.
+      // Create a new copy of the qcall.
       QCall2* tQCall = new QCall2(*this);
       // Try to write the copy to the target queue.
       if (mTarget->mCallQueue.tryWrite(tQCall))
       {
-         // Notify the target.
+         // Notify the target thread that a qcall is available.
          mTarget->notifyQCallAvailable();
       }
       else
@@ -463,7 +467,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall3 is a class template for a QCall with 3 arguments
+// QCall3 is a class template for a qcall with 3 arguments
 
 template <class X1,class X2,class X3>
 class  QCall3 : public BaseQCall
@@ -479,8 +483,9 @@ public:
    X2 mX2;
    X3 mX3;
 
-   // Execute CallPointer, it contains the address of the function to be called.
-   // This typically contains the address of a target class member function.
+   // Execution call pointer, it contains the address of the function to be
+   // called. This typically contains the address of a target class member
+   // function.
    std::function<void(X1,X2,X3)> mExecuteCallPointer;
 
    //***************************************************************************
@@ -493,16 +498,16 @@ public:
    // queue and then notifies the target thread that a qcall is available.
    void operator()(X1 aX1, X2 aX2, X3 aX3)
    {
-      // Store arguments for this QCall.
+      // Store arguments for the qcall.
       mX1 = aX1;
       mX2 = aX2;
       mX3 = aX3;
-      // Create a new copy of this QCall.
+      // Create a new copy of the qcall.
       QCall3* tQCall = new QCall3(*this);
       // Try to write the copy to the target queue.
       if (mTarget->mCallQueue.tryWrite(tQCall))
       {
-         // Notify the target.
+         // Notify the target thread that a qcall is available.
          mTarget->notifyQCallAvailable();
       }
       else
@@ -546,7 +551,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall4 is a class template for a QCall with 4 arguments
+// QCall4 is a class template for a qcall with 4 arguments
 
 template <class X1,class X2,class X3,class X4>
 class  QCall4 : public BaseQCall
@@ -563,8 +568,9 @@ public:
    X3 mX3;
    X4 mX4;
 
-   // Execute CallPointer, it contains the address of the function to be called.
-   // This typically contains the address of a target class member function.
+   // Execution call pointer, it contains the address of the function to be
+   // called. This typically contains the address of a target class member
+   // function.
    std::function<void(X1, X2, X3, X4)> mExecuteCallPointer;
 
    //***************************************************************************
@@ -577,17 +583,17 @@ public:
    // queue and then notifies the target thread that a qcall is available.
    void operator()(X1 aX1, X2 aX2, X3 aX3, X4 aX4)
    {
-      // Store arguments for this QCall.
+      // Store arguments for the qcall.
       mX1 = aX1;
       mX2 = aX2;
       mX3 = aX3;
       mX4 = aX4;
-      // Create a new copy of this QCall.
+      // Create a new copy of the qcall.
       QCall4* tQCall = new QCall4(*this);
       // Try to write the copy to the target queue.
       if (mTarget->mCallQueue.tryWrite(tQCall))
       {
-         // Notify the target.
+         // Notify the target thread that a qcall is available.
          mTarget->notifyQCallAvailable();
       }
       else
@@ -631,7 +637,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall5 is a class template for a QCall with 5 arguments
+// QCall5 is a class template for a qcall with 5 arguments
 
 template <class X1,class X2,class X3,class X4,class X5>
 class  QCall5 : public BaseQCall
@@ -649,8 +655,9 @@ public:
    X4 mX4;
    X5 mX5;
 
-   // Execute CallPointer, it contains the address of the function to be called.
-   // This typically contains the address of a target class member function.
+   // Execution call pointer, it contains the address of the function to be
+   // called. This typically contains the address of a target class member
+   // function.
    std::function<void(X1, X2, X3, X4, X5)> mExecuteCallPointer;
 
    //***************************************************************************
@@ -663,18 +670,18 @@ public:
    // queue and then notifies the target thread that a qcall is available.
    void operator()(X1 aX1, X2 aX2, X3 aX3, X4 aX4,X5 aX5)
    {
-      // Store arguments for this QCall.
+      // Store arguments for the qcall.
       mX1 = aX1;
       mX2 = aX2;
       mX3 = aX3;
       mX4 = aX4;
       mX5 = aX5;
-      // Create a new copy of this QCall.
+      // Create a new copy of the qcall.
       QCall5* tQCall = new QCall5(*this);
       // Try to write the copy to the target queue.
       if (mTarget->mCallQueue.tryWrite(tQCall))
       {
-         // Notify the target.
+         // Notify the target thread that a qcall is available.
          mTarget->notifyQCallAvailable();
       }
       else

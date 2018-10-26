@@ -28,12 +28,15 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
-   if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
-   if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
-   if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
-   if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
+   if (aCmd->isCmd("GO1"))  executeGo1(aCmd);
+   if (aCmd->isCmd("GO2"))  executeGo2(aCmd);
+   if (aCmd->isCmd("GO3"))  executeGo3(aCmd);
+   if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
+   if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
+   if (aCmd->isCmd("GO6"))  executeGo6(aCmd);
+   if (aCmd->isCmd("GO7"))  executeGo7(aCmd);
+   if (aCmd->isCmd("GO8"))  executeGo8(aCmd);
+   if (aCmd->isCmd("GO9"))  executeGo9(aCmd);
 }
 
 //******************************************************************************
@@ -92,6 +95,59 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+{
+   using namespace std::placeholders;
+   typedef std::function<void(int)> FunctionT;
+   FunctionT tFunction1 = std::bind(my_function, _1);
+   tFunction1(101);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+class MyClass
+{
+public:
+   void my_function(int aX)
+   {
+      printf("my_function %d\n", aX);
+   }
+};
+
+
+void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
+{
+   using namespace std::placeholders;
+   typedef std::function<void(int)> FunctionT;
+
+   MyClass tObject;
+
+   FunctionT tFunction1 = std::bind(&MyClass::my_function, &tObject, _1);
+   tFunction1(101);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo9(Ris::CmdLineCmd* aCmd)
 {
 }
 

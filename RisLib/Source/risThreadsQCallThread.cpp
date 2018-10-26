@@ -52,11 +52,13 @@ void BaseQCallThread::threadResourceInitFunction()
 
 void BaseQCallThread::threadTimerInitFunction()
 {
+   using namespace std::placeholders;
+
    // Guard.
    if (mTimerPeriod == 0) return;
 
    // Bind timer callback.
-   mThreadTimerCall.bind (this,&BaseQCallThread::threadExecuteOnTimer);
+   mThreadTimerCall = std::bind (&BaseQCallThread::threadExecuteOnTimer, this, _1);
 
    // Start timer.
    mThreadTimer.startTimer(mThreadTimerCall,mTimerPeriod);

@@ -8,6 +8,7 @@ Some timer thread class.
 //******************************************************************************
 //******************************************************************************
 
+#include <random>
 #include "risThreadsThreads.h"
 
 //******************************************************************************
@@ -37,9 +38,10 @@ public:
    // If true then execute periodic function.
    bool mTPFlag;
 
-   // Random delay bounds.
-   int mDelayA1;
-   int mDelayA2;
+   // Random number generator for random timer delay.
+   std::random_device mRandomDevice;
+   std::mt19937       mRandomGen;
+   std::uniform_int_distribution<> mRandomDis;
 
    //***************************************************************************
    //***************************************************************************

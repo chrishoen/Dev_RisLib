@@ -6,6 +6,9 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include "someThreadParms.h"
+#include "someTestQCallThread.h"
+
 #define  _SOMETIMERTHREAD_CPP_
 #include "someRandomTimerThread.h"
 
@@ -17,10 +20,10 @@ namespace Some
 //******************************************************************************
 
 RandomTimerThread::RandomTimerThread()
+   : mRandomGen(mRandomDevice()),
+     mRandomDis(gThreadParms.mDelayA1, gThreadParms.mDelayA2)
 {
    mTPFlag = false;
-   mDelayA1 = 100;
-   mDelayA2 = 200;
 }
 
 //******************************************************************************
@@ -48,12 +51,20 @@ void RandomTimerThread::threadRunFunction()
    Prn::print(Prn::ThreadRun1, "RandomTimerThread::threadRunFunction BEGIN");
 
    // Loop to wait for posted events and process them.
+   int tCount = 0;
    while (true)
    {
       // Test for thread termination.
       if (BaseClass::mTerminateFlag) break;
-      // Wait.
-      BaseClass::threadSleep(1000);
+
+      // Wait for a random delay.
+      int tDelay = mRandomDis(mRandomGen);
+      Prn::print(Prn::ThreadRun4, "Delay %4d",tDelay);
+      BaseClass::threadSleep(tDelay);
+
+      // Send a qcall to the test thread.
+      if (mTPFlag) gTestQCallThread->mTest1QCall(tCount);
+      tCount++;
    }
 
    Prn::print(Prn::ThreadRun1, "RandomTimerThread::threadRunFunction END");

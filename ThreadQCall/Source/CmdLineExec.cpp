@@ -3,6 +3,7 @@
 
 #include "someRandomTimerThread.h"
 #include "someTestQCallThread.h"
+#include "someThreadParms.h"
 
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
@@ -38,6 +39,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"))       executeGo4(aCmd);
    if (aCmd->isCmd("GO5"))       executeGo5(aCmd);
    if (aCmd->isCmd("GO5"))       executeGo5(aCmd);
+   if (aCmd->isCmd("Parms"))     executeParms(aCmd);
 }
 
 //******************************************************************************
@@ -87,4 +89,19 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
+{
+   Some::gThreadParms.reset();
+   Some::gThreadParms.readSection("default");
+   Some::gThreadParms.show();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 

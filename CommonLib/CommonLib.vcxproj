@@ -25,6 +25,7 @@
     <ClCompile Include="Source\procoSerialSettings.cpp" />
     <ClCompile Include="Source\procoTcpSettings.cpp" />
     <ClCompile Include="Source\procoUdpSettings.cpp" />
+    <ClCompile Include="Source\someThreadParms.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -37,6 +38,7 @@
     <ClInclude Include="Source\procoSerialSettings.h" />
     <ClInclude Include="Source\procoTcpSettings.h" />
     <ClInclude Include="Source\procoUdpSettings.h" />
+    <ClInclude Include="Source\someThreadParms.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

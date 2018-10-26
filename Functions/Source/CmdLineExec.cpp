@@ -109,7 +109,11 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 class MyClass
 {
 public:
-   void my_function(int aX)
+   void my_function0()
+   {
+      printf("my_function\n");
+   }
+   void my_function1(int aX)
    {
       printf("my_function %d\n", aX);
    }
@@ -123,7 +127,7 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 
    MyClass tObject;
 
-   FunctionT tFunction1 = std::bind(&MyClass::my_function, &tObject, _1);
+   FunctionT tFunction1 = std::bind(&MyClass::my_function1, &tObject, _1);
    tFunction1(101);
 }
 
@@ -133,6 +137,13 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
 {
+   using namespace std::placeholders;
+   typedef std::function<void(void)> FunctionT;
+
+   MyClass tObject;
+
+   FunctionT tFunction1 = std::bind(&MyClass::my_function0, &tObject);
+   tFunction1();
 }
 
 //******************************************************************************

@@ -130,8 +130,9 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+#include <functional>
 #include "risLCPointerQueue.h"
-#include "risCallPointer.h"
 
 namespace Ris
 {
@@ -240,8 +241,7 @@ public:
 
    // Execute CallPointer, it contains the address of the function to be called.
    // This typically contains the address of a target class member function.
-   typedef Ris::CallPointer0<> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
+   std::function<void(void)> mExecuteCallPointer;
 
    //***************************************************************************
    //***************************************************************************
@@ -282,19 +282,21 @@ public:
    // Methods.
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aTargetObject);
    }
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallObject aCallObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aCallObject);
    }
 };
 
@@ -317,8 +319,7 @@ public:
 
    // Execute CallPointer, it contains the address of the function to be called.
    // This typically contains the address of a target class member function.
-   typedef Ris::CallPointer1<X1> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
+   std::function<void(X1)> mExecuteCallPointer;
 
    //***************************************************************************
    //***************************************************************************
@@ -360,19 +361,21 @@ public:
    // Methods.
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aTargetObject, _1);
    }
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallObject aCallObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aCallObject, _1);
    }
 };
 
@@ -396,8 +399,7 @@ public:
 
    // Execute CallPointer, it contains the address of the function to be called.
    // This typically contains the address of a target class member function.
-   typedef Ris::CallPointer2<X1, X2> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
+   std::function<void(X1,X2)> mExecuteCallPointer;
 
    //***************************************************************************
    //***************************************************************************
@@ -443,16 +445,18 @@ public:
    template <class TargetObject,class CallMethod>
    void bind(TargetObject aTargetObject,CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aTargetObject, _1, _2);
    }
 
    // Bind a target and call pointer to the qcall.
    template <class TargetObject,class CallObject,class CallMethod>
    void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aCallObject, _1, _2);
    }
 };
 
@@ -477,8 +481,7 @@ public:
 
    // Execute CallPointer, it contains the address of the function to be called.
    // This typically contains the address of a target class member function.
-   typedef Ris::CallPointer3<X1, X2, X3> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
+   std::function<void(X1,X2,X3)> mExecuteCallPointer;
 
    //***************************************************************************
    //***************************************************************************
@@ -522,19 +525,21 @@ public:
    // Methods.
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aTargetObject, _1, _2, _3);
    }
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallObject aCallObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aCallObject, _1, _2, _3);
    }
 };
 
@@ -560,8 +565,7 @@ public:
 
    // Execute CallPointer, it contains the address of the function to be called.
    // This typically contains the address of a target class member function.
-   typedef Ris::CallPointer4<X1, X2, X3, X4> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
+   std::function<void(X1, X2, X3, X4)> mExecuteCallPointer;
 
    //***************************************************************************
    //***************************************************************************
@@ -606,19 +610,21 @@ public:
    // Methods.
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aTargetObject, _1, _2, _3, _4);
    }
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallObject aCallObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aCallObject, _1, _2, _3, _4);
    }
 };
 
@@ -645,8 +651,7 @@ public:
 
    // Execute CallPointer, it contains the address of the function to be called.
    // This typically contains the address of a target class member function.
-   typedef Ris::CallPointer5<X1, X2, X3, X4, X5> ExecuteCallPointer;
-   ExecuteCallPointer mExecuteCallPointer;
+   std::function<void(X1, X2, X3, X4, X5)> mExecuteCallPointer;
 
    //***************************************************************************
    //***************************************************************************
@@ -692,19 +697,21 @@ public:
    // Methods.
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aTargetObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aTargetObject, _1, _2, _3, _4, _5);
    }
 
    // Bind a target and call pointer to the qcall.
-   template <class TargetObject,class CallObject,class CallMethod>
-   void bind(TargetObject aTargetObject,CallObject aCallObject,CallMethod aCallMethod)
+   template <class TargetObject, class CallObject, class CallMethod>
+   void bind(TargetObject aTargetObject, CallObject aCallObject, CallMethod aCallMethod)
    {
+      using namespace std::placeholders;
       mTarget = aTargetObject;
-      mExecuteCallPointer.bind (aCallObject,aCallMethod);
+      mExecuteCallPointer = std::bind(aCallMethod, aCallObject, _1, _2, _3, _4, _5);
    }
 };
 

@@ -142,7 +142,6 @@
     <ClInclude Include="Source\risByteBuffer.h" />
     <ClInclude Include="Source\risByteContent.h" />
     <ClInclude Include="Source\risByteMsgMonkey.h" />
-    <ClInclude Include="Source\risCallPointer.h" />
     <ClInclude Include="Source\risCmdLineCmd.h" />
     <ClInclude Include="Source\risCmdLineConsole.h" />
     <ClInclude Include="Source\risCmdLineExec.h" />

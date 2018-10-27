@@ -179,9 +179,6 @@
     <ClInclude Include="Source\risByteMsgMonkey.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risCallPointer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risCmdLineCmd.h">
       <Filter>Source</Filter>
     </ClInclude>

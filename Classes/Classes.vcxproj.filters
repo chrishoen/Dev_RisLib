@@ -15,9 +15,6 @@
     <ClCompile Include="Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someClass2.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someClass3.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -36,9 +33,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\Callback.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someClass2.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someClass3.h">

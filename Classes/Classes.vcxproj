@@ -177,7 +177,6 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
-    <ClCompile Include="Source\someClass2.cpp" />
     <ClCompile Include="Source\someClass3.cpp" />
     <ClCompile Include="Source\someClass4.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
@@ -189,7 +188,6 @@
     <ClInclude Include="Source\Callback.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\someClass1.h" />
-    <ClInclude Include="Source\someClass2.h" />
     <ClInclude Include="Source\someClass3.h" />
     <ClInclude Include="Source\someClass4.h" />
     <ClInclude Include="Source\someClass5.h" />

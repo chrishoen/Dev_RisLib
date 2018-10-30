@@ -10,6 +10,7 @@
 #include <windows.h> 
 #include <conio.h>
 #include <io.h>
+#include <direct.h>
 
 #include "risPortableCalls.h"
 
@@ -127,6 +128,17 @@ void portableSetConsoleTitle(char* aTitle)
 bool portableFilePathExists (char* aFilePath)
 {
    return  _access(aFilePath, 0) == 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the program current working directory.
+
+void portableChdir(const char* aFilePath)
+{
+   int tRet = _chdir(aFilePath);
+   if (tRet) printf("portableChdir FAIL %s", aFilePath);
 }
 
 //******************************************************************************

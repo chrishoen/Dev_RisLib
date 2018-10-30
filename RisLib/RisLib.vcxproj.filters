@@ -242,9 +242,6 @@
     <ClInclude Include="Source\risPortableCalls.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\risPortableTypes.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\risProgramTime.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -264,9 +261,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsQCallThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risThreadsSynch.h">

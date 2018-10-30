@@ -167,7 +167,6 @@
     <ClInclude Include="Source\risNetUdpMsgThread.h" />
     <ClInclude Include="Source\risNetUdpStringSocket.h" />
     <ClInclude Include="Source\risPortableCalls.h" />
-    <ClInclude Include="Source\risPortableTypes.h" />
     <ClInclude Include="Source\risProgramTime.h" />
     <ClInclude Include="Source\risSerialHeaderBuffer.h" />
     <ClInclude Include="Source\risSerialMsgPort.h" />
@@ -180,7 +179,6 @@
     <ClInclude Include="Source\risThreadsProcess.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />
-    <ClInclude Include="Source\risThreadsQueue.h" />
     <ClInclude Include="Source\risThreadsSynch.h" />
     <ClInclude Include="Source\risThreadsThreads.h" />
     <ClInclude Include="Source\risThreadsTimer.h" />

@@ -7,7 +7,6 @@
 
 #include "procoClientThread.h"
 
-#include "risThreadsQueue.h"
 #include "CmdLineExec.h"
 
 using namespace ProtoComm;

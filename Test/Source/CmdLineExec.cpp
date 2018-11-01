@@ -44,13 +44,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10);
-   aCmd->setArgDefault(2,11.1);
-
-   int    tInt    = aCmd->argInt(1);
-   double tDouble = aCmd->argDouble(2);
-
-   Prn::print(0,"Show2 %d %10.6f",tInt,tDouble);
+   Prn::print(0, "IsNumber %s", my_string_from_bool(aCmd->isArgNumber(1)));
 }
 
 //******************************************************************************
@@ -59,9 +53,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Log::openFile(4, "DasProcGammaDiff.txt");
-   Log::write(4, "GammaDiff %12.10f", 1.234);
-   Log::closeFile(4);
 }
 
 //******************************************************************************
@@ -70,7 +61,15 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-  
+   char tString[200];
+
+   while (true)
+   {
+      fgets(tString, 200, stdin);
+      printf("CMD %d %s", (int)strlen(tString), tString);
+      if (strcmp(tString, "e\n") == 0) break;
+   }
+
 }
 
 //******************************************************************************

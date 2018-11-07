@@ -150,6 +150,12 @@
     <ClCompile Include="Source\risLCCritcalSection_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\tsCentral.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\tsThreadLocal.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">
@@ -318,6 +324,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risLCCriticalSection.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\tsCentral.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\tsThreadLocal.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

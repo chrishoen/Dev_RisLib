@@ -19,9 +19,7 @@ SectionBegin default
    DelayA                 100   200
    ShowCode               1
 
-   DelayA                 20    50
-   DelayB                 1     10
-   ShowCode               0
+   DelayA                 500   1000
 
 SectionEnd
 

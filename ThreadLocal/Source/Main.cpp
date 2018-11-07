@@ -3,7 +3,6 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "someTestQCallThread.h"
 #include "someRandomTimerThread.h"
 
 #include "MainInit.h"
@@ -26,14 +25,17 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   Some::gTestQCallThread = new Some::TestQCallThread;
-   Some::gTestQCallThread->launchThread();
+   if (true)
+   {
+      Some::gRandomTimerThread1 = new Some::RandomTimerThread(1);
+      Some::gRandomTimerThread1->launchThread();
+   }
 
-   Some::gRandomTimerThread1 = new Some::RandomTimerThread(1);
-   Some::gRandomTimerThread1->launchThread();
-
-   Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
-   Some::gRandomTimerThread2->launchThread();
+   if (true)
+   {
+      Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
+      Some::gRandomTimerThread2->launchThread();
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -49,13 +51,19 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   Some::gRandomTimerThread1->shutdownThread();
-   Some::gRandomTimerThread2->shutdownThread();
-   Some::gTestQCallThread->shutdownThread();
+   if (Some::gRandomTimerThread1)
+   {
+      Some::gRandomTimerThread1->shutdownThread();
+      delete Some::gRandomTimerThread1;
+      Some::gRandomTimerThread1 = 0;
+   }
 
-   delete Some::gRandomTimerThread1;
-   delete Some::gRandomTimerThread2;
-   delete Some::gTestQCallThread;
+   if (Some::gRandomTimerThread2)
+   {
+      Some::gRandomTimerThread2->shutdownThread();
+      delete Some::gRandomTimerThread2;
+      Some::gRandomTimerThread2 = 0;
+   }
 
    //***************************************************************************
    //***************************************************************************

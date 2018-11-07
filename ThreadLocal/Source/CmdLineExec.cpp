@@ -2,7 +2,6 @@
 #include "stdafx.h"
 
 #include "someRandomTimerThread.h"
-#include "someTestQCallThread.h"
 #include "someThreadParms.h"
 
 #include "risCmdLineConsole.h"
@@ -52,7 +51,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 101);
 
-   Some::gTestQCallThread->mTest1QCall(7, aCmd->argInt(1));
 }
 
 //******************************************************************************

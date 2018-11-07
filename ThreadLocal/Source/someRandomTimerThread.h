@@ -76,6 +76,8 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Methods. 
+
+   void executeOnTimer(int aCount);
 };
 
 //******************************************************************************
@@ -84,8 +86,8 @@ public:
 // Global singular instance.
 
 #ifdef _SOMETIMERTHREAD_CPP_
-         RandomTimerThread* gRandomTimerThread1;
-         RandomTimerThread* gRandomTimerThread2;
+         RandomTimerThread* gRandomTimerThread1 = 0;
+         RandomTimerThread* gRandomTimerThread2 = 0;
 #else
 extern   RandomTimerThread* gRandomTimerThread1;
 extern   RandomTimerThread* gRandomTimerThread2;

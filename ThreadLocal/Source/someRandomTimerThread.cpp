@@ -7,7 +7,6 @@
 #include "stdafx.h"
 
 #include "someThreadParms.h"
-#include "someTestQCallThread.h"
 
 #define  _SOMETIMERTHREAD_CPP_
 #include "someRandomTimerThread.h"
@@ -64,7 +63,7 @@ void RandomTimerThread::threadRunFunction()
       BaseClass::threadSleep(tDelay);
 
       // Send a qcall to the test thread.
-      if (mTPFlag) gTestQCallThread->mTest1QCall(mIdent,tCount);
+      if (mTPFlag) executeOnTimer(tCount);
       tCount++;
    }
 
@@ -81,6 +80,19 @@ void RandomTimerThread::threadRunFunction()
 void RandomTimerThread::threadExitFunction()
 {
    Prn::print(Prn::ThreadInit1, "RandomTimerThread::threadExitFunction");
+}
+
+void RandomTimerThread::executeOnTimer(int aCount)
+{
+   if (mIdent == 1)
+   {
+      Prn::print(Prn::View11, "Timer %4d %4d", mIdent, aCount);
+   }
+   else
+   {
+      Prn::print(Prn::View11, "Timer           %4d %4d", mIdent, aCount);
+   }
+
 }
 
 //******************************************************************************

@@ -6,6 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include "tsCentral.h"
 #include "someThreadParms.h"
 
 #define  _SOMETIMERTHREAD_CPP_
@@ -23,6 +24,16 @@ RandomTimerThread::RandomTimerThread(int aIdent)
      mRandomGen(mRandomDevice()),
      mRandomDis(gThreadParms.mDelayA1, gThreadParms.mDelayA2)
 {
+   // Set base class variables.
+   if (mIdent == 1)
+   {
+      BaseClass::setThreadName("RandomTimer1");
+   }
+   else
+   {
+      BaseClass::setThreadName("RandomTimer2");
+   }
+
    mTPFlag = false;
 }
 
@@ -84,6 +95,10 @@ void RandomTimerThread::threadExitFunction()
 
 void RandomTimerThread::executeOnTimer(int aCount)
 {
+   TS::local()->mCode = mIdent;
+
+   TS::printCode();
+
    if (mIdent == 1)
    {
       Prn::print(Prn::View11, "Timer %4d %4d", mIdent, aCount);

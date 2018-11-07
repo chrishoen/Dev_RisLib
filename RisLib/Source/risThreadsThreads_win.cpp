@@ -61,6 +61,8 @@ BaseThread::BaseThread()
 
    mThreadStackSize = 0;
    mThreadInitSemFlag = true;
+
+   mThreadLocal = new TS::ThreadLocal;
 }
 
 //******************************************************************************
@@ -70,6 +72,8 @@ BaseThread::BaseThread()
 BaseThread::~BaseThread() 
 {
    delete mBaseSpecific;
+   delete mThreadLocal;
+   TS::setThreadLocal(0);
 }
 
 //******************************************************************************
@@ -79,6 +83,16 @@ BaseThread::~BaseThread()
 void* BaseThread::getHandlePtr()
 {
    return (void*)&mBaseSpecific->mHandle;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the thread name in the thread local storage.
+
+void BaseThread::setThreadName(const char* aThreadName)
+{
+   mThreadLocal->setThreadName(aThreadName);
 }
 
 //******************************************************************************
@@ -190,6 +204,9 @@ void BaseThread::threadFunction()
    // Thread execution
    try
    {
+      // Set the thread local storage pointer to the address of the
+      // thread local storage object.
+      TS::setThreadLocal(mThreadLocal);
       // Seed thread random number.
       my_srand();
       // This is used by inheritors to initialize resources. This should be

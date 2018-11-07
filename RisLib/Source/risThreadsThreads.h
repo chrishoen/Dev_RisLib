@@ -9,6 +9,7 @@ Base thread classes
 
 #include "risThreadsSynch.h"
 #include "ris_priorities.h"
+#include "tsCentral.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -55,7 +56,6 @@ public:
    //waitForThreadTerminate waits for it.
    BinarySemaphore  mThreadExitSem;
 
-protected:
    // Pimpl pattern. Used to hide details of the operating system specific
    // variables, like the thread handle, from the .h file so that this
    // include file can be complied by different compliers. The class is
@@ -63,7 +63,19 @@ protected:
    // different compilers.
    class BaseSpecific;
    BaseSpecific* mBaseSpecific;
-public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Thread local storage. This is created in the constructor. The pointer
+   // is copied to the thread local storage variable at the beginning of
+   // the thread run function.
+   TS::ThreadLocal* mThreadLocal;
+
+   // Set the thread name in the thread local storage.
+   void setThreadName(const char* aThreadName);
 
    //***************************************************************************
    //***************************************************************************
@@ -204,7 +216,6 @@ public:
 
    // Show thread configuration info.
    void threadShowInfo(char* aLabel);
-
 };
 
 //******************************************************************************

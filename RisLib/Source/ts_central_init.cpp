@@ -50,7 +50,7 @@ void setThreadLocal(ThreadLocal* aThreadLocal)
 }
 
 // Return a pointer to the thread local storage.
-ThreadLocal* local()
+ThreadLocal* tls()
 {
    return gThreadLocal;
 }

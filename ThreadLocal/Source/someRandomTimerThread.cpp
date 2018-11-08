@@ -95,7 +95,7 @@ void RandomTimerThread::threadExitFunction()
 
 void RandomTimerThread::executeOnTimer(int aCount)
 {
-   TS::local()->mCode = mIdent;
+   TS::tls()->mCode = mIdent;
 
    TS::printCode();
 

@@ -30,11 +30,11 @@ extern thread_local ThreadLocal* gThreadLocal;
 
 void printCode()
 {
-   if (local())
+   if (tls())
    {
       printf("TS printCode %-20s %d\n", 
-         local()->mThreadName,
-         local()->mCode);
+         tls()->mThreadName,
+         tls()->mCode);
    }
    else
    {

@@ -35,7 +35,7 @@ namespace TS
    void setThreadLocal(ThreadLocal* aLocal);
 
    // Return a pointer to the thread local storage.
-   ThreadLocal* local();
+   ThreadLocal* tls();
 
    //***************************************************************************
    //***************************************************************************

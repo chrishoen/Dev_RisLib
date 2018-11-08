@@ -23,14 +23,18 @@ namespace TS
    void reset ();
    void setProgramName (const char* aName);
    void initialize();
+   void finalize();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Access to thread local storage.
 
-   // Return a pointer to the thread local storage.
+   // Set the pointer to the thread local storage. This should be called
+   // at the begining of the thread run function.
    void setThreadLocal(ThreadLocal* aLocal);
+
+   // Return a pointer to the thread local storage.
    ThreadLocal* local();
 
    //***************************************************************************

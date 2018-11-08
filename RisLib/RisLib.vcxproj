@@ -246,6 +246,7 @@
     <ClCompile Include="Source\tsShare.cpp" />
     <ClCompile Include="Source\tsThreadLocal.cpp" />
     <ClCompile Include="Source\ts_central_init.cpp" />
+    <ClCompile Include="Source\ts_central_print.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

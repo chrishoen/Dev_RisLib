@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "ts_central.h"
 #include "risThreadsProcess.h"
 #include "someThreadParms.h"
 
@@ -10,6 +11,11 @@
 
 void main_initialize(int argc,char** argv)
 {
+   // Initialize the thread print facility.
+   TS::reset();
+   TS::setProgramName("ThreadLocal");
+   TS::initialize();
+
    // Enter process.
    Ris::Threads::enterProcessHigh();
 
@@ -49,6 +55,9 @@ void main_finalize()
 
    // Exit process.
    Ris::Threads::exitProcess();
+
+   // Finalize the thread print facility.
+   TS::finalize();
 }
 
 //******************************************************************************

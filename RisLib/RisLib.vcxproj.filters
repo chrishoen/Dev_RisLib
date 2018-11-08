@@ -159,6 +159,9 @@
     <ClCompile Include="Source\ts_central_init.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ts_central_print.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">

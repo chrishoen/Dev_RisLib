@@ -21,7 +21,7 @@ namespace TS
 // Thread local storage.
 
 // Thread local storage.
-static thread_local ThreadLocal* gThreadLocal;
+static thread_local ThreadLocal* gThreadLocal = 0;
 
 //******************************************************************************
 //******************************************************************************
@@ -42,41 +42,24 @@ void setProgramName(const char* aName)
 //***************************************************************************
 // Access to thread local storage.
 
-// Return a pointer to the thread local storage.
+// Set the pointer to the thread local storage. This should be called
+// at the begining of the thread run function.
 void setThreadLocal(ThreadLocal* aThreadLocal)
 {
    gThreadLocal = aThreadLocal;
 }
 
+// Return a pointer to the thread local storage.
 ThreadLocal* local()
 {
    return gThreadLocal;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-// Print the test code.
-
-void printCode()
-{
-   if (gThreadLocal)
-   {
-      printf("TS printCode %-20s %d\n", 
-         gThreadLocal->mThreadName,
-         gThreadLocal->mCode);
-   }
-   else
-   {
-      printf("TS printCode NOT INITIALIZED");
-   }
-}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-bool openFile()
+bool openLogFile()
 {            
    char tBuf[400];
    char tFileName[400];
@@ -97,13 +80,27 @@ bool openFile()
 //******************************************************************************
 //******************************************************************************
 
-void closeFile()
-{            
+void closeLogFile()
+{
    if (gShare.mLogFile != 0)
    {
       fclose(gShare.mLogFile);
    }
-   gShare.mLogFile=0;
+   gShare.mLogFile = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void initialize()
+{
+   openLogFile();
+}
+
+void finalize()
+{
+   openLogFile();
 }
 
 //******************************************************************************

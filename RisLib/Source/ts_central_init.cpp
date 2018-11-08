@@ -8,7 +8,9 @@
 
 #include "my_functions.h"
 #include "risAlphaDir.h"
-#include "tsCentral.h"
+
+#include "tsShare.h"
+#include "ts_central.h"
 
 namespace TS
 {
@@ -16,14 +18,7 @@ namespace TS
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Regional variables
-
-static const int cMaxStringSize = 400;
-
-// Program log file.
-char rProgramName[cMaxStringSize];
-FILE* rLogFile;
-
+// Thread local storage.
 
 // Thread local storage.
 static thread_local ThreadLocal* gThreadLocal;
@@ -34,12 +29,12 @@ static thread_local ThreadLocal* gThreadLocal;
 
 void reset()
 {
-   strcpy(rProgramName, "SomeProgram");
+   strcpy(gShare.mProgramName, "SomeProgram");
 }
 
 void setProgramName(const char* aName)
 {
-   strncpy(rProgramName, aName, cMaxStringSize);
+   strncpy(gShare.mProgramName, aName, cMaxStringSize);
 }
 
 //***************************************************************************
@@ -85,12 +80,12 @@ bool openFile()
 {            
    char tBuf[400];
    char tFileName[400];
-   strcpy(tFileName, rProgramName);
+   strcpy(tFileName, gShare.mProgramName);
    strcat(tFileName,".txt");
 
-   rLogFile = fopen(Ris::getAlphaFilePath_Log(tBuf,tFileName),"w");
+   gShare.mLogFile = fopen(Ris::getAlphaFilePath_Log(tBuf,tFileName),"w");
 
-   if (rLogFile==0)
+   if (gShare.mLogFile==0)
    {
       return false;
    }
@@ -104,11 +99,11 @@ bool openFile()
 
 void closeFile()
 {            
-   if (rLogFile != 0)
+   if (gShare.mLogFile != 0)
    {
-      fclose(rLogFile);
+      fclose(gShare.mLogFile);
    }
-   rLogFile=0;
+   gShare.mLogFile=0;
 }
 
 //******************************************************************************

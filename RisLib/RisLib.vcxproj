@@ -187,8 +187,9 @@
     <ClInclude Include="Source\risTimeMarker.h" />
     <ClInclude Include="Source\ris_priorities.h" />
     <ClInclude Include="Source\stdafx.h" />
-    <ClInclude Include="Source\tsCentral.h" />
+    <ClInclude Include="Source\tsShare.h" />
     <ClInclude Include="Source\tsThreadLocal.h" />
+    <ClInclude Include="Source\ts_central.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\logFiles.cpp" />
@@ -242,8 +243,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\tsCentral.cpp" />
+    <ClCompile Include="Source\tsShare.cpp" />
     <ClCompile Include="Source\tsThreadLocal.cpp" />
+    <ClCompile Include="Source\ts_central_init.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

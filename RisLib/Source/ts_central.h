@@ -1,7 +1,11 @@
 #pragma once
 
 /*==============================================================================
-Implements a thread local system facility that provides printing and logging.
+Implements a facility that provides printing and logging that is 
+based on having the controlling parameters located in thread local
+storage.
+
+The API.
 ==============================================================================*/
 
 //******************************************************************************
@@ -18,6 +22,7 @@ namespace TS
 
    void reset ();
    void setProgramName (const char* aName);
+   void initialize();
 
    //***************************************************************************
    //***************************************************************************

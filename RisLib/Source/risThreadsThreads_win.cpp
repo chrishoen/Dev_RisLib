@@ -10,6 +10,8 @@
 #include <windows.h> 
 #include <assert.h>
 
+#include "ts_central.h"
+
 #include "my_functions.h"
 #include "ris_priorities.h"
 #include "prnPrint.h"

@@ -162,6 +162,9 @@
     <ClCompile Include="Source\tsThreadServices_print.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\tsThreadServices_tls.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">

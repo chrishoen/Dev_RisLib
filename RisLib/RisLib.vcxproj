@@ -247,6 +247,7 @@
     <ClCompile Include="Source\tsThreadLocal.cpp" />
     <ClCompile Include="Source\tsThreadServices_init.cpp" />
     <ClCompile Include="Source\tsThreadServices_print.cpp" />
+    <ClCompile Include="Source\tsThreadServices_tls.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

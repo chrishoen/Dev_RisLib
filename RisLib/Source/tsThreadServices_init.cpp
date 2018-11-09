@@ -18,14 +18,6 @@ namespace TS
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread local storage.
-
-// Thread local storage.
-static thread_local ThreadLocal* gThreadLocal = 0;
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
 void reset()
 {
@@ -35,24 +27,6 @@ void reset()
 void setProgramName(const char* aName)
 {
    strncpy(gShare.mProgramName, aName, cMaxStringSize);
-}
-
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-// Access to thread local storage.
-
-// Set the pointer to the thread local storage. This should be called
-// at the begining of the thread run function.
-void setThreadLocal(ThreadLocal* aThreadLocal)
-{
-   gThreadLocal = aThreadLocal;
-}
-
-// Return a pointer to the thread local storage.
-ThreadLocal* tls()
-{
-   return gThreadLocal;
 }
 
 //******************************************************************************

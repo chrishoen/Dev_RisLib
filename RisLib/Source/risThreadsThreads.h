@@ -43,12 +43,10 @@ public:
    int    mThreadStackSize;
    int    mThreadPriority;
    int    mThreadSingleProcessor;
-   int    mThreadUseInitSem;
 
    //Init semaphore.
    //It is posted to after the end of threadInitFunction.
    //launchThread waits for it.
-   bool             mThreadInitSemFlag;
    BinarySemaphore  mThreadInitSem;
 
    //Exit semaphore.

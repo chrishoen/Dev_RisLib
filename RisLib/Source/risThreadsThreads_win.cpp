@@ -62,7 +62,6 @@ BaseThread::BaseThread()
    mThreadSingleProcessor  = -1;
 
    mThreadStackSize = 0;
-   mThreadInitSemFlag = true;
 
    // Create this now in the thread context of the thread creator.
    // It will be copied to the thread local storage variable at the
@@ -202,10 +201,7 @@ void BaseThread::launchThread()
    //***************************************************************************
    // Wait for the thread init function to complete.
 
-   if (mThreadInitSemFlag)
-   {
-      mThreadInitSem.get();
-   }
+   mThreadInitSem.get();
 }
 
 //******************************************************************************
@@ -238,10 +234,7 @@ void BaseThread::threadFunction()
       // has completed 
       threadTimerInitFunction();
       // Post to the thread init semaphore.
-      if (mThreadInitSemFlag)
-      {
-         mThreadInitSem.put();
-      }
+      mThreadInitSem.put();
       // Run section, overload provided by inheritors 
       threadRunFunction();
       // Exit section, overload provided by inheritors

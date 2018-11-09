@@ -28,7 +28,7 @@ RandomTimerThread::RandomTimerThread(int aIdent)
    if (mIdent == 1)
    {
       BaseClass::setThreadName("RandomTimer1");
-      BaseClass::setThreadPrintLevel(1);
+      BaseClass::setThreadPrintLevel(3);
    }
    else
    {
@@ -48,7 +48,6 @@ RandomTimerThread::RandomTimerThread(int aIdent)
 
 void RandomTimerThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "RandomTimerThread::threadInitFunction");
 }
 
 //******************************************************************************
@@ -61,8 +60,6 @@ void RandomTimerThread::threadInitFunction()
 
 void RandomTimerThread::threadRunFunction()
 {
-   Prn::print(Prn::ThreadRun1, "RandomTimerThread::threadRunFunction BEGIN");
-
    // Loop to wait for posted events and process them.
    int tCount = 0;
    while (true)
@@ -79,8 +76,6 @@ void RandomTimerThread::threadRunFunction()
       if (mTPFlag) executeOnTimer(tCount);
       tCount++;
    }
-
-   Prn::print(Prn::ThreadRun1, "RandomTimerThread::threadRunFunction END");
 }
 
 //******************************************************************************
@@ -92,14 +87,11 @@ void RandomTimerThread::threadRunFunction()
 
 void RandomTimerThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "RandomTimerThread::threadExitFunction");
 }
 
 void RandomTimerThread::executeOnTimer(int aCount)
 {
-   TS::tls()->mCode = mIdent;
-
-   TS::print(2,"print %d",aCount);
+   TS::print(0,"print %d",aCount);
 
    if (mIdent == 1)
    {

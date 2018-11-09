@@ -61,8 +61,14 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, false);
 
-   Some::gRandomTimerThread1->mTPFlag = aCmd->argBool(1);
-   Some::gRandomTimerThread2->mTPFlag = aCmd->argBool(1);
+   if (Some::gRandomTimerThread1)
+   {
+      Some::gRandomTimerThread1->mTPFlag = aCmd->argBool(1);
+   }
+   if (Some::gRandomTimerThread2)
+   {
+      Some::gRandomTimerThread2->mTPFlag = aCmd->argBool(1);
+   }
 }
 
 //******************************************************************************

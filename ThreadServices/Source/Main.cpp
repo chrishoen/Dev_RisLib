@@ -31,7 +31,7 @@ int main(int argc,char** argv)
       Some::gRandomTimerThread1->launchThread();
    }
 
-   if (true)
+   if (false)
    {
       Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
       Some::gRandomTimerThread2->launchThread();

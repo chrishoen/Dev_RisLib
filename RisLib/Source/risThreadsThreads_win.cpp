@@ -218,6 +218,7 @@ void BaseThread::threadFunction()
       // Set the thread local storage pointer to the address of the
       // thread local storage object.
       TS::setThreadLocal(mThreadLocal);
+      TS::print(1, "threadFunction BEGIN");
       // Seed thread random number.
       my_srand();
       // This is used by inheritors to initialize resources. This should be
@@ -226,6 +227,7 @@ void BaseThread::threadFunction()
       // Initialization section, overload provided by inheritors
       // It is intended that this will be overloaded by 
       // inheriting thread base classes and by inheriting user classes
+      TS::print(1, "threadInitFunction");
       threadInitFunction();
       // It is intended that this will be overloaded by 
       // inheriting thread base classes that provide timers,
@@ -236,8 +238,10 @@ void BaseThread::threadFunction()
       // Post to the thread init semaphore.
       mThreadInitSem.put();
       // Run section, overload provided by inheritors 
+      TS::print(1, "threadRunFunction");
       threadRunFunction();
       // Exit section, overload provided by inheritors
+      TS::print(1, "threadExitFunction");
       threadExitFunction();
       // This is used by inheritors to finalize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
@@ -253,6 +257,7 @@ void BaseThread::threadFunction()
       // Exception section, overload provided by inheritors
       threadExceptionFunction("UNKNOWN");
    }
+   TS::print(1, "threadFunction END");
 }
 
 //******************************************************************************

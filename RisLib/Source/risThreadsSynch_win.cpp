@@ -15,8 +15,6 @@
 #include <assert.h>
 #include "risThreadsSynch.h"
 
-#pragma unmanaged
-
 namespace Ris
 {
 namespace Threads
@@ -47,13 +45,6 @@ BinarySemaphore::~BinarySemaphore()
 {
    CloseHandle(mSpecific->mHandle);
    delete mSpecific;
-}
-
-//******************************************************************************
-
-void* BinarySemaphore::getHandlePtr()
-{
-   return (void*)&mSpecific->mHandle;
 }
 
 //******************************************************************************
@@ -111,13 +102,6 @@ CountingSemaphore::~CountingSemaphore()
 
 //******************************************************************************
 
-void* CountingSemaphore::getHandlePtr()
-{
-   return (void*)&mSpecific->mHandle;
-}
-
-//******************************************************************************
-
 void CountingSemaphore::put()
 {
    ReleaseSemaphore(mSpecific->mHandle,1,NULL);
@@ -159,13 +143,6 @@ MutexSemaphore::MutexSemaphore()
 MutexSemaphore::~MutexSemaphore() 
 {
    delete mSpecific;
-}
-
-//******************************************************************************
-
-void* MutexSemaphore::getHandlePtr()
-{
-   return (void*)&mSpecific->mSRWLock;
 }
 
 //******************************************************************************

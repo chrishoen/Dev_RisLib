@@ -92,13 +92,6 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Set the configuration variables to default values.
-   // This can be overloaded to set them to specific values.
-   // This is called by launch before the thread is created.
-   // Note that launch uses the configuration variables when it
-   // does the CreateThread.
-   virtual void configureThread(); 
-
    // Launch the thread.
    // It calls win32 CreateThread and passes in the configuration variables
    // and the address of the c-function BaseThread_Execute and a this pointer.

@@ -23,6 +23,10 @@ namespace ProtoComm
 
 NetworkThread::NetworkThread()
 {
+   // Set base class thread services.
+   BaseClass::setThreadName("Network");
+   BaseClass::setThreadPrintLevel(3);
+
    // Set base class thread priority.
    BaseClass::setThreadPriorityHigh();
 
@@ -53,8 +57,6 @@ NetworkThread::~NetworkThread()
 
 void NetworkThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "NetworkThread::threadInitFunction");
-
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
@@ -77,8 +79,6 @@ void NetworkThread::threadInitFunction()
 
 void  NetworkThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
-
    // Shutdown the child thread.
    mUdpMsgThread->shutdownThread();
 }

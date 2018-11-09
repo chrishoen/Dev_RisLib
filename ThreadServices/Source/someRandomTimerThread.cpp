@@ -6,7 +6,6 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "tsThreadServices.h"
 #include "someThreadParms.h"
 
 #define  _SOMETIMERTHREAD_CPP_

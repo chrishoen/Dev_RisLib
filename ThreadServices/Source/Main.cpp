@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include "tsThreadServices.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 

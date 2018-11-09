@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "tsThreadServices.h"
 #include "risThreadsProcess.h"
 #include "procoUdpSettings.h"
 
@@ -10,6 +11,16 @@
 
 void main_initialize(int argc,char** argv)
 {
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize thread services.
+
+   TS::reset();
+   TS::setProgramName("ProtoUdp");
+   TS::setProgramPrintLevel(3);
+   TS::initialize();
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -77,7 +88,7 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Done.
 
-   Prn::print(0, "ProtoCommU Program************************************BEGIN %s", argv[1]);
+   Prn::print(0, "ProtoUdp Program************************************BEGIN %s", argv[1]);
 }
 
 //******************************************************************************
@@ -87,13 +98,16 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoCommU Program*************************************END");
+   Prn::print(0,"ProtoUdp Program*************************************END");
 
-   // Close print.
+   // Finalize print facility.
    Prn::finalizePrint();
 
    // Exit process.
    Ris::Threads::exitProcess();
+
+   // Finalize thread services.
+   TS::finalize();
 }
 
 //******************************************************************************

@@ -1,7 +1,11 @@
 #pragma once
 
 /*==============================================================================
-Byte content message network socket settings class.
+Thread Services.
+These provide printing, logging, and error handling services that are
+based on having the controlling parameters located in thread local storage.
+
+Thread local storage class.
 ==============================================================================*/
 
 //******************************************************************************

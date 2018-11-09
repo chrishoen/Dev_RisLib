@@ -189,7 +189,7 @@
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\tsShare.h" />
     <ClInclude Include="Source\tsThreadLocal.h" />
-    <ClInclude Include="Source\ts_central.h" />
+    <ClInclude Include="Source\tsThreadServices.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\logFiles.cpp" />
@@ -245,8 +245,8 @@
     </ClCompile>
     <ClCompile Include="Source\tsShare.cpp" />
     <ClCompile Include="Source\tsThreadLocal.cpp" />
-    <ClCompile Include="Source\ts_central_init.cpp" />
-    <ClCompile Include="Source\ts_central_print.cpp" />
+    <ClCompile Include="Source\tsThreadServices_init.cpp" />
+    <ClCompile Include="Source\tsThreadServices_print.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

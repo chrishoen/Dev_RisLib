@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{eea6127a-5d32-4fad-a79d-a8156b74d82c}</ProjectGuid>
+    <ProjectGuid>{0733efa6-71cf-4c81-b84d-fbd2578a4dd1}</ProjectGuid>
     <RootNamespace>ThreadLocal</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>

@@ -156,10 +156,10 @@
     <ClCompile Include="Source\tsShare.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ts_central_init.cpp">
+    <ClCompile Include="Source\tsThreadServices_init.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ts_central_print.cpp">
+    <ClCompile Include="Source\tsThreadServices_print.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -335,10 +335,10 @@
     <ClInclude Include="Source\tsThreadLocal.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ts_central.h">
+    <ClInclude Include="Source\tsShare.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\tsShare.h">
+    <ClInclude Include="Source\tsThreadServices.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

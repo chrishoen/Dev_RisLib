@@ -10,7 +10,7 @@
 #include "risAlphaDir.h"
 
 #include "tsShare.h"
-#include "ts_central.h"
+#include "tsThreadServices.h"
 
 namespace TS
 {

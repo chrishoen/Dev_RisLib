@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "ts_central.h"
+#include "tsThreadServices.h"
 #include "risThreadsProcess.h"
 #include "someThreadParms.h"
 
@@ -11,7 +11,7 @@
 
 void main_initialize(int argc,char** argv)
 {
-   // Initialize the thread print facility.
+   // Initialize thread services.
    TS::reset();
    TS::setProgramName("ThreadLocal");
    TS::initialize();
@@ -38,7 +38,7 @@ void main_initialize(int argc,char** argv)
    Some::gThreadParms.readSection("default");
 
    // Done.
-   Prn::print(0, "ThreadLocal Program************************************BEGIN");
+   Prn::print(0, "ThreadServices Program************************************BEGIN");
 }
 
 //******************************************************************************
@@ -48,7 +48,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0, "ThreadLocal Program************************************END");
+   Prn::print(0, "ThreadServices Program************************************END");
 
    // Finalize print facility.
    Prn::finalizePrint();
@@ -56,7 +56,7 @@ void main_finalize()
    // Exit process.
    Ris::Threads::exitProcess();
 
-   // Finalize the thread print facility.
+   // Finalize thread services.
    TS::finalize();
 }
 

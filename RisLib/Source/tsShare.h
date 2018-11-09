@@ -1,12 +1,11 @@
 #pragma once
 
 /*==============================================================================
-Implements a facility that provides printing and logging that is
-based on having the controlling parameters located in thread local
-storage.
+Thread Services.
+These provide printing, logging, and error handling services that are
+based on having the controlling parameters located in thread local storage.
 
 A global shared object that contains program settings.
-
 ==============================================================================*/
 
 //******************************************************************************

@@ -74,8 +74,11 @@ public:
    // the thread run function.
    TS::ThreadLocal* mThreadLocal;
 
-   // Set the thread name in the thread local storage.
+   // Set the thread services thread name in the thread local storage.
    void setThreadName(const char* aThreadName);
+
+   // Set the thread services print level in the thread local storage.
+   void setThreadPrintLevel(int aPrintLevel);
 
    //***************************************************************************
    //***************************************************************************

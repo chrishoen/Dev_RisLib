@@ -93,11 +93,21 @@ void* BaseThread::getHandlePtr()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Set the thread name in the thread local storage.
+// Set the thread services thread name in the thread local storage.
 
 void BaseThread::setThreadName(const char* aThreadName)
 {
    mThreadLocal->setThreadName(aThreadName);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the thread services print level in the thread local storage.
+
+void BaseThread::setThreadPrintLevel(int aPrintLevel)
+{
+   mThreadLocal->mPrintLevel = aPrintLevel;
 }
 
 //******************************************************************************

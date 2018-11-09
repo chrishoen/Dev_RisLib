@@ -51,8 +51,8 @@ public:
    // Thread name.
    char mThreadName[cMaxStringSize];
 
-   // A mask for the ts prints.
-   int mPrintMask;
+   // The print level for the thread. 
+   int mPrintLevel;
 
    //***************************************************************************
    //***************************************************************************

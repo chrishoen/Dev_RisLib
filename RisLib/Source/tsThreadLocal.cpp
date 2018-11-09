@@ -18,9 +18,9 @@ namespace TS
 
 ThreadLocal::ThreadLocal()
 {
-   strcpy(mThreadName, "unknown");
+   strcpy(mThreadName, "NoThreadName");
    mCode = 0;
-   mPrintMask = 0x11;
+   mPrintLevel = 3;
 }
 
 void ThreadLocal::setThreadName(const char* aName)

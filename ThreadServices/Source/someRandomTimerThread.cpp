@@ -97,7 +97,7 @@ void RandomTimerThread::executeOnTimer(int aCount)
 {
    TS::tls()->mCode = mIdent;
 
-   TS::printCode();
+   TS::print(0,"print %d",aCount);
 
    if (mIdent == 1)
    {

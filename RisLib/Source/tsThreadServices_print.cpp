@@ -23,23 +23,67 @@ namespace TS
 // Thread local storage.
 extern thread_local ThreadLocal* gThreadLocal;
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-// Print the test code.
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Filtered print, if the corresponding entry in the filter table is true
+// then the print is executed.
 
-void printCode()
+void print(int aLevel, const char* aFormat, ...)
 {
-   if (tls())
-   {
-      printf("TS printCode %-20s %d\n", 
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Exit if print not enabled.
+
+// if (aLevel > tls()->mPrintLevel) return;
+
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Buffers.
+
+   // Instantiate a local input string buffer and a pointer.
+   char* tInputStr = 0;
+   char  tInputBuffer[cMaxStringSize];
+   int   tInputStrSize;
+   tInputStr = &tInputBuffer[0];
+
+   // Instantiate a local print string buffer and a pointer.
+   char* tPrintStr = 0;
+   char  tPrintBuffer[cMaxStringSize];
+   int   tPrintStrSize;
+   tPrintStr = &tPrintBuffer[0];
+
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Do a vsprintf with variable arg list into the input string pointer.
+
+   va_list  ArgPtr;
+   va_start(ArgPtr, aFormat);
+   tInputStrSize = vsnprintf(tInputStr, cMaxStringSize, aFormat, ArgPtr);
+   va_end(ArgPtr);
+
+   tInputStr[tInputStrSize++] = 0;
+
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Do an sprintf with the thread name and the input string into the
+   // print string.
+
+   tPrintStrSize = sprintf(tPrintBuffer,"%-20s $$ %s",
          tls()->mThreadName,
-         tls()->mCode);
-   }
-   else
-   {
-      printf("TS printCode NOT INITIALIZED");
-   }
+         tInputStr);
+
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Print the string.
+
+   // Print to stdout.
+   puts(tPrintStr);
 }
 
 //******************************************************************************

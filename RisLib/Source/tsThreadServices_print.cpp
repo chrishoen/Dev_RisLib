@@ -35,29 +35,23 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    // Buffers.
 
-   // Instantiate a local input string buffer and a pointer.
-   char* tInputStr = 0;
+   // Input string buffer.
    char  tInputBuffer[cMaxStringSize];
-   int   tInputStrSize;
-   tInputStr = &tInputBuffer[0];
+   int   tInputSize;
 
-   // Instantiate a local print string buffer and a pointer.
-   char* tPrintStr = 0;
+   // Print string buffer.
    char  tPrintBuffer[cMaxStringSize];
-   int   tPrintStrSize;
-   tPrintStr = &tPrintBuffer[0];
+   int   tPrintSize;
 
    //*************************************************************************
    //*************************************************************************
    //*************************************************************************
-   // Do a vsprintf with variable arg list into the input string pointer.
+   // Do a vsprintf with variable arg list into the input string buffer.
 
    va_list  ArgPtr;
    va_start(ArgPtr, aFormat);
-   tInputStrSize = vsnprintf(tInputStr, cMaxStringSize, aFormat, ArgPtr);
+   tInputSize = vsnprintf(tInputBuffer, cMaxStringSize, aFormat, ArgPtr);
    va_end(ArgPtr);
-
-   tInputStr[tInputStrSize++] = 0;
 
    //*************************************************************************
    //*************************************************************************
@@ -65,17 +59,17 @@ void print(int aLevel, const char* aFormat, ...)
    // Do an sprintf with the thread name and the input string into the
    // print string.
 
-   tPrintStrSize = sprintf(tPrintBuffer,"%-20s $$ %s",
-         tls()->mThreadName,
-         tInputStr);
+   tPrintSize = sprintf(tPrintBuffer,"%-20s $$ %s",
+      tls()->mThreadName,
+      tInputBuffer);
 
    //*************************************************************************
    //*************************************************************************
    //*************************************************************************
    // Print the string.
 
-   // Print to stdout.
-   puts(tPrintStr);
+   // Print to stdout. This appends an eol \n.
+   puts(tPrintBuffer);
 }
 
 //******************************************************************************

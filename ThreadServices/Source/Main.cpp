@@ -75,7 +75,7 @@ int main(int argc,char** argv)
    // End program.
 
    main_finalize();
- //return 0;
+   return 0;
 
    printf("press enter\n");
    getchar();

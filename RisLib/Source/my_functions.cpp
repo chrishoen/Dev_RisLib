@@ -245,8 +245,21 @@ void my_strupr(char* aString)
 
 void my_strncpy(char* aDestin,const char* aSource,unsigned int aSize)
 {
-   strncpy(aDestin,aSource,(size_t)aSize);
-   aDestin[aSize-1]=0;
+   if (aSize <= 1)
+   {
+      aDestin[0] = 0;
+      return;
+   }
+
+   int tIndex = 0;
+   while (true)
+   {
+      aDestin[tIndex] = aSource[tIndex];
+      if (aSource[tIndex] == 0) break;
+      if (tIndex == aSize - 1) break;
+      tIndex++;
+   }
+   aDestin[tIndex] = 0;
 }
 
 //******************************************************************************

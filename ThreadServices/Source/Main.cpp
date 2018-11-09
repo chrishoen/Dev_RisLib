@@ -43,12 +43,9 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Execute user command line executive, wait for user to exit.
 
-   TS::print(1, "");
-   TS::print(1, "Command Line Executive BEGIN");
    CmdLineExec* tExec = new CmdLineExec;
    Ris::gCmdLineConsole.execute(tExec);
    delete tExec;
-   TS::print(1, "Command Line Executive END");
 
    //***************************************************************************
    //***************************************************************************

@@ -77,7 +77,6 @@ BaseThread::~BaseThread()
 {
    delete mBaseSpecific;
    delete mThreadLocal;
-   TS::setThreadLocal(0);
 }
 
 //******************************************************************************
@@ -125,6 +124,9 @@ void BaseThread::setThreadPriority(int aThreadPriority)
 
 void BaseThread::launchThread()
 {
+   TS::print(1, "");
+   TS::print(1, "launchThread %s", mThreadLocal->mThreadName);
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -186,13 +188,14 @@ void BaseThread::launchThread()
 
 void BaseThread::threadFunction()
 {
+   // Set the thread local storage pointer to the address of the
+   // thread local storage object.
+   TS::setThreadLocal(mThreadLocal);
+   TS::print(1, "threadFunction BEGIN");
+
    // Thread execution
    try
    {
-      // Set the thread local storage pointer to the address of the
-      // thread local storage object.
-      TS::setThreadLocal(mThreadLocal);
-      TS::print(1, "threadFunction BEGIN");
       // Seed thread random number.
       my_srand();
       // This is used by inheritors to initialize resources. This should be
@@ -232,6 +235,8 @@ void BaseThread::threadFunction()
       threadExceptionFunction("UNKNOWN");
    }
    TS::print(1, "threadFunction END");
+   // Zero the thread local storage pointer.
+   TS::setThreadLocal(0);
 }
 
 //******************************************************************************
@@ -267,7 +272,10 @@ void BaseThread::forceTerminateThread()
 
 void BaseThread::waitForThreadTerminate()
 {
+   TS::print(1, "");
+   TS::print(1, "waitForThreadTerminate BEGIN %s",mThreadLocal->mThreadName);
    WaitForSingleObject(mBaseSpecific->mHandle,INFINITE);
+   TS::print(1, "waitForThreadTerminate END   %s", mThreadLocal->mThreadName);
 }
 
 //******************************************************************************

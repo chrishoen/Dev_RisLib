@@ -13,7 +13,8 @@ void main_initialize(int argc,char** argv)
 {
    // Initialize thread services.
    TS::reset();
-   TS::setProgramName("ThreadLocal");
+   TS::setProgramName("ThreadServices");
+   TS::setProgramPrintLevel(3);
    TS::initialize();
 
    // Enter process.

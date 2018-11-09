@@ -29,6 +29,11 @@ void setProgramName(const char* aName)
    strncpy(gShare.mProgramName, aName, cMaxStringSize);
 }
 
+void setProgramPrintLevel(int aPrintLevel)
+{
+   gShare.mMainThreadLocal->mPrintLevel = aPrintLevel;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -70,11 +75,20 @@ void closeLogFile()
 void initialize()
 {
    openLogFile();
+
+   // This executes in the context of the main thread, so set the thread
+   // local storage pointer to the address of the main thread local storage
+   // object.
+   TS::setThreadLocal(gShare.mMainThreadLocal);
+   TS::print(1, "ThreadServices initialize");
 }
 
 void finalize()
 {
    openLogFile();
+   // This executes in the context of the main thread, so set the thread
+   // local storage pointer to zero.
+   TS::setThreadLocal(0);
 }
 
 //******************************************************************************

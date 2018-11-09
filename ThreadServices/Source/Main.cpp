@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "tsThreadServices.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
@@ -31,7 +32,7 @@ int main(int argc,char** argv)
       Some::gRandomTimerThread1->launchThread();
    }
 
-   if (false)
+   if (true)
    {
       Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
       Some::gRandomTimerThread2->launchThread();
@@ -42,9 +43,12 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Execute user command line executive, wait for user to exit.
 
+   TS::print(1, "");
+   TS::print(1, "Command Line Executive BEGIN");
    CmdLineExec* tExec = new CmdLineExec;
    Ris::gCmdLineConsole.execute(tExec);
    delete tExec;
+   TS::print(1, "Command Line Executive END");
 
    //***************************************************************************
    //***************************************************************************

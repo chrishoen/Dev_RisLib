@@ -13,6 +13,7 @@ A global shared object that contains program settings.
 //******************************************************************************
 
 #include <stdio.h>
+#include "tsThreadLocal.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -42,6 +43,11 @@ public:
    //***************************************************************************
    // Members.
 
+   // Thread local storage. This is created in the constructor. The pointer
+   // is copied to the thread local storage variable at the beginning of
+   // the thread run function.
+   TS::ThreadLocal* mMainThreadLocal;
+
    // Program log file.
    char mProgramName[cMaxStringSize];
    FILE* mLogFile;
@@ -53,6 +59,7 @@ public:
 
    // Constructor.
    Share();
+   ~Share();
 };
 
 //******************************************************************************

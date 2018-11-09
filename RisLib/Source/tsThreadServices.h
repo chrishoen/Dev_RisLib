@@ -22,7 +22,8 @@ namespace TS
    // Initialize the thread services.
 
    void reset ();
-   void setProgramName (const char* aName);
+   void setProgramName(const char* aName);
+   void setProgramPrintLevel(int aPrintLevel);
    void initialize();
    void finalize();
 

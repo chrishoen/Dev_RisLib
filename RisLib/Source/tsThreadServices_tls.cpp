@@ -34,7 +34,7 @@ void setThreadLocal(ThreadLocal* aThreadLocal)
 ThreadLocal* tls()
 {
    // Guard.
-   if (gThreadLocal == 0 && false)
+   if (gThreadLocal == 0)
    {
       printf("gThreadLocal not initialized, exiting program\n");
       exit(1);

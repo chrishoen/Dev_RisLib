@@ -18,7 +18,7 @@ void main_initialize(int argc,char** argv)
 
    TS::reset();
    TS::setProgramName("ProtoUdp");
-   TS::setProgramPrintLevel(3);
+   TS::setProgramPrintLevel(2);
    TS::initialize();
 
    //***************************************************************************

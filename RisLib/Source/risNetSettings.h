@@ -54,6 +54,9 @@ public:
    // Socket flags.
    int mFlags;
 
+   // Thread print level.
+   int mPrintLevel;
+
    // Message monkey creator.
    BaseMsgMonkeyCreator* mMonkeyCreator;
 

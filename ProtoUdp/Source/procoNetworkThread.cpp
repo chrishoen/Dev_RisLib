@@ -64,6 +64,7 @@ void NetworkThread::threadInitFunction()
    tSettings.setRemoteIp (gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mRxMsgQCall = mRxMsgQCall;
+   tSettings.mPrintLevel = gUdpSettings.mPrintLevel;
 
    // Create the child thread with the settings.
    mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);

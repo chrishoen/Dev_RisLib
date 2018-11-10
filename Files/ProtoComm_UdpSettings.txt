@@ -4,6 +4,7 @@
 SectionBegin Default
 
    ThreadTimerPeriod           100
+   PrintLevel                  1
    NumWords                    1000
 
 SectionEnd

@@ -40,7 +40,7 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Show info for program threads.
+   // Show program threads.
 
    TS::print(0, "ThreadInfo");
    if (Some::gRandomTimerThread1) Some::gRandomTimerThread1->showThreadInfo();

@@ -78,10 +78,21 @@ void NetworkThread::threadInitFunction()
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void  NetworkThread::threadExitFunction()
+void NetworkThread::threadExitFunction()
 {
    // Shutdown the child thread.
    mUdpMsgThread->shutdownThread();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Show thread state info, base class overload.
+
+void NetworkThread::showThreadInfo()
+{
+   BaseClass::showThreadInfo();
+   if (mUdpMsgThread) mUdpMsgThread->showThreadInfo();
 }
 
 //******************************************************************************

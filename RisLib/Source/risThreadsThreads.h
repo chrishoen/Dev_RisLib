@@ -50,22 +50,26 @@ public:
    // Thread run state.
    int mThreadRunState;
 
-   //Configuration variables.
-   //Some of these are passed to the CreateThread in launch
-   //and some are used by threadFunction.
+   // Configuration variables.
+   // Some of these are passed to the CreateThread in launch
+   // and some are used by threadFunction.
    int    mThreadStackSize;
    int    mThreadPriority;
    int    mThreadSingleProcessor;
 
-   //Init semaphore.
-   //It is posted to after the end of threadInitFunction.
-   //launchThread waits for it.
+   // Init semaphore.
+   // It is posted to after the end of threadInitFunction.
+   // launchThread waits for it.
    BinarySemaphore  mThreadInitSem;
 
-   //Exit semaphore.
-   //It is posted to after the end of threadExitFunction.
-   //waitForThreadTerminate waits for it.
+   // Exit semaphore.
+   // It is posted to after the end of threadExitFunction.
+   // waitForThreadTerminate waits for it.
    BinarySemaphore  mThreadExitSem;
+
+   // The processor that was current at the start of the thread
+   // run function.
+   int mThreadRunProcessor;
 
    // Pimpl pattern. Used to hide details of the operating system specific
    // variables, like the thread handle, from the .h file so that this

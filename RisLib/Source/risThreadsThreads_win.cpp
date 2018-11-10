@@ -63,6 +63,8 @@ BaseThread::BaseThread()
    mThreadSingleProcessor  = -1;
 
    mThreadStackSize = 0;
+   mThreadRunProcessor = -1;
+
 
    // Create this now in the thread context of the thread creator.
    // It will be copied to the thread local storage variable at the
@@ -201,6 +203,10 @@ void BaseThread::threadFunction()
    // thread local storage object.
    TS::setThreadLocal(mThreadLocal);
    TS::print(1, "threadFunction BEGIN");
+
+   // Set the processor that was current at the start of the thread
+   // run function.
+   mThreadRunProcessor = GetCurrentProcessorNumber();
 
    // Set the run state.
    mThreadRunState = cThreadRunState_Running;
@@ -386,14 +392,11 @@ void BaseThread::showThreadFullInfo()
 
 void BaseThread::showThreadInfo()
 {
-   unsigned tPriorityClass = GetPriorityClass(GetCurrentProcess());
    int tThreadPriority = GetThreadPriority(mBaseSpecific->mHandle);
-   int tCurrentProcessorNumber = GetCurrentProcessorNumber();
 
-   TS::print(0,"ThreadInfo %-20s %1d %3d %3d %s",
+   TS::print(0,"ThreadInfo %-20s %1d %3d %s",
      mThreadLocal->mThreadName,
-     tCurrentProcessorNumber,
-     tPriorityClass,
+     mThreadRunProcessor,
      tThreadPriority,
      asStringThreadRunState());
 }

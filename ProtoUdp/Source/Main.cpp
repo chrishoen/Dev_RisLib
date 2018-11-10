@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
@@ -33,7 +34,7 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Show program threads.
 
-   TS::print(0, "ThreadInfo");
+   Ris::Threads::showCurrentThreadInfo();
    ProtoComm::gNetworkThread->showThreadInfo();
 
    //***************************************************************************

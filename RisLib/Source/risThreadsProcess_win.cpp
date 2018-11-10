@@ -68,6 +68,24 @@ void setProcessAffinityMask(unsigned aMask)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+void showCurrentThreadInfo()
+{
+   unsigned tPriorityClass = GetPriorityClass(GetCurrentProcess());
+   int tThreadPriority = GetThreadPriority(GetCurrentThread());
+   int tCurrentProcessorNumber = GetCurrentProcessorNumber();
+
+   TS::print(1, "");
+   TS::print(1, "ThreadInfo %-20s %1d %3d %3d",
+      "main",
+      tCurrentProcessorNumber,
+      tThreadPriority,
+      tPriorityClass);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 

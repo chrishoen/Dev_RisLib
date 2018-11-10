@@ -129,15 +129,15 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Returning false means socket was closed.
    if (mRxLength <= 0)
    {
-      TS::print(0, "ERROR UdpRxMsgSocket %d %d", mStatus, mError);
-      if (BaseClass::mStatus < 0)
-         switch (mError)
-         {
-         case 0: return false; break;
-         default: return false; break;
-         }
+      if (BaseClass::mError == 0)
+      {
+         TS::print(1, "UdpRxMsgSocket CLOSED");
+      }
       else
-         return false;
+      {
+         TS::print(0, "ERROR UdpRxMsgSocket %d %d", BaseClass::mStatus, BaseClass::mError);
+      }
+      return false;
    }
 
    TS::print(3, "UdpRxMsgSocket rx message %d", mRxLength);

@@ -39,6 +39,9 @@ namespace TS
    // Return a pointer to the thread local storage.
    ThreadLocal* tls();
 
+   // Return true if the thread local storage is inititialized.
+   bool isEnabled();
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

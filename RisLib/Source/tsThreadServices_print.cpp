@@ -18,11 +18,22 @@ namespace TS
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Filtered print, if the corresponding entry in the filter table is true
-// then the print is executed.
+// Print. This is input a print level 0,1,2 and the signature for a
+// printf. If the input level is less than or equal to the print level
+// that is located in thread local storage then the print is performed
+// else it is ignored. If the print is performed it prints a string
+// to stdout and appends an end of line (\n).
 
 void print(int aLevel, const char* aFormat, ...)
 {
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Do this first.
+
+   // Guard.
+   if (!isEnabled()) return;
+
    //*************************************************************************
    //*************************************************************************
    //*************************************************************************
@@ -65,7 +76,6 @@ void print(int aLevel, const char* aFormat, ...)
    if (aLevel <= tls()->mPrintLevel)
    {
       fputs(tPrintString, stdout);
-//    puts(tPrintString);
    }
 
    // Print to the log file.

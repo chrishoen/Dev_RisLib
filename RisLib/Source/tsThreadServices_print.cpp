@@ -26,21 +26,14 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    //*************************************************************************
    //*************************************************************************
-   // Exit if print not enabled.
-
-   if (aLevel > tls()->mPrintLevel) return;
-
-   //*************************************************************************
-   //*************************************************************************
-   //*************************************************************************
-   // Buffers.
+   // Strings.
 
    // Input string buffer.
-   char  tInputBuffer[cMaxStringSize];
+   char  tInputString[cMaxStringSize];
    int   tInputSize;
 
    // Print string buffer.
-   char  tPrintBuffer[cMaxStringSize];
+   char  tPrintString[cMaxStringSize];
    int   tPrintSize;
 
    //*************************************************************************
@@ -50,26 +43,36 @@ void print(int aLevel, const char* aFormat, ...)
 
    va_list  ArgPtr;
    va_start(ArgPtr, aFormat);
-   tInputSize = vsnprintf(tInputBuffer, cMaxStringSize, aFormat, ArgPtr);
+   tInputSize = vsnprintf(tInputString, cMaxStringSize, aFormat, ArgPtr);
    va_end(ArgPtr);
 
    //*************************************************************************
    //*************************************************************************
    //*************************************************************************
    // Do an sprintf with the thread name and the input string into the
-   // print string.
+   // print string. Append a newline \n.
 
-   tPrintSize = sprintf(tPrintBuffer,"%-20s $$ %s",
+   tPrintSize = sprintf(tPrintString,"%-20s $$ %s\n",
       tls()->mThreadName,
-      tInputBuffer);
+      tInputString);
 
    //*************************************************************************
    //*************************************************************************
    //*************************************************************************
    // Print the string.
 
-   // Print to stdout. This appends an eol \n.
-   puts(tPrintBuffer);
+   // Print to stdout.
+   if (aLevel <= tls()->mPrintLevel)
+   {
+      fputs(tPrintString, stdout);
+//    puts(tPrintString);
+   }
+
+   // Print to the log file.
+   if (gShare.mLogFile)
+   {
+      fputs(tPrintString, gShare.mLogFile);
+   }
 }
 
 //******************************************************************************

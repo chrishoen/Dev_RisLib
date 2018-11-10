@@ -58,6 +58,7 @@ BaseThread::BaseThread()
 {
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle    = 0;
+   mThreadRunState = 0;
    mThreadPriority = get_default_thread_priority();
    mThreadSingleProcessor  = -1;
 
@@ -124,13 +125,21 @@ void BaseThread::setThreadPriority(int aThreadPriority)
 
 void BaseThread::launchThread()
 {
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Do this first.
+
    TS::print(1, "");
    TS::print(1, "launchThread %s", mThreadLocal->mThreadName);
+
+   // Set the run state.
+   mThreadRunState = cThreadRunState_Launching;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Create thread, suspended
+   // Create thread, suspended.
 
    DWORD tThreadFlags = CREATE_SUSPENDED;
 
@@ -193,6 +202,9 @@ void BaseThread::threadFunction()
    TS::setThreadLocal(mThreadLocal);
    TS::print(1, "threadFunction BEGIN");
 
+   // Set the run state.
+   mThreadRunState = cThreadRunState_Running;
+
    // Thread execution
    try
    {
@@ -234,6 +246,10 @@ void BaseThread::threadFunction()
       // Exception section, overload provided by inheritors
       threadExceptionFunction("UNKNOWN");
    }
+
+   // Set the run state.
+   mThreadRunState = cThreadRunState_Terminated;
+
    TS::print(1, "threadFunction END");
    // Zero the thread local storage pointer.
    TS::setThreadLocal(0);
@@ -338,9 +354,9 @@ int BaseThread::getThreadProcessorNumber()
 //******************************************************************************
 //******************************************************************************
 
-void BaseThread::threadShowInfo(char* aLabel)
+void BaseThread::showThreadFullInfo()
 {
-   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", aLabel);
+   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", mThreadLocal->mThreadName);
 
    unsigned tPriorityClass = GetPriorityClass(GetCurrentProcess());
    int tThreadPriority = GetThreadPriority(mBaseSpecific->mHandle);
@@ -364,6 +380,38 @@ void BaseThread::threadShowInfo(char* aLabel)
    printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void BaseThread::showThreadInfo()
+{
+   unsigned tPriorityClass = GetPriorityClass(GetCurrentProcess());
+   int tThreadPriority = GetThreadPriority(mBaseSpecific->mHandle);
+   int tCurrentProcessorNumber = GetCurrentProcessorNumber();
+
+   TS::print(0,"ThreadInfo %-20s %1d %3d %3d %s",
+     mThreadLocal->mThreadName,
+     tCurrentProcessorNumber,
+     tPriorityClass,
+     tThreadPriority,
+     asStringThreadRunState());
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+char* BaseThread::asStringThreadRunState()
+{
+   switch (mThreadRunState)
+   {
+   case cThreadRunState_Launching: return "Launching";
+   case cThreadRunState_Running : return "running";
+   case cThreadRunState_Terminated: return "Terminated";
+   default: return "UNKNOWN";
+   }
+}
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

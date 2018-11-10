@@ -40,6 +40,15 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Show info for program threads.
+
+   TS::print(0, "ThreadInfo");
+   if (Some::gRandomTimerThread1) Some::gRandomTimerThread1->showThreadInfo();
+   if (Some::gRandomTimerThread2) Some::gRandomTimerThread2->showThreadInfo();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Execute user command line executive, wait for user to exit.
 
    CmdLineExec* tExec = new CmdLineExec;

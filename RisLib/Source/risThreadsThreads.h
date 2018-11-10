@@ -35,7 +35,20 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Constants.
+
+   // Thread run states.
+   static const int cThreadRunState_Launching  = 1;
+   static const int cThreadRunState_Running    = 2;
+   static const int cThreadRunState_Terminated = 3;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members.
+
+   // Thread run state.
+   int mThreadRunState;
 
    //Configuration variables.
    //Some of these are passed to the CreateThread in launch
@@ -81,7 +94,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constructor.
    BaseThread(); 
@@ -188,7 +201,7 @@ public:
    void setThreadPriorityLow();
    void setThreadPriority(int aThreadPriority);
 
-   //Wait for the thread to terminate.
+   // Wait for the thread to terminate.
    void waitForThreadTerminate();
 
    // Terminate the thread forcefully.
@@ -206,7 +219,18 @@ public:
    int  getThreadProcessorNumber();
 
    // Show thread configuration info.
-   void threadShowInfo(char* aLabel);
+   void showThreadFullInfo();
+
+   // Show thread state info.
+   virtual void showThreadInfo();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Helpers.
+   char* asStringThreadRunState();
 };
 
 //******************************************************************************

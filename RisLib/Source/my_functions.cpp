@@ -144,6 +144,18 @@ char* my_string_from_bool(bool aValue)
    return aValue ? (char*)"true" : (char*)"false";
 }
 
+// Return string "true" "false" for a bool
+char* my_string_from_true(bool aValue)
+{
+   return aValue ? (char*)"true" : (char*)"false";
+}
+
+// Return string "pass" "fail" for a bool
+char* my_string_from_pass(bool aValue)
+{
+   return aValue ? (char*)"PASS" : (char*)"FAIL";
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 #include "MainInit.h"
@@ -43,6 +44,18 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Show program threads.
+
+   Ris::Threads::showCurrentThreadInfo();
+   Some::gSlaveThread->showThreadInfo();
+   Some::gMasterThread->mLongThread->showThreadInfo();
+   Some::gMasterThread->mShortThread->showThreadInfo();
+   Some::gRandomTimerThread1->showThreadInfo();
+   Some::gRandomTimerThread2->showThreadInfo();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Start user command line executive, wait for user to exit.
 
    CmdLineExec* exec = new CmdLineExec;
@@ -70,6 +83,7 @@ int main(int argc,char** argv)
    // Finalize program.
 
    main_finalize();
+   return 0;
 
    printf("press enter\n");
    getchar();

@@ -48,8 +48,7 @@ int main(int argc,char** argv)
 
    Ris::Threads::showCurrentThreadInfo();
    Some::gSlaveThread->showThreadInfo();
-   Some::gMasterThread->mLongThread->showThreadInfo();
-   Some::gMasterThread->mShortThread->showThreadInfo();
+   Some::gMasterThread->showThreadInfo();
    Some::gRandomTimerThread1->showThreadInfo();
    Some::gRandomTimerThread2->showThreadInfo();
 

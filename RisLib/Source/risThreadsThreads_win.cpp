@@ -61,7 +61,6 @@ BaseThread::BaseThread()
    mThreadRunState = 0;
    mThreadPriority = get_default_thread_priority();
    mThreadSingleProcessor  = -1;
-
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
 
@@ -206,7 +205,7 @@ void BaseThread::threadFunction()
 
    // Set the processor that was current at the start of the thread
    // run function.
-   mThreadRunProcessor = GetCurrentProcessorNumber();
+   mThreadRunProcessor = getThreadProcessorNumber();
 
    // Set the run state.
    mThreadRunState = cThreadRunState_Running;
@@ -392,7 +391,7 @@ void BaseThread::showThreadFullInfo()
 
 void BaseThread::showThreadInfo()
 {
-   int tThreadPriority = GetThreadPriority(mBaseSpecific->mHandle);
+   int tThreadPriority = getThreadPriority();
 
    TS::print(0,"ThreadInfo %-20s %1d %3d %s",
      mThreadLocal->mThreadName,
@@ -415,6 +414,7 @@ char* BaseThread::asStringThreadRunState()
    default: return "UNKNOWN";
    }
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

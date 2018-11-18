@@ -28,7 +28,7 @@ SlaveThread::SlaveThread()
      mRandomDis(gThreadParms.mDelayB1, gThreadParms.mDelayB2)
 {
    // Set base class thread variables.
-   BaseClass::setThreadName("SlaveThread");
+   BaseClass::setThreadName("Slave");
    BaseClass::setThreadPrintLevel(3);
    BaseClass::setThreadPriorityHigh();
    BaseClass::mTimerPeriod = 1000;

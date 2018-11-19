@@ -32,14 +32,19 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,(int)1);
-   aCmd->setArgDefault(2,(int)2);
-
-
-   Prn::print(0, "NumArg %10d",aCmd->numArg());
-   Prn::print(0, "ARG1   %10d",aCmd->argInt(1));
-   Prn::print(0, "ARG2   %10d",aCmd->argInt(2));
-   Prn::print(0, "");
+   Prn::print(Prn::View11, "GO1****************************");
+   while (true)
+   {
+      int tChar = 0;
+      tChar = getc(stdin);
+      //    tChar = getchar();
+      Prn::print(Prn::View11, "char %d", tChar);
+      if (tChar == 27)
+      {
+         Prn::print(Prn::View11, "escape");
+         break;
+      }
+   }
 }
 
 //******************************************************************************

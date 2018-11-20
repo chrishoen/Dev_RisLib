@@ -6,7 +6,7 @@
 
 #include "prnPrint.h"
 
-#include "ris_priorities.h"
+#include "risThreadsPriorities.h"
 #include "risThreadsQCallThread.h"
 
 namespace Ris
@@ -17,19 +17,19 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
 
 BaseQCallThread::BaseQCallThread()
 {
-   mThreadPriority = get_default_qcall_thread_priority();
+   setThreadPrintLevel(TS::PrintLevel(0, 3));
+   setThreadPriority(Ris::Threads::gPriorities.mQCall);
 
    mTerminateFlag = false;
-   mCallQueSize=100;
+   mCallQueSize=1000;
    mQCallAbortFlag = false;
 
-   mTimerExecuteFlag = false;
    mTimerPeriod = 1000;
    mCurrentTimeCount = 0;
-   mTimerCurrentTimeCount = 0;
 }
 
 BaseQCallThread::~BaseQCallThread()
@@ -39,87 +39,57 @@ BaseQCallThread::~BaseQCallThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Thread resource init function. This is called by the base class
+// after the thread starts running. It initializes the call queue and
+// the waitable timer.
 
 void BaseQCallThread::threadResourceInitFunction()
 {
    // Initialize the call queue.
-   BaseQCallTarget::initializeCallQueue(mCallQueSize);
+   mCallQueue.initialize(mCallQueSize);
+
+   // Initialize the waitable timer.
+   mWaitable.initialize(mTimerPeriod);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-void BaseQCallThread::threadTimerInitFunction()
-{
-   using namespace std::placeholders;
-
-   // Guard.
-   if (mTimerPeriod == 0) return;
-
-   // Bind timer callback.
-   mThreadTimerCall = std::bind (&BaseQCallThread::threadExecuteOnTimer, this, _1);
-
-   // Start timer.
-   mThreadTimer.startTimer(mThreadTimerCall,mTimerPeriod);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void BaseQCallThread::threadExecuteOnTimer(int aCurrentTimeCount)
-{
-   // Update timer variables.
-   mTimerCurrentTimeCount++;
-   mTimerExecuteFlag=true;
-
-   // Use central semaphore to wake up the thread.
-   mCentralSem.put();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Thread run function, base class overload.
-// This provides the execution context for processing queued QCalls
-// It waits for the call queue semaphore, extracts a call from
+// Thread run function. This is called by the base class immediately 
+// after the thread init function. It runs a loop that waits for the
+// waitable timer or event.
+// 
+// This provides the execution context for processing queued qcalls
+// It waits for the call queue waitable event, extracts a call from
 // the call queue, and executes the call.
 //
-// When a QCall is written to the call queue, this wakes up, reads it from the 
-// queue, and executes it. It returns true if successful, it returns false if
-// mTerminateFlag was true.
+// When a qcall is written to the call queue, this wakes up, reads it from the 
+// queue, and executes it in the context of this thread.
+//
+// When the periodic waitable timer expires, this wakes up and executes 
+// the inheritors timer function in the context of this thread.
 
 void BaseQCallThread::threadRunFunction()
 {
-   // Loop to process the call queue.
+   // Loop to process the call queue or timer.
    // Exit the loop on a thread terminate.
-   Prn::print(Prn::QCallRun1, "BaseQCallThread::threadRunFunction");
    while (true)
    {
-      // Wait for the central thread semaphore.
-      mCentralSem.get();
+      // Wait for a timer or an event.
+      mWaitable.waitForTimerOrEvent();
 
-      // Test for termination..
-      if(mTerminateFlag) return;
+      // Test for thread termination.
+      if (mTerminateFlag) break;
 
-      // Test for timer. 
-      // When the timer service routine is called, it sets
-      // TimerExecuteFlag true, increments mCurrentTimeCount, and
-      // puts to mCentralSem. 
-      if(mTimerExecuteFlag)
+      // If the periodic timer occurred.
+      if (mWaitable.wasTimer())
       {
-         mTimerExecuteFlag=false;
-
-         // Copy time count from timer.
-         mCurrentTimeCount = mTimerCurrentTimeCount;
-
-         // Execute inheritor timer function.
-         executeOnTimer(mCurrentTimeCount);
+         // Call the inheritors handler for the timer.
+         executeOnTimer(mCurrentTimeCount++);
       }
 
-      // Not timer, the semaphore was from the thread call queue.
-      else
+      // If an event was posted.
+      if (mWaitable.wasEvent())
       {
          // Try to read a qcall from the queue.
          BaseQCall* tQCall = (BaseQCall*)mCallQueue.tryRead();
@@ -141,14 +111,18 @@ void BaseQCallThread::threadRunFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread init function, base class overload.
+// Thread resource exit function. This is called by the base class
+// before the thread is terminated. It finalizes the call queue and
+// the waitable timer.
 
 void BaseQCallThread::threadResourceExitFunction()
 {
-   Prn::print(Prn::QCallInit1, "BaseQCallThread::threadResourceExitFunction");
-
    // Finalize the call queue.
-   BaseQCallTarget::initializeCallQueue(mCallQueSize);
+   mCallQueue.finalize();
+
+   // Finalize the waitable timer;
+   mWaitable.finalize();
+
 }
 
 //******************************************************************************
@@ -158,25 +132,41 @@ void BaseQCallThread::threadResourceExitFunction()
 
 void BaseQCallThread::shutdownThread()
 {
-   Prn::print(Prn::QCallInit1, "BaseQCallThread::shutdownThread");
-
-   // Set termination flag.
-   mTerminateFlag=true;
-   // Post to the call sem to wake up thread if blocked on it.
-   mCentralSem.put();
-   // Wait for thread terminate.
+   shutdownThreadPrologue();
+   // Set the termination flag.
+   mTerminateFlag = true;
+   // Post to the waitable event. This will wake up the threadRunFunction
+   // and it will return because the termination flag was set.
+   mWaitable.postEvent();
+   // Wait for the thread run function to return.
    waitForThreadTerminate();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Post to the central semahore. It is called by qcall invokations after
-// a qcall has been enqueued to the call queue.
+// Try to write a qcall to the to the target queue. Return true if
+// successful. This is called by qcall invocations to enqueue a qcall.
+// It writes to the call queue and posts to the waitable event, which
+// then wakes up the thread run function to process the call queue.
 
-void BaseQCallThread::notifyQCallAvailable()
+bool BaseQCallThread::tryWriteQCall(BaseQCall* aQCall) 
 {
-   mCentralSem.put();
+   // Guard.
+   if (mTerminateFlag) return false;
+
+   // Try to write to the call queue.
+   if (!mCallQueue.tryWrite(aQCall))
+   {
+      // The write was not successful.
+      return false;
+   }
+
+   // Post to the waitable event.
+   mWaitable.postEvent();
+
+   // Successful.
+   return true;
 }
 
 //******************************************************************************

@@ -8,7 +8,7 @@ Base thread classes
 //******************************************************************************
 
 #include "risThreadsSynch.h"
-#include "ris_priorities.h"
+#include "risThreadsPriorities.h"
 #include "tsThreadLocal.h"
 
 //******************************************************************************
@@ -39,8 +39,12 @@ public:
 
    // Thread run states.
    static const int cThreadRunState_Launching  = 1;
-   static const int cThreadRunState_Running    = 2;
-   static const int cThreadRunState_Terminated = 3;
+   static const int cThreadRunState_InitR      = 2;
+   static const int cThreadRunState_InitF      = 3;
+   static const int cThreadRunState_Running    = 4;
+   static const int cThreadRunState_ExitR      = 5;
+   static const int cThreadRunState_ExitF      = 6;
+   static const int cThreadRunState_Terminated = 7;
 
    //***************************************************************************
    //***************************************************************************
@@ -93,7 +97,7 @@ public:
    void setThreadName(const char* aThreadName);
 
    // Set the thread services print level in the thread local storage.
-   void setThreadPrintLevel(int aPrintLevel);
+   void setThreadPrintLevel(TS::PrintLevel aPrintLevel);
 
    //***************************************************************************
    //***************************************************************************
@@ -169,11 +173,6 @@ public:
    // inheriting thread base classes and by inheriting user classes
    virtual void threadInitFunction(){}
 
-   // This is used by inheritors to initialize thread timers. This should be
-   // overloaded by thread base classes and not by thread user classes.
-   // The launching thread also waits for this to complete.
-   virtual void threadTimerInitFunction(){}
-
    // This should be used by inheritors to do the actual work of the thread
    virtual void threadRunFunction(){}
 
@@ -192,6 +191,9 @@ public:
    // This virtual is overloaded by inheritors to shutdown the thread
    virtual void shutdownThread() {}
 
+   // Overloaded shutodwns should call this first.
+   void shutdownThreadPrologue();
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -200,10 +202,11 @@ public:
    // Sleep for some milliseconds.
    void threadSleep(int aTicks); 
 
-   // Set thread priority.
-   void setThreadPriorityHigh();
+   // Set the thread processor number and priority.
+   void setThreadPriority(Priority aPriority);
    void setThreadPriorityLow();
-   void setThreadPriority(int aThreadPriority);
+   void setThreadPriorityNormal();
+   void setThreadPriorityHigh();
 
    // Wait for the thread to terminate.
    void waitForThreadTerminate();

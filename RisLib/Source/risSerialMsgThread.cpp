@@ -11,7 +11,7 @@
 #include "risPortableCalls.h"
 #include "prnPrint.h"
 
-#include "ris_priorities.h"
+#include "risThreadsPriorities.h"
 #include "risSerialMsgThread.h"
 
 namespace Ris
@@ -24,7 +24,10 @@ namespace Ris
 
 SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
 {
-   BaseClass::mThreadPriority = get_default_udp_rx_thread_priority();
+   // Set base class thread services.
+   BaseClass::setThreadName("SerialMsg");
+   BaseClass::setThreadPriority(aSettings.mThreadPriority);
+   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 
    mSettings = aSettings;
    mRxMsgQCall = aSettings.mRxMsgQCall;
@@ -47,8 +50,6 @@ SerialMsgThread::~SerialMsgThread()
 
 void SerialMsgThread::threadInitFunction()
 {
-   Prn::print(Prn::SerialInitM1, "SerialMsgThread::threadInitFunction");
-
    // Initialize and open the serial port.
    mSerialMsgPort.initialize(mSettings);
    mSerialMsgPort.doOpen();
@@ -63,8 +64,6 @@ void SerialMsgThread::threadInitFunction()
 
 void  SerialMsgThread::threadRunFunction()
 {
-   Prn::print(Prn::SerialInitM1, "SerialRxMsgThread::threadRunFunction %d",mSerialMsgPort.mValidFlag);
-   
    bool tGoing=mSerialMsgPort.mValidFlag;
  
    while(tGoing)
@@ -105,7 +104,6 @@ void  SerialMsgThread::threadRunFunction()
 
 void SerialMsgThread::threadExitFunction()
 {
-   Prn::print(Prn::SerialInitM1, "SerialMsgThread::threadExitFunction");
 }
 
 //******************************************************************************
@@ -121,6 +119,7 @@ void SerialMsgThread::threadExitFunction()
 
 void SerialMsgThread::shutdownThread()
 {
+   shutdownThreadPrologue();
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
    mSerialMsgPort.doClose();

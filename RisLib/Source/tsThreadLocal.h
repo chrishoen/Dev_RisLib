@@ -12,9 +12,7 @@ Thread local storage class.
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteContent.h"
-#include "risByteMsgMonkey.h"
-#include "risThreadsQCall.h"
+#include "tsDefs.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -51,8 +49,12 @@ public:
    // Thread name.
    char mThreadName[cMaxStringSize];
 
-   // The print level for the thread. 
-   int mPrintLevel;
+   // The print and log levels for the thread. 
+   PrintLevel mPrintLevel;
+
+   // Count the number of times that print is called with a
+   // level at or above 4.
+   int mPrintCount4;
 
    //***************************************************************************
    //***************************************************************************

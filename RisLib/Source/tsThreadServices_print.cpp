@@ -10,6 +10,7 @@
 #include "risAlphaDir.h"
 
 #include "tsShare.h"
+#include "tsPrintThread.h"
 #include "tsThreadServices.h"
 
 namespace TS
@@ -22,7 +23,7 @@ namespace TS
 // printf. If the input level is less than or equal to the print level
 // that is located in thread local storage then the print is performed
 // else it is ignored. If the print is performed it prints a string
-// to stdout and appends an end of line (\n).
+// to stdout and and to the log file.
 
 void print(int aLevel, const char* aFormat, ...)
 {
@@ -32,7 +33,34 @@ void print(int aLevel, const char* aFormat, ...)
    // Do this first.
 
    // Guard.
+   if (!gShare.mPrintEnableFlag) return;
+   if (gPrintThread == 0) return;
    if (!isEnabled()) return;
+   if (aLevel > tls()->mPrintLevel.mOutLevel && 
+       aLevel > tls()->mPrintLevel.mLogLevel) return;
+
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Guard against having too many prints that are at or above level 4.
+
+   if (aLevel >= 4)
+   {
+      // Increment.
+      tls()->mPrintCount4++;
+
+      // If at the limit then print a message and exit.
+      if (tls()->mPrintCount4 == 40)
+      {
+         PrintString* tPrintString = new PrintString("PRINT COUNT 4 LIMIT HAS BEEN REACHED");
+         tPrintString->mOutFlag = true;
+         tPrintString->sendToPrintThread();
+         return;
+      }
+
+      // If above the limit then exit.
+      if (tls()->mPrintCount4 > 40) return;
+   }
 
    //*************************************************************************
    //*************************************************************************
@@ -44,8 +72,8 @@ void print(int aLevel, const char* aFormat, ...)
    int   tInputSize;
 
    // Print string buffer.
-   char  tPrintString[cMaxStringSize];
-   int   tPrintSize;
+   char  tOutputString[cMaxStringSize];
+   int   tOutputSize;
 
    //*************************************************************************
    //*************************************************************************
@@ -63,7 +91,7 @@ void print(int aLevel, const char* aFormat, ...)
    // Do an sprintf with the thread name and the input string into the
    // print string. Append a newline \n.
 
-   tPrintSize = sprintf(tPrintString,"%-20s $$ %s\n",
+   tOutputSize = sprintf(tOutputString,"%-20s $$ %s\n",
       tls()->mThreadName,
       tInputString);
 
@@ -72,17 +100,10 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    // Print the string.
 
-   // Print to stdout.
-   if (aLevel <= tls()->mPrintLevel)
-   {
-      fputs(tPrintString, stdout);
-   }
-
-   // Print to the log file.
-   if (gShare.mLogFile)
-   {
-      fputs(tPrintString, gShare.mLogFile);
-   }
+   // Create a new string instance and send it to the print thread.
+   PrintString* tPrintString = new PrintString(tOutputString);
+   tPrintString->mOutFlag = aLevel <= tls()->mPrintLevel.mOutLevel;
+   tPrintString->sendToPrintThread();
 }
 
 //******************************************************************************

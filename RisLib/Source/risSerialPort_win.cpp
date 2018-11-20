@@ -61,7 +61,7 @@ void SerialPort::doOpen()
 {
    mValidFlag=false;
 
-   Prn::print(Prn::SerialInitP1,"SerialPort::doOpen %s",mSettings.mPortDevice);
+   TS::print(1, "SerialPort::doOpen %s", mSettings.mPortDevice);
 
    //***************************************************************************
    //***************************************************************************
@@ -89,7 +89,7 @@ void SerialPort::doOpen()
 
       if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
       {
-         Prn::print(Prn::SerialInitP1, "serial_open_error_1 %d", GetLastError());
+         TS::print(1, "serial_open_error_1 %d", GetLastError());
          Sleep(2000);
       }
       else
@@ -111,7 +111,7 @@ void SerialPort::doOpen()
 
    if (GetLastError() != ERROR_SUCCESS)
    {
-      Prn::print(Prn::SerialErrorP1,"serial_create_error_2 %d", GetLastError());
+      TS::print(1, "serial_create_error_2 %d", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
       return;
@@ -155,7 +155,7 @@ void SerialPort::doOpen()
          else
          {
             // Failed, continue to retry
-            Prn::print(Prn::SerialErrorP1, "serial_create_retry %d", GetLastError());
+            TS::print(1, "serial_create_retry %d", GetLastError());
             doPurge();
             Sleep(100);
             // Retry failed, abort initialization
@@ -185,7 +185,7 @@ void SerialPort::doOpen()
 
    if(!SetCommTimeouts(mSpecific->mPortHandle, &tComTimeout))
    {
-      Prn::print(Prn::SerialErrorP1,"serial_create_error_4 %d", GetLastError());
+      TS::print(1, "serial_create_error_4 %d", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
       return;
@@ -206,7 +206,7 @@ void SerialPort::doOpen()
  
    mValidFlag=true;
 
-   Prn::print(Prn::SerialInitP2, "SerialMsgPort initialize PASS  $ %s : %16s",
+   TS::print(1, "SerialMsgPort initialize PASS  $ %s : %16s",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
 }
@@ -219,7 +219,7 @@ void SerialPort::doClose()
 {
    if (mValidFlag)
    {
-      Prn::print(Prn::SerialInitP1,"SerialPort::doClose %s", mSettings.mPortDevice);
+      TS::print(1, "SerialPort::doClose %s", mSettings.mPortDevice);
       CancelIoEx(mSpecific->mPortHandle,0);
       CloseHandle(mSpecific->mPortHandle);
       CloseHandle(mSpecific->mRxEventHandle);
@@ -272,7 +272,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
    if (WriteFile(mSpecific->mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped))
    {
       // Write was successful.
-      Prn::print(Prn::SerialTxRunP1, "SerialPort::doSendBytes PASS1 %d",aNumBytes);
+      TS::print(4, "SerialPort::doSendBytes PASS1 %d",aNumBytes);
       return 0;
    }
 
@@ -285,24 +285,24 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
       {
          if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
          {
-            Prn::print(Prn::SerialTxRunP1, "SerialPort::doSendBytes PASS1 %d",aNumBytes);
+            TS::print(4, "SerialPort::doSendBytes PASS1 %d",aNumBytes);
             return 0;
          }
          else
          {
-            Prn::print(Prn::SerialErrorP1, "ERROR SerialPort::doSendBytes ERROR 101, %d", GetLastError());
+            TS::print(1, "ERROR SerialPort::doSendBytes ERROR 101, %d", GetLastError());
             return cRetCodeError;
          }
       }
       break;
       default:
       {
-         Prn::print(Prn::SerialErrorP1, "ERROR SerialPort::doSendBytes ERROR 102, %d", GetLastError());
+         TS::print(1, "ERROR SerialPort::doSendBytes ERROR 102, %d", GetLastError());
          return cRetCodeError;
       }
       break;
    }
-   Prn::print(Prn::SerialTxRunP1, "SerialPort::doSendBytes PASS3 %d",aNumBytes);
+   TS::print(4, "SerialPort::doSendBytes PASS3 %d",aNumBytes);
    return 0;
 }
 
@@ -431,7 +431,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       }
       else
       {
-         Prn::print(Prn::SerialErrorP2,"SerialPort::doReceiveBytes ERROR 101 %d", GetLastError());
+         TS::print(1, "SerialPort::doReceiveBytes ERROR 101 %d", GetLastError());
          return cRetCodeError;
       }
    }
@@ -454,7 +454,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
          {
             if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tBytesRead, FALSE))
             {
-               Prn::print(Prn::SerialErrorP1, "ERROR SerialPort::doReceiveBytes ERROR 102 %d", GetLastError());
+               TS::print(1, "ERROR SerialPort::doReceiveBytes ERROR 102 %d", GetLastError());
                return cRetCodeError;
             }
             else
@@ -467,12 +467,12 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
          // Read timeput.
          case WAIT_TIMEOUT:
          {
-            Prn::print(Prn::SerialErrorP1, "ERROR SerialPort::doReceiveBytes TIMEOUT %d", GetLastError());
+            TS::print(1, "ERROR SerialPort::doReceiveBytes TIMEOUT %d", GetLastError());
             return cRetCodeError;
          }
          default:
          {
-            Prn::print(Prn::SerialErrorP1, "ERROR SerialPort::doReceiveBytes ERROR 104 %d", GetLastError());
+            TS::print(1, "ERROR SerialPort::doReceiveBytes ERROR 104 %d", GetLastError());
             return cRetCodeError;
          }
       }
@@ -482,7 +482,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // If the read was aborted then clear hardware error.
    if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
-      Prn::print(Prn::SerialErrorP1, "ERROR SerialPort::doReceiveBytes ERROR 105 %d", GetLastError());
+      TS::print(1, "ERROR SerialPort::doReceiveBytes ERROR 105 %d", GetLastError());
       ClearCommError(mSpecific->mPortHandle, 0, 0);
       return cRetCodeError;
    }
@@ -490,12 +490,12 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // If the number of bytes read was wrong then error.
    if (tBytesRead != aNumBytes)
    {
-      Prn::print(Prn::SerialErrorP1, "ERROR SerialPort::doReceiveBytes ERROR 106 %d", GetLastError());
+      TS::print(1, "ERROR SerialPort::doReceiveBytes ERROR 106 %d", GetLastError());
       return cRetCodeTimeout;
    }
 
    // Done.
-   Prn::print(Prn::SerialRxRunP1, "SerialPort::doReceiveBytes PASS1 %d", tBytesRead);
+   TS::print(1, "SerialPort::doReceiveBytes PASS1 %d", tBytesRead);
    return tBytesRead;
 }
 

@@ -15,9 +15,6 @@
     <ClCompile Include="Source\prnPrintSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ris_priorities_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\risByteBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -165,6 +162,21 @@
     <ClCompile Include="Source\tsThreadServices_tls.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\tsDefs.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\tsPrintString.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\tsPrintThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risThreadsPriorities_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\risThreadsWaitable_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">
@@ -180,9 +192,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\prnPrintSettings.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ris_priorities.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\risByteBuffer.h">
@@ -342,6 +351,21 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\tsThreadServices.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsPriorities.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\risThreadsWaitable.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\tsDefs.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\tsPrintString.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\tsPrintThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,7 +5,7 @@
 SectionBegin default
 
    // Timer thread.
-   TimerThreadPeriod      1000
+   TimerThreadPeriod      4000
 
    // Filename.
    Filename               my_file.dat

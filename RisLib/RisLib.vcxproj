@@ -176,6 +176,7 @@
     <ClInclude Include="Source\risSockets.h" />
     <ClInclude Include="Source\risStatistics.h" />
     <ClInclude Include="Source\risSystemTime.h" />
+    <ClInclude Include="Source\risThreadsPriorities.h" />
     <ClInclude Include="Source\risThreadsProcess.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
     <ClInclude Include="Source\risThreadsQCallThread.h" />
@@ -184,9 +185,12 @@
     <ClInclude Include="Source\risThreadsTimer.h" />
     <ClInclude Include="Source\risThreadsTimerThread.h" />
     <ClInclude Include="Source\risThreadsTwoThread.h" />
+    <ClInclude Include="Source\risThreadsWaitable.h" />
     <ClInclude Include="Source\risTimeMarker.h" />
-    <ClInclude Include="Source\ris_priorities.h" />
     <ClInclude Include="Source\stdafx.h" />
+    <ClInclude Include="Source\tsDefs.h" />
+    <ClInclude Include="Source\tsPrintString.h" />
+    <ClInclude Include="Source\tsPrintThread.h" />
     <ClInclude Include="Source\tsShare.h" />
     <ClInclude Include="Source\tsThreadLocal.h" />
     <ClInclude Include="Source\tsThreadServices.h" />
@@ -230,6 +234,7 @@
     <ClCompile Include="Source\risSockets_win.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
     <ClCompile Include="Source\risSystemTime_win.cpp" />
+    <ClCompile Include="Source\risThreadsPriorities_win.cpp" />
     <ClCompile Include="Source\risThreadsProcess_win.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />
     <ClCompile Include="Source\risThreadsSynch_win.cpp" />
@@ -237,12 +242,15 @@
     <ClCompile Include="Source\risThreadsTimerThread.cpp" />
     <ClCompile Include="Source\risThreadsTimer_win.cpp" />
     <ClCompile Include="Source\risThreadsTwoThread.cpp" />
+    <ClCompile Include="Source\risThreadsWaitable_win.cpp" />
     <ClCompile Include="Source\risTimeMarker.cpp" />
-    <ClCompile Include="Source\ris_priorities_win.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\tsDefs.cpp" />
+    <ClCompile Include="Source\tsPrintString.cpp" />
+    <ClCompile Include="Source\tsPrintThread.cpp" />
     <ClCompile Include="Source\tsShare.cpp" />
     <ClCompile Include="Source\tsThreadLocal.cpp" />
     <ClCompile Include="Source\tsThreadServices_init.cpp" />

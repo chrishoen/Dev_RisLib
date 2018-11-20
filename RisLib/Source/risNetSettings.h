@@ -11,6 +11,8 @@ Byte content message network socket settings class.
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 #include "risThreadsQCall.h"
+#include "tsDefs.h"
+#include "risThreadsPriorities.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -54,8 +56,11 @@ public:
    // Socket flags.
    int mFlags;
 
-   // Thread print level.
-   int mPrintLevel;
+   // Thread processor number and priority.
+   Ris::Threads::Priority mThreadPriority;
+
+   // Thread print and log levels.
+   TS::PrintLevel mPrintLevel;
 
    // Message monkey creator.
    BaseMsgMonkeyCreator* mMonkeyCreator;

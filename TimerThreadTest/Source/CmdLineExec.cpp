@@ -27,11 +27,20 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("TP"    ))  gTimerThread->mTPFlag = aCmd->argBool(1);
+   if(aCmd->isCmd("TP"    ))  executeTP      (aCmd);
    if(aCmd->isCmd("TEST"  ))  executeTest    (aCmd);
    if(aCmd->isCmd("GO1"   ))  executeGo1     (aCmd);
    if(aCmd->isCmd("GO2"   ))  executeGo2     (aCmd);
    if(aCmd->isCmd("GO3"   ))  executeGo3     (aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
+{
+   gTimerThread->mTPFlag=aCmd->argBool(1);
 }
 
 //******************************************************************************

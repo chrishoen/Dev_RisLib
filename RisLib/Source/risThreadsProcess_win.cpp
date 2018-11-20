@@ -76,10 +76,13 @@ void showCurrentThreadInfo()
    int tCurrentProcessorNumber = GetCurrentProcessorNumber();
 
    TS::print(1, "");
-   TS::print(1, "ThreadInfo %-20s %1d %3d %3d",
+   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d %1d $  %3d",
       "main",
       tCurrentProcessorNumber,
       tThreadPriority,
+      "running",
+      TS::tls()->mPrintLevel.mOutLevel,
+      TS::tls()->mPrintLevel.mLogLevel,
       tPriorityClass);
 }
 

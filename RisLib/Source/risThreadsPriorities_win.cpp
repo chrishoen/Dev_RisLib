@@ -10,10 +10,12 @@ Description:
 
 #include <windows.h>
 
-#include "ris_priorities.h"
+#define  _RISTHREADSPRIORITIES_CPP_
+#include "risThreadsPriorities.h"
 
-//******************************************************************************
 namespace Ris
+{
+namespace Threads
 {
 
 //******************************************************************************
@@ -32,24 +34,45 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// RisLib default thread priorities
+// Constructor.
 
-int get_default_thread_priority()                      { return THREAD_PRIORITY_NORMAL; }
-int get_default_high_thread_priority()                 { return THREAD_PRIORITY_TIME_CRITICAL; }
-int get_default_low_thread_priority()                  { return THREAD_PRIORITY_LOWEST; }
+Priority::Priority()
+{
+   mProcessor = -1;
+   mPriority = 50;
+}
 
-int get_default_qcall_thread_priority()                { return THREAD_PRIORITY_NORMAL; }
-int get_default_qcall_timer_thread_priority()          { return THREAD_PRIORITY_ABOVE_NORMAL; }
-
-int get_default_short_thread_priority()                { return THREAD_PRIORITY_HIGHEST; }
-int get_default_short_timer_thread_priority()          { return THREAD_PRIORITY_TIME_CRITICAL; }
-int get_default_long_thread_priority()                 { return THREAD_PRIORITY_ABOVE_NORMAL; }
-
-int get_default_udp_rx_thread_priority()               { return THREAD_PRIORITY_HIGHEST; }
-int get_default_tcp_server_thread_priority()           { return THREAD_PRIORITY_HIGHEST; }
-int get_default_tcp_client_thread_priority()           { return THREAD_PRIORITY_HIGHEST; }
+Priority::Priority(short aProcessor, short aPriority)
+{
+   mProcessor = aProcessor;
+   mPriority = aPriority;
+}
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
+
+Priorities::Priorities()
+{
+   mLow       = Priority(-1, THREAD_PRIORITY_LOWEST);
+   mNormal    = Priority(-1, THREAD_PRIORITY_NORMAL);
+   mHigh      = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
+
+   mQCall     = Priority(-1, THREAD_PRIORITY_NORMAL);
+   mShort     = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
+   mLong      = Priority(-1, THREAD_PRIORITY_NORMAL);
+
+   mUdp       = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
+   mTcpServer = Priority(-1, THREAD_PRIORITY_NORMAL);
+   mTcpClient = Priority(-1, THREAD_PRIORITY_NORMAL);
+   mSerial    = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
+
+   mTsPrint   = Priority(-1, THREAD_PRIORITY_LOWEST);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+}//namespace
 }//namespace

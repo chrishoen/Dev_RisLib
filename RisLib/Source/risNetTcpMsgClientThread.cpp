@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "ris_priorities.h"
+#include "risThreadsPriorities.h"
 #include "risNetTcpMsgClientThread.h"
 
 namespace Ris
@@ -25,7 +25,9 @@ namespace Net
 TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 {
    // Base class variables.
-   mThreadPriority = get_default_tcp_client_thread_priority();
+   BaseClass::setThreadName("TcpMsgClient");
+   BaseClass::setThreadPriority(aSettings.mThreadPriority);
+   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 
    // Store settings.
    mSettings = aSettings;
@@ -171,6 +173,7 @@ void TcpMsgClientThread::threadExitFunction()
 
 void TcpMsgClientThread::shutdownThread()
 {
+   shutdownThreadPrologue();
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
    mSocket.doClose();

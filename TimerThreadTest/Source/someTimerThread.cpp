@@ -21,9 +21,13 @@ namespace Some
 
 TimerThread::TimerThread()
 {
-   // Set base class thread parameters.
+   // Set base class variables.
+   BaseClass::setThreadName("Timer");
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
+
+   // Set base class variables.
    BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadSingleProcessor = 2;
+   BaseClass::mThreadSingleProcessor = 3;
 
    // Set timer period
    mFrequency = 20;
@@ -44,7 +48,7 @@ void TimerThread::threadInitFunction()
 {
    if (mTestCode !=3) return;
 
-   BaseClass::threadShowInfo("TimerThread");
+   BaseClass::showThreadFullInfo();
 }
 
 //******************************************************************************
@@ -73,14 +77,13 @@ void TimerThread::executeTest1(int aTimeCount)
 
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      double tPeriodUS = mTimerPeriod*1000.0;
-//    tPeriodUS = 0.0;
-      Prn::print(Prn::ThreadRun1, "TEST %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+      Prn::print(Prn::ThreadRun1, "TEST %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
          mTimeMarker.mStatistics.mSize,
-         mTimeMarker.mStatistics.mMean   - tPeriodUS,
+         mTimeMarker.mStatistics.mMean,
          mTimeMarker.mStatistics.mStdDev,
-         mTimeMarker.mStatistics.mMinX   - tPeriodUS,
-         mTimeMarker.mStatistics.mMaxX   - tPeriodUS);
+         mTimeMarker.mStatistics.mMinX,
+         mTimeMarker.mStatistics.mMaxX,
+         mTimeMarker.mStatistics.mMaxX - mTimeMarker.mStatistics.mMinX);
          mTimeMarker.mStatistics.mEndOfPeriod = false;
    }
 }

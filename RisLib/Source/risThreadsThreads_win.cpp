@@ -13,7 +13,7 @@
 #include "tsThreadServices.h"
 
 #include "my_functions.h"
-#include "ris_priorities.h"
+#include "risThreadsPriorities.h"
 #include "prnPrint.h"
 #include "risThreadsThreads.h"
 
@@ -54,13 +54,13 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-BaseThread::BaseThread() 
+BaseThread::BaseThread()
 {
    mBaseSpecific = new BaseSpecific;
-   mBaseSpecific->mHandle    = 0;
+   mBaseSpecific->mHandle = 0;
    mThreadRunState = 0;
-   mThreadPriority = get_default_thread_priority();
-   mThreadSingleProcessor  = -1;
+   mThreadPriority = gPriorities.mNormal.mPriority;
+   mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
 
@@ -96,7 +96,7 @@ void BaseThread::setThreadName(const char* aThreadName)
 //******************************************************************************
 // Set the thread services print level in the thread local storage.
 
-void BaseThread::setThreadPrintLevel(int aPrintLevel)
+void BaseThread::setThreadPrintLevel(TS::PrintLevel aPrintLevel)
 {
    mThreadLocal->mPrintLevel = aPrintLevel;
 }
@@ -105,19 +105,28 @@ void BaseThread::setThreadPrintLevel(int aPrintLevel)
 //******************************************************************************
 //******************************************************************************
 
-void BaseThread::setThreadPriorityHigh()
+void BaseThread::setThreadPriority(Priority aPriority)
 {
-   mThreadPriority = get_default_high_thread_priority();
+   mThreadSingleProcessor = aPriority.mProcessor;
+   mThreadPriority = aPriority.mPriority;
 }
 
 void BaseThread::setThreadPriorityLow()
 {
-   mThreadPriority = get_default_low_thread_priority();
+   mThreadSingleProcessor = gPriorities.mLow.mProcessor;
+   mThreadPriority = gPriorities.mLow.mPriority;
 }
 
-void BaseThread::setThreadPriority(int aThreadPriority)
+void BaseThread::setThreadPriorityNormal()
 {
-   mThreadPriority = aThreadPriority;
+   mThreadSingleProcessor = gPriorities.mNormal.mProcessor;
+   mThreadPriority = gPriorities.mNormal.mPriority;
+}
+
+void BaseThread::setThreadPriorityHigh()
+{
+   mThreadSingleProcessor = gPriorities.mHigh.mProcessor;
+   mThreadPriority = gPriorities.mHigh.mPriority;
 }
 
 //******************************************************************************
@@ -207,9 +216,6 @@ void BaseThread::threadFunction()
    // run function.
    mThreadRunProcessor = getThreadProcessorNumber();
 
-   // Set the run state.
-   mThreadRunState = cThreadRunState_Running;
-
    // Thread execution
    try
    {
@@ -217,28 +223,27 @@ void BaseThread::threadFunction()
       my_srand();
       // This is used by inheritors to initialize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
+      mThreadRunState = cThreadRunState_InitR;
       threadResourceInitFunction();
       // Initialization section, overload provided by inheritors
       // It is intended that this will be overloaded by 
       // inheriting thread base classes and by inheriting user classes
       TS::print(1, "threadInitFunction");
+      mThreadRunState = cThreadRunState_InitF;
       threadInitFunction();
-      // It is intended that this will be overloaded by 
-      // inheriting thread base classes that provide timers,
-      // and not by inheriting user classes.
-      // Note that the timer starts after the initialization section
-      // has completed 
-      threadTimerInitFunction();
       // Post to the thread init semaphore.
       mThreadInitSem.put();
       // Run section, overload provided by inheritors 
       TS::print(1, "threadRunFunction");
+      mThreadRunState = cThreadRunState_Running;
       threadRunFunction();
       // Exit section, overload provided by inheritors
       TS::print(1, "threadExitFunction");
+      mThreadRunState = cThreadRunState_ExitF;
       threadExitFunction();
       // This is used by inheritors to finalize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
+      mThreadRunState = cThreadRunState_ExitR;
       threadResourceExitFunction();
    }
    catch (char* aStr)
@@ -293,10 +298,19 @@ void BaseThread::forceTerminateThread()
 
 void BaseThread::waitForThreadTerminate()
 {
-   TS::print(1, "");
    TS::print(1, "waitForThreadTerminate BEGIN %s",mThreadLocal->mThreadName);
    WaitForSingleObject(mBaseSpecific->mHandle,INFINITE);
    TS::print(1, "waitForThreadTerminate END   %s", mThreadLocal->mThreadName);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void BaseThread::shutdownThreadPrologue()
+{
+   TS::print(1, "");
+   TS::print(1, "shutdownThread %s", mThreadLocal->mThreadName);
 }
 
 //******************************************************************************
@@ -314,6 +328,7 @@ BaseThreadWithTermFlag::BaseThreadWithTermFlag()
 
 void BaseThreadWithTermFlag::shutdownThread()
 {
+   shutdownThreadPrologue();
    mTerminateFlag = true;
    waitForThreadTerminate();
 }
@@ -324,6 +339,7 @@ void BaseThreadWithTermFlag::shutdownThread()
 
 void BaseThreadWithTermSem::shutdownThread()
 {
+   shutdownThreadPrologue();
    mTerminateSem.put();
    waitForThreadTerminate();
 }
@@ -393,11 +409,13 @@ void BaseThread::showThreadInfo()
 {
    int tThreadPriority = getThreadPriority();
 
-   TS::print(0,"ThreadInfo %-20s %1d %3d %s",
-     mThreadLocal->mThreadName,
-     mThreadRunProcessor,
-     tThreadPriority,
-     asStringThreadRunState());
+   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d %1d",
+      mThreadLocal->mThreadName,
+      mThreadRunProcessor,
+      tThreadPriority,
+      asStringThreadRunState(),
+      mThreadLocal->mPrintLevel.mOutLevel,
+      mThreadLocal->mPrintLevel.mLogLevel);
 }
 
 //******************************************************************************
@@ -408,9 +426,13 @@ char* BaseThread::asStringThreadRunState()
 {
    switch (mThreadRunState)
    {
-   case cThreadRunState_Launching: return "Launching";
-   case cThreadRunState_Running : return "running";
-   case cThreadRunState_Terminated: return "Terminated";
+   case cThreadRunState_Launching:  return  "launching";
+   case cThreadRunState_InitR:      return  "initR";
+   case cThreadRunState_InitF:      return  "initF";
+   case cThreadRunState_Running:    return  "running";
+   case cThreadRunState_ExitF:      return  "exitF";
+   case cThreadRunState_ExitR:      return  "exitR";
+   case cThreadRunState_Terminated: return  "termed";
    default: return "UNKNOWN";
    }
 }

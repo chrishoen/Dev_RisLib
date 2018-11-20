@@ -17,7 +17,7 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 // The class provides a mechanism that allows a thread to wait on a timer
-// and on a set of events.
+// and on a counting semaphore.
 
 
 class Waitable
@@ -34,9 +34,9 @@ public:
    int  mTimerCount;
 
    // Return true if the previous wait unblocking was a result of the timer 
-   // or the event.
+   // or the counting semaphore.
    bool mWasTimerFlag;
-   bool mWasEventFlag;
+   bool mWasSemaphoreFlag;
 
    // Return true if the object is valid.
    bool mValidFlag;
@@ -60,10 +60,11 @@ public:
    Waitable();
   ~Waitable();
 
-   // Start a timer periodically, in milliseconds.
+   // Initialize the timer and the counting semaphore. Start the timer
+   // periodically, in milliseconds.
    void initialize(int aTimerPeriod);
 
-   // Stop the timer.
+   // Cancel the timer.
    void finalize();
 
    //***************************************************************************
@@ -71,16 +72,16 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Post to the event.
-   void postEvent();
+   // Post to the counting semaphore.
+   void postSemaphore();
 
-   // Wait for the timer or event.
-   void waitForTimerOrEvent();
+   // Wait for the timer or counting semaphore.
+   void waitForTimerOrSemaphore();
 
    // Return true if the previous wait unblocking was a result of the timer 
-   // or the event.
+   // or the counting semaphore.
    bool wasTimer();
-   bool wasEvent();
+   bool wasSemaphore();
 };
 
 //******************************************************************************

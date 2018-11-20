@@ -9,6 +9,8 @@
 
 #include <windows.h> 
 
+#include <atomic> 
+
 #include "risThreadsThreads.h"
 
 #include "risThreadsWaitable.h"
@@ -27,12 +29,14 @@ class Waitable::Specific
 {
 public:
    HANDLE mTimerHandle;
-   HANDLE mEventHandle;
+   HANDLE mSemaphoreHandle;
+   std::atomic<unsigned> mSemaphoreCount;
 
    Specific()
    {
       mTimerHandle = 0;
-      mEventHandle = 0;
+      mSemaphoreHandle = 0;
+      mSemaphoreCount.store(0);
    }
 };
 
@@ -46,7 +50,7 @@ Waitable::Waitable()
    // Initialize members.
    mTimerCount = 0;
    mWasTimerFlag = false;
-   mWasEventFlag = false;
+   mWasSemaphoreFlag = false;
    mValidFlag = false;
 
    // Create new specific implementation.
@@ -62,14 +66,15 @@ Waitable::~Waitable()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Start a timer call periodically, in milliseconds
+// Initialize the timer and the counting semaphore. Start the timer
+// periodically, in milliseconds.
 
 void Waitable::initialize (int aTimerPeriod)
 {
    // Initialize variables.
    mTimerCount = 0;
    mWasTimerFlag = false;
-   mWasEventFlag = false;
+   mWasSemaphoreFlag = false;
 
    // If using the timer.
    if (aTimerPeriod > 0)
@@ -90,8 +95,8 @@ void Waitable::initialize (int aTimerPeriod)
       mSpecific->mTimerHandle = 0;
    }
 
-   // Create the event.
-   mSpecific->mEventHandle = CreateSemaphore(NULL, 0, 1000000, NULL);
+   // Create the semaphore.
+   mSpecific->mSemaphoreHandle = CreateSemaphore(NULL, 0, 1000000, NULL);
 
    // Set valid.
    mValidFlag = true;
@@ -112,78 +117,101 @@ void Waitable::finalize()
    // Cancel the timer.
    CancelWaitableTimer(mSpecific->mTimerHandle);
 
-   // Close the timer and event.
+   // Close the timer and semaphore.
    CloseHandle(mSpecific->mTimerHandle);
-   CloseHandle(mSpecific->mEventHandle);
+   CloseHandle(mSpecific->mSemaphoreHandle);
 
    mSpecific->mTimerHandle = 0;
-   mSpecific->mEventHandle= 0;
+   mSpecific->mSemaphoreHandle= 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Wait for timer or event.
+// Wait for the timer or counting semaphore.
 
-void Waitable::waitForTimerOrEvent()
+void Waitable::waitForTimerOrSemaphore()
 {
-   // Reset variables.
+   // Reset the flags.
    mWasTimerFlag = false;
-   mWasEventFlag = false;
+   mWasSemaphoreFlag = false;
 
    // Guard.
    if (!mValidFlag) return;
 
-   TS::print(5, "Waitable waitForTimerOrEvent*******************************BEGIN");
+   TS::print(5, "Waitable waitForTimerOrSemaphore*******************************BEGIN");
 
-   // Wait for the timer or the event.
+   // Wait for the timer or the semaphore.
    DWORD tRet = 0;
    HANDLE tObjects[2];
    tObjects[0] = mSpecific->mTimerHandle;
-   tObjects[1] = mSpecific->mEventHandle;
+   tObjects[1] = mSpecific->mSemaphoreHandle;
    tRet = WaitForMultipleObjects(2, tObjects, FALSE, -1);
    TS::print(0, "Waitable WaitForMultipleObjects %d",tRet);
 
-   // Test if the timer was signaled.
-   tRet = WaitForSingleObject(mSpecific->mTimerHandle, 0);
+   // Test if the timer was signaled or both the timer and the semaphore
+   // were signaled.
    if (tRet == WAIT_OBJECT_0)
    {
-      TS::print(0, "Waitable WaitForSingleObject Timer");
-      // Set the flag.
+      // The timer was signaled and maybe the semaphore was signaled.
+      TS::print(0, "Waitable timer or both");
+
+      // Increment the timer count and set the flag.
       mTimerCount++;
       mWasTimerFlag = true;
+
+      // Test the semaphore count.
+      if (mSpecific->mSemaphoreCount > 0)
+      {
+         // The semaphore was signaled. Decrement the semaphore count by one.
+         mSpecific->mSemaphoreCount.fetch_sub(1);
+         // Set the flag.
+         mWasSemaphoreFlag = true;
+      }
    }
 
-   // Test if the event was signaled.
-   tRet = WaitForSingleObject(mSpecific->mEventHandle, 0);
-   if (tRet == WAIT_OBJECT_0)
+   // Test if only the semaphore was signaled.
+   if (tRet == WAIT_OBJECT_0 + 1)
    {
-      TS::print(0, "Waitable WaitForSingleObject Event");
-      // Set the flag.
-      mWasEventFlag = true;
+      // The timer was not signaled and the semaphore was signaled.
+      TS::print(0, "Waitable semaphore only");
+
+      // Test the semaphore count.
+      if (mSpecific->mSemaphoreCount > 0)
+      {
+         // The semaphore was signaled. Decrement the semaphore count by one.
+         mSpecific->mSemaphoreCount.fetch_sub(1);
+         // Set the flag.
+         mWasSemaphoreFlag = true;
+      }
    }
 
-   TS::print(5, "Waitable waitForTimerOrEvent*******************************END");
+   TS::print(5, "Waitable waitForTimerOrSemaphore*******************************END");
 }
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Return true if the previous wait unblocking was a result of the timer 
+// or the counting semaphore.
 
 bool Waitable::wasTimer() { return mWasTimerFlag; }
-bool Waitable::wasEvent() { return mWasEventFlag; }
+bool Waitable::wasSemaphore() { return mWasSemaphoreFlag; }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Post to the event. This will unblock any pending waits.
+// Post to the counting semaphore.
 
-void Waitable::postEvent()
+void Waitable::postSemaphore()
 {
    // Guard.
    if (!mValidFlag) return;
 
-   // Write to the event semaphore, increment by one.
-   ReleaseSemaphore(mSpecific->mEventHandle, 1, NULL);
+   // Increment the semaphore count by one.
+   mSpecific->mSemaphoreCount.fetch_add(1);
+
+   // Write to the counting semaphore, increment by one.
+   ReleaseSemaphore(mSpecific->mSemaphoreHandle, 1, NULL);
 }
 
 //******************************************************************************

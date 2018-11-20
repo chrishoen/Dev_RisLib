@@ -21,15 +21,15 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-/*
-   THREAD_PRIORITY_TIME_CRITICAL;
-   THREAD_PRIORITY_HIGHEST;
-   THREAD_PRIORITY_ABOVE_NORMAL;
-   THREAD_PRIORITY_NORMAL;
-   THREAD_PRIORITY_BELOW_NORMAL;
-   THREAD_PRIORITY_LOWEST;
-   THREAD_PRIORITY_IDLE;
-   */
+
+   static const int tInt1 = THREAD_PRIORITY_TIME_CRITICAL;
+   static const int tInt2 = THREAD_PRIORITY_HIGHEST;
+   static const int tInt3 = THREAD_PRIORITY_ABOVE_NORMAL;
+   static const int tInt4 = THREAD_PRIORITY_NORMAL;
+   static const int tInt5 = THREAD_PRIORITY_BELOW_NORMAL;
+   static const int tInt6 = THREAD_PRIORITY_LOWEST;
+   static const int tInt7 = THREAD_PRIORITY_IDLE;
+
 
 //******************************************************************************
 //******************************************************************************
@@ -68,7 +68,7 @@ Priorities::Priorities()
    mTcpClient = Priority(-1, THREAD_PRIORITY_NORMAL);
    mSerial    = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
 
-   mTsPrint   = Priority(-1, THREAD_PRIORITY_LOWEST);
+   mTsPrint   = Priority(-1, THREAD_PRIORITY_ABOVE_NORMAL);
 }
 
 //******************************************************************************

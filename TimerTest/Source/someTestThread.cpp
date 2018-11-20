@@ -23,8 +23,10 @@ TestThread::TestThread()
    // Set base class variables.
    BaseClass::setThreadName("Test");
    BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
+   BaseClass::setThreadPriorityHigh();
 
    mTimerPeriod = gThreadParms.mTimerThreadPeriod;
+   mTimerPeriod = 4000;
    mTPFlag = false;
 }
 
@@ -36,16 +38,13 @@ TestThread::TestThread()
 
 void TestThread::threadInitFunction()
 {
-   mWaitable.initialize(mTimerPeriod);
+// mWaitable.initialize(mTimerPeriod);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread run function. This is called by the base class immediately 
-// after the thread init function. It runs a loop that waits on SDL
-// events and processes posted events. The loop exits when it receives
-// a quit event.
+// Thread run function.
 
 void TestThread::threadRunFunction()
 {
@@ -53,15 +52,26 @@ void TestThread::threadRunFunction()
    int tCount = 0;
    while (true)
    {
-      // Wait for a timer or an event.
-      mWaitable.waitForTimerOrEvent();
+      BaseClass::threadSleep(1000);
+      // Test for thread termination.
+      if (BaseClass::mTerminateFlag) break;
+      Prn::print(Prn::View11, "executeOnTimer %d", tCount++);
+   }
+   return;
 
+   // Loop to wait for posted events and process them.
+// int tCount = 0;
+   while (true)
+   {
+      // Wait for the timer or the semaphore.
+      mWaitable.waitForTimerOrSemaphore();
+      BaseClass::threadSleep(4000);
       // Test for thread termination.
       if (BaseClass::mTerminateFlag) break;
 
-      // Call a handler for the timer or the event.
+      // Call a handler for the timer or the semaphore.
       if (mWaitable.wasTimer()) executeOnTimer(tCount++);
-      if (mWaitable.wasEvent()) executeOnEvent();
+      if (mWaitable.wasSemaphore()) executeOnSemaphore();
    }
 }
 
@@ -73,14 +83,14 @@ void TestThread::threadRunFunction()
 
 void TestThread::threadExitFunction()
 {
-   mWaitable.finalize();
+// mWaitable.finalize();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Thread shutdown function. Set the termination flag, post to the 
-// waitable event and wait for the thread to terminate.
+// waitable semaphore and wait for the thread to terminate.
 
 void TestThread::shutdownThread()
 {
@@ -88,7 +98,7 @@ void TestThread::shutdownThread()
    TS::print(1, "shutdownThread");
 
    BaseClass::mTerminateFlag = true;
-   mWaitable.postEvent();
+// mWaitable.postSemaphore();
    BaseClass::waitForThreadTerminate();
 }
 
@@ -99,16 +109,16 @@ void TestThread::shutdownThread()
 void TestThread::executeOnTimer(int aCount)
 {
    if (!mTPFlag) return;
-   Prn::print(0, "executeOnTimer %d", aCount);
+   Prn::print(Prn::View11, "executeOnTimer %d", aCount);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void TestThread::executeOnEvent()
+void TestThread::executeOnSemaphore()
 {
-   Prn::print(0, "executeOnEvent");
+   Prn::print(Prn::View11, "executeOnSemaphore");
 }
 
 //******************************************************************************

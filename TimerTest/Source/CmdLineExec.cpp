@@ -3,6 +3,7 @@
 
 #include "someTestThread.h"
 #include "someThreadParms.h"
+#include "tsPrintThread.h"
 
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
@@ -59,11 +60,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   // Set defaults if no arguments were entered.
-   aCmd->setArgDefault(1,"something");
-
-   // Show arguments.
-   Prn::print(0,"Go2 %s %10.6f",aCmd->argString(1));
+   TS::print(0, "Go2");
 }
 
 //******************************************************************************
@@ -72,6 +69,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   TS::gPrintThread->mSemaphore.put();
 }
 
 //******************************************************************************

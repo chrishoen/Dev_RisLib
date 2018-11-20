@@ -38,7 +38,7 @@ TestThread::TestThread()
 
 void TestThread::threadInitFunction()
 {
-// mWaitable.initialize(mTimerPeriod);
+   mWaitable.initialize(mTimerPeriod);
 }
 
 //******************************************************************************
@@ -52,20 +52,8 @@ void TestThread::threadRunFunction()
    int tCount = 0;
    while (true)
    {
-      BaseClass::threadSleep(1000);
-      // Test for thread termination.
-      if (BaseClass::mTerminateFlag) break;
-      Prn::print(Prn::View11, "executeOnTimer %d", tCount++);
-   }
-   return;
-
-   // Loop to wait for posted events and process them.
-// int tCount = 0;
-   while (true)
-   {
       // Wait for the timer or the semaphore.
       mWaitable.waitForTimerOrSemaphore();
-      BaseClass::threadSleep(4000);
       // Test for thread termination.
       if (BaseClass::mTerminateFlag) break;
 
@@ -83,7 +71,7 @@ void TestThread::threadRunFunction()
 
 void TestThread::threadExitFunction()
 {
-// mWaitable.finalize();
+   mWaitable.finalize();
 }
 
 //******************************************************************************
@@ -94,11 +82,10 @@ void TestThread::threadExitFunction()
 
 void TestThread::shutdownThread()
 {
-   TS::print(1, "");
-   TS::print(1, "shutdownThread");
+   BaseClass::shutdownThreadPrologue();
 
    BaseClass::mTerminateFlag = true;
-// mWaitable.postSemaphore();
+   mWaitable.postSemaphore();
    BaseClass::waitForThreadTerminate();
 }
 

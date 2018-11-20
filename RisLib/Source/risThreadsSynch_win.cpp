@@ -111,11 +111,10 @@ void CountingSemaphore::put()
 
 bool CountingSemaphore::get(int timeout)
 {
-   switch (WaitForSingleObjectEx(mSpecific->mHandle,timeout,TRUE))
+   switch (WaitForSingleObject(mSpecific->mHandle,timeout))
    {
       case WAIT_OBJECT_0      : return true;  break;
       case WAIT_TIMEOUT       : return false; break;
-      case WAIT_IO_COMPLETION : return false; break;
       default                 : return false; break;
    } 
 }

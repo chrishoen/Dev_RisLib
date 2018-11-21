@@ -30,7 +30,7 @@ MasterThread::MasterThread()
    // Set base class thread variables.
    BaseClass::mLongThread->setThreadName("MasterLong");
    BaseClass::mLongThread->setThreadPriority(Cmn::gPriorities.mMasterLong);
-   BaseClass::mLongThread->setThreadPrintLevel(TS::PrintLevel(5, 3));
+   BaseClass::mLongThread->setThreadPrintLevel(TS::PrintLevel(3, 3));
 
    BaseClass::mShortThread->setThreadName("MasterShort");
    BaseClass::mShortThread->setThreadPriority(Cmn::gPriorities.mMasterShort);
@@ -90,8 +90,7 @@ void MasterThread::executeOnTimer(int aTimerCount)
 
 void MasterThread::executeTest0()
 {
-   printf("Test0\n");
-   Prn::print(Prn::View22, "MasterThread::executeTest0");
+   Prn::print(Prn::View21, "MasterThread::executeTest0");
 }
 
 //******************************************************************************
@@ -100,7 +99,6 @@ void MasterThread::executeTest0()
 
 void MasterThread::executeTest1(int aSource, int aCode)
 {
-   printf("Test1\n");
    try
    {
       Prn::print(Prn::View22, "MasterThread::executeTest1 BEGIN", aCode);

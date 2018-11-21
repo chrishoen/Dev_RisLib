@@ -52,7 +52,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::View11,          true,  1);
    Prn::setFilter(Prn::View12,          false, 1);
    Prn::setFilter(Prn::View21,          true,  2);
-   Prn::setFilter(Prn::View22,          true,  2);
+   Prn::setFilter(Prn::View22,          false, 2);
 
    //***************************************************************************
    //***************************************************************************

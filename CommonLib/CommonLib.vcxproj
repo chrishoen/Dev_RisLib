@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\cmnPriorities_win.cpp" />
     <ClCompile Include="Source\procoMsg.cpp" />
     <ClCompile Include="Source\procoMsgBase.cpp" />
     <ClCompile Include="Source\procoMsgHelper.cpp" />
@@ -32,6 +33,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\cmnPriorities.h" />
     <ClInclude Include="Source\procoMsg.h" />
     <ClInclude Include="Source\procoMsgBase.h" />
     <ClInclude Include="Source\procoMsgHelper.h" />

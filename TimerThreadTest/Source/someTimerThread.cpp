@@ -37,7 +37,7 @@ TimerThread::TimerThread()
 
    // Members
    mTPFlag = false;
-   mTestCode = 3;
+   mTestCode = 1;
 }
 
 //******************************************************************************

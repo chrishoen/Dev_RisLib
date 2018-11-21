@@ -31,6 +31,9 @@
     <ClCompile Include="Source\someThreadParms.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\cmnPriorities_win.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -55,6 +58,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someThreadParms.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\cmnPriorities.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

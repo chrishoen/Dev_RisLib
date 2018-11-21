@@ -16,10 +16,8 @@ namespace Some
 
 TimerThread::TimerThread()
 {
-   // Set base class thread priority
+   // Set base class thread variables.
    BaseClass::setThreadPriorityHigh();
-
-   // Set timer period
    BaseClass::mTimerPeriod = 1000;
 
    // Members

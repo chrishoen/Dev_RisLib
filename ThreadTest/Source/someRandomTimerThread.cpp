@@ -28,12 +28,14 @@ RandomTimerThread::RandomTimerThread(int aIdent)
    if (mIdent == 1)
    {
       BaseClass::setThreadName("RandomTimer1");
-      BaseClass::setThreadPrintLevel(3);
+      BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
+      BaseClass::setThreadPriorityHigh();
    }
    else
    {
       BaseClass::setThreadName("RandomTimer2");
-      BaseClass::setThreadPrintLevel(2);
+      BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
+      BaseClass::setThreadPriorityHigh();
    }
 
    mTPFlag = false;
@@ -93,7 +95,7 @@ void RandomTimerThread::threadExitFunction()
 
 void RandomTimerThread::executeOnTimer(int aCount)
 {
-// TS::print(0, "print %d", aCount);
+   TS::print(10, "RandomTimerThread::executeOnTimer %d", aCount);
 
    gMasterThread->mTest1QCall(mIdent, aCount);
 }

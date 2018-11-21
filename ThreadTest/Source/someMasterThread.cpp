@@ -8,6 +8,7 @@ Description:
 
 #include "stdafx.h"
 
+#include "cmnPriorities.h"
 #include "someThreadParms.h"
 #include "someSlaveThread.h"
 
@@ -27,12 +28,13 @@ MasterThread::MasterThread()
    using namespace std::placeholders;
 
    // Set base class thread variables.
-   BaseClass::mShortThread->setThreadName("MasterShort");
-   BaseClass::mShortThread->setThreadPrintLevel(3);
    BaseClass::mLongThread->setThreadName("MasterLong");
-   BaseClass::mLongThread->setThreadPrintLevel(3);
+   BaseClass::mLongThread->setThreadPriority(Cmn::gPriorities.mMasterLong);
+   BaseClass::mLongThread->setThreadPrintLevel(TS::PrintLevel(5, 3));
 
-   BaseClass::mShortThread->setThreadPriorityHigh();
+   BaseClass::mShortThread->setThreadName("MasterShort");
+   BaseClass::mShortThread->setThreadPriority(Cmn::gPriorities.mMasterShort);
+   BaseClass::mShortThread->setThreadPrintLevel(TS::PrintLevel(3, 3));
    BaseClass::mShortThread->mTimerPeriod = 1000;
 
    // Set base class call pointers.
@@ -41,7 +43,8 @@ MasterThread::MasterThread()
    BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer = std::bind(&MasterThread::executeOnTimer, this, _1);
 
    // Set qcalls.
-   mTest1QCall.bind (this->mLongThread, this,&MasterThread::executeTest1);
+   mTest0QCall.bind(this->mLongThread, this, &MasterThread::executeTest0);
+   mTest1QCall.bind(this->mLongThread, this, &MasterThread::executeTest1);
 
    // Set member variables.
    mTPFlag = true;
@@ -77,7 +80,18 @@ void MasterThread::threadExitFunction()
 void MasterThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
-   Prn::print(Prn::View11, "StatusCount %10d", mStatusCount1);
+// Prn::print(Prn::View11, "StatusCount %10d", mStatusCount1);
+   Prn::print(Prn::View11, "StatusCount %10d %10d", aTimerCount,mStatusCount1);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void MasterThread::executeTest0()
+{
+   printf("Test0\n");
+   Prn::print(Prn::View22, "MasterThread::executeTest0");
 }
 
 //******************************************************************************
@@ -86,20 +100,21 @@ void MasterThread::executeOnTimer(int aTimerCount)
 
 void MasterThread::executeTest1(int aSource, int aCode)
 {
+   printf("Test1\n");
    try
    {
-      Prn::print(Prn::View22,"MasterThread::executeTest1 BEGIN",aCode);
+      Prn::print(Prn::View22, "MasterThread::executeTest1 BEGIN", aCode);
 
       BaseClass::resetNotify();
-      Ris::Threads::TwoThreadNotify tNotify(this,1);
-      gSlaveThread->mWorkRequestQCall(aCode,tNotify);
-      BaseClass::waitForNotify(-1,1);
+      Ris::Threads::TwoThreadNotify tNotify(this, 1);
+      gSlaveThread->mWorkRequestQCall(aCode, tNotify);
+      BaseClass::waitForNotify(-1, 1);
 
-      Prn::print(Prn::View22,"MasterThread::executeTest1 END");
+      Prn::print(Prn::View22, "MasterThread::executeTest1 END");
    }
-   catch(int aStatus)
+   catch (int aStatus)
    {
-      Prn::print(0, "Exception MasterThread::executeTest2 ABORTED  %d",aStatus);
+      Prn::print(0, "Exception MasterThread::executeTest2 ABORTED  %d", aStatus);
    }
 
    if (gThreadParms.mShowCode == 1 || aSource == 7)

@@ -61,7 +61,7 @@ Priorities::Priorities()
 
    mQCall     = Priority(-1, THREAD_PRIORITY_NORMAL);
    mShort     = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
-   mLong      = Priority(-1, THREAD_PRIORITY_NORMAL);
+   mLong      = Priority(-1, THREAD_PRIORITY_HIGHEST);
 
    mUdp       = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
    mTcpServer = Priority(-1, THREAD_PRIORITY_NORMAL);

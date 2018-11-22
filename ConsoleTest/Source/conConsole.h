@@ -55,6 +55,17 @@ public:
    // Run test loop.
    void doTestLoop1();
    void doTestLoop2();
+
+   void onKey_Enter();
+   void onKey_BackSpace();
+   void onKey_Delete();
+   void onKey_LeftArrow();
+   void onKey_RightArrow();
+   void onKey_UpArrow();
+   void onKey_DownArrow();
+   void onKey_Home();
+   void onKey_End();
+   void onKey_Default();
 };
 
 //******************************************************************************

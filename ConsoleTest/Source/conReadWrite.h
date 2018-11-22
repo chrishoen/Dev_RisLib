@@ -18,11 +18,38 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constants.
+
+   static const int cKey_Ignore = 0;
+   static const int cKey_EndOfRead = -1;
+
+   static const int cKey_Enter      = 1000;
+   static const int cKey_BackSpace  = 1001;
+   static const int cKey_Delete     = 1002;
+   static const int cKey_LeftArrow  = 1003;
+   static const int cKey_RightArrow = 1004;
+   static const int cKey_UpArrow    = 1005;
+   static const int cKey_DownArrow  = 1006;
+   static const int cKey_Home       = 1007;
+   static const int cKey_End        = 1008;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // These are a set of functions that provide low level console input and
 // output.
 
+   // Read a single keyboard input.
    int  readOne();
+
+   // Return true if the last read one is printable.
+   bool isPrintable();
+
+   // Return true if the last read one is end of read.
+   bool isEndOfRead();
+
    void writeOne(int aChar);
+   void writeNewLine();
 
 //******************************************************************************
 //******************************************************************************

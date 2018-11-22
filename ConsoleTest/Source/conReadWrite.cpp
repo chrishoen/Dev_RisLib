@@ -21,16 +21,106 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor.
+// Regional variables.
+
+   // The last two chars that were input.
+   int mKeyIn0 = 0;
+   int mKeyIn1 = 0;
+
+   // True if the last read one is printable.
+   bool mPrintable;
+
+   // True if the last read one is the end of read.
+   bool mEndOfRead;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Read one char.
 
 int readOne()
 {
-   return _getch_nolock();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read the input.
+
+   // Shift the key in history.
+   mKeyIn1 = mKeyIn0;
+
+   // Read the next key input.
+   mKeyIn0 = _getch_nolock();
+
+   // Clear flags before testing the input.
+   mPrintable = false;
+   mEndOfRead = false;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test the input.
+
+   // Test the input for end of read.
+   if (mKeyIn1 != 224 && mKeyIn0 == 'z')
+   {
+      mEndOfRead = true;
+      return cKey_EndOfRead;
+   }
+
+   if (mKeyIn1 != 224 && isprint(mKeyIn0))
+   {
+      mPrintable = true;
+      return mKeyIn0;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test the input.
+
+   // Test the input for special keys.
+   if (mKeyIn1 != 224 && mKeyIn0 == 13) return cKey_Enter;
+   if (mKeyIn1 != 224 && mKeyIn0 == 8)  return cKey_BackSpace;
+   if (mKeyIn1 == 224 && mKeyIn0 == 83) return cKey_Delete;
+
+   if (mKeyIn1 == 224 && mKeyIn0 == 75) return cKey_LeftArrow;
+   if (mKeyIn1 == 224 && mKeyIn0 == 77) return cKey_RightArrow;
+   if (mKeyIn1 == 224 && mKeyIn0 == 72) return cKey_UpArrow;
+   if (mKeyIn1 == 224 && mKeyIn0 == 80) return cKey_DownArrow;
+   if (mKeyIn1 == 224 && mKeyIn0 == 71) return cKey_Home;
+   if (mKeyIn1 == 224 && mKeyIn0 == 79) return cKey_End;
+
+   return 'X';
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return true if the last read one is printable/
+
+bool isPrintable()
+{
+   return mPrintable;
+}
+
+bool isEndOfRead()
+{
+   return mEndOfRead;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write one char.
 
 void writeOne(int aChar)
 {
    _putchar_nolock(aChar);
+}
+
+void writeNewLine()
+{
+   _putchar_nolock('\n');
 }
 
 //******************************************************************************

@@ -114,6 +114,22 @@ void Console::onKey_BackSpace()
 
 void Console::onKey_Delete()
 { 
+   if (mCursor == mInputLength) return;
+
+   for (int i = mCursor; i < mInputLength; i++)
+   {
+      mInputString[i] = mInputString[i + 1];
+      writeOne(mInputString[i]);
+   }
+   mInputString[mInputLength - 1] = 0;
+   mInputLength--;
+   writeOne(' ');
+
+   int tCount = mInputLength - mCursor + 2;
+   for (int i = 0; i < tCount; i++)
+   {
+      writeOne(8);
+   }
 }
 
 //******************************************************************************

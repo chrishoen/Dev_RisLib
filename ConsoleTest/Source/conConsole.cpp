@@ -162,6 +162,9 @@ void Console::onKey_DownArrow()
 
 void Console::onKey_Home()
 { 
+   if (mCursor == 0) return;
+   writeOne(13);
+   mCursor = 0;
 }
 
 //******************************************************************************
@@ -170,6 +173,11 @@ void Console::onKey_Home()
 
 void Console::onKey_End()
 { 
+   while (mCursor < mInputLength)
+   {
+      writeOne(mInputString[mCursor]);
+      mCursor++;
+   }
 }
 
 //******************************************************************************

@@ -24,8 +24,7 @@ namespace Con
 // Regional variables.
 
    // The last two chars that were input.
-   int mKeyIn0 = 0;
-   int mKeyIn1 = 0;
+   int mKeyIn = 0;
 
    // True if the last read one is printable.
    bool mPrintable;
@@ -45,15 +44,12 @@ int readOne()
    //***************************************************************************
    // Read the input.
 
-   // Shift the key in history.
-   mKeyIn1 = mKeyIn0;
-
-   // Read the next key input.
-   mKeyIn0 = _getch_nolock();
-
-   // Clear flags before testing the input.
+   // First, clear the flags.
    mPrintable = false;
    mEndOfRead = false;
+
+   // Read the key input.
+   mKeyIn = _getch();
 
    //***************************************************************************
    //***************************************************************************
@@ -61,16 +57,26 @@ int readOne()
    // Test the input.
 
    // Test the input for end of read.
-   if (mKeyIn1 != 224 && mKeyIn0 == 'z')
+   if (mKeyIn == 'z')
    {
       mEndOfRead = true;
       return cKey_EndOfRead;
    }
 
-   if (mKeyIn1 != 224 && isprint(mKeyIn0))
+   if (mKeyIn == 13) return cKey_Enter;
+   if (mKeyIn == 8)  return cKey_BackSpace;
+
+   if (mKeyIn != 224)
    {
-      mPrintable = true;
-      return mKeyIn0;
+      if (isprint(mKeyIn))
+      {
+         mPrintable = true;
+         return mKeyIn;
+      }
+      else
+      {
+         return cKey_Ignore;
+      }
    }
 
    //***************************************************************************
@@ -78,19 +84,19 @@ int readOne()
    //***************************************************************************
    // Test the input.
 
+   // Read the key input.
+   mKeyIn = _getch();
+
    // Test the input for special keys.
-   if (mKeyIn1 != 224 && mKeyIn0 == 13) return cKey_Enter;
-   if (mKeyIn1 != 224 && mKeyIn0 == 8)  return cKey_BackSpace;
-   if (mKeyIn1 == 224 && mKeyIn0 == 83) return cKey_Delete;
+   if (mKeyIn == 83) return cKey_Delete;
+   if (mKeyIn == 75) return cKey_LeftArrow;
+   if (mKeyIn == 77) return cKey_RightArrow;
+   if (mKeyIn == 72) return cKey_UpArrow;
+   if (mKeyIn == 80) return cKey_DownArrow;
+   if (mKeyIn == 71) return cKey_Home;
+   if (mKeyIn == 79) return cKey_End;
 
-   if (mKeyIn1 == 224 && mKeyIn0 == 75) return cKey_LeftArrow;
-   if (mKeyIn1 == 224 && mKeyIn0 == 77) return cKey_RightArrow;
-   if (mKeyIn1 == 224 && mKeyIn0 == 72) return cKey_UpArrow;
-   if (mKeyIn1 == 224 && mKeyIn0 == 80) return cKey_DownArrow;
-   if (mKeyIn1 == 224 && mKeyIn0 == 71) return cKey_Home;
-   if (mKeyIn1 == 224 && mKeyIn0 == 79) return cKey_End;
-
-   return 'X';
+   return cKey_Ignore;
 }
 
 //******************************************************************************
@@ -115,12 +121,12 @@ bool isEndOfRead()
 
 void writeOne(int aChar)
 {
-   _putchar_nolock(aChar);
+   putchar(aChar);
 }
 
 void writeNewLine()
 {
-   _putchar_nolock('\n');
+   putchar('\n');
 }
 
 //******************************************************************************

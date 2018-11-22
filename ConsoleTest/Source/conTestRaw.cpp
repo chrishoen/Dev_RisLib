@@ -55,7 +55,7 @@ void doTestLoopRaw()
       }
 
       Prn::print(Prn::View11, "char %d", tChar);
-      if (tChar == 27)
+      if (tChar == 'z')
       {
          Prn::print(Prn::View11, "escape");
          break;

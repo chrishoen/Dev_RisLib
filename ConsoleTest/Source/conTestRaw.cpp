@@ -11,10 +11,9 @@ Description:
 #include <conio.h>
 #include <ctype.h>
 
-#include "conReadWrite.h"
+#include "tsThreadServices.h"
 
-#define  _CONCONSOLE_CPP_
-#include "conConsole.h"
+#include "conReadWrite.h"
 
 namespace Con
 {
@@ -22,37 +21,38 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor.
+// Raw input and output.
 
-Console::Console()
+int readOneRaw()
 {
+   return _getch_nolock();
 }
 
-Console::~Console()
+void writeOneRaw(int aChar)
 {
+   _putchar_nolock(aChar);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Run test loop.
+// Run a test loop that prints raw key codes.
 
-void Console::doTestLoop1()
+void doTestLoopRaw()
 {
-   Prn::print(Prn::View11, "doTestLoop1****************************");
+   Prn::print(Prn::View11, "doTestLoopRaw****************************");
    while (true)
    {
       int tChar = 0;
-      tChar = readOne();
+      tChar = readOneRaw();
       if (tChar != 'n')
       {
-         writeOne(tChar);
+         writeOneRaw(tChar);
       }
       else
       {
-         writeOne(tChar);
+         writeOneRaw(tChar);
       }
-
 
       Prn::print(Prn::View11, "char %d", tChar);
       if (tChar == 27)
@@ -61,16 +61,6 @@ void Console::doTestLoop1()
          break;
       }
    }
-
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Run test loop.
-
-void Console::doTestLoop2()
-{
 };
 
 //******************************************************************************

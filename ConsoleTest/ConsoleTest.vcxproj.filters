@@ -22,6 +22,12 @@
     <ClCompile Include="Source\conConsole.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\conReadWrite.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\conTestRaw.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -34,6 +40,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\conConsole.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\conReadWrite.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\conTestRaw.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

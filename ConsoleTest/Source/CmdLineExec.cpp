@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "conConsole.h"
+#include "conTestRaw.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -32,7 +33,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Con::gConsole.doTestLoop1();
+   Con::doTestLoopRaw();
 }
 
 //******************************************************************************
@@ -41,7 +42,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Con::gConsole.doTestLoop2();
+   Con::gConsole.doTestLoop1();
 }
 
 //******************************************************************************

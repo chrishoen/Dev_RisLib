@@ -106,6 +106,7 @@ void Console::onKey_BackSpace()
    if (mCursor == 0) return;
    writeOne(8);
    mCursor--;
+   onKey_Delete();
 }
 
 //******************************************************************************

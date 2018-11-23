@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "conConsole.h"
+#include "conStringReader.h"
 #include "conTestRaw.h"
 #include "CmdLineExec.h"
 
@@ -42,7 +42,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Con::gConsole.doTestLoop1();
+   Con::gStringReader.doTestLoop1();
 }
 
 //******************************************************************************

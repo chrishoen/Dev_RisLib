@@ -19,13 +19,13 @@
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\conConsole.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\conTestRaw.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\conReadKey.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\conStringReader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,13 +39,13 @@
     <ClInclude Include="Source\stdafx.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\conConsole.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\conTestRaw.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\conReadKey.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\conStringReader.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

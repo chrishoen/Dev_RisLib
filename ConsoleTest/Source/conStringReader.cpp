@@ -13,8 +13,8 @@ Description:
 
 #include "conReadKey.h"
 
-#define  _CONCONSOLE_CPP_
-#include "conConsole.h"
+#define  _CONSTRINGREADER_CPP_
+#include "conStringReader.h"
 
 namespace Con
 {
@@ -24,11 +24,11 @@ namespace Con
 //******************************************************************************
 // Constructor.
 
-Console::Console()
+StringReader::StringReader()
 {
 }
 
-Console::~Console()
+StringReader::~StringReader()
 {
 }
 
@@ -37,7 +37,7 @@ Console::~Console()
 //******************************************************************************
 // Run test loop.
 
-void Console::doTestLoop1()
+void StringReader::doTestLoop1()
 {
    Prn::print(Prn::View11, "doTestLoop1****************************");
    mCursor = 0;
@@ -84,7 +84,7 @@ void Console::doTestLoop1()
 //******************************************************************************
 //******************************************************************************
 
-void Console::doTouchCursor()
+void StringReader::doTouchCursor()
 {
    return;
    if (mInputLength < 2) return;
@@ -109,7 +109,7 @@ void Console::doTouchCursor()
 //******************************************************************************
 //******************************************************************************
 
-void Console::onKey_Ignore()
+void StringReader::onKey_Ignore()
 {
 }
 
@@ -118,7 +118,7 @@ void Console::onKey_Ignore()
 //******************************************************************************
 // Set the cursor fro the beginning.
 
-void Console::onKey_Enter()
+void StringReader::onKey_Enter()
 {
    mCursor = 0;
 }
@@ -128,7 +128,7 @@ void Console::onKey_Enter()
 //******************************************************************************
 // Move the cursor left by one (backspace) and delete the character there. 
 
-void Console::onKey_BackSpace()
+void StringReader::onKey_BackSpace()
 { 
    if (mCursor == 0) return;
    writeOne(8);
@@ -143,7 +143,7 @@ void Console::onKey_BackSpace()
 // the character at the cursor with the one after it and reduces the length of
 // the input string by one.
 
-void Console::onKey_Delete()
+void StringReader::onKey_Delete()
 { 
    // If at the end then exit.
    if (mCursor == mInputLength) return;
@@ -173,7 +173,7 @@ void Console::onKey_Delete()
 //******************************************************************************
 // Write one backspace. This moves the cursor left by one.
 
-void Console::onKey_LeftArrow()
+void StringReader::onKey_LeftArrow()
 {
    if (mCursor == 0) return;
    writeOne(8);
@@ -186,7 +186,7 @@ void Console::onKey_LeftArrow()
 // Write the input string character at the cursor. This moves the cursor to
 // the right by one.
 
-void Console::onKey_RightArrow()
+void StringReader::onKey_RightArrow()
 { 
    if (mCursor < mInputLength)
    {
@@ -199,7 +199,7 @@ void Console::onKey_RightArrow()
 //******************************************************************************
 //******************************************************************************
 
-void Console::onKey_UpArrow()
+void StringReader::onKey_UpArrow()
 { 
 }
 
@@ -207,7 +207,7 @@ void Console::onKey_UpArrow()
 //******************************************************************************
 //******************************************************************************
 
-void Console::onKey_DownArrow()
+void StringReader::onKey_DownArrow()
 { 
 }
 
@@ -217,7 +217,7 @@ void Console::onKey_DownArrow()
 // Write a line feed to move the cursor to the beginning and set the cursor
 // to zero.
 
-void Console::onKey_Home()
+void StringReader::onKey_Home()
 { 
    if (mCursor == 0) return;
    writeOne(13);
@@ -230,7 +230,7 @@ void Console::onKey_Home()
 // Move the cursor to the end by writing the input string from the cursor
 // to the end.
 
-void Console::onKey_End()
+void StringReader::onKey_End()
 { 
    while (mCursor < mInputLength)
    {
@@ -246,7 +246,7 @@ void Console::onKey_End()
 // new string, including the new character, from the cursor to the end.
 // Go back from the end to the new cursor.
 
-void Console::onKey_Printable()
+void StringReader::onKey_Printable()
 { 
    // Shift right by one all keys at and to the right of the cursor.
    mInputLength = (int)strlen(mInputString);
@@ -279,7 +279,7 @@ void Console::onKey_Printable()
 //******************************************************************************
 // Run test loop.
 
-void Console::doTestLoop2()
+void StringReader::doTestLoop2()
 {
 };
 

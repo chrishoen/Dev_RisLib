@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Console Services.
+StringReader Services.
 ==============================================================================*/
 
 //******************************************************************************
@@ -30,7 +30,7 @@ namespace Con
 //******************************************************************************
 // This class provides global program console i/o facility.
 
-class Console
+class StringReader
 {
 public:
    //***************************************************************************
@@ -50,8 +50,8 @@ public:
    // Methods.
 
    // Constructor.
-   Console();
-   ~Console();
+   StringReader();
+   ~StringReader();
 
    //***************************************************************************
    //***************************************************************************
@@ -81,10 +81,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _CONCONSOLE_CPP_
-          Console gConsole;
+#ifdef _CONSTRINGREADER_CPP_
+          StringReader gStringReader;
 #else
-   extern Console gConsole;
+   extern StringReader gStringReader;
 #endif
 
 //******************************************************************************

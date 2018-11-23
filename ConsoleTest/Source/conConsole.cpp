@@ -70,6 +70,8 @@ void Console::doTestLoop1()
       default:onKey_Default();
       }
 
+      doTouchCursor();
+
       Prn::print(Prn::View11, "mInput %3d $ %4d $  %3d %s", 
          mCursor, 
          mKeyIn, 
@@ -84,6 +86,31 @@ void Console::doTestLoop1()
 //******************************************************************************
 //******************************************************************************
 
+void Console::doTouchCursor()
+{
+   if (mInputLength < 2) return;
+   if (mCursor == 0)
+   {
+      writeOne(mInputString[0]);
+      writeOne(8);
+   }
+   else if (mCursor == mInputLength)
+   {
+      writeOne(8);
+      writeOne(mInputString[mCursor - 1]);
+   }
+   else
+   {
+      writeOne(8);
+      writeOne(mInputString[mCursor - 1]);
+   }
+
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Console::onKey_Ignore()
 {
 }
@@ -91,6 +118,7 @@ void Console::onKey_Ignore()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Set the cursor fro the beginning.
 
 void Console::onKey_Enter()
 {
@@ -100,6 +128,7 @@ void Console::onKey_Enter()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Move the cursor left by one (backspace) and delete the character there. 
 
 void Console::onKey_BackSpace()
 { 
@@ -112,11 +141,17 @@ void Console::onKey_BackSpace()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Shift the input string left by one, starting at the cursor. This overwrites
+// the character at the cursor with the one after it and reduces the length of
+// the input string by one.
 
 void Console::onKey_Delete()
 { 
+   // If at the end then exit.
    if (mCursor == mInputLength) return;
 
+   // Shift the input string from the cursor to the end left by one
+   // and write it out. This over writes the character at the cursor.
    for (int i = mCursor; i < mInputLength; i++)
    {
       mInputString[i] = mInputString[i + 1];
@@ -124,8 +159,10 @@ void Console::onKey_Delete()
    }
    mInputString[mInputLength - 1] = 0;
    mInputLength--;
+   // Erase the last character.
    writeOne(' ');
 
+   // Go back from the end to the cursor.
    int tCount = mInputLength - mCursor + 2;
    for (int i = 0; i < tCount; i++)
    {
@@ -136,6 +173,7 @@ void Console::onKey_Delete()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Write one backspace. This moves the cursor left by one.
 
 void Console::onKey_LeftArrow()
 {
@@ -147,6 +185,8 @@ void Console::onKey_LeftArrow()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Write the input string character at the cursor. This moves the cursor to
+// the right by one.
 
 void Console::onKey_RightArrow()
 { 
@@ -176,6 +216,8 @@ void Console::onKey_DownArrow()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Write a line feed to move the cursor to the beginning and set the cursor
+// to zero.
 
 void Console::onKey_Home()
 { 
@@ -187,6 +229,8 @@ void Console::onKey_Home()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Move the cursor to the end by writing the input string from the cursor
+// to the end.
 
 void Console::onKey_End()
 { 
@@ -200,18 +244,36 @@ void Console::onKey_End()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Insert the input key into the input string at the cursor. Write the
+// new string, including the new character, from the cursor to the end.
+// Go back from the end to the new cursor.
 
 void Console::onKey_Default()
 { 
-   Prn::print(Prn::View14, "Keyin Default");
-
-   writeOne(mKeyIn);
-
-   mInputString[mCursor] = mKeyIn;
-   mInputString[mCursor + 1] = 0;
+   // Shift right by one all keys at and to the right of the cursor.
    mInputLength = (int)strlen(mInputString);
+   for (int i = mInputLength; i > mCursor; i--)
+   {
+      mInputString[i] = mInputString[i - 1];
+   }
+   mInputString[mInputLength + 1] = 0;
+   mInputLength++;
 
+   // Set the input key at the cursor.
+   mInputString[mCursor] = mKeyIn;
+
+   // Write the new string from the cursor to the end.
+   for (int i = mCursor; i < mInputLength; i++)
+   {
+      writeOne(mInputString[i]);
+   }
+
+   // Set the new cursor and go back to it.
    mCursor++;
+   for (int i = mCursor; i < mInputLength; i++)
+   {
+      writeOne(8);
+   }
 }
 
 //******************************************************************************

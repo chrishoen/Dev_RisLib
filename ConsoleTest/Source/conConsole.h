@@ -73,6 +73,7 @@ public:
    void onKey_End();
    void onKey_Default();
    void onKey_Ignore();
+   void doTouchCursor();
 };
 
 //******************************************************************************

@@ -18,10 +18,39 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This is a record that describes single keyboard inputs.
+
+class KeyRecord
+{
+public:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   int  mCode;
+   char mChar;
+   bool mIsPrintable;
+   bool mIsEndOfRead;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   KeyRecord();
+   void reset();
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Constants.
 
    static const int cKey_Ignore = 0;
    static const int cKey_EndOfRead = -1;
+   static const int cKey_Printable = 1;
 
    static const int cKey_Enter      = 1000;
    static const int cKey_BackSpace  = 1001;
@@ -39,16 +68,12 @@ namespace Con
 // These are a set of functions that provide low level console input and
 // output.
 
-   // Read a single keyboard input.
-   int  readOne();
+   // Read a single console keyboard input. Return it in the input record.
+   // Return true if successful.
+   void readKey(KeyRecord* aRecord);
 
-   // Return true if the last read one is printable.
-   bool isPrintable();
-
-   // Return true if the last read one is end of read.
-   bool isEndOfRead();
-
-   void writeOne(int aChar);
+   // Write a single character to the console.
+   void writeOne(char aChar);
    void writeNewLine();
 
 //******************************************************************************

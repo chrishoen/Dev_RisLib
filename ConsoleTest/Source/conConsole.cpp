@@ -11,7 +11,7 @@ Description:
 #include <conio.h>
 #include <ctype.h>
 
-#include "conReadWrite.h"
+#include "conReadKey.h"
 
 #define  _CONCONSOLE_CPP_
 #include "conConsole.h"
@@ -46,28 +46,28 @@ void Console::doTestLoop1()
 
    while (true)
    {
-      mKeyIn = readOne();
+      readKey(&mKeyIn);
 
-      if (isEndOfRead())
+      if (mKeyIn.mIsEndOfRead)
       {
          Prn::print(Prn::View11, "end of read");
          writeNewLine();
          break;
       }
 
-      switch (mKeyIn)
+      switch (mKeyIn.mCode)
       {
-      case cKey_Ignore: onKey_Enter(); break;
-      case cKey_Enter: onKey_Enter(); break;
-      case cKey_BackSpace: onKey_BackSpace(); break;
-      case cKey_Delete: onKey_Delete(); break;
-      case cKey_LeftArrow: onKey_LeftArrow(); break;
+      case cKey_Ignore:     onKey_Ignore(); break;
+      case cKey_Enter:      onKey_Enter(); break;
+      case cKey_BackSpace:  onKey_BackSpace(); break;
+      case cKey_Delete:     onKey_Delete(); break;
+      case cKey_LeftArrow:  onKey_LeftArrow(); break;
       case cKey_RightArrow: onKey_RightArrow(); break;
-      case cKey_UpArrow: onKey_UpArrow(); break;
-      case cKey_DownArrow: onKey_DownArrow(); break;
-      case cKey_Home: onKey_Home(); break;
-      case cKey_End: onKey_End(); break;
-      default:onKey_Default();
+      case cKey_UpArrow:    onKey_UpArrow(); break;
+      case cKey_DownArrow:  onKey_DownArrow(); break;
+      case cKey_Home:       onKey_Home(); break;
+      case cKey_End:        onKey_End(); break;
+      case cKey_Printable:  onKey_Printable(); break;
       }
 
       doTouchCursor();
@@ -77,9 +77,7 @@ void Console::doTestLoop1()
          mKeyIn, 
          mInputLength,
          mInputString);
-
    }
-
 };
 
 //******************************************************************************
@@ -88,6 +86,7 @@ void Console::doTestLoop1()
 
 void Console::doTouchCursor()
 {
+   return;
    if (mInputLength < 2) return;
    if (mCursor == 0)
    {
@@ -104,7 +103,6 @@ void Console::doTouchCursor()
       writeOne(8);
       writeOne(mInputString[mCursor - 1]);
    }
-
 }
 
 //******************************************************************************
@@ -248,7 +246,7 @@ void Console::onKey_End()
 // new string, including the new character, from the cursor to the end.
 // Go back from the end to the new cursor.
 
-void Console::onKey_Default()
+void Console::onKey_Printable()
 { 
    // Shift right by one all keys at and to the right of the cursor.
    mInputLength = (int)strlen(mInputString);
@@ -260,7 +258,7 @@ void Console::onKey_Default()
    mInputLength++;
 
    // Set the input key at the cursor.
-   mInputString[mCursor] = mKeyIn;
+   mInputString[mCursor] = mKeyIn.mChar;
 
    // Write the new string from the cursor to the end.
    for (int i = mCursor; i < mInputLength; i++)

@@ -11,9 +11,7 @@ Description:
 #include <conio.h>
 #include <ctype.h>
 
-#include "tsThreadServices.h"
-
-#include "conReadWrite.h"
+#include "conTestRaw.h"
 
 namespace Con
 {

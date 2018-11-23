@@ -9,7 +9,7 @@ Console Services.
 //******************************************************************************
 
 #include <stdio.h>
-#include "tsThreadLocal.h"
+#include "conReadkey.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -38,7 +38,7 @@ public:
    //***************************************************************************
    // Members.
 
-   int mKeyIn;
+   KeyRecord mKeyIn;
    int mCursor;
 
    char mInputString[cMaxStringSize];
@@ -71,7 +71,7 @@ public:
    void onKey_DownArrow();
    void onKey_Home();
    void onKey_End();
-   void onKey_Default();
+   void onKey_Printable();
    void onKey_Ignore();
    void doTouchCursor();
 };

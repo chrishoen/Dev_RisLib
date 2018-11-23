@@ -13,105 +13,118 @@ Description:
 
 #include "tsThreadServices.h"
 
-#include "conReadWrite.h"
+#include "conReadKey.h"
 
 namespace Con
 {
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
+
+KeyRecord::KeyRecord()
+{
+   reset();
+}
+
+void KeyRecord::reset()
+{
+   mCode = 0;
+   mChar = 0;
+   mIsPrintable = false;
+   mIsEndOfRead = false;
+}
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Regional variables.
+// Read a single console keyboard input. Return it in the input record.
 
-   // The last two chars that were input.
-   int mKeyIn = 0;
-
-   // True if the last read one is printable.
-   bool mPrintable;
-
-   // True if the last read one is the end of read.
-   bool mEndOfRead;
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Read one char.
-
-int readOne()
+void readKey(KeyRecord* aRecord)
 {
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Read the input.
+   // Do this first.
 
-   // First, clear the flags.
-   mPrintable = false;
-   mEndOfRead = false;
-
-   // Read the key input.
-   mKeyIn = _getch();
+   // Clear the input record.
+   aRecord->reset();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Test the input.
+   // Local variables.
+
+   int tKeyIn = 0;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read and test.
+
+   // Read the input key.
+   tKeyIn = _getch();
 
    // Test the input for end of read.
-   if (mKeyIn == 'z')
+   if (tKeyIn == 'z')
    {
-      mEndOfRead = true;
-      return cKey_EndOfRead;
+      aRecord->mIsEndOfRead = true;
+      aRecord->mCode = cKey_EndOfRead;
    }
 
-   if (mKeyIn == 13) return cKey_Enter;
-   if (mKeyIn == 8)  return cKey_BackSpace;
-
-   if (mKeyIn != 224)
+   // Test the input for enter.
+   if (tKeyIn == 13)
    {
-      if (isprint(mKeyIn))
+      aRecord->mCode = cKey_Enter;
+      return;
+   }
+
+   // Test the input for back space.
+   if (tKeyIn == 8)
+   {
+      aRecord->mCode = cKey_BackSpace;
+      return;
+   }
+
+   // Test the input for not special.
+   if (tKeyIn != 224)
+   {
+      // Test the input for printable.
+      if (isprint(tKeyIn))
       {
-         mPrintable = true;
-         return mKeyIn;
+         aRecord->mIsPrintable = true;
+         aRecord->mCode = cKey_Printable;
+         aRecord->mChar = tKeyIn;
+         return;
       }
+      // Not special and not printable.
       else
       {
-         return cKey_Ignore;
+         aRecord->mCode = cKey_Ignore;
+         return;
       }
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Test the input.
+   // Read again and test.
 
    // Read the key input.
-   mKeyIn = _getch();
+   tKeyIn = _getch();
 
    // Test the input for special keys.
-   if (mKeyIn == 83) return cKey_Delete;
-   if (mKeyIn == 75) return cKey_LeftArrow;
-   if (mKeyIn == 77) return cKey_RightArrow;
-   if (mKeyIn == 72) return cKey_UpArrow;
-   if (mKeyIn == 80) return cKey_DownArrow;
-   if (mKeyIn == 71) return cKey_Home;
-   if (mKeyIn == 79) return cKey_End;
-
-   return cKey_Ignore;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Return true if the last read one is printable/
-
-bool isPrintable()
-{
-   return mPrintable;
-}
-
-bool isEndOfRead()
-{
-   return mEndOfRead;
+   switch (tKeyIn)
+   {
+   case  83: aRecord->mCode = cKey_Delete; break;
+   case  75: aRecord->mCode = cKey_LeftArrow; break;
+   case  77: aRecord->mCode = cKey_RightArrow; break;
+   case  72: aRecord->mCode = cKey_UpArrow; break;
+   case  80: aRecord->mCode = cKey_DownArrow; break;
+   case  71: aRecord->mCode = cKey_Home; break;
+   case  79: aRecord->mCode = cKey_End; break;
+   default : aRecord->mCode = cKey_Ignore; break;
+   }
 }
 
 //******************************************************************************
@@ -119,14 +132,14 @@ bool isEndOfRead()
 //******************************************************************************
 // Write one char.
 
-void writeOne(int aChar)
+void writeOne(char aChar)
 {
-   putchar(aChar);
+   _putch(aChar);
 }
 
 void writeNewLine()
 {
-   putchar('\n');
+   _putch('\n');
 }
 
 //******************************************************************************

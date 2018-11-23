@@ -1,12 +1,13 @@
 #pragma once
 
 /*==============================================================================
-Console Services. Read and write low level input and output.
+KeyReader Services.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
 
 //******************************************************************************
 //******************************************************************************
@@ -48,25 +49,45 @@ public:
 //******************************************************************************
 // Constants.
 
-   static const int cKey_Ignore = 0;
-   static const int cKey_EndOfRead = -1;
-   static const int cKey_Printable = 1;
+static const int cKey_Ignore = 0;
+static const int cKey_EndOfRead = -1;
+static const int cKey_Printable = 1;
 
-   static const int cKey_Enter      = 1000;
-   static const int cKey_BackSpace  = 1001;
-   static const int cKey_Delete     = 1002;
-   static const int cKey_LeftArrow  = 1003;
-   static const int cKey_RightArrow = 1004;
-   static const int cKey_UpArrow    = 1005;
-   static const int cKey_DownArrow  = 1006;
-   static const int cKey_Home       = 1007;
-   static const int cKey_End        = 1008;
+static const int cKey_Enter = 1000;
+static const int cKey_BackSpace = 1001;
+static const int cKey_Delete = 1002;
+static const int cKey_LeftArrow = 1003;
+static const int cKey_RightArrow = 1004;
+static const int cKey_UpArrow = 1005;
+static const int cKey_DownArrow = 1006;
+static const int cKey_Home = 1007;
+static const int cKey_End = 1008;
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// These are a set of functions that provide low level console input and
-// output.
+// This class provides global program console i/o facility.
+
+class KeyReader
+{
+public:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   KeyReader();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    // Read a single console keyboard input. Return it in the input record.
    // Return true if successful.
@@ -75,6 +96,18 @@ public:
    // Write a single character to the console.
    void writeOne(char aChar);
    void writeNewLine();
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Global singular instance.
+
+#ifdef _CONKEYREADER_CPP_
+          KeyReader gKeyReader;
+#else
+   extern KeyReader gKeyReader;
+#endif
 
 //******************************************************************************
 //******************************************************************************

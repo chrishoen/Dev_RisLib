@@ -11,12 +11,12 @@ Description:
 #include <conio.h>
 #include <ctype.h>
 
-#include "tsThreadServices.h"
-
-#include "conReadKey.h"
+#define  _CONKEYREADER_CPP_
+#include "conKeyReader.h"
 
 namespace Con
 {
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -38,9 +38,18 @@ void KeyRecord::reset()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
+
+KeyReader::KeyReader()
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Read a single console keyboard input. Return it in the input record.
 
-void readKey(KeyRecord* aRecord)
+void KeyReader::readKey(KeyRecord* aRecord)
 {
    //***************************************************************************
    //***************************************************************************
@@ -123,7 +132,7 @@ void readKey(KeyRecord* aRecord)
    case  80: aRecord->mCode = cKey_DownArrow; break;
    case  71: aRecord->mCode = cKey_Home; break;
    case  79: aRecord->mCode = cKey_End; break;
-   default : aRecord->mCode = cKey_Ignore; break;
+   default: aRecord->mCode = cKey_Ignore; break;
    }
 }
 
@@ -132,12 +141,12 @@ void readKey(KeyRecord* aRecord)
 //******************************************************************************
 // Write one char.
 
-void writeOne(char aChar)
+void KeyReader::writeOne(char aChar)
 {
    _putch(aChar);
 }
 
-void writeNewLine()
+void KeyReader::writeNewLine()
 {
    _putch('\n');
 }

@@ -22,10 +22,10 @@
     <ClCompile Include="Source\conTestRaw.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\conReadKey.cpp">
+    <ClCompile Include="Source\conStringReader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\conStringReader.cpp">
+    <ClCompile Include="Source\conKeyReader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,10 +42,10 @@
     <ClInclude Include="Source\conTestRaw.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\conReadKey.h">
+    <ClInclude Include="Source\conStringReader.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\conStringReader.h">
+    <ClInclude Include="Source\conKeyReader.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

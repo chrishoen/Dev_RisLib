@@ -8,10 +8,7 @@ Description:
 
 #include "stdafx.h"
 
-#include <conio.h>
 #include <ctype.h>
-
-#include "conReadKey.h"
 
 #define  _CONSTRINGREADER_CPP_
 #include "conStringReader.h"
@@ -32,6 +29,17 @@ StringReader::~StringReader()
 {
 }
 
+// Write a single char to the console output.
+void StringReader::writeOne(char aChar)
+{
+   gKeyReader.writeOne(aChar);
+}
+
+void StringReader::writeNewLine()
+{
+   gKeyReader.writeNewLine();
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -46,7 +54,7 @@ void StringReader::doTestLoop1()
 
    while (true)
    {
-      readKey(&mKeyIn);
+      gKeyReader.readKey(&mKeyIn);
 
       if (mKeyIn.mIsEndOfRead)
       {

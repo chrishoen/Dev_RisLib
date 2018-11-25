@@ -23,10 +23,19 @@ namespace Con
 
 StringReader::StringReader()
 {
+   resetVariables();
 }
 
-StringReader::~StringReader()
+void StringReader::resetVariables()
 {
+   mCursor = 0;
+   mLastCursor = 0;
+   mDeltaCursor = 0;
+   mInputLength = 0;
+   mLastInputLength = 0;
+   mDeltaInputLength = 0;
+   mInputString[0] = 0;
+   mOutputString[0] = 0;
 }
 
 // Write a single char to the console output.
@@ -40,6 +49,11 @@ void StringReader::writeNewLine()
    gKeyReader.writeNewLine();
 }
 
+void StringReader::delay()
+{
+   Ris::portableSleep(100);
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -48,13 +62,16 @@ void StringReader::writeNewLine()
 void StringReader::doTestLoop1()
 {
    Prn::print(Prn::View11, "doTestLoop1****************************");
-   mCursor = 0;
-   mInputLength = 0;
-   mInputString[0] = 0;
+
+   resetVariables();
 
    while (true)
    {
+      mLastInputLength = mInputLength;
+      mLastCursor = mCursor;
+
       gKeyReader.readKey(&mKeyIn);
+      delay();
 
       if (mKeyIn.mIsEndOfRead)
       {
@@ -76,9 +93,12 @@ void StringReader::doTestLoop1()
       case cKey_Home:       onKey_Home(); break;
       case cKey_End:        onKey_End(); break;
       case cKey_Printable:  onKey_Printable(); break;
+      case cKey_Special:    onKey_Special(); break;
       }
 
-      doTouchCursor();
+      mDeltaCursor = mCursor - mLastCursor;
+      mInputLength = (int)strlen(mInputString);
+      mDeltaInputLength = mInputLength - mLastInputLength;
 
       Prn::print(Prn::View11, "mInput %3d $ %4d $  %3d %s", 
          mCursor, 
@@ -186,6 +206,13 @@ void StringReader::onKey_LeftArrow()
    if (mCursor == 0) return;
    writeOne(8);
    mCursor--;
+   return;
+
+   if (mCursor == 0) return;
+   mCursor--;
+   echoInput();
+   return;
+
 }
 
 //******************************************************************************
@@ -201,6 +228,12 @@ void StringReader::onKey_RightArrow()
       writeOne(mInputString[mCursor]);
       mCursor++;
    }
+   return;
+
+   mCursor++;
+   echoInput();
+   return;
+
 }
 
 //******************************************************************************
@@ -239,12 +272,23 @@ void StringReader::onKey_Home()
 // to the end.
 
 void StringReader::onKey_End()
-{ 
+{
    while (mCursor < mInputLength)
    {
       writeOne(mInputString[mCursor]);
       mCursor++;
    }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Move the cursor to the end by writing the input string from the cursor
+// to the end.
+
+void StringReader::onKey_Special()
+{
+   writeOne(77);
 }
 
 //******************************************************************************
@@ -285,11 +329,38 @@ void StringReader::onKey_Printable()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Run test loop.
+// Write the output string to the console output.
 
-void StringReader::doTestLoop2()
+void StringReader::echoInput()
 {
-};
+   // Get the input string length.
+   mInputLength = (int)strlen(mInputString);
+
+   // If the input string length did not change.
+   if (mDeltaInputLength == 0)
+   {
+      // Write the input string from the beginning of the line to the
+      // end of the string.
+      strcpy(mOutputString, "\r");
+      strncat(mOutputString, mInputString, cMaxStringSize);
+      gKeyReader.writeString(mOutputString);
+
+      // Write the input string from the beginning of the line to the
+      // cursor.
+      if (mCursor < mInputLength)
+      {
+         // Write the input string from the beginning of the line to the
+         // cursor.
+         strcpy(mOutputString, "\r");
+         strncat(mOutputString, mInputString, cMaxStringSize);
+         mOutputString[mCursor] = 0;
+         gKeyReader.writeString(mOutputString);
+      }
+
+   }
+
+}
+
 
 //******************************************************************************
 //******************************************************************************

@@ -17,7 +17,7 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 
-static int mTimerPeriod = 10;
+static int mTimerPeriod = 50;
 
 void setProcessTimerResolution(int aTimerPeriod)
 {
@@ -49,7 +49,7 @@ void enterProcessHigh()
 void exitProcess()
 {
    // Restore the  process timer resolution.
-   timeEndPeriod(mTimerPeriod);
+   timeEndPeriod(100);
 }
 
 //******************************************************************************

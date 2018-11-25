@@ -88,6 +88,13 @@ void KeyReader::readKey(KeyRecord* aRecord)
       return;
    }
 
+   // Test the input for enter.
+   if (tKeyIn == 's')
+   {
+      aRecord->mCode = cKey_Special;
+      return;
+   }
+
    // Test the input for back space.
    if (tKeyIn == 8)
    {
@@ -132,7 +139,7 @@ void KeyReader::readKey(KeyRecord* aRecord)
    case  80: aRecord->mCode = cKey_DownArrow; break;
    case  71: aRecord->mCode = cKey_Home; break;
    case  79: aRecord->mCode = cKey_End; break;
-   default: aRecord->mCode = cKey_Ignore; break;
+   default:  aRecord->mCode = cKey_Ignore; break;
    }
 }
 
@@ -149,6 +156,12 @@ void KeyReader::writeOne(char aChar)
 void KeyReader::writeNewLine()
 {
    _putch('\n');
+}
+
+// Write a string to the console.
+void KeyReader::writeString(char* aString)
+{
+   _cputs(aString);
 }
 
 //******************************************************************************

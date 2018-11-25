@@ -52,6 +52,7 @@ public:
 static const int cKey_Ignore = 0;
 static const int cKey_EndOfRead = -1;
 static const int cKey_Printable = 1;
+static const int cKey_Special = 2;
 
 static const int cKey_Enter = 1000;
 static const int cKey_BackSpace = 1001;
@@ -96,6 +97,9 @@ public:
    // Write a single character to the console.
    void writeOne(char aChar);
    void writeNewLine();
+
+   // Write a string to the console.
+   void writeString(char* aString);
 };
 
 //******************************************************************************

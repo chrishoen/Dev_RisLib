@@ -38,11 +38,22 @@ public:
    //***************************************************************************
    // Members.
 
+   // Keyboard input.
    KeyRecord mKeyIn;
-   int mCursor;
 
+   // Cursor postion.
+   int mCursor;
+   int mLastCursor;
+   int mDeltaCursor;
+
+   // Input string.
    char mInputString[cMaxStringSize];
    int mInputLength;
+   int mLastInputLength;
+   int mDeltaInputLength;
+
+   // Output string.
+   char mOutputString[cMaxStringSize];
 
    //***************************************************************************
    //***************************************************************************
@@ -51,7 +62,7 @@ public:
 
    // Constructor.
    StringReader();
-   ~StringReader();
+   void resetVariables();
 
    //***************************************************************************
    //***************************************************************************
@@ -77,6 +88,7 @@ public:
    void onKey_Home();
    void onKey_End();
    void onKey_Printable();
+   void onKey_Special();
    void onKey_Ignore();
    void doTouchCursor();
 
@@ -88,6 +100,11 @@ public:
    // Write a single char to the console output.
    void writeOne(char aChar);
    void writeNewLine();
+
+   // Write the output string to the console output.
+   void echoInput();
+
+   void delay();
 };
 
 //******************************************************************************

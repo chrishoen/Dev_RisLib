@@ -7,9 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\CmdLineExec.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -28,11 +25,11 @@
     <ClCompile Include="Source\conKeyReader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\conInputReader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\CmdLineExec.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -46,6 +43,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\conKeyReader.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\conInputReader.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

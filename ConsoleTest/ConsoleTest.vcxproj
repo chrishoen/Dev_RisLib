@@ -174,7 +174,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\conInputReader.cpp" />
     <ClCompile Include="Source\conKeyReader.cpp" />
     <ClCompile Include="Source\conStringReader.cpp" />
     <ClCompile Include="Source\conTestRaw.cpp" />
@@ -186,7 +186,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\conInputReader.h" />
     <ClInclude Include="Source\conKeyReader.h" />
     <ClInclude Include="Source\conStringReader.h" />
     <ClInclude Include="Source\conTestRaw.h" />

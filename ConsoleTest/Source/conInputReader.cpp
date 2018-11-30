@@ -58,29 +58,128 @@ void InputReader::finalize()
 void InputReader::doTestLoop1()
 {
    DWORD tRet = 0;
-   bool tFound = false;
-   int tCount = 0;
+   char  tString[200];
+   DWORD tNumRead = 0;
+   DWORD tNumWritten = 0;
+   int   tCount = 0;
+
    Prn::print(Prn::View01, "InputReader::doTestLoop1****************************");
    Prn::print(Prn::View11, "InputReader::doTestLoop1****************************");
+   Prn::print(Prn::View21, "InputReader::doTestLoop1****************************");
+
+   while (true)
+   {
+      mInputCount = 0;
+      Prn::print(Prn::View11, "ReadConsoleInput****************************");
+
+      FlushConsoleInputBuffer(mInputHandle);
+      while (true)
+      {
+         ReadConsoleInput(
+            mInputHandle,
+            &mInputRecord,
+            1,
+            &tNumRead);
+
+         if (mInputRecord.EventType == KEY_EVENT)
+         {
+            mInputBuffer[mInputCount++] = mInputRecord;
+
+            Prn::print(Prn::View11, "ReadConsoleInput  %4d $ %4d %4d",
+               mInputCount,
+               mInputRecord.Event.KeyEvent.bKeyDown,
+               mInputRecord.Event.KeyEvent.uChar.AsciiChar);
+
+            if (mInputRecord.Event.KeyEvent.bKeyDown == 0) break;
+         }
+      }
+
+      FlushConsoleInputBuffer(mInputHandle);
+      WriteConsoleInput(
+         mInputHandle,
+         mInputBuffer,
+         mInputCount,
+         &tNumWritten);
+      Prn::print(Prn::View11, "WriteConsoleInput %4d", tNumWritten);
+
+      // Read console input.
+      ReadConsole(
+         mInputHandle,
+         tString,
+         200,
+         &tNumRead,
+         NULL);
+      tString[tNumRead] = 0;
+      if (tNumRead > 1) tString[tNumRead - 2] = 0;
+      Prn::print(Prn::View21, "ReadConsole %4d %4d $ %s", tNumRead,strlen(tString),tString);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Run test loop.
+
+void InputReader::doTestLoop2()
+{
+   DWORD tNumRead = 0;
+   int   tCount = 0;
+
+   Prn::print(Prn::View01, "InputReader::doTestLoop2****************************");
+   Prn::print(Prn::View11, "InputReader::doTestLoop2****************************");
+   Prn::print(Prn::View21, "InputReader::doTestLoop2****************************");
+
+   while (true)
+   {
+      ReadConsoleInput(
+         mInputHandle,
+         &mInputRecord,
+         1,
+         &tNumRead);
+      tCount++;
+
+      if (mInputRecord.EventType == KEY_EVENT)
+      {
+         Prn::print(Prn::View01, "ReadConsoleInput  %4d $ %4d %4d",
+            tCount,
+            mInputRecord.Event.KeyEvent.bKeyDown,
+            mInputRecord.Event.KeyEvent.uChar.AsciiChar);
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Run test loop.
+
+void InputReader::doTestLoop3()
+{
+   char  tString[200];
+   DWORD tNumRead = 0;
+   int   tCount = 0;
+
+   Prn::print(Prn::View01, "InputReader::doTestLoop3****************************");
+   Prn::print(Prn::View11, "InputReader::doTestLoop3****************************");
+   Prn::print(Prn::View21, "InputReader::doTestLoop3****************************");
 
    while (true)
    {
       // Read console input.
-      char  tCommandLine[200];
+      ReadConsole(
+         mInputHandle,
+         tString,
+         200,
+         &tNumRead,
+         NULL);
+      tString[tNumRead - 2] = 0;
 
-      int tChar = _getch();
-      ungetch(tChar);
-      Prn::print(Prn::View11, "Char   %4d", tChar);
-//      fgets(tCommandLine, 200, stdin);
-      DWORD tNumRead = 0;
-      tRet = ReadConsoleInput(
-         mInputHandle,      // input buffer handle 
-         mInputBuffer,      // buffer to read into 
-         128,               // size of read buffer 
-         &tNumRead);        // number of records read 
-      Prn::print(Prn::View11, "String %s", tCommandLine);
+      Prn::print(Prn::View21, "ReadConsole %4d $ %4d %s",
+         tNumRead, 
+         strlen(tString),
+         tString);
    }
-};
+}
 
 //******************************************************************************
 //******************************************************************************
@@ -99,15 +198,19 @@ tRet = ReadConsoleInput(
 Prn::print(Prn::View01, "ReadConsoleInput END %4d %4d", tRet, tNumRead);
 
 
-
+//      fgets(tCommandLine, 200, stdin);
 
 DWORD tNumRead = 0;
 ReadConsole(
    mInputHandle,
-   tCommandLine,
+   tString,
    200,
    &tNumRead,
    NULL);
+tString[tNumRead] = 0;
+if (tNumRead > 1) tString[tNumRead - 2] = 0;
+Prn::print(Prn::View11, "String %4d %4d $ %s", tNumRead, tString);
+
 #endif
 
 

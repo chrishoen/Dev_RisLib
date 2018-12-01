@@ -13,7 +13,7 @@ int main(int argc,char** argv)
    main_initialize(argc,argv);
 
    Con::gInputReader.initialize();
-   Con::gInputReader.doTestLoop1();
+   Con::gInputReader.doTestLoop2();
    Con::gInputReader.finalize();
 
    main_finalize();

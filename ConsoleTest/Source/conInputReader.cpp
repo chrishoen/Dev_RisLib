@@ -58,6 +58,7 @@ void InputReader::finalize()
 void InputReader::doTestLoop1()
 {
    DWORD tRet = 0;
+
    char  tString[200];
    DWORD tNumRead = 0;
    DWORD tNumWritten = 0;
@@ -85,10 +86,12 @@ void InputReader::doTestLoop1()
          {
             mInputBuffer[mInputCount++] = mInputRecord;
 
-            Prn::print(Prn::View11, "ReadConsoleInput  %4d $ %4d %4d",
+            Prn::print(Prn::View11, "ReadConsoleInput  %4d $ %4d %4d $ %4X %4X",
                mInputCount,
                mInputRecord.Event.KeyEvent.bKeyDown,
-               mInputRecord.Event.KeyEvent.uChar.AsciiChar);
+               mInputRecord.Event.KeyEvent.uChar.AsciiChar,
+               mInputRecord.Event.KeyEvent.dwControlKeyState,
+               mInputRecord.Event.KeyEvent.wVirtualKeyCode);
 
             if (mInputRecord.Event.KeyEvent.bKeyDown == 0) break;
          }
@@ -140,10 +143,24 @@ void InputReader::doTestLoop2()
 
       if (mInputRecord.EventType == KEY_EVENT)
       {
-         Prn::print(Prn::View01, "ReadConsoleInput  %4d $ %4d %4d",
-            tCount,
+         Prn::print(Prn::View11, "ReadConsoleInput  %4d $ %4d %4d $ %4X %4X",
+            mInputCount,
             mInputRecord.Event.KeyEvent.bKeyDown,
-            mInputRecord.Event.KeyEvent.uChar.AsciiChar);
+            mInputRecord.Event.KeyEvent.uChar.AsciiChar,
+            mInputRecord.Event.KeyEvent.dwControlKeyState,
+            mInputRecord.Event.KeyEvent.wVirtualKeyCode);
+      }
+
+      if (mInputRecord.EventType == KEY_EVENT &&
+          mInputRecord.Event.KeyEvent.bKeyDown &&
+          isprint(mInputRecord.Event.KeyEvent.uChar.AsciiChar)) 
+      {
+               Prn::print(Prn::View21, "Printable  %4d $ %4d %4d $ %4X %4X",
+                  mInputCount,
+                  mInputRecord.Event.KeyEvent.bKeyDown,
+                  mInputRecord.Event.KeyEvent.uChar.AsciiChar,
+                  mInputRecord.Event.KeyEvent.dwControlKeyState,
+                  mInputRecord.Event.KeyEvent.wVirtualKeyCode);
       }
    }
 }

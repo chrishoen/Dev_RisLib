@@ -1,80 +1,68 @@
 #include "stdafx.h"
+
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
-#include "GSettings.h"
+#include "MainInit.h"
 
 #include "someTimerThread.h"
-using namespace Some;
-
-void amain_initialize(int argc,char** argv);
-void amain_finalize();
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 int main(int argc,char** argv)
 {
-   //--------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize program.
 
-   amain_initialize(argc,argv);
+   main_initialize(argc,argv);
 
-   //--------------------------------------------------------------------
-   // Launch threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Launch program threads.
 
-   gTimerThread = new TimerThread;
-   gTimerThread->launchThread();
+   Some::gTimerThread = new Some::TimerThread;
+   Some::gTimerThread->launchThread();
 
-   //--------------------------------------------------------------------
-   // Start user command line executive,
-   // It returns when user exits
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Show program threads.
 
-   CmdLineExec* tExec = new CmdLineExec;
-   Ris::executeCmdLineConsole(tExec);
-   delete tExec;
+   Ris::Threads::showCurrentThreadInfo();
+   Some::gTimerThread->showThreadInfo();
 
-   //--------------------------------------------------------------------
-   // Shutdown threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Start user command line executive, wait for user to exit.
 
-   gTimerThread->shutdownThread();
-   delete gTimerThread;
+   CmdLineExec* exec = new CmdLineExec;
+   Ris::executeCmdLineConsole(exec);
+   delete exec;
 
-   //--------------------------------------------------------------------
-   // Exit
-   
-   amain_finalize();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Shutdown program Threads.
 
+   Some::gTimerThread->shutdownThread();
+
+   delete Some::gTimerThread;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Finalize program.
+
+   main_finalize();
    return 0;
 }
 
 //******************************************************************************
-// Initialize
-
-void amain_initialize(int argc,char** argv)
-{
-   // Enter process
-   Ris::Threads::enterProcessHigh();
-
-   // Initialize print facility
-   Prn::resetPrint();
-   Prn::initializePrint();
-
-   // Initialize global settings
-   gGSettings.initialize();
-
-   Prn::print(0,"CmdLineTest*******************************************BEGIN");
-}
-
 //******************************************************************************
-// Main finalize
-
-void amain_finalize()
-{
-   Prn::print(0,"CmdLineTest*******************************************END");
-
-   // Exit process
-   Ris::Threads::exitProcess();
-
-   // Close print
-   Prn::finalizePrint();
-}
-
+//******************************************************************************

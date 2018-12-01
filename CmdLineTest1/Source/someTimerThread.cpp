@@ -5,8 +5,9 @@ Description:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 #include "stdafx.h"
+
+#include "risProgramTime.h"
 
 #define  _SOMETIMERTHREAD_CPP_
 #include "someTimerThread.h"
@@ -14,13 +15,18 @@ Description:
 namespace Some
 {
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 TimerThread::TimerThread()
 {
-   // Set base class thread priority
+   // Set base class variables.
+   BaseClass::setThreadName("Timer");
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
    BaseClass::setThreadPriorityHigh();
-
-   // Set timer period
-   BaseClass::mTimerPeriod = 10;
+   BaseClass::mThreadSingleProcessor = 3;
+   BaseClass::mTimerPeriod = 250;
 
    // Members
    mTPFlag = false;
@@ -29,9 +35,24 @@ TimerThread::TimerThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+void TimerThread::threadInitFunction()
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void TimerThread::executeOnTimer(int aTimeCount)
 {
-   if (mTPFlag) Prn::print(Prn::ThreadRun4,"TTTimer %04d",aTimeCount);
+   if (!mTPFlag) return;
+   Prn::print(Prn::View01, "TIMER %5d", aTimeCount);
+   Prn::print(Prn::View11, "TIMER %5d", aTimeCount);
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 }//namespace

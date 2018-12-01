@@ -175,9 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\conInputReader.cpp" />
-    <ClCompile Include="Source\conKeyReader.cpp" />
-    <ClCompile Include="Source\conStringReader.cpp" />
-    <ClCompile Include="Source\conTestRaw.cpp" />
+    <ClCompile Include="Source\conInputTest.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
@@ -187,9 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\conInputReader.h" />
-    <ClInclude Include="Source\conKeyReader.h" />
-    <ClInclude Include="Source\conStringReader.h" />
-    <ClInclude Include="Source\conTestRaw.h" />
+    <ClInclude Include="Source\conInputTest.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>

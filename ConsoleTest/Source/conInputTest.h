@@ -1,15 +1,14 @@
 #pragma once
 
 /*==============================================================================
-StringReader Services.
+InputTest Services.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include <stdio.h>
-#include "conKeyReader.h"
+#include <windows.h>
 
 //******************************************************************************
 //******************************************************************************
@@ -21,36 +20,37 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constants.
-
-   static const int cMaxStringSize = 400;
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // This class provides global program console i/o facility.
 
-class StringReader
+class InputTest
 {
 public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Constants.
+
+   static const int cMaxStringSize = 400;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members.
 
-   // Keyboard input.
-   KeyRecord mKeyIn;
+   // Handle.
+   HANDLE mInputHandle;
+   INPUT_RECORD mInputBuffer[128];
+   INPUT_RECORD mInputRecord;
+   int          mInputCount;
 
-   // Cursor postion.
-   int mCursor;
-   int mLastCursor;
-   int mDeltaCursor;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Input string.
    char mInputString[cMaxStringSize];
    int mInputLength;
-   int mLastInputLength;
-   int mDeltaInputLength;
 
    // Output string.
    char mOutputString[cMaxStringSize];
@@ -61,8 +61,12 @@ public:
    // Methods.
 
    // Constructor.
-   StringReader();
+   InputTest();
    void resetVariables();
+
+   // Initialize.
+   void initialize();
+   void finalize();
 
    //***************************************************************************
    //***************************************************************************
@@ -72,39 +76,12 @@ public:
    // Run test loop.
    void doTestLoop1();
    void doTestLoop2();
+   void doTestLoop3();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
-
-   void onKey_Enter();
-   void onKey_BackSpace();
-   void onKey_Delete();
-   void onKey_LeftArrow();
-   void onKey_RightArrow();
-   void onKey_UpArrow();
-   void onKey_DownArrow();
-   void onKey_Home();
-   void onKey_End();
-   void onKey_Printable();
-   void onKey_Special();
-   void onKey_Ignore();
-   void doTouchCursor();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Write a single char to the console output.
-   void writeOne(char aChar);
-   void writeNewLine();
-
-   // Write the output string to the console output.
-   void echoInput();
-
-   void delay();
 };
 
 //******************************************************************************
@@ -113,9 +90,9 @@ public:
 // Global singular instance.
 
 #ifdef _CONSTRINGREADER_CPP_
-          StringReader gStringReader;
+          InputTest gInputTest;
 #else
-   extern StringReader gStringReader;
+   extern InputTest gInputTest;
 #endif
 
 //******************************************************************************

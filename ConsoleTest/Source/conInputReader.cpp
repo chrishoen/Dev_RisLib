@@ -41,9 +41,6 @@ void InputReader::initialize()
 
    resetVariables();
    mInputHandle = GetStdHandle(STD_INPUT_HANDLE);
-
-//  gInputThread = new InputThread;
-//  gInputThread->launchThread();
 }
 
 void InputReader::finalize()
@@ -53,163 +50,177 @@ void InputReader::finalize()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Run test loop.
+// Read a string from the console input and copy it to the input
+// argument.
 
-void InputReader::doTestLoop1()
+void InputReader::doReadString(char* aInputString)
 {
-   DWORD tRet = 0;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Locals.
 
-   char  tString[200];
    DWORD tNumRead = 0;
    DWORD tNumWritten = 0;
-   int   tCount = 0;
 
-   Prn::print(Prn::View01, "InputReader::doTestLoop1****************************");
-   Prn::print(Prn::View11, "InputReader::doTestLoop1****************************");
-   Prn::print(Prn::View21, "InputReader::doTestLoop1****************************");
+   //************************************************************************
+   //************************************************************************
+   //************************************************************************
+   // Read the first key.
 
+   // Flush the input and loop to read console input key records for the
+   // first key input. Store the key records in the input buffer.
+   // If the first key is a control then process it and exit the loop.
+   mInputCount = 0;
+   FlushConsoleInputBuffer(mInputHandle);
    while (true)
    {
-      mInputCount = 0;
-      Prn::print(Prn::View11, "ReadConsoleInput****************************");
-
-      FlushConsoleInputBuffer(mInputHandle);
-      while (true)
-      {
-         ReadConsoleInput(
-            mInputHandle,
-            &mInputRecord,
-            1,
-            &tNumRead);
-
-         if (mInputRecord.EventType == KEY_EVENT)
-         {
-            mInputBuffer[mInputCount++] = mInputRecord;
-
-            Prn::print(Prn::View11, "ReadConsoleInput  %4d $ %4d %4d $ %4X %4X",
-               mInputCount,
-               mInputRecord.Event.KeyEvent.bKeyDown,
-               mInputRecord.Event.KeyEvent.uChar.AsciiChar,
-               mInputRecord.Event.KeyEvent.dwControlKeyState,
-               mInputRecord.Event.KeyEvent.wVirtualKeyCode);
-
-            if (mInputRecord.Event.KeyEvent.bKeyDown &&
-                isprint(mInputRecord.Event.KeyEvent.uChar.AsciiChar))
-            {
-               break;
-            }
-
-            if (mInputRecord.Event.KeyEvent.bKeyDown &&
-                mInputRecord.Event.KeyEvent.wVirtualKeyCode==VK_UP)
-            {
-               Prn::print(Prn::View11, "ReadConsoleInput  UpArrow");
-               break;
-            }
-
-            if (mInputRecord.Event.KeyEvent.bKeyDown &&
-               mInputRecord.Event.KeyEvent.uChar.AsciiChar != 0 &&
-               iscntrl(mInputRecord.Event.KeyEvent.uChar.AsciiChar))
-            {
-               int tChar = mInputRecord.Event.KeyEvent.uChar.AsciiChar;
-               if (tChar == 27)
-               {
-                  Prn::print(Prn::View21, "escape");
-               }
-               else if (tChar == 13)
-               {
-                  Prn::print(Prn::View21, "enter");
-               }
-               else
-               {
-                  Prn::print(Prn::View21, "control");
-               }
-
-               mInputCount = 0;
-               break;
-            }
-
-            if (mInputRecord.Event.KeyEvent.bKeyDown)
-            {
-               int tCode = mInputRecord.Event.KeyEvent.wVirtualKeyCode;
-               if (VK_F1 <= tCode && tCode <= VK_F12)
-               {
-                  Prn::print(Prn::View21, "function");
-               }
-
-               mInputCount = 0;
-               break;
-            }
-
-         }
-      }
-
-      if (mInputCount == 0) continue;
-
-      WriteConsoleInput(
-         mInputHandle,
-         mInputBuffer,
-         mInputCount,
-         &tNumWritten);
-      Prn::print(Prn::View11, "WriteConsoleInput %4d", tNumWritten);
-
-      // Read console input.
-      ReadConsole(
-         mInputHandle,
-         tString,
-         200,
-         &tNumRead,
-         NULL);
-      tString[tNumRead] = 0;
-      if (tNumRead > 1) tString[tNumRead - 2] = 0;
-      Prn::print(Prn::View21, "ReadConsole %4d %4d $ %s", tNumRead,strlen(tString),tString);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Run test loop.
-
-void InputReader::doTestLoop2()
-{
-   DWORD tNumRead = 0;
-   int   tCount = 0;
-
-   Prn::print(Prn::View01, "InputReader::doTestLoop2****************************");
-   Prn::print(Prn::View11, "InputReader::doTestLoop2****************************");
-   Prn::print(Prn::View21, "InputReader::doTestLoop2****************************");
-
-   while (true)
-   {
+      // Read a console input record.
       ReadConsoleInput(
          mInputHandle,
          &mInputRecord,
          1,
          &tNumRead);
-      mInputCount++;
 
+      // Process the console input record for key events.
       if (mInputRecord.EventType == KEY_EVENT)
       {
-         Prn::print(Prn::View11, "ReadConsoleInput  %4d $ %4d %4d $ %4X %4X",
-            mInputCount,
-            mInputRecord.Event.KeyEvent.bKeyDown,
-            mInputRecord.Event.KeyEvent.uChar.AsciiChar,
-            mInputRecord.Event.KeyEvent.dwControlKeyState,
-            mInputRecord.Event.KeyEvent.wVirtualKeyCode);
-      }
+         //******************************************************************
+         //******************************************************************
+         //******************************************************************
 
-      if (mInputRecord.EventType == KEY_EVENT &&
-          mInputRecord.Event.KeyEvent.bKeyDown &&
-          isprint(mInputRecord.Event.KeyEvent.uChar.AsciiChar)) 
-      {
-               Prn::print(Prn::View21, "Printable  %4d $ %4d %4d $ %4X %4X",
-                  mInputCount,
-                  mInputRecord.Event.KeyEvent.bKeyDown,
-                  mInputRecord.Event.KeyEvent.uChar.AsciiChar,
-                  mInputRecord.Event.KeyEvent.dwControlKeyState,
-                  mInputRecord.Event.KeyEvent.wVirtualKeyCode);
+         // Store the record in the input buffer and increment the
+         // input buffer count.
+         mInputBuffer[mInputCount++] = mInputRecord;
+
+         //******************************************************************
+         //******************************************************************
+         //******************************************************************
+         // If the input record is for a printable char
+         // then exit the loop.
+
+         if (mInputRecord.Event.KeyEvent.bKeyDown &&
+            isprint(mInputRecord.Event.KeyEvent.uChar.AsciiChar))
+         {
+            break;
+         }
+
+         //******************************************************************
+         //******************************************************************
+         //******************************************************************
+         // If the input record is for an up or down arrow
+         // then exit the loop.
+
+         if (mInputRecord.Event.KeyEvent.bKeyDown &&
+            mInputRecord.Event.KeyEvent.wVirtualKeyCode == VK_UP)
+         {
+            break;
+         }
+
+         if (mInputRecord.Event.KeyEvent.bKeyDown &&
+            mInputRecord.Event.KeyEvent.wVirtualKeyCode == VK_DOWN)
+         {
+            break;
+         }
+
+         //******************************************************************
+         //******************************************************************
+         //******************************************************************
+         // If the input record is for a control char
+         // then reset the input count and exit the loop.
+
+         if (mInputRecord.Event.KeyEvent.bKeyDown &&
+            mInputRecord.Event.KeyEvent.uChar.AsciiChar != 0 &&
+            iscntrl(mInputRecord.Event.KeyEvent.uChar.AsciiChar))
+         {
+            int tChar = mInputRecord.Event.KeyEvent.uChar.AsciiChar;
+            int tState = mInputRecord.Event.KeyEvent.dwControlKeyState;
+
+            if (tChar == 27)
+            {
+               strcpy(aInputString, "escape");
+               return;
+            }
+            else if (tChar == 13)
+            {
+               if ((tState & SHIFT_PRESSED))
+               {
+                  strcpy(aInputString, "shift_enter");
+                  return;
+               }
+               else if ((tState & LEFT_CTRL_PRESSED) || (tState & RIGHT_CTRL_PRESSED))
+               {
+                  strcpy(aInputString, "control_enter");
+                  return;
+               }
+               else if ((tState & LEFT_ALT_PRESSED) || (tState & RIGHT_ALT_PRESSED))
+               {
+                  strcpy(aInputString, "alt_enter");
+                  return;
+               }
+               else
+               {
+                  strcpy(aInputString, "enter");
+                  return;
+               }
+            }
+            else
+            {
+               if ((tState & SHIFT_PRESSED) == 0)
+               {
+                  sprintf(aInputString,"control_%c", 96 + tChar);
+                  return;
+               }
+               else
+               {
+                  sprintf(aInputString, "control_shift_%c", 96 + tChar);
+                  return;
+               }
+            }
+         }
+
+         //******************************************************************
+         //******************************************************************
+         //******************************************************************
+         // If the input record is for a function key
+         // then reset the input count and exit the loop.
+
+         if (mInputRecord.Event.KeyEvent.bKeyDown)
+         {
+            int tCode = mInputRecord.Event.KeyEvent.wVirtualKeyCode;
+            if (VK_F1 <= tCode && tCode <= VK_F12)
+            {
+               int tFunctionNum = tCode - VK_F1 + 1;
+               sprintf(aInputString, "function_%d", tFunctionNum);
+               return;
+            }
+         }
       }
    }
+
+   //************************************************************************
+   //************************************************************************
+   //************************************************************************
+   // If the first key is not a control then read the input string.
+
+   // Write the input buffer from the first key back to the console input
+   // buffer.
+   WriteConsoleInput(
+      mInputHandle,
+      mInputBuffer,
+      mInputCount,
+      &tNumWritten);
+
+   // Read the input string from the console input. This is in buffered 
+   // mode and will allow string editing.
+   ReadConsole(
+      mInputHandle,
+      aInputString,
+      200,
+      &tNumRead,
+      NULL);
+   aInputString[tNumRead] = 0;
+   if (tNumRead > 1) aInputString[tNumRead - 2] = 0;
 }
 
 //******************************************************************************
@@ -217,31 +228,15 @@ void InputReader::doTestLoop2()
 //******************************************************************************
 // Run test loop.
 
-void InputReader::doTestLoop3()
+void InputReader::doTestLoop1()
 {
+   int tCount = 0;
    char  tString[200];
-   DWORD tNumRead = 0;
-   int   tCount = 0;
-
-   Prn::print(Prn::View01, "InputReader::doTestLoop3****************************");
-   Prn::print(Prn::View11, "InputReader::doTestLoop3****************************");
-   Prn::print(Prn::View21, "InputReader::doTestLoop3****************************");
 
    while (true)
    {
-      // Read console input.
-      ReadConsole(
-         mInputHandle,
-         tString,
-         200,
-         &tNumRead,
-         NULL);
-      tString[tNumRead - 2] = 0;
-
-      Prn::print(Prn::View21, "ReadConsole %4d $ %4d %s",
-         tNumRead, 
-         strlen(tString),
-         tString);
+      doReadString(tString);
+      Prn::print(Prn::View11, "%4d $ %s",++tCount,tString);
    }
 }
 
@@ -249,32 +244,4 @@ void InputReader::doTestLoop3()
 //******************************************************************************
 //******************************************************************************
 }//namespace
-
-#if 0
-Prn::print(Prn::View01, "ReadConsoleInput BEGIN");
-DWORD tNumRead = 0;
-tRet = ReadConsoleInput(
-   mInputHandle,      // input buffer handle 
-   mInputBuffer,      // buffer to read into 
-   128,               // size of read buffer 
-   &tNumRead);        // number of records read 
-
-Prn::print(Prn::View01, "ReadConsoleInput END %4d %4d", tRet, tNumRead);
-
-
-//      fgets(tCommandLine, 200, stdin);
-
-DWORD tNumRead = 0;
-ReadConsole(
-   mInputHandle,
-   tString,
-   200,
-   &tNumRead,
-   NULL);
-tString[tNumRead] = 0;
-if (tNumRead > 1) tString[tNumRead - 2] = 0;
-Prn::print(Prn::View11, "String %4d %4d $ %s", tNumRead, tString);
-
-#endif
-
 

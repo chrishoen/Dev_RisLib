@@ -73,10 +73,12 @@ public:
    //***************************************************************************
    // Methods.
 
+   // Read a string from the console input and copy it to the input
+   // argument.
+   void doReadString(char* aInputString);
+
    // Run test loop.
    void doTestLoop1();
-   void doTestLoop2();
-   void doTestLoop3();
 
    //***************************************************************************
    //***************************************************************************

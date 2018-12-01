@@ -69,8 +69,13 @@ void InputReader::doReadString(char* aInputString)
    // Read the first key.
 
    // Flush the input and loop to read console input key records for the
-   // first key input. Store the key records in the input buffer.
-   // If the first key is a control then process it and exit the loop.
+   // first key input. Store the key records in the input buffer. If the 
+   // first key is a control then write substitutions to the argument input 
+   // string and and return. If the first key is not a control then exit
+   // the loop. In this case, the input records will be written back to the
+   // console input buffer and the argument input string will be read 
+   // from buffered console input so that editing can occur.
+
    mInputCount = 0;
    FlushConsoleInputBuffer(mInputHandle);
    while (true)
@@ -88,19 +93,32 @@ void InputReader::doReadString(char* aInputString)
          //******************************************************************
          //******************************************************************
          //******************************************************************
-
          // Store the record in the input buffer and increment the
          // input buffer count.
+
          mInputBuffer[mInputCount++] = mInputRecord;
 
          //******************************************************************
          //******************************************************************
          //******************************************************************
-         // If the input record is for a printable char
-         // then exit the loop.
+         // Extract local state variables from the key record.
 
-         if (mInputRecord.Event.KeyEvent.bKeyDown &&
-            isprint(mInputRecord.Event.KeyEvent.uChar.AsciiChar))
+         int tChar   = mInputRecord.Event.KeyEvent.uChar.AsciiChar;
+         int tState  = mInputRecord.Event.KeyEvent.dwControlKeyState;
+         int tCode   = mInputRecord.Event.KeyEvent.wVirtualKeyCode;
+
+         bool tDown  = (mInputRecord.Event.KeyEvent.bKeyDown);
+         bool tShift = (tState & SHIFT_PRESSED);
+         bool tCntl  = (tState & LEFT_CTRL_PRESSED) || (tState & RIGHT_CTRL_PRESSED);
+         bool tAlt   = (tState & LEFT_ALT_PRESSED) || (tState & RIGHT_ALT_PRESSED);
+
+         //******************************************************************
+         //******************************************************************
+         //******************************************************************
+         // If the input record is for a printable character then exit the
+         // loop.
+
+         if (tDown && isprint(tChar) && !tAlt)
          {
             break;
          }
@@ -108,34 +126,34 @@ void InputReader::doReadString(char* aInputString)
          //******************************************************************
          //******************************************************************
          //******************************************************************
-         // If the input record is for an up or down arrow
-         // then exit the loop.
+         // If the input record is for a printable character with an alt 
+         // then write substitutions to the argument input string and
+         // return.
 
-         if (mInputRecord.Event.KeyEvent.bKeyDown &&
-            mInputRecord.Event.KeyEvent.wVirtualKeyCode == VK_UP)
+         if (tDown && isprint(tChar) && tAlt)
          {
-            break;
-         }
-
-         if (mInputRecord.Event.KeyEvent.bKeyDown &&
-            mInputRecord.Event.KeyEvent.wVirtualKeyCode == VK_DOWN)
-         {
-            break;
+            sprintf(aInputString, "alt_%c", tChar);
+            return;
          }
 
          //******************************************************************
          //******************************************************************
          //******************************************************************
-         // If the input record is for a control char
-         // then reset the input count and exit the loop.
+         // If the input record is an up or down arrow then exit the loop.
 
-         if (mInputRecord.Event.KeyEvent.bKeyDown &&
-            mInputRecord.Event.KeyEvent.uChar.AsciiChar != 0 &&
-            iscntrl(mInputRecord.Event.KeyEvent.uChar.AsciiChar))
+         if (tDown && ((tCode == VK_UP) || (tCode == VK_DOWN)))
          {
-            int tChar = mInputRecord.Event.KeyEvent.uChar.AsciiChar;
-            int tState = mInputRecord.Event.KeyEvent.dwControlKeyState;
+            break;
+         }
 
+         //******************************************************************
+         //******************************************************************
+         //******************************************************************
+         // If the input record is a control character then write 
+         // substitutions to the argument input string and return.
+
+         if (tDown && (tChar != 0) && iscntrl(tChar))
+         {
             if (tChar == 27)
             {
                strcpy(aInputString, "escape");
@@ -143,17 +161,17 @@ void InputReader::doReadString(char* aInputString)
             }
             else if (tChar == 13)
             {
-               if ((tState & SHIFT_PRESSED))
+               if (tShift)
                {
                   strcpy(aInputString, "shift_enter");
                   return;
                }
-               else if ((tState & LEFT_CTRL_PRESSED) || (tState & RIGHT_CTRL_PRESSED))
+               else if (tCntl)
                {
-                  strcpy(aInputString, "control_enter");
+                  strcpy(aInputString, "cntl_enter");
                   return;
                }
-               else if ((tState & LEFT_ALT_PRESSED) || (tState & RIGHT_ALT_PRESSED))
+               else if (tAlt)
                {
                   strcpy(aInputString, "alt_enter");
                   return;
@@ -166,14 +184,14 @@ void InputReader::doReadString(char* aInputString)
             }
             else
             {
-               if ((tState & SHIFT_PRESSED) == 0)
+               if (tShift)
                {
-                  sprintf(aInputString,"control_%c", 96 + tChar);
+                  sprintf(aInputString, "cntl_shift_%c", 96 + tChar);
                   return;
                }
                else
                {
-                  sprintf(aInputString, "control_shift_%c", 96 + tChar);
+                  sprintf(aInputString, "cntl_%c", 96 + tChar);
                   return;
                }
             }
@@ -182,18 +200,24 @@ void InputReader::doReadString(char* aInputString)
          //******************************************************************
          //******************************************************************
          //******************************************************************
-         // If the input record is for a function key
-         // then reset the input count and exit the loop.
+         // If the input record is a function key then write 
+         // substitutions to the argument input string and return.
 
-         if (mInputRecord.Event.KeyEvent.bKeyDown)
+         if (tDown && (VK_F1 <= tCode && tCode <= VK_F12))
          {
-            int tCode = mInputRecord.Event.KeyEvent.wVirtualKeyCode;
-            if (VK_F1 <= tCode && tCode <= VK_F12)
-            {
-               int tFunctionNum = tCode - VK_F1 + 1;
-               sprintf(aInputString, "function_%d", tFunctionNum);
-               return;
-            }
+            int tFunctionNum = tCode - VK_F1 + 1;
+            
+
+            if (!tShift && !tCntl && !tAlt)  sprintf(aInputString, "function_%d", tFunctionNum);
+            if (!tShift && !tCntl &&  tAlt)  sprintf(aInputString, "alt_function_%d", tFunctionNum);
+            if (!tShift &&  tCntl && !tAlt)  sprintf(aInputString, "cntl_function_%d", tFunctionNum);
+            if (!tShift &&  tCntl &&  tAlt)  sprintf(aInputString, "cntl_alt_function_%d", tFunctionNum);
+            if ( tShift && !tCntl && !tAlt)  sprintf(aInputString, "shift_function_%d", tFunctionNum);
+            if ( tShift && !tCntl &&  tAlt)  sprintf(aInputString, "shift_alt_function_%d", tFunctionNum);
+            if ( tShift &&  tCntl && !tAlt)  sprintf(aInputString, "cntl_shift_function_%d", tFunctionNum);
+            if ( tShift &&  tCntl &&  tAlt)  sprintf(aInputString, "cntl_shift_alt_function_%d", tFunctionNum);
+
+            return;
          }
       }
    }
@@ -201,7 +225,8 @@ void InputReader::doReadString(char* aInputString)
    //************************************************************************
    //************************************************************************
    //************************************************************************
-   // If the first key is not a control then read the input string.
+   // If the first key is not a control then read the input string into
+   // the argument input string.
 
    // Write the input buffer from the first key back to the console input
    // buffer.
@@ -211,16 +236,20 @@ void InputReader::doReadString(char* aInputString)
       mInputCount,
       &tNumWritten);
 
-   // Read the input string from the console input. This is in buffered 
-   // mode and will allow string editing.
+   // Read from the console input into the argument input string. This is
+   // in buffered  mode and will allow string editing.
    ReadConsole(
       mInputHandle,
       aInputString,
       200,
       &tNumRead,
       NULL);
+
+   // Ignore the end of string.
    aInputString[tNumRead] = 0;
    if (tNumRead > 1) aInputString[tNumRead - 2] = 0;
+
+   // Done.
 }
 
 //******************************************************************************

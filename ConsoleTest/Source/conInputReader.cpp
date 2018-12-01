@@ -93,11 +93,58 @@ void InputReader::doTestLoop1()
                mInputRecord.Event.KeyEvent.dwControlKeyState,
                mInputRecord.Event.KeyEvent.wVirtualKeyCode);
 
-            if (mInputRecord.Event.KeyEvent.bKeyDown == 0) break;
+            if (mInputRecord.Event.KeyEvent.bKeyDown &&
+                isprint(mInputRecord.Event.KeyEvent.uChar.AsciiChar))
+            {
+               break;
+            }
+
+            if (mInputRecord.Event.KeyEvent.bKeyDown &&
+                mInputRecord.Event.KeyEvent.wVirtualKeyCode==VK_UP)
+            {
+               Prn::print(Prn::View11, "ReadConsoleInput  UpArrow");
+               break;
+            }
+
+            if (mInputRecord.Event.KeyEvent.bKeyDown &&
+               mInputRecord.Event.KeyEvent.uChar.AsciiChar != 0 &&
+               iscntrl(mInputRecord.Event.KeyEvent.uChar.AsciiChar))
+            {
+               int tChar = mInputRecord.Event.KeyEvent.uChar.AsciiChar;
+               if (tChar == 27)
+               {
+                  Prn::print(Prn::View21, "escape");
+               }
+               else if (tChar == 13)
+               {
+                  Prn::print(Prn::View21, "enter");
+               }
+               else
+               {
+                  Prn::print(Prn::View21, "control");
+               }
+
+               mInputCount = 0;
+               break;
+            }
+
+            if (mInputRecord.Event.KeyEvent.bKeyDown)
+            {
+               int tCode = mInputRecord.Event.KeyEvent.wVirtualKeyCode;
+               if (VK_F1 <= tCode && tCode <= VK_F12)
+               {
+                  Prn::print(Prn::View21, "function");
+               }
+
+               mInputCount = 0;
+               break;
+            }
+
          }
       }
 
-      FlushConsoleInputBuffer(mInputHandle);
+      if (mInputCount == 0) continue;
+
       WriteConsoleInput(
          mInputHandle,
          mInputBuffer,
@@ -139,7 +186,7 @@ void InputReader::doTestLoop2()
          &mInputRecord,
          1,
          &tNumRead);
-      tCount++;
+      mInputCount++;
 
       if (mInputRecord.EventType == KEY_EVENT)
       {

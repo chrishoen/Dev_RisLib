@@ -31,7 +31,6 @@ void InputReader::resetVariables()
 {
    mInputLength = 0;
    mInputString[0] = 0;
-   mOutputString[0] = 0;
 }
 
 void InputReader::initialize()
@@ -40,7 +39,6 @@ void InputReader::initialize()
    Prn::print(Prn::View11, "InputReader::initialize*****************************");
 
    resetVariables();
-   mInputHandle = GetStdHandle(STD_INPUT_HANDLE);
 }
 
 void InputReader::finalize()
@@ -60,6 +58,7 @@ void InputReader::doReadString(char* aInputString)
    //***************************************************************************
    // Locals.
 
+   HANDLE tInputHandle = GetStdHandle(STD_INPUT_HANDLE);
    DWORD tNumRead = 0;
    DWORD tNumWritten = 0;
 
@@ -77,12 +76,12 @@ void InputReader::doReadString(char* aInputString)
    // from buffered console input so that editing can occur.
 
    mInputCount = 0;
-   FlushConsoleInputBuffer(mInputHandle);
+   FlushConsoleInputBuffer(tInputHandle);
    while (true)
    {
       // Read a console input record.
       ReadConsoleInput(
-         mInputHandle,
+         tInputHandle,
          &mInputRecord,
          1,
          &tNumRead);
@@ -96,7 +95,8 @@ void InputReader::doReadString(char* aInputString)
          // Store the record in the input buffer and increment the
          // input buffer count.
 
-         mInputBuffer[mInputCount++] = mInputRecord;
+         mInputBuffer[mInputCount] = mInputRecord;
+         if (++mInputCount == cMaxBufferSize) mInputCount = cMaxBufferSize - 1;
 
          //******************************************************************
          //******************************************************************
@@ -130,9 +130,15 @@ void InputReader::doReadString(char* aInputString)
          // then write substitutions to the argument input string and
          // return.
 
-         if (tDown && isprint(tChar) && tAlt)
+         if (tDown && isprint(tChar) && tAlt && !tShift)
          {
             sprintf(aInputString, "alt_%c", tChar);
+            return;
+         }
+
+         if (tDown && isprint(tChar) && tAlt && tShift)
+         {
+            sprintf(aInputString, "alt_shift_%c", tChar - ('A' - 'a'));
             return;
          }
 
@@ -206,16 +212,15 @@ void InputReader::doReadString(char* aInputString)
          if (tDown && (VK_F1 <= tCode && tCode <= VK_F12))
          {
             int tFunctionNum = tCode - VK_F1 + 1;
-            
 
-            if (!tShift && !tCntl && !tAlt)  sprintf(aInputString, "function_%d", tFunctionNum);
-            if (!tShift && !tCntl &&  tAlt)  sprintf(aInputString, "alt_function_%d", tFunctionNum);
-            if (!tShift &&  tCntl && !tAlt)  sprintf(aInputString, "cntl_function_%d", tFunctionNum);
-            if (!tShift &&  tCntl &&  tAlt)  sprintf(aInputString, "cntl_alt_function_%d", tFunctionNum);
-            if ( tShift && !tCntl && !tAlt)  sprintf(aInputString, "shift_function_%d", tFunctionNum);
-            if ( tShift && !tCntl &&  tAlt)  sprintf(aInputString, "shift_alt_function_%d", tFunctionNum);
-            if ( tShift &&  tCntl && !tAlt)  sprintf(aInputString, "cntl_shift_function_%d", tFunctionNum);
-            if ( tShift &&  tCntl &&  tAlt)  sprintf(aInputString, "cntl_shift_alt_function_%d", tFunctionNum);
+            if (!tCntl && !tAlt && !tShift)  sprintf(aInputString, "fn_%d", tFunctionNum);
+            if (!tCntl && !tAlt &&  tShift)  sprintf(aInputString, "shift_fn_%d", tFunctionNum);
+            if (!tCntl &&  tAlt && !tShift)  sprintf(aInputString, "alt_fn_%d", tFunctionNum);
+            if (!tCntl &&  tAlt &&  tShift)  sprintf(aInputString, "alt_shift_fn_%d", tFunctionNum);
+            if ( tCntl && !tAlt && !tShift)  sprintf(aInputString, "cntl_fn_%d", tFunctionNum);
+            if ( tCntl && !tAlt &&  tShift)  sprintf(aInputString, "cntl_shift_fn_%d", tFunctionNum);
+            if ( tCntl &&  tAlt && !tShift)  sprintf(aInputString, "cntl_alt_fn_%d", tFunctionNum);
+            if ( tCntl &&  tAlt &&  tShift)  sprintf(aInputString, "cntl_alt_shift_fn_%d", tFunctionNum);
 
             return;
          }
@@ -231,7 +236,7 @@ void InputReader::doReadString(char* aInputString)
    // Write the input buffer from the first key back to the console input
    // buffer.
    WriteConsoleInput(
-      mInputHandle,
+      tInputHandle,
       mInputBuffer,
       mInputCount,
       &tNumWritten);
@@ -239,9 +244,9 @@ void InputReader::doReadString(char* aInputString)
    // Read from the console input into the argument input string. This is
    // in buffered  mode and will allow string editing.
    ReadConsole(
-      mInputHandle,
+      tInputHandle,
       aInputString,
-      200,
+      cMaxStringSize,
       &tNumRead,
       NULL);
 
@@ -255,7 +260,26 @@ void InputReader::doReadString(char* aInputString)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Run test loop.
+// Wait for a press enter at the console input.
+
+void InputReader::doWaitForPressEnter()
+{
+   char tString[10];
+   DWORD tNumRead = 0;
+   HANDLE tInputHandle = GetStdHandle(STD_INPUT_HANDLE);
+
+   ReadConsole(
+      tInputHandle,
+      tString,
+      10,
+      &tNumRead,
+      NULL);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Run a test loop.
 
 void InputReader::doTestLoop1()
 {

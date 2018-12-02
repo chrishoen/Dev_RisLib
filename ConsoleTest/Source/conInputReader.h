@@ -31,6 +31,7 @@ public:
    // Constants.
 
    static const int cMaxStringSize = 400;
+   static const int cMaxBufferSize = 400;
 
    //***************************************************************************
    //***************************************************************************
@@ -38,8 +39,7 @@ public:
    // Members.
 
    // Handle.
-   HANDLE mInputHandle;
-   INPUT_RECORD mInputBuffer[128];
+   INPUT_RECORD mInputBuffer[cMaxBufferSize];
    INPUT_RECORD mInputRecord;
    int          mInputCount;
 
@@ -51,9 +51,6 @@ public:
    // Input string.
    char mInputString[cMaxStringSize];
    int mInputLength;
-
-   // Output string.
-   char mOutputString[cMaxStringSize];
 
    //***************************************************************************
    //***************************************************************************
@@ -77,13 +74,16 @@ public:
    // argument.
    void doReadString(char* aInputString);
 
-   // Run test loop.
-   void doTestLoop1();
+   // Wait for a press enter at the console input.
+   void doWaitForPressEnter();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
+
+   // Run a test loop.
+   void doTestLoop1();
 };
 
 //******************************************************************************

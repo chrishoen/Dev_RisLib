@@ -13,6 +13,7 @@
 #include "my_functions.h"
 #include "tsThreadServices.h"
 #include "prnPrint.h"
+#include "conInput.h"
 
 #define  _RISCMDLINECONSOLE_CPP_
 #include "risCmdLineConsole.h"
@@ -34,8 +35,10 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
    TS::print(1, "");
    TS::print(1, "Command Line Executive BEGIN");
 
+   Con::initializeInput();
+
    // Locals
-   char tCommandLine[200];
+   char tCommandLine[Con::cMaxStringSize];
    CmdLineCmd  tCmd;
 
    // Reset the executive
@@ -44,14 +47,7 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
    while(true)
    {
       // Read console input
-	   if (fgets(tCommandLine, 200, stdin) == 0)
-	   {
-         TS::print(1, "Command Line Executive END");
-         return;
-	   }
-
-      // Remove cr/lf at end of line
-      my_trimCRLF(tCommandLine);
+      Con::doReadInputString(tCommandLine);
 
       // Test for toggle suppress print
       if (strcmp(tCommandLine,"p")==0)
@@ -65,6 +61,7 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
          // Exit
          if (strcmp(tCommandLine,"e")==0)
          {
+            Con::finalizeInput();
             TS::print(1, "Command Line Executive END");
             return;
          }
@@ -78,6 +75,7 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
             // Test for exit
             if(tCmd.isCmd("EXIT"))
             {
+               Con::finalizeInput();
                TS::print(1, "Command Line Executive END");
                return;;
             }
@@ -99,7 +97,9 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
          }
       }
    }
+   Con::finalizeInput();
    TS::print(1, "Command Line Executive END");
+   return;
 }
 
 //******************************************************************************

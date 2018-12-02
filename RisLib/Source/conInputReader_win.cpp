@@ -58,6 +58,7 @@ void InputReader::doReadString(char* aInputString)
    // Locals.
 
    HANDLE tInputHandle = GetStdHandle(STD_INPUT_HANDLE);
+   HANDLE tOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
    DWORD tNumRead = 0;
    DWORD tNumWritten = 0;
 
@@ -184,6 +185,7 @@ void InputReader::doReadString(char* aInputString)
                else
                {
                   strcpy(aInputString, "enter");
+                  WriteConsole(tOutputHandle, "\n", 1, &tNumWritten, 0);
                   return;
                }
             }

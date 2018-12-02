@@ -2,7 +2,7 @@
 
 #include "MainInit.h"
 
-#include "conInputReader.h"
+#include "conInputReader_win.h"
 #include "conInputTest.h"
 
 //******************************************************************************

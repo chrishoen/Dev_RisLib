@@ -12,7 +12,7 @@ Description:
 #include <ctype.h>
 
 #define  _CONSTRINGREADER_CPP_
-#include "conInputReader.h"
+#include "conInputReader_win.h"
 
 namespace Con
 {

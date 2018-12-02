@@ -174,8 +174,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\conInputReader.cpp" />
+    <ClCompile Include="Source\conInputReader_win.cpp" />
     <ClCompile Include="Source\conInputTest.cpp" />
+    <ClCompile Include="Source\conInput_win.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
@@ -184,7 +185,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\conInputReader.h" />
+    <ClInclude Include="Source\conInput.h" />
+    <ClInclude Include="Source\conInputReader_win.h" />
     <ClInclude Include="Source\conInputTest.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\stdafx.h" />

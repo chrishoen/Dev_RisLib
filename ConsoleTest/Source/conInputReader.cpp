@@ -24,21 +24,18 @@ namespace Con
 
 InputReader::InputReader()
 {
-   resetVariables();
+   reset();
 }
 
-void InputReader::resetVariables()
+void InputReader::reset()
 {
-   mInputLength = 0;
-   mInputString[0] = 0;
 }
 
 void InputReader::initialize()
 {
    Prn::print(Prn::View01, "InputReader::initialize*****************************");
    Prn::print(Prn::View11, "InputReader::initialize*****************************");
-
-   resetVariables();
+   reset();
 }
 
 void InputReader::finalize()

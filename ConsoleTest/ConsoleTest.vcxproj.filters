@@ -19,12 +19,6 @@
     <ClCompile Include="Source\conInputTest.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\conInputReader_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\conInput_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\MainInit.h">
@@ -34,12 +28,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\conInputTest.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\conInputReader_win.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\conInput.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

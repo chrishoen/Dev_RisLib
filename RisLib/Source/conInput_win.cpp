@@ -11,7 +11,7 @@ Description:
 #include <conio.h>
 #include <ctype.h>
 
-#include "conInputReader.h"
+#include "conInput.h"
 #include "conInputReader_win.h"
 
 namespace Con

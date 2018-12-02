@@ -11,6 +11,8 @@ Description:
 #include <conio.h>
 #include <ctype.h>
 
+#include "prnPrint.h"
+
 #define  _CONSTRINGREADER_CPP_
 #include "conInputReader_win.h"
 

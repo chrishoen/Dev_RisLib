@@ -122,6 +122,13 @@ namespace Prn
    static const int  View43            = 103;
    static const int  View44            = 104;
 
+   static const int  Stat1             = 105;
+   static const int  Stat2             = 106;
+   static const int  Stat3             = 107;
+   static const int  Stat4             = 108;
+   static const int  Stat5             = 109;
+   static const int  Stat6             = 110;
+
    static const int  CalcInit1         = 200;
    static const int  CalcInit2         = 201;
    static const int  CalcInit3         = 202;

@@ -56,13 +56,16 @@ int main(int argc,char** argv)
    delete Some::gTestQCallThread;
    Some::gTestQCallThread = 0;
 
+   printf("press enter\n");
+   getchar();
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // End program.
 
    main_finalize();
-// return 0;
+   return 0;
 
    printf("press enter\n");
    getchar();

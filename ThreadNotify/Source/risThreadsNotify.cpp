@@ -27,6 +27,7 @@ namespace Threads
 
 Notify::Notify()
 {
+   reset();
 }
 
 //******************************************************************************
@@ -36,35 +37,61 @@ Notify::Notify()
 
 void Notify::reset()
 {
-   // Reset the bit mask and bit latch.
-   mBitLatch.reset();
-
-   // Wait for the event.
+   mLock = true;
+   for (int i = 0; i < cMaxBits; i++)
+   {
+      mMask[i]   = false;
+      mLatch[i]  = false;
+      mStatus[i] = 0;
+      mData[i]   = 0;
+   }
+   mLock = false;
+   mAnyFlag = false;
    mEventSem.reset();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Set a bit in the bit mask.
+// Clear all of the mask and latch bits and set a single mask bit.
 
-void Notify::setMaskBit(int aBitNum)
+void Notify::setMaskAny(int aBitNum)
 {
-   mBitLatch.setMaskBit(aBitNum);
+   // Reset all variables and reset the event semaphore.
+   reset();
+   // Set the mask bit.
+   mMask[aBitNum] = true;
+   // Set the any flag for the OR trap condition.
+   mAnyFlag = true;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Set a bit in the bit latch and signal the event semaphore.
+// Set a bit in the bit latch and conditionally signal the event
+// semaphore.
 
 void Notify::notify(int aBitNum)
 {
-   // Set a bit in the latch.
-   mBitLatch.setLatchBit(aBitNum);
+   // Set the latch bit.
+   mLatch[aBitNum] = true;
 
-   // Test the latch for any masked bit set.
-   if (mBitLatch.isAny())
+   // Test the masked latch bits for OR and AND trap conditions.
+   bool tAnyFound = false;
+   bool tAllFound = true;
+   for (int i = 0; i < cMaxBits; i++)
+   {
+      if (mMask[i])
+      {
+         if (mLatch[i]) tAnyFound = true;
+         else           tAllFound = false;
+      }
+   }
+   if (!tAnyFound) tAllFound = false;
+      
+   // Test if the OR trap condition is true and any latched bits were found
+   // or if the AND trap condition is true and all latched birs were found.
+   if ((mAnyFlag && tAnyFound) || (!mAnyFlag && tAllFound))
    {
       // Signal the event.
       mEventSem.put();
@@ -76,7 +103,7 @@ void Notify::notify(int aBitNum)
 //******************************************************************************
 // Wait for a bit to be set.
 
-void Notify::waitForBit(int aTimeout)
+void Notify::wait(int aTimeout)
 {
    // Wait for the event.
    mEventSem.get(aTimeout);

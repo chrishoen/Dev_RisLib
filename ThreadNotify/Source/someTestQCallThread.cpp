@@ -80,9 +80,8 @@ void TestQCallThread::executeTest1(int aCode1)
 {
    Prn::print(Prn::View11, "Test1 BEGIN");
 
-   mNotify.reset();
-   mNotify.setMaskBit(1);
-   mNotify.waitForBit(-1);
+   mNotify.setMaskAny(1);
+   mNotify.wait(-1);
 
    Prn::print(Prn::View11, "Test1 END");
 }

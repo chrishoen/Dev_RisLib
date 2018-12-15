@@ -29,15 +29,43 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Constanst.
+
+   static const int cMaxBits = 32;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members.
 
-   // Binary semaphore event that the owning thread blocks on. It is signalled
-   // by other threads that use it to notify the owning thread of a
-   // notification event.
-   BinarySemaphore mEventSem;
+   // Array of mask bits.
+   bool mMask[cMaxBits];
 
-   // AND OR masked latch.
-   Ris::Logic::AndOrLatch  mBitLatch;
+   // Array of latch bits.
+   bool mLatch[cMaxBits];
+
+   // Array of returned status codes.
+   int mStatus[cMaxBits];
+
+   // Array of returned data pointers.
+   void* mData[cMaxBits];
+
+   // If this true then notification operations are disabled.
+   bool mLock;
+
+   // If this flag is true then the setting of any masked latch bit will
+   // cause an event to be signaled. If this flag is false then the setting
+   // of all masked latch bits will cause an event to be signaled.
+   bool mAnyFlag;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Binary semaphore event that the owning thread blocks on. It is signaled
+   // by other threads to notify the owning thread of a notification event.
+   BinarySemaphore mEventSem;
 
 public:
    //***************************************************************************
@@ -47,23 +75,22 @@ public:
 
    // Constructor.
    Notify();
+   void reset();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Reset the bit mask.
-  void reset();
+   // Clear all of the mask and latch bits and set a single mask bit.
+   void setMaskAny(int aBitNum);
 
-  // Set a bit in the bit mask.
-  void setMaskBit(int aBitNum);
+   // Set a bit in the bit latch and conditionally signal the event
+   // semaphore.
+   void notify(int aBitNum);
 
-  // Set a bit in the bit latch and signal the event semaphore.
-  void notify(int aBitNum);
-
-  // Wait for a bit to be set.
-   void waitForBit(int aTimeout);
+   // Wait for a bit to be set.
+   void wait(int aTimeout);
 };
 
 //******************************************************************************

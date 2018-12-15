@@ -11,9 +11,9 @@
 
 void main_initialize(int argc,char** argv)
 {
-   printf("ThreadTest Program*********************************************BEGIN\n");
-   printf("ThreadTest Program*********************************************BEGIN\n");
-   printf("ThreadTest Program*********************************************BEGIN\n\n");
+   printf("ThreadNotify Program*******************************************BEGIN\n");
+   printf("ThreadNotify Program*******************************************BEGIN\n");
+   printf("ThreadNotify Program*******************************************BEGIN\n\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -21,7 +21,7 @@ void main_initialize(int argc,char** argv)
    // Initialize thread services.
 
    TS::reset();
-   TS::setProgramName("ThreadTest");
+   TS::setProgramName("ThreadNotify");
    TS::setProgramPrintLevel(TS::PrintLevel(3, 3));
    TS::initialize();
 
@@ -40,7 +40,6 @@ void main_initialize(int argc,char** argv)
    // Initialize print.
    Prn::resetPrint();
    Prn::useConsole(1);
-   Prn::useConsole(2);
    Prn::initializePrint();
 
    // Initialize print filters.
@@ -49,10 +48,9 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ThreadRun2,      false);
    Prn::setFilter(Prn::ThreadRun3,      false);
    Prn::setFilter(Prn::ThreadRun4,      false);
+
    Prn::setFilter(Prn::View11,          true,  1);
-   Prn::setFilter(Prn::View12,          false, 1);
-   Prn::setFilter(Prn::View21,          true,  2);
-   Prn::setFilter(Prn::View22,          false, 2);
+   Prn::setFilter(Prn::View12,          true,  1);
 
    //***************************************************************************
    //***************************************************************************
@@ -82,7 +80,7 @@ void main_finalize()
 
    // Done.
    printf("\n");
-   printf("ThreadTest Program*********************************************END\n\n");
+   printf("ThreadNotify Program*******************************************END\n\n");
 }
 
 //******************************************************************************

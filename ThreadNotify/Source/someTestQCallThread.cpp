@@ -22,7 +22,7 @@ namespace Some
 TestQCallThread::TestQCallThread()
 {
    // Set base class thread variables.
-   BaseClass::setThreadName("SlaveThread");
+   BaseClass::setThreadName("TestQCall");
    BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
    BaseClass::setThreadPriorityHigh();
    BaseClass::mTimerPeriod = 1000;
@@ -31,7 +31,7 @@ TestQCallThread::TestQCallThread()
    mTest1QCall.bind(this, &TestQCallThread::executeTest1);
 
    // Initialize variables.
-   mTPFlag = true;
+   mTPFlag = false;
    mStatusCount1=0;
    mStatusCount2=0;
 }
@@ -48,7 +48,6 @@ TestQCallThread::~TestQCallThread()
 
 void TestQCallThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "TestQCallThread::threadInitFunction");
 }
 
 //******************************************************************************
@@ -58,7 +57,6 @@ void TestQCallThread::threadInitFunction()
 
 void  TestQCallThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "TestQCallThread::threadExitFunction");
 }
 
 //******************************************************************************
@@ -80,7 +78,7 @@ void TestQCallThread::executeOnTimer(int aTimerCount)
 
 void TestQCallThread::executeTest1(int aCode1)
 {
-   Prn::print(Prn::View21, "TestQCallThread::executeTest1 %d", aCode1);
+   Prn::print(Prn::View11, "Test1 %d", aCode1);
 }
 
 //******************************************************************************

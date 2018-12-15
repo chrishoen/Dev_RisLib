@@ -53,8 +53,8 @@ int main(int argc,char** argv)
    // Shutdown program threads.
 
    Some::gTestQCallThread->shutdownThread();
-
    delete Some::gTestQCallThread;
+   Some::gTestQCallThread = 0;
 
    //***************************************************************************
    //***************************************************************************
@@ -62,6 +62,12 @@ int main(int argc,char** argv)
    // End program.
 
    main_finalize();
+// return 0;
+
+   printf("press enter\n");
+   getchar();
+
+   return 0;
 }
 
 //******************************************************************************

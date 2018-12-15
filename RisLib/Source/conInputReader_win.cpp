@@ -35,8 +35,8 @@ void InputReader::reset()
 
 void InputReader::initialize()
 {
-   Prn::print(Prn::View01, "InputReader::initialize*****************************");
-   Prn::print(Prn::View11, "InputReader::initialize*****************************");
+// Prn::print(Prn::View01, "InputReader::initialize*****************************");
+// Prn::print(Prn::View11, "InputReader::initialize*****************************");
    reset();
 }
 

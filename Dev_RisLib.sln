@@ -73,6 +73,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadServices", "ThreadSer
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TimerTest", "TimerTest\TimerTest.vcxproj", "{91C24221-953C-44AF-B2CD-5D946A87DA49}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadNotify", "ThreadNotify\ThreadNotify.vcxproj", "{AB660074-58B8-469C-93BC-B4AE2FAFAC16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -313,6 +315,14 @@ Global
 		{91C24221-953C-44AF-B2CD-5D946A87DA49}.Release|Win32.Build.0 = Release|Win32
 		{91C24221-953C-44AF-B2CD-5D946A87DA49}.Release|x64.ActiveCfg = Release|x64
 		{91C24221-953C-44AF-B2CD-5D946A87DA49}.Release|x64.Build.0 = Release|x64
+		{AB660074-58B8-469C-93BC-B4AE2FAFAC16}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AB660074-58B8-469C-93BC-B4AE2FAFAC16}.Debug|Win32.Build.0 = Debug|Win32
+		{AB660074-58B8-469C-93BC-B4AE2FAFAC16}.Debug|x64.ActiveCfg = Debug|x64
+		{AB660074-58B8-469C-93BC-B4AE2FAFAC16}.Debug|x64.Build.0 = Debug|x64
+		{AB660074-58B8-469C-93BC-B4AE2FAFAC16}.Release|Win32.ActiveCfg = Release|Win32
+		{AB660074-58B8-469C-93BC-B4AE2FAFAC16}.Release|Win32.Build.0 = Release|Win32
+		{AB660074-58B8-469C-93BC-B4AE2FAFAC16}.Release|x64.ActiveCfg = Release|x64
+		{AB660074-58B8-469C-93BC-B4AE2FAFAC16}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,6 +29,8 @@ TestQCallThread::TestQCallThread()
 
    // Initialize qcalls.
    mTest1QCall.bind(this, &TestQCallThread::executeTest1);
+   mTest2QCall.bind(this, &TestQCallThread::executeTest2);
+   mTest3QCall.bind(this, &TestQCallThread::executeTest3);
 
    // Initialize variables.
    mTPFlag = false;
@@ -73,8 +75,7 @@ void TestQCallThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall registered to the mUdpMsgThread child thread. It is invoked when
-// a message is received. It process the received messages.
+// Test qcall function. 
 
 void TestQCallThread::executeTest1(int aCode1)
 {
@@ -84,6 +85,36 @@ void TestQCallThread::executeTest1(int aCode1)
    mNotify.wait(-1);
 
    Prn::print(Prn::View11, "Test1 END");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test qcall function. 
+
+void TestQCallThread::executeTest2(int aCode1)
+{
+   Prn::print(Prn::View11, "Test2 BEGIN");
+
+   mNotify.setMaskAny(2, 1, 2);
+   mNotify.wait(-1);
+
+   Prn::print(Prn::View11, "Test2 END");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test qcall function. 
+
+void TestQCallThread::executeTest3(int aCode1)
+{
+   Prn::print(Prn::View11, "Test3 BEGIN");
+
+   mNotify.setMaskAll(2, 1, 2);
+   mNotify.wait(-1);
+
+   Prn::print(Prn::View11, "Test3 END");
 }
 
 //******************************************************************************

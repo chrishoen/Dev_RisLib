@@ -85,6 +85,14 @@ public:
    // Clear all of the mask and latch bits and set a single mask bit.
    void setMaskAny(int aBitNum);
 
+   // Clear all of the mask and latch bits and set a variable list of mask bits.
+   // Set the trap condition for OR.
+   void setMaskAny(int aTimeout, int aNumArgs, ...);
+
+   // Clear all of the mask and latch bits and set a variable list of mask bits.
+   // Set the trap condition for AND.
+   void setMaskAll(int aTimeout, int aNumArgs, ...);
+
    // Set a bit in the bit latch and conditionally signal the event
    // semaphore.
    void notify(int aBitNum);

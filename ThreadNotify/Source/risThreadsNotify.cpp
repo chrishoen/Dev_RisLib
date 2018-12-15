@@ -7,11 +7,7 @@
 
 #include "stdafx.h"
 
-#include <windows.h> 
-
-#include <atomic> 
-
-#include "risThreadsThreads.h"
+#include <stdarg.h>
 
 #include "risThreadsNotify.h"
 
@@ -45,7 +41,6 @@ void Notify::reset()
       mStatus[i] = 0;
       mData[i]   = 0;
    }
-   mLock = false;
    mAnyFlag = false;
    mEventSem.reset();
 }
@@ -59,10 +54,71 @@ void Notify::setMaskAny(int aBitNum)
 {
    // Reset all variables and reset the event semaphore.
    reset();
+
    // Set the mask bit.
    mMask[aBitNum] = true;
+
    // Set the any flag for the OR trap condition.
    mAnyFlag = true;
+
+   // Enable notifications.
+   mLock = false;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Clear all of the mask and latch bits and set a variable list of mask bits.
+// Set the trap condition for OR.
+
+void Notify::setMaskAny(int aTimeout, int aNumArgs, ...)
+{
+   // Reset all variables and reset the event semaphore.
+   reset();
+
+   // Set the mask bit from variable arguments.
+   va_list valist;
+   va_start(valist, aNumArgs);
+   for (int i = 0; i < aNumArgs; i++)
+   {
+      int tBitNum = va_arg(valist, int);
+      mMask[tBitNum] = true;
+   }
+   va_end(valist);
+
+   // Set the any flag for the OR trap condition.
+   mAnyFlag = true;
+
+   // Enable notifications.
+   mLock = false;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Clear all of the mask and latch bits and set a variable list of mask bits.
+// Set the trap condition for AND.
+
+void Notify::setMaskAll(int aTimeout, int aNumArgs, ...)
+{
+   // Reset all variables and reset the event semaphore.
+   reset();
+
+   // Set the mask bit from variable arguments.
+   va_list valist;
+   va_start(valist, aNumArgs);
+   for (int i = 0; i < aNumArgs; i++)
+   {
+      int tBitNum = va_arg(valist, int);
+      mMask[tBitNum] = true;
+   }
+   va_end(valist);
+
+   // Set the any flag for the AND trap condition.
+   mAnyFlag = false;
+
+   // Enable notifications.
+   mLock = false;
 }
 
 //******************************************************************************
@@ -73,6 +129,9 @@ void Notify::setMaskAny(int aBitNum)
 
 void Notify::notify(int aBitNum)
 {
+   // Guard.
+   if (mLock) return;
+
    // Set the latch bit.
    mLatch[aBitNum] = true;
 

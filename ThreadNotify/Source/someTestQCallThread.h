@@ -76,11 +76,15 @@ public:
    //***************************************************************************
    // Methods.qcalls.
 
-   // Test qcall. It is invoked by the timer thread.
+   // Test qcall. 
    Ris::Threads::QCall1<int> mTest1QCall;
+   Ris::Threads::QCall1<int> mTest2QCall;
+   Ris::Threads::QCall1<int> mTest3QCall;
 
    // Test function. This is bound to the qcall.
-   void executeTest1 (int aCode);
+   void executeTest1(int aCode);
+   void executeTest2(int aCode);
+   void executeTest3(int aCode);
 };
 
 //******************************************************************************

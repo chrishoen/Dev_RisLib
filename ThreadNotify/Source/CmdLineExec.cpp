@@ -31,6 +31,10 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
+   if (aCmd->isCmd("TEST1"))     executeTest1(aCmd);
+   if (aCmd->isCmd("TEST2"))     executeTest2(aCmd);
+   if (aCmd->isCmd("TEST3"))     executeTest3(aCmd);
+
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -44,11 +48,43 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 101);
 
    Some::gTestQCallThread->mTest1QCall(aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTest2(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 101);
+
+   Some::gTestQCallThread->mTest2QCall(aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTest3(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 101);
+
+   Some::gTestQCallThread->mTest3QCall(aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 1);
+   Some::gTestQCallThread->mNotify.notify(aCmd->argInt(1));
 }
 
 //******************************************************************************

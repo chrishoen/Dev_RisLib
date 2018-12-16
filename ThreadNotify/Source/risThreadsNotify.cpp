@@ -42,6 +42,9 @@ void Notify::reset()
       mData[i]   = 0;
    }
    mAnyFlag = false;
+   mTimeoutFlag = false;
+   mAbortFlag = false;
+
    mEventSem.reset();
 }
 
@@ -50,7 +53,7 @@ void Notify::reset()
 //******************************************************************************
 // Clear all of the mask and latch bits and set a single mask bit.
 
-void Notify::setMaskAny(int aBitNum)
+void Notify::setMaskSingle(int aBitNum)
 {
    // Reset all variables and reset the event semaphore.
    reset();
@@ -71,7 +74,7 @@ void Notify::setMaskAny(int aBitNum)
 // Clear all of the mask and latch bits and set a variable list of mask bits.
 // Set the trap condition for OR.
 
-void Notify::setMaskAny(int aTimeout, int aNumArgs, ...)
+void Notify::setMaskAny(int aNumArgs, ...)
 {
    // Reset all variables and reset the event semaphore.
    reset();
@@ -99,7 +102,7 @@ void Notify::setMaskAny(int aTimeout, int aNumArgs, ...)
 // Clear all of the mask and latch bits and set a variable list of mask bits.
 // Set the trap condition for AND.
 
-void Notify::setMaskAll(int aTimeout, int aNumArgs, ...)
+void Notify::setMaskAll(int aNumArgs, ...)
 {
    // Reset all variables and reset the event semaphore.
    reset();
@@ -147,7 +150,7 @@ void Notify::notify(int aBitNum)
       }
    }
    if (!tAnyFound) tAllFound = false;
-      
+
    // Test if the OR trap condition is true and any latched bits were found
    // or if the AND trap condition is true and all latched birs were found.
    if ((mAnyFlag && tAnyFound) || (!mAnyFlag && tAllFound))
@@ -160,12 +163,51 @@ void Notify::notify(int aBitNum)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Wait for a bit to be set.
+// Set the abort bit and signal the event semaphore.
 
-void Notify::wait(int aTimeout)
+void Notify::abort(int aBitNum)
+{
+   // Set the abort flag.
+   mAbortFlag = false;
+
+   // Signal the event.
+   mEventSem.put();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Wait for a bit to be set. Return false if a timeout or abort occured.
+
+bool Notify::wait(int aTimeout)
 {
    // Wait for the event.
-   mEventSem.get(aTimeout);
+   if (mEventSem.get(aTimeout))
+   {
+      // Not timeout occured. If no abort occured then return true.
+      return !mAbortFlag;
+   }
+   else
+   {
+      // A timeout occured.
+      return false;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Wait for a specified time. Ignore any bit notifications except an abort.
+// Return false if an abort occured.
+
+bool Notify::waitForTimer(int aTimeout)
+{
+   // Reset all variables.
+   reset();
+   // Wait for the semaphore to timeout.
+   wait(aTimeout);
+   // If no abort occured then return true.
+   return !mAbortFlag;
 }
 
 //******************************************************************************

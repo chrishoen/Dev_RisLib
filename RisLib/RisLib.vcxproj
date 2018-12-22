@@ -131,8 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\conInput.h" />
-    <ClInclude Include="Source\conInputReader_win.h" />
     <ClInclude Include="Source\logFiles.h" />
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
@@ -198,8 +196,6 @@
     <ClInclude Include="Source\tsThreadServices.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\conInputReader_win.cpp" />
-    <ClCompile Include="Source\conInput_win.cpp" />
     <ClCompile Include="Source\logFiles.cpp" />
     <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\prnPrintFilterTable.cpp" />

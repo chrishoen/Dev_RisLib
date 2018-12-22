@@ -177,12 +177,6 @@
     <ClCompile Include="Source\risThreadsWaitable_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\conInput_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\conInputReader_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\logFiles.h">
@@ -372,12 +366,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\tsPrintThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\conInput.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\conInputReader_win.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

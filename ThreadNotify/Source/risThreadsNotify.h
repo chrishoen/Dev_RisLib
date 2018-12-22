@@ -29,7 +29,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Constanst.
+   // Constants.
 
    // Maximum number of bits.
    static const int cMaxBits = 32;
@@ -82,8 +82,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // If this true then an exception is thrown on timeout or abort.
-   bool mThrowFlag;
+   // If this true then an exception is thrown on abort, timeout or error.
+   bool mThrowEnable;
 
    // This indicates the source of an exception.
    int mThrowCode;
@@ -125,6 +125,10 @@ public:
 
    // Set the mask label.
    void setLabel(const char* aLabel);
+
+   // Enable exceptions. If this is true then an abort, timeout, or error
+   // will throw an exception when a notification occurrs.
+   void enableExceptions(bool aThrowEnable);
 
    // Wait for a bit to be set. Return false if a timeout or abort occured.
    bool wait(int aTimeout);

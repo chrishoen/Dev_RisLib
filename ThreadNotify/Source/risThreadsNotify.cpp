@@ -45,7 +45,7 @@ void Notify::reset()
    mTimeoutFlag = false;
    mErrorFlag = 0;
    mAbortFlag = false;
-
+   mThrowEnable = false;
 
    mEventSem.reset();
 }
@@ -136,6 +136,13 @@ void Notify::setLabel(const char* aLabel)
    my_strncpy(mLabel, aLabel, cMaxStringSize);
 }
 
+// Enable exceptions. If this is true then an abort, timeout, or error
+// will throw an exception when a notification occurrs.
+void Notify::enableExceptions(bool aThrowEnable)
+{
+   mThrowEnable = aThrowEnable;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -206,17 +213,48 @@ void Notify::abort(int aBitNum)
 
 bool Notify::wait(int aTimeout)
 {
-   // Wait for the event.
-   if (mEventSem.get(aTimeout))
+   // Wait for the event. Set the timeout flag if the wait times out.
+   if (!mEventSem.get(aTimeout))
    {
-      // Not timeout occured. If no abort occured then return true.
-      return !mAbortFlag;
+      // A timeout occurred.
+      mTimeoutFlag = true;
    }
-   else
+
+   // Test for an abort condition.
+   if (mAbortFlag)
    {
-      // A timeout occured.
+      if (mThrowEnable)
+      {
+         mThrowCode = cAbortException;
+         throw cAbortException;
+      }
       return false;
    }
+
+   // Test for a timeout condition.
+   if (mTimeoutFlag)
+   {
+      if (mThrowEnable)
+      {
+         mThrowCode = cTimeoutException;
+         throw cTimeoutException;
+      }
+      return false;
+   }
+
+   // Test for an error condition.
+   if (mErrorFlag)
+   {
+      if (mThrowEnable)
+      {
+         mThrowCode = cErrorException;
+         throw cErrorException;
+      }
+      return false;
+   }
+
+   // Done. Success.
+   return true;
 }
 
 //******************************************************************************
@@ -231,8 +269,20 @@ bool Notify::waitForTimer(int aTimeout)
    reset();
    // Wait for the semaphore to timeout.
    wait(aTimeout);
-   // If no abort occured then return true.
-   return !mAbortFlag;
+
+   // Test for an abort condition.
+   if (mAbortFlag)
+   {
+      if (mThrowEnable)
+      {
+         mThrowCode = cAbortException;
+         throw cAbortException;
+      }
+      return false;
+   }
+
+   // Done. Success.
+   return true;
 }
 
 //******************************************************************************

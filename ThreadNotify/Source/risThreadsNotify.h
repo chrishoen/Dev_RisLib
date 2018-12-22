@@ -34,6 +34,14 @@ public:
    // Maximum number of bits.
    static const int cMaxBits = 32;
 
+   // Maximum string size.
+   static const int cMaxStringSize = 40;
+
+   // Throw codes.
+   static const int cAbortException   = 666;
+   static const int cTimeoutException = 667;
+   static const int cErrorException   = 668;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -50,18 +58,21 @@ public:
    // of all masked latch bits will cause an event to be signaled.
    bool mAnyFlag;
 
-   // Array of returned status codes. If the status is not zero then
-   // an error occurred. These are set by notifiers.
-   int mStatus[cMaxBits];
+   // Error code. If not zero then an error occurred. This is set by
+   // notifiers.
+   int mError;
 
-   // Array of returned data pointers.
-   void* mData[cMaxBits];
+   // Label string.
+   char mLabel[cMaxStringSize];
 
    // If this true then notification operations are disabled.
    bool mLock;
 
-   // If this true then a timeout occured.
+   // If this true then a timeout occurred.
    bool mTimeoutFlag;
+
+   // If this true then an error occurred.
+   bool mErrorFlag;
 
    // If this true then an abort notification occurred.
    bool mAbortFlag;
@@ -102,7 +113,7 @@ public:
    // Methods. These are used to receive notifications.
 
    // Clear all of the mask and latch bits and set a single mask bit.
-   void setMaskSingle(int aBitNum);
+   void setMaskOne(int aBitNum);
 
    // Clear all of the mask and latch bits and set a variable list of mask
    // bits. Set the trap condition for OR.
@@ -111,6 +122,9 @@ public:
    // Clear all of the mask and latch bits and set a variable list of mask
    // bits. Set the trap condition for AND.
    void setMaskAll(int aNumArgs, ...);
+
+   // Set the mask label.
+   void setLabel(const char* aLabel);
 
    // Wait for a bit to be set. Return false if a timeout or abort occured.
    bool wait(int aTimeout);
@@ -127,6 +141,10 @@ public:
    // Set a bit in the bit latch and conditionally signal the event
    // semaphore.
    void notify(int aBitNum);
+
+   // Set a bit in the bit latch and conditionally signal the event
+   // semaphore. Also set the error code.
+   void notifyError(int aBitNum,int aError);
 
    // Set the abort bit and signal the event semaphore.
    void abort(int aBitNum);

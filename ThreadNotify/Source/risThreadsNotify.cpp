@@ -38,12 +38,14 @@ void Notify::reset()
    {
       mMask[i]   = false;
       mLatch[i]  = false;
-      mStatus[i] = 0;
-      mData[i]   = 0;
    }
+   mError = 0;
+   strcpy(mLabel,"nolabel");
    mAnyFlag = false;
    mTimeoutFlag = false;
+   mErrorFlag = 0;
    mAbortFlag = false;
+
 
    mEventSem.reset();
 }
@@ -53,7 +55,7 @@ void Notify::reset()
 //******************************************************************************
 // Clear all of the mask and latch bits and set a single mask bit.
 
-void Notify::setMaskSingle(int aBitNum)
+void Notify::setMaskOne(int aBitNum)
 {
    // Reset all variables and reset the event semaphore.
    reset();
@@ -127,6 +129,16 @@ void Notify::setMaskAll(int aNumArgs, ...)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Set the mask label.
+
+void Notify::setLabel(const char* aLabel)
+{
+   my_strncpy(mLabel, aLabel, cMaxStringSize);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Set a bit in the bit latch and conditionally signal the event
 // semaphore.
 
@@ -158,6 +170,19 @@ void Notify::notify(int aBitNum)
       // Signal the event.
       mEventSem.put();
    }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set a bit in the bit latch and conditionally signal the event
+// semaphore. Also set the error code.
+
+void Notify::notifyError(int aBitNum, int aError)
+{
+   mError = aError;
+   if (mError) mErrorFlag = true;
+   notify(aBitNum);
 }
 
 //******************************************************************************

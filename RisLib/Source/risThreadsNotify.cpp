@@ -7,6 +7,8 @@
 
 #include "stdafx.h"
 
+#include "my_functions.h"
+
 #include <stdarg.h>
 
 #include "risThreadsNotify.h"

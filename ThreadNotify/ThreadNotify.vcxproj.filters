@@ -21,9 +21,6 @@
     <ClCompile Include="Source\someTestQCallThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\risThreadsNotify.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -36,9 +33,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someTestQCallThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsNotify.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

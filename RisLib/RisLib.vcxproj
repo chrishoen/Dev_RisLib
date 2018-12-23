@@ -176,6 +176,7 @@
     <ClInclude Include="Source\risSockets.h" />
     <ClInclude Include="Source\risStatistics.h" />
     <ClInclude Include="Source\risSystemTime.h" />
+    <ClInclude Include="Source\risThreadsNotify.h" />
     <ClInclude Include="Source\risThreadsPriorities.h" />
     <ClInclude Include="Source\risThreadsProcess.h" />
     <ClInclude Include="Source\risThreadsQCall.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="Source\risSockets_win.cpp" />
     <ClCompile Include="Source\risStatistics.cpp" />
     <ClCompile Include="Source\risSystemTime_win.cpp" />
+    <ClCompile Include="Source\risThreadsNotify.cpp" />
     <ClCompile Include="Source\risThreadsPriorities_win.cpp" />
     <ClCompile Include="Source\risThreadsProcess_win.cpp" />
     <ClCompile Include="Source\risThreadsQCallThread.cpp" />

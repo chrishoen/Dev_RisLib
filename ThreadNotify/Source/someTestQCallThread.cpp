@@ -87,9 +87,9 @@ void TestQCallThread::executeTest1(int aTimeout)
       mNotify.setMaskOne("label1",1);
       mNotify.wait(aTimeout);
    }
-   catch (int aCode)
+   catch (int aException)
    {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest1 %d %s", aCode,mNotify.mException);
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest1 %d %s", aException,mNotify.mException);
    }
 
    Prn::print(Prn::View11, "Test1 END");

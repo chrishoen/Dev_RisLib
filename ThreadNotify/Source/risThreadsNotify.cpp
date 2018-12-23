@@ -23,7 +23,6 @@ namespace Threads
 
 Notify::Notify()
 {
-   mSuspendFlag = false;
    reset();
 }
 
@@ -47,7 +46,6 @@ void Notify::reset()
    mAbortFlag = false;
    mTimeoutFlag = false;
    mErrorFlag = 0;
-
    mEventSem.reset();
 }
 
@@ -67,9 +65,6 @@ void Notify::setMaskOne(int aBitNum)
 {
    // Test for exception conditions.
    testException();
-
-   // Test for suspension conditions.
-   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -93,9 +88,6 @@ void Notify::setMaskOne(const char* aLabel,int aBitNum)
 {
    // Test for exception conditions.
    testException();
-
-   // Test for suspension conditions.
-   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -123,9 +115,6 @@ void Notify::setMaskAny(int aNumArgs, ...)
 {
    // Test for exception conditions.
    testException();
-
-   // Test for suspension conditions.
-   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -157,9 +146,6 @@ void Notify::setMaskAny(const char* aLabel,int aNumArgs, ...)
 {
    // Test for exception conditions.
    testException();
-
-   // Test for suspension conditions.
-   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -195,9 +181,6 @@ void Notify::setMaskAll(int aNumArgs, ...)
    // Test for exception conditions.
    testException();
 
-   // Test for suspension conditions.
-   testSuspend();
-
    // Reset all variables and reset the event semaphore.
    reset();
 
@@ -228,9 +211,6 @@ void Notify::setMaskAll(const char* aLabel,int aNumArgs, ...)
 {
    // Test for exception conditions.
    testException();
-
-   // Test for suspension conditions.
-   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -394,52 +374,6 @@ void Notify::waitForTimer(int aTimeout)
 
    // Test for exception conditions.
    testException();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Test the suspend request flag . If a suspend has been requested then
-// block on the resume semaphore until it is signalled by a resume.
-// Return true if a suspend and resume occurred.
-
-bool Notify::testSuspend()
-{
-   // Guard.
-   if (!mSuspendFlag) return false;
-
-   // Wait for the semaphore.
-   mResumeSem.get();
-   mSuspendFlag = false;
-   return true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set the suspend flag and reset the resume semaphore.
-
-void Notify::suspend()
-{
-   // Set the suspend flag.
-   mSuspendFlag = true;
-
-   // Reset the semaphore.
-   mResumeSem.reset();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Clear the suspend flag and signal the resume semaphore.
-
-void Notify::resume()
-{
-   // Clear the suspend flag.
-   mSuspendFlag = false;
-
-   // Signal the semaphore.
-   mResumeSem.put();
 }
 
 //******************************************************************************

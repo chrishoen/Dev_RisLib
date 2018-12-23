@@ -40,9 +40,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("Error"))     executeError(aCmd);
    if (aCmd->isCmd("A"))         executeAbort(aCmd);
 
-   if (aCmd->isCmd("S"))         executeSuspend(aCmd);
-   if (aCmd->isCmd("R"))         executeResume(aCmd);
-
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -124,24 +121,6 @@ void CmdLineExec::executeError(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 {
    Some::gTestQCallThread->mNotify.abort();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeSuspend(Ris::CmdLineCmd* aCmd)
-{
-   Some::gTestQCallThread->mNotify.suspend();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeResume(Ris::CmdLineCmd* aCmd)
-{
-   Some::gTestQCallThread->mNotify.resume();
 }
 
 //******************************************************************************

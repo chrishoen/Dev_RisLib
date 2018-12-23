@@ -31,11 +31,11 @@ public:
    //***************************************************************************
    // Constants.
 
-   // Maximum number of bits.
-   static const int cMaxBits = 32;
-
    // Maximum string size.
    static const int cMaxStringSize = 100;
+
+   // Maximum number of bits.
+   static const int cMaxBits = 32;
 
    // Throw codes.
    static const int cAbortException   = 666;
@@ -118,36 +118,42 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. These are used to receive notifications.
+   // Methods. These are used to initialize and wait for notifications.
 
-   // Clear all of the mask and latch bits and set a single mask bit.
+   // Test for exceptions. Test for suspensions. Clear all of the mask and
+   // latch bits and set a single mask bit. These are called before waiting
+   // for a notification. 
    void setMaskOne(int aBitNum);
    void setMaskOne(const char* aLabel,int aBitNum);
 
-   // Clear all of the mask and latch bits and set a variable list of mask
-   // bits. Set the trap condition for OR.
+   // Test for exceptions. Test for suspensions. Clear all of the mask and
+   // latch bits and set a variable list of mask bits. Set the trap condition
+   // for OR. These are called before waiting for a notification. 
    void setMaskAny(int aNumArgs, ...);
    void setMaskAny(const char* aLabel,int aNumArgs, ...);
 
-   // Clear all of the mask and latch bits and set a variable list of mask
-   // bits. Set the trap condition for AND.
+   // Test for exceptions. Test for suspensions. Clear all of the mask and
+   // latch bits and set a variable list of mask bits. Set the trap condition
+   // for AND. These are called before waiting for a notification. 
    void setMaskAll(int aNumArgs, ...);
    void setMaskAll(const char* aLabel,int aNumArgs, ...);
 
-   // Test for an exception condition. If an abort, timeout, or error
-   // has occurred then throw the corresponding exception.
+   // Test for an exception condition. If an abort, timeout, or error has
+   // occurred then throw the corresponding exception.
    void testException();
 
-   // Test the suspend request flag . If a suspend has been requested then
-   // block on the resume semaphore until it is signalled by a resume.
-   // Return true if a suspend and resume occurred.
+   // Test for a suspension request. If the suspend flag is true then
+   // block on the resume semaphore until it is signalled by a resume
+   // call and return true. If the suspend flag is false then return
+   // false.
    bool testSuspend();
 
-   // Wait for a bit to be set. Test for exceptions.
+   // Test for exceptions. Wait for a bit to be set. If the wait times out
+   // then set the timeout flag. Test for exceptions.
    void wait(int aTimeout);
 
-   // Wait for a specified time. Ignore any bit notifications except an abort.
-   // Test for exceptions.
+   // Test for exceptions. Wait for a specified time. Ignore any bit
+   // notifications except an abort. Test for exceptions.
    void waitForTimer(int aTimeout);
 
    //***************************************************************************
@@ -155,21 +161,26 @@ public:
    //***************************************************************************
    // Methods. These are used to send notifications.
 
-   // Set a bit in the bit latch and conditionally signal the event
-   // semaphore.
+   // Set a bit in the bit latch and conditionally signal the event semaphore.
+   // This wakes up a thread that is waiting for a notification.
    void notify(int aBitNum);
 
-   // Set a bit in the bit latch and conditionally signal the event
-   // semaphore. Also set the error code.
+   // Set a bit in the bit latch and conditionally signal the event semaphore.
+   // Also set the error flag and error code. This wakes up a thread that is
+   // waiting for a notification.
    void notifyError(int aBitNum,int aError);
 
-   // Set the abort flag and signal the event semaphore.
+   // Set the abort flag and signal the event semaphore. This will abort any 
+   // of the above set, test, or wait calls.
    void abort();
 
-   // Set the suspend flag and reset the resume semaphore.
+   // Set the suspend flag and reset the resume semaphore. This will suspend 
+   // any of the above set or test calls.
    void suspend();
 
-   // Clear the suspend flag and signal the resume semaphore.
+   // Clear the suspend flag and signal the resume semaphore. This will 
+   // wakeup a thread that is suspended during one of the above set or test
+   // calls.
    void resume();
 };
 

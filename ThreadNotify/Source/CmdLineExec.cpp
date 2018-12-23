@@ -34,10 +34,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TEST1"))     executeTest1(aCmd);
    if (aCmd->isCmd("TEST2"))     executeTest2(aCmd);
    if (aCmd->isCmd("TEST3"))     executeTest3(aCmd);
+   if (aCmd->isCmd("TEST4"))     executeTest4(aCmd);
 
    if (aCmd->isCmd("N"))         executeNotify(aCmd);
    if (aCmd->isCmd("Error"))     executeError(aCmd);
    if (aCmd->isCmd("A"))         executeAbort(aCmd);
+
+   if (aCmd->isCmd("S"))         executeSuspend(aCmd);
+   if (aCmd->isCmd("R"))         executeResume(aCmd);
 
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
@@ -85,6 +89,17 @@ void CmdLineExec::executeTest3(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeTest4(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, -1);
+
+   Some::gTestQCallThread->mTest4QCall(aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeNotify(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 1);
@@ -109,6 +124,24 @@ void CmdLineExec::executeError(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 {
    Some::gTestQCallThread->mNotify.abort();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeSuspend(Ris::CmdLineCmd* aCmd)
+{
+   Some::gTestQCallThread->mNotify.suspend();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeResume(Ris::CmdLineCmd* aCmd)
+{
+   Some::gTestQCallThread->mNotify.resume();
 }
 
 //******************************************************************************

@@ -23,6 +23,7 @@ namespace Threads
 
 Notify::Notify()
 {
+   mSuspendFlag = false;
    reset();
 }
 
@@ -65,7 +66,10 @@ void Notify::clearFlags()
 void Notify::setMaskOne(int aBitNum)
 {
    // Test for exception conditions.
-   test();
+   testException();
+
+   // Test for suspension conditions.
+   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -88,7 +92,10 @@ void Notify::setMaskOne(int aBitNum)
 void Notify::setMaskOne(const char* aLabel,int aBitNum)
 {
    // Test for exception conditions.
-   test();
+   testException();
+
+   // Test for suspension conditions.
+   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -115,7 +122,10 @@ void Notify::setMaskOne(const char* aLabel,int aBitNum)
 void Notify::setMaskAny(int aNumArgs, ...)
 {
    // Test for exception conditions.
-   test();
+   testException();
+
+   // Test for suspension conditions.
+   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -146,7 +156,10 @@ void Notify::setMaskAny(int aNumArgs, ...)
 void Notify::setMaskAny(const char* aLabel,int aNumArgs, ...)
 {
    // Test for exception conditions.
-   test();
+   testException();
+
+   // Test for suspension conditions.
+   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -180,7 +193,10 @@ void Notify::setMaskAny(const char* aLabel,int aNumArgs, ...)
 void Notify::setMaskAll(int aNumArgs, ...)
 {
    // Test for exception conditions.
-   test();
+   testException();
+
+   // Test for suspension conditions.
+   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -211,7 +227,10 @@ void Notify::setMaskAll(int aNumArgs, ...)
 void Notify::setMaskAll(const char* aLabel,int aNumArgs, ...)
 {
    // Test for exception conditions.
-   test();
+   testException();
+
+   // Test for suspension conditions.
+   testSuspend();
 
    // Reset all variables and reset the event semaphore.
    reset();
@@ -305,7 +324,7 @@ void Notify::abort()
 // Test for an exception condition. If an abort, timeout, or error
 // has occurred then throw the corresponding exception.
 
-void Notify::test()
+void Notify::testException()
 {
    // Test for an abort condition.
    if (mAbortFlag)
@@ -343,7 +362,7 @@ void Notify::test()
 void Notify::wait(int aTimeout)
 {
    // Test for exception conditions.
-   test();
+   testException();
 
    // Wait for the event. Set the timeout flag if the wait times out.
    if (!mEventSem.get(aTimeout))
@@ -353,7 +372,7 @@ void Notify::wait(int aTimeout)
    }
 
    // Test for exception conditions.
-   test();
+   testException();
 }
 
 //******************************************************************************
@@ -365,7 +384,7 @@ void Notify::wait(int aTimeout)
 void Notify::waitForTimer(int aTimeout)
 {
    // Test for exception conditions.
-   test();
+   testException();
 
    // Reset all variables.
    reset();
@@ -374,7 +393,53 @@ void Notify::waitForTimer(int aTimeout)
    wait(aTimeout);
 
    // Test for exception conditions.
-   test();
+   testException();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test the suspend request flag . If a suspend has been requested then
+// block on the resume semaphore until it is signalled by a resume.
+// Return true if a suspend and resume occurred.
+
+bool Notify::testSuspend()
+{
+   // Guard.
+   if (!mSuspendFlag) return false;
+
+   // Wait for the semaphore.
+   mResumeSem.get();
+   mSuspendFlag = false;
+   return true;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the suspend flag and reset the resume semaphore.
+
+void Notify::suspend()
+{
+   // Set the suspend flag.
+   mSuspendFlag = true;
+
+   // Reset the semaphore.
+   mResumeSem.reset();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Clear the suspend flag and signal the resume semaphore.
+
+void Notify::resume()
+{
+   // Clear the suspend flag.
+   mSuspendFlag = false;
+
+   // Signal the semaphore.
+   mResumeSem.put();
 }
 
 //******************************************************************************

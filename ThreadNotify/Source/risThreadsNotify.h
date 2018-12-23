@@ -92,6 +92,18 @@ public:
    // by other threads to notify the owning thread of a notification event.
    BinarySemaphore mEventSem;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Binary semaphore event that the owning thread blocks on if a suspend 
+   // has been requested. A resume request posts to this semaphore.
+   BinarySemaphore mResumeSem;
+
+   // If this true then a suspend has been requested.
+   bool mSuspendFlag;
+
 public:
    //***************************************************************************
    //***************************************************************************
@@ -124,7 +136,12 @@ public:
 
    // Test for an exception condition. If an abort, timeout, or error
    // has occurred then throw the corresponding exception.
-   void test();
+   void testException();
+
+   // Test the suspend request flag . If a suspend has been requested then
+   // block on the resume semaphore until it is signalled by a resume.
+   // Return true if a suspend and resume occurred.
+   bool testSuspend();
 
    // Wait for a bit to be set. Test for exceptions.
    void wait(int aTimeout);
@@ -148,6 +165,12 @@ public:
 
    // Set the abort flag and signal the event semaphore.
    void abort();
+
+   // Set the suspend flag and reset the resume semaphore.
+   void suspend();
+
+   // Clear the suspend flag and signal the resume semaphore.
+   void resume();
 };
 
 //******************************************************************************

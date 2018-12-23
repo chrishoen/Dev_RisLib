@@ -31,6 +31,7 @@ TestQCallThread::TestQCallThread()
    mTest1QCall.bind(this, &TestQCallThread::executeTest1);
    mTest2QCall.bind(this, &TestQCallThread::executeTest2);
    mTest3QCall.bind(this, &TestQCallThread::executeTest3);
+   mTest4QCall.bind(this, &TestQCallThread::executeTest4);
 
    // Initialize variables.
    mTPFlag = false;
@@ -136,6 +137,37 @@ void TestQCallThread::executeTest3(int aTimeout)
    }
 
    Prn::print(Prn::View11, "Test3 END");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test qcall function. 
+
+void TestQCallThread::executeTest4(int aTimeout)
+{
+   Prn::print(Prn::View11, "Test4 BEGIN");
+
+   try
+   {
+      Prn::print(Prn::View11, "Test4 Mark11");
+      mNotify.setMaskOne("label1", 1);
+      Prn::print(Prn::View11, "Test4 Mark12");
+      mNotify.wait(aTimeout);
+      Prn::print(Prn::View11, "Test4 Mark13");
+
+      Prn::print(Prn::View11, "Test4 Mark21");
+      mNotify.setMaskOne("label2", 2);
+      Prn::print(Prn::View11, "Test4 Mark22");
+      mNotify.wait(aTimeout);
+      Prn::print(Prn::View11, "Test4 Mark23");
+   }
+   catch (int aCode)
+   {
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest4 %d %s", aCode, mNotify.mException);
+   }
+
+   Prn::print(Prn::View11, "Test4 END");
 }
 
 //******************************************************************************

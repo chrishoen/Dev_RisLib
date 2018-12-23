@@ -35,6 +35,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TEST2"))     executeTest2(aCmd);
    if (aCmd->isCmd("TEST3"))     executeTest3(aCmd);
 
+   if (aCmd->isCmd("N"))         executeNotify(aCmd);
+   if (aCmd->isCmd("Error"))     executeError(aCmd);
+   if (aCmd->isCmd("A"))         executeAbort(aCmd);
+
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -75,6 +79,36 @@ void CmdLineExec::executeTest3(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1, 101);
 
    Some::gTestQCallThread->mTest3QCall(aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeNotify(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 1);
+   Some::gTestQCallThread->mNotify.notify(aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeError(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 1);
+   aCmd->setArgDefault(2, 101);
+   Some::gTestQCallThread->mNotify.notifyError(aCmd->argInt(1), aCmd->argInt(2));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
+{
+   Some::gTestQCallThread->mNotify.abort();
 }
 
 //******************************************************************************

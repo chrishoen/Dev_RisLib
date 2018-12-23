@@ -81,8 +81,15 @@ void TestQCallThread::executeTest1(int aCode1)
 {
    Prn::print(Prn::View11, "Test1 BEGIN");
 
-   mNotify.setMaskOne(1);
-   mNotify.wait(-1);
+   try
+   {
+      mNotify.setMaskOne("label1",1);
+      mNotify.wait(-1);
+   }
+   catch (int aCode)
+   {
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest1 %d %s", aCode,mNotify.mException);
+   }
 
    Prn::print(Prn::View11, "Test1 END");
 }
@@ -96,8 +103,15 @@ void TestQCallThread::executeTest2(int aCode1)
 {
    Prn::print(Prn::View11, "Test2 BEGIN");
 
-   mNotify.setMaskAny(2, 1, 2);
-   mNotify.wait(-1);
+   try
+   {
+      mNotify.setMaskAny("label1", 2, 1, 2);
+      mNotify.wait(-1);
+   }
+   catch (int aCode)
+   {
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest2 %d %s", aCode, mNotify.mException);
+   }
 
    Prn::print(Prn::View11, "Test2 END");
 }
@@ -111,8 +125,15 @@ void TestQCallThread::executeTest3(int aCode1)
 {
    Prn::print(Prn::View11, "Test3 BEGIN");
 
-   mNotify.setMaskAll(2, 1, 2);
-   mNotify.wait(-1);
+   try
+   {
+      mNotify.setMaskAll("label1", 2, 1, 2);
+      mNotify.wait(-1);
+   }
+   catch (int aCode)
+   {
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest3 %d %s", aCode, mNotify.mException);
+   }
 
    Prn::print(Prn::View11, "Test3 END");
 }

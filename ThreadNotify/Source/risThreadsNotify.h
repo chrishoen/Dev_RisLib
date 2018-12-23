@@ -35,7 +35,7 @@ public:
    static const int cMaxBits = 32;
 
    // Maximum string size.
-   static const int cMaxStringSize = 40;
+   static const int cMaxStringSize = 100;
 
    // Throw codes.
    static const int cAbortException   = 666;
@@ -65,6 +65,9 @@ public:
    // Label string.
    char mLabel[cMaxStringSize];
 
+   // Exception description string.
+   char mException[cMaxStringSize];
+
    // If this true then notification operations are disabled.
    bool mLock;
 
@@ -77,15 +80,7 @@ public:
    // If this true then an abort notification occurred.
    bool mAbortFlag;
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // If this true then an exception is thrown on abort, timeout or error.
-   bool mThrowEnable;
-
-   // This indicates the source of an exception.
+   // This indicates the cause of an exception.
    int mThrowCode;
 
    //***************************************************************************
@@ -114,28 +109,28 @@ public:
 
    // Clear all of the mask and latch bits and set a single mask bit.
    void setMaskOne(int aBitNum);
+   void setMaskOne(const char* aLabel,int aBitNum);
 
    // Clear all of the mask and latch bits and set a variable list of mask
    // bits. Set the trap condition for OR.
    void setMaskAny(int aNumArgs, ...);
+   void setMaskAny(const char* aLabel,int aNumArgs, ...);
 
    // Clear all of the mask and latch bits and set a variable list of mask
    // bits. Set the trap condition for AND.
    void setMaskAll(int aNumArgs, ...);
+   void setMaskAll(const char* aLabel,int aNumArgs, ...);
 
-   // Set the mask label.
-   void setLabel(const char* aLabel);
+   // Test for an exception condition. If an abort, timeout, or error
+   // has occurred then throw the corresponding exception.
+   void test();
 
-   // Enable exceptions. If this is true then an abort, timeout, or error
-   // will throw an exception when a notification occurrs.
-   void enableExceptions(bool aThrowEnable);
-
-   // Wait for a bit to be set. Return false if a timeout or abort occured.
-   bool wait(int aTimeout);
+   // Wait for a bit to be set. Test for exceptions.
+   void wait(int aTimeout);
 
    // Wait for a specified time. Ignore any bit notifications except an abort.
-   // Return false if an abort occured.
-   bool waitForTimer(int aTimeout);
+   // Test for exceptions.
+   void waitForTimer(int aTimeout);
 
    //***************************************************************************
    //***************************************************************************
@@ -150,8 +145,8 @@ public:
    // semaphore. Also set the error code.
    void notifyError(int aBitNum,int aError);
 
-   // Set the abort bit and signal the event semaphore.
-   void abort(int aBitNum);
+   // Set the abort flag and signal the event semaphore.
+   void abort();
 };
 
 //******************************************************************************

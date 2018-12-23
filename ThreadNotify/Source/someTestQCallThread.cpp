@@ -77,14 +77,14 @@ void TestQCallThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // Test qcall function. 
 
-void TestQCallThread::executeTest1(int aCode1)
+void TestQCallThread::executeTest1(int aTimeout)
 {
    Prn::print(Prn::View11, "Test1 BEGIN");
 
    try
    {
       mNotify.setMaskOne("label1",1);
-      mNotify.wait(-1);
+      mNotify.wait(aTimeout);
    }
    catch (int aCode)
    {
@@ -99,14 +99,14 @@ void TestQCallThread::executeTest1(int aCode1)
 //******************************************************************************
 // Test qcall function. 
 
-void TestQCallThread::executeTest2(int aCode1)
+void TestQCallThread::executeTest2(int aTimeout)
 {
    Prn::print(Prn::View11, "Test2 BEGIN");
 
    try
    {
       mNotify.setMaskAny("label1", 2, 1, 2);
-      mNotify.wait(-1);
+      mNotify.wait(aTimeout);
    }
    catch (int aCode)
    {
@@ -121,14 +121,14 @@ void TestQCallThread::executeTest2(int aCode1)
 //******************************************************************************
 // Test qcall function. 
 
-void TestQCallThread::executeTest3(int aCode1)
+void TestQCallThread::executeTest3(int aTimeout)
 {
    Prn::print(Prn::View11, "Test3 BEGIN");
 
    try
    {
       mNotify.setMaskAll("label1", 2, 1, 2);
-      mNotify.wait(-1);
+      mNotify.wait(aTimeout);
    }
    catch (int aCode)
    {

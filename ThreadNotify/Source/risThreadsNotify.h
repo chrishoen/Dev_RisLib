@@ -47,6 +47,9 @@ public:
    //***************************************************************************
    // Members.
 
+   // Label string.
+   char mLabel[cMaxStringSize];
+
    // Array of mask bits.
    bool mMask[cMaxBits];
 
@@ -60,10 +63,10 @@ public:
 
    // Error code. If not zero then an error occurred. This is set by
    // notifiers.
-   int mError;
+   int mErrorCode;
 
-   // Label string.
-   char mLabel[cMaxStringSize];
+   // This indicates the cause of an exception.
+   int mExceptionCode;
 
    // Exception description string.
    char mException[cMaxStringSize];
@@ -71,17 +74,14 @@ public:
    // If this true then notification operations are disabled.
    bool mLock;
 
+   // If this true then an abort notification occurred.
+   bool mAbortFlag;
+
    // If this true then a timeout occurred.
    bool mTimeoutFlag;
 
    // If this true then an error occurred.
    bool mErrorFlag;
-
-   // If this true then an abort notification occurred.
-   bool mAbortFlag;
-
-   // This indicates the cause of an exception.
-   int mThrowCode;
 
    //***************************************************************************
    //***************************************************************************
@@ -101,6 +101,7 @@ public:
    // Constructor.
    Notify();
    void reset();
+   void clearFlags();
 
    //***************************************************************************
    //***************************************************************************

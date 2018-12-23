@@ -82,9 +82,9 @@ public:
    Ris::Threads::QCall1<int> mTest3QCall;
 
    // Test function. This is bound to the qcall.
-   void executeTest1(int aCode);
-   void executeTest2(int aCode);
-   void executeTest3(int aCode);
+   void executeTest1(int aTimeout);
+   void executeTest2(int aTimeout);
+   void executeTest3(int aTimeout);
 };
 
 //******************************************************************************

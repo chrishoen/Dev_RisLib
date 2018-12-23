@@ -54,7 +54,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 101);
+   aCmd->setArgDefault(1, -1);
 
    Some::gTestQCallThread->mTest1QCall(aCmd->argInt(1));
 }
@@ -65,7 +65,7 @@ void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 101);
+   aCmd->setArgDefault(1, -1);
 
    Some::gTestQCallThread->mTest2QCall(aCmd->argInt(1));
 }
@@ -76,7 +76,7 @@ void CmdLineExec::executeTest2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 101);
+   aCmd->setArgDefault(1, -1);
 
    Some::gTestQCallThread->mTest3QCall(aCmd->argInt(1));
 }

@@ -39,15 +39,22 @@ void Notify::reset()
       mMask[i]   = false;
       mLatch[i]  = false;
    }
-   mError = 0;
+   mErrorCode = 0;
    mLabel[0] = 0;
    mException[0] = 0;
    mAnyFlag = false;
+   mAbortFlag = false;
    mTimeoutFlag = false;
    mErrorFlag = 0;
-   mAbortFlag = false;
 
    mEventSem.reset();
+}
+
+void Notify::clearFlags()
+{
+   mAbortFlag = false;
+   mTimeoutFlag = false;
+   mErrorFlag = 0;
 }
 
 //******************************************************************************
@@ -57,6 +64,9 @@ void Notify::reset()
 
 void Notify::setMaskOne(int aBitNum)
 {
+   // Test for exception conditions.
+   test();
+
    // Reset all variables and reset the event semaphore.
    reset();
 
@@ -77,6 +87,9 @@ void Notify::setMaskOne(int aBitNum)
 
 void Notify::setMaskOne(const char* aLabel,int aBitNum)
 {
+   // Test for exception conditions.
+   test();
+
    // Reset all variables and reset the event semaphore.
    reset();
 
@@ -101,6 +114,9 @@ void Notify::setMaskOne(const char* aLabel,int aBitNum)
 
 void Notify::setMaskAny(int aNumArgs, ...)
 {
+   // Test for exception conditions.
+   test();
+
    // Reset all variables and reset the event semaphore.
    reset();
 
@@ -129,6 +145,9 @@ void Notify::setMaskAny(int aNumArgs, ...)
 
 void Notify::setMaskAny(const char* aLabel,int aNumArgs, ...)
 {
+   // Test for exception conditions.
+   test();
+
    // Reset all variables and reset the event semaphore.
    reset();
 
@@ -160,6 +179,9 @@ void Notify::setMaskAny(const char* aLabel,int aNumArgs, ...)
 
 void Notify::setMaskAll(int aNumArgs, ...)
 {
+   // Test for exception conditions.
+   test();
+
    // Reset all variables and reset the event semaphore.
    reset();
 
@@ -188,6 +210,9 @@ void Notify::setMaskAll(int aNumArgs, ...)
 
 void Notify::setMaskAll(const char* aLabel,int aNumArgs, ...)
 {
+   // Test for exception conditions.
+   test();
+
    // Reset all variables and reset the event semaphore.
    reset();
 
@@ -255,7 +280,7 @@ void Notify::notify(int aBitNum)
 
 void Notify::notifyError(int aBitNum, int aError)
 {
-   mError = aError;
+   mErrorCode = aError;
    mErrorFlag = true;
    notify(aBitNum);
 }
@@ -285,7 +310,8 @@ void Notify::test()
    // Test for an abort condition.
    if (mAbortFlag)
    {
-      mThrowCode = cAbortException;
+      clearFlags();
+      mExceptionCode = cAbortException;
       sprintf(mException, "aborted");
       throw cAbortException;
    }
@@ -293,7 +319,8 @@ void Notify::test()
    // Test for a timeout condition.
    if (mTimeoutFlag)
    {
-      mThrowCode = cTimeoutException;
+      clearFlags();
+      mExceptionCode = cTimeoutException;
       sprintf(mException, "timeout %s",mLabel);
       throw cTimeoutException;
    }
@@ -301,8 +328,9 @@ void Notify::test()
    // Test for an error condition.
    if (mErrorFlag)
    {
-      mThrowCode = cErrorException;
-      sprintf(mException, "error %s %d", mLabel,mError);
+      clearFlags();
+      mExceptionCode = cErrorException;
+      sprintf(mException, "error %s %d", mLabel,mErrorCode);
       throw cErrorException;
    }
 }

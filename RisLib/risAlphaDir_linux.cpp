@@ -52,7 +52,7 @@ char* getAlphaFilePath_X(char* aBuffer, char* aSubDirName, char* aFileName = 0)
 {
    strcpy(aBuffer, rAlphaDirPath);
    strcat(aBuffer, aSubDirName);
-   strcat(aBuffer, "\\");
+   strcat(aBuffer, "/");
 
    if (aFileName == 0) return aBuffer;
 
@@ -68,18 +68,18 @@ char* getAlphaFilePath_X(char* aBuffer, char* aSubDirName, char* aFileName = 0)
 // null then the dir path is returned. The buffer is written to with the 
 // requested string to and a pointer to it is returned.
 
-char* getAlphaFilePath_Bin         (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Bin",         aFileName); }
-char* getAlphaFilePath_Calibration (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Calibration", aFileName); }
-char* getAlphaFilePath_Data        (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Data",        aFileName); }
-char* getAlphaFilePath_DLL         (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "DLL",         aFileName); }
-char* getAlphaFilePath_Files       (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Files",       aFileName); }
-char* getAlphaFilePath_Image       (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Image",       aFileName); }
-char* getAlphaFilePath_Lib         (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Lib",         aFileName); }
-char* getAlphaFilePath_Log         (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Log",         aFileName); }
-char* getAlphaFilePath_RecData     (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "RecData",     aFileName); }
-char* getAlphaFilePath_Settings    (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Settings",    aFileName); }
-char* getAlphaFilePath_TestImage   (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "TestImage",   aFileName); }
-char* getAlphaFilePath_Work        (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "Work",        aFileName); }
+char* getAlphaFilePath_Bin         (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "bin",         aFileName); }
+char* getAlphaFilePath_Calibration (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "calibration", aFileName); }
+char* getAlphaFilePath_Data        (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "data",        aFileName); }
+char* getAlphaFilePath_DLL         (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "dll",         aFileName); }
+char* getAlphaFilePath_Files       (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "files",       aFileName); }
+char* getAlphaFilePath_Image       (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "image",       aFileName); }
+char* getAlphaFilePath_Lib         (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "lib",         aFileName); }
+char* getAlphaFilePath_Log         (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "log",         aFileName); }
+char* getAlphaFilePath_RecData     (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "recdata",     aFileName); }
+char* getAlphaFilePath_Settings    (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "settings",    aFileName); }
+char* getAlphaFilePath_TestImage   (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "testimage",   aFileName); }
+char* getAlphaFilePath_Work        (char* aBuffer, char* aFileName) { return getAlphaFilePath_X(aBuffer, "work",        aFileName); }
 
 //******************************************************************************
 //******************************************************************************
@@ -91,7 +91,7 @@ class AlphaResetClass
 public:
    AlphaResetClass()
    {
-      strcpy(rAlphaDirPath, "C:\\Alpha\\");
+      strcpy(rAlphaDirPath, "/opt/alpha/");
    }
 };
 

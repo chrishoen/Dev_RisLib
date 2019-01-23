@@ -41,11 +41,13 @@ namespace Ris
    char* getAlphaFilePath_Calibration (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Data        (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_DLL         (char* aBuffer, char* aFileName = 0);
+   char* getAlphaFilePath_Files       (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Image       (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Lib         (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Log         (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_RecData     (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Settings    (char* aBuffer, char* aFileName = 0);
+   char* getAlphaFilePath_TestImage   (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Work        (char* aBuffer, char* aFileName = 0);
 
 

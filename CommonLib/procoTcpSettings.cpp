@@ -31,7 +31,7 @@ TcpSettings::TcpSettings()
 void TcpSettings::reset()
 {
    BaseClass::reset();
-   strcpy(BaseClass::mDefaultFileName, "ProtoComm_TcpSettings.txt");
+   BaseClass::setFileName_RelAlphaFiles("/RisLib/ProtoComm_TcpSettings.txt");
 
    mMyAppNumber = 0;
 

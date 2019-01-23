@@ -31,7 +31,7 @@ UdpSettings::UdpSettings()
 void UdpSettings::reset()
 {
    BaseClass::reset();
-   strcpy(BaseClass::mDefaultFileName, "ProtoComm_UdpSettings.txt");
+   BaseClass::setFileName_RelAlphaFiles("/RisLib/ProtoComm_UdpSettings.txt");
 
    mMyAppNumber = 0;
 

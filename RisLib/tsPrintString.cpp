@@ -50,6 +50,7 @@ PrintString& PrintString::operator= (const PrintString& aRhs)
 {
    mOutFlag = aRhs.mOutFlag;
    my_strncpy(mString, aRhs.mString, cMaxStringSize);
+   return *this;
 }
 
 //******************************************************************************

@@ -1,88 +1,91 @@
+/*==============================================================================
+==============================================================================*/
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 #include "stdafx.h"
 
-#include "risCmdLineFile.h"
-#include "risPortableCalls.h"
+#include <pthread.h> 
 
+#include "risLCCriticalSection.h"
 
-#define  _PROCOSERIALSETTINGS_CPP_
-#include "procoSerialSettings.h"
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-namespace ProtoComm
+namespace Ris
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor.
 
-SerialSettings::SerialSettings()
+void chkerror(int aRet, char* aLabel)
 {
-   reset();
-}
-
-void SerialSettings::reset()
-{
-   BaseClass::reset();
-   BaseClass::setFileName_RelAlphaFiles("/RisLib/ProtoComm_SerialSettings.txt");
-
-   mSerialPortDevice[0] = 0;
-   mSerialPortSetup[0] = 0;
-   mSerialRxTimeout = 0;
+   if (aRet == 0)return;
+   printf("FAIL %s %d\n", aLabel, aRet);
+   exit(1);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Show.
+// Created a critical section. Pass the returned code to the following
+// functions.
 
-void SerialSettings::show()
+void* createCriticalSection()
 {
-   printf("\n");
-   printf("SerialSettings************************************************ %s\n", mTargetSection);
+   int ret;
 
-   printf("SerialPortDevice           %-12s\n", mSerialPortDevice);
-   printf("SerialPortSetup            %-12s\n", mSerialPortSetup);
-   printf("SerialRxTimeout            %5d\n",   mSerialRxTimeout);
+   pthread_mutex_t* tMutex = new pthread_mutex_t;
+   ret = pthread_mutex_init(tMutex, NULL);
+   chkerror(ret, "pthread_mutex_init");
 
-   printf("SerialSettings************************************************\n");
-   printf("\n");
+   return (void*)tMutex;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Base class override: Execute a command from the command file to set a 
-// member variable.  Only process commands for the target section.This is
-// called by the associated command file object for each command in the file.
+// Enter a critical section. This is used to lock a resource for a short
+// time interval.
 
-void SerialSettings::execute(Ris::CmdLineCmd* aCmd)
+void enterCriticalSection(void* aCriticalSection)
 {
-   if (!isTargetSection(aCmd)) return;
+   int ret;
 
-   if (aCmd->isCmd("SerialPortDevice"))  aCmd->copyArgString(1, mSerialPortDevice, cMaxStringSize);
-   if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup, cMaxStringSize);
-   if (aCmd->isCmd("SerialRxTimeout"))   mSerialRxTimeout = aCmd->argInt(1);
+   ret = pthread_mutex_lock((pthread_mutex_t*)aCriticalSection);
+   chkerror(ret, "pthread_mutex_lock");
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Calculate expanded member variables. This is called after the entire
-// section of the command file has been processed.
+// Leave a critical section. This is used to unlock a resource.
 
-void SerialSettings::expand()
+void leaveCriticalSection(void* aCriticalSection)
 {
+   int ret;
+
+   ret = pthread_mutex_unlock((pthread_mutex_t*)aCriticalSection);
+   chkerror(ret, "pthread_mutex_unlock");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Destroy a critical section.
+
+void destroyCriticalSection(void* aCriticalSection)
+{
+   int ret;
+
+   ret = pthread_mutex_destroy((pthread_mutex_t*)aCriticalSection);
+   chkerror(ret, "pthread_mutex_destroy");
+
+   delete aCriticalSection;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace
+

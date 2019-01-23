@@ -56,22 +56,8 @@ public:
    // File name max size.
    static const int cMaxStringSize = 400;
 
-   // Explicit file directory for the parms files.
-   // If this is set then this is the first directory that is searched.
-   char mExplicitFileDir[cMaxStringSize];
-   bool mUseExplicitFileDir;
-
-   // General name.
-   char mName[cMaxStringSize];
-
-   // File name for files that contain default paramters.
-   char mDefaultFileName[cMaxStringSize];
-
-   // File name for files that contain override paramters.
-   char mOverrideFileName[cMaxStringSize];
-
-   // Enable error prints.
-   bool mEnablePrint;
+   // Full file path for the parms file.
+   char mFilePath[cMaxStringSize];
 
    //***************************************************************************
    //***************************************************************************
@@ -93,7 +79,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Infrastucture.
+   // Methods.
 
    // Constructor,
    typedef Ris::BaseCmdLineExec BaseClass;
@@ -114,20 +100,16 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Set the file dir that the parms file lives in.
-   // The following read functions search for the parms file in the 
-   // functions search first the current working directory and then the 
-   // current program directory.
-   // 1) the explicit file dir, if it is set
-   // 2) the current working directory
-   // 3) the current working directory + ..\Files
-   // 4) the current program directory + ..\..\Files
-   void setExplicitFileDir(char* aFileDir);
+   // Set the full file path for the parms file.
+   void setFilePath(char* aFilePath);
 
-   // Set the default file name.
-   // Set the override file name.
-   void setDefaultFileName(char* aFileName);
-   void setOVerrideFileName(char* aFileName);
+   // Set the file name for the parms file. The full file path will be
+   // relative to the alpha files directory.
+   void setFileName_RelAlphaFiles(char* aFileName);
+
+   // Set the file name for the parms file. The full file path will be
+   // relative to the alpha settings directory.
+   void setFileName_RelAlphaSettings(char* aFileName);
 
    // Read a section of the command file and set member variables accordingly.
    // Create a command file object, open the file, pass this object to the file
@@ -135,17 +117,9 @@ public:
    // command in the file, and then close the file. This only reads variables
    // for a specific section in the file. If the input section is null or 
    // empty then section logic is ignored and the entire file is read.
-   // This reads from the default file name.
-   bool readSection(char* aFilepath,char* aSection);
-   
-   // This is the same as above, but with a null filepath. The filepath is
-   // searched amoung default filepaths.
+   // This reads the file from the file path memver variable.
    bool readSection(char* aSection);
-
-   // This is the same as above, but it uses the override file name, instead
-   // of the default file name.
-   bool readOverride(char* aSection);
-
+   
    // Alias for readSection(0);
    bool readFile();
 };

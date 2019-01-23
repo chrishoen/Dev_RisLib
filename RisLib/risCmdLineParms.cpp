@@ -25,20 +25,37 @@ namespace Ris
 
 BaseCmdLineParms::BaseCmdLineParms()
 {
-   mExplicitFileDir[0]=0;
-   mUseExplicitFileDir=false;
+   mFilePath[0];
    reset();
 }
 
 void BaseCmdLineParms::reset()
 {
    mUseSections = true;
-   mEnablePrint = true;
    mTargetSection[0] = 0;
    mTargetSectionFlag = true;
-   strcpy(mName, "NO_NAME");
-   strcpy(mDefaultFileName, "NO_DEFAULT_FILENAME");
-   strcpy(mOverrideFileName,"NO_OVERRIDE_FILENAME");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// File path.
+
+void BaseCmdLineParms::setFilePath(char* aFilePath)
+{
+   strncpy(mFilePath, aFilePath,cMaxStringSize);
+}
+
+void BaseCmdLineParms::setFileName_RelAlphaFiles(char* aFileName)
+{
+   char tBuffer[cMaxStringSize];
+   strncpy(mFilePath, Ris::getAlphaFilePath_Files(tBuffer, aFileName), cMaxStringSize);
+}
+
+void BaseCmdLineParms::setFileName_RelAlphaSettings(char* aFileName)
+{
+   char tBuffer[cMaxStringSize];
+   strncpy(mFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aFileName), cMaxStringSize);
 }
 
 //******************************************************************************
@@ -87,7 +104,7 @@ bool BaseCmdLineParms::isTargetSection(Ris::CmdLineCmd* aCmd)
 // for a specific section in the file. If the input section is null or 
 // empty then section logic is ignored and the entire file is read.
 
-bool BaseCmdLineParms::readSection(char* aFilePath, char* aSection)
+bool BaseCmdLineParms::readSection(char* aSection)
 {
    //***************************************************************************
    //***************************************************************************
@@ -122,9 +139,12 @@ bool BaseCmdLineParms::readSection(char* aFilePath, char* aSection)
    // Command line executive file object.   
    Ris::CmdLineFile tCmdLineFile;
 
-   if (!tCmdLineFile.open(aFilePath))
+   // Open the file.
+   if (!tCmdLineFile.open(mFilePath))
    {
-      if(mEnablePrint) printf("BaseCmdLineParms::file open FAIL001 %s %s\n", mDefaultFileName,aFilePath);
+      // Exit the program if the open failed.
+      printf("BaseCmdLineParms::file open FAIL001 %s\n", mFilePath);
+      exit(1);
       return false;
    }
 
@@ -145,258 +165,6 @@ bool BaseCmdLineParms::readSection(char* aFilePath, char* aSection)
 
    // Done.
    return true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is the same as above, but with a null filepath. The filepath is
-// searched amoung default filepaths.
-
-bool BaseCmdLineParms::readSection(char* aSection)
-{
-   char tFilePath[400];
-
-   // Filepath found.
-   bool tFileFound = false;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   if (mUseExplicitFileDir)
-   {
-      strcpy(tFilePath, mExplicitFileDir);
-      strcat(tFilePath, mDefaultFileName);
-
-      if (portableFilePathExists(tFilePath))
-      {
-         return readSection(tFilePath, aSection);
-      }
-      else
-      {
-         if (mEnablePrint) printf("BaseCmdLineParms::file open FAIL101 %s %s\n", mDefaultFileName, tFilePath);
-         return false;
-      }
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetProgramDir());
-   strcat(tFilePath, mDefaultFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetCurrentDir());
-   strcat(tFilePath, mDefaultFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetCurrentDir());
-   strcat(tFilePath, "..\\Files\\");
-   strcat(tFilePath, mDefaultFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetProgramDir());
-   strcat(tFilePath, "..\\..\\Files\\");
-   strcat(tFilePath, mDefaultFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   char tBuffer[400];
-   strcpy(tFilePath, Ris::getAlphaFilePath_Work(tBuffer, mDefaultFileName));
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, mDefaultFileName));
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath, aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // File not found.
-
-   if (mEnablePrint) printf("BaseCmdLineParms::file open FAIL102 %s %s\n", mDefaultFileName,tFilePath);
-   return false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is the same as above, but it uses the override file name, instead
-// of the default file name.
-
-bool BaseCmdLineParms::readOverride(char* aSection)
-{
-   char tFilePath[200];
-
-   // Filepath found.
-   bool tFileFound = false;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   if (mUseExplicitFileDir)
-   {
-      strcpy(tFilePath, mExplicitFileDir);
-      strcat(tFilePath, mOverrideFileName);
-
-      if (portableFilePathExists(tFilePath))
-      {
-         return readSection(tFilePath, aSection);
-      }
-      else
-      {
-         if (mEnablePrint) printf("BaseCmdLineParms::file open FAIL201 %s %s\n", mDefaultFileName, tFilePath);
-         return false;
-      }
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetCurrentDir());
-   strcat(tFilePath, mOverrideFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetCurrentDir());
-   strcat(tFilePath, "..\\Files\\");
-   strcat(tFilePath, mOverrideFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   strcpy(tFilePath, Ris::portableGetProgramDir());
-   strcat(tFilePath, "..\\..\\Files\\");
-   strcat(tFilePath, mOverrideFileName);
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Search for file. If found then read it.
-
-   char tBuffer[400];
-   strcpy(tFilePath, Ris::getAlphaFilePath_Work(tBuffer, mOverrideFileName));
-
-   if (portableFilePathExists(tFilePath))
-   {
-      return readSection(tFilePath,aSection);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // File not found.
-
-   if (mEnablePrint) printf("BaseCmdLineParms::file open FAIL202 %s %s\n", mDefaultFileName,tFilePath);
-   return false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set the file dir that the parms file lives in.
-// The following read functions search for the parms file in the 
-// functions search first the current working directory and then the 
-// current program directory.
-// 1) the explicit file dir, if it is set
-// 2) the current working directory
-// 3) the current working directory + ..\Files
-// 4) the current program directory
-
-void BaseCmdLineParms::setExplicitFileDir(char* aFileDir)
-{
-   strcpy(mExplicitFileDir, aFileDir);
-   mUseExplicitFileDir = true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set the default file name.
-// Set the override file name.
-
-void BaseCmdLineParms::setDefaultFileName(char* aFileName)
-{
-   strcpy(mDefaultFileName, aFileName);
-}
-void BaseCmdLineParms::setOVerrideFileName(char* aFileName)
-{
-   strcpy(mOverrideFileName, aFileName);
 }
 
 //******************************************************************************

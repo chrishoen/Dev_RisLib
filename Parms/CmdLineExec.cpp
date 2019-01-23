@@ -48,8 +48,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    char tBuffer[400];
 
    Prn::print(0, "AlphaDir            %s", Ris::getAlphaDirectory());
-   Prn::print(0, "Alpha Work          %s", Ris::getAlphaFilePath_Work(tBuffer));
-   Prn::print(0, "Alpha Work          %s", Ris::getAlphaFilePath_Work(tBuffer, "BackEnd.cs"));
+   Prn::print(0, "Alpha Files         %s", Ris::getAlphaFilePath_Files(tBuffer));
+   Prn::print(0, "Alpha Filse         %s", Ris::getAlphaFilePath_Files(tBuffer, "BackEnd.cs"));
 }
 
 //******************************************************************************
@@ -155,7 +155,7 @@ void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeParms2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,"Run1");
-   gParms.setExplicitFileDir("C:\\Alpha\\Work");
+   gParms.setFilePath("C:\\Alpha\\Files\\RisLib\\Parms.txt");
    gParms.reset();
    gParms.readSection("default");
    gParms.readSection(aCmd->argString(1));

@@ -25,7 +25,7 @@ Parms::Parms()
 void Parms::reset()
 {
    BaseClass::reset();
-   strcpy(BaseClass::mDefaultFileName,"RisParms_Parms.txt");
+   BaseClass::setFileName_RelAlphaFiles("/RisLib/RisParms_Parms.txt");
 
    mCode0 = 0;
    mCode1 = 0;

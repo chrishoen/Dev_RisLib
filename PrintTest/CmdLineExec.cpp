@@ -88,20 +88,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 1);
-   int tConsole = aCmd->argInt(1);
-
-   Ris::Net::UdpTxStringSocket tSocket;
-
-   Ris::Net::Settings tSettings;
-   tSettings.setRemoteIp(
-      Prn::gPrintSettings.mPrintViewHostIPAddress,
-      Prn::gPrintSettings.mPrintViewHostIPPort + tConsole);
-   tSocket.initialize(tSettings);
-   tSocket.configure();
-
-   tSocket.doSendString("ABCDEFG");
-   tSocket.doClose();
 }
 
 //******************************************************************************

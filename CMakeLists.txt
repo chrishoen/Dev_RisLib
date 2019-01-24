@@ -4,8 +4,8 @@ include(MyCMake.cmake)
 
 project ("Dev_RisLib")
 
-#add_subdirectory ("RisLib")
-#return()
+add_subdirectory ("RisLib")
+return()
 
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")

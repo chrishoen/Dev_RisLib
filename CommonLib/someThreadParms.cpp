@@ -32,7 +32,7 @@ ThreadParms::ThreadParms()
 void ThreadParms::reset()
 {
    BaseClass::reset();
-   BaseClass::setFileName_RelAlphaFiles("/RisLib/Thread_Parms.txt");
+   BaseClass::setFileName_RelAlphaFiles("RisLib/Thread_Parms.txt");
 
    mTimerThreadPeriod = 0;
    mFilename[0] = 0;

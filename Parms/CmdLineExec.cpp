@@ -107,7 +107,7 @@ void CmdLineExec::executeRun1(Ris::CmdLineCmd* aCmd)
    gParms.readSection("default");
    gParms.readSection("run1");
 
-   MyClass tMyClass(gParms.mMyClassParms);
+   MyClass tMyClass(gParms.mMyClassParms1);
    tMyClass.doRun1();
 }
 
@@ -133,7 +133,6 @@ void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeParms2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,"Run1");
-   gParms.setFilePath("C:\\Alpha\\Files\\RisLib\\Parms.txt");
    gParms.reset();
    gParms.readSection("default");
    gParms.readSection(aCmd->argString(1));

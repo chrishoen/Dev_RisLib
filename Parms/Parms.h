@@ -51,46 +51,13 @@ public:
    //***************************************************************************
    // Integrity checks.
 
-   int   mCode0;
    int   mCode1;
    int   mCode2;
+   int   mCode3;
+   int   mCode4;
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Lowpass filtered gaussian noise time series.
-
-   bool    mLockFlag;     // True if locked.
-   double  mDuration;     // Trial duration
-   double  mFs;           // Sampling frequency
-   double  mFc;           // Cutoff frequency 
-   double  mFc1;          // Cutoff frequency 
-   double  mFc2;          // Cutoff frequency 
-   int     mFilterOrder;  // Filter order
-
-   double  mEX;           // Desired expectation
-   double  mUX;           // Desired uncertainty
-
-   static const int cMaxStringSize=400;
-   char mOutputFile [cMaxStringSize];
-
-   Some::MyClassParms mMyClassParms;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Signal histories.
-
-   int mHistoryMaxSamples;
-   double mHistoryDeltaT;
-      
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Expanded members that are not read from the parms file.
-
-   double  mTs;           // Sampling period
-   int     mNumSamples;   // Number of samples in array
+   Some::MyClassParms mMyClassParms1;
+   Some::MyClassParms mMyClassParms2;
 
    //***************************************************************************
    //***************************************************************************

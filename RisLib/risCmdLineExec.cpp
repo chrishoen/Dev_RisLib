@@ -128,6 +128,9 @@ void CmdLineExecNestedAnchor::nestedPush(BaseCmdLineExec* aNextExec)
 
 void CmdLineExecNestedAnchor::nestedPop  ()
 {
+   // Guard.
+   if (!mExecStack.isPop()) return;
+
    // Pop from the stack to set the current executive.
    mExecStack.pop(mExec);
 

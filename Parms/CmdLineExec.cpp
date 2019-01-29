@@ -117,11 +117,8 @@ void CmdLineExec::executeRun1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,"Run1");
    gParms.reset();
-   Prn::print(0, "gParms.mFilePath         %s", gParms.mFilePath);
    gParms.readSection("default");
-   gParms.readSection(aCmd->argString(1));
    gParms.show();
 }
 
@@ -132,8 +129,9 @@ void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,"Run1");
+   aCmd->setArgDefault(1, "Run1");
    gParms.reset();
+   Prn::print(0, "gParms.mFilePath         %s", gParms.mFilePath);
    gParms.readSection("default");
    gParms.readSection(aCmd->argString(1));
    gParms.show();

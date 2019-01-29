@@ -69,6 +69,7 @@ public:
 
    // The target section, the section to be read from.
    char mTargetSection[200];
+   char mTargetSectionSave[200];
 
    // True if the current command is in the target section.
    bool mTargetSectionFlag;
@@ -117,9 +118,13 @@ public:
    // command in the file, and then close the file. This only reads variables
    // for a specific section in the file. If the input section is null or 
    // empty then section logic is ignored and the entire file is read.
-   // This reads the file from the file path memver variable.
+   // This reads the file from the file path member variable.
    bool readSection(char* aSection);
-   
+
+   // Read a section of the file and apply a separate executive
+   // to it.
+   bool readSection(char* aSection, Ris::BaseCmdLineExec* aExec);
+
    // Alias for readSection(0);
    bool readFile();
 };

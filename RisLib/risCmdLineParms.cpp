@@ -33,6 +33,7 @@ void BaseCmdLineParms::reset()
 {
    mUseSections = true;
    mTargetSection[0] = 0;
+   mTargetSectionSave[0] = 0;
    mTargetSectionFlag = true;
 }
 
@@ -92,6 +93,16 @@ bool BaseCmdLineParms::isTargetSection(Ris::CmdLineCmd* aCmd)
    }
 
    return mTargetSectionFlag;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Alias for readSection(0);
+
+bool BaseCmdLineParms::readFile()
+{
+   return readSection(0);
 }
 
 //******************************************************************************
@@ -170,11 +181,111 @@ bool BaseCmdLineParms::readSection(char* aSection)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Alias for readSection(0);
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Read a section of the file and apply a separate executive
+// to it.
 
-bool BaseCmdLineParms::readFile()
+class CmdLineExecProxy : public Ris::BaseCmdLineExec
 {
-   return readSection(0);
+public:
+   bool mTargetSectionFlag;
+   char* mTargetSection;
+   Ris::BaseCmdLineExec* mExec;
+ 
+   CmdLineExecProxy(char* aTargetSection, Ris::BaseCmdLineExec* aExec)
+   {
+      mTargetSectionFlag = false;
+      mTargetSection = aTargetSection;
+      mExec = aExec;
+   }
+
+   bool isTargetSection(Ris::CmdLineCmd* aCmd)
+   {
+      // If the command is the beginning of a section. 
+      if (aCmd->isCmd("SectionBegin"))
+      {
+         mTargetSectionFlag = false;
+
+         if (aCmd->numArg() == 1)
+         {
+            // And the section is the target section then the 
+            // command is in the target section.
+            if (aCmd->isArgString(1, mTargetSection))
+            {
+               mTargetSectionFlag = true;
+            }
+         }
+      }
+
+      // If the command is at the end of any section
+      if (aCmd->isCmd("SectionEnd"))
+      {
+         // Then the command is not in the target section.
+         mTargetSectionFlag = false;
+      }
+
+      return mTargetSectionFlag;
+   }
+
+   void execute(Ris::CmdLineCmd* aCmd)
+   {
+      if (!isTargetSection(aCmd)) return;
+      mExec->execute(aCmd);
+   }
+};
+
+bool BaseCmdLineParms::readSection(char* aSection, Ris::BaseCmdLineExec* aExec)
+{
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Section variables.   
+
+   // Save the target section and then set it to the new section.
+   strcpy(mTargetSectionSave, mTargetSection);
+   strcpy(mTargetSection, aSection);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Open file.
+
+   // Command line executive file object.   
+   Ris::CmdLineFile tCmdLineFile;
+
+   // Open the file.
+   if (!tCmdLineFile.open(mFilePath))
+   {
+      // Exit the program if the open failed.
+      printf("BaseCmdLineParms::file open FAIL201 %s\n", mFilePath);
+      exit(1);
+      return false;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Execute the commands in the file.
+
+   // Pass this object to the file object to read the file and apply this
+   // object's execution method to each command in the file.
+   CmdLineExecProxy tExecProxy(&mTargetSection[0], aExec);
+   tCmdLineFile.execute(&tExecProxy);
+
+   // Close the file.
+   tCmdLineFile.close();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Done.
+
+   // Restore the target section.
+   strcpy(mTargetSection, mTargetSectionSave);
+   // Done.
+   return true;
 }
 
 //******************************************************************************

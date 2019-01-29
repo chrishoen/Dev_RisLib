@@ -83,6 +83,6 @@ void Parms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("Code4"))  mCode4 = aCmd->argInt(1);
 
    if (aCmd->isCmd("MyClassParms1")) nestedPush(aCmd, &mMyClassParms1);
-   if (aCmd->isCmd("MyClassParms2")) nestedPush(aCmd, &mMyClassParms2);
+   if (aCmd->isCmd("MyClassParms2")) readSection(aCmd->argString(1), &mMyClassParms2);
 }
 

@@ -57,16 +57,7 @@ public:
    // Members that are read from the parms file.
 
    // One diminsional table.
-   Ris::CmdLineDoubleTable1D  mTable1d;
-
-   // Two diminsional table.
-   Ris::CmdLineDoubleTable2D  mTable2d;
-
-   // One diminsional table.
    Ris::CmdLineIntTable1D     mIntTable1d;
-
-   // Two diminsional table.
-   Ris::CmdLineIntTable2D     mIntTable2d;
 
    // File codes.
    int mCode1;

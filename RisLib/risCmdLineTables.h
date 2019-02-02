@@ -1,9 +1,8 @@
 #pragma once
 /*==============================================================================
 
-Table classes that can be used by the command line file classes.
-One or two dimensional tables classes of int,double,string.
-One dimensional talble of string.
+Table class templates that can be used by the command line file classes.
+One or two dimensional table classes of int,double,string.
 
 ==============================================================================*/
 
@@ -27,7 +26,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Table, 1 dimensional, indexed by 0..R-1
+// One dimesnional table.
 
 template<typename ElementType,size_t MaxRows>
 class CmdLineTable1D : public std::array<ElementType, MaxRows>, public Ris::BaseCmdLineExec
@@ -38,7 +37,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Vector components.
+   // Last row number that was read from the file.
    int  mRows;
 
    //***************************************************************************
@@ -56,10 +55,38 @@ public:
    void reset()
    {
       mRows = 0;
-      for (int i = 0; i < MaxRows; i++) e(i) = 0;
+      for (int i = 0; i < MaxRows; i++)
+      {
+         // Specialize.
+         resetElement<ElementType>(e(i));
+      }
    }
 
+   // Specialize.
+   template <typename T>
+   void resetElement(ElementType& aX)
+   {
+   }
+
+   // Specialize.
+   template <>
+   void resetElement<int>(ElementType& aX)
+   {
+      aX = 0;
+   }
+
+   // Specialize.
+   template <>
+   void resetElement<double>(ElementType& aX)
+   {
+      aX = 0;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Access array elements.
+
    ElementType& e(int aRow)
    {
       return this->operator[](aRow);
@@ -75,22 +102,26 @@ public:
    {
       for (int i = 0; i < mRows; i++)
       {
+         // Specialize.
          showRow<ElementType>(aLabel, i);
       }
       printf("\n");
    }
 
+   // Specialize.
    template <typename T>
    void showRow(char* aLabel, int aRow)
    {
    }
 
+   // Specialize.
    template <>
    void showRow<int>(char* aLabel, int aRow)
    {
       printf("%-20s %10d\n", aLabel, e(aRow));
    }
 
+   // Specialize.
    template <>
    void showRow<double>(char* aLabel, int aRow)
    {
@@ -117,21 +148,25 @@ public:
       // This should be a numerical value.
       else if (mRows < MaxRows)
       {
+         // Specialize.
          readRow<ElementType>(aCmd);
       }
    }
    
+   // Specialize.
    template <typename T>
    void readRow(Ris::CmdLineCmd* aCmd)
    {
    }
 
+   // Specialize.
    template <>
    void readRow<int>(Ris::CmdLineCmd* aCmd)
    {
       e(mRows++) = aCmd->argInt(0);
    }
 
+   // Specialize.
    template <>
    void readRow<double>(Ris::CmdLineCmd* aCmd)
    {      
@@ -142,14 +177,10 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Table, 1 dimensional, indexed by 0..R-1
+// Two dimensional table.
 
 template<typename ElementType, size_t MaxRows, size_t MaxCols>
 class CmdLineTable2D : public std::array<ElementType[MaxCols], MaxRows>, public Ris::BaseCmdLineExec
@@ -160,7 +191,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Vector components.
+   // Last row number that was read from the file.
    int  mRows;
 
    //***************************************************************************
@@ -182,12 +213,37 @@ public:
       {
          for (int j = 0; j < MaxCols; j++)
          {
-            e(i, j) = 0;
+            // Specialize.
+            resetElement<ElementType>(e(i,j));
          }
       }
    }
 
+   // Specialize.
+   template <typename T>
+   void resetElement(ElementType& aX)
+   {
+   }
+
+   // Specialize.
+   template <>
+   void resetElement<int>(ElementType& aX)
+   {
+      aX = 0;
+   }
+
+   // Specialize.
+   template <>
+   void resetElement<double>(ElementType& aX)
+   {
+      aX = 0;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Access array elements.
+
    ElementType& e(int aRow, int aCol)
    {
       return this->operator[](aRow)[aCol];
@@ -206,6 +262,7 @@ public:
          printf("%-20s ", aLabel);
          for (int j = 0; j < MaxCols; j++)
          {
+            // Specialize.
             showElement<ElementType>(i, j);
          }
          printf("\n");
@@ -213,17 +270,20 @@ public:
       printf("\n");
    }
 
+   // Specialize.
    template <typename T>
    void showElement(int aRow, int aCol)
    {
    }
 
+   // Specialize.
    template <>
    void showElement<int>(int aRow, int aCol)
    {
       printf("%10d ",e(aRow,aCol));
    }
 
+   // Specialize.
    template <>
    void showElement<double>(int aRow, int aCol)
    {
@@ -250,15 +310,18 @@ public:
       // This should be a numerical value.
       else if (mRows < MaxRows)
       {
+         // Specialize.
          readRow<ElementType>(aCmd);
       }
    }
 
+   // Specialize.
    template <typename T>
    void readRow(Ris::CmdLineCmd* aCmd)
    {
    }
 
+   // Specialize.
    template <>
    void readRow<int>(Ris::CmdLineCmd* aCmd)
    {
@@ -269,6 +332,7 @@ public:
       mRows++;
    }
 
+   // Specialize.
    template <>
    void readRow<double>(Ris::CmdLineCmd* aCmd)
    {
@@ -283,7 +347,6 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 }//namespace
 
 

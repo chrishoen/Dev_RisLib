@@ -10,7 +10,7 @@ Parameters class whose values are read from a command file.
 //******************************************************************************
 //******************************************************************************
 
-#include "risCmdLineTableInt.h"
+#include "risCmdLineTables.h"
 #include "risCmdLineParms.h"
 
 //******************************************************************************

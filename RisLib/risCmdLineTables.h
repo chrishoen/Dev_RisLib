@@ -7,6 +7,10 @@ One dimensional talble of string.
 
 ==============================================================================*/
 
+#include "stdlib.h"
+#include "stdio.h"
+#include <array>
+
 #include "risCmdLineExec.h"
 
 //******************************************************************************
@@ -23,8 +27,9 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 // Table, 1 dimensional, indexed by 0..R-1
-  
-class CmdLineIntTable1D : public Ris::BaseCmdLineExec
+
+template<size_t MaxRows>
+class CmdLineTable1DInt : public std::array<int, MaxRows>, public Ris::BaseCmdLineExec
 {
 public:
    //***************************************************************************
@@ -33,55 +38,168 @@ public:
    // Members.
 
    // Vector components.
-   int* mValues;
-   int     mRows;
-
-   // True if initialized.
-   bool mInitialized;
-   // True if this is the first command line.
-   bool mFirstCmd;
-   // Number of ints allocated in mValues.
-   int  mAlloc;
-   // Current index into mValues.
-   int  mIndex;
-   // True if all values were read in correctly.
-   bool mValidFlag;
+   int  mRows;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constructor.
-   CmdLineIntTable1D();
-  ~CmdLineIntTable1D();
-   void reset();
+   CmdLineTable1DInt()
+   {
+      reset();
+   }
 
-   // Initialize and allocate memory for the table.
-   void initialize(int aRows);
+   // Reset variables.
+   void reset()
+   {
+      mRows = 0;
+      for (int i = 0; i < MaxRows; i++) e(i) = 0;
+   }
+
+   // Access array elements.
+   int& e(int aRow)
+   {
+      return this->operator[](aRow);
+   }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Access components.
-   int& e(int aRow);
-   int& operator()(int aRow);
-   void show(char* aLabel=0);
+   // Show.
+   void show(char* aLabel = 0)
+   {
+      for (int i = 0; i < mRows; i++) printf("%s  %d  %10d\n", aLabel, i, e(i));
+      printf("\n");
+   }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Execute, overload used to read from a command line file. This is called
-   // for each line in the corresponding table section of the file. It parses 
-   // the file command line to read table values
-   void execute(Ris::CmdLineCmd* aCmd);
+   // Execute, read from a command line file. This is called via a nested push.
+   void execute(Ris::CmdLineCmd* aCmd) override
+   {
+      // This should be the first command after the nested push.
+      if (aCmd->isCmd("{"))
+      {
+      }
+      // Pop back out at the end.
+      else if (aCmd->isCmd("}"))
+      {
+         nestedPop(aCmd);
+      }
+      // This should be a numerical value.
+      else if (mRows < MaxRows)
+      {
+         e(mRows++) = aCmd->argInt(0);
+      }
+   }
+};
 
-   // Execute again. reinitializes and calls execute.
-   void reexecute(Ris::CmdLineCmd* aCmd);
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Table, 1 dimensional, indexed by 0..R-1
+
+template<size_t MaxRows, size_t MaxCols>
+class CmdLineTable2DInt : public std::array<int[MaxCols], MaxRows>, public Ris::BaseCmdLineExec
+{
+public:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Vector components.
+   int  mRows;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   CmdLineTable2DInt()
+   {
+      reset();
+   }
+
+   // Reset variables.
+   void reset()
+   {
+      mRows = 0;
+      for (int i = 0; i < MaxRows; i++)
+      {
+         for (int j = 0; j < MaxCols; j++)
+         {
+            e(i, j) = 0;
+         }
+      }
+   }
+
+   // Access array elements.
+   int& e(int aRow, int aCol)
+   {
+      return this->operator[](aRow)[aCol];
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Show.
+   void show(char* aLabel = 0)
+   {
+      for (int i = 0; i < mRows; i++)
+      {
+         printf("%s ", aLabel);
+         for (int j = 0; j < MaxCols; j++)
+         {
+            printf("%10d", e(i, j));
+         }
+         printf("\n");
+      }
+      printf("\n");
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Execute, read from a command line file. This is called via a nested push.
+   void execute(Ris::CmdLineCmd* aCmd) override
+   {
+      // This should be the first command after the nested push.
+      if (aCmd->isCmd("{"))
+      {
+      }
+      // Pop back out at the end.
+      else if (aCmd->isCmd("}"))
+      {
+         nestedPop(aCmd);
+      }
+      // This should be a numerical value.
+      else if (mRows < MaxRows)
+      {
+         for (int j = 0;j < aCmd->numArg() + 1;j++)
+         e(mRows,j) = aCmd->argInt(j);
+         mRows++;
+      }
+   }
 };
 
 //******************************************************************************

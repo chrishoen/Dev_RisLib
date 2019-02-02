@@ -258,7 +258,7 @@ public:
    {
       for (int i = 0; i < mRows; i++)
       {
-         printf("%-20s ", aLabel);
+         printf("%-24s ", aLabel);
          for (int j = 0; j < MaxCols; j++)
          {
             // Specialize.

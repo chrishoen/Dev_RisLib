@@ -43,7 +43,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constructor.
    CmdLineTable1DInt()
@@ -51,13 +51,14 @@ public:
       reset();
    }
 
+   // Reset variables.
    void reset()
    {
       mRows = 0;
       for (int i = 0; i < MaxRows; i++) e(i) = 0;
    }
 
-   // Access components.
+   // Access array elements.
    int& e(int aRow)
    {
       return this->operator[](aRow);
@@ -68,6 +69,7 @@ public:
    //***************************************************************************
    // Methods.
 
+   // Show.
    void show(char* aLabel = 0)
    {
       for (int i = 0; i < mRows; i++) printf("%s  %d  %10d\n", aLabel, i, e(i));
@@ -79,10 +81,10 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Execute, overload used to read from a command line file.
+   // Execute, read from a command line file. This is called via a nested push.
    void execute(Ris::CmdLineCmd* aCmd) override
    {
-      // This should be the first command.
+      // This should be the first command after the nested push.
       if (aCmd->isCmd("{"))
       {
       }

@@ -10,7 +10,7 @@ Parameters class whose values are read from a command file.
 //******************************************************************************
 //******************************************************************************
 
-#include "risCmdLineTables.h"
+#include "risCmdLineTableInt.h"
 #include "risCmdLineParms.h"
 
 //******************************************************************************
@@ -57,7 +57,7 @@ public:
    // Members that are read from the parms file.
 
    // One diminsional table.
-   Ris::CmdLineIntTable1D     mIntTable1d;
+   Ris::CmdLineTable1DInt<10>  mTable1dInt;
 
    // File codes.
    int mCode1;

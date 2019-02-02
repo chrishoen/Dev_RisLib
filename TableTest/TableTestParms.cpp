@@ -28,7 +28,7 @@ void TableTestParms::reset()
    BaseClass::reset();
    BaseClass::setFileName_RelAlphaFiles("RisLib/TableTestParms.txt");
 
-   mIntTable1d.initialize(4);
+   mTable1dInt.reset();
 
    mCode1=0;
    mCode2=0;
@@ -45,7 +45,7 @@ void TableTestParms::show()
    printf("TableTestParms************************************************ %s\n", mTargetSection);
 
    printf("\n");
-   mIntTable1d.show("IntTable1d");
+   mTable1dInt.show("Table1dInt");
 
    printf("\n");
    printf("Code1                  %10d\n",        mCode1);
@@ -63,7 +63,7 @@ void TableTestParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
-   if (aCmd->isCmd("IntTable1d"))  mIntTable1d.execute(aCmd);
+   if (aCmd->isCmd("Table1dInt"))  mTable1dInt.execute(aCmd);
 
    if (aCmd->isCmd("Code1"))     mCode1 = aCmd->argInt(1);
    if (aCmd->isCmd("Code2"))     mCode2 = aCmd->argInt(1);

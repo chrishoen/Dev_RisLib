@@ -63,7 +63,7 @@ void TableTestParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
-   if (aCmd->isCmd("Table1dInt"))  mTable1dInt.execute(aCmd);
+   if (aCmd->isCmd("Table1dInt"))  nestedPush(aCmd, &mTable1dInt);
 
    if (aCmd->isCmd("Code1"))     mCode1 = aCmd->argInt(1);
    if (aCmd->isCmd("Code2"))     mCode2 = aCmd->argInt(1);

@@ -28,8 +28,8 @@ namespace Ris
 //******************************************************************************
 // Table, 1 dimensional, indexed by 0..R-1
 
-template<size_t N>
-class CmdLineTable1DInt : public std::array<int,N>, public Ris::BaseCmdLineExec
+template<size_t MaxRows>
+class CmdLineTable1DInt : public std::array<int, MaxRows>, public Ris::BaseCmdLineExec
 {
 public:
    //***************************************************************************
@@ -38,7 +38,7 @@ public:
    // Members.
 
    // Vector components.
-   int  mRowIndex;
+   int  mRows;
 
    //***************************************************************************
    //***************************************************************************
@@ -53,8 +53,8 @@ public:
 
    void reset()
    {
-      mRowIndex = 0;
-      for (int i = 0; i < N; i++) e(i) = 0;
+      mRows = 0;
+      for (int i = 0; i < MaxRows; i++) e(i) = 0;
    }
 
    // Access components.
@@ -70,18 +70,7 @@ public:
 
    void show(char* aLabel = 0)
    {
-      char tLabel[30];
-
-      if (aLabel == 0)
-      {
-         strcpy(tLabel, "CmdLineIntTable1D");
-      }
-      else
-      {
-         strncpy(tLabel, aLabel, 30);
-      }
-
-      for (int i = 0; i < N; i++) printf("%s  %d  %10d\n", tLabel, i, e(i));
+      for (int i = 0; i < mRows; i++) printf("%s  %d  %10d\n", aLabel, i, e(i));
       printf("\n");
    }
 
@@ -90,14 +79,24 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Execute, overload used to read from a command line file. This is called
-   // for each line in the corresponding table section of the file. It parses 
-   // the file command line to read table values
-   void execute(Ris::CmdLineCmd* aCmd)
+   // Execute, overload used to read from a command line file.
+   void execute(Ris::CmdLineCmd* aCmd) override
    {
-
+      // This should be the first command.
+      if (aCmd->isCmd("{"))
+      {
+      }
+      // Pop back out at the end.
+      else if (aCmd->isCmd("}"))
+      {
+         nestedPop(aCmd);
+      }
+      // This should be a numerical value.
+      else if (mRows < MaxRows)
+      {
+         e(mRows++) = aCmd->argInt(0);
+      }
    }
-
 };
 
 //******************************************************************************

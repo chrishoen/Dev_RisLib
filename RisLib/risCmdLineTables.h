@@ -105,7 +105,6 @@ public:
          // Specialize.
          showRow<ElementType>(aLabel, i);
       }
-      printf("\n");
    }
 
    // Specialize.
@@ -267,7 +266,6 @@ public:
          }
          printf("\n");
       }
-      printf("\n");
    }
 
    // Specialize.

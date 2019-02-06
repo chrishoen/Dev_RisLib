@@ -248,8 +248,11 @@ bool CmdLineCmd::argBool(int aArgIndex)
    // Test for 1,0
 
    // Convert argument string.
-   if (strcmp(mArgPtr[aArgIndex],"1")==0)       return true;
-   if (strcmp(mArgPtr[aArgIndex],"0")==0)       return false;
+   if (strcmp(mArgPtr[aArgIndex], "1") == 0)       return true;
+   if (strcmp(mArgPtr[aArgIndex], "0") == 0)       return false;
+   if (strcmp(mArgPtr[aArgIndex], "X") == 0)       return true;
+   if (strcmp(mArgPtr[aArgIndex], "x") == 0)       return true;
+   if (strcmp(mArgPtr[aArgIndex], ".") == 0)       return false;
 
    // Test for true,false
 

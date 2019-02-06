@@ -30,7 +30,7 @@ public:
    //***************************************************************************
    // Members.
 
-   enum {MaxNumOfArgs =  20};
+   enum {MaxNumOfArgs =  40};
    enum {MaxArgSize   = 100};
 
    // Copy of the input command line.

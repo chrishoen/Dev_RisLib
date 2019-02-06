@@ -62,6 +62,9 @@ public:
    Ris::CmdLineTable2D<int, 10, 2>     mIntTable2d;
    Ris::CmdLineTable2D<double, 10, 2>  mDoubleTable2d;
 
+   Ris::CmdLineTable1D<bool, 4>        mBoolTable1d;
+   Ris::CmdLineTable2D<bool, 4, 4>     mBoolTable2d;
+
    // File codes.
    int mCode1;
    int mCode2;

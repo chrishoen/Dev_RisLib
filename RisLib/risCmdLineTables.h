@@ -8,9 +8,9 @@ One or two dimensional table classes of int,double,string.
 
 #include "stdlib.h"
 #include "stdio.h"
-#include <type_traits>
 #include <array>
 
+#include "my_functions.h"
 #include "risCmdLineExec.h"
 
 //******************************************************************************
@@ -82,6 +82,13 @@ public:
       aX = 0;
    }
 
+   // Specialize.
+   template <>
+   void resetElement<bool>(ElementType& aX)
+   {
+      aX = false;
+   }
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -125,6 +132,13 @@ public:
    void showRow<double>(char* aLabel, int aRow)
    {
       printf("%-20s %10.4f\n", aLabel, e(aRow));
+   }
+
+   // Specialize.
+   template <>
+   void showRow<bool>(char* aLabel, int aRow)
+   {
+      printf("%-20s %8s\n", aLabel, my_string_from_bool(e(aRow)));
    }
 
    //***************************************************************************
@@ -171,6 +185,13 @@ public:
    {      
       e(mRows++) = aCmd->argDouble(0);
    }
+
+   // Specialize.
+   template <>
+   void readRow<bool>(Ris::CmdLineCmd* aCmd)
+   {
+      e(mRows++) = aCmd->argBool(0);
+   }
 };
 
 //******************************************************************************
@@ -192,6 +213,7 @@ public:
 
    // Last row number that was read from the file.
    int  mRows;
+   int  mCols;
 
    //***************************************************************************
    //***************************************************************************
@@ -238,6 +260,13 @@ public:
       aX = 0;
    }
 
+   // Specialize.
+   template <>
+   void resetElement<bool>(ElementType& aX)
+   {
+      aX = false;
+   }
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -259,7 +288,7 @@ public:
       for (int i = 0; i < mRows; i++)
       {
          printf("%-24s ", aLabel);
-         for (int j = 0; j < MaxCols; j++)
+         for (int j = 0; j < mCols; j++)
          {
             // Specialize.
             showElement<ElementType>(i, j);
@@ -286,6 +315,13 @@ public:
    void showElement<double>(int aRow, int aCol)
    {
       printf("%10.4f ", e(aRow, aCol));
+   }
+
+   // Specialize.
+   template <>
+   void showElement<bool>(int aRow, int aCol)
+   {
+      printf("%8s ", my_string_from_bool(e(aRow, aCol)));
    }
 
    //***************************************************************************
@@ -323,7 +359,8 @@ public:
    template <>
    void readRow<int>(Ris::CmdLineCmd* aCmd)
    {
-      for (int j = 0; j < aCmd->numArg() + 1; j++)
+      mCols = aCmd->numArg() + 1;
+      for (int j = 0; j < mCols; j++)
       {
          e(mRows, j) = aCmd->argInt(j);
       }
@@ -334,9 +371,22 @@ public:
    template <>
    void readRow<double>(Ris::CmdLineCmd* aCmd)
    {
-      for (int j = 0; j < aCmd->numArg() + 1; j++)
+      mCols = aCmd->numArg() + 1;
+      for (int j = 0; j < mCols; j++)
       {
          e(mRows, j) = aCmd->argDouble(j);
+      }
+      mRows++;
+   }
+
+   // Specialize.
+   template <>
+   void readRow<bool>(Ris::CmdLineCmd* aCmd)
+   {
+      mCols = aCmd->numArg() + 1;
+      for (int j = 0; j < mCols; j++)
+      {
+         e(mRows, j) = aCmd->argBool(j);
       }
       mRows++;
    }

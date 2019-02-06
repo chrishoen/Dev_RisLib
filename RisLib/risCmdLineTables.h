@@ -359,7 +359,7 @@ public:
    template <>
    void readRow<int>(Ris::CmdLineCmd* aCmd)
    {
-      mCols = aCmd->numArg() + 1;
+      mCols = my_imin(aCmd->numArg() + 1,MaxCols);
       for (int j = 0; j < mCols; j++)
       {
          e(mRows, j) = aCmd->argInt(j);
@@ -371,7 +371,7 @@ public:
    template <>
    void readRow<double>(Ris::CmdLineCmd* aCmd)
    {
-      mCols = aCmd->numArg() + 1;
+      mCols = my_imin(aCmd->numArg() + 1, MaxCols);
       for (int j = 0; j < mCols; j++)
       {
          e(mRows, j) = aCmd->argDouble(j);
@@ -383,7 +383,7 @@ public:
    template <>
    void readRow<bool>(Ris::CmdLineCmd* aCmd)
    {
-      mCols = aCmd->numArg() + 1;
+      mCols = my_imin(aCmd->numArg() + 1, MaxCols);
       for (int j = 0; j < mCols; j++)
       {
          e(mRows, j) = aCmd->argBool(j);

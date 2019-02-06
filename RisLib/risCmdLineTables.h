@@ -321,7 +321,7 @@ public:
    template <>
    void showElement<bool>(int aRow, int aCol)
    {
-      printf("%8s ", my_string_from_bool(e(aRow, aCol)));
+      printf("%1d ", e(aRow, aCol));
    }
 
    //***************************************************************************

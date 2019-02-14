@@ -22,6 +22,9 @@ namespace Ris
 // Convert a string to all upper case.
 static void r_myStrupr(char* aString);
 
+// Trim comments from string.
+static void r_myTrimComments(char* aString);
+
 // Similar to strtok
 static char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr);
 
@@ -64,18 +67,24 @@ CmdLineCmd::CmdLineCmd(const char* aCommandLine)
 
 void CmdLineCmd::parseCmdLine(const char* aCommandLine)
 {
-   //---------------------------------------------------------------------------
-   // Locals
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Locals.
 
    int   i;
    char* tToken;
    int   tArgIndex=1;
    int   tTokenIndex=0;
 
-   //---------------------------------------------------------------------------
-   // Initialize members
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize members.
 
    my_strncpy(mCommandLine,aCommandLine,1000);
+   r_myTrimComments(mCommandLine);
+
    mGoodCmd=false;
 
    for (i=0;i<=MaxNumOfArgs;i++)
@@ -87,13 +96,17 @@ void CmdLineCmd::parseCmdLine(const char* aCommandLine)
    mValidFlag   = 0;
    mArgWhole[0] = 0;
 
-   //---------------------------------------------------------------------------
-   // Guard
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Guard.
 
    if(strlen(mCommandLine)==0) return;
 
-   //---------------------------------------------------------------------------
-   // Parse command line into command and argument members
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Parse command line into command and argument members.
 
    tToken = r_myStrtok(mCommandLine,mDelimiters,&tTokenIndex);
 
@@ -526,12 +539,37 @@ void r_myStrupr(char* aString)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Trim comments from string.
+
+void r_myTrimComments(char* aString)
+{
+   unsigned char* tPtr = (unsigned char*)aString;
+   int tIndex = 0;
+   while (tPtr[tIndex] != 0)
+   {
+      if (tIndex >= 1)
+      {
+         if (tPtr[tIndex] == '/' && tPtr[tIndex - 1] == '/')
+         {
+            tPtr[tIndex - 1] = 0;
+            break;
+         }
+      }
+      tIndex++;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // String token analog.
 
 char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
 {
-   //---------------------------------------------------------------------------
-   // Locals
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Locals.
 
    char* tToken=0;
 
@@ -539,16 +577,18 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
    int tNumOfDelimiters = (int)strlen(aDelimiters);
    bool tGoing=true;
 
-   //---------------------------------------------------------------------------
-   // Search for first occurrance of a non delimiter
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Search for first occurrance of a non delimiter.
 
    tGoing=true;
    while(tGoing)
    {
-      // If not end of string
+      // If not end of string.
       if (aString[tIndex]!=0)
       {
-         // Compare current char with all delimiters
+         // Compare current char with all delimiters.
          bool tDelimiter = false;
          for(int i=0;i<tNumOfDelimiters;i++)
          {
@@ -557,30 +597,32 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
                tDelimiter=true;
             }
          }
-         // If current char is not a delimiter 
+         // If current char is not a delimiter. 
          if (tDelimiter==false)
          {
-            // Store token pointer and exit loop
+            // Store token pointer and exit loop.
             tToken = &aString[tIndex];
             tGoing=false;
          }
-         // If current char is a delimiter 
+         // If current char is a delimiter. 
          else
          {
-            // Advance to next char
+            // Advance to next char.
             tIndex++;
          }
       }
-      // Else end of string
+      // Else end of string.
       else
       {
-         // Exit loop
+         // Exit loop.
          tGoing=false;
       }
 	}
 
-   //---------------------------------------------------------------------------
-   // If no token then update state and return 0
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // If no token then update state and return 0.
 
    if(tToken==0)
    {
@@ -588,34 +630,34 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
       return 0;
    }
 
-   //---------------------------------------------------------------------------
-   // If the first char in the token is not a quote
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // If the first char in the token is not a quote.
 
    if(tToken[0]!='\"')
    {
-      //------------------------------------------------------------------------
-      // Search for next occurrance of a delimiter
-
+      // Search for next occurrance of a delimiter.
       tGoing=true;
       while(tGoing)
       {
-         // If not end of string
+         // If not end of string.
          if (aString[tIndex]!=0)
          {
-            // Compare current char with all delimiters
+            // Compare current char with all delimiters.
             for(int i=0;i<tNumOfDelimiters;i++)
             {
                // If current char is a delimiter 
                if (aString[tIndex]==aDelimiters[i]) 
                {
-                  // Replace current char with end of string
-                  // This terminates the token
+                  // Replace current char with end of string.
+                  // This terminates the token.
                   aString[tIndex]=0;
                   // Exit the loop
                   tGoing=false;
                }
             }
-            // Advance to the next char
+            // Advance to the next char.
             tIndex++;
          }
          // Else end of string
@@ -626,15 +668,18 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
          }
 	   }
    }
-   //---------------------------------------------------------------------------
-   // Else the first char is a quote
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Else the first char is a quote.
+
    else
    {
-      // Bypass the quote
+      // Bypass the quote.
       tIndex++;
       tToken++;
-      //------------------------------------------------------------------------
-      // Search for next occurrance of quote
+
+      // Search for next occurrance of quote.
       tGoing=true;
       while(tGoing)
       {
@@ -654,8 +699,10 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
 	   }
    }
 
-   //------------------------------------------------------------------------
-   // Update state and return token
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Update state and return token.
 
    *aIndexPtr=tIndex;
    return tToken;

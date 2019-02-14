@@ -36,6 +36,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0, "numArgs     %d", aCmd->numArg());
 }
 
 //******************************************************************************

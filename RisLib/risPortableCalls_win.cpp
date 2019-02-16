@@ -128,8 +128,8 @@ bool portableFilePathExists (const char* aFilePath)
 
 void portableChdir(const char* aFilePath)
 {
-   int tRet = _chdir(aFilePath);
-   if (tRet) printf("portableChdir FAIL %s", aFilePath);
+   BOOL tRet = SetCurrentDirectory(aFilePath);
+   if (!tRet) printf("portableChdir FAIL %s", aFilePath);
 }
 
 //******************************************************************************

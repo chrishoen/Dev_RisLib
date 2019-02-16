@@ -45,9 +45,6 @@ void  executeCmdLineConsoleThread (BaseCmdLineExec* aExec);
 // Abort, same as entering "Exit"
 void  abortCmdLineConsole ();
 
-// Set the console title.
-void  setConsoleTitle(char* aTitle);
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

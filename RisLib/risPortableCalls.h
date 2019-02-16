@@ -34,11 +34,8 @@ long long int portableGetHiResFrequency();
 // convert string to upper case.
 void portableStrupr(char* aString);
 
-// Set console title.
-void portableSetConsoleTitle(char* aTitle);
-
 // Return true if file exists.
-bool portableFilePathExists (char* aFilePath);
+bool portableFilePathExists (const char* aFilePath);
   
 // Set the program current working directory.
 void portableChdir(const char* aFilePath);

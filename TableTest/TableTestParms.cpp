@@ -38,6 +38,7 @@ void TableTestParms::reset()
    mBoolTable2d.reset();
 
    mStringTable1d.reset();
+   mTestTable.reset();
 
    mCode1=0;
    mCode2=0;
@@ -77,6 +78,11 @@ void TableTestParms::show()
    printf("\n");
    printf("Code1                %10d\n",  mCode1);
    printf("Code2                %10d\n",  mCode2);
+
+   printf("\n");
+   printf("TestTableSize            %10d %4d\n", mTestTable.mRows, mTestTable.mCols);
+   mTestTable.show("TestTable");
+
 }
 
 //******************************************************************************
@@ -102,6 +108,8 @@ void TableTestParms::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("Code1"))     mCode1 = aCmd->argInt(1);
    if (aCmd->isCmd("Code2"))     mCode2 = aCmd->argInt(1);
+
+   if (aCmd->isCmd("TestTable"))     nestedPush(aCmd, &mTestTable);
 }
 
 //******************************************************************************

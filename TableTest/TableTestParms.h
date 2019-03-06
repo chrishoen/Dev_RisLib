@@ -59,13 +59,16 @@ public:
    // One diminsional table.
    Ris::CmdLineTable1D<int, 10>        mIntTable1d;
    Ris::CmdLineTable1D<double, 10>     mDoubleTable1d;
-   Ris::CmdLineTable2D<int, 10, 2>     mIntTable2d;
+   Ris::CmdLineTable2D<int, 10, 4>     mIntTable2d;
    Ris::CmdLineTable2D<double, 10, 2>  mDoubleTable2d;
 
    Ris::CmdLineTable1D<bool, 4>        mBoolTable1d;
    Ris::CmdLineTable2D<bool, 4, 4>     mBoolTable2d;
 
    Ris::CmdLineTable1D<Ris::TableString, 4>  mStringTable1d;
+
+   // Test table.
+   Ris::CmdLineTable2D<int, 10, 4>     mTestTable;
 
    // File codes.
    int mCode1;

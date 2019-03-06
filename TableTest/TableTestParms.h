@@ -65,6 +65,8 @@ public:
    Ris::CmdLineTable1D<bool, 4>        mBoolTable1d;
    Ris::CmdLineTable2D<bool, 4, 4>     mBoolTable2d;
 
+   Ris::CmdLineTable1D<Ris::TableString, 4>  mStringTable1d;
+
    // File codes.
    int mCode1;
    int mCode2;
@@ -77,7 +79,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Infrastucture.
+   // Methods.
 
    // Constructor,
    typedef Ris::BaseCmdLineParms BaseClass;
@@ -93,7 +95,6 @@ public:
    // Calculate expanded member variables. This is called after the entire
    // section of the command file has been processed.
    void expand() override;
-
 };
 
 //******************************************************************************

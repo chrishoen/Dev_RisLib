@@ -155,7 +155,7 @@ bool BaseCmdLineParms::readSection(char* aSection)
    {
       // Exit the program if the open failed.
       printf("BaseCmdLineParms::file open FAIL001 %s\n", mFilePath);
-      exit(1);
+      Ris::portableHalt();
       return false;
    }
 
@@ -260,7 +260,7 @@ bool BaseCmdLineParms::readSection(char* aSection, Ris::BaseCmdLineExec* aExec)
    {
       // Exit the program if the open failed.
       printf("BaseCmdLineParms::file open FAIL201 %s\n", mFilePath);
-      exit(1);
+      Ris::portableHalt();
       return false;
    }
 

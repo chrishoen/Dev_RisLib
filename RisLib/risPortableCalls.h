@@ -19,6 +19,9 @@ namespace Ris
 // Sleep. Ticks are in milliseconds.
 void portableSleep(int aTicks);
 
+// Sleep. Ticks are in milliseconds.
+void portableHalt(const char* aString = 0);
+
 // Return a pointer to the current working directory.
 char* portableGetProgramDir();
 char* portableGetCurrentDir();

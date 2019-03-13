@@ -63,6 +63,11 @@ public:
       reset();
    }
 
+   ElementType& e(int aRow)
+   {
+      return this->operator[](aRow);
+   }
+
    // Reset variables.
    void reset()
    {

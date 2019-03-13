@@ -9,6 +9,7 @@ One or two dimensional table classes of int,double,string.
 #include "stdlib.h"
 #include "stdio.h"
 #include <array>
+#include <type_traits>
 
 #include "my_functions.h"
 #include "risCmdLineExec.h"
@@ -75,29 +76,28 @@ public:
       for (int i = 0; i < MaxRows; i++)
       {
          // Specialize.
-         resetElement<ElementType>(e(i));
+         resetElement(e(i));
       }
    }
 
    // Specialize.
-   template <typename T>
-   void resetElement(ElementType& aX)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void resetElement<int>(ElementType& aX)
+   template<typename U = ElementType>
+   void resetElement(ElementType& aX,
+      typename std::enable_if<std::is_same<U, int>::value>::type* = 0)
    {
       aX = 0;
    }
 
    // Specialize.
-   template <>
-   void resetElement<double>(ElementType& aX)
+   template<typename U = ElementType>
+   void resetElement(ElementType& aX,
+      typename std::enable_if<std::is_same<U, double>::value>::type* = 0)
    {
       aX = 0;
    }
+
+
+
 
 };
 

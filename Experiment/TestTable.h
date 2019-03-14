@@ -60,8 +60,7 @@ public:
    }
 
    // foo3 overload is enabled via a template parameter
-   template<class T,
-      typename std::enable_if<std::is_same<T,int>::value>::type* = nullptr >
+   template<class T, typename std::enable_if<std::is_same<T,int>::value>::type* = nullptr >
    void foo3(T t) // note, function signature is unmodified
    {
       printf("foo2 int\n");

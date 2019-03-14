@@ -30,6 +30,7 @@ public:
 
    // Last row number that was read from the file.
    int  mRows;
+   ElementType mData;
 
    //***************************************************************************
    //***************************************************************************
@@ -47,23 +48,43 @@ public:
    {
       foo2(101);
       foo3(101);
+      foo4();
+      foo5(101);
 
    }
 
 
 
-   // foo2 overload is enabled via a parameter
    template<class T>
    void foo2(T t, typename std::enable_if<std::is_same<T,int>::value >::type* = 0)
    {
       printf("foo2 int\n");
    }
 
-   // foo3 overload is enabled via a template parameter
    template<class T, typename std::enable_if<std::is_same<T,int>::value>::type* = nullptr >
    void foo3(T t) // note, function signature is unmodified
    {
-      printf("foo2 int\n");
+      printf("foo3 int\n");
+   }
+
+   template<class T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
+   void foo4() // note, function signature is unmodified
+   {
+      printf("foo4 int\n");
+   }
+
+   template<class T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
+   void foo5(int aX) // note, function signature is unmodified
+   {
+      printf("foo5 int\n");
+      mData = aX;
+   }
+
+   template<class T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void foo5(double aX) // note, function signature is unmodified
+   {
+      printf("foo5 double\n");
+      mData = aX;
    }
 };
 

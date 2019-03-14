@@ -3,14 +3,27 @@
 #include "CmdLineExec.h"
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 CmdLineExec::CmdLineExec()
 {
 }
-//******************************************************************************
+
 void CmdLineExec::reset()
 {
 }
+
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This class is the program command line executive. It processes user
+// command line inputs and executes them. It inherits from the command line
+// command executive base class, which provides an interface for executing
+// command line commands. It provides an override execute function that is
+// called by a console executive when it receives a console command line input.
+// The execute function then executes the command.
+
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
@@ -22,11 +35,20 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0, "IsNumber %s", my_string_from_bool(aCmd->isArgNumber(1)));
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
@@ -34,11 +56,24 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   char tString[200];
+
+   while (true)
+   {
+      fgets(tString, 200, stdin);
+      printf("CMD %d %s", (int)strlen(tString), tString);
+      if (strcmp(tString, "e\n") == 0) break;
+   }
+
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
@@ -49,80 +84,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-class TestRecord
-{
-public:
-
-   int mCode1;
-   int mCode2;
-   int mCode3;
-   int mCode4;
-
-   TestRecord()
-   {
-      mCode1=0;
-      mCode2=0;
-      mCode3=0;
-      mCode4=0;
-   }
-};
-
-//******************************************************************************
-
-class BaseItem
-{
-public:
-
-   int mRecordType;
-   void* mRecord;
-
-   BaseItem()
-   {
-      mRecordType = 0;
-      mRecord = 0;
-   }
-};
-
-//******************************************************************************
-
-class TestItem : public BaseItem
-{
-public:
-
-   TestItem()
-   {
-      mRecordType = 1001;
-      mRecord = 0;
-   }
-
-   TestItem(TestRecord* aRecord)
-   {
-      mRecordType = 1001;
-      mRecord = (void*)aRecord;
-   }
-
-   void set(TestRecord* aRecord)
-   {
-      mRecord = (void*)aRecord;
-   }
-
-};
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   TestRecord* tTestRecord1 = new TestRecord;
-   BaseItem*   tItem = new TestItem(tTestRecord1);
-
-   int tN1 = tItem->mRecordType;
-
-   TestItem tTestItem(tTestRecord1);
-   BaseItem tBaseItem = tTestItem;
-
-
 }
 

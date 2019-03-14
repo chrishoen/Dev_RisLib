@@ -217,7 +217,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 // Two dimensional table.
-#if 0
+
 template<typename ElementType, size_t MaxRows, size_t MaxCols>
 class CmdLineTable2D : public std::array<ElementType[MaxCols], MaxRows>, public Ris::BaseCmdLineExec
 {
@@ -251,34 +251,28 @@ public:
          for (int j = 0; j < MaxCols; j++)
          {
             // Specialize.
-            resetElement<ElementType>(e(i,j));
+            resetElement(e(i,j));
          }
       }
    }
 
    // Specialize.
-   template <typename T>
-   void resetElement(ElementType& aX)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void resetElement<int>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
+   void resetElement(int& aX)
    {
       aX = 0;
    }
 
    // Specialize.
-   template <>
-   void resetElement<double>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void resetElement(double& aX)
    {
       aX = 0;
    }
 
    // Specialize.
-   template <>
-   void resetElement<bool>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void resetElement(bool& aX)
    {
       aX = false;
    }
@@ -307,35 +301,29 @@ public:
          for (int j = 0; j < mCols; j++)
          {
             // Specialize.
-            showElement<ElementType>(i, j);
+            showElement(i, j);
          }
          printf("\n");
       }
    }
 
    // Specialize.
-   template <typename T>
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
    void showElement(int aRow, int aCol)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void showElement<int>(int aRow, int aCol)
    {
       printf("%10d ",e(aRow,aCol));
    }
 
    // Specialize.
-   template <>
-   void showElement<double>(int aRow, int aCol)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void showElement(int aRow, int aCol)
    {
       printf("%10.4f ", e(aRow, aCol));
    }
 
    // Specialize.
-   template <>
-   void showElement<bool>(int aRow, int aCol)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void showElement(int aRow, int aCol)
    {
       printf("%1d ", e(aRow, aCol));
    }
@@ -361,19 +349,13 @@ public:
       else if (mRows < MaxRows)
       {
          // Specialize.
-         readRow<ElementType>(aCmd);
+         readRow(aCmd);
       }
    }
 
    // Specialize.
-   template <typename T>
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
    void readRow(Ris::CmdLineCmd* aCmd)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void readRow<int>(Ris::CmdLineCmd* aCmd)
    {
       mCols = my_imin(aCmd->numArg() + 1,MaxCols);
       for (int j = 0; j < mCols; j++)
@@ -384,8 +366,8 @@ public:
    }
 
    // Specialize.
-   template <>
-   void readRow<double>(Ris::CmdLineCmd* aCmd)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void readRow(Ris::CmdLineCmd* aCmd)
    {
       mCols = my_imin(aCmd->numArg() + 1, MaxCols);
       for (int j = 0; j < mCols; j++)
@@ -396,8 +378,8 @@ public:
    }
 
    // Specialize.
-   template <>
-   void readRow<bool>(Ris::CmdLineCmd* aCmd)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void readRow(Ris::CmdLineCmd* aCmd)
    {
       mCols = my_imin(aCmd->numArg() + 1, MaxCols);
       for (int j = 0; j < mCols; j++)
@@ -407,7 +389,7 @@ public:
       mRows++;
    }
 };
-#endif
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

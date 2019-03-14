@@ -33,7 +33,8 @@ public:
 
    TestTable<int, 10> mTestTable;
 
-   Ris::CmdLineTable1D<int, 10> mIntTable;
+   Ris::CmdLineTable1D<int, 10> mIntTable1d;
+   Ris::CmdLineTable2D<int, 10, 10> mIntTable2d;
 
    //***************************************************************************
    //***************************************************************************

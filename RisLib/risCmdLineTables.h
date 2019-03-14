@@ -8,6 +8,7 @@ One or two dimensional table classes of int,double,string.
 
 #include "stdlib.h"
 #include "stdio.h"
+#include <type_traits>
 #include <array>
 
 #include "my_functions.h"
@@ -70,40 +71,34 @@ public:
       for (int i = 0; i < MaxRows; i++)
       {
          // Specialize.
-         resetElement<ElementType>(e(i));
+         resetElement(e(i));
       }
    }
 
    // Specialize.
-   template <typename T>
-   void resetElement(ElementType& aX)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void resetElement<int>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
+   void resetElement(int& aX)
    {
       aX = 0;
    }
 
    // Specialize.
-   template <>
-   void resetElement<double>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void resetElement(double& aX)
    {
       aX = 0;
    }
 
    // Specialize.
-   template <>
-   void resetElement<bool>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void resetElement(bool& aX)
    {
       aX = false;
    }
 
    // Specialize.
-   template <>
-   void resetElement<TableString>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, TableString>::value>::type* = nullptr >
+   void resetElement(TableString& aX)
    {
       aX[0]=0;
    }
@@ -129,40 +124,34 @@ public:
       for (int i = 0; i < mRows; i++)
       {
          // Specialize.
-         showRow<ElementType>(aLabel, i);
+         showRow(aLabel, i);
       }
    }
 
    // Specialize.
-   template <typename T>
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
    void showRow(char* aLabel, int aRow)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void showRow<int>(char* aLabel, int aRow)
    {
       printf("%-20s %10d\n", aLabel, e(aRow));
    }
 
    // Specialize.
-   template <>
-   void showRow<double>(char* aLabel, int aRow)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void showRow(char* aLabel, int aRow)
    {
       printf("%-20s %10.4f\n", aLabel, e(aRow));
    }
 
    // Specialize.
-   template <>
-   void showRow<bool>(char* aLabel, int aRow)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void showRow(char* aLabel, int aRow)
    {
       printf("%-20s %8s\n", aLabel, my_string_from_bool(e(aRow)));
    }
 
    // Specialize.
-   template <>
-   void showRow<TableString>(char* aLabel, int aRow)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, TableString>::value>::type* = nullptr >
+   void showRow(char* aLabel, int aRow)
    {
       printf("%-20s %s\n", aLabel, e(aRow));
    }
@@ -188,40 +177,34 @@ public:
       else if (mRows < MaxRows)
       {
          // Specialize.
-         readRow<ElementType>(aCmd);
+         readRow(aCmd);
       }
    }
    
    // Specialize.
-   template <typename T>
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
    void readRow(Ris::CmdLineCmd* aCmd)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void readRow<int>(Ris::CmdLineCmd* aCmd)
    {
       e(mRows++) = aCmd->argInt(0);
    }
 
    // Specialize.
-   template <>
-   void readRow<double>(Ris::CmdLineCmd* aCmd)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void readRow(Ris::CmdLineCmd* aCmd)
    {      
       e(mRows++) = aCmd->argDouble(0);
    }
 
    // Specialize.
-   template <>
-   void readRow<bool>(Ris::CmdLineCmd* aCmd)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void readRow(Ris::CmdLineCmd* aCmd)
    {
       e(mRows++) = aCmd->argBool(0);
    }
 
    // Specialize.
-   template <>
-   void readRow<TableString>(Ris::CmdLineCmd* aCmd)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, TableString>::value>::type* = nullptr >
+   void readRow(Ris::CmdLineCmd* aCmd)
    {
       aCmd->copyArgString(0, e(mRows++), cTableStringSize);
    }
@@ -268,34 +251,28 @@ public:
          for (int j = 0; j < MaxCols; j++)
          {
             // Specialize.
-            resetElement<ElementType>(e(i,j));
+            resetElement(e(i,j));
          }
       }
    }
 
    // Specialize.
-   template <typename T>
-   void resetElement(ElementType& aX)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void resetElement<int>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
+   void resetElement(int& aX)
    {
       aX = 0;
    }
 
    // Specialize.
-   template <>
-   void resetElement<double>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void resetElement(double& aX)
    {
       aX = 0;
    }
 
    // Specialize.
-   template <>
-   void resetElement<bool>(ElementType& aX)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void resetElement(bool& aX)
    {
       aX = false;
    }
@@ -324,35 +301,29 @@ public:
          for (int j = 0; j < mCols; j++)
          {
             // Specialize.
-            showElement<ElementType>(i, j);
+            showElement(i, j);
          }
          printf("\n");
       }
    }
 
    // Specialize.
-   template <typename T>
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
    void showElement(int aRow, int aCol)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void showElement<int>(int aRow, int aCol)
    {
       printf("%10d ",e(aRow,aCol));
    }
 
    // Specialize.
-   template <>
-   void showElement<double>(int aRow, int aCol)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void showElement(int aRow, int aCol)
    {
       printf("%10.4f ", e(aRow, aCol));
    }
 
    // Specialize.
-   template <>
-   void showElement<bool>(int aRow, int aCol)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void showElement(int aRow, int aCol)
    {
       printf("%1d ", e(aRow, aCol));
    }
@@ -378,19 +349,13 @@ public:
       else if (mRows < MaxRows)
       {
          // Specialize.
-         readRow<ElementType>(aCmd);
+         readRow(aCmd);
       }
    }
 
    // Specialize.
-   template <typename T>
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
    void readRow(Ris::CmdLineCmd* aCmd)
-   {
-   }
-
-   // Specialize.
-   template <>
-   void readRow<int>(Ris::CmdLineCmd* aCmd)
    {
       mCols = my_imin(aCmd->numArg() + 1,MaxCols);
       for (int j = 0; j < mCols; j++)
@@ -401,8 +366,8 @@ public:
    }
 
    // Specialize.
-   template <>
-   void readRow<double>(Ris::CmdLineCmd* aCmd)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   void readRow(Ris::CmdLineCmd* aCmd)
    {
       mCols = my_imin(aCmd->numArg() + 1, MaxCols);
       for (int j = 0; j < mCols; j++)
@@ -413,8 +378,8 @@ public:
    }
 
    // Specialize.
-   template <>
-   void readRow<bool>(Ris::CmdLineCmd* aCmd)
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr >
+   void readRow(Ris::CmdLineCmd* aCmd)
    {
       mCols = my_imin(aCmd->numArg() + 1, MaxCols);
       for (int j = 0; j < mCols; j++)

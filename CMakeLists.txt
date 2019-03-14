@@ -6,6 +6,7 @@ project ("Dev_RisLib")
 
 add_subdirectory ("RisLib")
 add_subdirectory ("Experiment")
+add_subdirectory ("TableTest")
 return()
 
 add_subdirectory ("ByteContent")

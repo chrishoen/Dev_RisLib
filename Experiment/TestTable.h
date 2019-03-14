@@ -45,6 +45,26 @@ public:
    // Reset variables.
    void reset()
    {
+      foo2(101);
+      foo3(101);
+
+   }
+
+
+
+   // foo2 overload is enabled via a parameter
+   template<class T>
+   void foo2(T t, typename std::enable_if<std::is_same<T,int>::value >::type* = 0)
+   {
+      printf("foo2 int\n");
+   }
+
+   // foo3 overload is enabled via a template parameter
+   template<class T,
+      typename std::enable_if<std::is_same<T,int>::value>::type* = nullptr >
+   void foo3(T t) // note, function signature is unmodified
+   {
+      printf("foo2 int\n");
    }
 };
 

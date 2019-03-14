@@ -2,7 +2,7 @@
 
 #include "risCmdLineExec.h"
 
-#include "risCmdLineTables22.h"
+#include "TestTable.h"
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -11,7 +11,7 @@ class CmdLineExec : public Ris::BaseCmdLineExec
 {
 public:
 
-   Ris::CmdLineTable1D<int, 10> mIntTable;
+   TestTable<int, 10> mIntTable;
 
    CmdLineExec();
 

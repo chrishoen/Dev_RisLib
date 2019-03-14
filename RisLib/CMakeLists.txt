@@ -9,7 +9,14 @@ my_add_compile_options (RisLib)
 my_add_pch (RisLib)
 
 target_include_directories(RisLib PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(RisLib ws2_32 winmm)
+
+if (MSVC)
+   target_link_libraries(RisLib ws2_32 winmm)
+else()
+   set(THREADS_PREFER_PTHREAD_FLAG ON)
+   find_package(Threads REQUIRED)
+   target_link_libraries(RisLib Threads::Threads)
+endif()
 
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:\\MyTools\\MyLib\\include\\RisLib")

@@ -36,6 +36,5 @@ void amain_init()
    // Initialize print facility
    Prn::initializePrint();
 
-   Ris::setConsoleTitle("test");
 }
 

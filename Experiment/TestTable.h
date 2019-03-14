@@ -55,32 +55,32 @@ public:
 
 
 
-   template<class T>
+   template<typename T>
    void foo2(T t, typename std::enable_if<std::is_same<T,int>::value >::type* = 0)
    {
       printf("foo2 int\n");
    }
 
-   template<class T, typename std::enable_if<std::is_same<T,int>::value>::type* = nullptr >
+   template<typename T, typename std::enable_if<std::is_same<T,int>::value>::type* = nullptr >
    void foo3(T t) // note, function signature is unmodified
    {
       printf("foo3 int\n");
    }
 
-   template<class T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
    void foo4() // note, function signature is unmodified
    {
       printf("foo4 int\n");
    }
 
-   template<class T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr >
    void foo5(int aX) // note, function signature is unmodified
    {
       printf("foo5 int\n");
       mData = aX;
    }
 
-   template<class T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
+   template<typename T = ElementType, typename std::enable_if<std::is_same<T, double>::value>::type* = nullptr >
    void foo5(double aX) // note, function signature is unmodified
    {
       printf("foo5 double\n");

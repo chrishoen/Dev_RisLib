@@ -117,6 +117,11 @@ public:
    // blocking send call in the context of the calling thread. Delete the
    // string when done.
    void sendString(std::string* aString);
+
+   // Send a transmit string through the socket to the peer. It executes a
+   // blocking send call in the context of the calling thread. Delete the
+   // string when done.
+   void sendString(const char* aString);
 };
 
 //******************************************************************************

@@ -1,9 +1,8 @@
 
 #include "stdafx.h"
 
+#include <string>
 #include "procoUdpSettings.h"
-#include "procoMsg.h"
-#include "procoMsgHelper.h"
 
 #include "procoNetworkThread.h"
 
@@ -43,26 +42,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   int tMsgType= aCmd->argInt(1);
+   aCmd->setArgDefault(1,"some_string");
+   std::string* tString = new std::string(aCmd->argString(1));
 
-   switch (tMsgType)
-   {
-      case 1:
-      {
-         ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-         MsgHelper::initialize(tMsg);
-         gNetworkThread->sendMsg(tMsg);
-         break;
-      }
-      case 5:
-      {
-         ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-         MsgHelper::initialize(tMsg);
-         gNetworkThread->sendMsg(tMsg);
-         break;
-      }
-   }
+   gNetworkThread->sendString(tString);
 }
 
 //******************************************************************************
@@ -71,12 +54,6 @@ void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   int tNumWords = aCmd->argInt(1);
-   
-   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-   MsgHelper::initialize(tMsg,tNumWords);
-   gNetworkThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -85,10 +62,6 @@ void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-   MsgHelper::initialize(tMsg);
-
-   gNetworkThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -97,7 +70,6 @@ void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
-   gNetworkThread->sendTestMsg();
 }
 
 //******************************************************************************
@@ -106,9 +78,6 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-
-   gNetworkThread->sendMsg(tMsg);
 }
 
 //******************************************************************************

@@ -8,7 +8,6 @@
 
 #include "risSockets.h"
 #include "procoUdpSettings.h"
-#include "procoMsgHelper.h"
 
 #define  _PROCONETWORKTHREAD_CPP_
 #include "procoNetworkThread.h"
@@ -35,11 +34,10 @@ NetworkThread::NetworkThread()
    BaseClass::mTimerPeriod = gUdpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.
-   mRxMsgQCall.bind(this, &NetworkThread::executeRxMsg);
+   mRxStringQCall.bind(this, &NetworkThread::executeRxString);
 
    // Initialize variables.
-   mUdpMsgThread = 0;
-   mMonkeyCreator.configure(gUdpSettings.mMyAppNumber);
+   mUdpStringThread = 0;
    mTPFlag = false;
    mStatusCount1=0;
    mStatusCount2=0;
@@ -47,7 +45,7 @@ NetworkThread::NetworkThread()
 
 NetworkThread::~NetworkThread()
 {
-   delete mUdpMsgThread;
+   delete mUdpStringThread;
 }
 
 //******************************************************************************
@@ -63,15 +61,14 @@ void NetworkThread::threadInitFunction()
 
    tSettings.setLocalIp  (gUdpSettings.mMyUdpIPAddress,    gUdpSettings.mMyUdpPort);
    tSettings.setRemoteIp (gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
-   tSettings.mMonkeyCreator = &mMonkeyCreator;
-   tSettings.mRxMsgQCall = mRxMsgQCall;
+   tSettings.mRxStringQCall = mRxStringQCall;
    tSettings.mPrintLevel = gUdpSettings.mPrintLevel;
 
    // Create the child thread with the settings.
-   mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);
+   mUdpStringThread = new Ris::Net::UdpStringThread(tSettings);
 
    // Launch the child thread.
-   mUdpMsgThread->launchThread();
+   mUdpStringThread->launchThread();
 }
 
 //******************************************************************************
@@ -82,7 +79,7 @@ void NetworkThread::threadInitFunction()
 void NetworkThread::threadExitFunction()
 {
    // Shutdown the child thread.
-   mUdpMsgThread->shutdownThread();
+   mUdpStringThread->shutdownThread();
 }
 
 //******************************************************************************
@@ -93,131 +90,45 @@ void NetworkThread::threadExitFunction()
 void NetworkThread::showThreadInfo()
 {
    BaseClass::showThreadInfo();
-   if (mUdpMsgThread) mUdpMsgThread->showThreadInfo();
+   if (mUdpStringThread) mUdpStringThread->showThreadInfo();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall registered to the mUdpMsgThread child thread. It is invoked when
-// a message is received. It process the received messages.
+// QCall registered to the mUdpStringThread child thread. It is invoked when
+// a string is received. It process the received strings.
 
-void NetworkThread::executeRxMsg(Ris::ByteContent* aMsg)
+void NetworkThread::executeRxString(std::string* aString)
 {
-   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
-
-   // Message jump table based on message type.
-   // Calls corresponding specfic message handler method.
-   switch (tMsg->mMessageType)
-   {
-      case ProtoComm::MsgIdT::cTestMsg :
-         processRxMsg((ProtoComm::TestMsg*)tMsg);
-         break;
-      case ProtoComm::MsgIdT::cEchoRequestMsg :
-         processRxMsg((ProtoComm::EchoRequestMsg*)tMsg);
-         break;
-      case ProtoComm::MsgIdT::cEchoResponseMsg :
-         processRxMsg((ProtoComm::EchoResponseMsg*)tMsg);
-         break;
-      case ProtoComm::MsgIdT::cDataMsg :
-         processRxMsg((ProtoComm::DataMsg*)tMsg);
-         break;
-      default :
-         Prn::print(Prn::ThreadRun1, "NetworkThread::executeServerRxMsg ??? %d",tMsg->mMessageType);
-         delete tMsg;
-         break;
-   }
+   Prn::print(0, "NetworkThread::executeRxString %s",aString->c_str());
+   delete aString;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - TestMsg.
+// Send a string via the child socket thread.
 
-void NetworkThread::processRxMsg(TestMsg* aMsg)
+void NetworkThread::sendString (std::string* aString)
 {
-   Prn::print(Prn::ThreadRun1, "processRxMsg_TestMsg");
-   delete aMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - EchoRequestMsg.
-
-void NetworkThread::processRxMsg(EchoRequestMsg* aMsg)
-{
-   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoRequestMsg %d %d", aMsg->mCode1, aMsg->mNumWords);
-
-   EchoResponseMsg* tTxMsg = new EchoResponseMsg;
-   tTxMsg->mCode1 = aMsg->mCode1;
-   tTxMsg->mNumWords = aMsg->mNumWords;
-   sendMsg(tTxMsg);
-
-   delete aMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - EchoResponseMsg.
-
-void NetworkThread::processRxMsg(EchoResponseMsg* aMsg)
-{
-   Prn::print(Prn::ThreadRun1, "processRxMsg_EchoResponseMsg %d %d", aMsg->mCode1, aMsg->mNumWords);
-   delete aMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - DataMsg.
-
-void NetworkThread::processRxMsg(DataMsg* aMsg)
-{
-   Prn::print(Prn::ThreadRun1, "processRxMsg_DataMsg");
-   MsgHelper::show(aMsg);
-   delete aMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send a message via the child socket thread.
-
-void NetworkThread::sendMsg (ProtoComm::BaseMsg* aMsg)
-{
-   mUdpMsgThread->sendMsg(aMsg);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send a message via the child socket thread.
-
-void NetworkThread::sendTestMsg()
-{
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
- 
-   mUdpMsgThread->sendMsg(tMsg);
+   mUdpStringThread->sendString(aString);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Execute periodically. This is called by the base class timer. It
-// sends an echo request message.
+// sends an echo request string.
 
 void NetworkThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
    Prn::print(Prn::ThreadRun3, "NetworkThread::executeOnTimer %d", aTimerCount);
 
-   // Send a status request message.
-   EchoRequestMsg* tMsg = new EchoRequestMsg;
-   tMsg->mCode1 = aTimerCount;
-   tMsg->mNumWords = gUdpSettings.mNumWords;
-   sendMsg(tMsg);
+   // Send a string.
+   std::string* tString = new std::string("timer_string");
+   sendString(tString);
 }
 
 //******************************************************************************

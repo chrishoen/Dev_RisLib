@@ -1,17 +1,16 @@
 #pragma once
 
 /*==============================================================================
-Prototype udp message thread.
+Prototype udp string thread.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risNetUdpMsgThread.h"
+#include <string>
+#include "risNetUdpStringThread.h"
 #include "risThreadsQCallThread.h"
-
-#include "procoMsg.h"
 
 namespace ProtoComm
 {
@@ -19,13 +18,13 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a udp message thread that transmits and receives byte content
-// messages via a udp message child thread which manages a udp message socket.
+// This is a udp string thread that transmits and receives byte content
+// strings via a udp string child thread which manages a udp string socket.
 //
-// It provides the capability to send messages via the child thread socket and
-// it provides handlers for messages received via the child thread socket.
-// When the child thread receives a message it invokes a qcall that was
-// registered by this thread to defer execution of a message handler that is 
+// It provides the capability to send strings via the child thread socket and
+// it provides handlers for strings received via the child thread socket.
+// When the child thread receives a string it invokes a qcall that was
+// registered by this thread to defer execution of a string handler that is 
 // a member of this thread.
 //   
 // It inherits from BaseQCallThread to obtain a call queue based thread
@@ -41,14 +40,11 @@ public:
    //***************************************************************************
    // Members.
 
-   // Udp message socket child thread. It provides the thread execution
-   // context for a udp message socket and uses it to provide message
-   // communication. It interfaces to this thread via the receive message
+   // Udp string socket child thread. It provides the thread execution
+   // context for a udp string socket and uses it to provide string
+   // communication. It interfaces to this thread via the receive string
    // qcall callback.
-   Ris::Net::UdpMsgThread* mUdpMsgThread;
-
-   // Message monkey creator used by mUdpMsgThread.
-   ProtoComm::MsgMonkeyCreator mMonkeyCreator;
+   Ris::Net::UdpStringThread* mUdpStringThread;
 
    //***************************************************************************
    //***************************************************************************
@@ -85,7 +81,7 @@ public:
    void threadExitFunction() override;
 
    // Execute periodically. This is called by the base class timer. It
-   // sends an echo request message.
+   // sends an echo request string.
    void executeOnTimer(int aTimerCount) override;
   
    // Show thread state info.
@@ -94,35 +90,22 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. Receive message qcall.
+   // Methods. Receive string qcall.
 
-   // qcall registered to the mUdpMsgThread child thread. It is invoked when
-   // a message is received. It process the received messages.
-   Ris::Net::UdpMsgThread::RxMsgQCall mRxMsgQCall;
+   // qcall registered to the mUdpStringThread child thread. It is invoked when
+   // a string is received. It process the received strings.
+   Ris::Net::UdpStringThread::RxStringQCall mRxStringQCall;
 
-   // Call one of the specific receive message handlers. This is bound to the
-   // qcall.
-   void executeRxMsg (Ris::ByteContent* aMsg);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Specific receive message handlers.
-   void processRxMsg (ProtoComm::TestMsg*  aMsg);
-   void processRxMsg (ProtoComm::EchoRequestMsg* aMsg);
-   void processRxMsg (ProtoComm::EchoResponseMsg* aMsg);
-   void processRxMsg (ProtoComm::DataMsg* aMsg);
+   // Print the string. This is bound to the qcall.
+   void executeRxString (std::string* aString);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Send a message via the child thread.
-   void sendMsg (ProtoComm::BaseMsg* aMsg);
-   void sendTestMsg();   
+   // Send a string via the child thread.
+   void sendString (std::string* aString);
 };
 
 //******************************************************************************

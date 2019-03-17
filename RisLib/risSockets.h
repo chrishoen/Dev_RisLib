@@ -146,9 +146,9 @@ public:
    virtual bool doSocket    ();
    virtual bool setMulticast();
    virtual bool doConnect   ();
-   virtual bool doSend      (char* aPayload,int& aLength);
+   virtual bool doSend      (const char* aPayload,int& aLength);
    virtual bool doRecv      (char* aPayload,int& aLength,int aMaxLength);
-   virtual bool doSendTo    (SocketAddress& aHost,char* aPayload,int& aLength);
+   virtual bool doSendTo    (SocketAddress& aHost,const char* aPayload,int& aLength);
    virtual bool doRecvFrom  (SocketAddress& aHost,char* aPayload,int& aLength,int aMaxLength);
 
    bool setOptionMulticast  (IpAddress& aGroup,IpAddress& aInterface);
@@ -164,7 +164,7 @@ public:
 
    bool doSocket  ();
    bool doConnect ();
-   bool doSend    (char* aPayload,int aLength);
+   bool doSend    (const char* aPayload,int aLength);
    bool doRecv    (char* aPayload,int aLength,int& aStatus);
 
    bool setOptionKeepAlive();

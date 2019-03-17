@@ -389,7 +389,7 @@ bool BaseUdpSocket::doConnect()
 
 //******************************************************************************
 
-bool BaseUdpSocket::doSend(char* aPayload,int& aLength)
+bool BaseUdpSocket::doSend(const char* aPayload,int& aLength)
 {
    int tStatus=0;
 
@@ -417,7 +417,7 @@ bool BaseUdpSocket::doRecv(char* aPayload,int& aLength,int aMaxLength)
 
 //******************************************************************************
 
-bool BaseUdpSocket::doSendTo(SocketAddress& aHost,char* aPayload,int& aLength)
+bool BaseUdpSocket::doSendTo(SocketAddress& aHost,const char* aPayload,int& aLength)
 {
    int tStatus=0;
 
@@ -630,7 +630,7 @@ bool BaseTcpStreamSocket::doConnect()
 
 //******************************************************************************
 
-bool BaseTcpStreamSocket::doSend(char* aPayload,int aLength)
+bool BaseTcpStreamSocket::doSend(const char* aPayload,int aLength)
 {
    int tStatus=0;
 

@@ -288,7 +288,7 @@ void UdpTxStringSocket::show()
 // It returns true if successful.
 // It is protected by the transmit mutex.
 
-bool UdpTxStringSocket::doSendString(char* aString)
+bool UdpTxStringSocket::doSendString(const char* aString)
 {
    // Guard
    if (!mValidFlag) return false;

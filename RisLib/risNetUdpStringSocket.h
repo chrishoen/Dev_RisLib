@@ -42,7 +42,7 @@ public:
    // Constants.
 
    // String size.
-   static const int cStringSize = 1000;
+   static const int cStringSize = 2048;
 
    //***************************************************************************
    //***************************************************************************
@@ -168,7 +168,7 @@ public:
    // Send a string over the socket via a blocking send call.
    // It returns true if successful.
    // It is protected by the transmit mutex.
-   bool doSendString(char * aString);
+   bool doSendString(const char* aString);
 };
 
 //******************************************************************************

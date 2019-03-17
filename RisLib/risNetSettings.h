@@ -8,6 +8,7 @@ Byte content message network socket settings class.
 //******************************************************************************
 //******************************************************************************
 
+#include <string>
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 #include "risThreadsQCall.h"
@@ -72,6 +73,9 @@ public:
    // Receive byte content message callback qcall.
    Ris::Threads::QCall1<Ris::ByteContent*> mRxMsgQCall;
    Ris::Threads::QCall2<int,Ris::ByteContent*> mServerRxMsgQCall;
+
+   // Receive string callback qcall.
+   Ris::Threads::QCall1 < std::string *> mRxStringQCall;
 
    //***************************************************************************
    //***************************************************************************

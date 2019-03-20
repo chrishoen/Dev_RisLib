@@ -26,8 +26,7 @@ namespace Prn
 
 PrintSettings::PrintSettings()
 {
-   strcpy(mPrintViewRemoteIPAddress, "none");
-   strcpy(mPrintViewLocalIPAddress, "none");
+   strcpy(mPrintViewIPAddress, "none");
    mPrintViewIPPort = 99;
    mCode1 = 0;
 }
@@ -37,8 +36,7 @@ void PrintSettings::reset()
    BaseClass::reset();
    BaseClass::setFileName_RelAlphaSettings("PrnPrint_Settings.txt");
 
-   strcpy(mPrintViewLocalIPAddress, "127.0.0.1");
-   strcpy(mPrintViewRemoteIPAddress, "127.0.0.1");
+   strcpy(mPrintViewIPAddress, "127.0.0.1");
    mPrintViewIPPort = Ris::Net::PortDef::cPrintView;
 
    mCode1 = 0;
@@ -54,9 +52,8 @@ void PrintSettings::show()
    printf("\n");
    printf("PrintSettings************************************************ %s\n", mTargetSection);
 
-   printf("PrintViewLocal          %16s\n", mPrintViewLocalIPAddress);
-   printf("PrintViewRemote         %16s\n", mPrintViewRemoteIPAddress);
-   printf("PrintViewPort           %5d\n",  mPrintViewIPPort);
+   printf("PrintViewIPAddress      %16s\n", mPrintViewIPAddress);
+   printf("PrintViewIPPort         %5d\n",  mPrintViewIPPort);
    printf("Code1                   %5d\n",  mCode1);
 
    printf("PrintSettings************************************************\n");
@@ -74,9 +71,11 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
-   if (aCmd->isCmd("PrintViewLocalIPAddress"))  aCmd->copyArgString(1, mPrintViewLocalIPAddress, cMaxStringSize);
-   if (aCmd->isCmd("PrintViewRemoteIPAddress")) aCmd->copyArgString(1, mPrintViewRemoteIPAddress, cMaxStringSize);
-   if (aCmd->isCmd("PrintViewIPPort")) mPrintViewIPPort = aCmd->argInt(1);
+   if (aCmd->isCmd("PrintViewIP"))
+   {
+      aCmd->copyArgString(1, mPrintViewIPAddress, cMaxStringSize);
+      mPrintViewIPPort = aCmd->argInt(2);
+   }
 
    if (aCmd->isCmd("Code1")) mCode1 = aCmd->argInt(1);
 }

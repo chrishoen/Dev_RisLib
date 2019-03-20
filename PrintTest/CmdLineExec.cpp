@@ -47,10 +47,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(0,"Go1 0");
-   Prn::print(Prn::ProcRun1,"Go1 Prn::ProcRun1");
-   Prn::print(Prn::ProcRun2,"Go1 Prn::ProcRun2");
-   Prn::print(Prn::ProcRun3,"Go1 Prn::ProcRun3");
-   Prn::print(Prn::ProcRun4,"Go1 Prn::ProcRun4");
+   Prn::print(Prn::View01, "Go1 Prn::View01");
+   Prn::print(Prn::View11, "Go1 Prn::View11");
+   Prn::print(Prn::View21, "Go1 Prn::View21");
 }
 
 //******************************************************************************

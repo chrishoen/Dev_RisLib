@@ -17,8 +17,8 @@ void main_initialize(int argc,char** argv)
 
    // Initialize print facility
    Prn::resetPrint();
-// Prn::useConsole(0);
    Prn::useConsole(1);
+   Prn::useConsole(2);
    Prn::initializePrint();
 
    // Initialize print filters
@@ -54,6 +54,22 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ViewRun2,        true   ,1);
    Prn::setFilter(Prn::ViewRun3,        false  ,1);
    Prn::setFilter(Prn::ViewRun4,        true   ,1);
+
+   Prn::setFilter(Prn::View01, true);
+   Prn::setFilter(Prn::View02, true);
+   Prn::setFilter(Prn::View03, true);
+   Prn::setFilter(Prn::View04, true);
+
+   Prn::setFilter(Prn::View11, true, 1);
+   Prn::setFilter(Prn::View12, true, 1);
+   Prn::setFilter(Prn::View13, true, 1);
+   Prn::setFilter(Prn::View14, true, 1);
+
+   Prn::setFilter(Prn::View21, true, 2);
+   Prn::setFilter(Prn::View22, true, 2);
+   Prn::setFilter(Prn::View23, true, 2);
+   Prn::setFilter(Prn::View24, true, 2);
+
 
    Log::reset();
    Log::openFile(0,"LogPrintTest.txt");

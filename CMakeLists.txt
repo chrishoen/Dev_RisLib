@@ -5,8 +5,7 @@ include(MyCMake.cmake)
 project ("Dev_RisLib")
 
 add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoString")
+add_subdirectory ("PrintTest")
 return()
 
 add_subdirectory ("ByteContent")

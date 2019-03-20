@@ -64,8 +64,7 @@ public:
 
    // UDP address and port of the host that print view consoles run on.
    // Default is 127.0.0.1 58001.
-   char mPrintViewLocalIPAddress[cMaxStringSize];
-   char mPrintViewRemoteIPAddress[cMaxStringSize];
+   char mPrintViewIPAddress[cMaxStringSize];
    int  mPrintViewIPPort;
 
    // Test code.

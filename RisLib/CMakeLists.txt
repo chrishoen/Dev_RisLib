@@ -4,7 +4,11 @@ project (RisLib CXX)
 
 my_find_src_files (src_files RisLib)
 my_find_inc_files (inc_files)
-add_library (RisLib SHARED ${src_files})
+if (MSVC)
+   add_library (RisLib STATIC ${src_files})
+else()
+   add_library (RisLib SHARED ${src_files})
+endif()
 my_add_compile_options (RisLib)
 my_add_pch (RisLib)
 

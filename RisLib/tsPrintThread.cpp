@@ -73,6 +73,10 @@ void PrintThread::doFileOpenAppend()
    {
       mFile = fopen(gShare.mProgramLogFilepath, "w");
    }
+   if (mFile == 0)
+   {
+      printf("TS print file open error\n");
+   }
 }
 
 void PrintThread::doFileClose()

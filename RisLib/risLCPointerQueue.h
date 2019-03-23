@@ -103,6 +103,10 @@ public:
    // Return zero if the queue is empty.
    void* tryRead();
 
+   // Flush the queue via a loop that tries to read until the queue is 
+   // empty. Any read pointer is deleted.
+   void flush();
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

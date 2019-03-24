@@ -7,5 +7,6 @@ add_executable (ByteContent ${src_files})
 my_add_compile_options (ByteContent)
 my_add_pch (ByteContent)
 
-target_include_directories(ByteContent PRIVATE RisLib)
-target_link_libraries(ByteContent RisLib)
+my_inc_import_RisLib(ByteContent)
+my_lib_import_RisLib(ByteContent)
+

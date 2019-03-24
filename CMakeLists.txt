@@ -1,13 +1,9 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
 include(MyCMake.cmake)
+include(MyLocalImports.cmake)
 
 project ("Dev_RisLib")
-
-add_subdirectory ("ThreadServices")
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
-return()
 
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
@@ -36,3 +32,10 @@ add_subdirectory ("ThreadSynch")
 add_subdirectory ("ThreadTest")
 add_subdirectory ("TimerTest")
 add_subdirectory ("TimerThreadTest")
+return()
+
+add_subdirectory ("ThreadServices")
+add_subdirectory ("CommonLib")
+add_subdirectory ("RisLib")
+return()
+

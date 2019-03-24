@@ -7,8 +7,10 @@ add_executable (ThreadSynch ${src_files})
 my_add_compile_options (ThreadSynch)
 my_add_pch (ThreadSynch)
 
-target_include_directories(ThreadSynch PRIVATE RisLib)
-target_include_directories(ThreadSynch PRIVATE CommonLib)
 
-target_link_libraries(ThreadSynch RisLib)
-target_link_libraries(ThreadSynch CommonLib)
+my_inc_import_RisLib(ThreadSynch)
+my_inc_import_CommonLib(ThreadSynch)
+
+my_lib_import_CommonLib(ThreadSynch)
+my_lib_import_RisLib(ThreadSynch)
+

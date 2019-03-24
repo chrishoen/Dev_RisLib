@@ -7,5 +7,6 @@ add_executable (PrintView ${src_files})
 my_add_compile_options (PrintView)
 my_add_pch (PrintView)
 
-target_include_directories(PrintView PRIVATE RisLib)
-target_link_libraries(PrintView RisLib)
+my_inc_import_RisLib(PrintView)
+my_lib_import_RisLib(PrintView)
+

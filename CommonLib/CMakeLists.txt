@@ -8,6 +8,5 @@ my_add_compile_options (CommonLib)
 my_add_pch (CommonLib)
 
 target_include_directories(CommonLib PUBLIC ${PROJECT_SOURCE_DIR})
-target_include_directories(CommonLib PRIVATE RisLib)
 
-target_link_libraries(CommonLib RisLib)
+my_inc_import_RisLib(CommonLib)

@@ -7,8 +7,10 @@ add_executable (ProtoUdp ${src_files})
 my_add_compile_options (ProtoUdp)
 my_add_pch (ProtoUdp)
 
-target_include_directories(ProtoUdp PRIVATE RisLib)
-target_include_directories(ProtoUdp PRIVATE CommonLib)
 
-target_link_libraries(ProtoUdp RisLib)
-target_link_libraries(ProtoUdp CommonLib)
+my_inc_import_RisLib(ProtoUdp)
+my_inc_import_CommonLib(ProtoUdp)
+
+my_lib_import_CommonLib(ProtoUdp)
+my_lib_import_RisLib(ProtoUdp)
+

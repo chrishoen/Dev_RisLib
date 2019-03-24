@@ -7,8 +7,10 @@ add_executable (ProtoTcpClient ${src_files})
 my_add_compile_options (ProtoTcpClient)
 my_add_pch (ProtoTcpClient)
 
-target_include_directories(ProtoTcpClient PRIVATE RisLib)
-target_include_directories(ProtoTcpClient PRIVATE CommonLib)
 
-target_link_libraries(ProtoTcpClient RisLib)
-target_link_libraries(ProtoTcpClient CommonLib)
+my_inc_import_RisLib(ProtoTcpClient)
+my_inc_import_CommonLib(ProtoTcpClient)
+
+my_lib_import_CommonLib(ProtoTcpClient)
+my_lib_import_RisLib(ProtoTcpClient)
+

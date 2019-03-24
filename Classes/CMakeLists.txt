@@ -7,5 +7,6 @@ add_executable (Classes ${src_files})
 my_add_compile_options (Classes)
 my_add_pch (Classes)
 
-target_include_directories(Classes PRIVATE RisLib)
-target_link_libraries(Classes RisLib)
+my_inc_import_RisLib(Classes)
+my_lib_import_RisLib(Classes)
+

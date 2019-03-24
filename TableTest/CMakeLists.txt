@@ -7,5 +7,7 @@ add_executable (TableTest ${src_files})
 my_add_compile_options (TableTest)
 my_add_pch (TableTest)
 
-target_include_directories(TableTest PRIVATE RisLib)
-target_link_libraries(TableTest RisLib)
+
+my_inc_import_RisLib(TableTest)
+my_lib_import_RisLib(TableTest)
+

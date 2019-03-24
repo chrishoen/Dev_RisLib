@@ -7,5 +7,7 @@ add_executable (Test ${src_files})
 my_add_compile_options (Test)
 my_add_pch (Test)
 
-target_include_directories(Test PRIVATE RisLib)
-target_link_libraries(Test RisLib)
+
+my_inc_import_RisLib(Test)
+my_lib_import_RisLib(Test)
+

@@ -7,8 +7,10 @@ add_executable (SerialComm ${src_files})
 my_add_compile_options (SerialComm)
 my_add_pch (SerialComm)
 
-target_include_directories(SerialComm PRIVATE RisLib)
-target_include_directories(SerialComm PRIVATE CommonLib)
 
-target_link_libraries(SerialComm RisLib)
-target_link_libraries(SerialComm CommonLib)
+my_inc_import_RisLib(SerialComm)
+my_inc_import_CommonLib(SerialComm)
+
+my_lib_import_CommonLib(SerialComm)
+my_lib_import_RisLib(SerialComm)
+

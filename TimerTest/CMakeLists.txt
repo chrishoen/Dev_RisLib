@@ -7,8 +7,11 @@ add_executable (TimerTest ${src_files})
 my_add_compile_options (TimerTest)
 my_add_pch (TimerTest)
 
-target_include_directories(TimerTest PRIVATE RisLib)
-target_include_directories(TimerTest PRIVATE CommonLib)
 
-target_link_libraries(TimerTest RisLib)
-target_link_libraries(TimerTest CommonLib)
+
+my_inc_import_RisLib(TimerTest)
+my_inc_import_CommonLib(TimerTest)
+
+my_lib_import_CommonLib(TimerTest)
+my_lib_import_RisLib(TimerTest)
+

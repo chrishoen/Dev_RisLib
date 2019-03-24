@@ -7,8 +7,10 @@ add_executable (ThreadTest ${src_files})
 my_add_compile_options (ThreadTest)
 my_add_pch (ThreadTest)
 
-target_include_directories(ThreadTest PRIVATE RisLib)
-target_include_directories(ThreadTest PRIVATE CommonLib)
 
-target_link_libraries(ThreadTest RisLib)
-target_link_libraries(ThreadTest CommonLib)
+my_inc_import_RisLib(ThreadTest)
+my_inc_import_CommonLib(ThreadTest)
+
+my_lib_import_CommonLib(ThreadTest)
+my_lib_import_RisLib(ThreadTest)
+

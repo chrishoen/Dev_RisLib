@@ -7,8 +7,10 @@ add_executable (ProtoTcpServer ${src_files})
 my_add_compile_options (ProtoTcpServer)
 my_add_pch (ProtoTcpServer)
 
-target_include_directories(ProtoTcpServer PRIVATE RisLib)
-target_include_directories(ProtoTcpServer PRIVATE CommonLib)
 
-target_link_libraries(ProtoTcpServer RisLib)
-target_link_libraries(ProtoTcpServer CommonLib)
+my_inc_import_RisLib(ProtoTcpServer)
+my_inc_import_CommonLib(ProtoTcpServer)
+
+my_lib_import_CommonLib(ProtoTcpServer)
+my_lib_import_RisLib(ProtoTcpServer)
+

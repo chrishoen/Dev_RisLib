@@ -7,8 +7,10 @@ add_executable (ThreadNotify ${src_files})
 my_add_compile_options (ThreadNotify)
 my_add_pch (ThreadNotify)
 
-target_include_directories(ThreadNotify PRIVATE RisLib)
-target_include_directories(ThreadNotify PRIVATE CommonLib)
 
-target_link_libraries(ThreadNotify RisLib)
-target_link_libraries(ThreadNotify CommonLib)
+my_inc_import_RisLib(ThreadNotify)
+my_inc_import_CommonLib(ThreadNotify)
+
+my_lib_import_CommonLib(ThreadNotify)
+my_lib_import_RisLib(ThreadNotify)
+

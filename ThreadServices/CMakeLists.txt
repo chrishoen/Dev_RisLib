@@ -7,8 +7,10 @@ add_executable (ThreadServices ${src_files})
 my_add_compile_options (ThreadServices)
 my_add_pch (ThreadServices)
 
-target_include_directories(ThreadServices PRIVATE RisLib)
-target_include_directories(ThreadServices PRIVATE CommonLib)
 
-target_link_libraries(ThreadServices RisLib)
-target_link_libraries(ThreadServices CommonLib)
+my_inc_import_RisLib(ThreadServices)
+my_inc_import_CommonLib(ThreadServices)
+
+my_lib_import_CommonLib(ThreadServices)
+my_lib_import_RisLib(ThreadServices)
+

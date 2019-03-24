@@ -7,8 +7,10 @@ add_executable (ProtoMsg ${src_files})
 my_add_compile_options (ProtoMsg)
 my_add_pch (ProtoMsg)
 
-target_include_directories(ProtoMsg PRIVATE RisLib)
-target_include_directories(ProtoMsg PRIVATE CommonLib)
 
-target_link_libraries(ProtoMsg RisLib)
-target_link_libraries(ProtoMsg CommonLib)
+my_inc_import_RisLib(ProtoMsg)
+my_inc_import_CommonLib(ProtoMsg)
+
+my_lib_import_CommonLib(ProtoMsg)
+my_lib_import_RisLib(ProtoMsg)
+

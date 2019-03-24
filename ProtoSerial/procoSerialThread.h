@@ -8,7 +8,7 @@ FCom serial thread class.
 //******************************************************************************
 //******************************************************************************
 
-#include "risThreadsQCallthread.h"
+#include "risThreadsQCallThread.h"
 #include "risSerialMsgThread.h"
 
 #include "procoMsg.h"

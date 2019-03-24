@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include <time.h>
-#include <io.h>
 
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
@@ -35,22 +34,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   bool tFlag = Ris::portableFilePathExists ("C:\\Alpha\\Lib\\");
-
-   printf("tFlag %d\n",tFlag);
-
-   return;
-   char tFilePath[100];
-   strcpy(tFilePath,"C:\\Alpha\\Lib22\\");
-
-   if (_access(tFilePath, 0) == -1)
-   {
-      printf("NO\n");
-   }
-   else
-   {
-      printf("YES\n");
-   }
 }
 
 //******************************************************************************
@@ -59,17 +42,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   time_t     now = time(0);
-   struct tm  tstruct;
-   char       buf[80];
-   tstruct = *localtime(&now);
-   strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
-
-   printf ( "Current local time and date: %s\n", buf );
-
-
-   char tBuffer[100];
-   printf ( "Current local time and date: %s\n", my_timestamp(tBuffer));
 }
 
 //******************************************************************************

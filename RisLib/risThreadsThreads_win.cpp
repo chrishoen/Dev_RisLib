@@ -383,13 +383,13 @@ void BaseThread::showThreadFullInfo()
    int tThreadPriority = GetThreadPriority(mBaseSpecific->mHandle);
    int tCurrentProcessorNumber = GetCurrentProcessorNumber();
 
-   PDWORD_PTR tProcessAffinityMask = 0;
-   PDWORD_PTR tSystemAffinityMask = 0;
+   DWORD_PTR tProcessAffinityMask = 0;
+   DWORD_PTR tSystemAffinityMask = 0;
 
    GetProcessAffinityMask(
       GetCurrentProcess(),
-      tProcessAffinityMask,
-      tSystemAffinityMask);
+      &tProcessAffinityMask,
+      &tSystemAffinityMask);
 
    printf("PriorityClass           %8d\n", tPriorityClass);
    printf("ThreadPriority          %8d\n", tThreadPriority);

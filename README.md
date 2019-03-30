@@ -1,5 +1,5 @@
 # Dev_RisLib
-### real time infrastructure library, C++, vstudio, windows
+### real time infrastructure library, C++, vstudio, cmake windows and linux
 
 This is a library of C++ classes that provides some realtime functionality. Features include:
    1. Thread base classes.
@@ -7,11 +7,14 @@ This is a library of C++ classes that provides some realtime functionality. Feat
    3. ByteContent, a scheme to encapsulate binary messages with C++ classes and pack/unpack them into byte buffers.
    4. Socket classes. Serial port classes.
    5. Threads for TCP server and client, UDP, and serial that are used to communicate binary messages.
-   6. Command line executive classes for console and parameter and script files.
+   6. Command line executive classes for console and parameter and parameters files.
    7. A filtered print facility that can redirect to separate windows.
+   8. Thread Services classes that provide for instumentation of threads.
    8. Miscellaneous utility functions.
 
-This library is written for Windows in Visual Studio. The classes are based on Win32 realtime functions for threads and sockets and such. The library is portable. The details of the provided functionality that are specific to Win32 are contained in a small set of `*_win.cpp` files. There is a corresponding library for Linux, RisLibLx, with a corresponding small set of `*_linux.cpp` files that are specific to Linux. It is the intention of the library that programs built under Windows can be rebuilt seamlessly under Linux.
+This library is written for Windows and Linux in Visual Studio, using the cmake paradigm. The classes are based on Win32 or pthread realtime functions for threads and sockets and such. The library is portable. The details of the provided functionality that are specific to Win32 are contained in a small set of `*_win.cpp` or `*_linux.cpp`files. It is the intention of the library that programs built under Windows can be rebuilt seamlessly under Linux. CMake is used to implement the cross platform functionality.
+
+The solution contains the library project and a set of associated unit test projects.
 
 ## Classes
 ``` markdown
@@ -77,35 +80,43 @@ stdafx.h                      -- used for precompiled header files
 ## Solution Projects
 ``` markdown
 ByteContent     -- unit test for byte content
-CallPointer1    -- experiments for call pointers
-CallPointer2    -- experiments for call pointers
-Classes         -- experiments for classes
+Classes         -- constructor and destructor experiments
 CmdLineTest1    -- experiments for command line commands
-CommonLib       -- common library -- byte content messages and settings 
-ConsoleTest     -- unit test for command line console
-ExampleMsg      -- example byte content message set
+CommonLib       -- common library -- byte content messages and settings
 Experiment      -- experiments
-Files           -- parms files
-NanoTimeTest    -- nano second unit test
+Functions       -- function pointer experiments
 Parms           -- unit test for parms files
 PrintTest       -- unit test for print facility
 PrintView       -- PrintView.exe build
 Program         -- unit test for program configuration
 ProtoSerial     -- prototype for byte content message, serial
+ProtoString     -- prototype for byte content message, upd string
 ProtoTcpClient  -- prototype for byte content message, tcp client
 ProtoTcpServer  -- prototype for byte content message, tcp client
 ProtoUdp        -- prototype for byte content message, udp peer
-RegHelper       -- register helpers
 RisLib          -- realtime infrastructure library -- this is the library
-Scratch         -- temp project
 SerialComm      -- unit test for serial communications
 TableTest       -- unit est for lookup tables
 Test            -- general test project
+ThreadNotify    -- unit test for thread notification class
 ThreadQCall     -- unit test for qcall threads
 ThreadSample    -- sample thread project
-ThreadSynch     -- experiments for thread synchronization
-ThreadTest      -- experiments for threads
+ThreadServices  -- unit test for thread services classes
+ThreadSynch     -- unit test for thread synchronization classes
+ThreadTest      -- unit test for thread base classes
+TimerTest       -- unit test for timer classes
 TimerThreadTest -- unit test for timer threads and priorites and cores
-TwoThreadTest   -- unit test for two threads
 ```
  
+## CMake Files
+``` markdown
+
+set_for_linux.bat            -- setup cmake environment for linux
+set_for_win.bat              -- setup cmake environment for windows
+CMakeSettings.json           -- current cmake settings, either windows or linux
+CMakeSettings_linux.json     -- cmake settings for linux
+CMakeSettings_win.json       -- cmake settings for windows
+CMakeLists.txt               -- Solution main cmake file
+MyCMake.cmake                -- cmake macros for building projects
+MyLocalImports.cmake         -- cmake macros for importing local libraries
+```

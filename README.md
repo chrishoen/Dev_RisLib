@@ -16,6 +16,8 @@ This library is written for Windows and Linux in Visual Studio, using the cmake 
 
 The solution contains the library project and a set of associated unit test projects.
 
+The current linux version builds on an ASUS TinkerBoard running debian stretch. The only build prerequisite is the gcc build-essentials.
+
 ## Classes
 ``` markdown
 logFiles.h                    -- log file facility

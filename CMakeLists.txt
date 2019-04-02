@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-include(MyCMake.cmake)
+include(MyCodeMacros.cmake)
 include(MyLocalImports.cmake)
 
 project ("Dev_RisLib")

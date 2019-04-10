@@ -13,6 +13,7 @@
 #include <signal.h>
 #include <poll.h>
 #include <sys/eventfd.h>
+#include <sys/ioctl.h>
 
 #include "my_functions.h"
 #include "risThreadsThreads.h"
@@ -432,7 +433,9 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
 
 int SerialPort::getAvailableReceiveBytes()
 {
-   return 99;
+   int tBytesAvaiable;
+   ioctl(mSpecific->mPortFd, FIONREAD, &tBytesAvaiable);
+   return tBytesAvaiable;
 }
 
 //******************************************************************************

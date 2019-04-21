@@ -67,13 +67,13 @@ void UdpRxStringSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  $ %16s : %d",
+      TS::print(1, "UdpRxStringSocket  PASS %16s : %5d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  FAIL $ %16s : %d $ %d %d",
+      TS::print(1, "UdpRxStringSocket  FAIL %16s : %5d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -99,37 +99,13 @@ void UdpRxStringSocket::configureLocal(int aPort)
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  $ %16s : %d",
+      TS::print(1, "UdpRxStringSocket  PASS %16s : %5d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket FAIL $ %16s : %d $ %d %d",
-         BaseClass::mLocal.mIpAddr.mString,
-         BaseClass::mLocal.mPort,
-         BaseClass::mStatus,
-         BaseClass::mError);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// configure the socket at the local address at a port number.
-
-void UdpRxStringSocket::show()
-{
-   // Show.
-   if (mValidFlag)
-   {
-      printf("UdpRxStringSocket  $ %16s : %d\n",
-         BaseClass::mLocal.mIpAddr.mString,
-         BaseClass::mLocal.mPort);
-   }
-   else
-   {
-      printf("UdpRxStringSocket FAIL $ %16s : %d $ %d %d\n",
+      TS::print(1, "UdpRxStringSocket  FAIL %16s : %5d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -155,7 +131,11 @@ bool UdpRxStringSocket::doRecvString ()
    mRxLength=0;
 
    // Guard.
-   if (!mValidFlag) return false;
+   if (!mValidFlag)
+   {
+      TS::print(0, "ERROR UdpRxStringSocket INVALID SOCKET");
+      return false;
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -165,26 +145,24 @@ bool UdpRxStringSocket::doRecvString ()
    // Read from the socket.
    BaseClass::doRecvFrom(mFromAddress,mRxString,mRxLength,cStringSize);
 
-   // Guard
+   // Guard.
    // If bad status then return false.
-   // Returning true  means socket was not closed
-   // Returning false means socket was closed
-
-   if (mRxLength<=0)
+   // Returning true  means socket was not closed.
+   // Returning false means socket was closed.
+   if (mRxLength <= 0)
    {
-      if (mStatus < 0)
+      if (BaseClass::mError == 0)
       {
-         switch (mError)
-         {
-         case 0:  return false; break;
-         default: return false; break;
-         }
+         TS::print(1, "UdpRxMsgSocket CLOSED");
       }
       else
       {
-         return false;
+         TS::print(0, "ERROR UdpRxMsgSocket %d %d", BaseClass::mStatus, BaseClass::mError);
       }
+      return false;
    }
+
+   TS::print(3, "UdpRxStringSocket rx message %d", mRxLength);
 
    // Add null terminator.
    mRxString[mRxLength] = 0;

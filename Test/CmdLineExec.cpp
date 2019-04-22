@@ -44,7 +44,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "IsNumber %s", my_string_from_bool(aCmd->isArgNumber(1)));
+
+   Ris::CmdLineCmd* tCmd = new Ris::CmdLineCmd("test1, 101, 102.9, data1", true);
+
+   Prn::print(0, "numArg %10d", tCmd->numArg());
+   Prn::print(0, "cmd    %10s", my_string_from_bool(tCmd->isCmd("test1")));
+   Prn::print(0, "arg1   %10d", tCmd->argInt(1));
+   Prn::print(0, "arg2   %10.4f", tCmd->argDouble(2));
+   Prn::print(0, "arg3   %10s", tCmd->argString(3));
 }
 
 //******************************************************************************

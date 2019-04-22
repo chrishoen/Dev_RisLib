@@ -38,6 +38,18 @@ CmdLineCmd::CmdLineCmd()
    reset();
 }
 
+CmdLineCmd::CmdLineCmd(const char* aCommandLine,bool aUseCsvDelimiter)
+{
+   reset();
+   if (aUseCsvDelimiter) setCsvDelimiter();
+   parseCmdLine(aCommandLine);
+}
+
+void CmdLineCmd::setCsvDelimiter()
+{
+   strcpy(mDelimiters, ",");
+}
+
 void CmdLineCmd::reset()
 {
    mGoodCmd = false;
@@ -49,12 +61,6 @@ void CmdLineCmd::reset()
    }
 
    mNestedAnchor = 0;
-}
-
-CmdLineCmd::CmdLineCmd(const char* aCommandLine)
-{
-   reset();
-   parseCmdLine(aCommandLine);
 }
 
 //******************************************************************************

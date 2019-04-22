@@ -68,8 +68,9 @@ public:
 
    // Constructor
    CmdLineCmd();
-   CmdLineCmd(const char* aCommandLine);
+   CmdLineCmd(const char* aCommandLine,bool aUseCsvDelimiter = false);
    void reset();
+   void setCsvDelimiter();
 
    //***************************************************************************
    //***************************************************************************

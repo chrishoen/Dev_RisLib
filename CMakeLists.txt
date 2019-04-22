@@ -7,6 +7,10 @@ include(MyLocalImports.cmake)
 
 project ("Dev_RisLib")
 
+add_subdirectory ("RisLib")
+add_subdirectory ("Test")
+return()
+
 add_subdirectory ("ThreadServices")
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")

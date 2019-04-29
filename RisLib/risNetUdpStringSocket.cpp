@@ -221,6 +221,21 @@ void UdpTxStringSocket::configure()
    // Show.
    if (mValidFlag)
    {
+      TS::print(1, "UdpTxStringSocket  PASS %16s : %5d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort);
+   }
+   else
+   {
+      TS::print(1, "UdpTxStringSocket  FAIL %16s : %5d $ %d %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
+   }
+   // Show.
+   if (mValidFlag)
+   {
       Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort);

@@ -120,12 +120,20 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Sockets::IpAddress tA;
-   tA.set("192.168.1.9");
+   Ris::Sockets::IpAddress tA1;
+   Ris::Sockets::IpAddress tA2;
+   tA1.set("192.168.1.9");
+   tA2.set(tA1.mValue);
 
-   Prn::print(0, "valid    %s", my_string_from_bool(tA.mValid));
-   Prn::print(0, "value    %x", tA.mValue);
-   Prn::print(0, "string   %s", tA.mString);
+   Prn::print(0, "A1");
+   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
+   Prn::print(0, "value    %x", tA1.mValue);
+   Prn::print(0, "string   %s", tA1.mString);
+
+   Prn::print(0, "A2");
+   Prn::print(0, "valid    %s", my_string_from_bool(tA2.mValid));
+   Prn::print(0, "value    %x", tA2.mValue);
+   Prn::print(0, "string   %s", tA2.mString);
 }
 
 //******************************************************************************

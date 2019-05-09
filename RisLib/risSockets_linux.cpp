@@ -59,7 +59,7 @@ void IpAddress::set(char* aAddress)
    reset();
    struct in_addr tInAddr;
    if (inet_aton(aAddress, &tInAddr)==0) return;
-   mValue = tInAddr.s_addr;
+   mValue = ntohl(tInAddr.s_addr);
    strncpy(mString,inet_ntoa(tInAddr),16);
    mValid = true;
 }
@@ -68,11 +68,12 @@ void IpAddress::set(char* aAddress)
 
 void IpAddress::set(unsigned aAddress)
 {
+   reset();
    mValue = aAddress;
-
-   struct in_addr inAddr;
-   inAddr.s_addr = htonl(mValue);
-   strcpy(mString,inet_ntoa(inAddr));
+   struct in_addr tInAddr;
+   tInAddr.s_addr = htonl(mValue);
+   strncpy(mString, inet_ntoa(tInAddr), 16);
+   mValid = true;
 }
 
 //******************************************************************************

@@ -1,5 +1,23 @@
 #include "stdafx.h"
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+#define BUF_SIZE 500
+
+
+
+#include "risSockets.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -32,6 +50,61 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
    if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
    if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
+   if (aCmd->isCmd("GET"))     executeGetAddr(aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, "192.168.1.10");
+
+   struct addrinfo hints;
+   struct addrinfo *result, *rp;
+   int sfd, s, j;
+   size_t len;
+   ssize_t nread;
+   char buf[BUF_SIZE];
+
+   /* Obtain address(es) matching host/port */
+
+   memset(&hints, 0, sizeof(struct addrinfo));
+   hints.ai_family = AF_UNSPEC;    /* Allow IPv4 or IPv6 */
+   hints.ai_socktype = 0; /* Datagram socket */
+   hints.ai_flags = 0;
+   hints.ai_protocol = 0;          /* Any protocol */
+
+// s = getaddrinfo(aCmd->argString(1), NULL, &hints, &result);
+   s = getaddrinfo(aCmd->argString(1), NULL, NULL, &result);
+   if (s != 0)
+   {
+      printf("ERROR1 getaddrinfo: %s\n", gai_strerror(s));
+      return;
+   }
+
+   /* getaddrinfo() returns a list of address structures.
+      Try each address until we successfully connect(2).
+      If socket(2) (or connect(2)) fails, we (close the socket
+      and) try the next address. */
+
+   for (rp = result; rp != NULL; rp = rp->ai_next)
+   {
+      printf("DATA****************************\n");
+      printf("ai_addrlen %d\n", rp->ai_addrlen);
+
+      sockaddr_in* tSockAddrIn = (sockaddr_in*)rp->ai_addr;
+      struct in_addr tAddr = tSockAddrIn->sin_addr;
+      unsigned tValue = ntohl(tAddr.s_addr);
+
+      printf("ai_addr    %x\n", tValue);
+
+      Ris::Sockets::IpAddress tA1(tValue);
+      printf("A1         %s\n", tA1.mString);
+   }
+
+   freeaddrinfo(result);           /* No longer needed */
 }
 
 //******************************************************************************
@@ -44,7 +117,20 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "IsNumber %s", my_string_from_bool(aCmd->isArgNumber(1)));
+   Ris::Sockets::IpAddress tA1;
+   Ris::Sockets::IpAddress tA2;
+   tA1.set("192.168.1.9");
+   tA2.set(tA1.mValue);
+
+   Prn::print(0, "A1");
+   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
+   Prn::print(0, "value    %x", tA1.mValue);
+   Prn::print(0, "string   %s", tA1.mString);
+
+   Prn::print(0, "A2");
+   Prn::print(0, "valid    %s", my_string_from_bool(tA2.mValid));
+   Prn::print(0, "value    %x", tA2.mValue);
+   Prn::print(0, "string   %s", tA2.mString);
 }
 
 //******************************************************************************
@@ -53,6 +139,14 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, "remotehost");
+   Ris::Sockets::IpAddress tA1;
+   tA1.setByHostName(aCmd->argString(1));
+
+   Prn::print(0, "A1");
+   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
+   Prn::print(0, "value    %x", tA1.mValue);
+   Prn::print(0, "string   %s", tA1.mString);
 }
 
 //******************************************************************************
@@ -61,15 +155,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   char tString[200];
-
-   while (true)
-   {
-      fgets(tString, 200, stdin);
-      printf("CMD %d %s", (int)strlen(tString), tString);
-      if (strcmp(tString, "e\n") == 0) break;
-   }
-
 }
 
 //******************************************************************************

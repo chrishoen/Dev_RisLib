@@ -9,7 +9,7 @@ project ("Dev_RisLib")
 
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoUdp")
+add_subdirectory ("Experiment")
 return()
 
 add_subdirectory ("ThreadServices")

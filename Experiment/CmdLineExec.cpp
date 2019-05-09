@@ -71,13 +71,13 @@ void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
    /* Obtain address(es) matching host/port */
 
    memset(&hints, 0, sizeof(struct addrinfo));
-   hints.ai_family = AF_UNSPEC;    /* Allow IPv4 or IPv6 */
+   hints.ai_family = AF_INET;    /* Allow IPv4 or IPv6 */
    hints.ai_socktype = 0; /* Datagram socket */
-   hints.ai_flags = 0;
+   hints.ai_flags = (AI_V4MAPPED | AI_ADDRCONFIG | AI_CANONNAME);
    hints.ai_protocol = 0;          /* Any protocol */
 
-// s = getaddrinfo(aCmd->argString(1), NULL, &hints, &result);
-   s = getaddrinfo(aCmd->argString(1), NULL, NULL, &result);
+// s = getaddrinfo(aCmd->argString(1), NULL, NULL, &result);
+   s = getaddrinfo(aCmd->argString(1), NULL, &hints, &result);
    if (s != 0)
    {
       printf("ERROR1 getaddrinfo: %s\n", gai_strerror(s));
@@ -92,7 +92,7 @@ void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
    for (rp = result; rp != NULL; rp = rp->ai_next)
    {
       printf("DATA****************************\n");
-      printf("ai_addrlen %d\n", rp->ai_addrlen);
+      printf("ai_canonname %s\n", rp->ai_canonname);
 
       sockaddr_in* tSockAddrIn = (sockaddr_in*)rp->ai_addr;
       struct in_addr tAddr = tSockAddrIn->sin_addr;

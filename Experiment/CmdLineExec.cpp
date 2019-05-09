@@ -72,7 +72,7 @@ void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
 
    memset(&hints, 0, sizeof(struct addrinfo));
    hints.ai_family = AF_INET;    /* Allow IPv4 or IPv6 */
-   hints.ai_socktype = 0; /* Datagram socket */
+   hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */
    hints.ai_flags = (AI_V4MAPPED | AI_ADDRCONFIG | AI_CANONNAME);
    hints.ai_protocol = 0;          /* Any protocol */
 

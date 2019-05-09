@@ -11,6 +11,8 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <netdb.h>
+extern int h_errno;
 
 #include <unistd.h>
 #include <string.h>
@@ -89,6 +91,23 @@ void IpAddress::setByHostLocal()
 
 void IpAddress::setByHostName(char* aName)
 {
+   struct hostent* hostEnt = gethostbyname(aName);
+
+   if (hostEnt)
+   {
+      char* bytePtr = *hostEnt->h_addr_list;
+      u_long* uintPtr = (u_long*)bytePtr;
+      mValue = ntohl(*uintPtr);
+   }
+   else
+   {
+      mValue = 0;
+   }
+   set(mValue);
+   return;
+   struct in_addr inAddr;
+   inAddr.s_addr = htonl(mValue);
+   strcpy(mString, inet_ntoa(inAddr));
 }
 
 //******************************************************************************

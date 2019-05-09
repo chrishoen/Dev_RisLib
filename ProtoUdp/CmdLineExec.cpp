@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 
+#include "risSockets.h"
 #include "procoUdpSettings.h"
 #include "procoMsg.h"
 #include "procoMsgHelper.h"
@@ -30,10 +31,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("TP"))        ProtoComm::gNetworkThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("TX"))        executeTx(aCmd);
-   if (aCmd->isCmd("ECHO"))      executeEcho (aCmd);
+   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("DATA"))      executeData(aCmd);
-   if (aCmd->isCmd("GO1"))       executeGo1  (aCmd);
-   if (aCmd->isCmd("GO2"))       executeGo2  (aCmd);
+   if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
+   if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
+   if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
+   if (aCmd->isCmd("GO4"))       executeGo4(aCmd);
    if (aCmd->isCmd("Parms"))     executeParms(aCmd);
 }
 
@@ -109,6 +112,28 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
 
    gNetworkThread->sendMsg(tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+{
+   Ris::Sockets::IpAddress tA;
+   tA.set("192.168.1.9");
+
+   Prn::print(0, "valid    %s", my_string_from_bool(tA.mValid));
+   Prn::print(0, "value    %x", tA.mValue);
+   Prn::print(0, "string   %s", tA.mString);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+{
 }
 
 //******************************************************************************

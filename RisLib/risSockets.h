@@ -53,18 +53,19 @@ public:
 
    IpAddress();
    IpAddress(char*     aAddress);
-   IpAddress(int       aAddress);
+   IpAddress(unsigned  aAddress);
 
    void reset();
 
    void set (char*     aAddress);
-   void set (int       aAddress);
+   void set (unsigned  aAddress);
  
    void setByHostLocal ();
    void setByHostName  (char* aName);
 
-   int  mValue;
-   char mString[16];
+   bool mValid;
+   unsigned  mValue;
+   char mString[20];
 
    void setForBroadcast ();
    bool isBroadcast     ();

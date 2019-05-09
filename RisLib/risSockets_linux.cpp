@@ -38,7 +38,7 @@ IpAddress::IpAddress(char* aAddress)
    set(aAddress);
 }
 
-IpAddress::IpAddress(int   aAddress)
+IpAddress::IpAddress(unsigned  aAddress)
 {
    set(aAddress);
 }
@@ -47,6 +47,7 @@ IpAddress::IpAddress(int   aAddress)
 
 void IpAddress::reset()
 {
+   mValid = false;
    mValue = 0;
    strncpy(mString,"",16);
 }
@@ -55,14 +56,17 @@ void IpAddress::reset()
 
 void IpAddress::set(char* aAddress)
 {
-   if(strlen(aAddress)>16) return;
-   mValue = ntohl(inet_addr(aAddress));
-   strncpy(mString,aAddress,16);
+   reset();
+   struct in_addr tInAddr;
+   if (inet_aton(aAddress, &tInAddr)==0) return;
+   mValue = tInAddr.s_addr;
+   strncpy(mString,inet_ntoa(tInAddr),16);
+   mValid = true;
 }
 
 //******************************************************************************
 
-void IpAddress::set(int aAddress)
+void IpAddress::set(unsigned aAddress)
 {
    mValue = aAddress;
 

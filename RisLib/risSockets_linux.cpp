@@ -129,8 +129,53 @@ void SocketAddress::set(IpAddress aIpAddr,int aPort)
 
 //******************************************************************************
 
-void SocketAddress::setByName(const char* aNode, int aPort)
+void SocketAddress::setByHostName(const char* aNode, int aPort)
 {
+   struct addrinfo hints;
+   struct addrinfo *result, *rp;
+   int s;
+
+   char tPortString[20];
+   sprintf(tPortString, "%d", aPort);
+
+   /* Obtain address(es) matching host/port */
+
+   memset(&hints, 0, sizeof(struct addrinfo));
+   hints.ai_family = AF_INET;    /* Allow IPv4 or IPv6 */
+   hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */
+   hints.ai_flags = (AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV);
+   hints.ai_protocol = 0;          /* Any protocol */
+
+// s = getaddrinfo(aCmd->argString(1), NULL, NULL, &result);
+// s = getaddrinfo(aCmd->argString(1), NULL, &hints, &result);
+   s = getaddrinfo(aNode, tPortString, &hints, &result);
+   if (s != 0)
+   {
+      printf("ERROR1 getaddrinfo: %s %s\n", aNode, gai_strerror(s));
+      return;
+   }
+
+   for (rp = result; rp != NULL; rp = rp->ai_next)
+   {
+      printf("DATA****************************\n");
+
+      sockaddr_in* tSockAddrIn = (sockaddr_in*)rp->ai_addr;
+      struct in_addr tAddr = tSockAddrIn->sin_addr;
+      unsigned tValue = ntohl(tAddr.s_addr);
+      unsigned tPort = ntohs(tSockAddrIn->sin_port);
+
+      printf("ai_addr value    %x\n", tValue);
+      printf("ai_addr port     %d\n", tPort);
+
+      Ris::Sockets::IpAddress tA1;
+      tA1.set(tValue);
+      printf("A1         %s\n", tA1.mString);
+
+      mIpAddr.set(tValue);
+      mPort = tPort;
+   }
+
+   freeaddrinfo(result);
 }
 
 //******************************************************************************

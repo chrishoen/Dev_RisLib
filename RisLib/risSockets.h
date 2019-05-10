@@ -78,9 +78,10 @@ public:
    SocketAddress();
    void reset ();
 
-   void set      (const char*  aIpAddr,int aPort);
-   void set      (IpAddress    aIpAddr,int aPort);
-   void setByName(const char*  aNode,  int aPort);
+   void set (const char*  aIpAddr,int aPort);
+   void set (IpAddress    aIpAddr,int aPort);
+
+   void setByHostName(const char*  aNode,  int aPort);
 
    IpAddress mIpAddr;
    int       mPort;

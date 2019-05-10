@@ -46,7 +46,7 @@ void TcpServerHubSocket::configure()
 {
    // Configure the socket.
    BaseClass::reset();
-   BaseClass::mLocal.set(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
+   BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
    BaseClass::doSocket();
    BaseClass::setOptionReuseAddr();
    BaseClass::doBind();

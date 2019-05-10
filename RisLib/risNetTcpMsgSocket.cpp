@@ -72,7 +72,7 @@ void TcpMsgSocket::configure()
 {
    // Configure the socket.
    BaseClass::reset();
-   BaseClass::mRemote.set(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::mRemote.setByHostName(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
    BaseClass::setOptionKeepAlive();
    BaseClass::setOptionNoDelay();

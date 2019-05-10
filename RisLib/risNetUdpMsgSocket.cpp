@@ -62,7 +62,7 @@ void UdpRxMsgSocket::initialize(Settings& aSettings)
 void UdpRxMsgSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mLocal.set(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
+   BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
    BaseClass::doSocket();
    BaseClass::doBind();
 
@@ -242,7 +242,7 @@ void UdpTxMsgSocket::initialize(Settings& aSettings)
 void UdpTxMsgSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mRemote.set(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::mRemote.setByHostName(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
 
    // Set valid flag from base class results.

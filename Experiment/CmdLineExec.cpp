@@ -63,21 +63,19 @@ void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
 
    struct addrinfo hints;
    struct addrinfo *result, *rp;
-   int sfd, s, j;
-   size_t len;
-   ssize_t nread;
-   char buf[BUF_SIZE];
+   int s;
 
    /* Obtain address(es) matching host/port */
 
    memset(&hints, 0, sizeof(struct addrinfo));
    hints.ai_family = AF_INET;    /* Allow IPv4 or IPv6 */
    hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */
-   hints.ai_flags = (AI_V4MAPPED | AI_ADDRCONFIG | AI_CANONNAME);
+   hints.ai_flags = (AI_V4MAPPED | AI_ADDRCONFIG | AI_CANONNAME | AI_NUMERICSERV);
    hints.ai_protocol = 0;          /* Any protocol */
 
 // s = getaddrinfo(aCmd->argString(1), NULL, NULL, &result);
-   s = getaddrinfo(aCmd->argString(1), NULL, &hints, &result);
+// s = getaddrinfo(aCmd->argString(1), NULL, &hints, &result);
+   s = getaddrinfo(aCmd->argString(1), "56001", &hints, &result);
    if (s != 0)
    {
       printf("ERROR1 getaddrinfo: %s\n", gai_strerror(s));
@@ -97,10 +95,13 @@ void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
       sockaddr_in* tSockAddrIn = (sockaddr_in*)rp->ai_addr;
       struct in_addr tAddr = tSockAddrIn->sin_addr;
       unsigned tValue = ntohl(tAddr.s_addr);
+      unsigned tPort = ntohs(tSockAddrIn->sin_port);
 
-      printf("ai_addr    %x\n", tValue);
+      printf("ai_addr value    %x\n", tValue);
+      printf("ai_addr port     %d\n", tPort);
 
-      Ris::Sockets::IpAddress tA1(tValue);
+      Ris::Sockets::IpAddress tA1;
+      tA1.set(tValue);
       printf("A1         %s\n", tA1.mString);
    }
 

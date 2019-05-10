@@ -35,16 +35,6 @@ IpAddress :: IpAddress()
    reset();
 }
 
-IpAddress::IpAddress(char* aAddress)
-{
-   set(aAddress);
-}
-
-IpAddress::IpAddress(unsigned  aAddress)
-{
-   set(aAddress);
-}
-
 //******************************************************************************
 
 void IpAddress::reset()
@@ -128,8 +118,10 @@ bool IpAddress::isBroadcast()
 
 bool IpAddress::isMulticast()
 {
-   IpAddress tMulticastLo("224.0.0.0");
-   IpAddress tMulticastHi("239.255.255.255");
+   IpAddress tMulticastLo;
+   IpAddress tMulticastHi;
+   tMulticastLo.set("224.0.0.0");
+   tMulticastHi.set("239.255.255.255");
 
    return (tMulticastLo.mValue <= mValue) && (mValue <= tMulticastHi.mValue);
 }
@@ -141,22 +133,6 @@ bool IpAddress::isMulticast()
 SocketAddress::SocketAddress()
 {
    reset();
-}
-
-//******************************************************************************
-
-SocketAddress::SocketAddress(char* aIpAddr,int aPort)
-{
-   mIpAddr.set(aIpAddr);
-   mPort = aPort;
-}
-
-//******************************************************************************
-
-SocketAddress::SocketAddress(IpAddress aIpAddr,int aPort)
-{
-   mIpAddr = aIpAddr;
-   mPort = aPort;
 }
 
 //******************************************************************************

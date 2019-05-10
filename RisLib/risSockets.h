@@ -52,9 +52,6 @@ class IpAddress
 public:
 
    IpAddress();
-   IpAddress(char*     aAddress);
-   IpAddress(unsigned  aAddress);
-
    void reset();
 
    void set (char*     aAddress);
@@ -82,12 +79,11 @@ class SocketAddress
 public:
 
    SocketAddress();
-   SocketAddress(char*     aIpAddr,int aPort);
-   SocketAddress(IpAddress aIpAddr,int aPort);
    void reset ();
 
    void set (char*     aIpAddr,int aPort);
    void set (IpAddress aIpAddr,int aPort);
+   void setByName(char*     aIpAddr, int aPort);
 
    IpAddress mIpAddr;
    int       mPort;

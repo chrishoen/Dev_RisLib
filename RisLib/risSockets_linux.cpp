@@ -138,8 +138,6 @@ void SocketAddress::setByHostName(const char* aNode, int aPort)
    char tPortString[20];
    sprintf(tPortString, "%d", aPort);
 
-   /* Obtain address(es) matching host/port */
-
    memset(&hints, 0, sizeof(struct addrinfo));
    hints.ai_family = AF_INET;    /* Allow IPv4 or IPv6 */
    hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */

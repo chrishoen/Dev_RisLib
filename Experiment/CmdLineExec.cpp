@@ -142,7 +142,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, "remotehost");
    Ris::Sockets::IpAddress tA1;
-   tA1.setByHostName(aCmd->argString(1));
+// tA1.setByHostName(aCmd->argString(1));
 
    Prn::print(0, "A1");
    Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));

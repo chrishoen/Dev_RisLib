@@ -54,12 +54,9 @@ public:
    IpAddress();
    void reset();
 
-   void set (char*     aAddress);
-   void set (unsigned  aAddress);
+   void set (const char* aAddress);
+   void set (unsigned    aAddress);
  
-   void setByHostLocal ();
-   void setByHostName  (char* aName);
-
    bool mValid;
    unsigned  mValue;
    char mString[20];
@@ -81,9 +78,9 @@ public:
    SocketAddress();
    void reset ();
 
-   void set (char*     aIpAddr,int aPort);
-   void set (IpAddress aIpAddr,int aPort);
-   void setByName(char*     aIpAddr, int aPort);
+   void set      (const char*  aIpAddr,int aPort);
+   void set      (IpAddress    aIpAddr,int aPort);
+   void setByName(const char*  aNode,  int aPort);
 
    IpAddress mIpAddr;
    int       mPort;

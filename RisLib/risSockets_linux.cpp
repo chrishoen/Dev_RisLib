@@ -46,7 +46,7 @@ void IpAddress::reset()
 
 //******************************************************************************
 
-void IpAddress::set(char* aAddress)
+void IpAddress::set(const char* aAddress)
 {
    reset();
    struct in_addr tInAddr;
@@ -66,38 +66,6 @@ void IpAddress::set(unsigned aAddress)
    tInAddr.s_addr = htonl(mValue);
    strncpy(mString, inet_ntoa(tInAddr), 16);
    mValid = true;
-}
-
-//******************************************************************************
-
-void IpAddress::setByHostLocal()
-{
-   char name[200];
-   mValue = gethostname(name,200);
-   setByHostName(name);
-}
-
-//******************************************************************************
-
-void IpAddress::setByHostName(char* aName)
-{
-   struct hostent* hostEnt = gethostbyname(aName);
-
-   if (hostEnt)
-   {
-      char* bytePtr = *hostEnt->h_addr_list;
-      u_long* uintPtr = (u_long*)bytePtr;
-      mValue = ntohl(*uintPtr);
-   }
-   else
-   {
-      mValue = 0;
-   }
-   set(mValue);
-   return;
-   struct in_addr inAddr;
-   inAddr.s_addr = htonl(mValue);
-   strcpy(mString, inet_ntoa(inAddr));
 }
 
 //******************************************************************************
@@ -145,7 +113,7 @@ void SocketAddress::reset()
 
 //******************************************************************************
 
-void SocketAddress::set(char* aIpAddr,int aPort)
+void SocketAddress::set(const char* aIpAddr,int aPort)
 {
    mIpAddr.set(aIpAddr);
    mPort = aPort;
@@ -157,6 +125,12 @@ void SocketAddress::set(IpAddress aIpAddr,int aPort)
 {
    mIpAddr = aIpAddr;
    mPort   = aPort;
+}
+
+//******************************************************************************
+
+void SocketAddress::setByName(const char* aNode, int aPort)
+{
 }
 
 //******************************************************************************

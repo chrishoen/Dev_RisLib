@@ -33,22 +33,13 @@ IpAddress::IpAddress()
    reset();
 }
 
-IpAddress::IpAddress(char* aAddress)
-{
-   set(aAddress);
-}
-
-IpAddress::IpAddress(int   aAddress)
-{
-   set(aAddress);
-}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 void IpAddress::reset()
 {
+   mValid = false;
    mValue = 0;
    strncpy(mString,"",16);
 }
@@ -57,61 +48,30 @@ void IpAddress::reset()
 //******************************************************************************
 //******************************************************************************
 
-void IpAddress::set(char* aAddress)
+void IpAddress::set(const char* aAddress)
 {
-   setByHostName(aAddress);
-   return;
+   reset();
+   struct in_addr tInAddr;
+// if (inet_aton(aAddress, &tInAddr) == 0) return;
+   if (InetPton(AF_INET,(PCSTR)aAddress, &tInAddr) <= 0) return;
 
-   if(strlen(aAddress)>16) return;
-   mValue = ntohl(inet_addr(aAddress));
-   strncpy(mString,aAddress,16);
+   mValue = ntohl(tInAddr.s_addr);
+   strncpy(mString, inet_ntoa(tInAddr), 16);
+   mValid = true;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void IpAddress::set(int aAddress)
+void IpAddress::set(unsigned aAddress)
 {
+   reset();
    mValue = aAddress;
-
-   struct in_addr inAddr;
-   inAddr.s_addr = htonl(mValue);
-   strcpy(mString,inet_ntoa(inAddr));
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void IpAddress::setByHostLocal()
-{
-   char name[200];
-   mValue = gethostname(name,200);
-   setByHostName(name);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void IpAddress::setByHostName(char* aName)
-{
-   struct hostent* hostEnt = gethostbyname(aName);
-
-   if(hostEnt)
-   {
-      char* bytePtr = *hostEnt->h_addr_list;
-      u_long* uintPtr = (u_long*)bytePtr;
-      mValue = ntohl(*uintPtr);
-   }
-   else
-   {
-      mValue = 0;
-   }
-   struct in_addr inAddr;
-   inAddr.s_addr = htonl(mValue);
-   strcpy(mString,inet_ntoa(inAddr));
+   struct in_addr tInAddr;
+   tInAddr.s_addr = htonl(mValue);
+   strncpy(mString, inet_ntoa(tInAddr), 16);
+   mValid = true;
 }
 
 //******************************************************************************
@@ -138,8 +98,10 @@ bool IpAddress::isBroadcast()
 
 bool IpAddress::isMulticast()
 {
-   IpAddress tMulticastLo("224.0.0.0");
-   IpAddress tMulticastHi("239.255.255.255");
+   IpAddress tMulticastLo;
+   IpAddress tMulticastHi;
+   tMulticastLo.set("224.0.0.0");
+   tMulticastHi.set("239.255.255.255");
 
    return (tMulticastLo.mValue <= mValue) && (mValue <= tMulticastHi.mValue);
 }
@@ -160,26 +122,6 @@ SocketAddress::SocketAddress()
 //******************************************************************************
 //******************************************************************************
 
-SocketAddress::SocketAddress(char* aIpAddr,int aPort)
-{
-   mIpAddr.set(aIpAddr);
-   mPort = aPort;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-SocketAddress::SocketAddress(IpAddress aIpAddr,int aPort)
-{
-   mIpAddr = aIpAddr;
-   mPort = aPort;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void SocketAddress::reset()
 {
    mIpAddr.reset();
@@ -190,7 +132,7 @@ void SocketAddress::reset()
 //******************************************************************************
 //******************************************************************************
 
-void SocketAddress::set(char* aIpAddr,int aPort)
+void SocketAddress::set(const char* aIpAddr,int aPort)
 {
    mIpAddr.set(aIpAddr);
    mPort = aPort;
@@ -200,10 +142,51 @@ void SocketAddress::set(char* aIpAddr,int aPort)
 //******************************************************************************
 //******************************************************************************
 
-void SocketAddress::set(IpAddress aIpAddr,int aPort)
+void SocketAddress::set(IpAddress aIpAddr, int aPort)
 {
    mIpAddr = aIpAddr;
-   mPort   = aPort;
+   mPort = aPort;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void SocketAddress::setByHostName(const char* aNode, int aPort)
+{
+   reset();
+
+   struct addrinfo hints;
+   struct addrinfo *result, *rp;
+   int s;
+
+   char tPortString[20];
+   sprintf(tPortString, "%d", aPort);
+
+   memset(&hints, 0, sizeof(struct addrinfo));
+   hints.ai_family = AF_INET;
+   hints.ai_socktype = SOCK_DGRAM;
+   hints.ai_flags = (AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV);
+   hints.ai_protocol = 0;
+
+   s = getaddrinfo(aNode, tPortString, &hints, &result);
+   if (s != 0)
+   {
+      printf("ERROR1 getaddrinfo: %s %s\n", aNode, gai_strerror(s));
+      return;
+   }
+
+   for (rp = result; rp != NULL; rp = rp->ai_next)
+   {
+      sockaddr_in* tSockAddrIn = (sockaddr_in*)rp->ai_addr;
+      struct in_addr tAddr = tSockAddrIn->sin_addr;
+      unsigned tValue = ntohl(tAddr.s_addr);
+      unsigned tPort = ntohs(tSockAddrIn->sin_port);
+      mIpAddr.set(tValue);
+      mPort = tPort;
+   }
+
+   freeaddrinfo(result);
 }
 
 //******************************************************************************

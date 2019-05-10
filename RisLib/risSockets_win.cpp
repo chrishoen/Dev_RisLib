@@ -157,7 +157,7 @@ void SocketAddress::setByHostName(const char* aNode, int aPort)
    reset();
 
    struct addrinfo hints;
-   struct addrinfo *result, *rp;
+   struct addrinfo *result;
    int s;
 
    char tPortString[20];
@@ -176,15 +176,12 @@ void SocketAddress::setByHostName(const char* aNode, int aPort)
       return;
    }
 
-   for (rp = result; rp != NULL; rp = rp->ai_next)
-   {
-      sockaddr_in* tSockAddrIn = (sockaddr_in*)rp->ai_addr;
-      struct in_addr tAddr = tSockAddrIn->sin_addr;
-      unsigned tValue = ntohl(tAddr.s_addr);
-      unsigned tPort = ntohs(tSockAddrIn->sin_port);
-      mIpAddr.set(tValue);
-      mPort = tPort;
-   }
+   sockaddr_in* tSockAddrIn = (sockaddr_in*)result->ai_addr;
+   struct in_addr tAddr = tSockAddrIn->sin_addr;
+   unsigned tValue = ntohl(tAddr.s_addr);
+   unsigned tPort = ntohs(tSockAddrIn->sin_port);
+   mIpAddr.set(tValue);
+   mPort = tPort;
 
    freeaddrinfo(result);
 }

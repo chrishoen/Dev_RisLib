@@ -81,7 +81,8 @@ public:
    void set (const char*  aIpAddr,int aPort);
    void set (IpAddress    aIpAddr,int aPort);
 
-   void setByHostName(const char*  aNode,  int aPort);
+   void setByHostName(const char*  aNode, int aPort);
+   void setForAny(int aPort);
 
    IpAddress mIpAddr;
    int       mPort;

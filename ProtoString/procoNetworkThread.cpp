@@ -59,8 +59,8 @@ void NetworkThread::threadInitFunction()
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setLocalIp  (gUdpSettings.mMyUdpIPAddress,    gUdpSettings.mMyUdpPort);
-   tSettings.setRemoteIp (gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
+   tSettings.setLocalPort(gUdpSettings.mMyUdpPort);
+   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
    tSettings.mRxStringQCall = mRxStringQCall;
    tSettings.mPrintLevel = gUdpSettings.mPrintLevel;
 

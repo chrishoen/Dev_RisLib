@@ -58,7 +58,7 @@ void ServerThread::threadInitFunction()
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setLocalIp(gTcpSettings.mTcpServerIPAddress, gTcpSettings.mTcpServerPort);
+   tSettings.setLocalPort(gTcpSettings.mTcpServerPort);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mMaxSessions = gTcpSettings.mTcpMaxSessions;
    tSettings.mServerSessionQCall = mSessionQCall;

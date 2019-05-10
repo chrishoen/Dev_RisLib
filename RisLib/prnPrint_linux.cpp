@@ -110,7 +110,7 @@ void initializePrint()
       {
          // Create a socket to send to the PrintView console.
          Ris::Net::Settings tSettings;
-         tSettings.setRemoteIp(
+         tSettings.setRemoteAddress(
             gPrintSettings.mPrintViewIPAddress,
             rConsolePort[i]);
          rConsoleSocket[i].initialize(tSettings);

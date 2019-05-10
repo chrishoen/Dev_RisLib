@@ -55,7 +55,8 @@ void TcpSettings::show()
 
    printf("MyAppNumber             %16d\n",       mMyAppNumber);
 
-   printf("TcpServer               %16s : %5d\n", mTcpServerIPAddress, mTcpServerPort);
+   printf("TcpServerAddress        %16s\n",       mTcpServerIPAddress);
+   printf("TcpServerPort           %16d\n",       mTcpServerPort);
    printf("TcpMaxSessions          %16d\n",       mTcpMaxSessions);
 
    printf("\n");
@@ -79,13 +80,9 @@ void TcpSettings::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("MyAppNumber"))   mMyAppNumber = aCmd->argInt(1);
 
-   if (aCmd->isCmd("TcpServer"))
-   {
-      aCmd->copyArgString(1, mTcpServerIPAddress,cMaxStringSize);
-      mTcpServerPort = aCmd->argInt(2);
-   }
-
-   if (aCmd->isCmd("TcpMaxSessions")) mTcpMaxSessions = aCmd->argInt(1);
+   if (aCmd->isCmd("TcpServerAddress"))    aCmd->copyArgString(1, mTcpServerIPAddress,cMaxStringSize);
+   if (aCmd->isCmd("TcpServerPort"))       mTcpServerPort = aCmd->argInt(2);
+   if (aCmd->isCmd("TcpMaxSessions"))      mTcpMaxSessions = aCmd->argInt(1);
 
    if (aCmd->isCmd("ThreadTimerPeriod"))   mThreadTimerPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("NumWords"))            mNumWords = aCmd->argInt(1);

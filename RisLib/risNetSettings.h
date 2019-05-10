@@ -39,9 +39,6 @@ public:
    //***************************************************************************
    // Members.
 
-   // IP address.
-   char mLocalIpAddr[20];
-
    // IP port.
    int mLocalIpPort;
 
@@ -86,8 +83,8 @@ public:
    Settings();
 
    // Set member.
-   void setLocalIp (char* aIpAddr, int aIpPort);
-   void setRemoteIp(char* aIpAddr, int aIpPort);
+   void setLocalPort (int aIpPort);
+   void setRemoteAddress(char* aIpAddr, int aIpPort);
 };
 
 //******************************************************************************

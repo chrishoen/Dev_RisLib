@@ -20,7 +20,6 @@ namespace Net
 
 Settings::Settings()
 {
-   mLocalIpAddr[0] = 0;
    mLocalIpPort = 0;
    mRemoteIpAddr[0] = 0;
    mRemoteIpPort = 0;
@@ -30,13 +29,12 @@ Settings::Settings()
    mThreadPriority = Ris::Threads::gPriorities.mUdp;
 }
 
-void Settings::setLocalIp(char* aIpAddr, int aIpPort)
+void Settings::setLocalPort(int aIpPort)
 {
-   strcpy(mLocalIpAddr, aIpAddr);
    mLocalIpPort = aIpPort;
 }
 
-void Settings::setRemoteIp(char* aIpAddr, int aIpPort)
+void Settings::setRemoteAddress(char* aIpAddr, int aIpPort)
 {
    strcpy(mRemoteIpAddr, aIpAddr);
    mRemoteIpPort = aIpPort;

@@ -68,7 +68,6 @@ public:
    int  mMyAppNumber;
 
    // UDP address and port.
-   char mMyUdpIPAddress[cMaxStringSize];
    int  mMyUdpPort;
 
    // UDP address and port.

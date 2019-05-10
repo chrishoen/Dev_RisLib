@@ -155,23 +155,33 @@ void SocketAddress::set(IpAddress aIpAddr,int aPort)
 //******************************************************************************
 //******************************************************************************
 
+void SocketAddress::setForAny(int aPort)
+{
+   mIpAddr.set((unsigned)0);
+   mPort = aPort;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void SocketAddress::setByHostName(const char* aNode, int aPort)
 {
+   reset();
+
    struct addrinfo hints;
-   struct addrinfo *result, *rp;
+   struct addrinfo *result;
    int s;
 
    char tPortString[20];
    sprintf(tPortString, "%d", aPort);
 
    memset(&hints, 0, sizeof(struct addrinfo));
-   hints.ai_family = AF_INET;    /* Allow IPv4 or IPv6 */
-   hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */
+   hints.ai_family = AF_INET;
+   hints.ai_socktype = SOCK_DGRAM;
    hints.ai_flags = (AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV);
-   hints.ai_protocol = 0;          /* Any protocol */
+   hints.ai_protocol = 0;
 
-// s = getaddrinfo(aCmd->argString(1), NULL, NULL, &result);
-// s = getaddrinfo(aCmd->argString(1), NULL, &hints, &result);
    s = getaddrinfo(aNode, tPortString, &hints, &result);
    if (s != 0)
    {
@@ -179,25 +189,12 @@ void SocketAddress::setByHostName(const char* aNode, int aPort)
       return;
    }
 
-   for (rp = result; rp != NULL; rp = rp->ai_next)
-   {
-      printf("DATA****************************\n");
-
-      sockaddr_in* tSockAddrIn = (sockaddr_in*)rp->ai_addr;
-      struct in_addr tAddr = tSockAddrIn->sin_addr;
-      unsigned tValue = ntohl(tAddr.s_addr);
-      unsigned tPort = ntohs(tSockAddrIn->sin_port);
-
-      printf("ai_addr value    %x\n", tValue);
-      printf("ai_addr port     %d\n", tPort);
-
-      Ris::Sockets::IpAddress tA1;
-      tA1.set(tValue);
-      printf("A1         %s\n", tA1.mString);
-
-      mIpAddr.set(tValue);
-      mPort = tPort;
-   }
+   sockaddr_in* tSockAddrIn = (sockaddr_in*)result->ai_addr;
+   struct in_addr tAddr = tSockAddrIn->sin_addr;
+   unsigned tValue = ntohl(tAddr.s_addr);
+   unsigned tPort = ntohs(tSockAddrIn->sin_port);
+   mIpAddr.set(tValue);
+   mPort = tPort;
 
    freeaddrinfo(result);
 }

@@ -112,6 +112,7 @@ public:
    int mProtocol;
  
    bool updateError(int aStatus);
+   void setError(int aError);
 
    int mStatus;
    int mError;

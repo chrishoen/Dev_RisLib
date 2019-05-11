@@ -292,6 +292,16 @@ bool BaseSocket::updateError(int aStatus)
 //******************************************************************************
 //******************************************************************************
 
+void BaseSocket::setError(int aError)
+{
+   mStatus = -1;
+   mError = aError;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 bool BaseSocket::setOptionBroadcast ()
 {
    int tStatus=0;
@@ -465,6 +475,12 @@ bool BaseUdpSocket :: setMulticast()
 
 bool BaseSocket::doBind()
 {
+   if (!mLocal.mIpAddr.mValid)
+   {
+      setError(666);
+      return false;
+   }
+
    int tStatus=0;
 
    sockaddr_in localName;memset(&localName,0,sizeof(localName));
@@ -482,6 +498,12 @@ bool BaseSocket::doBind()
 
 bool BaseUdpSocket::doConnect()
 {
+   if (!mRemote.mIpAddr.mValid)
+   {
+      setError(666);
+      return false;
+   }
+
    int tStatus=0;
 
    sockaddr_in hostName;memset(&hostName,0,sizeof(hostName));
@@ -532,6 +554,12 @@ bool BaseUdpSocket::doRecv(char* aPayload,int& aLength,int aMaxLength)
 
 bool BaseUdpSocket::doSendTo(SocketAddress& aHost,const char* aPayload,int& aLength)
 {
+   if (!aHost.mIpAddr.mValid)
+   {
+      setError(666);
+      return false;
+   }
+
    int tStatus=0;
 
    if (aLength==0) return true;
@@ -638,6 +666,12 @@ bool BaseTcpServerHubSocket::doListen()
 
 bool BaseTcpServerHubSocket::doAccept(BaseTcpStreamSocket& aStream)
 {
+   if (!mRemote.mIpAddr.mValid)
+   {
+      setError(666);
+      return false;
+   }
+
    int tStatus=0;
 
    sockaddr tempName;
@@ -786,6 +820,12 @@ bool BaseTcpStreamSocket::setOptionKeepAlive ()
 
 bool BaseTcpStreamSocket::doConnect()
 {
+   if (!mRemote.mIpAddr.mValid)
+   {
+      setError(666);
+      return false;
+   }
+
    int tStatus=0;
 
    sockaddr_in hostName;memset(&hostName,0,sizeof(hostName));

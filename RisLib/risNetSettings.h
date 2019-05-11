@@ -88,6 +88,9 @@ public:
    // Set member.
    void setLocalPort (int aIpPort);
    void setRemoteAddress(char* aIpAddr, int aIpPort);
+
+   // Set member.
+   void setUdpWrapFlag(bool aUdpWrapFlag);
 };
 
 //******************************************************************************

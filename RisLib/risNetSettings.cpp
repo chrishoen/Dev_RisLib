@@ -41,6 +41,15 @@ void Settings::setRemoteAddress(char* aIpAddr, int aIpPort)
    mRemoteIpPort = aIpPort;
 }
 
+// Set member.
+void Settings::setUdpWrapFlag(bool aUdpWrapFlag)
+{
+   mUdpWrapFlag = aUdpWrapFlag;
+   if (!mUdpWrapFlag) return;
+   strcpy(mRemoteIpAddr, "UdpWrap");
+}
+
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

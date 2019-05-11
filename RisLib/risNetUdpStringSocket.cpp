@@ -7,8 +7,6 @@
 
 #include "stdafx.h"
 
-#include "prnPrint.h"
-
 #include "risNetUdpStringSocket.h"
 
 namespace Ris
@@ -228,21 +226,6 @@ void UdpTxStringSocket::configure()
    else
    {
       TS::print(1, "UdpTxStringSocket  FAIL %16s : %5d $ %d %d",
-         BaseClass::mRemote.mString,
-         BaseClass::mRemote.mPort,
-         BaseClass::mStatus,
-         BaseClass::mError);
-   }
-   // Show.
-   if (mValidFlag)
-   {
-      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d",
-         BaseClass::mRemote.mString,
-         BaseClass::mRemote.mPort);
-   }
-   else
-   {
-      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  FAIL $ %16s : %d $ %d %d",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,

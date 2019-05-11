@@ -93,12 +93,8 @@ void SocketAddress::setByHostName(const char* aNode, int aPort)
       return;
    }
 
-   sockaddr_in* tSockAddrIn = (sockaddr_in*)result->ai_addr;
-   struct in_addr tAddr = tSockAddrIn->sin_addr;
-   unsigned tValue = ntohl(tAddr.s_addr);
-   unsigned tPort = ntohs(tSockAddrIn->sin_port);
-   mIpAddr.set(tValue);
-   mPort = tPort;
+   sockaddr_in* tAddrIn = (sockaddr_in*)result->ai_addr;
+   setByAddress(ntohl(tAddrIn->sin_addr.s_addr), ntohs(tAddrIn->sin_port));
 
    freeaddrinfo(result);
 }
@@ -183,11 +179,11 @@ BaseSocket::~BaseSocket()
 
 void BaseSocket::reset()
 {
+   mStatus = 0;
+   mError = 0;
    mBaseSpecific->mDesc = -1;
-   mStatus       = 0;
-   mError        = 0;
-   mType         = 0;
-   mProtocol     = 0;
+   mType = 0;
+   mProtocol = 0;
    mLocal.reset();
    mRemote.reset();
 }
@@ -196,29 +192,12 @@ void BaseSocket::reset()
 //******************************************************************************
 //******************************************************************************
 
-bool BaseSocket::doBind()
-{
-   int tStatus=0;
-
-   sockaddr_in localName;
-   memset(&localName,0,sizeof(localName));
-   localName.sin_family      = AF_INET;
-   localName.sin_addr.s_addr = htonl(mLocal.mAddress);
-   localName.sin_port        = htons(mLocal.mPort);
-
-   tStatus = bind(mBaseSpecific->mDesc,(sockaddr*) &localName,sizeof(localName));
-   return updateError(tStatus);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 bool BaseSocket::doClose()
 {
-   int tStatus=0;
+   int tStatus = 0;
 
    if (mBaseSpecific->mDesc == -1) return false;
+   // tStatus = close(mBaseSpecific->mDesc);
    tStatus = shutdown(mBaseSpecific->mDesc, SHUT_RDWR);
    mBaseSpecific->mDesc = -1;
    return updateError(tStatus);
@@ -232,7 +211,7 @@ bool BaseSocket::updateError(int aStatus)
 {
    int tError;
 
-   if(aStatus < 0)
+   if (aStatus < 0)
    {
       tError = errno;
    }
@@ -242,9 +221,19 @@ bool BaseSocket::updateError(int aStatus)
    }
 
    mStatus = aStatus;
-   mError  = tError;
+   mError = tError;
 
    return aStatus >= 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void BaseSocket::setError(int aError)
+{
+   mStatus = -1;
+   mError = aError;
 }
 
 //******************************************************************************
@@ -316,7 +305,7 @@ bool BaseSocket::setOptionNoDelay ()
 //******************************************************************************
 //******************************************************************************
 
-bool BaseUdpSocket::setOptionMulticast(IpAddress& aGroup,IpAddress& aInterface)
+bool BaseUdpSocket::setOptionMulticast(SocketAddress& aGroup, SocketAddress& aInterface)
 {
    int tStatus = 0;
 
@@ -378,7 +367,7 @@ bool BaseUdpSocket::doSocket()
    mBaseSpecific->mDesc = socket(AF_INET,mType,mProtocol);
 
    if (mBaseSpecific->mDesc == -1) tStatus = -1;
-   else                                  tStatus =  0;
+   else                            tStatus =  0;
 
    return updateError(tStatus);
 }
@@ -397,13 +386,42 @@ bool BaseUdpSocket :: setMulticast()
 //******************************************************************************
 //******************************************************************************
 
+bool BaseSocket::doBind()
+{
+   if (!mLocal.mValid)
+   {
+      setError(666);
+      return false;
+   }
+
+   int tStatus = 0;
+
+   sockaddr_in localName; memset(&localName, 0, sizeof(localName));
+   localName.sin_family = AF_INET;
+   localName.sin_addr.s_addr = htonl(mLocal.mAddress);
+   localName.sin_port = htons(mLocal.mPort);
+
+   tStatus = bind(mBaseSpecific->mDesc, (sockaddr*)&localName, sizeof(localName));
+   return updateError(tStatus);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 bool BaseUdpSocket::doConnect()
 {
+   if (!mRemote.mValid)
+   {
+      setError(666);
+      return false;
+   }
+
    int tStatus=0;
 
    sockaddr_in hostName;memset(&hostName,0,sizeof(hostName));
    hostName.sin_family      = AF_INET;
-   hostName.sin_addr.s_addr = htonl(mRemote.mAdddress);
+   hostName.sin_addr.s_addr = htonl(mRemote.mAddress);
    hostName.sin_port        = htons(mRemote.mPort);
 
    tStatus = connect(mBaseSpecific->mDesc,(sockaddr*) &hostName,sizeof(hostName));
@@ -449,6 +467,12 @@ bool BaseUdpSocket::doRecv(char* aPayload,int& aLength,int aMaxLength)
 
 bool BaseUdpSocket::doSendTo(SocketAddress& aHost,const char* aPayload,int& aLength)
 {
+   if (!aHost.mValid)
+   {
+      setError(666);
+      return false;
+   }
+
    int tStatus=0;
 
    if (aLength==0) return true;
@@ -554,7 +578,7 @@ bool BaseTcpServerHubSocket::doListen()
 
 bool BaseTcpServerHubSocket::doAccept(BaseTcpStreamSocket& aStream)
 {
-   int tStatus=0;
+   int tStatus = 0;
 
    sockaddr tempName;
    int tempNameLength;
@@ -563,24 +587,23 @@ bool BaseTcpServerHubSocket::doAccept(BaseTcpStreamSocket& aStream)
 
    int desc;
    tempNameLength = sizeof(tempName);
-   desc = accept(mBaseSpecific->mDesc,&tempName,(socklen_t*)&tempNameLength);
-   memmove(&clientName,&tempName,sizeof(tempName));
-   if(desc != -1)
+   desc = accept(mBaseSpecific->mDesc, &tempName, (socklen_t*)&tempNameLength);
+   memmove(&clientName, &tempName, sizeof(tempName));
+   if (desc != -1)
    {
-       tStatus=0;
-       aStream.mBaseSpecific->mDesc = desc;
-       aStream.mLocal = mLocal;
-       aStream.mType  = SOCK_STREAM;
-       aStream.mRemote.setByAddress(ntohl(clientName.sin_addr.s_addr), ntohs(clientName.sin_port));
+      tStatus = 0;
+      aStream.mBaseSpecific->mDesc = desc;
+      aStream.mLocal = mLocal;
+      aStream.mType = SOCK_STREAM;
+      aStream.mRemote.setByAddress(ntohl(clientName.sin_addr.s_addr), ntohs(clientName.sin_port));
    }
    else
    {
-     tStatus = -1;
+      tStatus = -1;
    }
 
    return updateError(tStatus);
 }
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -656,6 +679,8 @@ bool BaseTcpStreamSocket::doSocket()
 
    if (mBaseSpecific->mDesc == -1) tStatus = -1;
    else                                  tStatus =  0;
+
+   setOptionDontLinger();
 
    return updateError(tStatus);
 }

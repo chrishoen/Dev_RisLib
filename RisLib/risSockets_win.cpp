@@ -391,7 +391,7 @@ bool BaseUdpSocket::doSocket()
    mBaseSpecific->mDesc = WSASocket(AF_INET,SOCK_DGRAM,0,NULL,0,dwFlags);
 
    if (mBaseSpecific->mDesc==INVALID_SOCKET) tStatus = -1;
-   else                       tStatus =  0;
+   else                                      tStatus =  0;
 
    return updateError(tStatus);
 }
@@ -701,7 +701,7 @@ bool BaseTcpStreamSocket::doSocket()
 
    mType = SOCK_STREAM;
    mProtocol = 0;
-   mBaseSpecific->mDesc = socket(AF_INET,SOCK_STREAM,0);
+   mBaseSpecific->mDesc = socket(AF_INET, mType, mProtocol);
 
    if (mBaseSpecific->mDesc==INVALID_SOCKET) tStatus = -1;
    else                       tStatus =  0;

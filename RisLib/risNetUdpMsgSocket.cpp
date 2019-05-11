@@ -73,13 +73,13 @@ void UdpRxMsgSocket::configure()
    if (mValidFlag)
    {
       TS::print(1, "UdpRxMsgSocket     PASS %16s : %5d",
-         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
       TS::print(1, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
-         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
          BaseClass::mError);
@@ -142,7 +142,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 
    TS::print(3, "UdpRxMsgSocket rx message %d", mRxLength);
    TS::print(3, "UdpRxMsgSocket     FROM %16s : %5d",
-      mFromAddress.mIpAddr.mString,
+      mFromAddress.mString,
       mLocal.mPort);
 
    // Set the buffer length.
@@ -249,19 +249,19 @@ void UdpTxMsgSocket::configure()
    BaseClass::doSocket();
 
    // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0 && BaseClass::mRemote.mIpAddr.mValid;
+   mValidFlag = BaseClass::mStatus == 0 && BaseClass::mRemote.mValid;
 
    // Show.
    if (mValidFlag)
    {
       TS::print(1, "UdpTxMsgSocket     PASS %16s : %5d",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
       TS::print(1, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
          BaseClass::mError);

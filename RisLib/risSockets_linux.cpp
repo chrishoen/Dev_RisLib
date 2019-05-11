@@ -27,89 +27,6 @@ namespace Sockets
 {
 
 //******************************************************************************
- //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-IpAddress :: IpAddress()
-{
-   reset();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void IpAddress::reset()
-{
-   mValid = false;
-   mValue = 0;
-   strncpy(mString,"",16);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void IpAddress::set(const char* aAddress)
-{
-   reset();
-   struct in_addr tInAddr;
-   if (inet_aton(aAddress, &tInAddr)==0) return;
-   mValue = ntohl(tInAddr.s_addr);
-   strncpy(mString,inet_ntoa(tInAddr),16);
-   mValid = true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void IpAddress::set(unsigned aAddress)
-{
-   reset();
-   mValue = aAddress;
-   struct in_addr tInAddr;
-   tInAddr.s_addr = htonl(mValue);
-   strncpy(mString, inet_ntoa(tInAddr), 16);
-   mValid = true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void IpAddress::setForBroadcast()
-{
-   set(0xFFFFFFFF);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool IpAddress::isBroadcast()
-{
-   return mValue==0xFFFFFFFF;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool IpAddress::isMulticast()
-{
-   IpAddress tMulticastLo;
-   IpAddress tMulticastHi;
-   tMulticastLo.set("224.0.0.0");
-   tMulticastHi.set("239.255.255.255");
-
-   return (tMulticastLo.mValue <= mValue) && (mValue <= tMulticastHi.mValue);
-}
-
-//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -127,37 +44,24 @@ SocketAddress::SocketAddress()
 
 void SocketAddress::reset()
 {
-   mIpAddr.reset();
-   mPort = 1024;
+   mValid = false;
+   mAddress = 0;
+   strcpy(mString,"invalid");
+   mPort = 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void SocketAddress::set(const char* aIpAddr,int aPort)
+void SocketAddress::setByAddress(unsigned aAddress, int aPort)
 {
-   mIpAddr.set(aIpAddr);
-   mPort = aPort;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void SocketAddress::set(IpAddress aIpAddr,int aPort)
-{
-   mIpAddr = aIpAddr;
-   mPort   = aPort;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void SocketAddress::setForAny(int aPort)
-{
-   mIpAddr.set((unsigned)0);
+   reset();
+   mAddress = aAddress;
+   struct in_addr tInAddr;
+   tInAddr.s_addr = htonl(mAddress);
+   strncpy(mString, inet_ntoa(tInAddr), 16);
+   mValid = true;
    mPort = aPort;
 }
 
@@ -197,6 +101,46 @@ void SocketAddress::setByHostName(const char* aNode, int aPort)
    mPort = tPort;
 
    freeaddrinfo(result);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void SocketAddress::setForAny(int aPort)
+{
+   setByAddress((unsigned)0,aPort);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void SocketAddress::setForBroadcast(int aPort)
+{
+   setByAddress(0xFFFFFFFF,aPort);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+bool SocketAddress::isBroadcast()
+{
+   return mAddress == 0xFFFFFFFF;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+bool SocketAddress::isMulticast()
+{
+   SocketAddress tMulticastLo;
+   SocketAddress tMulticastHi;
+   tMulticastLo.setByHostName("224.0.0.0", 0);
+   tMulticastHi.setByHostName("239.255.255.255", 0);
+   return (tMulticastLo.mAddress <= mAddress) && (mAddress <= tMulticastHi.mAddress);
 }
 
 //******************************************************************************
@@ -256,9 +200,10 @@ bool BaseSocket::doBind()
 {
    int tStatus=0;
 
-   sockaddr_in localName;memset(&localName,0,sizeof(localName));
+   sockaddr_in localName;
+   memset(&localName,0,sizeof(localName));
    localName.sin_family      = AF_INET;
-   localName.sin_addr.s_addr = inet_addr(mLocal.mIpAddr.mString);
+   localName.sin_addr.s_addr = htonl(mLocal.mAddress);
    localName.sin_port        = htons(mLocal.mPort);
 
    tStatus = bind(mBaseSpecific->mDesc,(sockaddr*) &localName,sizeof(localName));
@@ -274,7 +219,6 @@ bool BaseSocket::doClose()
    int tStatus=0;
 
    if (mBaseSpecific->mDesc == -1) return false;
-// tStatus = close(mBaseSpecific->mDesc);
    tStatus = shutdown(mBaseSpecific->mDesc, SHUT_RDWR);
    mBaseSpecific->mDesc = -1;
    return updateError(tStatus);
@@ -374,13 +318,13 @@ bool BaseSocket::setOptionNoDelay ()
 
 bool BaseUdpSocket::setOptionMulticast(IpAddress& aGroup,IpAddress& aInterface)
 {
-   int tStatus=0;
+   int tStatus = 0;
 
    struct ip_mreq tMreq;
-   tMreq.imr_multiaddr.s_addr = htonl(aGroup.mValue); 
-   tMreq.imr_interface.s_addr = htonl(aInterface.mValue); 
+   tMreq.imr_multiaddr.s_addr = htonl(aGroup.mAddress);
+   tMreq.imr_interface.s_addr = htonl(aInterface.mAddress);
 
-   tStatus=setsockopt(mBaseSpecific->mDesc,IPPROTO_IP,IP_ADD_MEMBERSHIP,(char*)&tMreq,sizeof(ip_mreq));
+   tStatus = setsockopt(mBaseSpecific->mDesc, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char*)&tMreq, sizeof(ip_mreq));
    return updateError(tStatus);
 }
 
@@ -413,7 +357,7 @@ bool BaseSocket::ioctlFlush ()
 //******************************************************************************
 //******************************************************************************
 
-bool BaseSocket::ioctlGetBcastAddr (IpAddress& aBcastAddr)
+bool BaseSocket::ioctlGetBcastAddr (SocketAddress& aBcastAddr)
 {
    return false;
 }
@@ -459,7 +403,7 @@ bool BaseUdpSocket::doConnect()
 
    sockaddr_in hostName;memset(&hostName,0,sizeof(hostName));
    hostName.sin_family      = AF_INET;
-   hostName.sin_addr.s_addr = inet_addr(mRemote.mIpAddr.mString);
+   hostName.sin_addr.s_addr = htonl(mRemote.mAdddress);
    hostName.sin_port        = htons(mRemote.mPort);
 
    tStatus = connect(mBaseSpecific->mDesc,(sockaddr*) &hostName,sizeof(hostName));
@@ -513,7 +457,7 @@ bool BaseUdpSocket::doSendTo(SocketAddress& aHost,const char* aPayload,int& aLen
    int         destinAddrSize = sizeof(sockaddr_in);
    memset(&destinAddr,0,sizeof(destinAddr));
    destinAddr.sin_family      = AF_INET;
-   destinAddr.sin_addr.s_addr = inet_addr(aHost.mIpAddr.mString);
+   destinAddr.sin_addr.s_addr = htonl(aHost.mAddress);
    destinAddr.sin_port        = htons(aHost.mPort);
    tStatus = sendto(mBaseSpecific->mDesc,aPayload,aLength,0,(sockaddr*)&destinAddr,sizeof(destinAddr));
 
@@ -538,8 +482,7 @@ bool BaseUdpSocket::doRecvFrom(SocketAddress& aHost,char* aPayload,int& aLength,
    if(tStatus>0) aLength = tStatus;
    else          aLength = 0;
 
-   aHost.mIpAddr.set(inet_ntoa(sender.sin_addr));
-   aHost.mPort = sender.sin_port;
+   aHost.setByAddress(ntohl(sender.sin_addr.s_addr), ntohs(sender.sin_port));
 
    return updateError(tStatus);
 }
@@ -628,8 +571,7 @@ bool BaseTcpServerHubSocket::doAccept(BaseTcpStreamSocket& aStream)
        aStream.mBaseSpecific->mDesc = desc;
        aStream.mLocal = mLocal;
        aStream.mType  = SOCK_STREAM;
-       aStream.mRemote.mIpAddr.set((int)clientName.sin_addr.s_addr);
-       aStream.mRemote.mPort = (int)clientName.sin_port;
+       aStream.mRemote.setByAddress(ntohl(clientName.sin_addr.s_addr), ntohs(clientName.sin_port));
    }
    else
    {
@@ -741,7 +683,7 @@ bool BaseTcpStreamSocket::doConnect()
 
    sockaddr_in hostName;memset(&hostName,0,sizeof(hostName));
    hostName.sin_family      = AF_INET;
-   hostName.sin_addr.s_addr = inet_addr(mRemote.mIpAddr.mString);
+   hostName.sin_addr.s_addr = htonl(mRemote.mAddress);
    hostName.sin_port        = htons(mRemote.mPort);
    tStatus = connect(mBaseSpecific->mDesc,(sockaddr*) &hostName,sizeof(hostName));
 

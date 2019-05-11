@@ -84,13 +84,13 @@ void TcpMsgSocket::configure()
    if (mValidFlag)
    {
       Prn::print(Prn::SocketInitS1, "TcpMsgSocket            %16s : %5d",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
       Prn::print(Prn::SocketErrorS1, "TcpMsgSocket       FAIL %16s : %5d $ %d %d",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
          BaseClass::mError);

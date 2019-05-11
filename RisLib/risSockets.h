@@ -14,8 +14,8 @@ calls are not documented here, look in a sockets book or on the web.
 
 Here are the classes:
 
-IPAddress is an ip address.
 SocketAddress is an ip address + a port number.
+They are stored in host order.
 
 BaseSocket is the socket base class. It contains a local and a host
 address. Local is the machine that the socket is running on and Host
@@ -47,45 +47,25 @@ namespace Sockets
 //******************************************************************************
 //******************************************************************************
 
-class IpAddress
-{
-public:
-
-   IpAddress();
-   void reset();
-
-   void set (const char* aAddress);
-   void set (unsigned    aAddress);
- 
-   bool mValid;
-   unsigned  mValue;
-   char mString[20];
-
-   void setForBroadcast ();
-   bool isBroadcast     ();
-
-   bool isMulticast     ();
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 class SocketAddress
 {
 public:
 
+   bool mValid;
+   unsigned mAddress;
+   char mString[32];
+   int mPort;
+
    SocketAddress();
    void reset ();
 
-   void set (const char*  aIpAddr,int aPort);
-   void set (IpAddress    aIpAddr,int aPort);
-
-   void setByHostName(const char*  aNode, int aPort);
+   void setByAddress(unsigned aAddress, int aPort);
+   void setByHostName(const char* aNode, int aPort);
    void setForAny(int aPort);
+   void setForBroadcast(int aPort);
 
-   IpAddress mIpAddr;
-   int       mPort;
+   bool isBroadcast();
+   bool isMulticast();
 };
 
 //******************************************************************************
@@ -125,7 +105,7 @@ public:
 
    bool ioctlFlush         ();
    bool ioctlBlocking      (bool aBlocking);
-   bool ioctlGetBcastAddr  (IpAddress& aBcastAddr);
+   bool ioctlGetBcastAddr  (SocketAddress& aBcastAddr);
 
 public:
    class BaseSpecific;
@@ -148,7 +128,7 @@ public:
    virtual bool doSendTo    (SocketAddress& aHost,const char* aPayload,int& aLength);
    virtual bool doRecvFrom  (SocketAddress& aHost,char* aPayload,int& aLength,int aMaxLength);
 
-   bool setOptionMulticast  (IpAddress& aGroup,IpAddress& aInterface);
+   bool setOptionMulticast  (SocketAddress& aGroup,SocketAddress& aInterface);
 };
 
 //******************************************************************************

@@ -68,13 +68,13 @@ void UdpRxStringSocket::configure()
    if (mValidFlag)
    {
       TS::print(1, "UdpRxStringSocket  PASS %16s : %5d",
-         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
       TS::print(1, "UdpRxStringSocket  FAIL %16s : %5d $ %d %d",
-         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
          BaseClass::mError);
@@ -100,13 +100,13 @@ void UdpRxStringSocket::configureLocal(int aPort)
    if (mValidFlag)
    {
       TS::print(1, "UdpRxStringSocket  PASS %16s : %5d",
-         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
       TS::print(1, "UdpRxStringSocket  FAIL %16s : %5d $ %d %d",
-         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
          BaseClass::mError);
@@ -222,13 +222,13 @@ void UdpTxStringSocket::configure()
    if (mValidFlag)
    {
       TS::print(1, "UdpTxStringSocket  PASS %16s : %5d",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
       TS::print(1, "UdpTxStringSocket  FAIL %16s : %5d $ %d %d",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
          BaseClass::mError);
@@ -237,13 +237,13 @@ void UdpTxStringSocket::configure()
    if (mValidFlag)
    {
       Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
       Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  FAIL $ %16s : %d $ %d %d",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
          BaseClass::mError);
@@ -261,13 +261,13 @@ void UdpTxStringSocket::show()
    if (mValidFlag)
    {
       printf("UdpTxStringSocket  $ %16s : %d\n",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
       printf("UdpTxStringSocket  FAIL $ %16s : %d $ %d %d\n",
-         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
          BaseClass::mError);

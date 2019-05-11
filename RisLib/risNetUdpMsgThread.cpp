@@ -88,7 +88,7 @@ void  UdpMsgThread::threadRunFunction()
                // Initialize and configure the transmit socket. Use the
                // receive from address and the settings port. Turn off
                // wrap mode.
-               mSettings.setRemoteAddress(mRxSocket.mFromAddress.mIpAddr.mString, mSettings.mRemoteIpPort);
+               mSettings.setRemoteAddress(mRxSocket.mFromAddress.mString, mSettings.mRemoteIpPort);
                mSettings.setUdpWrapFlag(false);
                mTxSocket.initialize(mSettings);
                mTxSocket.configure();

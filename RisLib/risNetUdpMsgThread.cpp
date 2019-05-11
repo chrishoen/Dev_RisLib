@@ -32,6 +32,9 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
    // Store settings.
    mSettings = aSettings;
    mRxMsgQCall = aSettings.mRxMsgQCall;
+
+   // Initialize variables.
+   mTxConfigFlag = false;
 }
 
 //******************************************************************************
@@ -52,6 +55,7 @@ void UdpMsgThread::threadInitFunction()
       // Initialize and configure the transmit socket.
       mTxSocket.initialize(mSettings);
       mTxSocket.configure();
+      mTxConfigFlag = true;
    }
 }
 
@@ -74,7 +78,7 @@ void  UdpMsgThread::threadRunFunction()
       ByteContent* tMsg=0;
       if (mRxSocket.doReceiveMsg(tMsg))
       {
-         // If this is the first receive message.
+         // If this is the first correct receive message.
          if (tFirstFlag)
          {
             tFirstFlag = false;
@@ -88,6 +92,7 @@ void  UdpMsgThread::threadRunFunction()
                mSettings.setUdpWrapFlag(false);
                mTxSocket.initialize(mSettings);
                mTxSocket.configure();
+               mTxConfigFlag = true;
             }
          }
          // Message was correctly received.
@@ -158,11 +163,18 @@ void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 // Send a transmit message through the socket to the peer. It executes a
-// blocking send call in the context of the calling thread. It is protected
-// by a mutex semaphore.
+// blocking send call in the context of the calling thread.
 
 void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {
+   // Guard.
+   if (!mTxConfigFlag)
+   {
+      delete aMsg;
+      return;
+   }
+
+   // Send the message.
    mTxSocket.doSendMsg(aMsg);
 }
 

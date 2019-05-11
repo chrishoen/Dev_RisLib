@@ -216,7 +216,7 @@ void UdpTxStringSocket::configure()
    BaseClass::doSocket();
 
    // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
+   mValidFlag = BaseClass::mStatus == 0 && BaseClass::mRemote.mValid;
 
    // Show.
    if (mValidFlag)

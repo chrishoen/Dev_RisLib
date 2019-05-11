@@ -61,6 +61,7 @@ void NetworkThread::threadInitFunction()
 
    tSettings.setLocalPort(gUdpSettings.mMyUdpPort);
    tSettings.setRemoteAddress(gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
+   tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
    tSettings.mRxStringQCall = mRxStringQCall;
    tSettings.mPrintLevel = gUdpSettings.mPrintLevel;
 

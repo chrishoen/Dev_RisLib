@@ -602,12 +602,6 @@ bool BaseTcpServerHubSocket::doListen()
 
 bool BaseTcpServerHubSocket::doAccept(BaseTcpStreamSocket& aStream)
 {
-   if (!mRemote.mValid)
-   {
-      setError(666);
-      return false;
-   }
-
    int tStatus=0;
 
    sockaddr tempName;

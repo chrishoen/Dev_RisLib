@@ -100,8 +100,8 @@ void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
       printf("ai_addr value    %x\n", tValue);
       printf("ai_addr port     %d\n", tPort);
 
-      Ris::Sockets::IpAddress tA1;
-      tA1.set(tValue);
+      Ris::Sockets::SocketAddress tA1;
+      tA1.setByAddress(tValue, tPort);
       printf("A1         %s\n", tA1.mString);
    }
 
@@ -118,19 +118,19 @@ void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Sockets::IpAddress tA1;
-   Ris::Sockets::IpAddress tA2;
-   tA1.set("192.168.1.9");
-   tA2.set(tA1.mValue);
+   Ris::Sockets::SocketAddress tA1;
+   Ris::Sockets::SocketAddress tA2;
+   tA1.setByHostName("192.168.1.9", 56001);
+   tA2.setByAddress(tA1.mAddress, tA1.mPort);
 
    Prn::print(0, "A1");
    Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
-   Prn::print(0, "value    %x", tA1.mValue);
+   Prn::print(0, "value    %x", tA1.mAddress);
    Prn::print(0, "string   %s", tA1.mString);
 
    Prn::print(0, "A2");
    Prn::print(0, "valid    %s", my_string_from_bool(tA2.mValid));
-   Prn::print(0, "value    %x", tA2.mValue);
+   Prn::print(0, "value    %x", tA2.mAddress);
    Prn::print(0, "string   %s", tA2.mString);
 }
 
@@ -142,13 +142,13 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, "remotehost");
    Ris::Sockets::SocketAddress tA1;
-   tA1.setByHostName(aCmd->argString(1),56001);
+   tA1.setByHostName(aCmd->argString(1), 56001);
 
    Prn::print(0, "A1");
-   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mIpAddr.mValid));
-   Prn::print(0, "value    %x", tA1.mIpAddr.mValue);
+   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
+   Prn::print(0, "value    %x", tA1.mAddress);
    Prn::print(0, "port     %d", tA1.mPort);
-   Prn::print(0, "string   %s", tA1.mIpAddr.mString);
+   Prn::print(0, "string   %s", tA1.mString);
 }
 
 //******************************************************************************
@@ -161,10 +161,10 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    tA1.setForAny(56001);
 
    Prn::print(0, "A1");
-   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mIpAddr.mValid));
-   Prn::print(0, "value    %x", tA1.mIpAddr.mValue);
+   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
+   Prn::print(0, "value    %x", tA1.mAddress);
    Prn::print(0, "port     %d", tA1.mPort);
-   Prn::print(0, "string   %s", tA1.mIpAddr.mString);
+   Prn::print(0, "string   %s", tA1.mString);
 }
 
 //******************************************************************************

@@ -141,6 +141,9 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    }
 
    TS::print(3, "UdpRxMsgSocket rx message %d", mRxLength);
+   TS::print(3, "UdpRxMsgSocket     FROM %16s : %5d",
+      mFromAddress.mIpAddr.mString,
+      mLocal.mPort);
 
    // Set the buffer length.
    tByteBuffer.setLength(mRxLength);
@@ -154,7 +157,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Extract the header.
    mMonkey->extractMessageHeaderParms(&tByteBuffer);
 
-   TS::print(3, "UdpRxMsgSocket rx header %d %d",
+   TS::print(4, "UdpRxMsgSocket rx header %d %d",
       mMonkey->mHeaderValidFlag,
       mMonkey->mHeaderLength);
 

@@ -42,11 +42,17 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 
 void UdpMsgThread::threadInitFunction()
 {
-   // Initialize and configure the sockets.
+   // Initialize and configure the receive socket.
    mRxSocket.initialize(mSettings);
    mRxSocket.configure();
-   mTxSocket.initialize(mSettings);
-   mTxSocket.configure();
+
+   // If not wrap mode.
+   if (!mSettings.mUdpWrapFlag)
+   {
+      // Initialize and configure the transmit socket.
+      mTxSocket.initialize(mSettings);
+      mTxSocket.configure();
+   }
 }
 
 //******************************************************************************
@@ -57,15 +63,33 @@ void UdpMsgThread::threadInitFunction()
 
 void  UdpMsgThread::threadRunFunction()
 {
-   bool tGoing=mRxSocket.mValidFlag;
+   bool tGoing = mRxSocket.mValidFlag;
+   bool tFirstFlag = true;
 
    while(tGoing)
    {
-      // Try to receive a message with a blocking receive call.
-      // If a message was received then process it.
+      // Try to receive a message with a blocking receive call. If a message
+      // was received then process it. If in wrap mode then configure the
+      // transmit socket using the receive from address. 
       ByteContent* tMsg=0;
       if (mRxSocket.doReceiveMsg(tMsg))
       {
+         // If this is the first receive message.
+         if (tFirstFlag)
+         {
+            tFirstFlag = false;
+            // If in wrap mode.
+            if (mSettings.mUdpWrapFlag)
+            {
+               // Initialize and configure the transmit socket. Use the
+               // receive from address and the settings port. Turn off
+               // wrap mode.
+               mSettings.setRemoteAddress(mRxSocket.mFromAddress.mIpAddr.mString, mSettings.mRemoteIpPort);
+               mSettings.setUdpWrapFlag(false);
+               mTxSocket.initialize(mSettings);
+               mTxSocket.configure();
+            }
+         }
          // Message was correctly received.
          // Call the receive callback qcall.
          processRxMsg(tMsg);

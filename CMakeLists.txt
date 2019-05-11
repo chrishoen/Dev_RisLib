@@ -9,6 +9,11 @@ project ("Dev_RisLib")
 
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoUdp")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
 add_subdirectory ("Experiment")
 add_subdirectory ("ProtoString")
 add_subdirectory ("ProtoTcpClient")

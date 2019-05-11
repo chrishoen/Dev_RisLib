@@ -67,12 +67,17 @@ public:
    // Application settings.
    int  mMyAppNumber;
 
-   // UDP address and port.
+   // Receive on this port.
    int  mMyUdpPort;
 
-   // UDP address and port.
+   // Transmit to this address and port.
    char mOtherUdpIPAddress[cMaxStringSize];
    int  mOtherUdpPort;
+
+   // If true then use the first receive from ip address as the
+   // transmit ip address. Don't open the transmit socket until
+   // a message is received.
+   bool mUdpWrapFlag;
 
    //***************************************************************************
    //***************************************************************************

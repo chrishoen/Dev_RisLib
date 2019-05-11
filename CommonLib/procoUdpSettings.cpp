@@ -38,6 +38,7 @@ void UdpSettings::reset()
    mMyUdpPort = 0;
    mOtherUdpIPAddress[0]=0;
    mOtherUdpPort = 0;
+   mUdpWrapFlag = false;
 
    mThreadTimerPeriod = 0;
 
@@ -57,8 +58,10 @@ void UdpSettings::show()
 
    printf("MyAppNumber             %16d\n", mMyAppNumber);
 
-   printf("MyUdp                   %16d\n",mMyUdpPort);
-   printf("OtherUdp                %16s : %5d\n",mOtherUdpIPAddress,mOtherUdpPort);
+   printf("MyUdpPort               %16d\n",mMyUdpPort);
+   printf("OtherUdpAddress         %16s\n", mOtherUdpIPAddress);
+   printf("OtherUdpPort            %16d\n", mOtherUdpPort);
+   printf("UdpWrapflag             %16s\n", my_string_from_bool(mUdpWrapFlag));
 
    printf("\n");
    printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
@@ -85,6 +88,7 @@ void UdpSettings::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("MyUdpPort"))           mMyUdpPort = aCmd->argInt(1);
    if (aCmd->isCmd("OtherUdpAddress"))     aCmd->copyArgString(1, mOtherUdpIPAddress,cMaxStringSize);
    if (aCmd->isCmd("OtherUdpPort"))        mOtherUdpPort = aCmd->argInt(1);
+   if (aCmd->isCmd("UdpWrapFlag"))         mUdpWrapFlag = aCmd->argBool(1);
 
    if (aCmd->isCmd("ThreadTimerPeriod"))   mThreadTimerPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("PrintLevel"))          mPrintLevel.readArgs(aCmd);

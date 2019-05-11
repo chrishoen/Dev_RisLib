@@ -39,14 +39,17 @@ public:
    //***************************************************************************
    // Members.
 
-   // IP port.
+   // Receive on this port.
    int mLocalIpPort;
 
-   // IP address.
+   // Transmit to this address and port.
    char mRemoteIpAddr[20];
+   int  mRemoteIpPort;
 
-   // IP port.
-   int mRemoteIpPort;
+   // If true then use the first receive from ip address as the
+   // transmit ip address. Don't open the transmit socket until
+   // a message is received.
+   bool mUdpWrapFlag;
 
    // Max number of tcp server sessions.
    int mMaxSessions;

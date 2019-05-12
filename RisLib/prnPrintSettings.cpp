@@ -53,8 +53,8 @@ void PrintSettings::show()
    printf("PrintSettings************************************************ %s\n", mTargetSection);
 
    printf("PrintViewIPAddress      %16s\n", mPrintViewIPAddress);
-   printf("PrintViewIPPort         %5d\n",  mPrintViewIPPort);
-   printf("Code1                   %5d\n",  mCode1);
+   printf("PrintViewIPPort         %16d\n", mPrintViewIPPort);
+   printf("Code1                   %16d\n", mCode1);
 
    printf("PrintSettings************************************************\n");
    printf("\n");

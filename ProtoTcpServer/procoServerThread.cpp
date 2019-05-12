@@ -22,10 +22,10 @@ namespace ProtoComm
 
 ServerThread::ServerThread()
 {
-   // Set base class thread priority.
+   // Set base class thread variables.
+   BaseClass::setThreadName("Server");
    BaseClass::setThreadPriorityHigh();
-
-   // Set base class timer period.
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(1, 0));
    BaseClass::mTimerPeriod = gTcpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.
@@ -53,8 +53,6 @@ ServerThread::~ServerThread()
 
 void ServerThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "ServerThread::threadInitFunction");
-
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
@@ -63,6 +61,7 @@ void ServerThread::threadInitFunction()
    tSettings.mMaxSessions = gTcpSettings.mTcpMaxSessions;
    tSettings.mServerSessionQCall = mSessionQCall;
    tSettings.mServerRxMsgQCall = mRxMsgQCall;
+   tSettings.mPrintLevel = gTcpSettings.mPrintLevel;
 
    // Create the child thread with the settings.
    mTcpMsgServerThread = new Ris::Net::TcpMsgServerThread(tSettings);

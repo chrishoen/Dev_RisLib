@@ -65,8 +65,8 @@ void UdpSettings::show()
 
    printf("\n");
    printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
-   printf("PrintLevel              %16s\n", mPrintLevel.asString(tBuffer));
    printf("NumWords                %16d\n", mNumWords);
+   printf("PrintLevel              %16s\n", mPrintLevel.asString(tBuffer));
 
    printf("UdpSettings************************************************\n");
    printf("\n");
@@ -91,8 +91,8 @@ void UdpSettings::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("UdpWrapFlag"))         mUdpWrapFlag = aCmd->argBool(1);
 
    if (aCmd->isCmd("ThreadTimerPeriod"))   mThreadTimerPeriod = aCmd->argInt(1);
-   if (aCmd->isCmd("PrintLevel"))          mPrintLevel.readArgs(aCmd);
    if (aCmd->isCmd("NumWords"))            mNumWords = aCmd->argInt(1);
+   if (aCmd->isCmd("PrintLevel"))          mPrintLevel.readArgs(aCmd);
 }
 
 //******************************************************************************

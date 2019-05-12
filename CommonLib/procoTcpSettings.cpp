@@ -50,6 +50,7 @@ void TcpSettings::reset()
 
 void TcpSettings::show()
 {
+   char tBuffer[40];
    printf("\n");
    printf("TcpSettings************************************************ %s\n", mTargetSection);
 
@@ -62,6 +63,7 @@ void TcpSettings::show()
    printf("\n");
    printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
    printf("NumWords                %16d\n", mNumWords);
+   printf("PrintLevel              %16s\n", mPrintLevel.asString(tBuffer));
 
    printf("TcpSettings************************************************\n");
    printf("\n");
@@ -86,6 +88,7 @@ void TcpSettings::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("ThreadTimerPeriod"))   mThreadTimerPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("NumWords"))            mNumWords = aCmd->argInt(1);
+   if (aCmd->isCmd("PrintLevel"))          mPrintLevel.readArgs(aCmd);
 }
 
 //******************************************************************************

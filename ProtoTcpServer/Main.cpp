@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
@@ -28,6 +29,14 @@ int main(int argc, char** argv)
    ProtoComm::gServerThread = new ProtoComm::ServerThread;
    ProtoComm::gServerThread->launchThread();
       
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Show program threads.
+
+   Ris::Threads::showCurrentThreadInfo();
+   ProtoComm::gServerThread->showThreadInfo();
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

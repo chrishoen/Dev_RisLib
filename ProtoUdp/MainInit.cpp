@@ -28,24 +28,6 @@ void main_initialize(int argc,char** argv)
    Prn::initializePrint();
 
    // Initialize print filters.
-   Prn::setFilter(Prn::SocketInitS1,    true);
-   Prn::setFilter(Prn::SocketInitS2,    false);
-   Prn::setFilter(Prn::SocketRxRunS1,   false);
-   Prn::setFilter(Prn::SocketRxRunS2,   false);
-   Prn::setFilter(Prn::SocketTxRunS1,   false);
-   Prn::setFilter(Prn::SocketTxRunS2,   false);
-   Prn::setFilter(Prn::SocketErrorS1,   true);
-   Prn::setFilter(Prn::SocketErrorS2,   false);
-
-   Prn::setFilter(Prn::SocketInitT1,    true);
-   Prn::setFilter(Prn::SocketInitT2,    false);
-   Prn::setFilter(Prn::SocketRxRunT1,   false);
-   Prn::setFilter(Prn::SocketRxRunT2,   false);
-   Prn::setFilter(Prn::SocketTxRunT1,   false);
-   Prn::setFilter(Prn::SocketTxRunT2,   false);
-   Prn::setFilter(Prn::SocketErrorT1,   true);
-   Prn::setFilter(Prn::SocketErrorT2,   true);
-
    Prn::setFilter(Prn::ThreadInit1,     true);
    Prn::setFilter(Prn::ThreadInit1,     true);
    Prn::setFilter(Prn::ThreadRun1,      true);

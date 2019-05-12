@@ -23,15 +23,10 @@ namespace ProtoComm
 
 NetworkThread::NetworkThread()
 {
-   // Set base class thread services.
+   // Set base class thread variables.
    BaseClass::setThreadName("Network");
    BaseClass::setThreadPriorityHigh();
    BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
-
-   // Set base class thread priority.
-   BaseClass::setThreadPriorityHigh();
-
-   // Set base class timer period.
    BaseClass::mTimerPeriod = gUdpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.

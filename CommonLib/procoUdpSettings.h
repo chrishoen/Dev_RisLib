@@ -87,11 +87,11 @@ public:
    // Message thread timer period.
    int mThreadTimerPeriod;
 
-   // Thread print level.
-   TS::PrintLevel mPrintLevel;
-
    // Echo message number of words.
    int mNumWords;
+
+   // Thread print level.
+   TS::PrintLevel mPrintLevel;
 
    //***************************************************************************
    //***************************************************************************

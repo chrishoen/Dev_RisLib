@@ -22,10 +22,10 @@ namespace ProtoComm
 
 ClientThread::ClientThread()
 {
-   // Set base class thread priority.
+   // Set base class thread variables.
+   BaseClass::setThreadName("Client");
    BaseClass::setThreadPriorityHigh();
-
-   // Set base class timer period.
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(1, 0));
    BaseClass::mTimerPeriod = gTcpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.
@@ -53,8 +53,6 @@ ClientThread::~ClientThread()
 
 void ClientThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "ClientThread::threadInitFunction");
-
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
@@ -62,6 +60,7 @@ void ClientThread::threadInitFunction()
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;
+   tSettings.mPrintLevel = gTcpSettings.mPrintLevel;
 
    // Create the child thread with the settings.
    mTcpMsgClientThread = new Ris::Net::TcpMsgClientThread(tSettings);
@@ -78,8 +77,6 @@ void ClientThread::threadInitFunction()
 
 void  ClientThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "ClientThread::threadExitFunction");
-
    // Shutdown the child thread.
    mTcpMsgClientThread->shutdownThread();
 }

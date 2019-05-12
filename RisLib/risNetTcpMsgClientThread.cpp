@@ -46,8 +46,6 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 
 void TcpMsgClientThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInitT1, "TcpClientThread::threadInitFunction");
-
    // Initialize and configure the socket.
    mSocket.initialize(mSettings);
    mSocket.configure();
@@ -62,8 +60,6 @@ void TcpMsgClientThread::threadInitFunction()
 
 void TcpMsgClientThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketInitT2, "TcpClientThread::threadRunFunction");
-
    mConnectionFlag = false;
    bool going = true;
 
@@ -80,7 +76,7 @@ void TcpMsgClientThread::threadRunFunction()
          if (mSocket.doConnect())
          {
             // Connection was established.
-            Prn::print(Prn::SocketRxRunT1, "Connected");
+            TS::print(3, "Connected");
             mConnectionFlag = true;
 
             // Process a session change because a
@@ -90,7 +86,7 @@ void TcpMsgClientThread::threadRunFunction()
          else 
          {
             // Connection was not established.
-            Prn::print(Prn::SocketRxRunT1, "Not Connected");
+            TS::print(3, "Not Connected");
 
             mConnectionFlag = false;
 
@@ -116,8 +112,6 @@ void TcpMsgClientThread::threadRunFunction()
          if (mSocket.doReceiveMsg(tMsg))
          {
             // Message was correctly received.
-            Prn::print(Prn::SocketRxRunT1, "Recv message %d",mSocket.mRxCount);
-
             // Process the receive message.
             if (tMsg)
             {
@@ -128,7 +122,7 @@ void TcpMsgClientThread::threadRunFunction()
          {
             // Message was not correctly received, so
             // Connection was lost.
-            Prn::print(Prn::SocketRxRunT1, "Recv failed, Connection lost");
+            TS::print(3, "Recv failed, Connection lost");
             mConnectionFlag = false;
 
             // Process a session change because a
@@ -157,7 +151,6 @@ void TcpMsgClientThread::threadRunFunction()
 
 void TcpMsgClientThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInitT1, "TcpClientThread::threadExitFunction");
 }
 
 //******************************************************************************
@@ -194,7 +187,7 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
    // Guard.
    if (!mSessionQCall.isValid())
    {
-      Prn::print(Prn::SocketErrorT1, "ERROR processSessionChange qcall invalid");
+      TS::print(0, "ERROR processSessionChange qcall invalid");
       return;
    }
 
@@ -236,7 +229,6 @@ void TcpMsgClientThread::sendMsg(ByteContent* aMsg)
    }
    else
    {
-      Prn::print(Prn::SocketTxRunT2, "ERROR doSendMsg FAIL session invalid");
       delete aMsg;
    }
 }

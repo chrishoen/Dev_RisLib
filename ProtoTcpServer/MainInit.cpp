@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "tsThreadServices.h"
 #include "risThreadsProcess.h"
 #include "procoTcpSettings.h"
 
@@ -27,24 +28,6 @@ void main_initialize(int argc,char** argv)
    Prn::initializePrint();
 
    // Initialize print filters.
-   Prn::setFilter(Prn::SocketInitS1,    true);
-   Prn::setFilter(Prn::SocketInitS2,    false);
-   Prn::setFilter(Prn::SocketRxRunS1,   false);
-   Prn::setFilter(Prn::SocketRxRunS2,   false);
-   Prn::setFilter(Prn::SocketTxRunS1,   false);
-   Prn::setFilter(Prn::SocketTxRunS2,   false);
-   Prn::setFilter(Prn::SocketErrorS1,   true);
-   Prn::setFilter(Prn::SocketErrorS2,   false);
-
-   Prn::setFilter(Prn::SocketInitT1,    true);
-   Prn::setFilter(Prn::SocketInitT2,    false);
-   Prn::setFilter(Prn::SocketRxRunT1,   false);
-   Prn::setFilter(Prn::SocketRxRunT2,   false);
-   Prn::setFilter(Prn::SocketTxRunT1,   false);
-   Prn::setFilter(Prn::SocketTxRunT2,   false);
-   Prn::setFilter(Prn::SocketErrorT1,   true);
-   Prn::setFilter(Prn::SocketErrorT2,   true);
-
    Prn::setFilter(Prn::ThreadInit1,     true);
    Prn::setFilter(Prn::ThreadInit1,     true);
    Prn::setFilter(Prn::ThreadRun1,      true);
@@ -65,9 +48,19 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Initialize thread services.
+
+   TS::reset();
+   TS::setProgramName("TcpServer");
+   TS::setProgramPrintLevel(TS::PrintLevel(2, 3));
+   TS::initialize();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Done.
 
-   Prn::print(0, "ProtoCommTS Server***********************************BEGIN");
+   Prn::print(0, "ProtoTcpServer***********************************BEGIN");
 }
 
 //******************************************************************************
@@ -77,13 +70,16 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoCommTS Server***********************************END");
+   Prn::print(0, "ProtoTcpServer***********************************END");
 
    // Close print.
    Prn::finalizePrint();
 
    // Exit process.
    Ris::Threads::exitProcess();
+
+   // Finalize thread services.
+   TS::finalize();
 }
 
 //******************************************************************************

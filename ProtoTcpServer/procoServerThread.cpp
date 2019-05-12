@@ -78,8 +78,6 @@ void ServerThread::threadInitFunction()
 
 void  ServerThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "ServerThread::threadExitFunction");
-
    // Shutdown the child thread.
    mTcpMsgServerThread->shutdownThread(); 
 }

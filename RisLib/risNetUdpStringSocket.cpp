@@ -240,33 +240,6 @@ void UdpTxStringSocket::configure()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Show.
-
-void UdpTxStringSocket::show()
-{
-   // Guard.
-   if (mPrintDisable) return;
-
-   // Show.
-   if (mValidFlag)
-   {
-      printf("UdpTxStringSocket  $ %16s : %d\n",
-         BaseClass::mRemote.mString,
-         BaseClass::mRemote.mPort);
-   }
-   else
-   {
-      printf("UdpTxStringSocket  FAIL $ %16s : %d $ %d %d\n",
-         BaseClass::mRemote.mString,
-         BaseClass::mRemote.mPort,
-         BaseClass::mStatus,
-         BaseClass::mError);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Send a string over the socket via a blocking send call.
 // It returns true if successful.
 // It is protected by the transmit mutex.

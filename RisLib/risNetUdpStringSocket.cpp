@@ -65,13 +65,13 @@ void UdpRxStringSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      TS::print(1, "UdpRxStringSocket  PASS %16s : %5d",
+      TS::print(0, "UdpRxStringSocket  PASS %16s : %5d",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      TS::print(1, "UdpRxStringSocket  FAIL %16s : %5d $ %d %d",
+      TS::print(0, "UdpRxStringSocket  FAIL %16s : %5d $ %d %d",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,

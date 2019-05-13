@@ -39,7 +39,8 @@ namespace Prn
 
 void resetPrint              ();
 void useConsole              (int   aConsole);
-void initializePrint         ();
+void setPrintViewIPAddress   (const char* aAddress);
+void initializePrint();
 void finalizePrint           ();
 
 //******************************************************************************

@@ -91,6 +91,16 @@ void resetPrint()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Override the printview ip address.
+
+void setPrintViewIPAddress(const char* aAddress)
+{
+   strncpy(gPrintSettings.mPrintViewIPAddress, aAddress, 30);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 // Set console flag. A print view console for the index will be created and
 // used.
 
@@ -115,15 +125,20 @@ void initializePrint()
    {
       if (rConsoleFlag[i])
       {
-         // Create a process for the PrintView console.
-         rConsoleHandle[i] = rCreatePrintView(i);
          // Create a socket to send to the PrintView console.
          Ris::Net::Settings tSettings;
          tSettings.setRemoteAddress(
             gPrintSettings.mPrintViewIPAddress,
             rConsolePort[i]);
+
+         rConsoleSocket[i].mPrintDisable = true;
          rConsoleSocket[i].initialize(tSettings);
          rConsoleSocket[i].configure();
+         if (!rConsoleSocket[i].mValidFlag)
+         {
+            printf("ERROR PrintView socket fail");
+            rConsoleFlag[i] = false;
+         }
       }
    }
 }

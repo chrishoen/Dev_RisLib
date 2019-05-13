@@ -254,13 +254,13 @@ void UdpTxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      TS::print(1, "UdpTxMsgSocket     PASS %16s : %5d",
+      TS::print(0, "UdpTxMsgSocket     PASS %16s : %5d",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      TS::print(1, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
+      TS::print(0, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,

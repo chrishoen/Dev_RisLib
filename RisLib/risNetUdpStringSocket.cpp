@@ -214,6 +214,7 @@ void UdpTxStringSocket::configure()
    BaseClass::mRemote.setByHostName(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
    BaseClass::setOptionDontRoute();
+   if (mSettings.mTestForLocal) BaseClass::testRemoteAddress();
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0 && BaseClass::mRemote.mValid;

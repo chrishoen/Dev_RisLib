@@ -46,6 +46,9 @@ public:
    char mRemoteIpAddr[20];
    int  mRemoteIpPort;
 
+   // If true then test that the remote address is local.
+   bool mTestForLocal;
+
    // If true then use the first receive from ip address as the
    // transmit ip address. Don't open the transmit socket until
    // a message is received.

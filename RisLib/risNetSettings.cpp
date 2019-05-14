@@ -23,6 +23,7 @@ Settings::Settings()
    mLocalIpPort = 0;
    mRemoteIpAddr[0] = 0;
    mRemoteIpPort = 0;
+   mTestForLocal = false;
    mUdpWrapFlag = false;
    mMaxSessions = 0;
    mFlags = 0;

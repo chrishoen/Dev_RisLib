@@ -8,6 +8,7 @@ include(MyLocalImports.cmake)
 project ("Dev_RisLib")
 
 add_subdirectory ("RisLib")
+add_subdirectory ("Experiment")
 add_subdirectory ("PrintTest")
 return()
 

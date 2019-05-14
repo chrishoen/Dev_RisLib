@@ -81,7 +81,6 @@ void resetPrint()
 {
    // Read from settings file.
    gPrintSettings.reset();
-// gPrintSettings.mEnablePrint = false;
    gPrintSettings.readSection("default");
 
    // Reset variables.
@@ -127,16 +126,13 @@ void initializePrint()
       {
          // Create a socket to send to the PrintView console.
          Ris::Net::Settings tSettings;
-         tSettings.setRemoteAddress(
-            gPrintSettings.mPrintViewIPAddress,
-            rConsolePort[i]);
-
-         rConsoleSocket[i].mPrintDisable = true;
+         tSettings.mTestForLocal = true;
+         tSettings.setRemoteAddress(gPrintSettings.mPrintViewIPAddress, rConsolePort[i]);
          rConsoleSocket[i].initialize(tSettings);
          rConsoleSocket[i].configure();
          if (!rConsoleSocket[i].mValidFlag)
          {
-            rConsoleSocket[i].showError("PrintView");
+            rConsoleSocket[i].showError("initializePrint");
             rConsoleFlag[i] = false;
          }
       }

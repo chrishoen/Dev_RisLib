@@ -201,6 +201,8 @@ bool BaseSocket::doClose()
 
 bool BaseSocket::updateError(int aStatus)
 {
+   if (mStatus < 0) return false;
+
    int tError;
 
    if(aStatus < 0)
@@ -242,8 +244,42 @@ void BaseSocket::setError(int aError)
 
 void BaseSocket::showError(const char* aLabel)
 {
-   printf("SOCKET ERROR %s %d %d\n",
-      aLabel, mStatus, mError);
+   if (mError == 666)
+   {
+      printf("SOCKET ERROR %s %d %d %s\n",
+         aLabel, mStatus, mError, "bad remote address");
+   }
+   else if (mError == 667)
+   {
+      printf("SOCKET ERROR %s %d %d %s\n",
+         aLabel, mStatus, mError, "bad local address");
+   }
+   else
+   {
+      printf("SOCKET ERROR %s %d %d %s\n",
+         aLabel, mStatus, mError, strerror(mError));
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void BaseSocket::testRemoteAddress(bool aTestForLocal)
+{
+   if (!mRemote.mValid)
+   {
+      setError(666);
+      return;
+   }
+
+   if (aTestForLocal)
+   {
+      bool tFail = true;
+      if ((mRemote.mAddress & 0xc0000000) == 0xc0000000) tFail = false;
+      if ((mRemote.mAddress & 0x0a000000) == 0x0a000000) tFail = false;
+      if (tFail) setError(666);
+   }
 }
 
 //******************************************************************************
@@ -252,10 +288,11 @@ void BaseSocket::showError(const char* aLabel)
 
 bool BaseSocket::setOptionBroadcast ()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   BOOL bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_BROADCAST,(char*)&bValue,sizeof(BOOL));
+   int tStatus = 0;
+   BOOL bValue = true;
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_BROADCAST,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -265,10 +302,11 @@ bool BaseSocket::setOptionBroadcast ()
 
 bool BaseSocket::setOptionReuseAddr ()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   BOOL bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_REUSEADDR,(char*)&bValue,sizeof(BOOL));
+   int tStatus = 0;
+   BOOL bValue = true;
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_REUSEADDR,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -278,10 +316,11 @@ bool BaseSocket::setOptionReuseAddr ()
 
 bool BaseSocket::setOptionDontRoute ()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   BOOL bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTROUTE,(char*)&bValue,sizeof(BOOL));
+   int tStatus = 0;
+   BOOL bValue = true;
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTROUTE,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -291,10 +330,11 @@ bool BaseSocket::setOptionDontRoute ()
 
 bool BaseSocket::setOptionDontLinger ()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   BOOL bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTLINGER,(char*)&bValue,sizeof(BOOL));
+   int tStatus = 0;
+   BOOL bValue = true;
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTLINGER,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -304,10 +344,11 @@ bool BaseSocket::setOptionDontLinger ()
 
 bool BaseSocket::setOptionNoDelay ()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   BOOL bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,IPPROTO_TCP,TCP_NODELAY,(char*)&bValue,sizeof(BOOL));
+   int tStatus = 0;
+   BOOL bValue = true;
+   tStatus = setsockopt(mBaseSpecific->mDesc,IPPROTO_TCP,TCP_NODELAY,(char*)&bValue,sizeof(BOOL));
    return updateError(tStatus);
 }
 
@@ -317,13 +358,15 @@ bool BaseSocket::setOptionNoDelay ()
 
 bool BaseUdpSocket::setOptionMulticast(SocketAddress& aGroup,SocketAddress& aInterface)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
+
+   int tStatus = 0;
 
    struct ip_mreq tMreq;
    tMreq.imr_multiaddr.s_addr = htonl(aGroup.mAddress); 
    tMreq.imr_interface.s_addr = htonl(aInterface.mAddress); 
 
-   tStatus=setsockopt(mBaseSpecific->mDesc,IPPROTO_IP,IP_ADD_MEMBERSHIP,(char*)&tMreq,sizeof(ip_mreq));
+   tStatus = setsockopt(mBaseSpecific->mDesc,IPPROTO_IP,IP_ADD_MEMBERSHIP,(char*)&tMreq,sizeof(ip_mreq));
    return updateError(tStatus);
 }
 
@@ -333,13 +376,13 @@ bool BaseUdpSocket::setOptionMulticast(SocketAddress& aGroup,SocketAddress& aInt
 
 bool BaseSocket::ioctlBlocking(bool aBlocking)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
+   int tStatus = 0;
    u_long value;
    if (aBlocking) value=0;
    else           value=1;
-   tStatus=ioctlsocket(mBaseSpecific->mDesc,FIONBIO,&value);
-
+   tStatus = ioctlsocket(mBaseSpecific->mDesc,FIONBIO,&value);
    return updateError(tStatus);
 }
 
@@ -349,9 +392,10 @@ bool BaseSocket::ioctlBlocking(bool aBlocking)
 
 bool BaseSocket::ioctlFlush ()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   tStatus=ioctlsocket(mBaseSpecific->mDesc,SIO_FLUSH,NULL);
+   int tStatus = 0;
+   tStatus = ioctlsocket(mBaseSpecific->mDesc,SIO_FLUSH,NULL);
    return updateError(tStatus);
 }
 
@@ -361,8 +405,9 @@ bool BaseSocket::ioctlFlush ()
 
 bool BaseSocket::ioctlGetBcastAddr (SocketAddress& aBcastAddr)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
+   int tStatus = 0;
    sockaddr_in outputAddr;
    DWORD       outputAddrSize = sizeof(sockaddr_in);
    memset(&outputAddr,0,sizeof(outputAddr));
@@ -393,8 +438,9 @@ bool BaseSocket::ioctlGetBcastAddr (SocketAddress& aBcastAddr)
 
 bool BaseUdpSocket::doSocket()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
+   int tStatus = 0;
    mType = SOCK_DGRAM;
    mProtocol = 0;
    DWORD dwFlags = WSA_FLAG_OVERLAPPED;
@@ -422,14 +468,15 @@ bool BaseUdpSocket :: setMulticast()
 
 bool BaseSocket::doBind()
 {
+   if (mStatus < 0) return false;
+
    if (!mLocal.mValid)
    {
       setError(666);
       return false;
    }
 
-   int tStatus=0;
-
+   int tStatus = 0;
    sockaddr_in localName;memset(&localName,0,sizeof(localName));
    localName.sin_family      = AF_INET;
    localName.sin_addr.s_addr = htonl(mLocal.mAddress);
@@ -445,14 +492,15 @@ bool BaseSocket::doBind()
 
 bool BaseUdpSocket::doConnect()
 {
+   if (mStatus < 0) return false;
+
    if (!mRemote.mValid)
    {
       setError(666);
       return false;
    }
 
-   int tStatus=0;
-
+   int tStatus = 0;
    sockaddr_in hostName;memset(&hostName,0,sizeof(hostName));
    hostName.sin_family      = AF_INET;
    hostName.sin_addr.s_addr = htonl(mRemote.mAddress);
@@ -469,9 +517,10 @@ bool BaseUdpSocket::doConnect()
 
 bool BaseUdpSocket::doSend(const char* aPayload,int& aLength)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   if (aLength==0) return true;
+   int tStatus = 0;
+   if (aLength == 0) return true;
 
    tStatus = send(mBaseSpecific->mDesc,aPayload,aLength,0);
 
@@ -484,9 +533,10 @@ bool BaseUdpSocket::doSend(const char* aPayload,int& aLength)
 
 bool BaseUdpSocket::doRecv(char* aPayload,int& aLength,int aMaxLength)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   if (aMaxLength==0) return true;
+   int tStatus = 0;
+   if (aMaxLength == 0) return true;
 
    tStatus = recv(mBaseSpecific->mDesc,aPayload,aMaxLength,0);
    if(tStatus>0) aLength = tStatus;
@@ -501,15 +551,16 @@ bool BaseUdpSocket::doRecv(char* aPayload,int& aLength,int aMaxLength)
 
 bool BaseUdpSocket::doSendTo(SocketAddress& aHost,const char* aPayload,int& aLength)
 {
+   if (mStatus < 0) return false;
+
    if (!aHost.mValid)
    {
       setError(666);
       return false;
    }
 
-   int tStatus=0;
-
-   if (aLength==0) return true;
+   int tStatus = 0;
+   if (aLength == 0) return true;
 
    sockaddr_in destinAddr;
    int         destinAddrSize = sizeof(sockaddr_in);
@@ -528,9 +579,10 @@ bool BaseUdpSocket::doSendTo(SocketAddress& aHost,const char* aPayload,int& aLen
 
 bool BaseUdpSocket::doRecvFrom(SocketAddress& aHost,char* aPayload,int& aLength,int aMaxLength)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   if (aMaxLength==0) return true;
+   int tStatus = 0;
+   if (aMaxLength == 0) return true;
 
    sockaddr_in sender;
    int         senderSize=sizeof(sender);
@@ -581,8 +633,9 @@ BaseTcpServerHubSocket::~BaseTcpServerHubSocket()
 
 bool BaseTcpServerHubSocket::doSocket()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
+   int tStatus = 0;
    mType = SOCK_STREAM;
    mProtocol = 0;
    mBaseSpecific->mDesc = socket(AF_INET,SOCK_STREAM,0);
@@ -599,7 +652,9 @@ bool BaseTcpServerHubSocket::doSocket()
 
 bool BaseTcpServerHubSocket::doListen()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
+
+   int tStatus = 0;
 
    tStatus = listen(mBaseSpecific->mDesc,SOMAXCONN);
 
@@ -612,8 +667,9 @@ bool BaseTcpServerHubSocket::doListen()
 
 bool BaseTcpServerHubSocket::doAccept(BaseTcpStreamSocket& aStream)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
+   int tStatus = 0;
    sockaddr tempName;
    int tempNameLength;
    sockaddr_in clientName;
@@ -707,8 +763,9 @@ int BaseTcpServerHubSocket::selectOnReadSet()
 
 bool BaseTcpStreamSocket::doSocket()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
+   int tStatus = 0;
    mType = SOCK_STREAM;
    mProtocol = 0;
    mBaseSpecific->mDesc = socket(AF_INET, mType, mProtocol);
@@ -727,10 +784,11 @@ bool BaseTcpStreamSocket::doSocket()
 
 bool BaseTcpStreamSocket::setOptionKeepAlive ()
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   BOOL bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_KEEPALIVE,(char*)&bValue,sizeof(BOOL));
+   int tStatus = 0;
+   BOOL bValue = true;
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_KEEPALIVE,(char*)&bValue,sizeof(BOOL));
 
    DWORD dwBytes;
    tcp_keepalive keepalive1;
@@ -759,14 +817,15 @@ bool BaseTcpStreamSocket::setOptionKeepAlive ()
 
 bool BaseTcpStreamSocket::doConnect()
 {
+   if (mStatus < 0) return false;
+
    if (!mRemote.mValid)
    {
       setError(666);
       return false;
    }
 
-   int tStatus=0;
-
+   int tStatus = 0;
    sockaddr_in hostName;memset(&hostName,0,sizeof(hostName));
    hostName.sin_family      = AF_INET;
    hostName.sin_addr.s_addr = htonl(mRemote.mAddress);
@@ -782,9 +841,10 @@ bool BaseTcpStreamSocket::doConnect()
 
 bool BaseTcpStreamSocket::doSend(const char* aPayload,int aLength)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   if (aLength==0) return true;
+   int tStatus = 0;
+   if (aLength == 0) return true;
 
    int bytesRequired=aLength;
    int bytesRemaining=aLength;
@@ -819,9 +879,10 @@ bool BaseTcpStreamSocket::doSend(const char* aPayload,int aLength)
 
 bool BaseTcpStreamSocket::doRecv(char* aPayload,int aLength,int& aStatus)
 {
-   int tStatus=0;
+   if (mStatus < 0) return false;
 
-   if (aLength==0) return true;
+   int tStatus = 0;
+   if (aLength == 0) return true;
 
    int bytesRequired=aLength;
    int bytesRemaining=aLength;

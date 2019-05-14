@@ -232,27 +232,6 @@ bool BaseSocket::updateError(int aStatus)
 //******************************************************************************
 //******************************************************************************
 
-void BaseSocket::testRemoteAddress(bool aTestForLocal)
-{
-   if (!mRemote.mValid)
-   {
-      setError(666);
-      return;
-   }
-
-   if (aTestForLocal)
-   {
-      bool tFail = true;
-      if ((mRemote.mAddress & 0xc0000000) == 0xc0000000) tFail = false;
-      if ((mRemote.mAddress & 0x0a000000) == 0x0a000000) tFail = false;
-      if (tFail) setError(666);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void BaseSocket::setError(int aError)
 {
    mStatus = -1;
@@ -279,6 +258,27 @@ void BaseSocket::showError(const char* aLabel)
    {
       printf("SOCKET ERROR %s %d %d %s\n",
          aLabel, mStatus, mError, strerror(mError));
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void BaseSocket::testRemoteAddress(bool aTestForLocal)
+{
+   if (!mRemote.mValid)
+   {
+      setError(666);
+      return;
+   }
+
+   if (aTestForLocal)
+   {
+      bool tFail = true;
+      if ((mRemote.mAddress & 0xc0000000) == 0xc0000000) tFail = false;
+      if ((mRemote.mAddress & 0x0a000000) == 0x0a000000) tFail = false;
+      if (tFail) setError(666);
    }
 }
 

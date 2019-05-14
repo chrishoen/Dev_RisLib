@@ -6,6 +6,9 @@
 #include <assert.h>
 
 #include "risSockets.h"
+#include "risNetUdpStringSocket.h"
+#include "risNetSettings.h"
+
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -108,7 +111,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    Ris::Sockets::SocketAddress tA1;
    Ris::Sockets::SocketAddress tA2;
-   tA1.setByHostName("192.168.1.9",56001);
+   tA1.setByHostName("192.168.1.9", 56001);
    tA2.setByAddress(tA1.mAddress, tA1.mPort);
 
    Prn::print(0, "A1");
@@ -128,15 +131,29 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, "remotehost");
-   Ris::Sockets::SocketAddress tA1;
-   tA1.setByHostName(aCmd->argString(1),56001);
+   aCmd->setArgDefault(1, "sms3");
+   Ris::Net::UdpTxStringSocket tSocket;
+   Ris::Net::Settings tSettings;
 
-   Prn::print(0, "A1");
-   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
-   Prn::print(0, "value    %x", tA1.mAddress);
-   Prn::print(0, "port     %d", tA1.mPort);
-   Prn::print(0, "string   %s", tA1.mString);
+   tSettings.mTestForLocal = true;
+   tSettings.setRemoteAddress(aCmd->argString(1), 58001);
+
+   tSocket.initialize(tSettings);
+   tSocket.configure();
+
+   if (!tSocket.mValidFlag)
+   {
+      tSocket.showError("initializePrint");
+   }
+
+   Prn::print(0, "tSocket");
+   Prn::print(0, "valid    %s", my_string_from_bool(tSocket.mValidFlag));
+   Prn::print(0, "status   %d", tSocket.mStatus);
+   Prn::print(0, "error    %d", tSocket.mError);
+   Prn::print(0, "valid    %s", my_string_from_bool(tSocket.mValidFlag));
+   Prn::print(0, "address  %x", tSocket.mRemote.mAddress);
+   Prn::print(0, "port     %d", tSocket.mRemote.mPort);
+   Prn::print(0, "string   %s", tSocket.mRemote.mString);
 }
 
 //******************************************************************************
@@ -145,8 +162,9 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, "remotehost");
    Ris::Sockets::SocketAddress tA1;
-   tA1.setForAny(56001);
+   tA1.setByHostName(aCmd->argString(1), 56001);
 
    Prn::print(0, "A1");
    Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));

@@ -108,7 +108,7 @@ public:
    bool ioctlBlocking      (bool aBlocking);
    bool ioctlGetBcastAddr  (SocketAddress& aBcastAddr);
 
-   void testRemoteAddress();
+   void testRemoteAddress(bool aTestForLocal);
 
 public:
    class BaseSpecific;

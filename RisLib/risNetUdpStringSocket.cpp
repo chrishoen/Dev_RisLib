@@ -184,7 +184,6 @@ UdpTxStringSocket::UdpTxStringSocket()
    mValidFlag = false;
    mTxLength = 0;
    mTxCount = 0;
-   mPrintDisable = false;
 }
 
 //******************************************************************************
@@ -212,15 +211,12 @@ void UdpTxStringSocket::configure()
 {
    // Configure the socket.
    BaseClass::mRemote.setByHostName(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::testRemoteAddress(mSettings.mTestForLocal);
    BaseClass::doSocket();
    BaseClass::setOptionDontRoute();
-   if (mSettings.mTestForLocal) BaseClass::testRemoteAddress();
 
    // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0 && BaseClass::mRemote.mValid;
-
-   // Guard.
-   if (mPrintDisable) return;
+   mValidFlag = BaseClass::mStatus == 0;
 
    // Show.
    if (mValidFlag)

@@ -150,7 +150,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    tSettings.mTestForLocal = true;
    tSettings.setRemoteAddress(aCmd->argString(1), 58001);
 
-   tSocket.mPrintDisable = false;
    tSocket.initialize(tSettings);
    tSocket.configure();
 

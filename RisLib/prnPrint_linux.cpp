@@ -121,7 +121,6 @@ void initializePrint()
          Ris::Net::Settings tSettings;
          tSettings.mTestForLocal = true;
          tSettings.setRemoteAddress(gPrintSettings.mPrintViewIPAddress, rConsolePort[i]);
-         rConsoleSocket[i].mPrintDisable = false;
          rConsoleSocket[i].initialize(tSettings);
          rConsoleSocket[i].configure();
          if (!rConsoleSocket[i].mValidFlag )

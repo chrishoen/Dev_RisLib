@@ -26,7 +26,7 @@ void main_initialize(int argc,char** argv)
    else
    {
       Prn::resetPrint();
-      Prn::setPrintViewIPAddress("sms33");
+      Prn::setPrintViewIPAddress("sms3");
       Prn::useConsole(1);
       Prn::useConsole(2);
       Prn::initializePrint();

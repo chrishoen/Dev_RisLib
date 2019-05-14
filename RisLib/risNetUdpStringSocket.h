@@ -140,9 +140,6 @@ public:
    // Transmit mutex is used by doSendMsg for mutual exclusion.
    Threads::MutexSemaphore  mTxMutex;
 
-   // If true then status prints are disabled.
-   bool mPrintDisable;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

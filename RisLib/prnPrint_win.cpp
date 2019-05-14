@@ -136,7 +136,7 @@ void initializePrint()
          rConsoleSocket[i].configure();
          if (!rConsoleSocket[i].mValidFlag)
          {
-            printf("ERROR PrintView socket fail");
+            rConsoleSocket[i].showError("PrintView");
             rConsoleFlag[i] = false;
          }
       }

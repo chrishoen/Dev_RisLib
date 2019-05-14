@@ -292,7 +292,7 @@ bool BaseSocket::setOptionBroadcast ()
 
    int tStatus = 0;
    bool bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_BROADCAST,(char*)&bValue,sizeof(bool));
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_BROADCAST,&bValue,sizeof(bool));
    return updateError(tStatus);
 }
 
@@ -305,8 +305,8 @@ bool BaseSocket::setOptionReuseAddr ()
    if (mStatus < 0) return false;
 
    int tStatus = 0;
-   bool bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_REUSEADDR,(char*)&bValue,sizeof(bool));
+   int tValue = 1;
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_REUSEADDR,&tValue,sizeof(int));
    return updateError(tStatus);
 }
 
@@ -320,7 +320,7 @@ bool BaseSocket::setOptionDontRoute()
 
    int tStatus = 0;
    int tValue = 1;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTROUTE,&tValue,sizeof(int));
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTROUTE,&tValue,sizeof(int));
    return updateError(tStatus);
 }
 
@@ -333,8 +333,8 @@ bool BaseSocket::setOptionDontLinger ()
    if (mStatus < 0) return false;
 
    int tStatus = 0;
-   bool bValue=false;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_LINGER,(char*)&bValue,sizeof(bool));
+   int tValue = 1;
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_LINGER,&tValue,sizeof(int));
    return updateError(tStatus);
 }
 
@@ -347,8 +347,8 @@ bool BaseSocket::setOptionNoDelay ()
    if (mStatus < 0) return false;
 
    int tStatus = 0;
-// bool bValue=true;
-// tStatus=setsockopt(mBaseSpecific->mDesc,IPPROTO_TCP,TCP_NODELAY,(char*)&bValue,sizeof(bool));
+   int tValue = 1;
+// tStatus = setsockopt(mBaseSpecific->mDesc,IPPROTO_TCP,TCP_NODELAY,(char*)&tValue,sizeof(bool));
    return updateError(tStatus);
 }
 

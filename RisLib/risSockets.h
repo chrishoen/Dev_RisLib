@@ -93,6 +93,7 @@ public:
  
    bool updateError(int aStatus);
    void setError(int aError);
+   void showError(const char* aLabel);
 
    int mStatus;
    int mError;

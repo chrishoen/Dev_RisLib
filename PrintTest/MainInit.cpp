@@ -15,11 +15,23 @@ void main_initialize(int argc,char** argv)
    // Enter process
    Ris::Threads::enterProcessHigh();
 
-   // Initialize print facility
-   Prn::resetPrint();
-   Prn::useConsole(1);
-   Prn::useConsole(2);
-   Prn::initializePrint();
+   // Initialize print facility.
+   if (false)
+   {
+      Prn::resetPrint();
+      Prn::useConsole(1);
+      Prn::useConsole(2);
+      Prn::initializePrint();
+   }
+   else
+   {
+      Prn::resetPrint();
+      Prn::setPrintViewIPAddress("sms3");
+      Prn::useConsole(1);
+      Prn::useConsole(2);
+      Prn::initializePrint();
+   }
+
 
    // Initialize print filters
    Prn::setFilter(Prn::View01, true);

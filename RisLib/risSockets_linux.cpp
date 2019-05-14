@@ -240,6 +240,16 @@ void BaseSocket::setError(int aError)
 //******************************************************************************
 //******************************************************************************
 
+void BaseSocket::showError(const char* aLabel)
+{
+   printf("SOCKET ERROR %s %d %d %s\n",
+      aLabel, mStatus, mError,strerror(mError));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 bool BaseSocket::setOptionBroadcast ()
 {
    int tStatus=0;
@@ -266,12 +276,12 @@ bool BaseSocket::setOptionReuseAddr ()
 //******************************************************************************
 //******************************************************************************
 
-bool BaseSocket::setOptionDontRoute ()
+bool BaseSocket::setOptionDontRoute()
 {
    int tStatus=0;
 
-   bool bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTROUTE,(char*)&bValue,sizeof(bool));
+   int tValue = 1;
+   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_DONTROUTE,&tValue,sizeof(int));
    return updateError(tStatus);
 }
 

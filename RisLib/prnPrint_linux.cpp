@@ -124,12 +124,12 @@ void initializePrint()
             gPrintSettings.mPrintViewIPAddress,
             rConsolePort[i]);
 
-         rConsoleSocket[i].mPrintDisable = true;
+//       rConsoleSocket[i].mPrintDisable = true;
          rConsoleSocket[i].initialize(tSettings);
          rConsoleSocket[i].configure();
          if (!rConsoleSocket[i].mValidFlag)
          {
-            printf("ERROR PrintView socket fail");
+            rConsoleSocket[i].showError("PrintView");
             rConsoleFlag[i] = false;
          }
       }

@@ -563,6 +563,13 @@ bool BaseUdpSocket::doRecvFrom(SocketAddress& aHost,char* aPayload,int& aLength,
 
    tStatus = (int)recvfrom(mBaseSpecific->mDesc,aPayload,aMaxLength,0,(struct sockaddr*)&sender,(socklen_t*)&senderSize);
    
+   if (mBaseSpecific->mDesc == -1)
+   {
+      mStatus = 0;
+      mError = 0;
+      return false;
+   }
+
    if(tStatus>0) aLength = tStatus;
    else          aLength = 0;
 

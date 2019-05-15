@@ -184,6 +184,7 @@ UdpTxStringSocket::UdpTxStringSocket()
    mValidFlag = false;
    mTxLength = 0;
    mTxCount = 0;
+   mPrintDisable = false;
 }
 
 //******************************************************************************
@@ -216,6 +217,9 @@ void UdpTxStringSocket::configure()
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
+
+   // Guard.
+   if (mPrintDisable) return;
 
    // Show.
    if (mValidFlag)

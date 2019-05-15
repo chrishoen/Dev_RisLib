@@ -137,6 +137,9 @@ public:
    // Metrics.
    int mTxCount;
 
+   // If true then status prints are disabled.
+   bool mPrintDisable;
+
    // Transmit mutex is used by doSendMsg for mutual exclusion.
    Threads::MutexSemaphore  mTxMutex;
 

@@ -151,11 +151,11 @@ bool UdpRxStringSocket::doRecvString ()
    {
       if (BaseClass::mError == 0)
       {
-         TS::print(1, "UdpRxMsgSocket CLOSED");
+         TS::print(1, "UdpRxStringSocket CLOSED");
       }
       else
       {
-         TS::print(0, "ERROR UdpRxMsgSocket %d %d", BaseClass::mStatus, BaseClass::mError);
+         TS::print(0, "ERROR UdpRxStringSocket %d %d", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }

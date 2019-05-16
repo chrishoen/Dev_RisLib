@@ -202,7 +202,6 @@ void UdpTxBinarySocket::configure()
 //******************************************************************************
 // Send a binary over the socket via a blocking send call.
 // It returns true if successful.
-// It is protected by the transmit mutex.
 
 bool UdpTxBinarySocket::doSendBinary(void* aBinary,int aLength)
 {

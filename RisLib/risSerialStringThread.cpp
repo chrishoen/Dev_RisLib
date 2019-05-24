@@ -30,9 +30,12 @@ SerialStringThread::SerialStringThread(SerialSettings& aSettings)
    BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 
    mSettings = aSettings;
+   mSessionQCall = aSettings.mSessionQCall;
+   mSessionCallback = aSettings.mSessionCallback;
    mRxStringQCall = aSettings.mRxStringQCall;
    mRxStringCallback = aSettings.mRxStringCallback;
 
+   mConnectionFlag = false;
    mTxCount = 0;
    mTxLength = 0;
    mRxCount = 0;
@@ -124,6 +127,31 @@ void SerialStringThread::shutdownThread()
    mSerialPort.doClose();
 
    BaseThreadWithTermFlag::waitForThreadTerminate();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Notify the parent thread that a session has changed. This is called by
+// the threadRunFunction when a new session is established or an existing
+// session is disestablished. It invokes the mSessionQCall that is
+// registered at initialization. The session is disestablished if the 
+// serial port is closed because of an error and it is established if
+// it is successfully reopened.
+
+void SerialStringThread::processSessionChange(bool aEstablished)
+{
+   // If the callback function pointer is valid then call it.
+   if (mSessionCallback)
+   {
+      mSessionCallback(aEstablished);
+   }
+
+   // If the callback qcall is valid then invoke it.
+   if (mSessionQCall.isValid())
+   {
+      mSessionQCall(aEstablished);
+   }
 }
 
 //******************************************************************************

@@ -72,7 +72,7 @@ public:
    // Methods.
 
    // Open/Close serial port.
-   void doOpen();
+   bool doOpen();
    void doClose();
    void doPurge();
 

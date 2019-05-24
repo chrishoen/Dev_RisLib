@@ -69,6 +69,12 @@ public:
    // Receive string callback function.
    std::function<void(std::string*)> mRxStringCallback;
 
+   // Session callback qcall.
+   Ris::Threads::QCall1<bool> mSessionQCall;
+
+   // Session callback function.
+   std::function<void(bool)> mSessionCallback;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

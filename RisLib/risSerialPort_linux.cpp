@@ -65,9 +65,9 @@ bool SerialPort::isValid(){return mValidFlag;}
 //******************************************************************************
 // Open the port.
 
-void SerialPort::doOpen()
+bool SerialPort::doOpen()
 {
-   mValidFlag=false;
+   mValidFlag = false;
 
    TS::print(1,"SerialPort::doOpen %s",mSettings.mPortDevice);
 
@@ -76,19 +76,12 @@ void SerialPort::doOpen()
    //***************************************************************************
    // Open the port.
 
-   while (1)
-   {
-      mSpecific->mPortFd = open(mSettings.mPortDevice, O_RDWR | O_NOCTTY | O_SYNC);
+   mSpecific->mPortFd = open(mSettings.mPortDevice, O_RDWR | O_NOCTTY | O_SYNC);
 
-      if (mSpecific->mPortFd < 0)
-      {
-         TS::print(0, "serial_open_error_1 %d", errno);
-         Ris::Threads::threadSleep(2000);
-      }
-      else
-      {
-         break;
-      }
+   if (mSpecific->mPortFd < 0)
+   {
+      TS::print(0, "serial_open_error_1 %d", errno);
+      return false;
    }
 
    //***************************************************************************
@@ -98,9 +91,10 @@ void SerialPort::doOpen()
 
    mSpecific->mEventFd = eventfd(0, EFD_SEMAPHORE);
 
-  if (mSpecific->mPortFd < 0)
+   if (mSpecific->mPortFd < 0)
    {
-     TS::print(1, "serial_open_error_2 %d", errno);
+      TS::print(1, "serial_open_error_2 %d", errno);
+      return false;
    }
 
    //***************************************************************************
@@ -126,11 +120,12 @@ void SerialPort::doOpen()
    //***************************************************************************
    // Done.
  
-   mValidFlag=true;
-
    TS::print(1, "SerialPort initialize PASS  $ %s : %16s",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
+
+   mValidFlag = true;
+   return true;
 }
 
 //******************************************************************************

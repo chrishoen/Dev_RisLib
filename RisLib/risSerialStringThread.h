@@ -70,6 +70,23 @@ public:
    // Rx string.
    char mRxString[cMaxStringSize];
 
+   // If true then the serial port is open. If false then it is closed
+   // because of an error.
+   bool mConnectionFlag;
+
+   // This is a qcall that is invoked when a session is established or
+   // disestablished. It is registered by the parent thread at
+   // initialzation. It is called when the serial port is disconnected
+   // because of an error and when it is reconnected.
+   typedef Ris::Threads::QCall1<bool> SessionQCall;
+   SessionQCall mSessionQCall;
+
+   // This is a function pointer that is called when a session is
+   // established or disestablished. It is registered by the parent thread
+   // at initialzation. It is called when the serial port is disconnected
+   // because of an error and when it is reconnected.
+   std::function<void(bool)> mSessionCallback;
+
    // This is a qcall callback that is called when a string is received.
    // It is registered by the parent thread at initialzation.
    typedef Ris::Threads::QCall1<std::string*> RxStringQCall;
@@ -122,6 +139,14 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Methods.
+
+   // Notify the parent thread that a session has changed. This is called by
+   // the threadRunFunction when a new session is established or an existing
+   // session is disestablished. It invokes the mSessionQCall that is
+   // registered at initialization. The session is disestablished if the 
+   // serial port is closed because of an error and it is established if
+   // it is successfully reopened.
+   virtual void processSessionChange(bool aEstablished);
 
    // Pass a received string to the parent thread. This is called by the
    // threadRunFunction when a string is received. It invokes the

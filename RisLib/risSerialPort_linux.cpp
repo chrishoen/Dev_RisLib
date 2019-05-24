@@ -80,7 +80,7 @@ bool SerialPort::doOpen()
 
    if (mSpecific->mPortFd < 0)
    {
-      TS::print(0, "serial_open_error_1 %d", errno);
+      TS::print(0, "serial_open_error_1 %d %s", errno, strerror(errno));
       return false;
    }
 

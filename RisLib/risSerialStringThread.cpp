@@ -56,7 +56,7 @@ void SerialStringThread::threadInitFunction()
 {
    // Initialize and open the serial port.
    mSerialPort.initialize(mSettings);
-   mSerialPort.doOpen();
+//   mConnectionFlag = mSerialPort.doOpen();
 }
 
 //******************************************************************************
@@ -67,34 +67,77 @@ void SerialStringThread::threadInitFunction()
 
 void  SerialStringThread::threadRunFunction()
 {
-   bool tGoing = mSerialPort.mValidFlag;
+   bool tGoing = true;
 
    while (tGoing)
    {
-      // Try to receive a string with a blocking receive call.
-      // If a string was received then process it.
-      // If a string was not received then the serial port was closed or 
-      // an error occurred.  
-      if (mSerialPort.doReceiveLine(mRxString, cMaxStringSize) > 0)
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // If not connected.
+
+      if (!mConnectionFlag)
       {
-         // Metrics.
-         mRxCount++;
-         // Message was correctly received.
-         // call the receive callback, passing the received string.
-         // to the thread inheritor.
-         processRxString(mRxString);
-      }
-      else
-      {
-         // String was not correctly received.
-         mRxError++;
+         // Try to connect.
+         if (mSerialPort.doOpen())
+         {
+            // Connection was established.
+            TS::print(2, "serial port open Connected");
+            mConnectionFlag = true;
+
+            // Process a session change because a
+            // new session has been established.
+            processSessionChange(true);
+         }
+         else
+         {
+            // Connection was not established.
+            TS::print(2, "serial port not open Not Connected");
+
+            // If termination request, exit the loop
+            // This is set by shutdown, see below.
+            if (mTerminateFlag) break;
+
+            // Sleep.
+            threadSleep(2000);
+         }
       }
 
-      // If termination request, exit the loop.
-      // This is set by shutdown, see below.
-      if (mTerminateFlag)
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // If connected.
+
+      else
       {
-         tGoing = false;
+         // Try to receive a string with a blocking receive call.
+         // If a string was received then process it.
+         // If a string was not received then the serial port was closed or 
+         // an error occurred.  
+         if (mSerialPort.doReceiveLine(mRxString, cMaxStringSize) > 0)
+         {
+            // Metrics.
+            mRxCount++;
+            // Message was correctly received.
+            // call the receive callback, passing the received string.
+            // to the thread inheritor.
+            processRxString(mRxString);
+         }
+         else
+         {
+            // If termination request, exit the loop
+            // This is set by shutdown, see below.
+            if (mTerminateFlag) break;
+
+            // Message was not correctly received, so
+            // Connection was lost.
+            TS::print(2, "serial port Recv failed, Connection lost");
+            mConnectionFlag = false;
+
+            // Process a session change because a
+            // session has been disestablished.
+            processSessionChange(false);
+         }
       }
    }
 }

@@ -26,18 +26,16 @@ TimerThread::TimerThread()
    BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
 
    // Set base class variables.
-   BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadSingleProcessor = 3;
+   BaseClass::setThreadPriority(Ris::Threads::Priority(3, 95));
 
-   // Set timer period
-   mFrequency = 20;
-   BaseClass::mTimerPeriod = 1000 / mFrequency;
-
-   mTimeMarker.initialize(5*mFrequency);
+   // Set timer period.
+   BaseClass::mTimerPeriod = 50;
+   mTimeMarker.initialize(100);
 
    // Members
    mTPFlag = false;
    mTestCode = 1;
+   mTestCount = 0;
 }
 
 //******************************************************************************
@@ -57,7 +55,7 @@ void TimerThread::threadInitFunction()
 
 void TimerThread::executeOnTimer(int aTimeCount)
 {
-   if (aTimeCount < mFrequency) return;
+   if (aTimeCount < 20) return;
 
    switch (mTestCode)
    {
@@ -77,7 +75,8 @@ void TimerThread::executeTest1(int aTimeCount)
 
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      Prn::print(Prn::ThreadRun1, "TEST %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
+      Prn::print(Prn::ThreadRun1, "TEST %5d %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
+         mTestCount++,
          mTimeMarker.mStatistics.mSize,
          mTimeMarker.mStatistics.mMean,
          mTimeMarker.mStatistics.mStdDev,

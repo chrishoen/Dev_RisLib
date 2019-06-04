@@ -8,6 +8,7 @@ Description:
 #include "stdafx.h"
 
 #include "risProgramTime.h"
+#include "tsThreadServices.h"
 
 #define  _SOMETIMERTHREAD_CPP_
 #include "someTimerThread.h"
@@ -75,7 +76,7 @@ void TimerThread::executeTest1(int aTimeCount)
 
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      Prn::print(Prn::ThreadRun1, "TEST %5d %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
+      TS::print(0, "TEST %5d %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
          mTestCount++,
          mTimeMarker.mStatistics.mSize,
          mTimeMarker.mStatistics.mMean,

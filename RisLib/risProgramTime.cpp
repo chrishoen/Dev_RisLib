@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "risPortableCalls.h"
+#include "risHiresTime.h"
 #include "risProgramTime.h"
 
 namespace Ris
@@ -14,12 +14,8 @@ namespace Ris
 //******************************************************************************
 // Regionals
 
-// High performance time count at program start
-static unsigned long long int mProgramStartTimeCount = Ris::portableGetHiResCounter();
-
-// Scale factor used to calculate the current program time
-static double mScaleFactorSec = (double)((1.0)/Ris::portableGetHiResFrequency());
-
+// High performance time count at program start in nanoseconds.
+static unsigned long long int mProgramStartTimeCount = Ris::getCurrentHiresTime();
    
 //******************************************************************************
 //******************************************************************************
@@ -29,8 +25,11 @@ static double mScaleFactorSec = (double)((1.0)/Ris::portableGetHiResFrequency())
 
 double getCurrentProgramTime()
 {
-   unsigned long long int mCurrentTimeCount = Ris::portableGetHiResCounter();
-   return (mCurrentTimeCount - mProgramStartTimeCount)*mScaleFactorSec;
+   // Current high performance time count in nanoseconds.
+   unsigned long long int mCurrentTimeCount = Ris::getCurrentHiresTime();
+
+   // Return the current program time in seconds.
+   return (double)(mCurrentTimeCount - mProgramStartTimeCount)*(1E-9);
 }
 
 //******************************************************************************

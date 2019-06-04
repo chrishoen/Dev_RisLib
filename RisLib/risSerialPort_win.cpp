@@ -57,7 +57,7 @@ bool SerialPort::isValid(){return mValidFlag;}
 //******************************************************************************
 //******************************************************************************
 
-void SerialPort::doOpen()
+bool SerialPort::doOpen()
 {
    mValidFlag=false;
 
@@ -114,7 +114,7 @@ void SerialPort::doOpen()
       TS::print(1, "serial_create_error_2 %d", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
-      return;
+      return false; 
    }
  
    Sleep(100);
@@ -164,7 +164,7 @@ void SerialPort::doOpen()
                Prn::print(Prn::SerialErrorP1, "serial_create_error_3 %d", GetLastError());
                CloseHandle(mSpecific->mPortHandle);
                mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
-               return;
+               return false;
             }
          }
       }
@@ -188,7 +188,7 @@ void SerialPort::doOpen()
       TS::print(1, "serial_create_error_4 %d", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
-      return;
+      return false;
    }
 
    //***************************************************************************
@@ -209,6 +209,8 @@ void SerialPort::doOpen()
    TS::print(1, "SerialMsgPort initialize PASS  $ %s : %16s",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
+
+   return true;
 }
 
 //******************************************************************************

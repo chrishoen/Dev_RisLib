@@ -67,6 +67,7 @@ Priorities::Priorities()
    mTcpServer = Priority(-1, THREAD_PRIORITY_NORMAL);
    mTcpClient = Priority(-1, THREAD_PRIORITY_NORMAL);
    mSerial    = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
+   mTimerTest = Priority(3,  THREAD_PRIORITY_TIME_CRITICAL);
 
    mTsPrint   = Priority(-1, THREAD_PRIORITY_ABOVE_NORMAL);
 }

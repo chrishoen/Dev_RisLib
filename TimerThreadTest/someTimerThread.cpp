@@ -8,6 +8,7 @@ Description:
 #include "stdafx.h"
 
 #include "risProgramTime.h"
+#include "risThreadsPriorities.h"
 #include "tsThreadServices.h"
 
 #define  _SOMETIMERTHREAD_CPP_
@@ -27,7 +28,7 @@ TimerThread::TimerThread()
    BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
 
    // Set base class variables.
-   BaseClass::setThreadPriority(Ris::Threads::Priority(3, 95));
+   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
 
    // Set timer period.
    BaseClass::mTimerPeriod = 50;
@@ -76,7 +77,7 @@ void TimerThread::executeTest1(int aTimeCount)
 
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-//    TS::print(0, "CURRENT %10.4f", Ris::getCurrentProgramTime());
+      TS::print(0, "CURRENT %10.4f", Ris::getCurrentProgramTime());
       TS::print(0, "TEST %5d %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
          mTestCount++,
          mTimeMarker.mStatistics.mSize,

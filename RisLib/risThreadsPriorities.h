@@ -70,6 +70,7 @@ public:
    Priority mTcpServer;
    Priority mTcpClient;
    Priority mSerial;
+   Priority mTimerTest;
 
    Priority mTsPrint;
 

@@ -1,64 +1,67 @@
 /*==============================================================================
-Description:
 ==============================================================================*/
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 #include "stdafx.h"
 
-#define  _RISTHREADSPRIORITIES_CPP_
-#include "risThreadsPriorities.h"
+#include <windows.h> 
+#include <conio.h>
+#include <io.h>
+#include <ProfileApi.h>
+
+#include "risHiresTime.h"
 
 namespace Ris
 {
-namespace Threads
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+class HiresTimeInitClass
 {
+public:
+   LARGE_INTEGER mPerformanceFrequency;
+
+   HiresTimeInitClass()
+   {
+      return;
+      QueryPerformanceFrequency(&mPerformanceFrequency);
+      printf("QueryPerformanceFrequency %lld\n", mPerformanceFrequency.QuadPart);
+   }
+};
+
+HiresTimeInitClass gHiresTimeInitClass;
+LARGE_INTEGER gPerformanceFrequency = gHiresTimeInitClass.mPerformanceFrequency;
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor.
 
-Priority::Priority()
+
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return the current high resolution timer value in nanoseconds. 
+
+unsigned long long int getCurrentHiresTime()
 {
-   mProcessor = -1;
-   mPriority = 50;
-}
+   LARGE_INTEGER tPerformanceCount;
+   LARGE_INTEGER tPerformanceFrequency;
 
-Priority::Priority(short aProcessor, short aPriority)
-{
-   mProcessor = aProcessor;
-   mPriority = aPriority;
-}
+   QueryPerformanceCounter(&tPerformanceCount);
+   QueryPerformanceFrequency(&tPerformanceFrequency);
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
+// printf("QueryPerformanceCounter   %lld\n", tPerformanceCount.QuadPart);
+// printf("QueryPerformanceFrequency %lld\n", tPerformanceFrequency.QuadPart);
 
-Priorities::Priorities()
-{
-   mLow       = Priority(-1, 20);
-   mNormal    = Priority(-1, 50);
-   mHigh      = Priority(-1, 80);
+   tPerformanceCount.QuadPart *= 1000000;
 
-   mQCall     = Priority(-1, 50);
-   mShort     = Priority(-1, 80);
-   mLong      = Priority(-1, 50);
-
-   mUdp       = Priority(-1, 80);
-   mTcpServer = Priority(-1, 50);
-   mTcpClient = Priority(-1, 50);
-   mSerial    = Priority(-1, 80);
-   mTimerTest = Priority(3,  95);
-
-   mTsPrint   = Priority(-1, 20);
+   tPerformanceCount.QuadPart /= tPerformanceFrequency.QuadPart;
+   return tPerformanceCount.QuadPart*1000;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace
-}//namespace
+

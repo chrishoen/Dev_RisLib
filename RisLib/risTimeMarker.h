@@ -32,14 +32,14 @@ public:
 
    // Timer counter values at start and stop of 
    // measured time interval.
-   long long mTimeCountAtStart;
-   long long mTimeCountAtStop;
+   unsigned long long mTimeCountAtStart;
+   unsigned long long mTimeCountAtStop;
 
    // Difference between stop and start time counts, in microseconds
-   float mTimeDifferenceUS;
+   double mTimeDifferenceUS;
 
    // Scale factor used to calculate the time difference
-   float mScaleFactorUS;
+   double mScaleFactorUS;
 
    // True if a start has occurred
    bool mStartFlag;

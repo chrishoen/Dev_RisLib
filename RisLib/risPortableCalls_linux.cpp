@@ -154,16 +154,14 @@ bool portableKbhit()
 //******************************************************************************
 //******************************************************************************
 
-long long int portableGetHiResCounter()
+unsigned long long int portableGetHiResCounter()
 {
    struct timespec tTimespec;
-// clock_gettime(CLOCK_MONOTONIC, &tTimespec);
    clock_gettime(CLOCK_REALTIME, &tTimespec);
 
    unsigned long long int tSeconds = (unsigned long long int)tTimespec.tv_sec;
    unsigned long long int tNanoseconds = (unsigned long long int)tTimespec.tv_nsec;
-   long long int tNanosecondsPerSecond = 1000000000;
-   long long int tTimeNs = tSeconds * tNanosecondsPerSecond + tNanoseconds;
+   unsigned long long int tTimeNs = tSeconds * 1000 * 1000 * 1000 + tNanoseconds;
    return tTimeNs;
 }
 
@@ -171,7 +169,7 @@ long long int portableGetHiResCounter()
 //******************************************************************************
 //******************************************************************************
 
-long long int portableGetHiResFrequency()
+unsigned long long int portableGetHiResFrequency()
 {
    return 1000 * 1000 * 1000;
 }

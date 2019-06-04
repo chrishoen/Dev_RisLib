@@ -30,7 +30,7 @@ PeriodicTimeMarker::PeriodicTimeMarker()
    mScaleFactorUS = 0.0;
 
    // Scale factor
-   mScaleFactorUS = (float)((1E6)/Ris::portableGetHiResFrequency());
+   mScaleFactorUS = ((1E6)/Ris::portableGetHiResFrequency());
 }
 
 //******************************************************************************
@@ -39,16 +39,16 @@ PeriodicTimeMarker::PeriodicTimeMarker()
 
 void PeriodicTimeMarker::initialize(int aWindowSize)
 {
-   // All zero
+   // All zero.
    mTimeCountAtStart = 0;
    mTimeCountAtStop = 0;
    mStartFlag=false;
    mChangeCount=0;
 
-   // Scale factor
-   mScaleFactorUS = (float)((1E6)/Ris::portableGetHiResFrequency());
+   // Scale factor.
+   mScaleFactorUS = ((1E6)/Ris::portableGetHiResFrequency());
 
-   // Initialize statistics
+   // Initialize statistics.
    mStatistics.initialize(aWindowSize);
 }
 
@@ -58,10 +58,10 @@ void PeriodicTimeMarker::initialize(int aWindowSize)
 
 void PeriodicTimeMarker::doStart()
 {
-   // Read start time from hardware
+   // Read start time from hardware.
    mTimeCountAtStart = Ris::portableGetHiResCounter();
 
-   // Set flag
+   // Set flag.
    mStartFlag=true;
 }
 
@@ -71,15 +71,15 @@ void PeriodicTimeMarker::doStart()
 
 void PeriodicTimeMarker::doStop()
 {
-   // Read stop time from hardware
+   // Read stop time from hardware.
    mTimeCountAtStop = Ris::portableGetHiResCounter();
 
-   long long tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
+   unsigned long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
 
-   // Calculate delta time in microseconds
-   mTimeDifferenceUS = (float)(tDeltaTimeCount*mScaleFactorUS);
+   // Calculate delta time in microseconds.
+   mTimeDifferenceUS = tDeltaTimeCount*mScaleFactorUS;
 
-   // Calculate statistics on delta time
+   // Calculate statistics on delta time.
    if (mStartFlag)
    {
       mStatistics.put(mTimeDifferenceUS);
@@ -100,14 +100,14 @@ void PeriodicTimeMarker::doStop()
 
 TrialTimeMarker::TrialTimeMarker()
 {
-   // All zero
+   // All zero.
    mTimeCountAtStart = 0;
    mTimeCountAtStop = 0;
    mStartFlag=false;
    mScaleFactorUS = 0.0;
 
-   // Scale factor
-   mScaleFactorUS = (float)((1E6)/Ris::portableGetHiResFrequency());
+   // Scale factor.
+   mScaleFactorUS = (1E6)/Ris::portableGetHiResFrequency();
 }
 
 //******************************************************************************
@@ -116,15 +116,15 @@ TrialTimeMarker::TrialTimeMarker()
 
 void TrialTimeMarker::startTrial(double aXLimit)
 {
-   // All zero
+   // All zero.
    mTimeCountAtStart = 0;
    mTimeCountAtStop = 0;
    mStartFlag=false;
 
-   // Scale factor
-   mScaleFactorUS = (float)((1E6)/Ris::portableGetHiResFrequency());
+   // Scale factor.
+   mScaleFactorUS = (1E6)/Ris::portableGetHiResFrequency();
 
-   // Initialize statistics
+   // Initialize statistics.
    mStatistics.startTrial(aXLimit);
 }
 
@@ -139,10 +139,10 @@ void TrialTimeMarker::finishTrial()
 
 void TrialTimeMarker::doStart()
 {
-   // Read start time from hardware
+   // Read start time from hardware.
    mTimeCountAtStart = Ris::portableGetHiResCounter();
 
-   // Set flag
+   // Set flag.
    mStartFlag=true;
 }
 
@@ -152,15 +152,15 @@ void TrialTimeMarker::doStart()
 
 void TrialTimeMarker::doStop()
 {
-   // Read stop time from hardware
+   // Read stop time from hardware.
    mTimeCountAtStop = Ris::portableGetHiResCounter();
 
-   long long tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
+   unsigned long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
 
-   // Calculate delta time in microseconds
-   mTimeDifferenceUS = (float)(tDeltaTimeCount*mScaleFactorUS);
+   // Calculate delta time in microseconds.
+   mTimeDifferenceUS = tDeltaTimeCount*mScaleFactorUS;
 
-   // Calculate statistics on delta time
+   // Calculate statistics on delta time.
    if (mStartFlag)
    {
       mStatistics.put(mTimeDifferenceUS);

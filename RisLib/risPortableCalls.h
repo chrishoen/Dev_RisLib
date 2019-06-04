@@ -31,8 +31,8 @@ void  portableWaitForKbhit();
 bool  portableKbhit(void);
 
 // Get high resolution time, nanoseconds.
-long long int portableGetHiResCounter();
-long long int portableGetHiResFrequency();
+unsigned long long int portableGetHiResCounter();
+unsigned long long int portableGetHiResFrequency();
 
 // convert string to upper case.
 void portableStrupr(char* aString);

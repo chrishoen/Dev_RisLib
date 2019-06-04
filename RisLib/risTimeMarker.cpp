@@ -7,7 +7,7 @@
 
 #include "stdafx.h"
 
-#include "risPortableCalls.h"
+#include "risHiresTime.h"
 #include "risTimeMarker.h"
 
 namespace Ris
@@ -27,10 +27,6 @@ PeriodicTimeMarker::PeriodicTimeMarker()
    mTimeCountAtStop = 0;
    mStartFlag=false;
    mChangeCount = 0;
-   mScaleFactorUS = 0.0;
-
-   // Scale factor
-   mScaleFactorUS = ((1E6)/Ris::portableGetHiResFrequency());
 }
 
 //******************************************************************************
@@ -45,9 +41,6 @@ void PeriodicTimeMarker::initialize(int aWindowSize)
    mStartFlag=false;
    mChangeCount=0;
 
-   // Scale factor.
-   mScaleFactorUS = ((1E6)/Ris::portableGetHiResFrequency());
-
    // Initialize statistics.
    mStatistics.initialize(aWindowSize);
 }
@@ -59,7 +52,7 @@ void PeriodicTimeMarker::initialize(int aWindowSize)
 void PeriodicTimeMarker::doStart()
 {
    // Read start time from hardware.
-   mTimeCountAtStart = Ris::portableGetHiResCounter();
+   mTimeCountAtStart = Ris::getCurrentHiresTime();
 
    // Set flag.
    mStartFlag=true;
@@ -72,12 +65,12 @@ void PeriodicTimeMarker::doStart()
 void PeriodicTimeMarker::doStop()
 {
    // Read stop time from hardware.
-   mTimeCountAtStop = Ris::portableGetHiResCounter();
+   mTimeCountAtStop = Ris::getCurrentHiresTime();
 
    unsigned long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
 
    // Calculate delta time in microseconds.
-   mTimeDifferenceUS = tDeltaTimeCount*mScaleFactorUS;
+   mTimeDifferenceUS = tDeltaTimeCount*(1E-3);
 
    // Calculate statistics on delta time.
    if (mStartFlag)
@@ -104,10 +97,6 @@ TrialTimeMarker::TrialTimeMarker()
    mTimeCountAtStart = 0;
    mTimeCountAtStop = 0;
    mStartFlag=false;
-   mScaleFactorUS = 0.0;
-
-   // Scale factor.
-   mScaleFactorUS = (1E6)/Ris::portableGetHiResFrequency();
 }
 
 //******************************************************************************
@@ -120,9 +109,6 @@ void TrialTimeMarker::startTrial(double aXLimit)
    mTimeCountAtStart = 0;
    mTimeCountAtStop = 0;
    mStartFlag=false;
-
-   // Scale factor.
-   mScaleFactorUS = (1E6)/Ris::portableGetHiResFrequency();
 
    // Initialize statistics.
    mStatistics.startTrial(aXLimit);
@@ -140,7 +126,7 @@ void TrialTimeMarker::finishTrial()
 void TrialTimeMarker::doStart()
 {
    // Read start time from hardware.
-   mTimeCountAtStart = Ris::portableGetHiResCounter();
+   mTimeCountAtStart = Ris::getCurrentHiresTime();
 
    // Set flag.
    mStartFlag=true;
@@ -153,12 +139,12 @@ void TrialTimeMarker::doStart()
 void TrialTimeMarker::doStop()
 {
    // Read stop time from hardware.
-   mTimeCountAtStop = Ris::portableGetHiResCounter();
+   mTimeCountAtStop = Ris::getCurrentHiresTime();
 
    unsigned long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
 
    // Calculate delta time in microseconds.
-   mTimeDifferenceUS = tDeltaTimeCount*mScaleFactorUS;
+   mTimeDifferenceUS = tDeltaTimeCount*(1E-3);
 
    // Calculate statistics on delta time.
    if (mStartFlag)

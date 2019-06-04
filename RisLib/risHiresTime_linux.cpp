@@ -18,7 +18,7 @@ namespace Ris
 unsigned long long int getCurrentHiresTime()
 {
    struct timespec tTimespec;
-   clock_gettime(CLOCK_MONOTONIC, &tTimespec);
+   clock_gettime(CLOCK_MONOTONIC_RAW, &tTimespec);
 
    unsigned long long int tSeconds = (unsigned long long int)tTimespec.tv_sec;
    unsigned long long int tNanoseconds = (unsigned long long int)tTimespec.tv_nsec;

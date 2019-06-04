@@ -76,7 +76,7 @@ void TimerThread::executeTest1(int aTimeCount)
 
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      TS::print(0, "CURRENT %10.4f", Ris::getCurrentProgramTime());
+//    TS::print(0, "CURRENT %10.4f", Ris::getCurrentProgramTime());
       TS::print(0, "TEST %5d %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
          mTestCount++,
          mTimeMarker.mStatistics.mSize,

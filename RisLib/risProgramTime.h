@@ -4,6 +4,8 @@
 Time since program start in seconds.
 ==============================================================================*/
 
+#include "risStatistics.h"
+
 //*****************************************************************************
 //*****************************************************************************
 //*****************************************************************************
@@ -42,20 +44,28 @@ public:
    //***************************************************************************
    // Members.
 
+   // Start and stop times.
+   double mTimeAtStartUS;
+   double mTimeAtStopUS;
+
    // Time that has elapsed from start to stop.
-   double mElapsed;
+   double mTimeDifferenceUS;
 
-   // Start and stop timesh.
-   double mStart;
-   double mStop;
+   // True if a start has occurred.
+   bool mStartFlag;
+
+   // Statistics that are calculated for measured time interval.
+   Ris::PeriodicStatistics mStatistics;
+   int mChangeCount;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constuctor.
    ProgramTimeMarker();
+   void initialize(int aWindowSize);
 
    //***************************************************************************
    //***************************************************************************

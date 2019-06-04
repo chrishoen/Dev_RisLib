@@ -15,7 +15,7 @@ namespace Ris
 // Regionals
 
 // High performance time count at program start
-static long long int mProgramStartTimeCount = Ris::portableGetHiResCounter();
+static unsigned long long int mProgramStartTimeCount = Ris::portableGetHiResCounter();
 
 // Scale factor used to calculate the current program time
 static double mScaleFactorSec = (double)((1.0)/Ris::portableGetHiResFrequency());
@@ -29,7 +29,7 @@ static double mScaleFactorSec = (double)((1.0)/Ris::portableGetHiResFrequency())
 
 double getCurrentProgramTime()
 {
-   long long int mCurrentTimeCount = Ris::portableGetHiResCounter();
+   unsigned long long int mCurrentTimeCount = Ris::portableGetHiResCounter();
    return (mCurrentTimeCount - mProgramStartTimeCount)*mScaleFactorSec;
 }
 
@@ -43,9 +43,27 @@ double getCurrentProgramTime()
 
 ProgramTimeMarker::ProgramTimeMarker()
 {
-   mElapsed = 0.0;
-   mStart = 0.0;
-   mStop = 0.0;
+   mTimeDifferenceUS = 0.0;
+   mTimeAtStartUS = 0.0;
+   mTimeAtStopUS = 0.0;
+   mStartFlag = false;
+   mChangeCount = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void ProgramTimeMarker::initialize(int aWindowSize)
+{
+   mTimeDifferenceUS = 0.0;
+   mTimeAtStartUS = 0.0;
+   mTimeAtStopUS = 0.0;
+   mStartFlag = false;
+   mChangeCount = 0;
+
+   // Initialize statistics.
+   mStatistics.initialize(aWindowSize);
 }
 
 //******************************************************************************
@@ -55,13 +73,31 @@ ProgramTimeMarker::ProgramTimeMarker()
 
 void ProgramTimeMarker::doStart()
 {
-   mStart = getCurrentProgramTime();
+   // Read start time from hardware.
+   mTimeAtStartUS = getCurrentProgramTime() * 1E6;
+
+   // Set flag.
+   mStartFlag = true;
 }
 
 void ProgramTimeMarker::doStop()
 {
-   mStop = getCurrentProgramTime();
-   mElapsed = mStop - mStart;
+   // Read stop time from hardware.
+   mTimeAtStopUS = getCurrentProgramTime() * 1E6;
+
+   // Calculate delta time in microseconds.
+   mTimeDifferenceUS = mTimeAtStopUS - mTimeAtStartUS;
+
+   // Calculate statistics on delta time.
+   if (mStartFlag)
+   {
+      mStatistics.put(mTimeDifferenceUS);
+
+      if (mStatistics.mEndOfPeriod)
+      {
+         mChangeCount++;
+      }
+   }
 }
 
 //******************************************************************************

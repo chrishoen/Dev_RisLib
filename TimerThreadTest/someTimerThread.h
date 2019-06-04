@@ -1,8 +1,7 @@
-#ifndef _SOMETIMERTHREAD_H_
-#define _SOMETIMERTHREAD_H_
+#pragma once
 
 /*==============================================================================
-Timer thead example
+Timer test thread.
 ==============================================================================*/
 
 //******************************************************************************
@@ -10,6 +9,7 @@ Timer thead example
 //******************************************************************************
 #include "risThreadsTimerThread.h"
 #include "risTimeMarker.h"
+#include "risProgramTime.h"
 
 namespace Some
 {
@@ -27,7 +27,8 @@ public:
    //******************************************************************************
    // Members.
 
-   Ris::PeriodicTimeMarker mTimeMarker;
+// Ris::PeriodicTimeMarker mTimeMarker;
+   Ris::ProgramTimeMarker mTimeMarker;
 
    bool mTPFlag;
    int  mTestCode;
@@ -65,6 +66,4 @@ public:
 //******************************************************************************
 }//namespace
 
-
-#endif
 

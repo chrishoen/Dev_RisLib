@@ -85,6 +85,7 @@ void TimerThread::executeTest1(int aTimeCount)
          mTimeMarker.mStatistics.mMaxX,
          mTimeMarker.mStatistics.mMaxX - mTimeMarker.mStatistics.mMinX);
          mTimeMarker.mStatistics.mEndOfPeriod = false;
+//       TS::print(0, "CURRENT %10.4f", Ris::getCurrentProgramTime());
    }
 }
 

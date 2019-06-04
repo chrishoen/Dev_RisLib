@@ -14,7 +14,7 @@
 #include <assert.h>
 #include "my_functions.h"
 #include "prnPrint.h"
-#include "risNanoTime.h"
+#include "risNanoConvert.h"
 #include "risThreadsSynch.h"
 
 
@@ -97,13 +97,13 @@ bool BinarySemaphore::get(int aTimeout)
       clock_gettime(CLOCK_REALTIME, &tBeginTimespec);
 
       // Convert to ns
-      Ris::NanoTime::getNsFromTimespec(tBeginTimeNs,&tBeginTimespec);
+      Ris::NanoConvert::getNsFromTimespec(tBeginTimeNs,&tBeginTimespec);
 
       // Calculate expiration time from timeout (which is in milliseconds)
-      tExpireTimeNs = tBeginTimeNs + Ris::NanoTime::getNsFromMs(aTimeout);
+      tExpireTimeNs = tBeginTimeNs + Ris::NanoConvert::getNsFromMs(aTimeout);
 
       // Convert to timespec
-      Ris::NanoTime::getTimespecFromNs(&tExpireTimespec,tExpireTimeNs);
+      Ris::NanoConvert::getTimespecFromNs(&tExpireTimespec,tExpireTimeNs);
 
       // Semaphore timed wait with expiration timespec
       sem_timedwait(&mSpecific->mHandle,&tExpireTimespec);
@@ -112,7 +112,7 @@ bool BinarySemaphore::get(int aTimeout)
       clock_gettime(CLOCK_REALTIME, &tEndTimespec);
 
       // Convert to ns
-      Ris::NanoTime::getNsFromTimespec(tEndTimeNs,&tEndTimespec);
+      Ris::NanoConvert::getNsFromTimespec(tEndTimeNs,&tEndTimespec);
 
       // Compare
       bool tNoTimeout = tExpireTimeNs >= tEndTimeNs ? true : false; 

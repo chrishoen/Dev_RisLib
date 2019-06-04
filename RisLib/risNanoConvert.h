@@ -13,7 +13,7 @@ Time representation is long long, with LSB of 1 nanosecond
 
 namespace Ris
 {
-namespace NanoTime
+namespace NanoConvert
 {
 
 //******************************************************************************

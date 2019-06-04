@@ -4,11 +4,11 @@
 
 #include <time.h>
 
-#include "risNanoTime.h"
+#include "risNanoConvert.h"
 
 namespace Ris
 {
-namespace NanoTime
+namespace NanoConvert
 {
 
 //******************************************************************************
@@ -123,7 +123,7 @@ void getTmFromNs (struct tm* aTm,  long long aTimeNs)
 //******************************************************************************
 #if 0
 
-char* NanoTime::asString1(char* aString)
+char* NanoConvert::asString1(char* aString)
 {
    int tYear;
    int tDayInYear;
@@ -143,7 +143,7 @@ char* NanoTime::asString1(char* aString)
 
 //******************************************************************************
 
-char* NanoTime::asString2(char* aString)
+char* NanoConvert::asString2(char* aString)
 {
    int tYear;
    int tDayInYear;
@@ -158,7 +158,7 @@ char* NanoTime::asString2(char* aString)
 }
 
 //******************************************************************************
-char* NanoTime::asString3(char* aString)
+char* NanoConvert::asString3(char* aString)
 {
    int tYear;
    int tDayInYear;

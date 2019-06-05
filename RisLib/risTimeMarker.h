@@ -32,8 +32,8 @@ public:
 
    // Timer counter values at start and stop of 
    // measured time interval.
-   unsigned long long int mTimeCountAtStart;
-   unsigned long long int mTimeCountAtStop;
+   long long int mTimeCountAtStart;
+   long long int mTimeCountAtStop;
 
    // Difference between stop and start time counts, in microseconds
    double mTimeDifferenceUS;
@@ -82,8 +82,8 @@ public:
    // Timer counter values at start and stop of 
    // measured time interval.
 
-   unsigned long long int mTimeCountAtStart;
-   unsigned long long int mTimeCountAtStop;
+   long long int mTimeCountAtStart;
+   long long int mTimeCountAtStop;
 
    // Difference between stop and start time counts, in microseconds
    double mTimeDifferenceUS;

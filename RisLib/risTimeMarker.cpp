@@ -7,7 +7,7 @@
 
 #include "stdafx.h"
 
-#include "risHiresTime.h"
+#include "risProgramTime.h"
 #include "risTimeMarker.h"
 
 namespace Ris
@@ -52,7 +52,7 @@ void PeriodicTimeMarker::initialize(int aWindowSize)
 void PeriodicTimeMarker::doStart()
 {
    // Read start time from hardware.
-   mTimeCountAtStart = Ris::getCurrentHiresTime();
+   mTimeCountAtStart = Ris::getCurrentProgramTimeNS();
 
    // Set flag.
    mStartFlag=true;
@@ -65,9 +65,9 @@ void PeriodicTimeMarker::doStart()
 void PeriodicTimeMarker::doStop()
 {
    // Read stop time from hardware.
-   mTimeCountAtStop = Ris::getCurrentHiresTime();
+   mTimeCountAtStop = Ris::getCurrentProgramTimeNS();
 
-   unsigned long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
+   long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
 
    // Calculate delta time in microseconds.
    mTimeDifferenceUS = tDeltaTimeCount*(1E-3);
@@ -126,7 +126,7 @@ void TrialTimeMarker::finishTrial()
 void TrialTimeMarker::doStart()
 {
    // Read start time from hardware.
-   mTimeCountAtStart = Ris::getCurrentHiresTime();
+   mTimeCountAtStart = Ris::getCurrentProgramTimeNS();
 
    // Set flag.
    mStartFlag=true;
@@ -139,9 +139,9 @@ void TrialTimeMarker::doStart()
 void TrialTimeMarker::doStop()
 {
    // Read stop time from hardware.
-   mTimeCountAtStop = Ris::getCurrentHiresTime();
+   mTimeCountAtStop = Ris::getCurrentProgramTimeNS();
 
-   unsigned long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
+   long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
 
    // Calculate delta time in microseconds.
    mTimeDifferenceUS = tDeltaTimeCount*(1E-3);

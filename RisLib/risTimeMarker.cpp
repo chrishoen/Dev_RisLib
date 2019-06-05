@@ -22,10 +22,9 @@ namespace Ris
 
 PeriodicTimeMarker::PeriodicTimeMarker()
 {
-   // All zero
-   mTimeCountAtStart = 0;
-   mTimeCountAtStop = 0;
-   mStartFlag=false;
+   mTimeAtStartUS = 0.0;
+   mTimeAtStopUS = 0.0;
+   mStartFlag = false;
    mChangeCount = 0;
 }
 
@@ -36,9 +35,9 @@ PeriodicTimeMarker::PeriodicTimeMarker()
 void PeriodicTimeMarker::initialize(int aWindowSize)
 {
    // All zero.
-   mTimeCountAtStart = 0;
-   mTimeCountAtStop = 0;
-   mStartFlag=false;
+   mTimeAtStartUS = 0.0;
+   mTimeAtStopUS = 0.0;
+   mStartFlag = false;
    mChangeCount=0;
 
    // Initialize statistics.
@@ -52,7 +51,7 @@ void PeriodicTimeMarker::initialize(int aWindowSize)
 void PeriodicTimeMarker::doStart()
 {
    // Read start time from hardware.
-   mTimeCountAtStart = Ris::getCurrentProgramTimeNS();
+   mTimeAtStartUS = Ris::getCurrentProgramTimeUS();
 
    // Set flag.
    mStartFlag=true;
@@ -65,12 +64,10 @@ void PeriodicTimeMarker::doStart()
 void PeriodicTimeMarker::doStop()
 {
    // Read stop time from hardware.
-   mTimeCountAtStop = Ris::getCurrentProgramTimeNS();
+   mTimeAtStopUS = Ris::getCurrentProgramTimeUS();
 
-   long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
-
-   // Calculate delta time in microseconds.
-   mTimeDifferenceUS = tDeltaTimeCount*(1E-3);
+   // Calculate time difference.
+   mTimeDifferenceUS = mTimeAtStopUS - mTimeAtStartUS;
 
    // Calculate statistics on delta time.
    if (mStartFlag)
@@ -93,10 +90,9 @@ void PeriodicTimeMarker::doStop()
 
 TrialTimeMarker::TrialTimeMarker()
 {
-   // All zero.
-   mTimeCountAtStart = 0;
-   mTimeCountAtStop = 0;
-   mStartFlag=false;
+   mTimeAtStartUS = 0.0;
+   mTimeAtStopUS = 0.0;
+   mStartFlag = false;
 }
 
 //******************************************************************************
@@ -105,10 +101,9 @@ TrialTimeMarker::TrialTimeMarker()
 
 void TrialTimeMarker::startTrial(double aXLimit)
 {
-   // All zero.
-   mTimeCountAtStart = 0;
-   mTimeCountAtStop = 0;
-   mStartFlag=false;
+   mTimeAtStartUS = 0.0;
+   mTimeAtStopUS = 0.0;
+   mStartFlag = false;
 
    // Initialize statistics.
    mStatistics.startTrial(aXLimit);
@@ -126,10 +121,10 @@ void TrialTimeMarker::finishTrial()
 void TrialTimeMarker::doStart()
 {
    // Read start time from hardware.
-   mTimeCountAtStart = Ris::getCurrentProgramTimeNS();
+   mTimeAtStartUS = Ris::getCurrentProgramTimeUS();
 
    // Set flag.
-   mStartFlag=true;
+   mStartFlag = true;
 }
 
 //******************************************************************************
@@ -139,12 +134,10 @@ void TrialTimeMarker::doStart()
 void TrialTimeMarker::doStop()
 {
    // Read stop time from hardware.
-   mTimeCountAtStop = Ris::getCurrentProgramTimeNS();
+   mTimeAtStopUS = Ris::getCurrentProgramTimeUS();
 
-   long long int tDeltaTimeCount = mTimeCountAtStop - mTimeCountAtStart;
-
-   // Calculate delta time in microseconds.
-   mTimeDifferenceUS = tDeltaTimeCount*(1E-3);
+   // Calculate time difference.
+   mTimeDifferenceUS = mTimeAtStopUS - mTimeAtStartUS;
 
    // Calculate statistics on delta time.
    if (mStartFlag)

@@ -30,20 +30,17 @@ public:
    //***************************************************************************
    // Members.
 
-   // Timer counter values at start and stop of 
-   // measured time interval.
-   long long int mTimeCountAtStart;
-   long long int mTimeCountAtStop;
+   // Timer counter values at start and stop of measured time interval.
+   double mTimeAtStartUS;
+   double mTimeAtStopUS;
 
-   // Difference between stop and start time counts, in microseconds
+   // Difference between stop and start time counts, in microseconds.
    double mTimeDifferenceUS;
 
-   // True if a start has occurred
+   // True if a start has occurred.
    bool mStartFlag;
    
-   // Statistics that are calculated for measured
-   // time interval
-
+   // Statistics that are calculated for measured time interval.
    Ris::PeriodicStatistics mStatistics;
    int mChangeCount;
 
@@ -79,20 +76,17 @@ public:
    //***************************************************************************
    // Members.
 
-   // Timer counter values at start and stop of 
-   // measured time interval.
+   // Timer counter values at start and stop of measured time interval.
+   double mTimeAtStartUS;
+   double mTimeAtStopUS;
 
-   long long int mTimeCountAtStart;
-   long long int mTimeCountAtStop;
-
-   // Difference between stop and start time counts, in microseconds
+   // Difference between stop and start time counts, in microseconds.
    double mTimeDifferenceUS;
 
-   // True if a start has occurred
+   // True if a start has occurred.
    bool mStartFlag;
    
-   // Statistics that are calculated for measured
-   // time interval
+   // Statistics that are calculated for measured time interval.
    Ris::TrialStatistics mStatistics;
 
    //***************************************************************************

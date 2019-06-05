@@ -59,33 +59,6 @@ void CmdLineExec::executeTest(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,100);
-   aCmd->setArgDefault(2,50);
-
-   int tCount = aCmd->argInt(1);
-   int tSleep = aCmd->argInt(2);
-
-   Ris::PeriodicTimeMarker tMarker;
-
-   tMarker.initialize(tCount);
-
-   for (int i = 0; i < tCount; i++)
-   {
-      tMarker.doStart();
-      Ris::portableSleep(tSleep);
-      tMarker.doStop();
-   }
-
-   if (tMarker.mStatistics.mEndOfPeriod || true)
-   {
-      Prn::print(Prn::ThreadRun1, "TEST %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
-         tMarker.mStatistics.mSize,
-         tMarker.mStatistics.mMean,
-         tMarker.mStatistics.mStdDev,
-         tMarker.mStatistics.mMinX,
-         tMarker.mStatistics.mMaxX);
-   }
-
 }
 
 //******************************************************************************

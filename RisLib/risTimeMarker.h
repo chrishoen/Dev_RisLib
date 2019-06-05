@@ -31,14 +31,14 @@ public:
    // Members.
 
    // Timer counter values at start and stop of measured time interval.
-   double mTimeAtStartUS;
-   double mTimeAtStopUS;
+   double mTimeAtUpdateUS;
+   double mTimeAtLastUpdateUS;
 
    // Difference between stop and start time counts, in microseconds.
    double mTimeDifferenceUS;
 
-   // True if a start has occurred.
-   bool mStartFlag;
+   // True if this is the first update.
+   bool mFirstFlag;
    
    // Statistics that are calculated for measured time interval.
    Ris::PeriodicStatistics mStatistics;
@@ -58,9 +58,9 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Start/stop the time measurement.
-   void doStart();
-   void doStop();
+   // Read the current time, take the difference between the current time
+   // and the pervious time and update the statistics.
+   void doUpdate();
 };
 
 //******************************************************************************

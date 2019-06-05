@@ -22,9 +22,9 @@ namespace Ris
 
 PeriodicTimeMarker::PeriodicTimeMarker()
 {
-   mTimeAtStartUS = 0.0;
-   mTimeAtStopUS = 0.0;
-   mStartFlag = false;
+   mTimeAtUpdateUS = 0.0;
+   mTimeAtLastUpdateUS = 0.0;
+   mFirstFlag = true;
    mChangeCount = 0;
 }
 
@@ -34,11 +34,10 @@ PeriodicTimeMarker::PeriodicTimeMarker()
 
 void PeriodicTimeMarker::initialize(int aWindowSize)
 {
-   // All zero.
-   mTimeAtStartUS = 0.0;
-   mTimeAtStopUS = 0.0;
-   mStartFlag = false;
-   mChangeCount=0;
+   mTimeAtUpdateUS = 0.0;
+   mTimeAtLastUpdateUS = 0.0;
+   mFirstFlag = true;
+   mChangeCount = 0;
 
    // Initialize statistics.
    mStatistics.initialize(aWindowSize);
@@ -47,30 +46,22 @@ void PeriodicTimeMarker::initialize(int aWindowSize)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Read the current time, take the difference between the current time
+// and the pervious time and update the statistics.
 
-void PeriodicTimeMarker::doStart()
+void PeriodicTimeMarker::doUpdate()
 {
-   // Read start time from hardware.
-   mTimeAtStartUS = Ris::getCurrentProgramTimeUS();
+   // Store the pervious time.
+   mTimeAtLastUpdateUS = mTimeAtUpdateUS;
 
-   // Set flag.
-   mStartFlag=true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void PeriodicTimeMarker::doStop()
-{
-   // Read stop time from hardware.
-   mTimeAtStopUS = Ris::getCurrentProgramTimeUS();
+   // Read current time from hardware.
+   mTimeAtUpdateUS = Ris::getCurrentProgramTimeUS();
 
    // Calculate time difference.
-   mTimeDifferenceUS = mTimeAtStopUS - mTimeAtStartUS;
+   mTimeDifferenceUS = mTimeAtUpdateUS - mTimeAtLastUpdateUS;
 
    // Calculate statistics on delta time.
-   if (mStartFlag)
+   if (!mFirstFlag)
    {
       mStatistics.put(mTimeDifferenceUS);
 
@@ -79,6 +70,9 @@ void PeriodicTimeMarker::doStop()
          mChangeCount++;
       }
    }
+
+   // Not first.
+   mFirstFlag = false;
 }
 
 //******************************************************************************

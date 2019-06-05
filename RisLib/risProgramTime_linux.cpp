@@ -3,8 +3,8 @@
 
 #include "stdafx.h"
 
-#include <windows.h> 
-#include <ProfileApi.h>
+#include <time.h>
+#include <sys/time.h>
 
 #include "risProgramTime.h"
 
@@ -16,27 +16,25 @@ namespace Ris
 //******************************************************************************
 // Regionals.
 
-// Return high performance timer frequency.
-double my_get_hires_frequency()
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return the current high resolution timer value in nanoseconds. 
+
+inline long long int my_get_hires_count()
 {
-   LARGE_INTEGER tPerformanceFrequency;
-   QueryPerformanceFrequency(&tPerformanceFrequency);
-   return (double)tPerformanceFrequency.QuadPart;
+   struct timespec tTimespec;
+   clock_gettime(CLOCK_MONOTONIC_RAW, &tTimespec);
+
+   long long int tSeconds = (long long int)tTimespec.tv_sec;
+   long long int tNanoseconds = (long long int)tTimespec.tv_nsec;
+   long long int tTimeNs = tSeconds * 1000 * 1000 * 1000 + tNanoseconds;
+
+   return tTimeNs;
 }
 
-// Return high performance timer count.
-double my_get_hires_count()
-{
-   LARGE_INTEGER tPerformanceCount;
-   QueryPerformanceCounter(&tPerformanceCount);
-   return (double)tPerformanceCount.QuadPart;
-}
-
-// High performance clock period.
-double gHiresPeriod = 1.0/my_get_hires_frequency();
-
-// High performance clock count at program startup.
-double gProgramStartHiresCount = my_get_hires_count();
+// High resolution timer count at program startup in nanoseconds.
+long long int gProgramStartHiresCount = my_get_hires_count();
    
 //******************************************************************************
 //******************************************************************************
@@ -46,10 +44,10 @@ double gProgramStartHiresCount = my_get_hires_count();
 double getCurrentProgramTime()
 {
    // Get current hires count.
-   double tCurrentHiresCount = my_get_hires_count();
+   long long int tCurrentHiresCount = my_get_hires_count();
 
    // Return the current program time in seconds.
-   return (tCurrentHiresCount - gProgramStartHiresCount)*gHiresPeriod;
+   return (double)(tCurrentHiresCount - gProgramStartHiresCount)*1E-9;
 }
 
 //******************************************************************************
@@ -59,7 +57,11 @@ double getCurrentProgramTime()
 
 double getCurrentProgramTimeMS()
 {
-   return getCurrentProgramTime()*1E3;
+   // Get current hires count.
+   long long int tCurrentHiresCount = my_get_hires_count();
+
+   // Return the current program time in seconds.
+   return (double)(tCurrentHiresCount - gProgramStartHiresCount)*1E-6;
 }
 
 //******************************************************************************
@@ -69,7 +71,11 @@ double getCurrentProgramTimeMS()
 
 double getCurrentProgramTimeUS()
 {
-   return getCurrentProgramTime()*1E6;
+   // Get current hires count.
+   long long int tCurrentHiresCount = my_get_hires_count();
+
+   // Return the current program time in seconds.
+   return (double)(tCurrentHiresCount - gProgramStartHiresCount)*1E-3;
 }
 
 //******************************************************************************
@@ -79,7 +85,11 @@ double getCurrentProgramTimeUS()
 
 long long int getCurrentProgramTimeNS()
 {
-   return (long long int)(getCurrentProgramTime()*1E9);
+   // Get current hires count.
+   long long int tCurrentHiresCount = my_get_hires_count();
+
+   // Return the current program time in nanoseconds.
+   return tCurrentHiresCount - gProgramStartHiresCount;
 }
 
 //******************************************************************************

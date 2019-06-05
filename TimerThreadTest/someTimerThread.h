@@ -9,7 +9,6 @@ Timer test thread.
 //******************************************************************************
 #include "risThreadsTimerThread.h"
 #include "risTimeMarker.h"
-#include "risProgramTime.h"
 
 namespace Some
 {
@@ -27,8 +26,7 @@ public:
    //******************************************************************************
    // Members.
 
-// Ris::PeriodicTimeMarker mTimeMarker;
-   Ris::ProgramTimeMarker mTimeMarker;
+   Ris::PeriodicTimeMarker mTimeMarker;
 
    bool mTPFlag;
    int  mTestCode;

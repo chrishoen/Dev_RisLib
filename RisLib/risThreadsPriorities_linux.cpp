@@ -52,7 +52,8 @@ Priorities::Priorities()
    mTcpServer = Priority(-1, 50);
    mTcpClient = Priority(-1, 50);
    mSerial    = Priority(-1, 80);
-   mTimerTest = Priority(3,  95);
+   mTimerTest = Priority( 3, 95);
+   mTimerTest = Priority( 2, 95);
 
    mTsPrint   = Priority(-1, 20);
 }

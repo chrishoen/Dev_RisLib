@@ -22,15 +22,29 @@ namespace Ris
 //******************************************************************************
 // Execute a system command. return zero if successful.
 
-int doSystemCommand(const char* aCommand, bool aPrintError)
+int doSystemCommand(const char* aCommand)
 {
    int tRet = system(aCommand);
-   if (tRet && aPrintError)
+   if (tRet)
    {
       printf("doSystemCommand FAIL1 %s\n",aCommand);
       return -1;
    }
    return 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Execute a system command. return zero if successful.
+
+int doSystemCommandSuppress(const char* aCommand)
+{
+   char* tString = new char[1000];
+   strcpy(tString, aCommand);
+   strcat(tString, " >/dev/null 2>&1");
+   int tRet = system(tString);
+   return tRet;
 }
 
 //******************************************************************************

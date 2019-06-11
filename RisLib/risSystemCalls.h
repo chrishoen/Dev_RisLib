@@ -17,7 +17,11 @@ namespace Ris
 //******************************************************************************
 
 // Execute a system command. return zero if successful.
-int doSystemCommand(const char* aFilePath, bool aPrintError = true);
+int doSystemCommand(const char* aFilePath);
+
+// Execute a system command. return zero if successful.
+// Suppress print.
+int doSystemCommandSuppress(const char* aFilePath);
 
 //******************************************************************************
 //******************************************************************************

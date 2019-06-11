@@ -83,6 +83,7 @@ function(my_add_compile_options _target)
       target_compile_options(${_target} PRIVATE "-Wunused-function")
       target_compile_options(${_target} PRIVATE "-Wunused-value")
       target_compile_options(${_target} PRIVATE "-Wunused-variable")
+      target_compile_options(${_target} PRIVATE "-Wno-psabi")
 
       target_compile_definitions(${_target} PRIVATE "-DNDEBUG")
    endif()

@@ -44,6 +44,7 @@ int doSystemCommandSuppress(const char* aCommand)
    strcpy(tString, aCommand);
    strcat(tString, " >/dev/null 2>&1");
    int tRet = system(tString);
+   delete tString;
    return tRet;
 }
 

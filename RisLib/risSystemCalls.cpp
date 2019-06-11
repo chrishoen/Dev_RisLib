@@ -22,10 +22,10 @@ namespace Ris
 //******************************************************************************
 // Execute a system command. return zero if successful.
 
-int doSystemCommand(const char* aCommand)
+int doSystemCommand(const char* aCommand, bool aPrintError)
 {
    int tRet = system(aCommand);
-   if (tRet)
+   if (tRet && aPrintError)
    {
       printf("doSystemCommand FAIL1 %s\n",aCommand);
       return -1;

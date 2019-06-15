@@ -11,6 +11,8 @@
 #include <conio.h>
 #include <io.h>
 #include <direct.h>
+#include <time.h>
+#include <ctime.h>
 
 #include "risPortableCalls.h"
 
@@ -148,6 +150,31 @@ void portableChdir(const char* aFilePath)
 {
    BOOL tRet = SetCurrentDirectory(aFilePath);
    if (!tRet) printf("portableChdir FAIL %s", aFilePath);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return the current time as a string.
+
+char* portableGetCurrentTimeAsString(char* aBuffer, bool aSecondDecimals)
+{
+   // Get the current time.
+   struct timespec tSystemTime;
+   timespec_get(&tSystemTime, TIME_UTC);
+
+   // Print the time to a string with decimals in the seconds.
+   if (aSecondDecimals)
+   {
+      char tTemp[40];
+      strftime(tTemp, 40, "%F %T", localtime(&tSystemTime.tv_sec));
+      sprintf(aBuffer, "%s.%03ld", tTemp, tSystemTime.tv_nsec / 1000000);
+   }
+   // Print the time to a string without decimals in the seconds.
+   else
+   {
+      strftime(aBuffer, 40, "%F %T", localtime(&tSystemTime.tv_sec));
+   }
 }
 
 //******************************************************************************

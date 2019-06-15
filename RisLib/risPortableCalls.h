@@ -19,7 +19,7 @@ namespace Ris
 // Sleep. Ticks are in milliseconds.
 void portableSleep(int aTicks);
 
-// Sleep. Ticks are in milliseconds.
+// Print a string and then halt the program.
 void portableHalt(const char* aString = 0);
 
 // Return a pointer to the current working directory.
@@ -42,6 +42,9 @@ bool portableFilePathExists (const char* aFilePath);
   
 // Set the program current working directory.
 void portableChdir(const char* aFilePath);
+
+// Return the current time as a string.
+char* portableGetCurrentTimeAsString(char* aBuffer, bool aSecondDecimals = false);
 
 //******************************************************************************
 //******************************************************************************

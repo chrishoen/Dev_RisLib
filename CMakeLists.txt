@@ -9,6 +9,7 @@ project ("Dev_RisLib")
 
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
+add_subdirectory ("Test")
 add_subdirectory ("TimerThreadTest")
 return()
 

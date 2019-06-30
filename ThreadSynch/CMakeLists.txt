@@ -9,8 +9,6 @@ my_add_pch (ThreadSynch)
 
 
 my_inc_import_RisLib(ThreadSynch)
-my_inc_import_CommonLib(ThreadSynch)
 
-my_lib_import_CommonLib(ThreadSynch)
 my_lib_import_RisLib(ThreadSynch)
 

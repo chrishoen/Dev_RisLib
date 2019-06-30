@@ -10,7 +10,7 @@ SET(CMAKE_CXX_COMPILER
 C:/Beagle/toolchain/bin/arm-linux-gnueabihf-g++.exe)
 # where is the target environment
 SET(CMAKE_FIND_ROOT_PATH
-C:/Beagle/toolchain)
+C:/Beagle/toolchain/cmake)
 # for cmake 3.8
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 

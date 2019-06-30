@@ -10,8 +10,6 @@ my_add_pch (ThreadSample)
 
 
 my_inc_import_RisLib(ThreadSample)
-my_inc_import_CommonLib(ThreadSample)
 
-my_lib_import_CommonLib(ThreadSample)
 my_lib_import_RisLib(ThreadSample)
 

@@ -26,9 +26,16 @@ function(my_lib_import_RisLib _target)
       target_link_libraries(${_target} ws2_32)
       target_link_libraries(${_target} winmm)
    else()
-      set(THREADS_PREFER_PTHREAD_FLAG ON)
-      find_package(Threads REQUIRED)
-      target_link_libraries(${_target} Threads::Threads)
+      if (true)
+         set(THREADS_PREFER_PTHREAD_FLAG ON)
+         find_package(Threads REQUIRED)
+         target_link_libraries(${_target} Threads::Threads)
+      else()
+         set (MyPThreadImportPath  "C:/Beagle/toolchain/arm-linux-gnueabihf/libc/usr/lib/libpthread.a")
+         add_library(PThreadLib STATIC IMPORTED)
+         set_target_properties(PThreadLib PROPERTIES IMPORTED_LOCATION ${MyPThreadImportPath})
+         target_link_libraries(${_target} PThreadLib)
+      endif()
    endif()
 
 endfunction()
@@ -42,4 +49,19 @@ endfunction()
 #*******************************************************************************
 #*******************************************************************************
 #*******************************************************************************
+
+function(my_lib_import_RisLib22 _target)
+
+   target_link_libraries(${_target} RisLib)
+
+   if (MSVC)
+      target_link_libraries(${_target} ws2_32)
+      target_link_libraries(${_target} winmm)
+   else()
+      set(THREADS_PREFER_PTHREAD_FLAG ON)
+      find_package(Threads REQUIRED)
+      target_link_libraries(${_target} Threads::Threads)
+   endif()
+
+endfunction()
 

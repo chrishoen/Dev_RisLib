@@ -10,9 +10,9 @@ my_add_pch (RisLib)
 
 target_include_directories(RisLib PUBLIC ${PROJECT_SOURCE_DIR})
 
-if (MSVC)
-   install(FILES ${inc_files} DESTINATION "C:\\MyTools\\MyLib\\include\\RisLib")
-   install(TARGETS RisLib DESTINATION "C:\\MyTools\\MyLib\\lib")
+if (MSVC OR CMAKE_SYSTEM_VERSION EQUAL 101)
+   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
+   install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
 else()
    install(FILES ${inc_files} DESTINATION "/usr/local/include/RisLib")
    install(TARGETS RisLib DESTINATION "/usr/local/lib")

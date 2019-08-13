@@ -74,6 +74,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, "101");
+
+   Prn::print(0, "test     %10d", aCmd->argInt(1));
 }
 
 //******************************************************************************

@@ -751,7 +751,7 @@ void CmdLineCmd::gcodeExtractArgs()
 
    char tTemp[40];
 
-   for (int i = 1; i <= mArgNum ; i++)
+   for (int i = 1; i <= mArgNum; i++)
    {
       // Test first char for gcode parameter.
       if (mArgPtr[i][0] == 'Z')

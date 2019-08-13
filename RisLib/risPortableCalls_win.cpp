@@ -12,7 +12,6 @@
 #include <io.h>
 #include <direct.h>
 #include <time.h>
-#include <ctime.h>
 
 #include "risPortableCalls.h"
 
@@ -159,22 +158,13 @@ void portableChdir(const char* aFilePath)
 
 char* portableGetCurrentTimeAsString(char* aBuffer, bool aSecondDecimals)
 {
-   // Get the current time.
-   struct timespec tSystemTime;
-   timespec_get(&tSystemTime, TIME_UTC);
+   // declaring argument of time() 
+   time_t my_time = time(NULL);
 
-   // Print the time to a string with decimals in the seconds.
-   if (aSecondDecimals)
-   {
-      char tTemp[40];
-      strftime(tTemp, 40, "%F %T", localtime(&tSystemTime.tv_sec));
-      sprintf(aBuffer, "%s.%03ld", tTemp, tSystemTime.tv_nsec / 1000000);
-   }
-   // Print the time to a string without decimals in the seconds.
-   else
-   {
-      strftime(aBuffer, 40, "%F %T", localtime(&tSystemTime.tv_sec));
-   }
+   // ctime() used to give the present time 
+   sprintf(aBuffer,"%s", ctime(&my_time));
+
+   return aBuffer;
 }
 
 //******************************************************************************

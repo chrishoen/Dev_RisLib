@@ -44,7 +44,7 @@ void reset()
 
 bool openFile(int aLogNum, char* aFilePath)
 {            
-   char tBuf[400];
+   // char tBuf[400];
    // mFile[aLogNum] = fopen(Ris::getAlphaFilePath_Log(tBuf,aFileName),"w");
    mFile[aLogNum] = fopen(aFilePath,"w");
 
@@ -62,7 +62,7 @@ bool openFile(int aLogNum, char* aFilePath)
 
 bool openFileAppend(int aLogNum, char* aFilePath)
 {            
-   char tBuf[400];
+// char tBuf[400];
 // mFile[aLogNum] = fopen(Ris::getAlphaFilePath_Log(tBuf, aFileName), "a");
    mFile[aLogNum] = fopen(aFilePath, "w");
 
@@ -125,8 +125,11 @@ void write (int aLogNum, const char* aFormat, ...)
    tPrintSize = vsnprintf(tPrintString, cMaxStringSize, aFormat, ArgPtr);
    va_end(ArgPtr);
 
-   tPrintString[tPrintSize++] = '\n';
-   tPrintString[tPrintSize++] = 0;
+   if (tPrintSize < cMaxStringSize - 3)
+   {
+      tPrintString[tPrintSize++] = '\n';
+      tPrintString[tPrintSize++] = 0;
+   }
 
    //-----------------------------------------------------
    // Print the string

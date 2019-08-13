@@ -56,6 +56,30 @@ public:
    // True if struct is valid
    bool   mValidFlag;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // These are for gcode parameters.
+   // G11 Z101 F102.2 P103
+   bool mValidGCodeZ;
+   bool mValidGCodeP;
+   bool mValidGCodeF;
+
+   int  mIntGCodeZ;
+   int  mIntGCodeP;
+   int  mIntGCodeF;
+
+   double mDoubleGCodeZ;
+   double mDoubleGCodeP;
+   double mDoubleGCodeF;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
    // Nested anchor, used for processing nested records. This is piggybacked 
    // onto a command by a command line processor so that it can be used by a 
    // command line executive.
@@ -64,9 +88,9 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
-   // Constructor
+   // Constructor.
    CmdLineCmd();
    CmdLineCmd(const char* aCommandLine,bool aUseCsvDelimiter = false);
    void reset();
@@ -134,6 +158,31 @@ public:
    void setArgDefault         (int argIndex,  bool     aValue);
    void setArgDefault         (int argIndex,  double   aValue);
    void setArgDefault         (int argIndex,  char*    aString);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, gcode argument extraction.
+
+   // Extract gcode parameters from arguments.
+   void gcodeExtractArgs();
+
+   // Return an argument from the command line.
+   // These are forgcode parameters.
+   // G11 Z101 F102.2 P103
+   bool     gcodeIsValidZ();
+   bool     gcodeIsValidP();
+   bool     gcodeIsValidF();
+
+   int      gcodeIntZ();
+   double   gcodeDoubleZ();
+
+   int      gcodeIntP();
+   double   gcodeDoubleP();
+
+   int      gcodeIntF();
+   double   gcodeDoubleF();
+
 };
 
 //******************************************************************************

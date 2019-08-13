@@ -146,6 +146,9 @@ void CmdLineCmd::parseCmdLine(const char* aCommandLine)
       tArgIndex++;
    }
 
+   // Extract gcode parameters from arguments.
+   gcodeExtractArgs();
+
    // Copy all of the chars after the command into the whole argument.
    if (mArgNum == 0) return;
 
@@ -713,6 +716,99 @@ char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr)
    *aIndexPtr=tIndex;
    return tToken;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Extract gcode parameters from arguments.
+
+void CmdLineCmd::gcodeExtractArgs()
+{
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Reset the gcode variables.
+
+   mValidGCodeZ = false;
+   mValidGCodeP = false;
+   mValidGCodeF = false;
+
+   mIntGCodeZ = 0;
+   mIntGCodeP = 0;
+   mIntGCodeF = 0;
+
+   mDoubleGCodeZ = 0.0;
+   mDoubleGCodeP = 0.0;
+   mDoubleGCodeF = 0.0;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Extract gcode parameters from arguments.
+
+   char tTemp[40];
+
+   for (int i = 1; i <= mArgNum ; i++)
+   {
+      // Test first char for gcode parameter.
+      if (mArgPtr[i][0] == 'Z')
+      {
+         // Copy argument string to temp, strip leading char.
+         strncpy(tTemp, mArgPtr[i], 40);
+         tTemp[39] = 0;
+         tTemp[0] = ' ';
+         // Convert temp string.
+         mValidGCodeZ = true;
+         mIntGCodeZ = atoi(tTemp);
+         mDoubleGCodeZ = atof(tTemp);
+      }
+
+      // Test first char for gcode parameter.
+      if (mArgPtr[i][0] == 'P')
+      {
+         // Copy argument string to temp, strip leading char.
+         strncpy(tTemp, mArgPtr[i], 40);
+         tTemp[39] = 0;
+         tTemp[0] = ' ';
+         // Convert temp string.
+         mValidGCodeP = true;
+         mIntGCodeP = atoi(tTemp);
+         mDoubleGCodeP = atof(tTemp);
+      }
+
+      // Test first char for gcode parameter.
+      if (mArgPtr[i][0] == 'F')
+      {
+         // Copy argument string to temp, strip leading char.
+         strncpy(tTemp, mArgPtr[i], 40);
+         tTemp[39] = 0;
+         tTemp[0] = ' ';
+         // Convert temp string.
+         mValidGCodeF = true;
+         mIntGCodeF = atoi(tTemp);
+         mDoubleGCodeF = atof(tTemp);
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return gcode variables.
+
+bool     CmdLineCmd::gcodeIsValidZ() { return mValidGCodeZ; }
+bool     CmdLineCmd::gcodeIsValidP() { return mValidGCodeP; }
+bool     CmdLineCmd::gcodeIsValidF() { return mValidGCodeF; }
+
+int      CmdLineCmd::gcodeIntZ()     { return mIntGCodeZ; };
+double   CmdLineCmd::gcodeDoubleZ()  { return mDoubleGCodeZ; }
+int      CmdLineCmd::gcodeIntP()     { return mIntGCodeP; };
+double   CmdLineCmd::gcodeDoubleP()  { return mDoubleGCodeP; }
+int      CmdLineCmd::gcodeIntF()     { return mIntGCodeF; };
+double   CmdLineCmd::gcodeDoubleF()  { return mDoubleGCodeF; }
 
 //******************************************************************************
 //******************************************************************************

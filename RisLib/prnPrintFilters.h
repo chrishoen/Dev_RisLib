@@ -275,6 +275,18 @@ namespace Prn
    static const int  RO2               = 338;
    static const int  RO3               = 339;
    static const int  RO4               = 340;
+   static const int  Calc01            = 341;
+   static const int  Calc02            = 342;
+   static const int  Calc03            = 343;
+   static const int  Calc04            = 344;
+   static const int  Calc11            = 345;
+   static const int  Calc12            = 346;
+   static const int  Calc13            = 347;
+   static const int  Calc14            = 348;
+   static const int  Calc21            = 349;
+   static const int  Calc22            = 350;
+   static const int  Calc23            = 351;
+   static const int  Calc24            = 352;
 
 //******************************************************************************
 //******************************************************************************

@@ -12,7 +12,7 @@ my_special1()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("Test")
-add_subdirectory ("CmdLineTest")
+add_subdirectory ("Parms")
 return()
 
 add_subdirectory ("RisLib")

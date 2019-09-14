@@ -4,6 +4,7 @@
 #include "Parms.h"
 #include "someMyClass.h"
 #include "risAlphaDir.h"
+#include "risBaseDir.h"
 
 using namespace Some;
 
@@ -66,6 +67,10 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   char tBuffer[400];
+
+   Prn::print(0, "BaseDir             %s", Ris::getBaseDirectory());
+   Prn::print(0, "BackEnd.cs          %s", Ris::getBaseFullFilePath(tBuffer, "files/RisLib/BackEnd.cs"));
 }
 
 //******************************************************************************

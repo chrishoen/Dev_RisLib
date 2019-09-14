@@ -48,6 +48,7 @@ function(my_add_compile_options _target)
       target_compile_options(${_target} PRIVATE "/WX")
       target_compile_options(${_target} PRIVATE "/wd4996")
       target_compile_options(${_target} PRIVATE "/wd6031")
+      target_compile_options(${_target} PRIVATE "/wd6385")
 
       target_compile_options(${_target} PRIVATE "/O2")
       target_compile_options(${_target} PRIVATE "/Ot")

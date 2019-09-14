@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 
+#include "risBaseDir.h"
 #include "risAlphaDir.h"
 #include "risPortableCalls.h"
 #include "risCmdLineFile.h"
@@ -47,12 +48,17 @@ void BaseCmdLineParms::setFilePath(char* aFilePath)
    strncpy(mFilePath, aFilePath,cMaxStringSize);
 }
 
+void BaseCmdLineParms::setFileName_RelativeToBaseDir(char* aFileName)
+{
+   char tBuffer[cMaxStringSize];
+   strncpy(mFilePath, Ris::getBaseFullFilePath(tBuffer, aFileName), cMaxStringSize);
+}
+
 void BaseCmdLineParms::setFileName_RelAlphaFiles(char* aFileName)
 {
    char tBuffer[cMaxStringSize];
    strncpy(mFilePath, Ris::getAlphaFilePath_Files(tBuffer, aFileName), cMaxStringSize);
 }
-
 void BaseCmdLineParms::setFileName_RelAlphaSettings(char* aFileName)
 {
    char tBuffer[cMaxStringSize];

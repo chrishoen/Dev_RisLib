@@ -105,6 +105,10 @@ public:
    void setFilePath(char* aFilePath);
 
    // Set the file name for the parms file. The full file path will be
+   // relative to the program base directory.
+   void setFileName_RelativeToBaseDir(char* aFileName);
+
+   // Set the file name for the parms file. The full file path will be
    // relative to the alpha files directory.
    void setFileName_RelAlphaFiles(char* aFileName);
 

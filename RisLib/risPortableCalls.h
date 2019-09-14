@@ -46,6 +46,9 @@ void portableChdir(const char* aFilePath);
 // Return the current time as a string.
 char* portableGetCurrentTimeAsString(char* aBuffer, bool aSecondDecimals = false);
 
+// Return true if running windows, false if running linux.
+bool portableIsWindows();
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

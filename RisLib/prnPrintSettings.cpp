@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 
+#include "risPortableCalls.h"
 #include "risCmdLineFile.h"
 #include "risAlphaDir.h"
 #include "risNetPortDef.h"
@@ -34,7 +35,15 @@ PrintSettings::PrintSettings()
 void PrintSettings::reset()
 {
    BaseClass::reset();
-   BaseClass::setFileName_RelAlphaSettings("PrnPrint_Settings.txt");
+
+   if (Ris::portableIsWindows())
+   {
+      BaseClass::setFilePath("C:/Alpha/Settings/PrnPrint_Settings.txt");
+   }
+   else
+   {
+      BaseClass::setFilePath("/opt/alpha/settings/PrnPrint_Settings.txt");
+   }
 
    strcpy(mPrintViewIPAddress, "127.0.0.1");
    mPrintViewIPPort = Ris::Net::PortDef::cPrintView;

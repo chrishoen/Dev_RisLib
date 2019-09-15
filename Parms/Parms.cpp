@@ -25,7 +25,7 @@ Parms::Parms()
 void Parms::reset()
 {
    BaseClass::reset();
-   BaseClass::setFileName_RelativeToBaseDir("files/RisLib/RisParms_Parms.txt");
+   BaseClass::setFilePath_RelativeToBaseDir("files/RisLib/RisParms_Parms.txt");
 
    mCode1 = 0;
    mCode2 = 0;

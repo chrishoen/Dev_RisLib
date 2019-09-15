@@ -48,7 +48,7 @@ void BaseCmdLineParms::setFilePath(char* aFilePath)
    strncpy(mFilePath, aFilePath,cMaxStringSize);
 }
 
-void BaseCmdLineParms::setFileName_RelativeToBaseDir(char* aFileName)
+void BaseCmdLineParms::setFilePath_RelativeToBaseDir(char* aFileName)
 {
    char tBuffer[cMaxStringSize];
    strncpy(mFilePath, Ris::getBaseFullFilePath(tBuffer, aFileName), cMaxStringSize);

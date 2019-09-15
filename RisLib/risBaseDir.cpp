@@ -26,12 +26,41 @@ static const int cMaxBaseDirStringSize = 400;
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Regional variables
+// Regional variables.
 
-char rBaseDirPath    [cMaxBaseDirStringSize];
+// Base directory path.
+char rBaseDirPath[cMaxBaseDirStringSize] = { 0 };
 
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Set the program base directory path.
 
+void setBaseDirectory(char* aDirPath)
+{
+   // Store the path to the regional variable.
+   strcpy(rBaseDirPath, aDirPath);
+
+   // Get the string length.
+   int tLength = (int)strlen(rBaseDirPath);
+
+   // Convert backward slashes to forward slashes.
+   for (int i = 0; i < tLength; i++)
+   {
+      if (rBaseDirPath[i] == '\\')
+      {
+         rBaseDirPath[i] = '/';
+      }
+   }
+
+   // If the path doesn't end in a forward slash then add one.
+   if (rBaseDirPath[tLength - 1] != '/')
+   {
+      strcat(rBaseDirPath, "/");
+   }
+}
+
+//****************************************************************************
 //****************************************************************************
 //****************************************************************************
 // Set the program base directory path.
@@ -105,6 +134,16 @@ void setBaseDirectoryForLinux(char* aDirPath)
 char* getBaseDirectory()
 {
    return &rBaseDirPath[0];
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Change the program directory to the base directory path global variable.
+
+void chdirToBaseDirectory()
+{
+   Ris::portableChdir(rBaseDirPath);
 }
 
 //****************************************************************************

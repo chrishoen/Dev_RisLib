@@ -14,10 +14,12 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Base directory management functions.
-//
+// Methods.
 
-// Set the program base directory path.
+// Set the program base directory path global variable.
+void setBaseDirectory(char* aDirPath);
+
+// Set the program base directory path global variable.
 //
 // These can be used in a cross platofrm program to set the base directory. 
 // If the program runs under windows then the first executes and the second
@@ -36,6 +38,19 @@ void setBaseDirectoryForLinux(char* aDirPath);
 
 // Return the program base directory path.
 char* getBaseDirectory();
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Methods.
+
+// Change the program directory to the base directory path global variable.
+void chdirToBaseDirectory();
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Methods.
 
 // Return the full file path to a file that lives somewhere under the base
 // directory. The first input is a temp char buffer. The second input is

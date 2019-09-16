@@ -48,10 +48,10 @@ void BaseCmdLineParms::setFilePath(char* aFilePath)
    strncpy(mFilePath, aFilePath,cMaxStringSize);
 }
 
-void BaseCmdLineParms::setFilePath_RelativeToBaseDir(char* aFileName)
+void BaseCmdLineParms::setFilePath_RelativeToBaseDir(char* aRelativeFilePath)
 {
    char tBuffer[cMaxStringSize];
-   strncpy(mFilePath, Ris::getBaseFullFilePath(tBuffer, aFileName), cMaxStringSize);
+   strncpy(mFilePath, Ris::getBaseFullFilePath(tBuffer, aRelativeFilePath), cMaxStringSize);
 }
 
 void BaseCmdLineParms::setFileName_RelAlphaFiles(char* aFileName)

@@ -106,7 +106,7 @@ public:
 
    // Set the file name for the parms file. The full file path will be
    // relative to the program base directory.
-   void setFilePath_RelativeToBaseDir(char* aFileName);
+   void setFilePath_RelativeToBaseDir(char* aRelativeFilePath);
 
    // Set the file name for the parms file. The full file path will be
    // relative to the alpha files directory.

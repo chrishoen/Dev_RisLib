@@ -3,7 +3,7 @@
       {
          "name": "Dev_RisLib",
          "inheritEnvironments": [ "linux_arm" ],
-         "environments": [ { "INCLUDE": "C:\\Beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\6.3.1;C:\\Beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\6.3.1\\arm-linux-gnueabihf;C:\\Beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\6.3.1\\backward;C:\\Beagle\\toolchain\\lib\\gcc\\arm-linux-gnueabihf\\6.3.1\\include;C:\\Beagle\\toolchain\\lib\\gcc\\arm-linux-gnueabihf\\6.3.1\\include-fixed;C:\\Beagle\\toolchain\\arm-linux-gnueabihf\\libc\\usr\\include;" } ],
+         "environments": [ { "INCLUDE": "C:\\Beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\8;C:\\Beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\8\\arm-linux-gnueabihf;C:\\Beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\8\\backward;C:\\Beagle\\toolchain\\lib\\gcc\\arm-linux-gnueabihf\\8\\include;C:\\Beagle\\toolchain\\lib\\gcc\\arm-linux-gnueabihf\\8\\include-fixed;C:\\Beagle\\toolchain\\arm-linux-gnueabihf\\libc\\usr\\include;" } ],
          "generator": "Ninja",
          "configurationType": "Release",
          "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}",

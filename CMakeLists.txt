@@ -11,9 +11,8 @@ project ("Dev_RisLib")
 my_special1()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Test")
-add_subdirectory ("Parms")
-add_subdirectory ("PrintTest")
+add_subdirectory ("CommonLib")
+add_subdirectory ("TimerThreadTest")
 return()
 
 add_subdirectory ("RisLib")

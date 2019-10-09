@@ -73,6 +73,11 @@ void SocketAddress::setByHostName(const char* aNode, int aPort)
 {
    reset();
 
+   if (strcmp(aNode, "127.0.0.1") == 0)
+   {
+      printf("LINE101*******************\n");
+   }
+
    struct addrinfo hints;
    struct addrinfo *result;
    int s;

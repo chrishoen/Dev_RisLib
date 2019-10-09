@@ -73,10 +73,23 @@ void SocketAddress::setByHostName(const char* aNode, int aPort)
 {
    reset();
 
-   if (strcmp(aNode, "127.0.0.1") == 0)
+   unsigned tAddress;
+
+   struct hostent* hostEnt = gethostbyname(aNode);
+
+   if (hostEnt)
    {
-      printf("LINE101*******************\n");
+      char* bytePtr = *hostEnt->h_addr_list;
+      u_long* uintPtr = (u_long*)bytePtr;
+      tAddress = ntohl(*uintPtr);
    }
+   else
+   {
+      tAddress = 0;
+   }
+   setByAddress(tAddress, aPort);
+   return;
+
 
    struct addrinfo hints;
    struct addrinfo *result;

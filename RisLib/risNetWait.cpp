@@ -38,7 +38,6 @@ bool doWaitForNetwork()
          TS::print(0, "doWaitForNetwork FAIL %d", tRet);
          printf("doWaitForNetwork FAIL %d\n", tRet);
          Ris::Threads::threadSleep(1000);
-         break;
       }
    }
 

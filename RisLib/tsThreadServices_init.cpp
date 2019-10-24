@@ -41,6 +41,12 @@ void setProgramPrintLevel(PrintLevel aPrintLevel)
    gShare.mMainThreadLocal->mPrintLevel = aPrintLevel;
 }
 
+void getProgramPrintLevel(PrintLevel& aPrintLevel)
+{
+   aPrintLevel = gShare.mMainThreadLocal->mPrintLevel;
+}
+
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

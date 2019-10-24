@@ -210,7 +210,7 @@ bool SerialPort::doOpen()
  
    mValidFlag = true;
 
-   TS::print(1, "SerialMsgPort initialize PASS  $ %s : %16s",
+   TS::print(1, "SerialPort initialize PASS  $ %s : %16s",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
 
@@ -264,8 +264,12 @@ void SerialPort::doPurge()
 
 int SerialPort::doSendBytes(char* aData, int aNumBytes)
 {
+   TS::print(4, "SerialPort::doSendBytes START %d", aNumBytes);
    // Guard.
    if (!isValid()) return cRetCodeError;
+
+   TS::PrintLevel tPrintLevel;
+   TS::getProgramPrintLevel(tPrintLevel);
 
    // Local variables.
    DWORD tNumWritten;

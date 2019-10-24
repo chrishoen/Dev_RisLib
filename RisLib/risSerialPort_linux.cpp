@@ -223,7 +223,7 @@ int SerialPort::doSendLine(const char *aData)
    {
       char tBuffer[200];
       strncpy(tBuffer, aData, 196);
-      int tLength = (int)strlen(tBuffer);
+      size_t tLength = strlen(tBuffer);
       tBuffer[tLength] = '\n';
       tLength++;
       tBuffer[tLength] = 0;
@@ -233,7 +233,7 @@ int SerialPort::doSendLine(const char *aData)
    {
       char tBuffer[200];
       strncpy(tBuffer, aData, 195);
-      int tLength = (int)strlen(tBuffer);
+      size_t tLength = strlen(tBuffer);
       tBuffer[tLength] = '\r';
       tLength++;
       tBuffer[tLength] = '\n';
@@ -251,6 +251,25 @@ int SerialPort::doSendLine(const char *aData)
 int SerialPort::doSendOne(char aData)
 {
    return doSendBytes(&aData,1);   
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Receive a string, terminated with end of line LF (\n,10) or 
+// CRLF (\r\n,13,10). Trims the  terminator and returns a null terminated
+// string. Termination mode is determined by settings.
+
+int SerialPort::doReceiveLine(char* aData, int aMaxNumBytes)
+{
+   if (mSettings.mTermMode == cSerialTermMode_LF)
+   {
+      return doReceiveLineLF(aData, aMaxNumBytes);
+   }
+   else
+   {
+      return doReceiveLineCRLF(aData, aMaxNumBytes);
+   }
 }
 
 //******************************************************************************

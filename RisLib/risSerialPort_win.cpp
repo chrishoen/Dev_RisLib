@@ -39,6 +39,7 @@ SerialPort::SerialPort()
    mSpecific->mRxEventHandle = 0;
    mSpecific->mTxEventHandle = 0;
    mValidFlag = false;
+   mTerminateFlag = false;
 }
 
 SerialPort::~SerialPort(void)
@@ -80,6 +81,8 @@ bool SerialPort::doOpen()
 
    while (1)
    {
+      if (mTerminateFlag) return false;
+
       mSpecific->mPortHandle = CreateFile(mSettings.mPortDevice,
          GENERIC_READ | GENERIC_WRITE,
          0,
@@ -205,7 +208,7 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Done.
  
-   mValidFlag=true;
+   mValidFlag = true;
 
    TS::print(1, "SerialMsgPort initialize PASS  $ %s : %16s",
       mSettings.mPortDevice,
@@ -220,6 +223,7 @@ bool SerialPort::doOpen()
 
 void SerialPort::doClose()
 {
+   mTerminateFlag = true;
    if (mValidFlag)
    {
       TS::print(1, "SerialPort::doClose %s", mSettings.mPortDevice);

@@ -45,6 +45,8 @@ SerialPort::SerialPort()
    mSpecific = new Specific;
    mSpecific->mPortFd = 0;
    mSpecific->mEventFd = 0;
+   mValidFlag = false;
+   mTerminateFlag = false;
 }
 
 SerialPort::~SerialPort(void)

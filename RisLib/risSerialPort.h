@@ -50,6 +50,9 @@ public:
    // Validity.
    bool mValidFlag;
 
+   // If true then a terminations is requested.
+   bool mTerminateFlag;
+
    // Portable specifics.
    class Specific;
    Specific* mSpecific;

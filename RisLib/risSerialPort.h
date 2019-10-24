@@ -87,7 +87,8 @@ public:
    // Send data, fixed number of bytes.
    int  doSendBytes(char *aData, int aNumBytes);
 
-   // Send a null terminated string, append an end of line LF (\n,10)
+   // Send a null terminated string, append an end of line LF (\n,10) or
+   // CRLF (\r\n,13,10)
    int  doSendLine(const char *aData);
 
    // Send data, one byte.
@@ -101,9 +102,16 @@ public:
    // Receive data, fixed number of bytes.
    int doReceiveBytes(char *aData, int aNumBytes);
 
-   // Receive a string, terminated with end of line LF (\n,10). Trims the 
-   // terminator and returns a null terminated string.
+   // Receive a string, terminated with end of line LF (\n,10) or 
+   // CRLF (\r\n,13,10). Trims the  terminator and returns a null terminated
+   // string. Termination mode is determined by settings.
    int doReceiveLine(char *aData, int aMaxNumBytes);
+
+   // Receive a string, terminated with end of line LF (\n,10). 
+   int doReceiveLineLF(char* aData, int aMaxNumBytes);
+
+   // Receive a string, terminated with end of line CRLF (\r\n,13,10). 
+   int doReceiveLineCRLF(char* aData, int aMaxNumBytes);
 
    // Receive one byte.
    int doReceiveOne(char *aData);

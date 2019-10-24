@@ -219,14 +219,28 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
 int SerialPort::doSendLine(const char *aData)
 {
    // Copy the input string to a temp buffer and append a terminator.
-   char tBuffer[200];
-   strncpy(tBuffer, aData, 196);
-   int tLength = (int)strlen(tBuffer);
-   tBuffer[tLength] = '\n';
-   tLength++;
-   tBuffer[tLength] = 0;
-
-   return doSendBytes(tBuffer,tLength);   
+   if (mSettings.mTermMode == cSerialTermMode_LF)
+   {
+      char tBuffer[200];
+      strncpy(tBuffer, aData, 196);
+      int tLength = (int)strlen(tBuffer);
+      tBuffer[tLength] = '\n';
+      tLength++;
+      tBuffer[tLength] = 0;
+      return doSendBytes(tBuffer, tLength);
+   }
+   else
+   {
+      char tBuffer[200];
+      strncpy(tBuffer, aData, 195);
+      int tLength = (int)strlen(tBuffer);
+      tBuffer[tLength] = '\r';
+      tLength++;
+      tBuffer[tLength] = '\n';
+      tLength++;
+      tBuffer[tLength] = 0;
+      return doSendBytes(tBuffer, tLength);
+   }
 }
 
 //******************************************************************************
@@ -242,10 +256,9 @@ int SerialPort::doSendOne(char aData)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive a string, terminated with end of line LF (\n,10). Trims the 
-// terminator and returns a null terminated string.
+// Receive a string, terminated with end of line LF (\n,10).
 
-int SerialPort::doReceiveLine(char *aData, int aMaxNumBytes)
+int SerialPort::doReceiveLineLF(char *aData, int aMaxNumBytes)
 {
    int  tStatus = -1;
    int  tIndex = 0;
@@ -273,6 +286,65 @@ int SerialPort::doReceiveLine(char *aData, int aMaxNumBytes)
             // Terminator detected, strip if off
             tGoing = false;
             aData[tIndex] = 0;
+            tStatus = tIndex;
+         }
+         if (tIndex == aMaxNumBytes - 1)
+         {
+            // NumBytes limit was reached
+            tGoing = false;
+            aData[tIndex] = 0;
+            tStatus = tIndex;
+         }
+
+         // Increment
+         tIndex++;
+      }
+      else
+      {
+         // Read failure
+         tStatus = tRxStatus;
+         tGoing = false;
+      }
+   }
+   return tStatus;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Receive a string, terminated with end of line LF (\r\n,13,10).
+
+int SerialPort::doReceiveLineCRLF(char* aData, int aMaxNumBytes)
+{
+   int  tStatus = -1;
+   int  tIndex = 0;
+   int  tRxStatus = 0;
+   char tRxChar = 0;
+   char tLastRxChar = 0;
+   bool tGoing = true;
+
+   aData[0] = 0;
+
+   // Loop to read single bytes, store them, and exit
+   // when termination cr/lf is detected
+   while (isValid() && tGoing)
+   {
+      // Save last received char.
+      tLastRxChar = tRxChar;
+      // Read one byte.
+      tRxStatus = doReceiveOne(&tRxChar);
+      if (tRxStatus >= 0)
+      {
+         // Read success.
+         // Store byte.
+         aData[tIndex] = tRxChar;
+
+         // If CR
+         if (tRxChar == 10 && tLastRxChar == 13)
+         {
+            // Terminator detected, strip if off
+            tGoing = false;
+            aData[tIndex - 1] = 0;
             tStatus = tIndex;
          }
          if (tIndex == aMaxNumBytes - 1)

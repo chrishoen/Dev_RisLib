@@ -93,7 +93,7 @@ bool SerialPort::doOpen()
 
       if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
       {
-         TS::print(1, "serial_open_error_1 %d", GetLastError());
+         TS::print(1, "serial_open_error_1 %d %s", GetLastError(), mSettings.mPortDevice);
          Sleep(2000);
       }
       else

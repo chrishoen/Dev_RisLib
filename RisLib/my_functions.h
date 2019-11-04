@@ -16,7 +16,8 @@ double my_fmin (double aA,double aB);
 double my_fmax (double aA,double aB);
 
 int    my_imin (int aA,int aB);
-int    my_imax (int aA,int aB);
+int    my_imax(int aA, int aB);
+int    my_iabs(int aA);
 
 // Close to
 bool my_closeto (double aA,double aB,double aResolution);

@@ -22,7 +22,8 @@ double my_fmin (double aA,double aB) {return aA > aB ? aB : aA;}
 double my_fmax (double aA,double aB) {return aA > aB ? aA : aB;}
 
 int    my_imin (int aA,int aB) {return aA > aB ? aB : aA;}
-int    my_imax (int aA,int aB) {return aA > aB ? aA : aB;}
+int    my_imax (int aA, int aB) { return aA > aB ? aA : aB; }
+int    my_iabs (int aA) { return aA >=0  ? aA : -aA; }
 
 //******************************************************************************
 //******************************************************************************

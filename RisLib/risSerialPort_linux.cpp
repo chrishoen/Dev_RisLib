@@ -14,6 +14,8 @@
 #include <poll.h>
 #include <sys/eventfd.h>
 #include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <linux/serial.h>
 
 #include "my_functions.h"
 #include "risThreadsThreads.h"
@@ -108,6 +110,19 @@ bool SerialPort::doOpen()
    tcgetattr(mSpecific->mPortFd, &tOptions);
    cfmakeraw(&tOptions);
    tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Configure the port for rs485.
+
+   struct serial_rs485 t485conf = { 0 };
+   t485conf.flags |= SER_RS485_ENABLED;
+   if (ioctl(mSpecific->mPortFd, TIOCSRS485, &t485conf) < 0)
+   {
+      TS::print(1, "serial_open_error_101 %d", errno);
+      return false;
+   }
 
    //***************************************************************************
    //***************************************************************************

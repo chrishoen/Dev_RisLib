@@ -62,6 +62,9 @@ public:
    // Termination mode. LF (\n,10) or CRLF (\r\n,13,10).
    int mTermMode;
 
+   // Termination mode. LF (\n,10) or CRLF (\r\n,13,10).
+   bool m485Flag;
+
    // Thread processor number and priority.
    Ris::Threads::Priority mThreadPriority;
 

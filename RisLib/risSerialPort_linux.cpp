@@ -116,12 +116,15 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Configure the port for rs485.
 
-   struct serial_rs485 t485conf = { 0 };
-   t485conf.flags |= SER_RS485_ENABLED;
-   if (ioctl(mSpecific->mPortFd, TIOCSRS485, &t485conf) < 0)
+   if (mSettings.m485Flag)
    {
-      TS::print(1, "serial_open_error_101 %d", errno);
-      return false;
+      struct serial_rs485 t485conf = { 0 };
+      t485conf.flags |= SER_RS485_ENABLED;
+      if (ioctl(mSpecific->mPortFd, TIOCSRS485, &t485conf) < 0)
+      {
+         TS::print(1, "serial_open_error_485 %d", errno);
+         return false;
+      }
    }
 
    //***************************************************************************
@@ -137,9 +140,19 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Done.
  
-   TS::print(1, "SerialPort initialize PASS  $ %s : %16s",
-      mSettings.mPortDevice,
-      mSettings.mPortSetup);
+   if (!mSettings.m485Flag)
+   {
+      TS::print(1, "SerialPort initialize PASS  $ %s : %16s",
+         mSettings.mPortDevice,
+         mSettings.mPortSetup);
+   }
+   else
+   {
+      TS::print(1, "SerialPort initialize PASS  $ %s : %16s RS485",
+         mSettings.mPortDevice,
+         mSettings.mPortSetup);
+   }
+
 
    mValidFlag = true;
    return true;

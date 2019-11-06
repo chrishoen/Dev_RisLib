@@ -120,6 +120,9 @@ bool SerialPort::doOpen()
    {
       struct serial_rs485 t485conf = { 0 };
       t485conf.flags |= SER_RS485_ENABLED;
+      t485conf.flags |= SER_RS485_RTS_ON_SEND;
+      t485conf.flags &= ~(SER_RS485_RTS_AFTER_SEND);
+      
       if (ioctl(mSpecific->mPortFd, TIOCSRS485, &t485conf) < 0)
       {
          TS::print(1, "serial_open_error_485 %d", errno);

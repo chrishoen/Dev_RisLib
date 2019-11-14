@@ -43,23 +43,23 @@ void BaseCmdLineParms::reset()
 //******************************************************************************
 // File path.
 
-void BaseCmdLineParms::setFilePath(char* aFilePath)
+void BaseCmdLineParms::setFilePath(const char* aFilePath)
 {
    strncpy(mFilePath, aFilePath,cMaxStringSize);
 }
 
-void BaseCmdLineParms::setFilePath_RelativeToBaseDir(char* aRelativeFilePath)
+void BaseCmdLineParms::setFilePath_RelativeToBaseDir(const char* aRelativeFilePath)
 {
    char tBuffer[cMaxStringSize];
    strncpy(mFilePath, Ris::getBaseFullFilePath(tBuffer, aRelativeFilePath), cMaxStringSize);
 }
 
-void BaseCmdLineParms::setFileName_RelAlphaFiles(char* aFileName)
+void BaseCmdLineParms::setFileName_RelAlphaFiles(const char* aFileName)
 {
    char tBuffer[cMaxStringSize];
    strncpy(mFilePath, Ris::getAlphaFilePath_Files(tBuffer, aFileName), cMaxStringSize);
 }
-void BaseCmdLineParms::setFileName_RelAlphaSettings(char* aFileName)
+void BaseCmdLineParms::setFileName_RelAlphaSettings(const char* aFileName)
 {
    char tBuffer[cMaxStringSize];
    strncpy(mFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aFileName), cMaxStringSize);
@@ -121,7 +121,7 @@ bool BaseCmdLineParms::readFile()
 // for a specific section in the file. If the input section is null or 
 // empty then section logic is ignored and the entire file is read.
 
-bool BaseCmdLineParms::readSection(char* aSection)
+bool BaseCmdLineParms::readSection(const char* aSection)
 {
    //***************************************************************************
    //***************************************************************************
@@ -242,7 +242,7 @@ public:
    }
 };
 
-bool BaseCmdLineParms::readSection(char* aSection, Ris::BaseCmdLineExec* aExec)
+bool BaseCmdLineParms::readSection(const char* aSection, Ris::BaseCmdLineExec* aExec)
 {
    //***************************************************************************
    //***************************************************************************

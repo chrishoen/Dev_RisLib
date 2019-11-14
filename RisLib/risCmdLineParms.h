@@ -102,19 +102,19 @@ public:
    // Methods.
 
    // Set the full file path for the parms file.
-   void setFilePath(char* aFilePath);
+   void setFilePath(const char* aFilePath);
 
    // Set the file name for the parms file. The full file path will be
    // relative to the program base directory.
-   void setFilePath_RelativeToBaseDir(char* aRelativeFilePath);
+   void setFilePath_RelativeToBaseDir(const char* aRelativeFilePath);
 
    // Set the file name for the parms file. The full file path will be
    // relative to the alpha files directory.
-   void setFileName_RelAlphaFiles(char* aFileName);
+   void setFileName_RelAlphaFiles(const char* aFileName);
 
    // Set the file name for the parms file. The full file path will be
    // relative to the alpha settings directory.
-   void setFileName_RelAlphaSettings(char* aFileName);
+   void setFileName_RelAlphaSettings(const char* aFileName);
 
    // Read a section of the command file and set member variables accordingly.
    // Create a command file object, open the file, pass this object to the file
@@ -123,11 +123,11 @@ public:
    // for a specific section in the file. If the input section is null or 
    // empty then section logic is ignored and the entire file is read.
    // This reads the file from the file path member variable.
-   bool readSection(char* aSection);
+   bool readSection(const char* aSection);
 
    // Read a section of the file and apply a separate executive
    // to it.
-   bool readSection(char* aSection, Ris::BaseCmdLineExec* aExec);
+   bool readSection(const char* aSection, Ris::BaseCmdLineExec* aExec);
 
    // Alias for readSection(0);
    bool readFile();

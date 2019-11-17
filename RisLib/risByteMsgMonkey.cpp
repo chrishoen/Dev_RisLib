@@ -17,7 +17,7 @@ namespace Ris
 //******************************************************************************
 // Constructor.
 
-void defaultDestroy(void*aMsg)
+void defaultDestroy(void* aMsg)
 {
    delete aMsg;
 }

@@ -1,5 +1,3 @@
-#pragma once
-
 /*==============================================================================
 
 Value queue that uses critical sections as locks.

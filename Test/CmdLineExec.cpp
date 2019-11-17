@@ -58,6 +58,10 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1, "101");
 
    Prn::print(0, "test     %10d", aCmd->argInt(1));
+
+   char tBuffer[40];
+   Ris::portableGetCurrentTimeAsString(tBuffer, 2);
+   Prn::print(0, "Ris::portableGetCurrentTimeAsString   %s", tBuffer);
 }
 
 //******************************************************************************

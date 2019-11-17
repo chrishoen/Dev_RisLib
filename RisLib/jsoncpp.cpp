@@ -2142,7 +2142,7 @@ CharReader* CharReaderBuilder::newCharReader() const {
   features.allowNumericKeys_ = settings_["allowNumericKeys"].asBool();
   features.allowSingleQuotes_ = settings_["allowSingleQuotes"].asBool();
 #if defined(JSON_HAS_INT64)
-  features.stackLimit_ = settings_["stackLimit"].asUInt64();
+  features.stackLimit_ = (size_t)settings_["stackLimit"].asUInt64();
 #else
   features.stackLimit_ = settings_["stackLimit"].asUInt();
 #endif

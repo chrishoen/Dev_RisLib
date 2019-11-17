@@ -240,6 +240,8 @@ char* portableGetCurrentTimeAsString(char* aBuffer, bool aSecondDecimals)
    {
       strftime(aBuffer, 40, "%F %T", localtime(&tSystemTime.tv_sec));
    }
+   //Done.
+   return aBuffer;
 }
 
 //******************************************************************************

@@ -26,7 +26,7 @@ namespace Ris
 
 BaseCmdLineParms::BaseCmdLineParms()
 {
-   mFilePath[0];
+   mFilePath[0] = 0;
    reset();
 }
 

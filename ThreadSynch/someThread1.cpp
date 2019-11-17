@@ -59,8 +59,6 @@ void Thread1::threadRunFunction()
 
 void Thread1::runTest1()
 {
-   mThreadSem.get();
-   gShare.mTimeMarker.doStop();
 }
 
 //******************************************************************************
@@ -69,8 +67,6 @@ void Thread1::runTest1()
 
 void Thread1::runTest2()
 {
-   mConditionVariable.waitFor();
-   gShare.mTimeMarker.doStop();
 }
 
 //******************************************************************************
@@ -79,8 +75,6 @@ void Thread1::runTest2()
 
 void Thread1::runTest3()
 {
-   Experiment::receive();
-   gShare.mTimeMarker.doStop();
 }
 
 }//namespace

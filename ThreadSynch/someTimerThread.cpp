@@ -49,8 +49,6 @@ void TimerThread::executeOnTimer(int aTimeCount)
          return;
    }
 
-   gShare.mTimeMarker.doStart();
-
    switch (gShare.mTest)
    {
    case 1:

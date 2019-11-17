@@ -6,6 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include "tsThreadServices.h"
 #include "someThreadParms.h"
 #include "someMasterThread.h"
 

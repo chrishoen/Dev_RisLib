@@ -10,54 +10,6 @@ project ("Dev_RisLib")
 
 my_special1()
 
-add_subdirectory ("RisLib")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("Test")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("TimerThreadTest")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("Experiment")
-add_subdirectory ("ProtoString")
-add_subdirectory ("ProtoTcpClient")
-add_subdirectory ("ProtoTcpServer")
-add_subdirectory ("ProtoUdp")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("Experiment")
-add_subdirectory ("PrintTest")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("Experiment")
-add_subdirectory ("ProtoString")
-add_subdirectory ("ProtoTcpClient")
-add_subdirectory ("ProtoTcpServer")
-add_subdirectory ("ProtoUdp")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoUdp")
-return()
-
-add_subdirectory ("ThreadServices")
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
-return()
-
-add_subdirectory ("RisLib")
-return()
-
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
 add_subdirectory ("CmdLineTest")
@@ -86,4 +38,53 @@ add_subdirectory ("ThreadTest")
 add_subdirectory ("TimerTest")
 add_subdirectory ("TimerThreadTest")
 return()
+
+add_subdirectory ("RisLib")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("Test")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("TimerThreadTest")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("Experiment")
+add_subdirectory ("ProtoString")
+add_subdirectory ("ProtoTcpClient")
+add_subdirectory ("ProtoTcpServer")
+add_subdirectory ("ProtoUdp")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("Experiment")
+add_subdirectory ("PrintTest")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("Experiment")
+add_subdirectory ("ProtoString")
+add_subdirectory ("ProtoTcpClient")
+add_subdirectory ("ProtoTcpServer")
+add_subdirectory ("ProtoUdp")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoUdp")
+return()
+
+add_subdirectory ("ThreadServices")
+add_subdirectory ("CommonLib")
+add_subdirectory ("RisLib")
+return()
+
+add_subdirectory ("RisLib")
+return()
+
 

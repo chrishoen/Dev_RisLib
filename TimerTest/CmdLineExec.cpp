@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 
+#include "tsThreadServices.h"
 #include "someTestThread.h"
 #include "someThreadParms.h"
 #include "tsPrintThread.h"

@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 
+#include "tsThreadServices.h"
 #include "someRandomTimerThread.h"
 #include "someThreadParms.h"
 

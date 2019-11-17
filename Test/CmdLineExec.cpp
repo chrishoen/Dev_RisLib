@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "risProgramTime.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -44,28 +45,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, "Z101");
-
-   if (aCmd->gcodeIsValidZ())
-   {
-      Prn::print(0, "IntZ     %10d", aCmd->gcodeIntZ());
-      Prn::print(0, "DoubleZ  %10.3f", aCmd->gcodeDoubleZ());
-      Prn::print(0, " ");
-   }
-
-   if (aCmd->gcodeIsValidP())
-   {
-      Prn::print(0, "IntP     %10d", aCmd->gcodeIntP());
-      Prn::print(0, "DoubleP  %10.3f", aCmd->gcodeDoubleP());
-      Prn::print(0, " ");
-   }
-
-   if (aCmd->gcodeIsValidF())
-   {
-      Prn::print(0, "IntF     %10d", aCmd->gcodeIntF());
-      Prn::print(0, "DoubleF  %10.3f", aCmd->gcodeDoubleF());
-      Prn::print(0, " ");
-   }
+   double tTime = Ris::getCurrentProgramTime();
+   Prn::print(0, "Ris::getCurrentProgramTime     %10.6f", tTime);
 }
 
 //******************************************************************************

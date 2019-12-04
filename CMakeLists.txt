@@ -10,6 +10,10 @@ project ("Dev_RisLib")
 
 my_special1()
 
+add_subdirectory ("RisLib")
+add_subdirectory ("Test")
+return()
+
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
 add_subdirectory ("CmdLineTest")
@@ -40,10 +44,6 @@ add_subdirectory ("TimerThreadTest")
 return()
 
 add_subdirectory ("RisLib")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("Test")
 return()
 
 add_subdirectory ("RisLib")

@@ -28,7 +28,7 @@ namespace Prn
 //****************************************************************************
 // Constants.
 
-static const int cMaxPrintStringSize = 400;
+static const int cMaxPrintStringSize = 1000;
 static const int cMaxConsoles = PrintFilterTable::cMaxConsoles;
 
 //****************************************************************************

@@ -46,8 +46,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   double tTime = Ris::getCurrentProgramTime();
-   Prn::print(0, "Ris::getCurrentProgramTime     %10.6f", tTime);
+   std::string tFileName = Ris::doGetRandomFileName();
+   Prn::print(0, "Unique FileName     %s", tFileName.c_str());
 }
 
 //******************************************************************************
@@ -56,8 +56,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   std::string tFileName = Ris::doGetUniqueFileName();
-   Prn::print(0, "Unique FileName     %s", tFileName.c_str());
 }
 
 //******************************************************************************

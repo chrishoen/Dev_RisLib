@@ -9,6 +9,7 @@ Print utility
 #include "stdafx.h"
 #include <random>
 
+#include "risSystemCalls.h"
 #include "risFileFunctions.h"
 
 //****************************************************************************
@@ -52,6 +53,7 @@ char* getSafeFilePath(char* aBuffer, const char* aFilePath)
    }
    return aBuffer;
 }
+
 
 //****************************************************************************
 //****************************************************************************
@@ -103,12 +105,25 @@ void doReadJsonFromFile(
    tInputFile >> aJsonValue;
 }
 
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Delete a file.
+
+void deleteFile(const char* aFilePath)
+{
+   char* tString = new char[2000];
+   sprintf(tString, "rm %s",aFilePath);
+   Ris::doSystemCommand(tString);
+   delete tString;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // get a unique file based on a random number.
 
-std::string doGetUniqueFileName()
+std::string doGetRandomFileName()
 {
    std::random_device tRandomDevice;
    std::mt19937 tRandomGenerator(tRandomDevice());

@@ -37,6 +37,9 @@ std::string& getSafeFilePath(std::string& aBuffer, const std::string& aFilePath)
 //******************************************************************************
 // Methods.
 
+// Get a unique file based on a random number.
+void deleteFile(const char* aFilePath);
+
 // Write a json value to a file.
 void doWriteJsonToFile(
    Json::Value& aJsonValue,           // Input
@@ -47,8 +50,8 @@ void doReadJsonFromFile(
    Json::Value& aJsonValue,           // Output
    const std::string& aFilePath);           // Input
 
-// get a unique file based on a random number.
-std::string doGetUniqueFileName();
+// Get a unique file based on a random number.
+std::string doGetRandomFileName();
 
 //******************************************************************************
 //******************************************************************************

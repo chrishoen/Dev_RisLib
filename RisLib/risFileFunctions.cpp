@@ -115,7 +115,7 @@ std::string doGetUniqueFileName()
    std::uniform_int_distribution<> tRandomDistribution(0,1000*1000*1000);
    int tRandomInt = tRandomDistribution(tRandomGenerator);
    char tFileName[40];
-   sprintf(tFileName, "some_file%d", tRandomInt);
+   sprintf(tFileName, "some_file_%d", tRandomInt);
    return std::string(tFileName);
 }
 

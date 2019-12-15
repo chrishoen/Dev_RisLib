@@ -7,6 +7,7 @@ Print utility
 //******************************************************************************
 
 #include "stdafx.h"
+#include <random>
 
 #include "risFileFunctions.h"
 
@@ -109,7 +110,13 @@ void doReadJsonFromFile(
 
 std::string doGetUniqueFileName()
 {
-   return "my_filename";
+   std::random_device tRandomDevice;
+   std::mt19937 tRandomGenerator(tRandomDevice());
+   std::uniform_int_distribution<> tRandomDistribution(0,1000*1000*1000);
+   int tRandomInt = tRandomDistribution(tRandomGenerator);
+   char tFileName[40];
+   sprintf(tFileName, "some_file%d", tRandomInt);
+   return std::string(tFileName);
 }
 
 //****************************************************************************

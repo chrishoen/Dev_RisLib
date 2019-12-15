@@ -47,6 +47,9 @@ void doReadJsonFromFile(
    Json::Value& aJsonValue,           // Output
    const std::string& aFilePath);           // Input
 
+// get a unique file based on a random number.
+std::string doGetUniqueFileName();
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

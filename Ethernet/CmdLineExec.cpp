@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "risFileFunctions.h"
 #include "risProgramTime.h"
 #include "CmdLineExec.h"
 
@@ -55,13 +56,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, "101");
-
-   Prn::print(0, "test     %10d", aCmd->argInt(1));
-
-   char tBuffer[40];
-   Ris::portableGetCurrentTimeAsString(tBuffer, false);
-   Prn::print(0, "Ris::portableGetCurrentTimeAsString   %s", tBuffer);
+   std::string tFileName = Ris::doGetUniqueFileName();
+   Prn::print(0, "Unique FileName     %s", tFileName.c_str());
 }
 
 //******************************************************************************

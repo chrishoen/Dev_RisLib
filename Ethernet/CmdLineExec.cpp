@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "risFileFunctions.h"
-#include "risProgramTime.h"
+#include "risSystemCalls.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -56,6 +56,13 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   std::vector<std::string> tResponse;
+   Ris::doSystemCommand("ls", tResponse);
+
+   for (int i = 0; i < tResponse.size(); i++)
+   {
+      Prn::print(0,"RESPONSE %d $ %s",i, tResponse[i].c_str());
+   }
 }
 
 //******************************************************************************
@@ -64,6 +71,13 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   std::vector<std::string> tResponse;
+   Ris::doSystemCommand("ifquery eth0", tResponse);
+
+   for (int i = 0; i < tResponse.size(); i++)
+   {
+      Prn::print(0, "RESPONSE %d $ %s", i, tResponse[i].c_str());
+   }
 }
 
 //******************************************************************************

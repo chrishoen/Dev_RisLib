@@ -6,6 +6,8 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include <iostream>
+#include "prnPrint.h"
 #include "risFileFunctions.h"
 #include "risSystemCalls.h"
 
@@ -57,17 +59,28 @@ int doSystemCommandSuppress(const char* aCommand)
 
 int doSystemCommand(const char* aCommand, std::vector<std::string>& aResponse)
 {
-   // Get and random temp file name.
+   // Do this first.
+   aResponse.clear();
+
+   // Get a random temp file name.
    std::string tTempFileName = doGetRandomFileName();
 
    // Construct a command string from the input command string and redirect
    // the command output to the random temp file.
    char* tString = new char[1000];
-   sprintf(tString, "%s > %s", aCommand, tTempFileName);
-
+   sprintf(tString, "%s > %s", aCommand, tTempFileName.c_str());
+  
    // Execute the system command with the output redireced to the random
    // temp file.
+   Prn::print(0, "COMMAND %s",tString);
+
    int tRet = system(tString);
+   // Read the system command response into the output response list.
+   std::ifstream tTempFileStream(tTempFileName);
+   for (std::string tFileLine; std::getline(tTempFileStream, tFileLine); )
+   {
+      aResponse.push_back(tFileLine);
+   }
 
    // Delete the temp file.
    deleteFile(tTempFileName.c_str());

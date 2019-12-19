@@ -86,6 +86,35 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   std::vector<std::string> tResponse;
+   Ris::doSystemCommand("ifconfig eth0", tResponse);
+
+   std::vector<std::string> tParse;
+   char tDelimiter = ' ';
+   std::stringstream tStream(tResponse[1]);
+   std::string tToken;
+
+   while (std::getline(tStream, tToken, tDelimiter))
+   {
+      if (tToken.length())
+      {
+         tParse.push_back(tToken);
+      }
+   }
+
+   std::string tAddr;
+   std::string tMask;
+
+   for (int i = 0; i < tParse.size(); i++)
+   {
+      Prn::print(0, "tParse $ %s", tParse[i].c_str());
+      if (tParse[i] == "inet") tAddr = tParse[i + 1];
+      if (tParse[i] == "netmask") tMask = tParse[i + 1];
+   }
+
+   Prn::print(0, "");
+   Prn::print(0, "tAddr  $ %s", tAddr.c_str());
+   Prn::print(0, "tMask  $ %s", tMask.c_str());
 }
 
 //******************************************************************************

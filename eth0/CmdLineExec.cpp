@@ -72,7 +72,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    std::vector<std::string> tResponse;
-   Ris::doSystemCommand("ifquery eth0", tResponse);
+   Ris::doSystemCommand("ifconfig eth0", tResponse);
 
    for (int i = 0; i < tResponse.size(); i++)
    {

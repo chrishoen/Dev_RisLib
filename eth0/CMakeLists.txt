@@ -11,3 +11,12 @@ my_add_pch (eth0)
 my_inc_import_RisLib(eth0)
 my_lib_import_RisLib(eth0)
 
+if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+   install(TARGETS commtest DESTINATION "/opt/prime/bin")
+else()
+   add_custom_command(
+      TARGET  eth0
+      POST_BUILD
+      COMMAND rsync -azv --chmod=ugo=rwx eth0 rsync://debian@bby/prime/bin
+      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/eth0)
+endif()

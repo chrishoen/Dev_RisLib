@@ -93,9 +93,9 @@ void Eth0::show(int aPF)
    Prn::print(aPF, "FilePath %s", mFilePath.c_str());
 
    Prn::print(aPF, "DhcpFlag                %s", my_string_from_bool(mDhcpFlag));
-   Prn::print(aPF, "Address                 %s", mAddress);
-   Prn::print(aPF, "Mask                    %s", mMask);
-   Prn::print(aPF, "Gateway                 %s", mGateway);
+   Prn::print(aPF, "Address                 %s", mAddress.c_str());
+   Prn::print(aPF, "Mask                    %s", mMask.c_str());
+   Prn::print(aPF, "Gateway                 %s", mGateway.c_str());
 }
 
 //******************************************************************************

@@ -2,6 +2,7 @@
 
 #include "risFileFunctions.h"
 #include "risSystemCalls.h"
+#include "risNetEth0.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -28,15 +29,19 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("GO1"))  executeGo1(aCmd);
-   if (aCmd->isCmd("GO2"))  executeGo2(aCmd);
-   if (aCmd->isCmd("GO3"))  executeGo3(aCmd);
-   if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
-   if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
-   if (aCmd->isCmd("GO6"))  executeGo6(aCmd);
-   if (aCmd->isCmd("GO7"))  executeGo7(aCmd);
-   if (aCmd->isCmd("GO8"))  executeGo8(aCmd);
-   if (aCmd->isCmd("GO9"))  executeGo9(aCmd);
+   if (aCmd->isCmd("GO1"))   executeGo1(aCmd);
+   if (aCmd->isCmd("GO2"))   executeGo2(aCmd);
+   if (aCmd->isCmd("GO3"))   executeGo3(aCmd);
+   if (aCmd->isCmd("GO4"))   executeGo4(aCmd);
+   if (aCmd->isCmd("GO5"))   executeGo5(aCmd);
+   if (aCmd->isCmd("GO6"))   executeGo6(aCmd);
+   if (aCmd->isCmd("GO7"))   executeGo7(aCmd);
+   if (aCmd->isCmd("GO8"))   executeGo8(aCmd);
+   if (aCmd->isCmd("GO9"))   executeGo9(aCmd);
+   if (aCmd->isCmd("GO10"))  executeGo10(aCmd);
+   if (aCmd->isCmd("GO11"))  executeGo11(aCmd);
+   if (aCmd->isCmd("GO12"))  executeGo12(aCmd);
+   if (aCmd->isCmd("GO13"))  executeGo13(aCmd);
 }
 
 //******************************************************************************
@@ -188,4 +193,40 @@ void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo9(Ris::CmdLineCmd* aCmd)
 {
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo10(Ris::CmdLineCmd* aCmd)
+{
+   Ris::Net::Eth0 tEth0;
+   tEth0.doGetNetsettings();
+   tEth0.show();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo13(Ris::CmdLineCmd* aCmd)
+{
+}
+
 

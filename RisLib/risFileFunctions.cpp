@@ -75,6 +75,35 @@ std::string& getSafeFilePath(std::string& aBuffer, const std::string& aFilePath)
    return aBuffer;
 }
 
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Delete a file.
+
+void deleteFile(const char* aFilePath)
+{
+   char* tString = new char[2000];
+   sprintf(tString, "rm %s",aFilePath);
+   Ris::doSystemCommand(tString);
+   delete tString;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// get a unique file based on a random number.
+
+std::string doGetRandomFileName()
+{
+   std::random_device tRandomDevice;
+   std::mt19937 tRandomGenerator(tRandomDevice());
+   std::uniform_int_distribution<> tRandomDistribution(0,1000*1000*1000);
+   int tRandomInt = tRandomDistribution(tRandomGenerator);
+   char tFileName[40];
+   sprintf(tFileName, "some_file_%d", tRandomInt);
+   return std::string(tFileName);
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -103,35 +132,6 @@ void doReadJsonFromFile(
    // Read the json value from the input file.
    std::ifstream tInputFile(aFilePath);
    tInputFile >> aJsonValue;
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Delete a file.
-
-void deleteFile(const char* aFilePath)
-{
-   char* tString = new char[2000];
-   sprintf(tString, "rm %s",aFilePath);
-   Ris::doSystemCommand(tString);
-   delete tString;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// get a unique file based on a random number.
-
-std::string doGetRandomFileName()
-{
-   std::random_device tRandomDevice;
-   std::mt19937 tRandomGenerator(tRandomDevice());
-   std::uniform_int_distribution<> tRandomDistribution(0,1000*1000*1000);
-   int tRandomInt = tRandomDistribution(tRandomGenerator);
-   char tFileName[40];
-   sprintf(tFileName, "some_file_%d", tRandomInt);
-   return std::string(tFileName);
 }
 
 //****************************************************************************

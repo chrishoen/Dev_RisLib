@@ -12,7 +12,7 @@ my_inc_import_RisLib(eth0)
 my_lib_import_RisLib(eth0)
 
 if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
-   install(TARGETS commtest DESTINATION "/opt/prime/bin")
+   install(TARGETS eth0 DESTINATION "/opt/prime/bin")
 else()
    add_custom_command(
       TARGET  eth0

@@ -202,6 +202,7 @@ void CmdLineExec::executeGo10(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::Eth0 tEth0;
    tEth0.doGetNetsettings();
+   tEth0.doWrite();
    tEth0.show();
 }
 

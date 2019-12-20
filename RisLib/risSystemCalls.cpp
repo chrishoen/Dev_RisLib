@@ -72,8 +72,6 @@ int doSystemCommand(const char* aCommand, std::vector<std::string>& aResponse)
   
    // Execute the system command with the output redireced to the random
    // temp file.
-   Prn::print(0, "COMMAND %s",tString);
-
    int tRet = system(tString);
    // Read the system command response into the output response list.
    std::ifstream tTempFileStream(tTempFileName);

@@ -42,6 +42,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO11"))  executeGo11(aCmd);
    if (aCmd->isCmd("GO12"))  executeGo12(aCmd);
    if (aCmd->isCmd("GO13"))  executeGo13(aCmd);
+   if (aCmd->isCmd("show"))  executeShow(aCmd);
 }
 
 //******************************************************************************
@@ -228,6 +229,18 @@ void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo13(Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
+{
+   Ris::Net::Interfaces tInterfaces;
+   tInterfaces.doGetNetsettings();
+   tInterfaces.doRead();
+   tInterfaces.show();
 }
 
 

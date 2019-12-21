@@ -125,6 +125,7 @@ void Interfaces::doGetNetsettingsEth0Gateway()
    // Do this first.
    mEth0Gateway = "none";
    mEth0DhcpFlag = false;
+   mEth0ValidFlag = false;
 
    // Execute system command into a response string list.
    // An example response is:
@@ -135,6 +136,9 @@ void Interfaces::doGetNetsettingsEth0Gateway()
 
    // Guard.
    if (tResponse.size() == 0) return;
+
+   // The interface is valid.
+   mEth0ValidFlag = true;
 
    // Stream string variables for the response list entry 1.
    std::stringstream tStream(tResponse[0]);
@@ -180,6 +184,9 @@ void Interfaces::doGetNetsettingsWlan0Gateway()
 
    // Guard.
    if (tResponse.size() == 0) return;
+
+   // The interface is valid.
+   mWlan0ValidFlag = true;
 
    // Stream string variables for the response list entry 1.
    std::stringstream tStream(tResponse[0]);

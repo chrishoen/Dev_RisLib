@@ -37,12 +37,14 @@ public:
    std::string mFilePath;
 
    // Network interface variables for eth0.
+   bool mEth0ValidFlag;
    bool mEth0DhcpFlag;
    std::string mEth0Address;
    std::string mEth0Mask;
    std::string mEth0Gateway;
 
    // Network interface variables for wlan0.
+   bool mWlan0ValidFlag;
    bool mWlan0DhcpFlag;
    std::string mWlan0Address;
    std::string mWlan0Mask;

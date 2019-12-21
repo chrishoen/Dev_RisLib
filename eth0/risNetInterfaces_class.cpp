@@ -29,10 +29,12 @@ Interfaces::Interfaces()
       mFilePath = "/opt/prime/files/netinterfaces.json";
    }
 
+   mEth0ValidFlag = false;
    mEth0DhcpFlag = false;
    mEth0Address = "none";
    mEth0Mask = "none";
    mEth0Gateway = "none";
+   mWlan0ValidFlag = false;
    mWlan0DhcpFlag = false;
    mWlan0Address = "none";
    mWlan0Mask = "none";
@@ -50,14 +52,16 @@ void Interfaces::doWrite()
    Json::Value tJsonValue;
 
    // Copy members.
-   tJsonValue["Eth0DhcpFlag"]  = mEth0DhcpFlag;
-   tJsonValue["Eth0Address"]   = mEth0Address;
-   tJsonValue["Eth0Mask"]      = mEth0Mask;
-   tJsonValue["Eth0Gateway"]   = mEth0Gateway;
-   tJsonValue["Wlan0DhcpFlag"] = mWlan0DhcpFlag;
-   tJsonValue["Wlan0Address"]  = mWlan0Address;
-   tJsonValue["Wlan0Mask"]     = mWlan0Mask;
-   tJsonValue["Wlan0Gateway"]  = mWlan0Gateway;
+   tJsonValue["Eth0ValidFlag"]  = mEth0ValidFlag;
+   tJsonValue["Eth0DhcpFlag"]   = mEth0DhcpFlag;
+   tJsonValue["Eth0Address"]    = mEth0Address;
+   tJsonValue["Eth0Mask"]       = mEth0Mask;
+   tJsonValue["Eth0Gateway"]    = mEth0Gateway;
+   tJsonValue["Wlan0ValidFlag"] = mWlan0ValidFlag;
+   tJsonValue["Wlan0DhcpFlag"]  = mWlan0DhcpFlag;
+   tJsonValue["Wlan0Address"]   = mWlan0Address;
+   tJsonValue["Wlan0Mask"]      = mWlan0Mask;
+   tJsonValue["Wlan0Gateway"]   = mWlan0Gateway;
 
    // Write to json file.
    Ris::doWriteJsonToFile(
@@ -84,14 +88,16 @@ void Interfaces::doRead()
       mFilePath);           // Input
 
    // Copy members.
-   mEth0DhcpFlag  = tJsonValue["Eth0DhcpFlag"].asBool();
-   mEth0Address   = tJsonValue["Eth0Address"].asString();
-   mEth0Mask      = tJsonValue["Eth0Mask"].asString();
-   mEth0Gateway   = tJsonValue["Eth0Gateway"].asString();
-   mWlan0DhcpFlag = tJsonValue["Wlan0DhcpFlag"].asBool();
-   mWlan0Address  = tJsonValue["Wlan0Address"].asString();
-   mWlan0Mask     = tJsonValue["Wlan0Mask"].asString();
-   mWlan0Gateway  = tJsonValue["Wlan0Gateway"].asString();
+   mEth0ValidFlag  = tJsonValue["Eth0ValidFlag"].asBool();
+   mEth0DhcpFlag   = tJsonValue["Eth0DhcpFlag"].asBool();
+   mEth0Address    = tJsonValue["Eth0Address"].asString();
+   mEth0Mask       = tJsonValue["Eth0Mask"].asString();
+   mEth0Gateway    = tJsonValue["Eth0Gateway"].asString();
+   mWlan0ValidFlag = tJsonValue["Wlan0ValidFlag"].asBool();
+   mWlan0DhcpFlag  = tJsonValue["Wlan0DhcpFlag"].asBool();
+   mWlan0Address   = tJsonValue["Wlan0Address"].asString();
+   mWlan0Mask      = tJsonValue["Wlan0Mask"].asString();
+   mWlan0Gateway   = tJsonValue["Wlan0Gateway"].asString();
 }
 
 //******************************************************************************
@@ -104,10 +110,12 @@ void Interfaces::show(int aPF)
    Prn::print(aPF, "");
    Prn::print(aPF, "FilePath %s", mFilePath.c_str());
 
+   Prn::print(aPF, "Eth0ValidFlag           %s", my_string_from_bool(mEth0ValidFlag));
    Prn::print(aPF, "Eth0DhcpFlag            %s", my_string_from_bool(mEth0DhcpFlag));
    Prn::print(aPF, "Eth0Address             %s", mEth0Address.c_str());
    Prn::print(aPF, "Eth0Mask                %s", mEth0Mask.c_str());
    Prn::print(aPF, "Eth0Gateway             %s", mEth0Gateway.c_str());
+   Prn::print(aPF, "Wlan0ValidFlag          %s", my_string_from_bool(mWlan0ValidFlag));
    Prn::print(aPF, "Wlan0DhcpFlag           %s", my_string_from_bool(mWlan0DhcpFlag));
    Prn::print(aPF, "Wlan0Address            %s", mWlan0Address.c_str());
    Prn::print(aPF, "Wlan0Mask               %s", mWlan0Mask.c_str());

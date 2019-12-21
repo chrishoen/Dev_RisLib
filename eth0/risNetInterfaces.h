@@ -83,7 +83,7 @@ public:
 
    // Get the current network settings. Sub functions.
    void doGetNetsettingsEth0();
-   void doGetNetsettingsWLan0();
+   void doGetNetsettingsWlan0();
    void doGetNetsettingsGateway();
 
    //***************************************************************************

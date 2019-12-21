@@ -23,7 +23,8 @@ void Interfaces::doGetNetsettings()
 {
    doGetNetsettingsEth0();
    doGetNetsettingsWlan0();
-   doGetNetsettingsGateway();
+   doGetNetsettingsEth0Gateway();
+   doGetNetsettingsWlan0Gateway();
 }
 
 //******************************************************************************
@@ -42,6 +43,9 @@ void Interfaces::doGetNetsettingsEth0()
    // "inet 192.168.1.35  netmask 255.255.255.0  broadcast 192.168.1.255"
    std::vector<std::string> tResponse;
    Ris::doSystemCommand("ifconfig eth0", tResponse);
+
+   // Guard.
+   if (tResponse.size() == 0) return;
 
    // Stream string variables for the response list entry 1.
    std::stringstream tStream(tResponse[1]);
@@ -84,6 +88,9 @@ void Interfaces::doGetNetsettingsWlan0()
    std::vector<std::string> tResponse;
    Ris::doSystemCommand("ifconfig wlan0", tResponse);
 
+   // Guard.
+   if (tResponse.size() == 0) return;
+
    // Stream string variables for the response list entry 1.
    std::stringstream tStream(tResponse[1]);
    std::string tToken;
@@ -113,10 +120,10 @@ void Interfaces::doGetNetsettingsWlan0()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Interfaces::doGetNetsettingsGateway()
+void Interfaces::doGetNetsettingsEth0Gateway()
 {
    // Do this first.
-   mGateway = "none";
+   mEth0Gateway = "none";
    mEth0DhcpFlag = false;
 
    // Execute system command into a response string list.
@@ -124,7 +131,10 @@ void Interfaces::doGetNetsettingsGateway()
    // "inet 192.168.1.35  netmask 255.255.255.0  broadcast 192.168.1.255"
    // "default via 192.168.1.1 dev eth0 proto dhcp src 192.168.1.35 metric 202"
    std::vector<std::string> tResponse;
-   Ris::doSystemCommand("ip route show", tResponse);
+   Ris::doSystemCommand("ip route show dev eth0", tResponse);
+
+   // Guard.
+   if (tResponse.size() == 0) return;
 
    // Stream string variables for the response list entry 1.
    std::stringstream tStream(tResponse[0]);
@@ -145,8 +155,53 @@ void Interfaces::doGetNetsettingsGateway()
    // Parse the list of strings into member variables.
    for (int i = 0; i < tParse.size(); i++)
    {
-      if (tParse[i] == "via") mGateway = tParse[i + 1];
+      if (tParse[i] == "via") mEth0Gateway = tParse[i + 1];
       if (tParse[i] == "dhcp") mEth0DhcpFlag = true;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Get the current network settings. Sub function.
+
+void Interfaces::doGetNetsettingsWlan0Gateway()
+{
+   // Do this first.
+   mWlan0Gateway = "none";
+   mWlan0DhcpFlag = false;
+
+   // Execute system command into a response string list.
+   // An example response is:
+   // "inet 192.168.1.35  netmask 255.255.255.0  broadcast 192.168.1.255"
+   // "default via 192.168.1.1 dev eth0 proto dhcp src 192.168.1.35 metric 202"
+   std::vector<std::string> tResponse;
+   Ris::doSystemCommand("ip route show dev wlan0", tResponse);
+
+   // Guard.
+   if (tResponse.size() == 0) return;
+
+   // Stream string variables for the response list entry 1.
+   std::stringstream tStream(tResponse[0]);
+   std::string tToken;
+   // Variables for parsing the response  list entry 1.
+   std::vector<std::string> tParse;
+   char tDelimiter = ' ';
+
+   // Parse the response string entry 1 into the a list of strings.
+   while (std::getline(tStream, tToken, tDelimiter))
+   {
+      if (tToken.length())
+      {
+         tParse.push_back(tToken);
+      }
+   }
+
+   // Parse the list of strings into member variables.
+   for (int i = 0; i < tParse.size(); i++)
+   {
+      if (tParse[i] == "via") mWlan0Gateway = tParse[i + 1];
+      if (tParse[i] == "dhcp") mWlan0DhcpFlag = true;
    }
 }
 

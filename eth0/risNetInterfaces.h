@@ -36,18 +36,17 @@ public:
    // Json file path.
    std::string mFilePath;
 
-   // True if dhcp is enabled.
+   // Network interface variables for eth0.
    bool mEth0DhcpFlag;
-   bool mWlan0DhcpFlag;
-
-   // Network address and mask for eth0 and wlan0.
    std::string mEth0Address;
    std::string mEth0Mask;
+   std::string mEth0Gateway;
+
+   // Network interface variables for wlan0.
+   bool mWlan0DhcpFlag;
    std::string mWlan0Address;
    std::string mWlan0Mask;
-
-   // Network gateway address.
-   std::string mGateway;
+   std::string mWlan0Gateway;
 
    //***************************************************************************
    //***************************************************************************
@@ -84,7 +83,8 @@ public:
    // Get the current network settings. Sub functions.
    void doGetNetsettingsEth0();
    void doGetNetsettingsWlan0();
-   void doGetNetsettingsGateway();
+   void doGetNetsettingsEth0Gateway();
+   void doGetNetsettingsWlan0Gateway();
 
    //***************************************************************************
    //***************************************************************************

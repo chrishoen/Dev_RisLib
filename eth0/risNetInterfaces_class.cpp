@@ -67,6 +67,7 @@ void Interfaces::doWrite()
    tJsonValue["Wlan0Address"]   = mWlan0Address;
    tJsonValue["Wlan0Mask"]      = mWlan0Mask;
    tJsonValue["Wlan0Gateway"]   = mWlan0Gateway;
+   tJsonValue["ShowValidFlag"]  = mShowValidFlag;
    tJsonValue["ShowDhcpFlag"]   = mShowDhcpFlag;
    tJsonValue["ShowAddress"]    = mShowAddress;
    tJsonValue["ShowMask"]       = mShowMask;
@@ -107,6 +108,7 @@ void Interfaces::doRead()
    mWlan0Address   = tJsonValue["Wlan0Address"].asString();
    mWlan0Mask      = tJsonValue["Wlan0Mask"].asString();
    mWlan0Gateway   = tJsonValue["Wlan0Gateway"].asString();
+   mShowValidFlag  = tJsonValue["ShowValidFlag"].asBool();
    mShowDhcpFlag   = tJsonValue["ShowDhcpFlag"].asBool();
    mShowAddress    = tJsonValue["ShowAddress"].asString();
    mShowMask       = tJsonValue["ShowMask"].asString();

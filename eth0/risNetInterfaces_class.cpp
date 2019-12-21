@@ -54,7 +54,7 @@ void Interfaces::doWrite()
    tJsonValue["Eth0Address"] = mEth0Address;
    tJsonValue["Eth0Mask"] = mEth0Mask;
    tJsonValue["Wlan0Address"] = mWlan0Address;
-   tJsonValue["WLan0Mask"] = mWlan0Mask;
+   tJsonValue["Wlan0Mask"] = mWlan0Mask;
    tJsonValue["Gateway"] = mGateway;
 
    // Write to json file.
@@ -106,7 +106,7 @@ void Interfaces::show(int aPF)
    Prn::print(aPF, "Eth0Address             %s", mEth0Address.c_str());
    Prn::print(aPF, "Eth0Mask                %s", mEth0Mask.c_str());
    Prn::print(aPF, "Wlan0Address            %s", mWlan0Address.c_str());
-   Prn::print(aPF, "WLan0Mask               %s", mWlan0Mask.c_str());
+   Prn::print(aPF, "Wlan0Mask               %s", mWlan0Mask.c_str());
    Prn::print(aPF, "Gateway                 %s", mGateway.c_str());
 }
 

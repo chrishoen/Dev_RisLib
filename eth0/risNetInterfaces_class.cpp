@@ -22,17 +22,20 @@ Interfaces::Interfaces()
 {
    if (Ris::portableIsWindows())
    {
-      mFilePath = "c:/aaa_cproc/files/eth0.json";
+      mFilePath = "c:/aaa_cproc/files/netinterfaces.json";
    }
    else
    {
-      mFilePath = "/opt/prime/files/eth0.json";
+      mFilePath = "/opt/prime/files/netinterfaces.json";
    }
 
-   mDhcpFlag = false;
-   mAddress = "192.1681.179";
-   mMask = "255.255.255.0";
-   mGateway = "192.168.1.1";
+   mEth0DhcpFlag = false;
+   mWlan0DhcpFlag = false;
+   mEth0Address = "none";
+   mEth0Mask = "none";
+   mWlan0Address = "none";
+   mWlan0Mask = "none";
+   mGateway = "none";
 }
 
 //******************************************************************************
@@ -46,9 +49,12 @@ void Interfaces::doWrite()
    Json::Value tJsonValue;
 
    // Copy members.
-   tJsonValue["DhcpFlag"] = mDhcpFlag;
-   tJsonValue["Address"] = mAddress;
-   tJsonValue["Mask"] = mMask;
+   tJsonValue["Eth0DhcpFlag"] = mEth0DhcpFlag;
+   tJsonValue["Wlan0DhcpFlag"] = mWlan0DhcpFlag;
+   tJsonValue["Eth0Address"] = mEth0Address;
+   tJsonValue["Eth0Mask"] = mEth0Mask;
+   tJsonValue["Wlan0Address"] = mWlan0Address;
+   tJsonValue["WLan0Mask"] = mWlan0Mask;
    tJsonValue["Gateway"] = mGateway;
 
    // Write to json file.
@@ -76,9 +82,12 @@ void Interfaces::doRead()
       mFilePath);           // Input
 
    // Copy members.
-   mDhcpFlag = tJsonValue["DhcpFlag"].asBool();
-   mAddress = tJsonValue["Address"].asString();
-   mMask = tJsonValue["Mask"].asString();
+   mEth0DhcpFlag = tJsonValue["Eth0DhcpFlag"].asBool();
+   mWlan0DhcpFlag = tJsonValue["Wlan0DhcpFlag"].asBool();
+   mEth0Address = tJsonValue["Eth0Address"].asString();
+   mEth0Mask = tJsonValue["Eth0Mask"].asString();
+   mWlan0Address = tJsonValue["Wlan0Address"].asString();
+   mWlan0Mask = tJsonValue["Wlan0Mask"].asString();
    mGateway = tJsonValue["Gateway"].asString();
 }
 
@@ -92,9 +101,12 @@ void Interfaces::show(int aPF)
    Prn::print(aPF, "");
    Prn::print(aPF, "FilePath %s", mFilePath.c_str());
 
-   Prn::print(aPF, "DhcpFlag                %s", my_string_from_bool(mDhcpFlag));
-   Prn::print(aPF, "Address                 %s", mAddress.c_str());
-   Prn::print(aPF, "Mask                    %s", mMask.c_str());
+   Prn::print(aPF, "Eth0DhcpFlag            %s", my_string_from_bool(mEth0DhcpFlag));
+   Prn::print(aPF, "Wlan0DhcpFlag           %s", my_string_from_bool(mWlan0DhcpFlag));
+   Prn::print(aPF, "Eth0Address             %s", mEth0Address.c_str());
+   Prn::print(aPF, "Eth0Mask                %s", mEth0Mask.c_str());
+   Prn::print(aPF, "Wlan0Address            %s", mWlan0Address.c_str());
+   Prn::print(aPF, "WLan0Mask               %s", mWlan0Mask.c_str());
    Prn::print(aPF, "Gateway                 %s", mGateway.c_str());
 }
 

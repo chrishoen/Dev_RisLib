@@ -18,11 +18,11 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class provides support for debian linux eth0. It provides getting
-// info on eth0 (address, mask, gateway, etc) and it provides the ability
-// to set configuration for eth0. It obtains network settings and stores 
-// them in a json file. It provides the abilty to read the settings from
-// the json file and set the network settings accordingly.
+// This class provides support for debian linux eth0 and wlan0. It provides
+// getting info on eth0 and wlan0 (address, mask, gateway, etc) and it provides
+// the ability to set configuration for them. It obtains network settings and
+// stores them in a json file. It provides the abilty to read the settings
+// from the json file and set the network settings accordingly.
 
 class Interfaces
 {
@@ -36,12 +36,17 @@ public:
    // Json file path.
    std::string mFilePath;
 
-   // True if dhcp is enabled for eth0.
-   bool mDhcpFlag;
+   // True if dhcp is enabled.
+   bool mEth0DhcpFlag;
+   bool mWlan0DhcpFlag;
 
-   // Network settings for eth0.
-   std::string mAddress;
-   std::string mMask;
+   // Network address and mask for eth0 and wlan0.
+   std::string mEth0Address;
+   std::string mEth0Mask;
+   std::string mWlan0Address;
+   std::string mWlan0Mask;
+
+   // Network gateway address.
    std::string mGateway;
 
    //***************************************************************************
@@ -77,8 +82,9 @@ public:
    // Methods.
 
    // Get the current network settings. Sub functions.
-   void doGetNetsettings1();
-   void doGetNetsettings2();
+   void doGetNetsettingsEth0();
+   void doGetNetsettingsWLan0();
+   void doGetNetsettingsGateway();
 
    //***************************************************************************
    //***************************************************************************

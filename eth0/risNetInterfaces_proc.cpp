@@ -7,7 +7,7 @@
 #include "risFileFunctions.h"
 #include "risSystemCalls.h"
 
-#include "risNetEth0.h"
+#include "risNetInterfaces.h"
 
 namespace Ris
 {
@@ -19,7 +19,7 @@ namespace Net
 //******************************************************************************
 // Get the current network settings.
 
-void Eth0::doGetNetsettings()
+void Interfaces::doGetNetsettings()
 {
    doGetNetsettings1();
    doGetNetsettings2();
@@ -30,7 +30,7 @@ void Eth0::doGetNetsettings()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Eth0::doGetNetsettings1()
+void Interfaces::doGetNetsettings1()
 {
    // Execute system command into a response string list.
    // An example response is:
@@ -67,7 +67,7 @@ void Eth0::doGetNetsettings1()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Eth0::doGetNetsettings2()
+void Interfaces::doGetNetsettings2()
 {
    // Execute system command into a response string list.
    // An example response is:

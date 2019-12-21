@@ -24,7 +24,7 @@ namespace Net
 // them in a json file. It provides the abilty to read the settings from
 // the json file and set the network settings accordingly.
 
-class Eth0
+class Interfaces
 {
 public:
 
@@ -50,7 +50,7 @@ public:
    // Methods:
 
    // Constructor.
-   Eth0();
+   Interfaces();
 
    //***************************************************************************
    //***************************************************************************

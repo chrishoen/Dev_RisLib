@@ -6,7 +6,7 @@
 #include "json.h"
 #include "risFileFunctions.h"
 
-#include "risNetEth0.h"
+#include "risNetInterfaces.h"
 
 namespace Ris
 {
@@ -18,7 +18,7 @@ namespace Net
 //******************************************************************************
 // Constructor
 
-Eth0::Eth0()
+Interfaces::Interfaces()
 {
    if (Ris::portableIsWindows())
    {
@@ -40,7 +40,7 @@ Eth0::Eth0()
 //******************************************************************************
 // Write to the json file.
 
-void Eth0::doWrite()
+void Interfaces::doWrite()
 {
    // Json variables.
    Json::Value tJsonValue;
@@ -62,7 +62,7 @@ void Eth0::doWrite()
 //******************************************************************************
 // Read from the json file.
 
-void Eth0::doRead()
+void Interfaces::doRead()
 {
    // Json variables.
    Json::Value tJsonValue;
@@ -87,7 +87,7 @@ void Eth0::doRead()
 //******************************************************************************
 // Show.
 
-void Eth0::show(int aPF)
+void Interfaces::show(int aPF)
 {
    Prn::print(aPF, "");
    Prn::print(aPF, "FilePath %s", mFilePath.c_str());

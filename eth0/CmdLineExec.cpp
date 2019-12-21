@@ -2,7 +2,7 @@
 
 #include "risFileFunctions.h"
 #include "risSystemCalls.h"
-#include "risNetEth0.h"
+#include "risNetInterfaces.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -200,10 +200,10 @@ void CmdLineExec::executeGo9(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo10(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Net::Eth0 tEth0;
-   tEth0.doGetNetsettings();
-   tEth0.doWrite();
-   tEth0.show();
+   Ris::Net::Interfaces tInterfaces;
+   tInterfaces.doGetNetsettings();
+   tInterfaces.doWrite();
+   tInterfaces.show();
 }
 
 //******************************************************************************

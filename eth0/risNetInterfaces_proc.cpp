@@ -21,10 +21,38 @@ namespace Net
 
 void Interfaces::doGetNetsettings()
 {
-   doGetNetsettingsEth0();
-   doGetNetsettingsWlan0();
+   // Get the network settings for eth0 and wlan0. These subfunctions
+   // set the member variables associated with the two interfaces.
+   doGetNetsettingsEth0Address();
+   doGetNetsettingsWlan0Address();
    doGetNetsettingsEth0Gateway();
    doGetNetsettingsWlan0Gateway();
+
+   // Defaults.
+   mShowValidFlag = false;
+   mShowDhcpFlag = false;
+   mShowAddress = "none";
+   mShowMask = "none";
+   mShowGateway = "none";
+
+   // Set the show member variables according to the  member variables 
+   // for the two interfaces. eth0 takes precedence over wlan0.
+   if (mEth0ValidFlag)
+   {
+      mShowValidFlag = mEth0ValidFlag;
+      mShowDhcpFlag = mEth0DhcpFlag;
+      mShowAddress = mEth0Address;
+      mShowMask = mEth0Mask;
+      mShowGateway = mEth0Gateway;
+   }
+   else if (mWlan0ValidFlag)
+   {
+      mShowValidFlag = mWlan0ValidFlag;
+      mShowDhcpFlag = mWlan0DhcpFlag;
+      mShowAddress = mWlan0Address;
+      mShowMask = mWlan0Mask;
+      mShowGateway = mWlan0Gateway;
+   }
 }
 
 //******************************************************************************
@@ -32,7 +60,7 @@ void Interfaces::doGetNetsettings()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Interfaces::doGetNetsettingsEth0()
+void Interfaces::doGetNetsettingsEth0Address()
 {
    // Do this first.
    mEth0Address = "none";
@@ -76,7 +104,7 @@ void Interfaces::doGetNetsettingsEth0()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Interfaces::doGetNetsettingsWlan0()
+void Interfaces::doGetNetsettingsWlan0Address()
 {
    // Do this first.
    mWlan0Address = "none";

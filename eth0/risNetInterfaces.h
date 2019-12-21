@@ -50,6 +50,15 @@ public:
    std::string mWlan0Mask;
    std::string mWlan0Gateway;
 
+   // Network interface variables to show.
+   // Decide between eth0 and wlan0.
+
+   bool mShowValidFlag;
+   bool mShowDhcpFlag;
+   std::string mShowAddress;
+   std::string mShowMask;
+   std::string mShowGateway;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -83,8 +92,8 @@ public:
    // Methods.
 
    // Get the current network settings. Sub functions.
-   void doGetNetsettingsEth0();
-   void doGetNetsettingsWlan0();
+   void doGetNetsettingsEth0Address();
+   void doGetNetsettingsWlan0Address();
    void doGetNetsettingsEth0Gateway();
    void doGetNetsettingsWlan0Gateway();
 

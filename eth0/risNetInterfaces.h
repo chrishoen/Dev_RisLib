@@ -50,15 +50,6 @@ public:
    std::string mWlan0Mask;
    std::string mWlan0Gateway;
 
-   // Network interface variables to show.
-   // Decide between eth0 and wlan0.
-
-   bool mShowValidFlag;
-   bool mShowDhcpFlag;
-   std::string mShowAddress;
-   std::string mShowMask;
-   std::string mShowGateway;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

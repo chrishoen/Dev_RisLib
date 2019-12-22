@@ -27,32 +27,6 @@ void Interfaces::doGetNetsettings()
    doGetNetsettingsWlan0Address();
    doGetNetsettingsEth0Gateway();
    doGetNetsettingsWlan0Gateway();
-
-   // Defaults.
-   mShowValidFlag = false;
-   mShowDhcpFlag = false;
-   mShowAddress = "none";
-   mShowMask = "none";
-   mShowGateway = "none";
-
-   // Set the show member variables according to the  member variables 
-   // for the two interfaces. eth0 takes precedence over wlan0.
-   if (mEth0ValidFlag)
-   {
-      mShowValidFlag = mEth0ValidFlag;
-      mShowDhcpFlag = mEth0DhcpFlag;
-      mShowAddress = mEth0Address;
-      mShowMask = mEth0Mask;
-      mShowGateway = mEth0Gateway;
-   }
-   else if (mWlan0ValidFlag)
-   {
-      mShowValidFlag = mWlan0ValidFlag;
-      mShowDhcpFlag = mWlan0DhcpFlag;
-      mShowAddress = mWlan0Address;
-      mShowMask = mWlan0Mask;
-      mShowGateway = mWlan0Gateway;
-   }
 }
 
 //******************************************************************************

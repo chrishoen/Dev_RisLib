@@ -39,11 +39,6 @@ Interfaces::Interfaces()
    mWlan0Address = "none";
    mWlan0Mask = "none";
    mWlan0Gateway = "none";
-   mShowValidFlag = false;
-   mShowDhcpFlag = false;
-   mShowAddress = "none";
-   mShowMask = "none";
-   mShowGateway = "none";
 }
 
 //******************************************************************************
@@ -67,11 +62,6 @@ void Interfaces::doWrite()
    tJsonValue["Wlan0Address"]   = mWlan0Address;
    tJsonValue["Wlan0Mask"]      = mWlan0Mask;
    tJsonValue["Wlan0Gateway"]   = mWlan0Gateway;
-   tJsonValue["ShowValidFlag"]  = mShowValidFlag;
-   tJsonValue["ShowDhcpFlag"]   = mShowDhcpFlag;
-   tJsonValue["ShowAddress"]    = mShowAddress;
-   tJsonValue["ShowMask"]       = mShowMask;
-   tJsonValue["ShowGateway"]    = mShowGateway;
 
    // Write to json file.
    Ris::doWriteJsonToFile(
@@ -108,11 +98,6 @@ void Interfaces::doRead()
    mWlan0Address   = tJsonValue["Wlan0Address"].asString();
    mWlan0Mask      = tJsonValue["Wlan0Mask"].asString();
    mWlan0Gateway   = tJsonValue["Wlan0Gateway"].asString();
-   mShowValidFlag  = tJsonValue["ShowValidFlag"].asBool();
-   mShowDhcpFlag   = tJsonValue["ShowDhcpFlag"].asBool();
-   mShowAddress    = tJsonValue["ShowAddress"].asString();
-   mShowMask       = tJsonValue["ShowMask"].asString();
-   mShowGateway    = tJsonValue["ShowGateway"].asString();
 }
 
 //******************************************************************************
@@ -135,11 +120,6 @@ void Interfaces::show(int aPF)
    Prn::print(aPF, "Wlan0Address            %s", mWlan0Address.c_str());
    Prn::print(aPF, "Wlan0Mask               %s", mWlan0Mask.c_str());
    Prn::print(aPF, "Wlan0Gateway            %s", mWlan0Gateway.c_str());
-   Prn::print(aPF, "ShowValidFlag           %s", my_string_from_bool(mShowValidFlag));
-   Prn::print(aPF, "ShowDhcpFlag            %s", my_string_from_bool(mShowDhcpFlag));
-   Prn::print(aPF, "ShowAddress             %s", mShowAddress.c_str());
-   Prn::print(aPF, "ShowMask                %s", mShowMask.c_str());
-   Prn::print(aPF, "ShowGateway             %s", mShowGateway.c_str());
 }
 
 //******************************************************************************

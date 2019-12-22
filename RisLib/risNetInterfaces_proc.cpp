@@ -4,8 +4,11 @@
 #include "stdafx.h"
 
 #include "json.h"
+#include "risPortableCalls.h"
 #include "risFileFunctions.h"
 #include "risSystemCalls.h"
+#include "my_functions.h"
+#include "prnPrint.h"
 
 #include "risNetInterfaces.h"
 

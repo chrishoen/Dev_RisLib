@@ -3,6 +3,7 @@
 #include "risFileFunctions.h"
 #include "risSystemCalls.h"
 #include "risNetInterfaces.h"
+#include "risSockets.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -173,6 +174,9 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, "192.168.1.1");
+   bool tPass = Ris::Sockets::isIpAddressValid(aCmd->argString(1));
+   Prn::print(0, "tPass  $ %s", my_string_from_bool(tPass));
 }
 
 //******************************************************************************

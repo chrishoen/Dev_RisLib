@@ -42,6 +42,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO11"))  executeGo11(aCmd);
    if (aCmd->isCmd("GO12"))  executeGo12(aCmd);
    if (aCmd->isCmd("GO13"))  executeGo13(aCmd);
+   if (aCmd->isCmd("GO20"))  executeGo20(aCmd);
+   if (aCmd->isCmd("GO21"))  executeGo21(aCmd);
+   if (aCmd->isCmd("GO22"))  executeGo22(aCmd);
+   if (aCmd->isCmd("GO23"))  executeGo23(aCmd);
    if (aCmd->isCmd("show"))  executeShow(aCmd);
 }
 
@@ -202,7 +206,7 @@ void CmdLineExec::executeGo9(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo10(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::Interfaces tInterfaces;
-   tInterfaces.doGetNetsettings();
+   tInterfaces.doGetNetSettings();
    tInterfaces.doWrite();
    tInterfaces.show();
 }
@@ -235,10 +239,46 @@ void CmdLineExec::executeGo13(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeGo20(Ris::CmdLineCmd* aCmd)
+{
+   Ris::Net::Interfaces tInterfaces;
+   tInterfaces.doRead();
+   tInterfaces.show();
+   tInterfaces.doSetNetSettingsEth0_static();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo23(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::Interfaces tInterfaces;
-   tInterfaces.doGetNetsettings();
+   tInterfaces.doGetNetSettings();
    tInterfaces.doRead();
    tInterfaces.show();
 }

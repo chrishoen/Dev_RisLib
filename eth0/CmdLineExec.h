@@ -66,6 +66,10 @@ public:
    void executeGo11(Ris::CmdLineCmd* aCmd);
    void executeGo12(Ris::CmdLineCmd* aCmd);
    void executeGo13(Ris::CmdLineCmd* aCmd);
+   void executeGo20(Ris::CmdLineCmd* aCmd);
+   void executeGo21(Ris::CmdLineCmd* aCmd);
+   void executeGo22(Ris::CmdLineCmd* aCmd);
+   void executeGo23(Ris::CmdLineCmd* aCmd);
    void executeShow(Ris::CmdLineCmd* aCmd);
 };
 

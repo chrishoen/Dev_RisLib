@@ -110,7 +110,7 @@ std::string doGetRandomFileName()
 // Write a json value to a file.
 
 void doWriteJsonToFile(
-   Json::Value& aJsonValue,    // Input
+   Json::Value& aJsonValue,          // Input
    const std::string& aFilePath)     // Input
 {
    // Write the json value to the output file.
@@ -126,7 +126,7 @@ void doWriteJsonToFile(
 // Read a json value from a file.
 
 void doReadJsonFromFile(
-   Json::Value& aJsonValue,    // Output
+   Json::Value& aJsonValue,          // Output
    const std::string& aFilePath)     // Input
 {
    // Read the json value from the input file.

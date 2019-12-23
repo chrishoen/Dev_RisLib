@@ -75,7 +75,7 @@ public:
    // Methods.
 
    // Get the current network settings.
-   void doGetNetsettings();
+   void doGetNetSettings();
 
    //***************************************************************************
    //***************************************************************************
@@ -83,10 +83,10 @@ public:
    // Methods.
 
    // Get the current network settings. Sub functions.
-   void doGetNetsettingsEth0Address();
-   void doGetNetsettingsWlan0Address();
-   void doGetNetsettingsEth0Gateway();
-   void doGetNetsettingsWlan0Gateway();
+   void doGetNetSettingsEth0Address();
+   void doGetNetSettingsWlan0Address();
+   void doGetNetSettingsEth0Gateway();
+   void doGetNetSettingsWlan0Gateway();
 
    //***************************************************************************
    //***************************************************************************
@@ -94,7 +94,9 @@ public:
    // Methods.
 
    // Set the network settings for eth0.
-   void doSetNetsettingsEth0();
+   void doSetNetSettingsEth0();
+   void doSetNetSettingsEth0_dhcp();
+   void doSetNetSettingsEth0_static();
 
    //***************************************************************************
    //***************************************************************************

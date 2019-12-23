@@ -22,14 +22,14 @@ namespace Net
 //******************************************************************************
 // Get the current network settings.
 
-void Interfaces::doGetNetsettings()
+void Interfaces::doGetNetSettings()
 {
    // Get the network settings for eth0 and wlan0. These subfunctions
    // set the member variables associated with the two interfaces.
-   doGetNetsettingsEth0Address();
-   doGetNetsettingsWlan0Address();
-   doGetNetsettingsEth0Gateway();
-   doGetNetsettingsWlan0Gateway();
+   doGetNetSettingsEth0Address();
+   doGetNetSettingsWlan0Address();
+   doGetNetSettingsEth0Gateway();
+   doGetNetSettingsWlan0Gateway();
 }
 
 //******************************************************************************
@@ -37,7 +37,7 @@ void Interfaces::doGetNetsettings()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Interfaces::doGetNetsettingsEth0Address()
+void Interfaces::doGetNetSettingsEth0Address()
 {
    // Do this first.
    mEth0Address = "none";
@@ -81,7 +81,7 @@ void Interfaces::doGetNetsettingsEth0Address()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Interfaces::doGetNetsettingsWlan0Address()
+void Interfaces::doGetNetSettingsWlan0Address()
 {
    // Do this first.
    mWlan0Address = "none";
@@ -125,7 +125,7 @@ void Interfaces::doGetNetsettingsWlan0Address()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Interfaces::doGetNetsettingsEth0Gateway()
+void Interfaces::doGetNetSettingsEth0Gateway()
 {
    // Do this first.
    mEth0Gateway = "none";
@@ -174,7 +174,7 @@ void Interfaces::doGetNetsettingsEth0Gateway()
 //******************************************************************************
 // Get the current network settings. Sub function.
 
-void Interfaces::doGetNetsettingsWlan0Gateway()
+void Interfaces::doGetNetSettingsWlan0Gateway()
 {
    // Do this first.
    mWlan0Gateway = "none";

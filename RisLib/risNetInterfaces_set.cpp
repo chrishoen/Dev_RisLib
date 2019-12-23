@@ -48,11 +48,11 @@ void Interfaces::doSetNetSettingsEth0_static()
 {
    // Read the json value from the input file.
    std::ifstream tInputFile("/opt/prime/special/interfaces_static");
-   std::ofstream tOutputFile("/opt/prime/special/interfaces_static_tmp");
+   std::ofstream tOutputFile("/opt/prime/special/tmp_interfaces_static");
    std::string tLine;
    while (std::getline(tInputFile, tLine))
    {
-      tOutputFile << tLine;
+      tOutputFile << tLine << std::endl;
    }
    tInputFile.close();
    tOutputFile.close();

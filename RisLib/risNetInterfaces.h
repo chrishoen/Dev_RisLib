@@ -77,11 +77,6 @@ public:
    // Get the current network settings.
    void doGetNetSettings();
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
    // Get the current network settings. Sub functions.
    void doGetNetSettingsEth0Address();
    void doGetNetSettingsWlan0Address();
@@ -93,10 +88,20 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Set the network settings for eth0.
+   // Set the network settings for eth0 from the member variables.
    void doSetNetSettingsEth0();
    void doSetNetSettingsEth0_dhcp();
    void doSetNetSettingsEth0_static();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Set a member variable. Return true if successful.
+   bool setEth0Address(std::string aString);
+   bool setEth0Mask(std::string aString);
+   bool setEth0Gateway(std::string aString);
 
    //***************************************************************************
    //***************************************************************************

@@ -5,6 +5,7 @@
 
 #include "json.h"
 #include "risPortableCalls.h"
+#include "risSockets.h"
 #include "risFileFunctions.h"
 #include "risSystemCalls.h"
 #include "my_functions.h"
@@ -93,6 +94,48 @@ void Interfaces::doSetNetSettingsEth0_static()
    tOutputFile.close();
 }
 
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set a member variable. Return true if successful.
+
+bool Interfaces::setEth0Address(std::string aString)
+{
+   if (Ris::Sockets::isIpAddressValid(aString.c_str()))
+   {
+      mEth0Address = aString;
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+bool Interfaces::setEth0Mask(std::string aString)
+{
+   if (Ris::Sockets::isIpAddressValid(aString.c_str()))
+   {
+      mEth0Mask = aString;
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+bool Interfaces::setEth0Gateway(std::string aString)
+{
+   if (Ris::Sockets::isIpAddressValid(aString.c_str()))
+   {
+      mEth0Gateway = aString;
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
 
 //******************************************************************************
 //******************************************************************************

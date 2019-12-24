@@ -90,6 +90,9 @@ public:
 
    // Set the network settings for eth0 from the member variables.
    void doSetNetSettingsEth0();
+
+   // Set the network settings for eth0 from the member variables.
+   // Sub functions.
    void doSetNetSettingsEth0_dhcp();
    void doSetNetSettingsEth0_static();
 

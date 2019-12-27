@@ -12,6 +12,7 @@ my_special1()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("eth0")
+add_subdirectory ("ThreadSynch")
 return()
 
 add_subdirectory ("ByteContent")

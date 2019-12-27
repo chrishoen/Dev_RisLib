@@ -23,10 +23,10 @@ int main(int argc,char** argv)
    // Launch threads
 
    gThread1 = new Thread1;
-   gThread1->launchThread();
+// gThread1->launchThread();
 
    gTimerThread = new TimerThread;
-   gTimerThread->launchThread();
+// gTimerThread->launchThread();
 
    //--------------------------------------------------------------------
    // Start user command line executive,

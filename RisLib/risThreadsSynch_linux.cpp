@@ -218,7 +218,13 @@ void MutexSemaphore::unlock()
 class NamedMutex::Specific
 {
 public:
-   sem_t mHandle;
+   bool   mValidFlag;
+   sem_t* mHandle;
+   Specific()
+   {
+      mValidFlag = false;
+      mHandle = 0;
+   }
 };
 
 //******************************************************************************
@@ -236,29 +242,39 @@ NamedMutex::NamedMutex(const char* aName)
 
 void NamedMutex::initialize(const char* aName)
 {
-   mSpecific->mHandle = *sem_open(aName, O_CREAT, O_RDWR, 1);
+   mSpecific->mHandle = sem_open(aName, O_CREAT, O_RDWR, 1);
+   if (mSpecific->mHandle != SEM_FAILED)
+   {
+      mSpecific->mValidFlag = true;
+   }
+   else
+   {
+      printf("NamedMutex failed");
+      mSpecific->mValidFlag = false;
+   }
+
 }
 
 //******************************************************************************
 
 NamedMutex::~NamedMutex()
 {
-   sem_close(&mSpecific->mHandle);
+   sem_close(mSpecific->mHandle);
    delete mSpecific;
-}
-
-//******************************************************************************
-
-void NamedMutex::unlock()
-{
-   sem_post(&mSpecific->mHandle);
 }
 
 //******************************************************************************
 
 void NamedMutex::lock()
 {
-   sem_wait(&mSpecific->mHandle);
+   sem_wait(mSpecific->mHandle);
+}
+
+//******************************************************************************
+
+void NamedMutex::unlock()
+{
+   sem_post(mSpecific->mHandle);
 }
 
 //******************************************************************************

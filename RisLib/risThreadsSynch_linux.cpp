@@ -8,6 +8,8 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
@@ -207,6 +209,56 @@ void MutexSemaphore::lock()
 void MutexSemaphore::unlock()
 {
    pthread_mutex_unlock(&mSpecific->mMutex);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+class NamedMutex::Specific
+{
+public:
+   sem_t mHandle;
+};
+
+//******************************************************************************
+
+NamedMutex::NamedMutex()
+{
+   mSpecific = new Specific;
+}
+
+NamedMutex::NamedMutex(const char* aName)
+{
+   mSpecific = new Specific;
+   initialize(aName);
+}
+
+void NamedMutex::initialize(const char* aName)
+{
+   mSpecific->mHandle = *sem_open(aName, O_CREAT, O_RDWR, 1);
+}
+
+//******************************************************************************
+
+NamedMutex::~NamedMutex()
+{
+   sem_close(&mSpecific->mHandle);
+   delete mSpecific;
+}
+
+//******************************************************************************
+
+void NamedMutex::unlock()
+{
+   sem_post(&mSpecific->mHandle);
+}
+
+//******************************************************************************
+
+void NamedMutex::lock()
+{
+   sem_wait(&mSpecific->mHandle);
 }
 
 //******************************************************************************

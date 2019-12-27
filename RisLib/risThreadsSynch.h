@@ -87,6 +87,28 @@ protected:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This encapsulates a named mutex semaphore.
+
+class NamedMutex
+{
+public:
+
+   NamedMutex();                        // Default constructor
+   NamedMutex(const char* aName);       // Create the mutex semaphore
+   void initialize(const char* aName);  // Create the mutex semaphore
+   virtual ~NamedMutex();               // Delete the mutex semaphore
+
+   void lock();                         // Lock the mutex
+   void unlock();                       // Unlock the mutex
+
+protected:
+   class Specific;
+   Specific* mSpecific;
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This encapsulates a critical section.
 
 class CriticalSection

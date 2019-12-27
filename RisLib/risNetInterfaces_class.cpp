@@ -128,5 +128,20 @@ void Interfaces::show(int aPF)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Show.
+
+void Interfaces::showEth0(int aPF)
+{
+   Prn::print(aPF, "");
+   Prn::print(aPF, "Eth0ValidFlag           %s", my_string_from_bool(mEth0ValidFlag));
+   Prn::print(aPF, "Eth0DhcpFlag            %s", my_string_from_bool(mEth0DhcpFlag));
+   Prn::print(aPF, "Eth0Address             %s", mEth0Address.c_str());
+   Prn::print(aPF, "Eth0Mask                %s", mEth0Mask.c_str());
+   Prn::print(aPF, "Eth0Gateway             %s", mEth0Gateway.c_str());
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace

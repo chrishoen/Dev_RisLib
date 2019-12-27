@@ -114,6 +114,7 @@ public:
 
    // Support.
    void show(int aPrintFilter = 0);
+   void showEth0(int aPrintFilter = 0);
 };
 
 //******************************************************************************

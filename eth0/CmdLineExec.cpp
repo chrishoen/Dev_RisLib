@@ -248,6 +248,7 @@ void CmdLineExec::executeGo20(Ris::CmdLineCmd* aCmd)
    Ris::Net::Interfaces tInterfaces;
    tInterfaces.doRead();
    tInterfaces.doSetNetSettingsEth0_dhcp();
+   Prn::print(0, "done");
 }
 
 //******************************************************************************
@@ -262,6 +263,7 @@ void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
    tInterfaces.setEth0Mask("255.255.252.0");
    tInterfaces.setEth0Gateway("10.120.0.3");
    tInterfaces.doSetNetSettingsEth0_static();
+   Prn::print(0, "done");
 }
 
 //******************************************************************************

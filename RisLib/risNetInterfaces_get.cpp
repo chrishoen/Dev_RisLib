@@ -30,6 +30,7 @@ void Interfaces::doGetNetSettings()
    doGetNetSettingsWlan0Address();
    doGetNetSettingsEth0Gateway();
    doGetNetSettingsWlan0Gateway();
+   doGetNetSettingsEth0DhcpFlag();
 }
 
 //******************************************************************************
@@ -215,6 +216,37 @@ void Interfaces::doGetNetSettingsWlan0Gateway()
       if (tParse[i] == "via") mWlan0Gateway = tParse[i + 1];
       if (tParse[i] == "dhcp") mWlan0DhcpFlag = true;
    }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Get the current network settings. Sub function.
+
+void Interfaces::doGetNetSettingsEth0DhcpFlag()
+{
+   // Do this first.
+   mEth0DhcpFlag = false;
+
+   // Input and output files.
+   std::ifstream tInputFile("/etc/network/interfaces");
+
+   // String variables.
+   std::string tInputLine;
+   size_t tFound = 0;
+
+   // Search the interfaces file for dhcp. 
+   while (std::getline(tInputFile, tInputLine))
+   {
+      // Find and replace address tag. 
+      tFound = tInputLine.find("dhcp");
+      if (tFound != std::string::npos)
+      {
+         mEth0DhcpFlag = tInputLine[0] != '#';
+         break;
+      }
+   }
+   tInputFile.close();
 }
 
 //******************************************************************************

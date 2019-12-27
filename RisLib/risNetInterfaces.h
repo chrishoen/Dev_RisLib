@@ -82,6 +82,7 @@ public:
    void doGetNetSettingsWlan0Address();
    void doGetNetSettingsEth0Gateway();
    void doGetNetSettingsWlan0Gateway();
+   void doGetNetSettingsEth0DhcpFlag();
 
    //***************************************************************************
    //***************************************************************************

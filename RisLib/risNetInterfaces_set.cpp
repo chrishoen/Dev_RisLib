@@ -36,8 +36,10 @@ void Interfaces::doSetNetSettingsEth0()
 void Interfaces::doSetNetSettingsEth0_dhcp()
 {
    doSystemCommand("cp /opt/prime/special/interfaces_dhcp /etc/network/interfaces");
-   doSystemCommand("ip link set dev eth0 down");
-   doSystemCommand("ip link set dev eth0 up");
+// doSystemCommand("ip link set dev eth0 down");
+// doSystemCommand("ip link set dev eth0 up");
+   doSystemCommand("ifdown --force eth0");
+   doSystemCommand("ifup --force eth0");
 }
 
 //******************************************************************************
@@ -92,6 +94,13 @@ void Interfaces::doSetNetSettingsEth0_static()
    }
    tInputFile.close();
    tOutputFile.close();
+
+   // Copy the temp file and set the address.
+   doSystemCommand("cp /opt/prime/special/tmp_interfaces_static /etc/network/interfaces");
+// doSystemCommand("ip link set dev eth0 down");
+// doSystemCommand("ip link set dev eth0 up");
+   doSystemCommand("ifdown --force eth0");
+   doSystemCommand("ifup --force eth0");
 }
 
 

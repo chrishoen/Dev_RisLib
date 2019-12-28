@@ -179,7 +179,11 @@ NamedMutex::NamedMutex()
 // Create the mutex. Call this if using default constructor.
 void NamedMutex::initialize(const char* aName)
 {
-   mSpecific->mHandle = CreateMutex(NULL, FALSE, aName);
+   mSpecific->mHandle = CreateMutexA(NULL, FALSE, aName);
+   if (mSpecific->mHandle == 0)
+   {
+      printf("NamedMutex::initialize error101\n");
+   }
 }
 
 // Destructor. Delete the mutex.

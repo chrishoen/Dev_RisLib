@@ -187,7 +187,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Specific implementation variables. pimpl pattern.
+   // Specific implementation variables.
    class Specific;
    Specific* mSpecific;
 

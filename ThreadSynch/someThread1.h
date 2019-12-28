@@ -32,7 +32,6 @@ public:
    void runTest3();
 
    Ris::Threads::BinarySemaphore      mThreadSem;
-   Ris::Threads::ConditionVariable    mConditionVariable;
 };
 
 //******************************************************************************

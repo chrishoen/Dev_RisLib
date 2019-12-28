@@ -54,9 +54,6 @@ void TimerThread::executeOnTimer(int aTimeCount)
    case 1:
       gThread1->mThreadSem.put();
       break;
-   case 2:
-      gThread1->mConditionVariable.wakeUp();
-      break;
    case 3:
       Experiment::send();
       break;

@@ -160,7 +160,7 @@ void MutexSemaphore::unlock()
 class NamedMutex::Specific
 {
 public:
-   SRWLOCK mSRWLock;
+   HANDLE mHandle;
 };
 
 // Constructor. Create the mutex.
@@ -179,23 +179,26 @@ NamedMutex::NamedMutex()
 // Create the mutex. Call this if using default constructor.
 void NamedMutex::initialize(const char* aName)
 {
-   InitializeSRWLock(&mSpecific->mSRWLock);
+   mSpecific->mHandle = CreateMutex(NULL, FALSE, aName);
 }
 
 // Destructor. Delete the mutex.
 NamedMutex::~NamedMutex()
 {
+   CloseHandle(mSpecific->mHandle);
    delete mSpecific;
 }
 
 // Lock the mutex.
 void NamedMutex::lock()
 {
+   WaitForSingleObject(mSpecific->mHandle, INFINITE); 
 }
 
 // Unlock the mutex.
 void NamedMutex::unlock()
 {
+   ReleaseMutex(&mSpecific->mHandle);
 }
 
 //******************************************************************************

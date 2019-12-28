@@ -28,37 +28,36 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Binary semaphore.
+
+// Specific implementation variables.
 class BinarySemaphore::Specific
 {
 public:
    sem_t mHandle;
 };
 
-//******************************************************************************
-
-BinarySemaphore::BinarySemaphore() 
+// Constructor. Create the semaphore.
+BinarySemaphore::BinarySemaphore()
 {
    mSpecific = new Specific;
    sem_init(&mSpecific->mHandle,0,0);
 }
 
-//******************************************************************************
+// Reset the semaphore.
+void BinarySemaphore::reset()
+{
+   sem_init(&mSpecific->mHandle, 0, 0);
+}
 
-BinarySemaphore::~BinarySemaphore() 
+// Destructor. Delete the semaphore.
+BinarySemaphore::~BinarySemaphore()
 {
    sem_destroy(&mSpecific->mHandle);
    delete mSpecific;
 }
 
-//******************************************************************************
-
-void BinarySemaphore::reset()
-{
-   sem_init(&mSpecific->mHandle,0,0);
-}
-
-//******************************************************************************
-
+// Put to the semaphore.
 void BinarySemaphore::put()
 {
    // Get current semaphore count
@@ -72,8 +71,7 @@ void BinarySemaphore::put()
    sem_post(&mSpecific->mHandle);
 }
 
-//******************************************************************************
-
+// Get from the semaphore, block until timeout, return true if no timeout.
 bool BinarySemaphore::get(int aTimeout)
 {
    switch (aTimeout)
@@ -127,44 +125,42 @@ bool BinarySemaphore::get(int aTimeout)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Counting semaphore.
 
+// Specific implementation variables.
 class CountingSemaphore::Specific
 {
 public:
    sem_t mHandle;
 };
 
-//******************************************************************************
-
-CountingSemaphore::CountingSemaphore() 
+// Constructor. Create the semaphore.
+CountingSemaphore::CountingSemaphore()
 {
    mSpecific = new Specific;
    sem_init(&mSpecific->mHandle,0,0);
 }
 
-CountingSemaphore::CountingSemaphore(int aInitial) 
+CountingSemaphore::CountingSemaphore(int aInitial)
 {
    mSpecific = new Specific;
    sem_init(&mSpecific->mHandle,0,aInitial);
 }
 
-//******************************************************************************
-
-CountingSemaphore::~CountingSemaphore() 
+// Destructor. Delete the semaphore.
+CountingSemaphore::~CountingSemaphore()
 {
    sem_destroy(&mSpecific->mHandle);
    delete mSpecific;
 }
 
-//******************************************************************************
-
+// Put to the semaphore.
 void CountingSemaphore::put()
 {
    sem_post(&mSpecific->mHandle);
 }
 
-//******************************************************************************
-
+// Get from the semaphore, block until timeout, return true if no timeout.
 bool CountingSemaphore::get(int timeout)
 {
    return sem_wait(&mSpecific->mHandle) == 0;
@@ -173,38 +169,36 @@ bool CountingSemaphore::get(int timeout)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Mutex semaphore.
 
+// Specific implementation variables.
 class MutexSemaphore::Specific
 {
 public:
    pthread_mutex_t mMutex;
 };
 
-//******************************************************************************
-
-MutexSemaphore::MutexSemaphore() 
+// Constructor. Create the mutex.
+MutexSemaphore::MutexSemaphore()
 {
    mSpecific = new Specific;
    pthread_mutex_init(&mSpecific->mMutex, NULL);
 }
 
-//******************************************************************************
-
-MutexSemaphore::~MutexSemaphore() 
+// Destructor. Delete the mutex.
+MutexSemaphore::~MutexSemaphore()
 {
    pthread_mutex_destroy(&mSpecific->mMutex);
    delete mSpecific;
 }
 
-//******************************************************************************
-
+// Lock the mutex.
 void MutexSemaphore::lock()
 {
    pthread_mutex_lock(&mSpecific->mMutex);
 }
 
-//******************************************************************************
-
+// Unlock the mutex.
 void MutexSemaphore::unlock()
 {
    pthread_mutex_unlock(&mSpecific->mMutex);
@@ -213,7 +207,9 @@ void MutexSemaphore::unlock()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Named mutex.
 
+// Specific implementation variables.
 class NamedMutex::Specific
 {
 public:
@@ -226,19 +222,20 @@ public:
    }
 };
 
-//******************************************************************************
-
-NamedMutex::NamedMutex()
-{
-   mSpecific = new Specific;
-}
-
+// Constructor. Create the mutex.
 NamedMutex::NamedMutex(const char* aName)
 {
    mSpecific = new Specific;
    initialize(aName);
 }
 
+// Constructor. default. Initialize the data structure.
+NamedMutex::NamedMutex()
+{
+   mSpecific = new Specific;
+}
+
+// Create the mutex. Call this if using default constructor.
 void NamedMutex::initialize(const char* aName)
 {
    mSpecific->mHandle = sem_open(aName, O_CREAT, O_RDWR, 1);
@@ -254,23 +251,20 @@ void NamedMutex::initialize(const char* aName)
 
 }
 
-//******************************************************************************
-
+// Destructor. Delete the mutex.
 NamedMutex::~NamedMutex()
 {
    sem_close(mSpecific->mHandle);
    delete mSpecific;
 }
 
-//******************************************************************************
-
+// Lock the mutex.
 void NamedMutex::lock()
 {
    sem_wait(mSpecific->mHandle);
 }
 
-//******************************************************************************
-
+// Unlock the mutex.
 void NamedMutex::unlock()
 {
    sem_post(mSpecific->mHandle);

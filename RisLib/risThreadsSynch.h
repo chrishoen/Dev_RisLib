@@ -33,7 +33,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Specific implementation variables. pimpl pattern.
+   // Specific implementation variables.
    class Specific;
    Specific* mSpecific;
 
@@ -72,7 +72,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Specific implementation variables. pimpl pattern.
+   // Specific implementation variables.
    class Specific;
    Specific* mSpecific;
 
@@ -109,7 +109,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Specific implementation variables. pimpl pattern.
+   // Specific implementation variables.
    class Specific;
    Specific* mSpecific;
 
@@ -118,10 +118,10 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Constructor. Create the semaphore.
+   // Constructor. Create the mutex.
    MutexSemaphore();
 
-   // Destructor. Delete the semaphore.
+   // Destructor. Delete the mutex.
    virtual ~MutexSemaphore();
 
    // Lock the mutex.
@@ -145,7 +145,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Specific implementation variables. pimpl pattern.
+   // Specific implementation variables.
    class Specific;
    Specific* mSpecific;
 

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 
 #include "risProgramTime.h"
+#include "risThreadsThreads.h"
+#include "risThreadsSynch.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -27,17 +29,30 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
-   if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
-   if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
-   if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
-   if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
+   if (aCmd->isCmd("GO1"))  executeGo1(aCmd);
+   if (aCmd->isCmd("GO2"))  executeGo2(aCmd);
+   if (aCmd->isCmd("GO3"))  executeGo3(aCmd);
+   if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
+   if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
+
+   if (aCmd->isCmd("SEMTEST"))  executeSemTest(aCmd);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+void CmdLineExec::executeSemTest(Ris::CmdLineCmd* aCmd)
+{
+   Ris::Threads::NamedMutex tMutex("/mymutex");
+   Prn::print(0, "mutext lock begin");
+   tMutex.lock();
+   Prn::print(0, "mutext lock end");
+   Ris::Threads::threadSleep(10000);
+   Prn::print(0, "mutext unlock begin");
+   tMutex.unlock();
+   Prn::print(0, "mutext unlock end");
+}
 
 //******************************************************************************
 //******************************************************************************

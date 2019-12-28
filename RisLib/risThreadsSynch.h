@@ -1,7 +1,7 @@
 #pragma once
 /*==============================================================================
 This file contains classes that encapsulate standard rtos multithreading
-synchronization constructs. It supplies events, semaphores, and threads.
+synchronization constructs. It supplies events, semaphores, and mutexes.
 The purpose of the classes is to wrap the rtos api thread synchronization
 calls.
 ==============================================================================*/
@@ -28,19 +28,34 @@ class BinarySemaphore
 {
 public:
 
-   BinarySemaphore();            // Creates the semaphore
-   virtual ~BinarySemaphore();   // Deletes the semaphore
-   void reset();                 // Resets the semaphore
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   void put ();                  // Put to the semaphore
-   bool get (int timeout= -1);   // Get from the semaphore, block until timeout,
-                                 // return true if no timeout
-
-   int mStatusCode;              // User status code
-
-protected:
+   // Specific implementation variables. pimpl pattern.
    class Specific;
    Specific* mSpecific;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+   
+   // Constructor. Create the semaphore.
+   BinarySemaphore();
+
+   // Reset the semaphore.
+   void reset();
+
+   // Destructor. Delete the semaphore.
+   virtual ~BinarySemaphore();
+
+   // Put to the semaphore.
+   void put ();
+
+   // Get from the semaphore, block until timeout, return true if no timeout.
+   bool get (int timeout= -1);   
 };
 
 //******************************************************************************
@@ -52,16 +67,32 @@ class CountingSemaphore
 {
 public:
 
-   CountingSemaphore();             // Creates the semaphore
-   CountingSemaphore(int aInitial); // Creates the semaphore
-   virtual ~CountingSemaphore();    // Deletes the semaphore
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   void put ();                     // Put to the semaphore
-   bool get (int timeout= -1);      // Get from the semaphore, block until timeout,
-                                    // return true if no timeout
-protected:
+   // Specific implementation variables. pimpl pattern.
    class Specific;
    Specific* mSpecific;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor. Create the semaphore.
+   CountingSemaphore();
+   CountingSemaphore(int aIntial);
+
+   // Destructor. Delete the semaphore.
+   virtual ~CountingSemaphore();
+
+   // Put to the semaphore.
+   void put();
+
+   // Get from the semaphore, block until timeout, return true if no timeout.
+   bool get(int timeout = -1);
 };
 
 //******************************************************************************
@@ -73,15 +104,31 @@ class MutexSemaphore
 {
 public:
 
-   MutexSemaphore();             // Creates the mutex semaphore
-   virtual ~MutexSemaphore();    // Deletes the mutex semaphore
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   void lock   ();               // Lock the mutex
-   void unlock ();               // Unlock the mutex
-
-protected:
+   // Specific implementation variables. pimpl pattern.
    class Specific;
    Specific* mSpecific;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor. Create the semaphore.
+   MutexSemaphore();
+
+   // Destructor. Delete the semaphore.
+   virtual ~MutexSemaphore();
+
+   // Lock the mutex.
+   void lock   ();
+
+   // Unlock the mutex.
+   void unlock ();
 };
 
 //******************************************************************************
@@ -93,17 +140,37 @@ class NamedMutex
 {
 public:
 
-   NamedMutex();                        // Default constructor
-   NamedMutex(const char* aName);       // Create the mutex semaphore
-   void initialize(const char* aName);  // Create the mutex semaphore
-   virtual ~NamedMutex();               // Delete the mutex semaphore
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   void lock();                         // Lock the mutex
-   void unlock();                       // Unlock the mutex
-
-protected:
+   // Specific implementation variables. pimpl pattern.
    class Specific;
    Specific* mSpecific;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor. Create the mutex.
+   NamedMutex(const char* aName);
+
+   // Constructor. default. Initialize the data structure.
+   NamedMutex();
+
+   // Create the mutex. Call this if using default constructor.
+   void initialize(const char* aName);
+
+   // Destructor. Delete the mutex.
+   virtual ~NamedMutex();
+
+   // Lock the mutex.
+   void lock();
+
+   // Unlock the mutex.
+   void unlock();
 };
 
 //******************************************************************************
@@ -115,38 +182,73 @@ class CriticalSection
 {
 public:
 
-   CriticalSection();
-   virtual ~CriticalSection();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   void enter ();
-   void leave ();
-
-protected:
+   // Specific implementation variables. pimpl pattern.
    class Specific;
    Specific* mSpecific;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor. Create the critical section.
+   CriticalSection();
+
+   // Destructor. Delete the critical section.
+   virtual ~CriticalSection();
+
+   // Enter the critical section.
+   void enter ();
+
+   // Leave the critical section.
+   void leave ();
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This encapsulates a condition variable
+// This encapsulates a condition variable.
 
 class ConditionVariable
 {
 public:
 
-   ConditionVariable();
-   ~ConditionVariable();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   void acquireLock ();
-   void releaseLock ();
-
-   void waitFor ();
-   void wakeUp (int aPredicate = 1);
-
-protected:
+   // Specific implementation variables. pimpl pattern.
    class Specific;
    Specific* mSpecific;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor. Create the condition variable.
+   ConditionVariable();
+
+   // Destructor. Delete the condition variable.
+   ~ConditionVariable();
+
+   // Acquire the lock.
+   void acquireLock ();
+
+   // Release the lock.
+   void releaseLock ();
+
+   // Wait for the condition variable.
+   void waitFor ();
+
+   // Wakeup the condition variable.
+   void wakeUp (int aPredicate = 1);
 };
   
 //******************************************************************************

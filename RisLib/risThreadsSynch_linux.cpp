@@ -40,7 +40,6 @@ BinarySemaphore::BinarySemaphore()
 {
    mSpecific = new Specific;
    sem_init(&mSpecific->mHandle,0,0);
-   mStatusCode=0;
 }
 
 //******************************************************************************

@@ -188,7 +188,7 @@ void NamedMutex::initialize(const char* aName)
       printf("NamedMutex::initialize error101\n");
       return;
    }
-
+   return;
    if (GetLastError() == ERROR_ALREADY_EXISTS)
    {
       printf("NamedMutex::initialize already exists\n");
@@ -231,7 +231,12 @@ void NamedMutex::close()
 // Lock the mutex.
 void NamedMutex::lock()
 {
-   WaitForSingleObject(mSpecific->mHandle, INFINITE); 
+   int tRet = WaitForSingleObject(mSpecific->mHandle, INFINITE);
+   if (tRet != 0)
+   {
+      printf("NamedMutex::WaitForSingleObject error  %lld %d %x\n",
+         (long long)mSpecific->mHandle, GetLastError(), tRet);
+   }
 }
 
 // Unlock the mutex.

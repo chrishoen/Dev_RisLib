@@ -10,7 +10,7 @@
 //******************************************************************************
 
 //const char* gSemName = "Local\\mysem";
-const char* gSemName = "mysem22";
+const char* gSemName = "Local\\mysem22";
 
 CmdLineExec::CmdLineExec()
 {

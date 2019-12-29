@@ -204,6 +204,7 @@ bool NamedMutex::create(const char* aName)
    mSpecific->mHandle = CreateMutexA(NULL, FALSE, aName);
    printf("NamedMutex::create %s %lld %d\n",
       aName, (long long)mSpecific->mHandle, GetLastError());
+// ReleaseMutex(&mSpecific->mHandle);
    return mSpecific->mHandle != 0;
 }
 

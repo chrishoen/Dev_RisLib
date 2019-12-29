@@ -9,6 +9,7 @@ Program command line executive.
 //******************************************************************************
 
 #include "risCmdLineExec.h"
+#include "risThreadsSynch.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -28,6 +29,8 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   Ris::Threads::NamedMutex gMutex;
 
    //***************************************************************************
    //***************************************************************************
@@ -59,7 +62,14 @@ public:
    void executeGo4(Ris::CmdLineCmd* aCmd);
    void executeGo5(Ris::CmdLineCmd* aCmd);
 
-   void executeSemTest(Ris::CmdLineCmd* aCmd);
+   void executeSemTest1(Ris::CmdLineCmd* aCmd);
+   void executeSemTest2(Ris::CmdLineCmd* aCmd);
+
+   void executeSemCreate(Ris::CmdLineCmd* aCmd);
+   void executeSemOpen(Ris::CmdLineCmd* aCmd);
+   void executeSemLock(Ris::CmdLineCmd* aCmd);
+   void executeSemUnlock(Ris::CmdLineCmd* aCmd);
+   void executeSemClose(Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

@@ -162,6 +162,9 @@ public:
 
    // Create the mutex. Call this if using default constructor.
    void initialize(const char* aName);
+   bool create(const char* aName);
+   bool open(const char* aName);
+   void close();
 
    // Destructor. Delete the mutex.
    virtual ~NamedMutex();

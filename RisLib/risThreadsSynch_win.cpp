@@ -181,13 +181,38 @@ NamedMutex::NamedMutex()
 void NamedMutex::initialize(const char* aName)
 {
    mSpecific->mHandle = CreateMutex(NULL, FALSE, aName);
-   printf("NamedMutex::initialize %s %lld %d\n",
+   printf("NamedMutex::create %s %lld %d\n",
       aName, (long long)mSpecific->mHandle, GetLastError());
    if (mSpecific->mHandle == 0)
    {
       printf("NamedMutex::initialize error101\n");
+      return;
    }
-// ReleaseMutex(&mSpecific->mHandle);
+
+   if (GetLastError() == ERROR_ALREADY_EXISTS)
+   {
+      printf("NamedMutex::initialize already exists\n");
+      if (mSpecific->mHandle) CloseHandle(mSpecific->mHandle);
+      mSpecific->mHandle = OpenMutex(MUTEX_ALL_ACCESS, FALSE, aName);
+      printf("NamedMutex::open  %s %lld %d\n",
+         aName, (long long)mSpecific->mHandle, GetLastError());
+   }
+}
+
+bool NamedMutex::create(const char* aName)
+{
+   mSpecific->mHandle = CreateMutexA(NULL, FALSE, aName);
+   printf("NamedMutex::create %s %lld %d\n",
+      aName, (long long)mSpecific->mHandle, GetLastError());
+   return mSpecific->mHandle != 0;
+}
+
+bool NamedMutex::open(const char* aName)
+{
+   mSpecific->mHandle = OpenMutex(MUTEX_ALL_ACCESS, FALSE, aName);
+   printf("NamedMutex::open  %s %lld %d\n",
+      aName, (long long)mSpecific->mHandle, GetLastError());
+   return mSpecific->mHandle != 0;
 }
 
 // Destructor. Delete the mutex.
@@ -195,6 +220,12 @@ NamedMutex::~NamedMutex()
 {
    CloseHandle(mSpecific->mHandle);
    delete mSpecific;
+}
+
+// close the mutex.
+void NamedMutex::close()
+{
+   CloseHandle(mSpecific->mHandle);
 }
 
 // Lock the mutex.

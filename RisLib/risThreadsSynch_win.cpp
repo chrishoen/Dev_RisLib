@@ -8,6 +8,7 @@
 #include "stdafx.h"
 
 #include <windows.h> 
+//#include "synchapi.h"
 
 #include "my_functions.h"
 
@@ -179,11 +180,14 @@ NamedMutex::NamedMutex()
 // Create the mutex. Call this if using default constructor.
 void NamedMutex::initialize(const char* aName)
 {
-   mSpecific->mHandle = CreateMutexA(NULL, FALSE, aName);
+   mSpecific->mHandle = CreateMutex(NULL, FALSE, aName);
+   printf("NamedMutex::initialize %s %lld %d\n",
+      aName, (long long)mSpecific->mHandle, GetLastError());
    if (mSpecific->mHandle == 0)
    {
       printf("NamedMutex::initialize error101\n");
    }
+// ReleaseMutex(&mSpecific->mHandle);
 }
 
 // Destructor. Delete the mutex.

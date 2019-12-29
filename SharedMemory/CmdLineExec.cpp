@@ -45,7 +45,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeSemTest(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
-   Ris::Threads::NamedMutex tMutex("/mymutex");
+   Ris::Threads::NamedMutex tMutex("Global\\mymutex");
    Prn::print(0, "mutext lock begin");
    tMutex.lock();
    Prn::print(0, "mutext lock end");

@@ -329,7 +329,8 @@ void NamedSemaphore::initialize(const char* aName)
 
 bool NamedSemaphore::create(const char* aName)
 {
-   mSpecific->mHandle = CreateSemaphore(NULL, 0, 100000, aName);
+// mSpecific->mHandle = CreateSemaphore(NULL, 0, 100000, aName);
+   mSpecific->mHandle = CreateSemaphore(NULL, 1, 1, aName);
    printf("NamedSemaphore::create %s %lld %d\n",
       aName, (long long)mSpecific->mHandle, GetLastError());
    return mSpecific->mHandle != 0;

@@ -9,11 +9,9 @@
 //******************************************************************************
 //******************************************************************************
 
-//const char* gMutexName = "Local\\mysem";
-const char* gMutexName = "mymutex";
-const char* mSemaphoreName = "mysemaphore";
 
 CmdLineExec::CmdLineExec()
+   : mMutex("mymutex")
 {
 }
 
@@ -42,17 +40,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("ST1"))  executeMutexTest1(aCmd);
    if (aCmd->isCmd("ST2"))  executeMutexTest2(aCmd);
 
-   if (aCmd->isCmd("MutexCreate"))  executeMutexCreate(aCmd);
-   if (aCmd->isCmd("MutexOpen"))    executeMutexOpen(aCmd);
    if (aCmd->isCmd("MutexLock"))    executeMutexLock(aCmd);
    if (aCmd->isCmd("MutexUnlock"))  executeMutexUnlock(aCmd);
-   if (aCmd->isCmd("MutexClose"))   executeMutexClose(aCmd);
-
-   if (aCmd->isCmd("SemCreate"))  executeSemaphoreCreate(aCmd);
-   if (aCmd->isCmd("SemOpen"))    executeSemaphoreOpen(aCmd);
-   if (aCmd->isCmd("SemGet"))     executeSemaphoreGet(aCmd);
-   if (aCmd->isCmd("SemPut"))     executeSemaphorePut(aCmd);
-   if (aCmd->isCmd("SemClose"))   executeSemaphoreClose(aCmd);
 }
 
 //******************************************************************************
@@ -61,61 +50,15 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeMutexTest1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 10);
-   Ris::Threads::NamedMutex tMutex;
-   if(!tMutex.create(gMutexName)) return;
-
-   Prn::print(0, "mutext lock begin");
-   tMutex.lock();
-   Prn::print(0, "mutext lock end");
-
-   for (int i = 0; i < aCmd->argInt(1); i++)
-   {
-      Prn::print(0, "sleep %d", i);
-      Ris::Threads::threadSleep(1000);
-   }
-
-   Prn::print(0, "mutext unlock begin");
-   tMutex.unlock();
-   Prn::print(0, "mutext unlock end");
 }
 
 void CmdLineExec::executeMutexTest2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 10);
-   Ris::Threads::NamedMutex tMutex;
-   if (!tMutex.open(gMutexName)) return;
-
-   Prn::print(0, "mutext lock begin");
-   tMutex.lock();
-   Prn::print(0, "mutext lock end");
-
-   for (int i = 0; i < aCmd->argInt(1); i++)
-   {
-      Prn::print(0, "sleep %d", i);
-      Ris::Threads::threadSleep(1000);
-   }
-
-   Prn::print(0, "mutext unlock begin");
-   tMutex.unlock();
-   Prn::print(0, "mutext unlock end");
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-void CmdLineExec::executeMutexCreate(Ris::CmdLineCmd* aCmd)
-{
-   mMutex.create(gMutexName);
-   Prn::print(0, "done");
-}
-
-void CmdLineExec::executeMutexOpen(Ris::CmdLineCmd* aCmd)
-{
-   mMutex.open(gMutexName);
-   Prn::print(0, "done");
-}
 
 void CmdLineExec::executeMutexLock(Ris::CmdLineCmd* aCmd)
 {
@@ -126,46 +69,6 @@ void CmdLineExec::executeMutexLock(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeMutexUnlock(Ris::CmdLineCmd* aCmd)
 {
    mMutex.unlock();
-   Prn::print(0, "done");
-}
-
-void CmdLineExec::executeMutexClose(Ris::CmdLineCmd* aCmd)
-{
-   mMutex.close();
-   Prn::print(0, "done");
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeSemaphoreCreate(Ris::CmdLineCmd* aCmd)
-{
-   mSemaphore.create(mSemaphoreName);
-   Prn::print(0, "done");
-}
-
-void CmdLineExec::executeSemaphoreOpen(Ris::CmdLineCmd* aCmd)
-{
-   mSemaphore.open(mSemaphoreName);
-   Prn::print(0, "done");
-}
-
-void CmdLineExec::executeSemaphoreGet(Ris::CmdLineCmd* aCmd)
-{
-   mSemaphore.get();
-   Prn::print(0, "done");
-}
-
-void CmdLineExec::executeSemaphorePut(Ris::CmdLineCmd* aCmd)
-{
-   mSemaphore.put();
-   Prn::print(0, "done");
-}
-
-void CmdLineExec::executeSemaphoreClose(Ris::CmdLineCmd* aCmd)
-{
-   mSemaphore.close();
    Prn::print(0, "done");
 }
 

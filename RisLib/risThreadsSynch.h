@@ -166,6 +166,7 @@ public:
    // Leave the critical section.
    void leave();
 };
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -209,6 +210,51 @@ public:
 
    // Unlock the mutex.
    void unlock();
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This encapsulates a named semaphore.
+
+class NamedSemaphore
+{
+public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Specific implementation variables.
+   class Specific;
+   Specific* mSpecific;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor. Create the mutex.
+   NamedSemaphore(const char* aName);
+
+   // Constructor. default. Initialize the data structure.
+   NamedSemaphore();
+
+   // Create the mutex. Call this if using default constructor.
+   void initialize(const char* aName);
+   bool create(const char* aName);
+   bool open(const char* aName);
+   void close();
+
+   // Destructor. Delete the mutex.
+   virtual ~NamedSemaphore();
+
+   // Get from the semaphore.
+   void get();
+
+   // put to the semaphore.
+   void put();
 };
 
 

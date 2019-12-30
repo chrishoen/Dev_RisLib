@@ -11,6 +11,7 @@
 
 //const char* gMutexName = "Local\\mysem";
 const char* gMutexName = "mymutex";
+const char* mSemaphoreName = "mysemaphore";
 
 CmdLineExec::CmdLineExec()
 {
@@ -46,6 +47,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("MutexLock"))    executeMutexLock(aCmd);
    if (aCmd->isCmd("MutexUnlock"))  executeMutexUnlock(aCmd);
    if (aCmd->isCmd("MutexClose"))   executeMutexClose(aCmd);
+
+   if (aCmd->isCmd("SemCreate"))  executeSemaphoreCreate(aCmd);
+   if (aCmd->isCmd("SemOpen"))    executeSemaphoreOpen(aCmd);
+   if (aCmd->isCmd("SemGet"))     executeSemaphoreGet(aCmd);
+   if (aCmd->isCmd("SemPut"))     executeSemaphorePut(aCmd);
+   if (aCmd->isCmd("SemClose"))   executeSemaphoreClose(aCmd);
 }
 
 //******************************************************************************
@@ -100,31 +107,65 @@ void CmdLineExec::executeMutexTest2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeMutexCreate(Ris::CmdLineCmd* aCmd)
 {
-   gMutex.create(gMutexName);
+   mMutex.create(gMutexName);
    Prn::print(0, "done");
 }
 
 void CmdLineExec::executeMutexOpen(Ris::CmdLineCmd* aCmd)
 {
-   gMutex.open(gMutexName);
+   mMutex.open(gMutexName);
    Prn::print(0, "done");
 }
 
 void CmdLineExec::executeMutexLock(Ris::CmdLineCmd* aCmd)
 {
-   gMutex.lock();
+   mMutex.lock();
    Prn::print(0, "done");
 }
 
 void CmdLineExec::executeMutexUnlock(Ris::CmdLineCmd* aCmd)
 {
-   gMutex.unlock();
+   mMutex.unlock();
    Prn::print(0, "done");
 }
 
 void CmdLineExec::executeMutexClose(Ris::CmdLineCmd* aCmd)
 {
-   gMutex.close();
+   mMutex.close();
+   Prn::print(0, "done");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeSemaphoreCreate(Ris::CmdLineCmd* aCmd)
+{
+   mSemaphore.create(mSemaphoreName);
+   Prn::print(0, "done");
+}
+
+void CmdLineExec::executeSemaphoreOpen(Ris::CmdLineCmd* aCmd)
+{
+   mSemaphore.open(mSemaphoreName);
+   Prn::print(0, "done");
+}
+
+void CmdLineExec::executeSemaphoreGet(Ris::CmdLineCmd* aCmd)
+{
+   mSemaphore.get();
+   Prn::print(0, "done");
+}
+
+void CmdLineExec::executeSemaphorePut(Ris::CmdLineCmd* aCmd)
+{
+   mSemaphore.put();
+   Prn::print(0, "done");
+}
+
+void CmdLineExec::executeSemaphoreClose(Ris::CmdLineCmd* aCmd)
+{
+   mSemaphore.close();
    Prn::print(0, "done");
 }
 

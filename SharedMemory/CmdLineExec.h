@@ -30,7 +30,8 @@ public:
    //***************************************************************************
    // Members.
 
-   Ris::Threads::NamedMutex gMutex;
+   Ris::Threads::NamedMutex mMutex;
+   Ris::Threads::NamedSemaphore mSemaphore;
 
    //***************************************************************************
    //***************************************************************************
@@ -70,6 +71,12 @@ public:
    void executeMutexLock(Ris::CmdLineCmd* aCmd);
    void executeMutexUnlock(Ris::CmdLineCmd* aCmd);
    void executeMutexClose(Ris::CmdLineCmd* aCmd);
+
+   void executeSemaphoreCreate(Ris::CmdLineCmd* aCmd);
+   void executeSemaphoreOpen(Ris::CmdLineCmd* aCmd);
+   void executeSemaphoreGet(Ris::CmdLineCmd* aCmd);
+   void executeSemaphorePut(Ris::CmdLineCmd* aCmd);
+   void executeSemaphoreClose(Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

@@ -292,6 +292,96 @@ void NamedMutex::unlock()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Named semaphore.
+
+// Specific implementation variables.
+class NamedSemaphore::Specific
+{
+public:
+   HANDLE mHandle;
+};
+
+// Constructor. Create the semaphore.
+NamedSemaphore::NamedSemaphore(const char* aName)
+{
+   mSpecific = new Specific;
+   initialize(aName);
+}
+
+// Constructor. default. Initialize the data structure.
+NamedSemaphore::NamedSemaphore()
+{
+   mSpecific = new Specific;
+}
+
+// Create the semaphore. Call this if using default constructor.
+void NamedSemaphore::initialize(const char* aName)
+{
+   mSpecific->mHandle = CreateSemaphore(NULL, 0, 100000, aName);
+   printf("NamedSemaphore::create %s %lld %d\n",
+      aName, (long long)mSpecific->mHandle, GetLastError());
+   if (mSpecific->mHandle == 0)
+   {
+      printf("NamedSemaphore::initialize error101\n");
+      return;
+   }
+}
+
+bool NamedSemaphore::create(const char* aName)
+{
+   mSpecific->mHandle = CreateSemaphore(NULL, 0, 100000, aName);
+   printf("NamedSemaphore::create %s %lld %d\n",
+      aName, (long long)mSpecific->mHandle, GetLastError());
+   return mSpecific->mHandle != 0;
+}
+
+bool NamedSemaphore::open(const char* aName)
+{
+   mSpecific->mHandle = OpenSemaphore(MUTEX_ALL_ACCESS, FALSE, aName);
+   printf("NamedSemaphore::open  %s %lld %d\n",
+      aName, (long long)mSpecific->mHandle, GetLastError());
+   return mSpecific->mHandle != 0;
+}
+
+// Destructor. Delete the semaphore.
+NamedSemaphore::~NamedSemaphore()
+{
+   printf("NamedSemaphore::destructor  %lld\n", (long long)mSpecific->mHandle);
+   CloseHandle(mSpecific->mHandle);
+   delete mSpecific;
+}
+
+// close the semaphore.
+void NamedSemaphore::close()
+{
+   printf("NamedSemaphore::close  %lld\n", (long long)mSpecific->mHandle);
+   CloseHandle(mSpecific->mHandle);
+}
+
+// Lock the semaphore.
+void NamedSemaphore::get()
+{
+   int tRet = WaitForSingleObject(mSpecific->mHandle, INFINITE);
+   if (tRet != 0)
+   {
+      printf("NamedSemaphore::WaitForSingleObject error  %lld %d %x\n",
+         (long long)mSpecific->mHandle, GetLastError(), tRet);
+   }
+}
+
+// Unlock the semaphore.
+void NamedSemaphore::put()
+{
+   if (ReleaseSemaphore(mSpecific->mHandle, 1, NULL) == 0)
+   {
+      printf("NamedSemaphore::ReleaseSemaphore error  %lld %d\n",
+         (long long)mSpecific->mHandle, GetLastError());
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 

@@ -9,8 +9,8 @@
 //******************************************************************************
 //******************************************************************************
 
-//const char* gSemName = "Local\\mysem";
-const char* gSemName = "Local\\mysem22";
+//const char* gMutexName = "Local\\mysem";
+const char* gMutexName = "mymutex";
 
 CmdLineExec::CmdLineExec()
 {
@@ -38,25 +38,25 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
    if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
 
-   if (aCmd->isCmd("ST1"))  executeSemTest1(aCmd);
-   if (aCmd->isCmd("ST2"))  executeSemTest2(aCmd);
+   if (aCmd->isCmd("ST1"))  executeMutexTest1(aCmd);
+   if (aCmd->isCmd("ST2"))  executeMutexTest2(aCmd);
 
-   if (aCmd->isCmd("SemCreate"))  executeSemCreate(aCmd);
-   if (aCmd->isCmd("SemOpen"))    executeSemOpen(aCmd);
-   if (aCmd->isCmd("SemLock"))    executeSemLock(aCmd);
-   if (aCmd->isCmd("SemUnlock"))  executeSemUnlock(aCmd);
-   if (aCmd->isCmd("SemClose"))   executeSemClose(aCmd);
+   if (aCmd->isCmd("MutexCreate"))  executeMutexCreate(aCmd);
+   if (aCmd->isCmd("MutexOpen"))    executeMutexOpen(aCmd);
+   if (aCmd->isCmd("MutexLock"))    executeMutexLock(aCmd);
+   if (aCmd->isCmd("MutexUnlock"))  executeMutexUnlock(aCmd);
+   if (aCmd->isCmd("MutexClose"))   executeMutexClose(aCmd);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeSemTest1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeMutexTest1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
    Ris::Threads::NamedMutex tMutex;
-   if(!tMutex.create(gSemName)) return;
+   if(!tMutex.create(gMutexName)) return;
 
    Prn::print(0, "mutext lock begin");
    tMutex.lock();
@@ -73,11 +73,11 @@ void CmdLineExec::executeSemTest1(Ris::CmdLineCmd* aCmd)
    Prn::print(0, "mutext unlock end");
 }
 
-void CmdLineExec::executeSemTest2(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeMutexTest2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
    Ris::Threads::NamedMutex tMutex;
-   if (!tMutex.open(gSemName)) return;
+   if (!tMutex.open(gMutexName)) return;
 
    Prn::print(0, "mutext lock begin");
    tMutex.lock();
@@ -98,31 +98,31 @@ void CmdLineExec::executeSemTest2(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeSemCreate(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeMutexCreate(Ris::CmdLineCmd* aCmd)
 {
-   gMutex.create(gSemName);
+   gMutex.create(gMutexName);
    Prn::print(0, "done");
 }
 
-void CmdLineExec::executeSemOpen(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeMutexOpen(Ris::CmdLineCmd* aCmd)
 {
-   gMutex.open(gSemName);
+   gMutex.open(gMutexName);
    Prn::print(0, "done");
 }
 
-void CmdLineExec::executeSemLock(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeMutexLock(Ris::CmdLineCmd* aCmd)
 {
    gMutex.lock();
    Prn::print(0, "done");
 }
 
-void CmdLineExec::executeSemUnlock(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeMutexUnlock(Ris::CmdLineCmd* aCmd)
 {
    gMutex.unlock();
    Prn::print(0, "done");
 }
 
-void CmdLineExec::executeSemClose(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeMutexClose(Ris::CmdLineCmd* aCmd)
 {
    gMutex.close();
    Prn::print(0, "done");

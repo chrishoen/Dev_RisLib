@@ -62,14 +62,14 @@ public:
    void executeGo4(Ris::CmdLineCmd* aCmd);
    void executeGo5(Ris::CmdLineCmd* aCmd);
 
-   void executeSemTest1(Ris::CmdLineCmd* aCmd);
-   void executeSemTest2(Ris::CmdLineCmd* aCmd);
+   void executeMutexTest1(Ris::CmdLineCmd* aCmd);
+   void executeMutexTest2(Ris::CmdLineCmd* aCmd);
 
-   void executeSemCreate(Ris::CmdLineCmd* aCmd);
-   void executeSemOpen(Ris::CmdLineCmd* aCmd);
-   void executeSemLock(Ris::CmdLineCmd* aCmd);
-   void executeSemUnlock(Ris::CmdLineCmd* aCmd);
-   void executeSemClose(Ris::CmdLineCmd* aCmd);
+   void executeMutexCreate(Ris::CmdLineCmd* aCmd);
+   void executeMutexOpen(Ris::CmdLineCmd* aCmd);
+   void executeMutexLock(Ris::CmdLineCmd* aCmd);
+   void executeMutexUnlock(Ris::CmdLineCmd* aCmd);
+   void executeMutexClose(Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

@@ -151,6 +151,44 @@ void MutexSemaphore::unlock()
    ReleaseSRWLockExclusive(&mSpecific->mSRWLock); 
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Critical section.
+
+// Specific implementation variables.
+class CriticalSection::Specific
+{
+public:
+   CRITICAL_SECTION mCriticalSection;
+};
+
+// Constructor. Create the critical section.
+CriticalSection::CriticalSection()
+{
+   mSpecific = new Specific;
+   InitializeCriticalSectionAndSpinCount(&mSpecific->mCriticalSection, 0x80000400);
+}
+
+// Destructor. Delete the critical section.
+CriticalSection::~CriticalSection()
+{
+   DeleteCriticalSection(&mSpecific->mCriticalSection);
+   delete mSpecific;
+}
+
+// Enter the critical section.
+void CriticalSection::enter()
+{
+   EnterCriticalSection(&mSpecific->mCriticalSection);
+}
+
+// Leave the critical section.
+void CriticalSection::leave()
+{
+   LeaveCriticalSection(&mSpecific->mCriticalSection);
+}
+
 
 //******************************************************************************
 //******************************************************************************
@@ -218,6 +256,7 @@ bool NamedMutex::open(const char* aName)
 // Destructor. Delete the mutex.
 NamedMutex::~NamedMutex()
 {
+   printf("NamedMutex::destructor  %lld\n",(long long)mSpecific->mHandle);
    CloseHandle(mSpecific->mHandle);
    delete mSpecific;
 }
@@ -225,6 +264,7 @@ NamedMutex::~NamedMutex()
 // close the mutex.
 void NamedMutex::close()
 {
+   printf("NamedMutex::close  %lld\n", (long long)mSpecific->mHandle);
    CloseHandle(mSpecific->mHandle);
 }
 
@@ -247,44 +287,6 @@ void NamedMutex::unlock()
       printf("NamedMutex::ReleaseMutex error  %lld %d\n",
          (long long)mSpecific->mHandle, GetLastError());
    }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Critical section.
-
-// Specific implementation variables.
-class CriticalSection::Specific
-{
-public:
-   CRITICAL_SECTION mCriticalSection; 
-};
-
-// Constructor. Create the critical section.
-CriticalSection::CriticalSection()
-{
-   mSpecific = new Specific;
-   InitializeCriticalSectionAndSpinCount(&mSpecific->mCriticalSection,0x80000400); 
-}
-
-// Destructor. Delete the critical section.
-CriticalSection::~CriticalSection()
-{
-   DeleteCriticalSection(&mSpecific->mCriticalSection);
-   delete mSpecific;
-}
-
-// Enter the critical section.
-void CriticalSection::enter()
-{
-   EnterCriticalSection(&mSpecific->mCriticalSection); 
-}
-
-// Leave the critical section.
-void CriticalSection::leave()
-{
-   LeaveCriticalSection(&mSpecific->mCriticalSection);
 }
 
 //******************************************************************************

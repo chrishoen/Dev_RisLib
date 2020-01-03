@@ -72,21 +72,21 @@ void Interfaces::doSetNetSettingsEth0_static()
       tFound = tOutputLine.find(tReplaceAddress);
       if (tFound != std::string::npos)
       {
-         tOutputLine.replace(tFound, tReplaceAddress.length(),mEth0Address);
+         tOutputLine.replace(tFound, tReplaceAddress.length(),mEth0WantAddress);
       }
 
       // Find and replace mask tag. 
       tFound = tOutputLine.find(tReplaceMask);
       if (tFound != std::string::npos)
       {
-         tOutputLine.replace(tFound, tReplaceMask.length(), mEth0Mask);
+         tOutputLine.replace(tFound, tReplaceMask.length(), mEth0WantMask);
       }
 
       // Find and replace gateway tag. 
       tFound = tOutputLine.find(tReplaceGateway);
       if (tFound != std::string::npos)
       {
-         tOutputLine.replace(tFound, tReplaceGateway.length(), mEth0Gateway);
+         tOutputLine.replace(tFound, tReplaceGateway.length(), mEth0WantGateway);
       }
 
       // Write the the output line.
@@ -109,39 +109,42 @@ void Interfaces::doSetNetSettingsEth0_static()
 //******************************************************************************
 // Set a member variable. Return true if successful.
 
-bool Interfaces::setEth0Address(std::string aString)
+bool Interfaces::setEth0WantAddress(std::string aString)
 {
    if (Ris::Sockets::isIpAddressValid(aString.c_str()))
    {
-      mEth0Address = aString;
+      mEth0WantAddress = aString;
       return true;
    }
    else
    {
+      Prn::print(0, "Interfaces::setEth0WantAddress ERROR");
       return false;
    }
 }
-bool Interfaces::setEth0Mask(std::string aString)
+bool Interfaces::setEth0WantMask(std::string aString)
 {
    if (Ris::Sockets::isIpAddressValid(aString.c_str()))
    {
-      mEth0Mask = aString;
+      mEth0WantMask = aString;
       return true;
    }
    else
    {
+      Prn::print(0, "Interfaces::setEth0WantMask ERROR");
       return false;
    }
 }
-bool Interfaces::setEth0Gateway(std::string aString)
+bool Interfaces::setEth0WantGateway(std::string aString)
 {
    if (Ris::Sockets::isIpAddressValid(aString.c_str()))
    {
-      mEth0Gateway = aString;
+      mEth0WantGateway = aString;
       return true;
    }
    else
    {
+      Prn::print(0, "Interfaces::setEth0WantGateway ERROR");
       return false;
    }
 }

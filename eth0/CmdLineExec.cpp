@@ -210,6 +210,7 @@ void CmdLineExec::executeGo9(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo10(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::Interfaces tInterfaces;
+   tInterfaces.doRead();
    tInterfaces.doGetNetSettings();
    tInterfaces.doWrite();
    tInterfaces.show();
@@ -259,9 +260,10 @@ void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::Interfaces tInterfaces;
    tInterfaces.doRead();
-   tInterfaces.setEth0Address("10.120.0.65");
-   tInterfaces.setEth0Mask("255.255.252.0");
-   tInterfaces.setEth0Gateway("10.120.0.3");
+   tInterfaces.setEth0WantAddress("10.120.0.65");
+   tInterfaces.setEth0WantMask("255.255.252.0");
+   tInterfaces.setEth0WantGateway("10.120.0.3");
+   tInterfaces.doWrite();
    tInterfaces.doSetNetSettingsEth0_static();
    Prn::print(0, "done");
 }

@@ -43,12 +43,22 @@ public:
    std::string mEth0Mask;
    std::string mEth0Gateway;
 
+   // Wanted static variables for eth0.
+   std::string mEth0WantAddress;
+   std::string mEth0WantMask;
+   std::string mEth0WantGateway;
+
    // Network interface variables for wlan0.
    bool mWlan0ValidFlag;
    bool mWlan0DhcpFlag;
    std::string mWlan0Address;
    std::string mWlan0Mask;
    std::string mWlan0Gateway;
+
+   // Wanted static variables for wlan0.
+   std::string mWlan0WantAddress;
+   std::string mWlan0WantMask;
+   std::string mWlan0WantGateway;
 
    //***************************************************************************
    //***************************************************************************
@@ -103,9 +113,9 @@ public:
    // Methods.
 
    // Set a member variable. Return true if successful.
-   bool setEth0Address(std::string aString);
-   bool setEth0Mask(std::string aString);
-   bool setEth0Gateway(std::string aString);
+   bool setEth0WantAddress(std::string aString);
+   bool setEth0WantMask(std::string aString);
+   bool setEth0WantGateway(std::string aString);
 
    //***************************************************************************
    //***************************************************************************

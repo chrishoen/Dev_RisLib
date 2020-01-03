@@ -225,9 +225,6 @@ void Interfaces::doGetNetSettingsWlan0Gateway()
 
 void Interfaces::doGetNetSettingsEth0DhcpFlag()
 {
-   // Do this first.
-   mEth0DhcpFlag = false;
-
    // Input and output files.
    std::ifstream tInputFile("/etc/network/interfaces");
 

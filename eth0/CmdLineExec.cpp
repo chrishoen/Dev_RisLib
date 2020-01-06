@@ -222,6 +222,12 @@ void CmdLineExec::executeGo10(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
 {
+   Ris::Net::Interfaces tInterfaces;
+   tInterfaces.doRead();
+// tInterfaces.doGetNetSettings();
+   tInterfaces.showEth0();
+   Prn::print(Prn::View21, "Go11*********************************************");
+   tInterfaces.showEth0(Prn::View21);
 }
 
 //******************************************************************************

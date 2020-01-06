@@ -19,6 +19,7 @@ void main_initialize(int argc,char** argv)
 
    // Initialize print facility
    Prn::resetPrint();
+   Prn::useConsole(2);
    Prn::initializePrint();
 
    // Initialize print filters
@@ -44,6 +45,10 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun3,  false);
    Prn::setFilter(Prn::QCallRun4,  false);
 
+   Prn::setFilter(Prn::View21, true,  2);
+   Prn::setFilter(Prn::View22, false, 2);
+   Prn::setFilter(Prn::View23, false, 2);
+   Prn::setFilter(Prn::View24, false, 2);
    Prn::print(0,"Ethernet*******************************************BEGIN");
 
 }

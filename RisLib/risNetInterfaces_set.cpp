@@ -8,6 +8,7 @@
 #include "risSockets.h"
 #include "risFileFunctions.h"
 #include "risSystemCalls.h"
+#include "risThreadsThreads.h"
 #include "my_functions.h"
 #include "prnPrint.h"
 
@@ -39,7 +40,9 @@ void Interfaces::doSetNetSettingsEth0_dhcp()
 // doSystemCommand("ip link set dev eth0 down");
 // doSystemCommand("ip link set dev eth0 up");
    doSystemCommand("ifdown --force eth0");
+   Threads::threadSleep(1000);
    doSystemCommand("ifup --force eth0");
+   Threads::threadSleep(1000);
 }
 
 //******************************************************************************
@@ -100,7 +103,9 @@ void Interfaces::doSetNetSettingsEth0_static()
 // doSystemCommand("ip link set dev eth0 down");
 // doSystemCommand("ip link set dev eth0 up");
    doSystemCommand("ifdown --force eth0");
+   Threads::threadSleep(1000);
    doSystemCommand("ifup --force eth0");
+   Threads::threadSleep(1000);
 }
 
 

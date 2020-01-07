@@ -165,6 +165,7 @@ void Interfaces::doGetNetSettingsEth0Gateway()
    // Parse the list of strings into member variables.
    for (int i = 0; i < tParse.size(); i++)
    {
+      if (tParse[i] == "linkdown") mEth0ValidFlag = false;
       if (tParse[i] == "via") mEth0Gateway = tParse[i + 1];
       if (tParse[i] == "dhcp") mEth0DhcpFlag = true;
    }

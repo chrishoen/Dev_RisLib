@@ -47,6 +47,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO21"))  executeGo21(aCmd);
    if (aCmd->isCmd("GO22"))  executeGo22(aCmd);
    if (aCmd->isCmd("GO23"))  executeGo23(aCmd);
+   if (aCmd->isCmd("GO30"))  executeGo20(aCmd);
+   if (aCmd->isCmd("GO31"))  executeGo21(aCmd);
    if (aCmd->isCmd("show"))  executeShow(aCmd);
 }
 
@@ -213,7 +215,7 @@ void CmdLineExec::executeGo10(Ris::CmdLineCmd* aCmd)
    tInterfaces.doRead();
    tInterfaces.doGetNetSettings();
    tInterfaces.doWrite();
-   tInterfaces.show();
+   tInterfaces.showEth0();
 }
 
 //******************************************************************************
@@ -254,6 +256,7 @@ void CmdLineExec::executeGo20(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::Interfaces tInterfaces;
    tInterfaces.doRead();
+   tInterfaces.doGetNetSettings();
    tInterfaces.doSetNetSettingsEth0_dhcp();
    Prn::print(0, "done");
 }
@@ -266,6 +269,7 @@ void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
 {
    Ris::Net::Interfaces tInterfaces;
    tInterfaces.doRead();
+   tInterfaces.doGetNetSettings();
    tInterfaces.setEth0WantAddress("10.120.0.65");
    tInterfaces.setEth0WantMask("255.255.252.0");
    tInterfaces.setEth0WantGateway("10.120.0.3");
@@ -294,12 +298,16 @@ void CmdLineExec::executeGo23(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeGo30(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Net::Interfaces tInterfaces;
-   tInterfaces.doGetNetSettings();
-   tInterfaces.doRead();
-   tInterfaces.show();
 }
 
 

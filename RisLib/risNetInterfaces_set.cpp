@@ -36,9 +36,17 @@ void Interfaces::doSetNetSettingsEth0()
 
 void Interfaces::doSetNetSettingsEth0_dhcp()
 {
+   // Copy the dhcp file to the interfaces file.
    doSystemCommand("cp /opt/prime/special/interfaces_dhcp /etc/network/interfaces");
-// doSystemCommand("ip link set dev eth0 down");
-// doSystemCommand("ip link set dev eth0 up");
+
+   // Guard.
+   if (!mEth0ValidFlag)
+   {
+      printf("the file is set, but eth0 is invalid\n");
+      return;
+   }
+
+   // Bring the interface down and then up.
    doSystemCommand("ifdown --force eth0");
    Threads::threadSleep(1000);
    doSystemCommand("ifup --force eth0");
@@ -98,10 +106,17 @@ void Interfaces::doSetNetSettingsEth0_static()
    tInputFile.close();
    tOutputFile.close();
 
-   // Copy the temp file and set the address.
+   // Copy the temp file to the interfaces file.
    doSystemCommand("cp /opt/prime/special/tmp_interfaces_static /etc/network/interfaces");
-// doSystemCommand("ip link set dev eth0 down");
-// doSystemCommand("ip link set dev eth0 up");
+
+   // Guard.
+   if (!mEth0ValidFlag)
+   {
+      printf("the file is set, but eth0 is invalid\n");
+      return;
+   }
+
+   // Bring the interface down and then up.
    doSystemCommand("ifdown --force eth0");
    Threads::threadSleep(1000);
    doSystemCommand("ifup --force eth0");
@@ -159,3 +174,9 @@ bool Interfaces::setEth0WantGateway(std::string aString)
 //******************************************************************************
 }//namespace
 }//namespace
+
+
+
+
+// doSystemCommand("ip link set dev eth0 down");
+// doSystemCommand("ip link set dev eth0 up");

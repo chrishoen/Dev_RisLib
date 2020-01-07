@@ -174,6 +174,56 @@ void Interfaces::doGetNetSettingsEth0Gateway()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Special.
+
+// Return true if eth0 is connected to a router.
+bool isEth0Valid()
+{
+   // Do this first.
+   bool tEth0ValidFlag = false;
+
+   // Execute system command into a response string list.
+   // An example response is:
+   // "inet 192.168.1.35  netmask 255.255.255.0  broadcast 192.168.1.255"
+   // "default via 192.168.1.1 dev eth0 proto dhcp src 192.168.1.35 metric 202"
+   std::vector<std::string> tResponse;
+   Ris::doSystemCommand("ip route show dev eth0", tResponse);
+
+   // Guard.
+   if (tResponse.size() == 0) return false;
+
+   // The interface is valid.
+   tEth0ValidFlag = true;
+
+   // Stream string variables for the response list entry 1.
+   std::stringstream tStream(tResponse[0]);
+   std::string tToken;
+   // Variables for parsing the response  list entry 1.
+   std::vector<std::string> tParse;
+   char tDelimiter = ' ';
+
+   // Parse the response string entry 1 into the a list of strings.
+   while (std::getline(tStream, tToken, tDelimiter))
+   {
+      if (tToken.length())
+      {
+         tParse.push_back(tToken);
+      }
+   }
+
+   // Parse the list of strings into member variables.
+   for (int i = 0; i < tParse.size(); i++)
+   {
+      if (tParse[i] == "linkdown") tEth0ValidFlag = false;
+   }
+
+   // Done.
+   return tEth0ValidFlag;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Get the current network settings. Sub function.
 
 void Interfaces::doGetNetSettingsWlan0Gateway()

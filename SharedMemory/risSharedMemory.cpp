@@ -46,6 +46,9 @@ SharedMemory::SharedMemory()
 
 bool SharedMemory::initialize(const char* aName, int aNumBytes)
 {
+   // Do this first.
+   mMemory = 0;
+
    // Create shared memory.
    mSpecific->mShareFileMap=CreateFileMapping(
       INVALID_HANDLE_VALUE,
@@ -56,14 +59,17 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
       aName);
 
    int tCreateStatus = GetLastError();
-   printf("CreateFileMapping %d\n",tCreateStatus);
+   //printf("CreateFileMapping %d\n",tCreateStatus);
 
-   char* tMemory = (char*)MapViewOfFile(
-      mSpecific->mShareFileMap,
-      FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);
+   if (mSpecific->mShareFileMap != 0)
+   {
+      char* tMemory = (char*)MapViewOfFile(
+         mSpecific->mShareFileMap,
+         FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
 
-   // Store the address.
-   mMemory = tMemory;
+      // Store the address.
+      mMemory = tMemory;
+   }
 
    // Done
    return tCreateStatus == 0;

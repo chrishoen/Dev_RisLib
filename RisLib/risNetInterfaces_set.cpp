@@ -50,7 +50,7 @@ void Interfaces::doSetNetSettingsEth0_dhcp()
    doSystemCommand("ifdown --force eth0");
    Threads::threadSleep(1000);
    doSystemCommand("ifup --force eth0");
-   Threads::threadSleep(1000);
+   Threads::threadSleep(2000);
 }
 
 //******************************************************************************
@@ -120,7 +120,7 @@ void Interfaces::doSetNetSettingsEth0_static()
    doSystemCommand("ifdown --force eth0");
    Threads::threadSleep(1000);
    doSystemCommand("ifup --force eth0");
-   Threads::threadSleep(1000);
+   Threads::threadSleep(2000);
 }
 
 

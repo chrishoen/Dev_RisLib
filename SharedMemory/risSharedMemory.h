@@ -15,6 +15,13 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 // This creates or opens a region of shared memory.
+//
+// The following rules are for shared memory regions that are shared between
+// different processes (who therefor have different address spaces):
+// 
+// 1) No constructors.
+// 2) No pointers.
+// 3) No dynamic memory, this means no std::string, no std::vector, ...
 
 class SharedMemory
 {
@@ -26,6 +33,7 @@ public:
    // Members.
 
    // The address of the shared memory region that was created or opened.
+   // If this is zero then the region is not open.
    void* mMemory;
 
    //***************************************************************************
@@ -36,9 +44,8 @@ public:
    // Constructor.
    SharedMemory();
 
-   // Create the shared memory region, if it does not already exist. Open it
-   // if it does already exist. Return true if the region was created, false
-   // if it was opened.
+   // If the shared memory region does not already exist, then create it and
+   // return true. If it does already exist, then open it and return false.
    bool initialize(const char* aName, int aNumBytes);
    
    // Close the shared memory region.

@@ -40,9 +40,8 @@ SharedMemory::SharedMemory()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Create the shared memory region, if it does not already exist. Open it
-// if it does already exist. Return true if the region was created, false
-// if it was opened.
+// If the shared memory region does not already exist, then create it and
+// return true. If it does already exist, then open it and return false.
 
 bool SharedMemory::initialize(const char* aName, int aNumBytes)
 {
@@ -58,9 +57,11 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
       aNumBytes,
       aName);
 
+   // Get the last error. If it is zero then the region did not already
+   // exist and a new one was created.
    int tCreateStatus = GetLastError();
-   //printf("CreateFileMapping %d\n",tCreateStatus);
 
+   // Map the file.
    if (mSpecific->mShareFileMap != 0)
    {
       char* tMemory = (char*)MapViewOfFile(
@@ -71,7 +72,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
       mMemory = tMemory;
    }
 
-   // Done
+   // Done.
    return tCreateStatus == 0;
 }
 
@@ -86,6 +87,7 @@ void SharedMemory::finalize()
 
     if (mSpecific) delete mSpecific;
     mSpecific = 0;
+    mMemory = 0;
 }
 
 //******************************************************************************

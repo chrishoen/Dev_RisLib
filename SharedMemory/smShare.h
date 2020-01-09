@@ -55,7 +55,10 @@ public:
 // Global instance initialize and finalize.
 
 // Create a shared memory region for the global instance and call placement
-// new with the shared memory address. Then initialize the global instance.
+// new with the shared memory address. If this is the first process to access
+// the region (it was created created, not opened) then initialize the global
+// instance. Otherwise, do not initialize it, because the first process
+// already did.
 void initializeShare();
 
 // Close the shared memory region for the global instance.

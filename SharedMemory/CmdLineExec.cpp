@@ -3,6 +3,9 @@
 #include "risProgramTime.h"
 #include "risThreadsThreads.h"
 #include "risThreadsSynch.h"
+
+
+#include "smShare.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -37,23 +40,27 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
    if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
 
-   if (aCmd->isCmd("ST1"))  executeMutexTest1(aCmd);
-   if (aCmd->isCmd("ST2"))  executeMutexTest2(aCmd);
+   if (aCmd->isCmd("MLock"))    executeMutexLock(aCmd);
+   if (aCmd->isCmd("MUnlock"))  executeMutexUnlock(aCmd);
 
-   if (aCmd->isCmd("MutexLock"))    executeMutexLock(aCmd);
-   if (aCmd->isCmd("MutexUnlock"))  executeMutexUnlock(aCmd);
+   if (aCmd->isCmd("SW"))       executeShareWrite(aCmd);
+   if (aCmd->isCmd("SR"))       executeShareRead(aCmd);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeMutexTest1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeShareWrite(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, "201");
+
+   SM::gShare->mX1 = aCmd->argInt(1);
 }
 
-void CmdLineExec::executeMutexTest2(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeShareRead(Ris::CmdLineCmd* aCmd)
 {
+   SM::gShare->show(0);
 }
 
 //******************************************************************************

@@ -62,11 +62,11 @@ public:
    void executeGo4(Ris::CmdLineCmd* aCmd);
    void executeGo5(Ris::CmdLineCmd* aCmd);
 
-   void executeMutexTest1(Ris::CmdLineCmd* aCmd);
-   void executeMutexTest2(Ris::CmdLineCmd* aCmd);
-
    void executeMutexLock(Ris::CmdLineCmd* aCmd);
    void executeMutexUnlock(Ris::CmdLineCmd* aCmd);
+
+   void executeShareWrite (Ris::CmdLineCmd* aCmd);
+   void executeShareRead  (Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

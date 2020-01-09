@@ -1,66 +1,70 @@
 #include "stdafx.h"
 
-
 #include "risThreadsProcess.h"
 
+#include "smShare.h"
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize
+// Initialize program resources.
 
 void main_initialize(int argc,char** argv)
 {
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Enter process
+   printf("SharedMemory Program********************************************BEGIN\n");
+   printf("SharedMemory Program********************************************BEGIN\n");
+   printf("SharedMemory Program********************************************BEGIN\n\n");
 
-   Ris::Threads::enterProcessHigh();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize print facility.
 
-   // Initialize print facility
+   // Initialize print.
    Prn::resetPrint();
+   Prn::useConsole(1);
    Prn::initializePrint();
 
-   // Initialize print filters
-   Prn::setFilter(Prn::ThreadRun1,  true);
-   Prn::setFilter(Prn::ThreadRun2,  false);
-   Prn::setFilter(Prn::ThreadRun3,  true);
-   Prn::setFilter(Prn::ThreadRun4,  true);
+   // Initialize print filters.
+   Prn::setFilter(Prn::View11, true,  1);
+   Prn::setFilter(Prn::View12, false, 1);
+   Prn::setFilter(Prn::View13, false, 1);
+   Prn::setFilter(Prn::View14, false, 1);
 
-   Prn::setFilter(Prn::ProcRun1,    true);
-   Prn::setFilter(Prn::ProcRun2,    true);
-   Prn::setFilter(Prn::ProcRun3,    false);
-   Prn::setFilter(Prn::ProcRun4,    true);
+   Prn::setFilter(Prn::Show1, true);
+   Prn::setFilter(Prn::Show2, true);
+   Prn::setFilter(Prn::Show3, false);
+   Prn::setFilter(Prn::Show4, false);
+   Prn::setFilter(Prn::Show5, false);
+   Prn::setFilter(Prn::Show6, false);
 
-   Prn::setFilter(Prn::ViewRun1,    true, 1);
-   Prn::setFilter(Prn::ViewRun2,    true, 1);
-   Prn::setFilter(Prn::ViewRun3,    false,1);
-   Prn::setFilter(Prn::ViewRun4,    true, 1);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // initialize.
 
-   Prn::setFilter(Prn::QCallInit1, true);
-   Prn::setFilter(Prn::QCallInit2, true);
-   Prn::setFilter(Prn::QCallRun1,  false);
-   Prn::setFilter(Prn::QCallRun2,  false);
-   Prn::setFilter(Prn::QCallRun3,  false);
-   Prn::setFilter(Prn::QCallRun4,  false);
-
-   Prn::print(0,"SharedMemory*******************************************BEGIN");
-
+   // Initialize shared memory.
+   SM::initializeShare();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Finalize
+// Finalize program resourcs.
 
 void main_finalize()
 {
-   Prn::print(0,"SharedMemory*******************************************END");
+   // Finalize shared memory.
+   SM::initializeShare();
 
-   // Close print
+   // Finalize print facility.
    Prn::finalizePrint();
 
-   // Exit process
-   Ris::Threads::exitProcess();
+   // Done.
+   printf("\n");
+   printf("SharedMemory Program********************************************END\n\n");
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************

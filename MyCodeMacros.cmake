@@ -81,7 +81,7 @@ function(my_add_compile_options _target)
       target_compile_options(${_target} PRIVATE "-Wno-format")
       target_compile_options(${_target} PRIVATE "-Wno-write-strings")
       target_compile_options(${_target} PRIVATE "-Wno-psabi")
-      target_compile_options(${_target} PRIVATE "-Wno-pragma-once-outside-header")
+#     target_compile_options(${_target} PRIVATE "-Wno-pragma-once-outside-header")
 
       target_compile_definitions(${_target} PRIVATE "-DNDEBUG")
 

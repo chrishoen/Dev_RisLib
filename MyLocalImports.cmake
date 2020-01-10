@@ -34,6 +34,7 @@ function(my_lib_import_RisLib _target)
       add_library(PThreadLib SHARED IMPORTED)
       set_target_properties(PThreadLib PROPERTIES IMPORTED_LOCATION ${MyPThreadImportPath})
       target_link_libraries(${_target} PThreadLib)
+      target_link_options(${_target} PRIVATE "-lrt")
    endif()
 
    if (false)

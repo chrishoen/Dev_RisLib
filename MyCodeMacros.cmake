@@ -85,7 +85,7 @@ function(my_add_compile_options _target)
 
       target_compile_definitions(${_target} PRIVATE "-DNDEBUG")
 
-      target_link_options(${_target} PRIVATE "-lrt")
+#     target_link_options(${_target} PRIVATE "-lrt")
    endif()
 
 endfunction()

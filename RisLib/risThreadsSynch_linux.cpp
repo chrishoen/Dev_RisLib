@@ -238,6 +238,21 @@ NamedMutex::NamedMutex()
 // Create the mutex. Call this if using default constructor.
 void NamedMutex::initialize(const char* aName)
 {
+   char tName[100];
+   
+   // Make sure the first char is a '/'
+   if (aName[0] == '/')
+   {
+      strncpy(tName, aName, 100 - 2);
+      tName[100 - 1] = 0;
+   }
+   else
+   {
+      strncpy(tName, "/", 1);
+      strncat(tName, aName, 100 - 3);
+      tName[100 - 1] = 0;
+   }
+
    mSpecific->mHandle = sem_open(aName, O_CREAT, O_RDWR, 1);
    if (mSpecific->mHandle != SEM_FAILED)
    {

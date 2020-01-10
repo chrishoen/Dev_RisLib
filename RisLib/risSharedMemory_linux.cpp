@@ -86,8 +86,6 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    // Map  the memory to process address space.
    mMemory = mmap(0, aNumBytes, PROT_WRITE | PROT_READ, MAP_SHARED, mSpecific->mFd, 0);
 
-   printf("shm_open %d\n", tFirstFlag);
-
    // Done.
    return tFirstFlag;
 }

@@ -76,6 +76,12 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
       // Create the shared memory.
       mSpecific->mFd = shm_open(mName, O_CREAT | O_RDWR, 0666);
 
+      if (mSpecific->mFd <= 0)
+      {
+         printf("SharedMemory error101\n");
+         return false;
+      }
+
       // This is the first one.
       tFirstFlag = true;
    }

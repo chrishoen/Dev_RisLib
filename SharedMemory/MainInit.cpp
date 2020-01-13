@@ -55,7 +55,7 @@ void main_initialize(int argc,char** argv)
 void main_finalize()
 {
    // Finalize shared memory.
-   SM::initializeShare();
+   SM::finalizeShare();
 
    // Finalize print facility.
    Prn::finalizePrint();

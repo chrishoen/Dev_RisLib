@@ -25,6 +25,10 @@ public:
    //***************************************************************************
    // Members.
 
+   // Resource count. Incremented each time that a process attaches to the
+   // shared memory region. Decremented each time that a process deattaches.
+   int mResourceCount;
+
    // Some variables.
    int mX1;
    int mX2;

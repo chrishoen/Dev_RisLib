@@ -38,7 +38,13 @@ public:
 SharedMemory::SharedMemory()
 {
    mSpecific = new Specific;
+   mNumBytes = 0;
    mMemory = 0;
+}
+
+SharedMemory::~SharedMemory()
+{
+   delete mSpecific;
 }
 
 //****************************************************************************
@@ -67,30 +73,34 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
       mName[cMaxStringSize - 1] = 0;
    }
 
-   // Try to open shared memory.
-   mSpecific->mFd = shm_open(mName, O_RDWR, 0666);
+   // Store this.
+   mNumBytes = aNumBytes;
 
-   // if open failed then the shared memory does not exist.
+   // Open shared memory.
+   mSpecific->mFd = shm_open(mName, O_CREAT | O_RDWR, 0777);
+
    if (mSpecific->mFd < 0)
    {
-      // Create the shared memory.
-      mSpecific->mFd = shm_open(mName, O_CREAT | O_RDWR, 0666);
-
-      if (mSpecific->mFd <= 0)
-      {
-         printf("SharedMemory error101\n");
-         return false;
-      }
-
-      // This is the first one.
-      tFirstFlag = true;
+      printf("SharedMemory::initialize error101 %d\n", errno);
+      return false;
    }
 
-   // Set the size
-   ftruncate(mSpecific->mFd, aNumBytes);
+   printf("SharedMemory::initialize shm_open %d %s %d\n", tFirstFlag,mName,mNumBytes);
 
-   // Map  the memory to process address space.
-   mMemory = mmap(0, aNumBytes, PROT_WRITE | PROT_READ, MAP_SHARED, mSpecific->mFd, 0);
+   // Set the memory size.
+   ftruncate(mSpecific->mFd, mNumBytes);
+
+   // Map the memory to process address space.
+   mMemory = mmap(0, (size_t)mNumBytes, PROT_WRITE | PROT_READ, MAP_SHARED, mSpecific->mFd, 0);
+
+   // Close the file.
+   close(mSpecific->mFd);
+
+   if (mMemory == 0)
+   {
+      printf("SharedMemory::initialize error102 %d\n", errno);
+      return false;
+   }
 
    // Done.
    return tFirstFlag;
@@ -103,8 +113,28 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
 
 void SharedMemory::finalize()
 {
+   printf("SharedMemory::finalize");
+   // Guard.
+   if (mMemory == 0) return;
+
+   // Do this first.
+   int tRet = 0;
+
+   // nnmap the memory to process address space.
+   tRet = munmap(mMemory, (size_t)mNumBytes);
+
+   if (tRet < 0)
+   {
+      printf("SharedMemory::finalize error101 %d", errno);
+   }
+
    // Remove the shared memory.
-   shm_unlink(mName);
+   tRet = shm_unlink(mName);
+
+   if (tRet < 0)
+   {
+      printf("SharedMemory::finalize error102 %d", errno);
+   }
 }
 
 //******************************************************************************

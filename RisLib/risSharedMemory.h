@@ -39,8 +39,11 @@ public:
    //***************************************************************************
    // Members.
 
-   // The name of the shared memory.
+   // The name of the shared memory region.
    char mName[cMaxStringSize];
+
+   // The size of the shared memory region.
+   int mNumBytes;
 
    // The address of the shared memory region that was created or opened.
    // If this is zero then the region is not open.
@@ -53,6 +56,7 @@ public:
 
    // Constructor.
    SharedMemory();
+   ~SharedMemory();
 
    // If the shared memory region does not already exist, then create it and
    // return true. If it does already exist, then open it and return false.

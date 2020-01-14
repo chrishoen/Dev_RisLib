@@ -11,9 +11,11 @@ project ("Dev_RisLib")
 my_special1()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
 add_subdirectory ("SharedMemory")
-add_subdirectory ("ThreadTest")
+return()
+
+add_subdirectory ("CommonLib")
+add_subdirectory ("ThreadTestLib")
 return()
 
 add_subdirectory ("RisLib")

@@ -43,10 +43,11 @@ void Share::initialize()
 
 void Share::show(int aPF)
 {
-   Prn::print(aPF, "mX1   %d", mX1);
-   Prn::print(aPF, "mX2   %d", mX2);
-   Prn::print(aPF, "mX3   %d", mX3);
-   Prn::print(aPF, "mX4   %d", mX4);
+   Prn::print(aPF, "mResourceCount   %d", mResourceCount);
+   Prn::print(aPF, "mX1              %d", mX1);
+   Prn::print(aPF, "mX2              %d", mX2);
+   Prn::print(aPF, "mX3              %d", mX3);
+   Prn::print(aPF, "mX4              %d", mX4);
 }
 
 //******************************************************************************
@@ -66,6 +67,9 @@ void initializeShare()
    // Create the global instance.
    gShare = new (gSharedMemory.mMemory) Share;
 
+   // Increment the resource count.
+   gShare->mResourceCount++;
+
    // If this the first time that the shared memory region was created
    // then initialize.
    if (tFirst)
@@ -81,7 +85,11 @@ void initializeShare()
 
 void finalizeShare()
 {
-   gSharedMemory.finalize();
+   // Decrement the resource count.
+   gShare->mResourceCount--;
+
+   // Finalize.
+   gSharedMemory.finalize(gShare->mResourceCount == 0);
 }
 
 //******************************************************************************

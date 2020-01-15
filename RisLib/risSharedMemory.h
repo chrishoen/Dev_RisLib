@@ -39,8 +39,11 @@ public:
    //***************************************************************************
    // Members.
 
-   // The name of the shared memory.
+   // The name of the shared memory region.
    char mName[cMaxStringSize];
+
+   // The size of the shared memory region.
+   int mNumBytes;
 
    // The address of the shared memory region that was created or opened.
    // If this is zero then the region is not open.
@@ -59,7 +62,7 @@ public:
    bool initialize(const char* aName, int aNumBytes);
    
    // Close the shared memory region.
-   void finalize();
+   void finalize(bool aUnlink = false);
 
    //***************************************************************************
    //***************************************************************************

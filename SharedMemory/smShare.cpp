@@ -39,7 +39,7 @@ void Share::initialize()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return the state as a string.
+// Show.
 
 void Share::show(int aPF)
 {
@@ -48,6 +48,11 @@ void Share::show(int aPF)
    Prn::print(aPF, "mX2              %d", mX2);
    Prn::print(aPF, "mX3              %d", mX3);
    Prn::print(aPF, "mX4              %d", mX4);
+}
+
+void Share::show2()
+{
+   gSharedMemory.show();
 }
 
 //******************************************************************************
@@ -59,21 +64,19 @@ void Share::show(int aPF)
 // instance. Otherwise, do not initialize it, because the first process
 // already did.
 
-void initializeShare()
+void initializeShare(bool aCreateFlag)
 {
    // Create the shared memory region.
-   bool tFirst = gSharedMemory.initialize("AAAASHARE", 16384);
+   gSharedMemory.initialize("AAAASHARE2", 4*4096, aCreateFlag);
 
    // Create the global instance.
    gShare = new (gSharedMemory.mMemory) Share;
 
-   // Increment the resource count.
-   gShare->mResourceCount++;
-
-   // If this the first time that the shared memory region was created
-   // then initialize.
-   if (tFirst)
+   // Increment the resource count. If this the first time that the shared
+   // memory region was created then initialize.
+   if (++gShare->mResourceCount == 1)
    {
+      printf("initialize\n");
       gShare->initialize();
    }
 }

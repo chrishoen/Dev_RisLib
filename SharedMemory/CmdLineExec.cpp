@@ -14,7 +14,7 @@
 
 
 CmdLineExec::CmdLineExec()
-   : mMutex("mymutex")
+// : mMutex("mymutex")
 {
 }
 
@@ -45,6 +45,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("SW"))       executeShareWrite(aCmd);
    if (aCmd->isCmd("SR"))       executeShareRead(aCmd);
+   if (aCmd->isCmd("Show2"))    executeShow2(aCmd);
 }
 
 //******************************************************************************
@@ -63,19 +64,24 @@ void CmdLineExec::executeShareRead(Ris::CmdLineCmd* aCmd)
    SM::gShare->show(0);
 }
 
+void CmdLineExec::executeShow2(Ris::CmdLineCmd* aCmd)
+{
+   SM::gShare->show2();
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 void CmdLineExec::executeMutexLock(Ris::CmdLineCmd* aCmd)
 {
-   mMutex.lock();
+// mMutex.lock();
    Prn::print(0, "done");
 }
 
 void CmdLineExec::executeMutexUnlock(Ris::CmdLineCmd* aCmd)
 {
-   mMutex.unlock();
+// mMutex.unlock();
    Prn::print(0, "done");
 }
 

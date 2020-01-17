@@ -42,6 +42,10 @@ public:
    // The name of the shared memory region.
    char mName[cMaxStringSize];
 
+   // If true then the shared memory region was created. If false, then it
+   // was opened.
+   bool mCreateFlag;
+
    // The size of the shared memory region.
    int mNumBytes;
 
@@ -56,13 +60,17 @@ public:
 
    // Constructor.
    SharedMemory();
+   ~SharedMemory();
 
    // If the shared memory region does not already exist, then create it and
    // return true. If it does already exist, then open it and return false.
-   bool initialize(const char* aName, int aNumBytes);
-   
+   bool initialize(const char* aName, int aNumBytes, bool aCreateFlag);
+
    // Close the shared memory region.
    void finalize(bool aUnlink = false);
+
+   // Show.
+   void show();
 
    //***************************************************************************
    //***************************************************************************

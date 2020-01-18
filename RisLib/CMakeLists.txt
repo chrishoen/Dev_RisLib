@@ -18,9 +18,7 @@ else()
    install(TARGETS RisLib DESTINATION "/usr/local/lib")
 endif()
 
-if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
-   install(TARGETS SharedMemory DESTINATION "/opt/prime/stage")
-else()
+if(CMAKE_SYSTEM_VERSION EQUAL 101)
    add_custom_command(
       TARGET  RisLib
       POST_BUILD

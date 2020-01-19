@@ -12,6 +12,7 @@ my_special1()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("SharedMemory")
+add_subdirectory ("NamedSemaphore")
 return()
 
 add_subdirectory ("ByteContent")

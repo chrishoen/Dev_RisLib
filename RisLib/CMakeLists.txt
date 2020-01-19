@@ -22,7 +22,7 @@ if(CMAKE_SYSTEM_VERSION EQUAL 101)
    add_custom_command(
       TARGET  RisLib
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so rsync://debian@bby/prime/stage
+      COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so rsync://debian@bbx/prime/stage
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/RisLib)
 endif()
 

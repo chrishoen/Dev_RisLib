@@ -66,6 +66,8 @@ void Share::show2()
 
 void initializeShare(bool aCreateFlag)
 {
+   return;
+
    // Create the shared memory region.
    gSharedMemory.initialize("AAAASHARE2", 4*4096, aCreateFlag);
 
@@ -88,6 +90,8 @@ void initializeShare(bool aCreateFlag)
 
 void finalizeShare()
 {
+   return;
+
    // Decrement the resource count.
    gShare->mResourceCount--;
 

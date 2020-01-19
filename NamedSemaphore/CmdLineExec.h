@@ -9,7 +9,7 @@ Program command line executive.
 //******************************************************************************
 
 #include "risCmdLineExec.h"
-#include "risThreadsSynch.h"
+#include "risNamedSemaphore.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -30,7 +30,7 @@ public:
    //***************************************************************************
    // Members.
 
-   Ris::Threads::NamedMutex mMutex;
+   Ris::NamedSemaphore mSem;
 
    //***************************************************************************
    //***************************************************************************
@@ -62,12 +62,8 @@ public:
    void executeGo4(Ris::CmdLineCmd* aCmd);
    void executeGo5(Ris::CmdLineCmd* aCmd);
 
-   void executeMutexLock(Ris::CmdLineCmd* aCmd);
-   void executeMutexUnlock(Ris::CmdLineCmd* aCmd);
-
-   void executeShareWrite (Ris::CmdLineCmd* aCmd);
-   void executeShareRead(Ris::CmdLineCmd* aCmd);
-   void executeShow2(Ris::CmdLineCmd* aCmd);
+   void executePut(Ris::CmdLineCmd* aCmd);
+   void executeGet(Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

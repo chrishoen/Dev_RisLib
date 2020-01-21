@@ -14,7 +14,7 @@
 
 
 CmdLineExec::CmdLineExec()
- : mMutex("mymutex")
+ : mMutex("/mymutex")
 {
 }
 

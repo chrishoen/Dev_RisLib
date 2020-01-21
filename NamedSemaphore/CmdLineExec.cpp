@@ -11,7 +11,7 @@
 
 
 CmdLineExec::CmdLineExec()
- : mSem("mynamedsem")
+ : mSem("/mynamedsem")
 {
 }
 

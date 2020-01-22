@@ -14,7 +14,7 @@
 
 
 CmdLineExec::CmdLineExec()
- : mMutex("/mymutex")
+ : mSem("/mysem2")
 {
 }
 
@@ -40,8 +40,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
    if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
 
-   if (aCmd->isCmd("MLock"))    executeMutexLock(aCmd);
-   if (aCmd->isCmd("MUnlock"))  executeMutexUnlock(aCmd);
+   if (aCmd->isCmd("Put"))  executePut(aCmd);
+   if (aCmd->isCmd("get"))  executeGet(aCmd);
 
    if (aCmd->isCmd("SW"))       executeShareWrite(aCmd);
    if (aCmd->isCmd("SR"))       executeShareRead(aCmd);
@@ -73,15 +73,15 @@ void CmdLineExec::executeShow2(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeMutexLock(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
 {
-   mMutex.lock();
+   mSem.put();
    Prn::print(0, "done");
 }
 
-void CmdLineExec::executeMutexUnlock(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
 {
-   mMutex.unlock();
+   mSem.get();
    Prn::print(0, "done");
 }
 

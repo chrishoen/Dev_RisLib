@@ -16,6 +16,8 @@ Description:
 #include <sys/types.h>
 #include <sys/ipc.h>
 
+#include "prnPrint.h"
+#include "my_functions.h"
 #include "risSystemCalls.h"
 #include "risFileFunctions.h"
 #include "risSharedMemory.h"

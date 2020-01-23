@@ -64,10 +64,10 @@ public:
 
    // If the shared memory region does not already exist, then create it and
    // return true. If it does already exist, then open it and return false.
-   bool initialize(const char* aName, int aNumBytes, bool aCreateFlag);
+   bool initialize(const char* aName, int aNumBytes);
 
    // Close the shared memory region.
-   void finalize(bool aUnlink = false);
+   void finalize();
 
    // Show.
    void show();

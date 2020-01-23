@@ -66,7 +66,7 @@ public:
 // the region (it was created created, not opened) then initialize the global
 // instance. Otherwise, do not initialize it, because the first process
 // already did.
-void initializeShare(bool aCreateFlag);
+void initializeShare();
 
 // Close the shared memory region for the global instance.
 void finalizeShare();

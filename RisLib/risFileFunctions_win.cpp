@@ -22,34 +22,30 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Write a json value to a file.
+// Delete a file.
 
-void doWriteJsonToFile(
-   Json::Value& aJsonValue,    // Input
-   const std::string& aFilePath)     // Input
+void deleteFile(const char* aFilePath)
 {
-   // Write the json value to the output file.
-   std::ofstream tOutputFile(aFilePath, std::ofstream::out);
-   Json::StyledStreamWriter tWriter;
-   tWriter.write(tOutputFile, aJsonValue);
-   tOutputFile.close();
+   char* tString = new char[2000];
+   sprintf(tString, "del %s", aFilePath);
+   Ris::doSystemCommand(tString);
+   delete tString;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read a json value from a file.
+// Touch a file.
 
-void doReadJsonFromFile(
-   Json::Value& aJsonValue,    // Output
-   const std::string& aFilePath)     // Input
+void touchFile(const char* aFilePath)
 {
-   // Read the json value from the input file.
-   std::ifstream tInputFile(aFilePath);
-   tInputFile >> aJsonValue;
+   char* tString = new char[2000];
+   sprintf(tString, "touch %s", aFilePath);
+   Ris::doSystemCommand(tString);
+   delete tString;
 }
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace

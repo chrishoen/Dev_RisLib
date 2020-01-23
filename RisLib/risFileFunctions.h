@@ -40,6 +40,9 @@ std::string& getSafeFilePath(std::string& aBuffer, const std::string& aFilePath)
 // Delete a file.
 void deleteFile(const char* aFilePath);
 
+// Touch a file.
+void doTouchFile(const char* aFilePath);
+
 // Write a json value to a file.
 void doWriteJsonToFile(
    Json::Value& aJsonValue,           // Input

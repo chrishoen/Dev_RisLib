@@ -16,6 +16,8 @@ Description:
 #include <sys/types.h>
 #include <sys/ipc.h>
 
+#include "risSystemCalls.h"
+#include "risFileFunctions.h"
 #include "risSharedMemory.h"
 
 namespace Ris
@@ -57,7 +59,7 @@ SharedMemory::~SharedMemory()
 // If the shared memory region does not already exist, then create it and
 // return true. If it does already exist, then open it and return false.
 
-bool SharedMemory::initialize(const char* aName, int aNumBytes, bool aCreateFlag)
+bool SharedMemory::initialize(const char* aName, int aNumBytes)
 {
    //****************************************************************************
    //****************************************************************************
@@ -67,7 +69,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, bool aCreateFlag
    int tRet = 0;
    mMemory = 0;
    mNumBytes = aNumBytes;
-   mCreateFlag = aCreateFlag;
+   mCreateFlag = false;
 
    // Save and set the umask.
    mode_t save_umask = umask(0);
@@ -77,6 +79,11 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, bool aCreateFlag
 
    // Default so that this is the first one.
    bool tFirstFlag = true;
+
+   //****************************************************************************
+   //****************************************************************************
+   //****************************************************************************
+   // Create the key.
 
    // Create the key.
    mSpecific->mKey = ftok("/opt/prime/special/myftok",101);
@@ -94,7 +101,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, bool aCreateFlag
    //****************************************************************************
    // Create or open the shared memory.
 
-   if (aCreateFlag)
+   if (mCreateFlag)
    {
       // Create a shared memory region.
       mSpecific->mFd = shmget(mSpecific->mKey, mNumBytes, tMode | IPC_CREAT);
@@ -166,7 +173,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, bool aCreateFlag
 //******************************************************************************
 // Close the shared memory.
 
-void SharedMemory::finalize(bool aUnlink)
+void SharedMemory::finalize()
 {
    int tRet = 0;
 
@@ -181,7 +188,7 @@ void SharedMemory::finalize(bool aUnlink)
    }
 
    // Unlink the shared memory.
-   if (aUnlink)
+   if (false)
    {
       printf("shmctl RMID\n");
       shmctl(mSpecific->mFd, IPC_RMID, NULL);

@@ -44,7 +44,7 @@ void main_initialize(int argc,char** argv)
    // initialize.
 
    // Initialize shared memory.
-   SM::initializeShare(argc == 2);
+   SM::initializeShare();
 }
 
 //******************************************************************************

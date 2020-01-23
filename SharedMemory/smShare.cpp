@@ -64,10 +64,10 @@ void Share::show2()
 // instance. Otherwise, do not initialize it, because the first process
 // already did.
 
-void initializeShare(bool aCreateFlag)
+void initializeShare()
 {
    // Create the shared memory region.
-   gSharedMemory.initialize("AAAASHARE2", 4096, aCreateFlag);
+   gSharedMemory.initialize("AAAASHARE", 4096);
 
    // Create the global instance.
    gShare = new (gSharedMemory.mMemory) Share;
@@ -92,7 +92,7 @@ void finalizeShare()
    gShare->mResourceCount--;
 
    // Finalize.
-   gSharedMemory.finalize(gShare->mResourceCount == 0);
+   gSharedMemory.finalize();
 }
 
 //******************************************************************************

@@ -53,6 +53,14 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Members.
+
+   // Print filter.
+   int mPF;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Methods.
 
    // Constructor.
@@ -61,7 +69,7 @@ public:
 
    // If the shared memory does not already exist, then create it and
    // return true. If it does already exist, then open it and return false.
-   bool initialize(const char* aName, int aNumBytes);
+   bool initialize(const char* aName, int aNumBytes, int aPrintFilter = 0);
 
    // Detach from the shared memory. Remove it if there are no more
    // processes attached to it.

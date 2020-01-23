@@ -58,7 +58,7 @@ SharedMemory::~SharedMemory()
 // If the shared memory does not already exist, then create it and
 // return true. If it does already exist, then open it and return false.
 
-bool SharedMemory::initialize(const char* aName, int aNumBytes)
+bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter)
 {
    //***************************************************************************
    //***************************************************************************
@@ -70,12 +70,13 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    mMemory = 0;
    mNumBytes = aNumBytes;
    strcpy(mName, aName);
+   mPF = aPrintFilter;
 
    // Save and set the umask.
    mode_t save_umask = umask(0);
    mode_t tMode = 0666;
 
-   printf("umask %03o %03o\n", tMode, save_umask);
+   Prn::print(mPF, "umask %03o %03o", tMode, save_umask);
 
    // Default so that this is the first one.
    bool tFirstFlag = true;
@@ -105,13 +106,13 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    // Create the key.
    mSpecific->mKey = ftok(tFilePath,101);
 
-   printf("ftok key %s %d\n", tFilePath, mSpecific->mKey);
+   Prn::print(mPF, "ftok key %s %d", tFilePath, mSpecific->mKey);
 
    delete tFilePath;
 
    if (mSpecific->mKey == -1)
    {
-      printf("ftok error101 %d\n", errno);
+      Prn::print(mPF, "ftok error101 %d", errno);
       exit(1);
       return false;
    }
@@ -136,7 +137,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    // Guard.
    if (mSpecific->mFd == -1)
    {
-      printf("shmget error101 %d\n", errno);
+      Prn::print(mPF, "shmget error101 %d", errno);
       exit(1);
       return false;
    }
@@ -154,7 +155,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
 
    if (mMemory == (void*)-1)
    {
-      printf("shmat error102 %d\n", errno);
+      Prn::print(mPF, "shmat error102 %d", errno);
       exit(1);
       return false;
    }
@@ -164,7 +165,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    //***************************************************************************
    // Done.
 
-   printf("shm_open %d %s\n", getNumAttached(), my_string_from_bool(tFirstFlag));
+   Prn::print(mPF, "shm_open %d %s", getNumAttached(), my_string_from_bool(tFirstFlag));
 
    return tFirstFlag;
 }
@@ -192,7 +193,7 @@ void SharedMemory::finalize()
    // Unmap the shared memory.
 
    // Detach the shared memory.
-   printf("shmdt\n");
+   Prn::print(mPF, "shmdt");
    tRet = shmdt(mMemory);
    
    // Set to zero.
@@ -200,14 +201,15 @@ void SharedMemory::finalize()
 
    if (tRet == -1)
    {
-      printf("finalize error102 %d", errno);
+      Prn::print(mPF, "finalize error102 %d", errno);
+      exit(1);
       return;
    }
 
    // Unlink the shared memory.
    if (tNumAttached == 1)
    {
-      printf("shmctl RMID\n");
+      Prn::print(mPF, "shmctl RMID");
       shmctl(mSpecific->mFd, IPC_RMID, NULL);
    }
 }
@@ -225,18 +227,18 @@ void SharedMemory::show()
    tRet = shmctl(mSpecific->mFd, IPC_STAT, &tBuff);
    if (tRet != 0)
    {
-      printf("show error101 %d\n", errno);
+      Prn::print(mPF, "show error101 %d", errno);
       exit(1);
       return;
    }
-   printf("perm.uid    %d\n", tBuff.shm_perm.uid);
-   printf("perm.gid    %d\n", tBuff.shm_perm.gid);
-   printf("perm.cuid   %d\n", tBuff.shm_perm.cuid);
-   printf("perm.cgid   %d\n", tBuff.shm_perm.cgid);
-   printf("perm.mode   %o\n", tBuff.shm_perm.mode);
-   printf("cpid        %d\n", tBuff.shm_cpid);
-   printf("lpid        %d\n", tBuff.shm_lpid);
-   printf("attach      %d\n", tBuff.shm_nattch);
+   Prn::print(mPF, "perm.uid    %d", tBuff.shm_perm.uid);
+   Prn::print(mPF, "perm.gid    %d", tBuff.shm_perm.gid);
+   Prn::print(mPF, "perm.cuid   %d", tBuff.shm_perm.cuid);
+   Prn::print(mPF, "perm.cgid   %d", tBuff.shm_perm.cgid);
+   Prn::print(mPF, "perm.mode   %o", tBuff.shm_perm.mode);
+   Prn::print(mPF, "cpid        %d", tBuff.shm_cpid);
+   Prn::print(mPF, "lpid        %d", tBuff.shm_lpid);
+   Prn::print(mPF, "attach      %d", tBuff.shm_nattch);
 }
 
 //******************************************************************************
@@ -252,7 +254,7 @@ int SharedMemory::getNumAttached()
    tRet = shmctl(mSpecific->mFd, IPC_STAT, &tBuff);
    if (tRet != 0)
    {
-      printf("shctl error101 %d\n", errno);
+      Prn::print(mPF, "shctl error101 %d", errno);
       exit(1);
       return false;
    }

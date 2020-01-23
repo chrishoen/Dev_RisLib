@@ -7,7 +7,7 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
-//#include "risSharedMemory.h"
+#include "risSharedMemory.h"
 
 #define  _SMSHARE_CPP_
 #include "smShare.h"
@@ -20,7 +20,7 @@ namespace SM
 //******************************************************************************
 // Shared memory object for the global instance.
 
-//Ris::SharedMemory gSharedMemory;
+Ris::SharedMemory gSharedMemory;
 
 //******************************************************************************
 //******************************************************************************
@@ -52,7 +52,7 @@ void Share::show(int aPF)
 
 void Share::show2()
 {
-//   gSharedMemory.show();
+   gSharedMemory.show();
 }
 
 //******************************************************************************
@@ -69,10 +69,10 @@ void initializeShare(bool aCreateFlag)
    return;
 
    // Create the shared memory region.
-//   gSharedMemory.initialize("AAAASHARE2", 4*4096, aCreateFlag);
+   gSharedMemory.initialize("AAAASHARE2", 4096, aCreateFlag);
 
    // Create the global instance.
-//   gShare = new (gSharedMemory.mMemory) Share;
+   gShare = new (gSharedMemory.mMemory) Share;
 
    // Increment the resource count. If this the first time that the shared
    // memory region was created then initialize.
@@ -96,7 +96,7 @@ void finalizeShare()
    gShare->mResourceCount--;
 
    // Finalize.
-//   gSharedMemory.finalize(gShare->mResourceCount == 0);
+   gSharedMemory.finalize(gShare->mResourceCount == 0);
 }
 
 //******************************************************************************

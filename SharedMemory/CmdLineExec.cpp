@@ -3,6 +3,7 @@
 #include "risProgramTime.h"
 
 
+#include "smShare.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -37,8 +38,33 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
    if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
 
-   if (aCmd->isCmd("Put"))  executePut(aCmd);
-   if (aCmd->isCmd("get"))  executeGet(aCmd);
+   if (aCmd->isCmd("Put"))     executePut(aCmd);
+   if (aCmd->isCmd("get"))     executeGet(aCmd);
+
+   if (aCmd->isCmd("SW"))      executeShareWrite(aCmd);
+   if (aCmd->isCmd("SR"))      executeShareRead(aCmd);
+   if (aCmd->isCmd("Show2"))   executeShow2(aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeShareWrite(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, "201");
+
+   SM::gShare->mX1 = aCmd->argInt(1);
+}
+
+void CmdLineExec::executeShareRead(Ris::CmdLineCmd* aCmd)
+{
+   SM::gShare->show(0);
+}
+
+void CmdLineExec::executeShow2(Ris::CmdLineCmd* aCmd)
+{
+   SM::gShare->show2();
 }
 
 //******************************************************************************

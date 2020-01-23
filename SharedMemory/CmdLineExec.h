@@ -64,6 +64,10 @@ public:
 
    void executePut(Ris::CmdLineCmd* aCmd);
    void executeGet(Ris::CmdLineCmd* aCmd);
+
+   void executeShareWrite(Ris::CmdLineCmd* aCmd);
+   void executeShareRead(Ris::CmdLineCmd* aCmd);
+   void executeShow2(Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

@@ -244,6 +244,57 @@ void NamedMutex::unlock()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Named mutex.
+
+// Specific implementation variables.
+class NamedSemaphore::Specific
+{
+public:
+   HANDLE mHandle;
+};
+
+// Constructor. Create the mutex.
+NamedSemaphore::NamedSemaphore(const char* aName)
+{
+   mSpecific = new Specific;
+   initialize(aName);
+}
+
+// Constructor. default. Initialize the data structure.
+NamedSemaphore::NamedSemaphore()
+{
+   mSpecific = new Specific;
+}
+
+// Create the semaphore. Call this if using default constructor.
+void NamedSemaphore::initialize(const char* aName)
+{
+   mSpecific->mHandle = CreateSemaphore(NULL, 1, 1, aName);
+}
+
+// Destructor. Delete the semaphore.
+NamedSemaphore::~NamedSemaphore()
+{
+   CloseHandle(mSpecific->mHandle);
+   delete mSpecific;
+}
+
+// Put to the semaphore.
+void NamedSemaphore::put()
+{
+   ReleaseSemaphore(mSpecific->mHandle, 1, NULL);
+}
+
+// Get from the semaphore.
+void NamedSemaphore::get()
+{
+   WaitForSingleObject(mSpecific->mHandle, INFINITE);
+}
+
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 }//namespace
 

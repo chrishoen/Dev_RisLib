@@ -12,8 +12,6 @@ function(my_find_src_files _a_src_files _target)
       list(FILTER _src_files EXCLUDE REGEX ".*_win.cpp$")
    endif()
 
-#   list(APPEND _src_files "stdafx.h")
-
    set(${_a_src_files} ${_src_files} PARENT_SCOPE)
 
    message(STATUS "***********************************************************" ${_target})

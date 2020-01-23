@@ -10,6 +10,10 @@ Description:
 
 #include <Windows.h>
 
+#include "prnPrint.h"
+#include "my_functions.h"
+#include "risSystemCalls.h"
+#include "risFileFunctions.h"
 #include "risSharedMemory.h"
 
 namespace Ris
@@ -37,16 +41,24 @@ SharedMemory::SharedMemory()
    mMemory = 0;
 }
 
+SharedMemory::~SharedMemory()
+{
+   delete mSpecific;
+}
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
 // If the shared memory region does not already exist, then create it and
 // return true. If it does already exist, then open it and return false.
 
-bool SharedMemory::initialize(const char* aName, int aNumBytes)
+bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter)
 {
    // Do this first.
    mMemory = 0;
+   mNumBytes = aNumBytes;
+   strcpy(mName, aName);
+   mPF = aPrintFilter;
 
    // Create shared memory.
    mSpecific->mShareFileMap=CreateFileMapping(
@@ -88,6 +100,28 @@ void SharedMemory::finalize()
     if (mSpecific) delete mSpecific;
     mSpecific = 0;
     mMemory = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Show info.
+
+void SharedMemory::show()
+{
+   Prn::print(mPF, "attach      %d", 101);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Get number of processes that are attached to the shared memory.
+
+int SharedMemory::getNumAttached()
+{
+   int tRet = 0;
+   int tNumAttached = 1;
+   return tNumAttached;
 }
 
 //******************************************************************************

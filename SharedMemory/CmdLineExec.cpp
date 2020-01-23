@@ -1,11 +1,8 @@
 #include "stdafx.h"
 
 #include "risProgramTime.h"
-#include "risThreadsThreads.h"
-#include "risThreadsSynch.h"
 
 
-#include "smShare.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -14,7 +11,7 @@
 
 
 CmdLineExec::CmdLineExec()
- : mSem("/mysem2")
+ : mSem("/mynamedsem")
 {
 }
 
@@ -42,31 +39,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("Put"))  executePut(aCmd);
    if (aCmd->isCmd("get"))  executeGet(aCmd);
-
-   if (aCmd->isCmd("SW"))       executeShareWrite(aCmd);
-   if (aCmd->isCmd("SR"))       executeShareRead(aCmd);
-   if (aCmd->isCmd("Show2"))    executeShow2(aCmd);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeShareWrite(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->setArgDefault(1, "201");
-
-   SM::gShare->mX1 = aCmd->argInt(1);
-}
-
-void CmdLineExec::executeShareRead(Ris::CmdLineCmd* aCmd)
-{
-   SM::gShare->show(0);
-}
-
-void CmdLineExec::executeShow2(Ris::CmdLineCmd* aCmd)
-{
-   SM::gShare->show2();
 }
 
 //******************************************************************************
@@ -91,8 +63,6 @@ void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   double tTime = Ris::getCurrentProgramTime();
-   Prn::print(0, "Ris::getCurrentProgramTime     %10.6f", tTime);
 }
 
 //******************************************************************************
@@ -101,13 +71,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, "101");
-
-   Prn::print(0, "test     %10d", aCmd->argInt(1));
-
-   char tBuffer[40];
-   Ris::portableGetCurrentTimeAsString(tBuffer, false);
-   Prn::print(0, "Ris::portableGetCurrentTimeAsString   %s", tBuffer);
 }
 
 //******************************************************************************

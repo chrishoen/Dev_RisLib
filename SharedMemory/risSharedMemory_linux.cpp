@@ -44,7 +44,6 @@ SharedMemory::SharedMemory()
 {
    mSpecific = new Specific;
    mNumBytes = 0;
-   mCreateFlag = false;
    mMemory = 0;
 }
 
@@ -61,15 +60,17 @@ SharedMemory::~SharedMemory()
 
 bool SharedMemory::initialize(const char* aName, int aNumBytes)
 {
-   //****************************************************************************
-   //****************************************************************************
-   //****************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Do this first.
 
+   // Store these.
    int tRet = 0;
    mMemory = 0;
    mNumBytes = aNumBytes;
-   mCreateFlag = false;
+   strcpy(mName, aName);
+   mNumAttached = 0;
 
    // Save and set the umask.
    mode_t save_umask = umask(0);
@@ -80,15 +81,35 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    // Default so that this is the first one.
    bool tFirstFlag = true;
 
-   //****************************************************************************
-   //****************************************************************************
-   //****************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Create the key.
 
-   // Create the key.
-   mSpecific->mKey = ftok("/opt/prime/special/myftok",101);
+   // Get a temp file path.
+   char* tFilePath = new char[2000];
 
-   printf("ftok key %d\n", mSpecific->mKey);
+   if (aName[0] != '/')
+   {
+      strcpy(tFilePath, "/var/tmp/");
+      strcat(tFilePath, aName);
+   }
+   else
+   {
+      strcpy(tFilePath, "/var/tmp");
+      strcat(tFilePath, aName);
+   }
+
+   // Create the temp file.
+   Ris::touchFile(tFilePath);
+
+   // Create the key.
+   mSpecific->mKey = ftok(tFilePath,101);
+
+   printf("ftok key %s %d\n", tFilePath, mSpecific->mKey);
+
+   delete tFilePath;
+
    if (mSpecific->mKey == -1)
    {
       printf("ftok error101 %d\n", errno);
@@ -96,22 +117,21 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
       return false;
    }
 
-   //****************************************************************************
-   //****************************************************************************
-   //****************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Create or open the shared memory.
 
-   if (mCreateFlag)
+   // Try to open the shared memory region.
+   mSpecific->mFd = shmget(mSpecific->mKey, mNumBytes, tMode);
+   tFirstFlag = false;
+
+   // If the open didn't work then the shared memory doesn't exist.
+   if (mSpecific->mFd == -1)
    {
-      // Create a shared memory region.
+      // Create the shared memory region.
       mSpecific->mFd = shmget(mSpecific->mKey, mNumBytes, tMode | IPC_CREAT);
       tFirstFlag = true;
-   }
-   else
-   {
-      // Open a shared memory region exclusively.
-      mSpecific->mFd = shmget(mSpecific->mKey, mNumBytes, tMode);
-      tFirstFlag = false;
    }
 
    // Guard.
@@ -125,12 +145,12 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    // Restore the umask.
    umask(save_umask);
 
-   //****************************************************************************
-   //****************************************************************************
-   //****************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Map the shared memory.
 
-   // Map  the memory to process address space.
+   // Attach the shared memory to the process address space.
    mMemory = shmat(mSpecific->mFd, NULL, 0);
 
    if (mMemory == (void*)-1)
@@ -140,30 +160,29 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
       return false;
    }
 
-   //****************************************************************************
-   //****************************************************************************
-   //****************************************************************************
-   // Lock the shared memory.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Get the number of attaches.
 
-   if (mCreateFlag && false)
+   struct shmid_ds tBuff;
+   memset(&tBuff, 0, sizeof(struct shmid_ds));
+   tRet = shmctl(mSpecific->mFd, IPC_STAT, &tBuff);
+   if (tRet != 0)
    {
-
-      printf("shmctl SHM_LOCK\n");
-      shmctl(mSpecific->mFd, SHM_LOCK, NULL);
-      if (tRet == -1)
-      {
-         printf("lock error101 %d\n", errno);
-         exit(1);
-         return false;
-      }
+      printf("shctl error101 %d\n", errno);
+      exit(1);
+      return false;
    }
 
-   //****************************************************************************
-   //****************************************************************************
-   //****************************************************************************
+   mNumAttached = tBuff.shm_nattch;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Done.
 
-   printf("shm_open %d\n", tFirstFlag);
+   printf("shm_open %d %s\n", mNumAttached, my_string_from_bool(tFirstFlag));
 
    return tFirstFlag;
 }
@@ -177,10 +196,35 @@ void SharedMemory::finalize()
 {
    int tRet = 0;
 
-   // unmap the shared memory.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Get the number of attaches.
+
+   struct shmid_ds tBuff;
+   memset(&tBuff, 0, sizeof(struct shmid_ds));
+   tRet = shmctl(mSpecific->mFd, IPC_STAT, &tBuff);
+   if (tRet != 0)
+   {
+      printf("shctl error101 %d\n", errno);
+      exit(1);
+      return;
+   }
+
+   mNumAttached = tBuff.shm_nattch;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Unmap the shared memory.
+
+   // Detach the shared memory.
    printf("shmdt\n");
    tRet = shmdt(mMemory);
    
+   // Set to zero.
+   mMemory = 0;
+
    if (tRet == -1)
    {
       printf("finalize error102 %d", errno);
@@ -188,7 +232,7 @@ void SharedMemory::finalize()
    }
 
    // Unlink the shared memory.
-   if (false)
+   if (mNumAttached == 1)
    {
       printf("shmctl RMID\n");
       shmctl(mSpecific->mFd, IPC_RMID, NULL);

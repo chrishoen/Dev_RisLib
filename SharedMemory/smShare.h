@@ -25,11 +25,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // Resource counter. This is automatically set to zero when the share is 
-   // created, because the shared memory region is zeroed whn it is created. 
-   // It is incremented when the share is initialized. It is decremented when
-   // it is finalized.
-   int mResourceCount;
+   // The number of attaches to the shared memory.
+   int mNumAttached;
 
    // Some variables.
    int mX1;

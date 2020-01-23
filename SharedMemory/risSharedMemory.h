@@ -42,16 +42,15 @@ public:
    // The name of the shared memory region.
    char mName[cMaxStringSize];
 
-   // If true then the shared memory region was created. If false, then it
-   // was opened.
-   bool mCreateFlag;
-
    // The size of the shared memory region.
    int mNumBytes;
 
    // The address of the shared memory region that was created or opened.
    // If this is zero then the region is not open.
    void* mMemory;
+
+   // The number of attaches to the shared memory.
+   int mNumAttached;
 
    //***************************************************************************
    //***************************************************************************

@@ -30,6 +30,7 @@ Ris::SharedMemory gSharedMemory;
 
 void Share::initialize()
 {
+   mNumAttached = 0;
    mX1 = 101;
    mX2 = 102;
    mX3 = 103;
@@ -43,7 +44,7 @@ void Share::initialize()
 
 void Share::show(int aPF)
 {
-   Prn::print(aPF, "mResourceCount   %d", mResourceCount);
+   Prn::print(aPF, "mNumAttached     %d", mNumAttached);
    Prn::print(aPF, "mX1              %d", mX1);
    Prn::print(aPF, "mX2              %d", mX2);
    Prn::print(aPF, "mX3              %d", mX3);
@@ -66,19 +67,21 @@ void Share::show2()
 
 void initializeShare()
 {
-   // Create the shared memory region.
-   gSharedMemory.initialize("AAAASHARE", 4096);
+   // Create or open the shared memory.
+   bool tFirstFlag = gSharedMemory.initialize("AAAASHARE", 4096);
 
    // Create the global instance.
    gShare = new (gSharedMemory.mMemory) Share;
 
-   // Increment the resource count. If this the first time that the shared
-   // memory region was created then initialize.
-   if (++gShare->mResourceCount == 1)
+   // If this the first time that the shared memory was created then
+   // initialize it.
+   if (tFirstFlag)
    {
       printf("initialize\n");
       gShare->initialize();
    }
+
+   gShare->mNumAttached = gSharedMemory.mNumAttached;
 }
 
 //******************************************************************************
@@ -88,9 +91,6 @@ void initializeShare()
 
 void finalizeShare()
 {
-   // Decrement the resource count.
-   gShare->mResourceCount--;
-
    // Finalize.
    gSharedMemory.finalize();
 }

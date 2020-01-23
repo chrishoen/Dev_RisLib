@@ -25,9 +25,6 @@ public:
    //***************************************************************************
    // Members.
 
-   // The number of attaches to the shared memory.
-   int mNumAttached;
-
    // Some variables.
    int mX1;
    int mX2;

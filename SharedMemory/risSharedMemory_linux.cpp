@@ -55,7 +55,7 @@ SharedMemory::~SharedMemory()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// If the shared memory region does not already exist, then create it and
+// If the shared memory does not already exist, then create it and
 // return true. If it does already exist, then open it and return false.
 
 bool SharedMemory::initialize(const char* aName, int aNumBytes)
@@ -70,7 +70,6 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    mMemory = 0;
    mNumBytes = aNumBytes;
    strcpy(mName, aName);
-   mNumAttached = 0;
 
    // Save and set the umask.
    mode_t save_umask = umask(0);
@@ -91,13 +90,13 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
 
    if (aName[0] != '/')
    {
-      strcpy(tFilePath, "/var/tmp/");
+      strcpy(tFilePath, "/tmp/aaa_shm_");
       strcat(tFilePath, aName);
    }
    else
    {
-      strcpy(tFilePath, "/var/tmp");
-      strcat(tFilePath, aName);
+      strcpy(tFilePath, "/tmp/aaa_shm_");
+      strcat(tFilePath, &aName[1]);
    }
 
    // Create the temp file.
@@ -163,26 +162,9 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Get the number of attaches.
-
-   struct shmid_ds tBuff;
-   memset(&tBuff, 0, sizeof(struct shmid_ds));
-   tRet = shmctl(mSpecific->mFd, IPC_STAT, &tBuff);
-   if (tRet != 0)
-   {
-      printf("shctl error101 %d\n", errno);
-      exit(1);
-      return false;
-   }
-
-   mNumAttached = tBuff.shm_nattch;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Done.
 
-   printf("shm_open %d %s\n", mNumAttached, my_string_from_bool(tFirstFlag));
+   printf("shm_open %d %s\n", getNumAttached(), my_string_from_bool(tFirstFlag));
 
    return tFirstFlag;
 }
@@ -190,7 +172,8 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Close the shared memory.
+// Detach from the shared memory. Remove it if there are no more
+// processes attached to it.
 
 void SharedMemory::finalize()
 {
@@ -201,17 +184,7 @@ void SharedMemory::finalize()
    //***************************************************************************
    // Get the number of attaches.
 
-   struct shmid_ds tBuff;
-   memset(&tBuff, 0, sizeof(struct shmid_ds));
-   tRet = shmctl(mSpecific->mFd, IPC_STAT, &tBuff);
-   if (tRet != 0)
-   {
-      printf("shctl error101 %d\n", errno);
-      exit(1);
-      return;
-   }
-
-   mNumAttached = tBuff.shm_nattch;
+   int tNumAttached = getNumAttached();
 
    //***************************************************************************
    //***************************************************************************
@@ -232,7 +205,7 @@ void SharedMemory::finalize()
    }
 
    // Unlink the shared memory.
-   if (mNumAttached == 1)
+   if (tNumAttached == 1)
    {
       printf("shmctl RMID\n");
       shmctl(mSpecific->mFd, IPC_RMID, NULL);
@@ -264,6 +237,28 @@ void SharedMemory::show()
    printf("cpid        %d\n", tBuff.shm_cpid);
    printf("lpid        %d\n", tBuff.shm_lpid);
    printf("attach      %d\n", tBuff.shm_nattch);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Get number of processes that are attached to the shared memory.
+
+int SharedMemory::getNumAttached()
+{
+   int tRet = 0;
+   struct shmid_ds tBuff;
+   memset(&tBuff, 0, sizeof(struct shmid_ds));
+   tRet = shmctl(mSpecific->mFd, IPC_STAT, &tBuff);
+   if (tRet != 0)
+   {
+      printf("shctl error101 %d\n", errno);
+      exit(1);
+      return false;
+   }
+
+   int tNumAttached = tBuff.shm_nattch;
+   return tNumAttached;
 }
 
 //******************************************************************************

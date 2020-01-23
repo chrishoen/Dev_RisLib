@@ -30,7 +30,6 @@ Ris::SharedMemory gSharedMemory;
 
 void Share::initialize()
 {
-   mNumAttached = 0;
    mX1 = 101;
    mX2 = 102;
    mX3 = 103;
@@ -44,7 +43,7 @@ void Share::initialize()
 
 void Share::show(int aPF)
 {
-   Prn::print(aPF, "mNumAttached     %d", mNumAttached);
+   Prn::print(aPF, "NumAttached      %d", gSharedMemory.getNumAttached());
    Prn::print(aPF, "mX1              %d", mX1);
    Prn::print(aPF, "mX2              %d", mX2);
    Prn::print(aPF, "mX3              %d", mX3);
@@ -80,8 +79,6 @@ void initializeShare()
       printf("initialize\n");
       gShare->initialize();
    }
-
-   gShare->mNumAttached = gSharedMemory.mNumAttached;
 }
 
 //******************************************************************************

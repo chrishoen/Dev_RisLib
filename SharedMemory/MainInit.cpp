@@ -1,6 +1,8 @@
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
+#include "smShare.h"
+
 
 //******************************************************************************
 //******************************************************************************
@@ -35,6 +37,14 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::Show4, false);
    Prn::setFilter(Prn::Show5, false);
    Prn::setFilter(Prn::Show6, false);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // initialize.
+
+   // Initialize shared memory.
+   SM::initializeShare(argc == 2);
 }
 
 //******************************************************************************
@@ -44,6 +54,9 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
+   // Finalize shared memory.
+   SM::finalizeShare();
+
    // Finalize print facility.
    Prn::finalizePrint();
 

@@ -167,7 +167,10 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter
    //***************************************************************************
    // Done.
 
-   Prn::print(mPF, "shm_open %d %s", getNumAttached(), my_string_from_bool(tFirstFlag));
+   Prn::print(mPF, "shm_open %d %d %s",
+      mSpecific->mFd,
+      getNumAttached(),
+      my_string_from_bool(tFirstFlag));
 
    return tFirstFlag;
 }

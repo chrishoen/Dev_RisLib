@@ -227,6 +227,7 @@ void SharedMemory::finalize()
 void SharedMemory::show()
 {
    int tRet = 0;
+
    struct shmid_ds tBuff;
    memset(&tBuff, 0, sizeof(struct shmid_ds));
    tRet = shmctl(mSpecific->mFd, IPC_STAT, &tBuff);
@@ -244,6 +245,23 @@ void SharedMemory::show()
    Prn::print(mPF, "cpid        %d", tBuff.shm_cpid);
    Prn::print(mPF, "lpid        %d", tBuff.shm_lpid);
    Prn::print(mPF, "attach      %d", tBuff.shm_nattch);
+
+
+
+   struct shm_info tInfo;
+   memset(&tInfo, 0, sizeof(struct shm_info));
+   tRet = shmctl(mSpecific->mFd, SHM_INFO, (struct shmid_ds*)&tInfo);
+   if (tRet != 0)
+   {
+      Prn::print(mPF, "show error102 %d", errno);
+      exit(1);
+      return;
+   }
+   Prn::print(mPF, "");
+   Prn::print(mPF, "info.used_ids    %d", tInfo.used_ids);
+   Prn::print(mPF, "info.shm_tot     %d", tInfo.shm_tot);
+   Prn::print(mPF, "info.shm_rss     %d", tInfo.shm_rss);
+   Prn::print(mPF, "info.shm_swp     %d", tInfo.shm_swp);
 }
 
 //******************************************************************************

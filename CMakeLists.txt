@@ -12,9 +12,9 @@ my_special1()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("SharedMemory")
-add_subdirectory ("NamedSemaphore")
 return()
 
+add_subdirectory ("NamedSemaphore")
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
 add_subdirectory ("CmdLineTest")

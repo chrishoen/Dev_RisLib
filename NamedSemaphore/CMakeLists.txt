@@ -17,6 +17,6 @@ else()
    add_custom_command(
       TARGET  NamedSemaphore
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx NamedSemaphore rsync://debian@bby1/prime/bin
+      COMMAND rsync -azv --chmod=ugo=rwx NamedSemaphore rsync://debian@bbx/prime/bin
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/NamedSemaphore)
 endif()

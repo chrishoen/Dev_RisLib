@@ -56,10 +56,10 @@ void touchFile(const char* aFilePath)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Open a lock file and lock it file. Return a file descriptor to the
+// Open a lock file and lock it. Return a file descriptor to the
 // opened lock file.
 
-void* doLockFileOpenAndLock(const char* aLockName)
+void* doLockFile_OpenAndLock(const char* aLockName)
 {
    char tFilePath[200];
    sprintf(tFilePath, "/var/lock/%s", aLockName);
@@ -82,7 +82,7 @@ void* doLockFileOpenAndLock(const char* aLockName)
 //****************************************************************************
 // Unlock on opened lock file and close it.
 
-void doLockFileUnlockAndClose(void* aFileDesc)
+void doLockFile_UnlockAndClose(void* aFileDesc)
 {
    int tFileDesc = (int)aFileDesc;
 

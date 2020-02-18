@@ -11,6 +11,7 @@ project ("Dev_RisLib")
 my_special1()
 
 add_subdirectory ("RisLib")
+add_subdirectory ("FileFunctions")
 add_subdirectory ("SharedMemory")
 return()
 

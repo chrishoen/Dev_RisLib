@@ -25,7 +25,7 @@ bool doWaitForNetwork()
    bool tSuccess = false;
    for (int i = 0; i < 100; i++)
    {
-      int tRet = Ris::doSystemCommand("ping -c 1 72.217.10.100");
+      int tRet = Ris::doSystemCommand("ping -c 1 72.217.3.100");
       if (tRet == 0)
       {
          TS::print(0, "doWaitForNetwork PASS");

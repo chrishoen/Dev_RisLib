@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "risProgramTime.h"
+#include "risNetWait.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -55,13 +56,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, "101");
-
-   Prn::print(0, "test     %10d", aCmd->argInt(1));
-
-   char tBuffer[40];
-   Ris::portableGetCurrentTimeAsString(tBuffer, false);
-   Prn::print(0, "Ris::portableGetCurrentTimeAsString   %s", tBuffer);
+   Ris::Net::doWaitForNetwork();
 }
 
 //******************************************************************************

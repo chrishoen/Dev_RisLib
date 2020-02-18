@@ -12,7 +12,6 @@
 
 
 CmdLineExec::CmdLineExec()
- : mSem("/mynamedsem")
 {
 }
 
@@ -38,9 +37,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
    if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
 
-   if (aCmd->isCmd("Put"))     executePut(aCmd);
-   if (aCmd->isCmd("get"))     executeGet(aCmd);
-
    if (aCmd->isCmd("SW"))      executeShareWrite(aCmd);
    if (aCmd->isCmd("SR"))      executeShareRead(aCmd);
    if (aCmd->isCmd("Show2"))   executeShow2(aCmd);
@@ -65,22 +61,6 @@ void CmdLineExec::executeShareRead(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeShow2(Ris::CmdLineCmd* aCmd)
 {
    SM::gShare->show2();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
-{
-   mSem.put();
-   Prn::print(0, "done");
-}
-
-void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
-{
-   mSem.get();
-   Prn::print(0, "done");
 }
 
 //******************************************************************************

@@ -48,8 +48,8 @@ void touchFile(const char* aFilePath)
    char* tString = new char[2000];
    sprintf(tString, "touch %s", aFilePath);
    Ris::doSystemCommand(tString);
-   sprintf(tString, "chmod 666 %s", aFilePath);
-   Ris::doSystemCommand(tString);
+// sprintf(tString, "chmod 666 %s", aFilePath);
+// Ris::doSystemCommand(tString);
    delete tString;
 }
 

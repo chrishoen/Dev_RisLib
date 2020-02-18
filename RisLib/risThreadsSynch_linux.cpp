@@ -311,7 +311,7 @@ void NamedSemaphore::initialize(const char* aName)
    }
    else
    {
-      printf("NamedSemaphore failed");
+      printf("NamedSemaphore failed\n");
       mSpecific->mValidFlag = false;
    }
 

@@ -9,7 +9,6 @@ Program command line executive.
 //******************************************************************************
 
 #include "risCmdLineExec.h"
-#include "risThreadsSynch.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -29,8 +28,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Members.
-
-   Ris::Threads::NamedSemaphore mSem;
 
    //***************************************************************************
    //***************************************************************************
@@ -61,9 +58,6 @@ public:
    void executeGo3(Ris::CmdLineCmd* aCmd);
    void executeGo4(Ris::CmdLineCmd* aCmd);
    void executeGo5(Ris::CmdLineCmd* aCmd);
-
-   void executePut(Ris::CmdLineCmd* aCmd);
-   void executeGet(Ris::CmdLineCmd* aCmd);
 
    void executeShareWrite(Ris::CmdLineCmd* aCmd);
    void executeShareRead(Ris::CmdLineCmd* aCmd);

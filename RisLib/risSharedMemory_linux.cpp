@@ -75,10 +75,10 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter
    mPF = aPrintFilter;
 
    // Save and set the umask.
-   mode_t save_umask = umask(0);
+// mode_t save_umask = umask(0);
    mode_t tMode = 0666;
 
-   Prn::print(mPF, "umask %03o %03o", tMode, save_umask);
+// Prn::print(mPF, "umask %03o %03o", tMode, save_umask);
 
    // Default so that this is the first one.
    bool tFirstFlag = true;
@@ -145,7 +145,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter
    }
 
    // Restore the umask.
-   umask(save_umask);
+// umask(save_umask);
 
    //***************************************************************************
    //***************************************************************************

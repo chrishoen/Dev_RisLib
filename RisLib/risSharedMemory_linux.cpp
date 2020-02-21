@@ -18,6 +18,7 @@ Description:
 
 #include "prnPrint.h"
 #include "my_functions.h"
+#include "risPortableCalls.h"
 #include "risSystemCalls.h"
 #include "risFileFunctions.h"
 #include "risSharedMemory.h"
@@ -103,7 +104,10 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter
    }
 
    // Create the temp file.
-   Ris::touchFile(tFilePath);
+   if (!Ris::portableFilePathExists(tFilePath))
+   {
+      Ris::touchFile(tFilePath);
+   }
 
    // Create the key.
    mSpecific->mKey = ftok(tFilePath,101);

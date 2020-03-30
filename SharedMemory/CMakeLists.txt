@@ -17,6 +17,6 @@ else()
    add_custom_command(
       TARGET  SharedMemory
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx SharedMemory rsync://debian@bbx/prime/bin
+      COMMAND rsync -azv --chmod=ugo=rwx SharedMemory rsync://debian@bby1/prime/bin
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/SharedMemory)
 endif()

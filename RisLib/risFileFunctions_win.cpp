@@ -29,7 +29,7 @@ void deleteFile(const char* aFilePath)
    char* tString = new char[2000];
    sprintf(tString, "del %s", aFilePath);
    Ris::doSystemCommand(tString);
-   delete tString;
+   delete[] tString;
 }
 
 //******************************************************************************
@@ -42,7 +42,27 @@ void touchFile(const char* aFilePath)
    char* tString = new char[2000];
    sprintf(tString, "touch %s", aFilePath);
    Ris::doSystemCommand(tString);
-   delete tString;
+   delete[] tString;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Open a lock file and lock it. Return a file descriptor to the
+// opened lock file.
+
+void* doLockFile_OpenAndLock(const char* aLockName)
+{
+   return 0;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Unlock on opened lock file and close it.
+
+void doLockFile_UnlockAndClose(void* aFileDesc)
+{
 }
 
 //******************************************************************************

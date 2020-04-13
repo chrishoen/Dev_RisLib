@@ -15,6 +15,9 @@ add_subdirectory ("Test")
 return()
 
 add_subdirectory ("RisLib")
+return()
+
+add_subdirectory ("RisLib")
 add_subdirectory ("PrintView")
 return()
 

@@ -11,12 +11,13 @@ project ("Dev_RisLib")
 my_special1()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("PrintView")
+add_subdirectory ("Test")
 return()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Test")
+add_subdirectory ("PrintView")
 return()
+
 
 add_subdirectory ("FileFunctions")
 add_subdirectory ("SharedMemory")

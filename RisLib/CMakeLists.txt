@@ -18,19 +18,17 @@ if (NOT MSVC)
    target_link_options(RisLib PUBLIC "-lrt")
 endif()
 
-if (MSVC OR CMAKE_SYSTEM_VERSION EQUAL 101)
+if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
-else()
-   install(FILES ${inc_files} DESTINATION "/usr/local/include/RisLib")
-   install(TARGETS RisLib DESTINATION "/usr/local/lib")
-endif()
-
-if(CMAKE_SYSTEM_VERSION EQUAL 101)
+elseif(CMAKE_SYSTEM_VERSION EQUAL 101)
    add_custom_command(
       TARGET  RisLib
       POST_BUILD
       COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so rsync://debian@bby1/prime/stage
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/RisLib)
+else()
+   install(FILES ${inc_files} DESTINATION "/usr/local/include/RisLib")
+   install(TARGETS RisLib DESTINATION "/usr/local/lib")
 endif()
 

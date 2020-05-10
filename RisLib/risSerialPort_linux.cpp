@@ -26,90 +26,107 @@
 namespace Ris
 {
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Portable specifics.
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Portable specifics.
 
-class SerialPort::Specific
-{
-public:
-   int mPortFd;
-   int mEventFd;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-SerialPort::SerialPort()
-{
-   mSpecific = new Specific;
-   mSpecific->mPortFd = 0;
-   mSpecific->mEventFd = 0;
-   mValidFlag = false;
-   mTerminateFlag = false;
-}
-
-SerialPort::~SerialPort(void)
-{
-   doClose();
-   delete mSpecific;
-}
-
-void SerialPort::initialize(SerialSettings& aSettings)
-{
-   mSettings = aSettings;
-}
-
-bool SerialPort::isValid(){return mValidFlag;}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Open the port.
-
-bool SerialPort::doOpen()
-{
-   mValidFlag = false;
-
-   TS::print(1,"SerialPort::doOpen %s",mSettings.mPortDevice);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Open the port.
-
-   mSpecific->mPortFd = open(mSettings.mPortDevice, O_RDWR | O_NOCTTY | O_SYNC);
-
-   if (mSpecific->mPortFd < 0)
+   class SerialPort::Specific
    {
-      TS::print(0, "serial_open_error_1 %d %s", errno, strerror(errno));
-      return false;
+   public:
+      int mPortFd;
+      int mEventFd;
+   };
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   SerialPort::SerialPort()
+   {
+      mSpecific = new Specific;
+      mSpecific->mPortFd = 0;
+      mSpecific->mEventFd = 0;
+      mValidFlag = false;
+      mTerminateFlag = false;
    }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Open the port.
-
-   mSpecific->mEventFd = eventfd(0, EFD_SEMAPHORE);
-
-   if (mSpecific->mPortFd < 0)
+   SerialPort::~SerialPort(void)
    {
-      TS::print(1, "serial_open_error_2 %d", errno);
-      return false;
+      doClose();
+      delete mSpecific;
    }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Configure the port for raw data.
+   void SerialPort::initialize(SerialSettings& aSettings)
+   {
+      mSettings = aSettings;
+   }
 
-   struct termios tOptions;
-   tcgetattr(mSpecific->mPortFd, &tOptions);
-   cfmakeraw(&tOptions);
-   tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
+   bool SerialPort::isValid() { return mValidFlag; }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Open the port.
+
+   bool SerialPort::doOpen()
+   {
+      mValidFlag = false;
+
+      TS::print(1, "SerialPort::doOpen %s", mSettings.mPortDevice);
+
+      //***************************************************************************
+      //***************************************************************************
+      //***************************************************************************
+      // Open the port.
+
+      mSpecific->mPortFd = open(mSettings.mPortDevice, O_RDWR | O_NOCTTY | O_SYNC);
+
+      if (mSpecific->mPortFd < 0)
+      {
+         TS::print(0, "serial_open_error_1 %d %s", errno, strerror(errno));
+         return false;
+      }
+
+      //***************************************************************************
+      //***************************************************************************
+      //***************************************************************************
+      // Open the port.
+
+      mSpecific->mEventFd = eventfd(0, EFD_SEMAPHORE);
+
+      if (mSpecific->mPortFd < 0)
+      {
+         TS::print(1, "serial_open_error_2 %d", errno);
+         return false;
+      }
+
+      //***************************************************************************
+      //***************************************************************************
+      //***************************************************************************
+      // Configure the port for raw data.
+
+      struct termios tOptions;
+      tcgetattr(mSpecific->mPortFd, &tOptions);
+      cfmakeraw(&tOptions);
+
+      if (strcmp(mSettings.mPortSetup, "19200") == 0)
+      {
+         cfsetispeed(&tOptions, B19200);
+         cfsetospeed(&tOptions, B19200);
+      }
+      else if (strcmp(mSettings.mPortSetup, "38400") == 0)
+      {
+         cfsetispeed(&tOptions, B38400);
+         cfsetospeed(&tOptions, B38400);
+      }
+      else
+      {
+         cfsetispeed(&tOptions, B38400);
+         cfsetospeed(&tOptions, B38400);
+      }
+
+      tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
 
    //***************************************************************************
    //***************************************************************************

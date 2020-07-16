@@ -35,13 +35,20 @@ int  rTable2Size;
 
 void doStrtokTest1(int aShowCode)
 {
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize.
+
    rTable1Size = 0;
    rTable2Size = 0;
 
    // Copy the input to the buffer.
    strcpy(rBuffer, rInput);
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Split the buffer into Table1.
 
    char* tToken = strtok(rBuffer, "&");
@@ -66,9 +73,10 @@ void doStrtokTest1(int aShowCode)
    rTable1Size = tIndex;
 
    // Show Table1.
-   for (int i=0; i<rTable1Size; i++)
-
-   printf("%3d %s\n", i, &rTable1[i][0]);
+   for (int i = 0; i < rTable1Size; i++)
+   {
+      printf("%3d %s\n", i, &rTable1[i][0]);
+   }
 
 
 }

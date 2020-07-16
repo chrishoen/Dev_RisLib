@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
-#include "risProgramTime.h"
-#include "risNetWait.h"
+#include "Strtok1.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -46,8 +45,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   double tTime = Ris::getCurrentProgramTime();
-   Prn::print(0, "Ris::getCurrentProgramTime     %10.6f", tTime);
+   aCmd->setArgDefault(0, 0);
+   doStrtokTest1(aCmd->argInt(1));
 }
 
 //******************************************************************************
@@ -56,7 +55,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Net::doWaitForNetwork();
 }
 
 //******************************************************************************

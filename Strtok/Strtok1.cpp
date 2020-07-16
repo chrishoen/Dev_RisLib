@@ -49,12 +49,26 @@ void doStrtokTest1(int aShowCode)
    int tIndex = 0;
    while (tToken != NULL)
    {
-      printf("%3d %s\n", tIndex, tToken);
+//    printf("%3d %s\n", tIndex, tToken);
 
+      // Copy the token to Table1 at the index.
+      if (strlen(tToken) > 1)
+      {
+         strcpy(rTable1[tIndex], tToken);
+         tIndex++;
+      }
+
+      // Advance.
       tToken = strtok(NULL, "&");
    }
 
+   // Store the size;
+   rTable1Size = tIndex;
 
+   // Show Table1.
+   for (int i=0; i<rTable1Size; i++)
+
+   printf("%3d %s\n", i, &rTable1[i][0]);
 
 
 }

@@ -14,7 +14,7 @@ add_subdirectory ("RisLib")
 return()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Test")
+add_subdirectory ("Strtok")
 return()
 
 

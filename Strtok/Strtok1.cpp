@@ -49,7 +49,8 @@ void doStrtokTest1(int aShowCode)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Split the buffer into Table1.
+   // Split the buffer into Table1. Each row will contain a combined 
+   // key,value pair separated by "=".
 
    char* tToken = strtok(rBuffer, "&");
 
@@ -78,7 +79,47 @@ void doStrtokTest1(int aShowCode)
       printf("%3d %s\n", i, &rTable1[i][0]);
    }
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Split the Table1 into Table2. Each row will contain an array[2] of 
+   // key,value pairs.
 
+   for (int tRowIndex = 0; tRowIndex < rTable1Size; tRowIndex++)
+   {
+      // Initialize the Table2 for for a default empty string.
+      rTable2[tRowIndex][0][0] = 0;
+      rTable2[tRowIndex][1][0] = 0;
+
+      // Copy the row into a temp string.
+      char tTable1Row[80];
+      strcpy(tTable1Row, &rTable1[tRowIndex][0]);
+
+      // Split the row temp string into a key,value pair and store it in Table2.
+      char* tToken = strtok(tTable1Row, "=");
+      int tPairIndex = 0;
+      while (tToken != NULL)
+      {
+         printf("PAIR %3d %3d %s\n", tRowIndex, tPairIndex, tToken);
+
+         // Store the token in Table2.
+         strcpy(&rTable2[tRowIndex][tPairIndex][0], tToken);
+         tPairIndex++;
+
+         // Advance.
+         tToken = strtok(NULL, "=");
+      }
+
+   }
+
+   // Store the size;
+   rTable2Size = rTable1Size;
+
+   // Show Table2.
+   for (int i = 0; i < rTable2Size; i++)
+   {
+      printf("%3d [%s] [%s]\n", i, &rTable2[i][0][0], &rTable2[i][1][0]);
+   }
 }
 
 //******************************************************************************

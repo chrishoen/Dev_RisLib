@@ -22,6 +22,8 @@ if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
 elseif(CMAKE_SYSTEM_VERSION EQUAL 101)
+   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
+   install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
    add_custom_command(
       TARGET  RisLib
       POST_BUILD

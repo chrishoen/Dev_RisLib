@@ -8,8 +8,7 @@
 
 CmdLineExec::CmdLineExec()
 {
-   mStringQueue.initialize();
-
+   mQueue.initialize();
 }
 
 void CmdLineExec::reset()
@@ -29,16 +28,51 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
-   if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
-   if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
-   if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
-   if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
+   if (aCmd->isCmd("Put"))  executePut(aCmd);
+   if (aCmd->isCmd("Get"))  executeGet(aCmd);
+   if (aCmd->isCmd("GO2"))  executeGo2(aCmd);
+   if (aCmd->isCmd("GO3"))  executeGo3(aCmd);
+   if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
+   if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
+{
+   if (char* tString = (char*)mQueue.tryStartWrite())
+   {
+      strcpy(tString, aCmd->argString(1));
+      mQueue.finishWrite();
+   }
+   else
+   {
+      Prn::print(0, "FULL");
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
+{
+   if (char* tString = (char*)mQueue.tryStartRead())
+   {
+      Prn::print(0, "%s", tString);
+      mQueue.finishRead();
+   }
+   else
+   {
+      Prn::print(0, "EMPTY");
+   }
+}
 
 //******************************************************************************
 //******************************************************************************

@@ -11,7 +11,7 @@ project ("Dev_RisLib")
 my_special1()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Strtok")
+add_subdirectory ("StringQueue")
 return()
 
 add_subdirectory ("RisLib")

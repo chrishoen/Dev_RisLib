@@ -1,12 +1,13 @@
 #include "stdafx.h"
 
-#include "risProgramTime.h"
-#include "risNetWait.h"
+#include "risSRSWStringQueue.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+Ris::SRSWStringQueue<200, 100> rStringQueue;
 
 CmdLineExec::CmdLineExec()
 {
@@ -46,8 +47,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   double tTime = Ris::getCurrentProgramTime();
-   Prn::print(0, "Ris::getCurrentProgramTime     %10.6f", tTime);
 }
 
 //******************************************************************************
@@ -56,7 +55,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Net::doWaitForNetwork();
 }
 
 //******************************************************************************

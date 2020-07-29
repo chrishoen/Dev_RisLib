@@ -1,16 +1,15 @@
 #include "stdafx.h"
 
-#include "risSRSWStringQueue.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-Ris::SRSWStringQueue<200, 100> rStringQueue;
-
 CmdLineExec::CmdLineExec()
 {
+   mStringQueue.initialize();
+
 }
 
 void CmdLineExec::reset()

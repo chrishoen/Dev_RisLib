@@ -40,6 +40,10 @@ public:
    void intialize()
    {
       BaseClass::initialize();
+      for (int i = 0; i < QueueSize; i++)
+      {
+         BaseClass::mElement[i][0] = 0;
+      }
    }
 };
 

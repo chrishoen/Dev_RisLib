@@ -62,7 +62,7 @@ public:
 
    // Initialize, there's no constructor. This is called by the process who
    // first creates the shared memory.
-   void intialize()
+   void initialize()
    {
       mPutIndex = 0;
       mGetIndex = 0;

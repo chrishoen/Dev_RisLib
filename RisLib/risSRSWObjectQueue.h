@@ -6,9 +6,8 @@ Single Reader Writer Object Queue Class Template.
 
 It is single writer single reader thread safe.
 It is uses no thread synchronization.
-It is shared memory safe.
 
-This implements a value queue. 
+It is shared memory safe. This means no constructors, no pointers.
 
 It is thread safe for separate single writer and single reader threads.
 
@@ -39,7 +38,9 @@ public:
    // Constants.
 
    // Number of elements allocated is size + 1. There is an extra element
-   // allocated.
+   // allocated. This allows a put operation to occur concurrently to
+   // a get operation, because the indices aren't updated until after the
+   // operations are finished.
    static const int cNumElements = Size + 1;
 
    //***************************************************************************
@@ -59,15 +60,10 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Constructor.
-   SRSWObjectQueue()
+   // Initialize, there's no constructor. This is called by the process who
+   // first creates the shared memory.
+   void intialize()
    {
-      reset();
-   }
-
-   void reset()
-   {
-      // Initialize variables.
       mPutIndex = 0;
       mGetIndex = 0;
    }
@@ -88,20 +84,24 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This attempts to write a value to the queue. If the queue is not full
-   // then it succeeds.
+   // This attempts to start an object write to the queue. If the queue is not
+   // full then it succeeds.
    // 
    // This tests if put operations are allowed. Puts are allowed if the 
-   // current size is less than or equal to NumElements - 2. If the size is equal
-   // to NumElements - 2 then the next put operation would put the size to
-   // cNumElements - 1, which is the max number of elements. This is the same
-   // as "is not full".
+   // current size is less than or equal to NumElements - 2. If the size is
+   // equal to NumElements - 2 then the next put operation would put the size
+   // to cNumElements - 1, which is the max number of elements. This is the
+   // same as "is not full".
+   //
+   // If the queue is full, then it returns a null pointer. If the queue is
+   // not full, then it returns a pointer to the element to put to. The
+   // pointer is then used to write the element. After the write, the finish
+   // write is called to advance the put index.
    // 
-   // This puts an element to the queue and advances the put index. It does a 
-   // copy from a source element into the queue array element at the put index.
-   // It uses a temp index variable so that writing to the index is atomic.
+   // The try write and finish write use temp variables, so that updating
+   // in put index is atomic for a single writer thread.
 
-   Element* startWrite()
+   Element* tryStartWrite()
    {
       // If the queue is full then return zero.
       int tSize = mPutIndex - mGetIndex;
@@ -114,6 +114,7 @@ public:
 
    void finishWrite()
    {
+      // Advance the put index.
       int tPutIndex = mPutIndex;
       if (++tPutIndex == cNumElements) tPutIndex = 0;
       mPutIndex = tPutIndex;
@@ -122,15 +123,21 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This attempts to read a value to the queue. If the queue is not empty
-   // then it succeeds.
+   // This attempts to start an object read from the queue. If the queue is
+   // not empty then it succeeds.
+   // 
+   // This tests if get operations are allowed. Gets are allowed if the 
+   // current size is greater than zero.
    //
-   // This gets an element from the queue and advances the get index. It does a 
-   // copy from the queue array element at the get index into a destination
-   // element. It uses a temp index variable so that writing to the index is
-   // atomic. Note that the destination element must be of element size.
-  
-   Element* startRead()
+   // If the queue is empty, then it returns a null pointer. If the queue is
+   // not empty, then it returns a pointer to the element to get. The
+   // pointer is then used to read the element. After the read, the finish
+   // read is called to advance the get index.
+   //
+   // The try read and finish read use temp variables, so that updating
+   // in get index is atomic for a single reader thread.
+ 
+   Element* tryStartRead()
    {
       // If the queue is empty then return zero.
       int tSize = mPutIndex - mGetIndex;

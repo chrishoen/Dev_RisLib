@@ -30,14 +30,16 @@ namespace Ris
 //******************************************************************************
 
 template <int StringSize,int QueueSize>
-class SRSWStringQueue : public SRSWObjectQueue<int,QueueSize>
+class SRSWStringQueue : public SRSWObjectQueue<char[StringSize],QueueSize>
 {
 public:
+   typedef SRSWObjectQueue<char[StringSize], QueueSize> BaseClass;
 
    // Initialize, there's no constructor. This is called by the process wh
    // first creates the shared memory.
-   void intialize22()
+   void intialize()
    {
+      BaseClass::initialize();
    }
 };
 

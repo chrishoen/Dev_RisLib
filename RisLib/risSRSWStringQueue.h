@@ -35,6 +35,18 @@ class SRSWStringQueue : public SRSWObjectQueue<char[StringSize],QueueSize>
 public:
    typedef SRSWObjectQueue<char[StringSize], QueueSize> BaseClass;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constants.
+
+   static const int cMaxStringSize = StringSize;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
    // Initialize, there's no constructor. This is called by the process wh
    // first creates the shared memory.
    void intialize()

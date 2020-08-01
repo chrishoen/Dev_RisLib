@@ -38,6 +38,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO4"   ))  executeGo4     (aCmd);
    if(aCmd->isCmd("GO5"   ))  executeGo5     (aCmd);
    if(aCmd->isCmd("PARMS" ))  executeParms   (aCmd);
+   if (aCmd->isCmd("T"))         Prn::toggleSuppressPrint();
+   if (aCmd->isCmd("S"))         Prn::suppressPrint();
+   if (aCmd->isCmd("U"))         Prn::unsuppressPrint();
+
 }
 
 //******************************************************************************

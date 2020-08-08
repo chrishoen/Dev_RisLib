@@ -2,14 +2,16 @@
 
 /*==============================================================================
 
-Single Reader Writer Object Queue Class Template. 
+Single Reader Writer Pointer Queue Class Template. 
 
 It is single writer single reader thread safe.
 It uses no thread synchronization.
 
-It is shared memory safe. This means no constructors, no pointers.
+This implements a pointer queue. 
 
 It is thread safe for separate single writer and single reader threads.
+
+Ris::SRSWPointerQueue<void*,100> mPointerQueue;
 
 ==============================================================================*/
 //******************************************************************************
@@ -28,7 +30,7 @@ namespace Ris
 //******************************************************************************
 
 template <class Element,int Size>
-class SRSWObjectQueue
+class SRSWPointerQueue
 {
 public:
 
@@ -60,10 +62,15 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Initialize, there's no constructor. This is called by the process who
-   // first creates the shared memory.
-   void initialize()
+   // Constructor.
+   SRSWPointerQueue()
    {
+      reset();
+   }
+
+   void reset()
+   {
+      // Initialize variables.
       mPutIndex = 0;
       mGetIndex = 0;
    }
@@ -101,60 +108,73 @@ public:
    // The try write and finish write use temp variables, so that updating
    // in put index is atomic for a single writer thread.
 
-   Element* tryStartWrite()
+   bool tryWrite (Element aElement)
    {
-      // If the queue is full then return zero.
+      // Test if the queue is full.
       int tSize = mPutIndex - mGetIndex;
       if (tSize < 0) tSize = cNumElements + tSize;
-      if (tSize > cNumElements - 2) return 0;
+      if (tSize > cNumElements - 2) return false;
 
-      // Return a pointer to the element at the put index.
-      return &mElement[mPutIndex];
-   }
-
-   void finishWrite()
-   {
-      // Advance the put index.
+      // Local put index.
       int tPutIndex = mPutIndex;
-      if (++tPutIndex == cNumElements) tPutIndex = 0;
+      // Copy the source element into the element at the queue put index.
+      mElement[tPutIndex] = aElement;
+      // Advance the put index.
+      if(++tPutIndex == cNumElements) tPutIndex = 0;
       mPutIndex = tPutIndex;
+      // Done.
+      return true;
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This attempts to start an object read from the queue. If the queue is
-   // not empty then it succeeds.
-   // 
-   // This tests if get operations are allowed. Gets are allowed if the 
-   // current size is greater than zero.
+   // This attempts to read a value to the queue. If the queue is not empty
+   // then it succeeds.
    //
-   // If the queue is empty, then it returns a null pointer. If the queue is
-   // not empty, then it returns a pointer to the element to get. The
-   // pointer is then used to read the element. After the read, the finish
-   // read is called to advance the get index.
-   //
-   // The try read and finish read use temp variables, so that updating
-   // in get index is atomic for a single reader thread.
- 
-   Element* tryStartRead()
+   // This gets an element from the queue and advances the get index. It does a 
+   // copy from the queue array element at the get index into a destination
+   // element. It uses a temp index variable so that writing to the index is
+   // atomic. Note that the destination element must be of element size.
+   // It returns the destination element.
+  
+   Element tryRead()
    {
       // If the queue is empty then return zero.
       int tSize = mPutIndex - mGetIndex;
       if (tSize < 0) tSize = cNumElements + tSize;
       if (tSize == 0) return 0;
 
-      // Return a pointer to the element at the get index.
-      return &mElement[mGetIndex];
-   }
-
-   void finishRead()
-   {
       // Local index.
       int tGetIndex = mGetIndex;
+      // Copy the queue array element at the get index into a temp.
+      Element tPointer = mElement[tGetIndex];
       // Advance the get index.
-      if (++tGetIndex == cNumElements) tGetIndex = 0;
+      if(++tGetIndex == cNumElements) tGetIndex = 0;
       mGetIndex = tGetIndex;
+
+      // Return the temp.
+      return tPointer;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This flushes the queue with reads. It deletes the pointers. It returns
+   // the number of elements flushed.
+
+   int flushRead()
+   {
+      // Flush the queue, delete the elements.
+      int tCount = 0;
+      while (Element tPointer = tryRead())
+      {
+         delete tPointer;
+         tCount++;
+      }
+
+      // Return the count.
+      return tCount;
    }
 };
 

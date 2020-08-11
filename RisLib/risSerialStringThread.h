@@ -161,13 +161,13 @@ public:
    // Send a null terminated string via the serial port. A newline terminator
    // is appended to the string before transmission. This executes in the
    // context of the The calling thread.
-   void sendString(const char* aString);
+   void sendString(const char* aString, bool aTerminator = true);
 
    // Send a null terminated string via the serial port. A newline terminator
    // is appended to the string before transmission. This executes in the
    // context of the The calling thread. The string is deleted after
    // transmission.
-   void sendString(std::string* aString);
+   void sendString(std::string* aString, bool aTerminaltor = true);
 };
 
 //******************************************************************************

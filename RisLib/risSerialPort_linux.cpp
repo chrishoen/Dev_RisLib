@@ -244,7 +244,7 @@ void SerialPort::doPurge()
 //******************************************************************************
 // Send data, fixed number of bytes.
 
-int SerialPort::doSendBytes(char* aData, int aNumBytes)
+int SerialPort::doSendBytes(const char* aData, int aNumBytes)
 {
    // Guard.
    if (!isValid()) return cRetCodeError;

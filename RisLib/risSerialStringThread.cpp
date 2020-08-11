@@ -226,9 +226,16 @@ void SerialStringThread::processRxString(char* aString)
 // is appended to the string before transmission. This executes in the
 // context of the The calling thread.
 
-void SerialStringThread::sendString(const char* aString)
+void SerialStringThread::sendString(const char* aString, bool aTerminator)
 {
-   mSerialPort.doSendLine(aString);
+   if (aTerminator)
+   {
+      mSerialPort.doSendLine(aString);
+   }
+   else
+   {
+      mSerialPort.doSendBytes(aString, strlen(aString));
+   }
 }
 
 //******************************************************************************
@@ -239,9 +246,16 @@ void SerialStringThread::sendString(const char* aString)
 // context of the The calling thread. The string is deleted after
 // transmission.
 
-void SerialStringThread::sendString(std::string* aString)
+void SerialStringThread::sendString(std::string* aString, bool aTerminator)
 {
-   mSerialPort.doSendLine(aString->c_str());
+   if (aTerminator)
+   {
+      mSerialPort.doSendLine(aString->c_str());
+   }
+   else
+   {
+      mSerialPort.doSendBytes(aString->c_str(), strlen(aString->c_str()));
+   }
    delete aString;
 }
 

@@ -88,7 +88,7 @@ public:
    // Methods.
 
    // Send data, fixed number of bytes.
-   int  doSendBytes(char *aData, int aNumBytes);
+   int  doSendBytes(const char *aData, int aNumBytes);
 
    // Send a null terminated string, append an end of line LF (\n,10) or
    // CRLF (\r\n,13,10)

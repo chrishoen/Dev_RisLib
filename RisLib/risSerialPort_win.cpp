@@ -262,7 +262,7 @@ void SerialPort::doPurge()
 //******************************************************************************
 // Send fixed number of bytes
 
-int SerialPort::doSendBytes(char* aData, int aNumBytes)
+int SerialPort::doSendBytes(const char* aData, int aNumBytes)
 {
    TS::print(4, "SerialPort::doSendBytes START %d", aNumBytes);
    // Guard.

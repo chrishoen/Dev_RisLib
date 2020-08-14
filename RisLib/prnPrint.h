@@ -37,12 +37,11 @@ namespace Prn
 // than zero then additional PrintView console applications are launched
 // and prints are redirected to them via sockets.
 
-void resetPrint              ();
-void useConsole              (int   aConsole);
-void setPrintViewIPAddress   (const char* aAddress);
+void resetPrint();
+void resetPrint(const char* aPrintViewIPAddress, int aPrintViewIPPort = 58000);
+void useConsole(int   aConsole);
 void initializePrint();
-void finalizePrint           ();
-
+void finalizePrint();
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

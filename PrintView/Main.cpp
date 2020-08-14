@@ -1,11 +1,21 @@
 #include "stdafx.h"
 
+#include "tsThreadServices.h"
+
 #include "risNetPortDef.h"
 #include "risNetUdpStringSocket.h"
 
 //******************************************************************************
+
+Ris::Net::UdpRxStringSocket rSocket;
+
 int main(int argc,char** argv)
 {
+   TS::reset();
+   TS::setProgramName("PrintView");
+   TS::setProgramPrintLevel(TS::PrintLevel(0, 0));
+   TS::initialize();
+
    int tPort = Ris::Net::PortDef::cPrintView;
 
    if (argc > 1)
@@ -13,14 +23,11 @@ int main(int argc,char** argv)
       tPort = atoi(argv[1]);
    }
 
-   Ris::Net::UdpRxStringSocket tSocket;
-   tSocket.configureLocal(tPort);
-// tSocket.show();
+   rSocket.configureLocal(tPort);
 
-   while (tSocket.doRecvString())
+   while (rSocket.doRecvString())
    {
-      puts(tSocket.mRxString);
-      if(strcmp("PRINTVIEW_SHUTDOWN",tSocket.mRxString)==0) return 0;
+      puts(rSocket.mRxString);
    }
    return 0;
 }

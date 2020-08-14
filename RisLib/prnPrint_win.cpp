@@ -87,14 +87,15 @@ void resetPrint()
    resetVariables();
 }
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Override the printview ip address.
-
-void setPrintViewIPAddress(const char* aAddress)
+void resetPrint(const char* aPrintViewIPAddress, int aPrintViewIPPort)
 {
-   strncpy(gPrintSettings.mPrintViewIPAddress, aAddress, 30);
+   // Manually set the settings.
+   gPrintSettings.reset();
+   strncpy(gPrintSettings.mPrintViewIPAddress, aPrintViewIPAddress, 30);
+   gPrintSettings.mPrintViewIPPort = aPrintViewIPPort;
+
+   // Reset variables.
+   resetVariables();
 }
 
 //****************************************************************************

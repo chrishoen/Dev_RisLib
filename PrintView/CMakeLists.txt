@@ -10,3 +10,12 @@ my_add_pch (PrintView)
 my_inc_import_RisLib(PrintView)
 my_lib_import_RisLib(PrintView)
 
+if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+   install(TARGETS PrintView DESTINATION "/opt/prime/bin")
+else()
+   add_custom_command(
+      TARGET  PrintView
+      POST_BUILD
+      COMMAND rsync -azv --chmod=ugo=rwx PrintView rsync://debian@bbacm/prime/bin
+      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/PrintView)
+endif()

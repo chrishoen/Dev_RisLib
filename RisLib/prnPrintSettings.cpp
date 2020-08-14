@@ -28,7 +28,7 @@ namespace Prn
 PrintSettings::PrintSettings()
 {
    strcpy(mPrintViewIPAddress, "none");
-   mPrintViewIPPort = 99;
+   mPrintViewIPPort = 58000;
    mCode1 = 0;
 }
 

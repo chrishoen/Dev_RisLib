@@ -20,8 +20,7 @@ int    my_imax(int aA, int aB);
 int    my_iabs(int aA);
 
 // Close to
-bool my_closeto (double aA,double aB,double aResolution);
-bool my_closeto (double aA,double aB,int aResolution);
+bool my_iscloseto (double aA,double aB,double aResolution);
 
 // Round to nearest integer
 int    my_round (double aA);

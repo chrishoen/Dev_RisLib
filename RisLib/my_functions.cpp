@@ -30,33 +30,9 @@ int    my_iabs (int aA) { return aA >=0  ? aA : -aA; }
 //******************************************************************************
 // Close to
 
-bool my_closeto (double aA,double aB,double aResolution)
+bool my_iscloseto (double aA,double aB,double aResolution)
 {
    return (fabs(aA - aB) <= aResolution);
-}
-
-bool my_closeto (double aA,double aB,int aResolution)
-{
-   switch (aResolution)
-   {
-      case  6  : return (fabs(aA - aB) <= 1000000.0);
-      case  5  : return (fabs(aA - aB) <= 100000.0);
-      case  4  : return (fabs(aA - aB) <= 10000.0);
-      case  3  : return (fabs(aA - aB) <= 1000.0);
-      case  2  : return (fabs(aA - aB) <= 100.0);
-      case  1  : return (fabs(aA - aB) <= 10.0);
-      case  0  : return (fabs(aA - aB) <= 1.0);
-      case -1  : return (fabs(aA - aB) <= 0.1);
-      case -2  : return (fabs(aA - aB) <= 0.01);
-      case -3  : return (fabs(aA - aB) <= 0.001);
-      case -4  : return (fabs(aA - aB) <= 0.0001);
-      case -5  : return (fabs(aA - aB) <= 0.00001);
-      case -6  : return (fabs(aA - aB) <= 0.000001);
-      case -7  : return (fabs(aA - aB) <= 0.0000001);
-      case -8  : return (fabs(aA - aB) <= 0.00000001);
-      default  : return (fabs(aA - aB) <= 0.01);
-   }
-   return false;
 }
 
 //******************************************************************************

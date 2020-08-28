@@ -11,7 +11,6 @@
 #include "risAlphaDir.h"
 
 #include "tsShare.h"
-#include "tsPrintThread.h"
 #include "tsThreadServices.h"
 
 namespace TS
@@ -56,10 +55,6 @@ void initialize()
    // Disable prints.
    gShare.mPrintEnableFlag = false;
 
-   // Launch the print thread.
-   TS::gPrintThread = new TS::PrintThread;
-   TS::gPrintThread->launchThread();
-
    // Let things settle.
 // Ris::Threads::threadSleep(200);
 
@@ -78,10 +73,6 @@ void finalize()
 
    // Let things settle.
 // Ris::Threads::threadSleep(500);
-
-   // shutdown the print thread.
-   TS::gPrintThread->shutdownThread();
-   delete TS::gPrintThread;
 
    // This executes in the context of the main thread, so set the thread
    // local storage pointer to zero.

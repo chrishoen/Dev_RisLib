@@ -10,7 +10,6 @@
 #include "risAlphaDir.h"
 
 #include "tsShare.h"
-#include "tsPrintThread.h"
 #include "tsThreadServices.h"
 
 namespace TS
@@ -34,32 +33,8 @@ void print(int aLevel, const char* aFormat, ...)
 
    // Guard.
    if (!gShare.mPrintEnableFlag) return;
-   if (gPrintThread == 0) return;
    if (!isEnabled()) return;
    if (aLevel > tls()->mPrintLevel) return;
-
-   //*************************************************************************
-   //*************************************************************************
-   //*************************************************************************
-   // Guard against having too many prints that are at or above level 4.
-
-   if (aLevel >= 4 && false)
-   {
-      // Increment.
-      tls()->mPrintCount4++;
-
-      // If at the limit then print a message and exit.
-      if (tls()->mPrintCount4 == 40)
-      {
-         PrintString* tPrintString = new PrintString("PRINT COUNT 4 LIMIT HAS BEEN REACHED");
-         tPrintString->mOutFlag = true;
-         tPrintString->sendToPrintThread();
-         return;
-      }
-
-      // If above the limit then exit.
-      if (tls()->mPrintCount4 > 40) return;
-   }
 
    //*************************************************************************
    //*************************************************************************
@@ -90,7 +65,7 @@ void print(int aLevel, const char* aFormat, ...)
    // Do an sprintf with the thread name and the input string into the
    // print string. Append a newline \n.
 
-   tOutputSize = sprintf(tOutputString,"%-20s $$ %s\n",
+   tOutputSize = sprintf(tOutputString,"%-20s $$ %s",
       tls()->mThreadName,
       tInputString);
 
@@ -99,10 +74,7 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    // Print the string.
 
-   // Create a new string instance and send it to the print thread.
-   PrintString* tPrintString = new PrintString(tOutputString);
-   tPrintString->mOutFlag = aLevel <= tls()->mPrintLevel;
-   tPrintString->sendToPrintThread();
+   puts(tOutputString);
 }
 
 //******************************************************************************

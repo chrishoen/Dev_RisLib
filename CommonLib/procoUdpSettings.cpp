@@ -34,6 +34,7 @@ void UdpSettings::reset()
    BaseClass::setFileName_RelAlphaFiles("RisLib/ProtoComm_UdpSettings.txt");
 
    mMyAppNumber = 0;
+   mPrintLevel = 0;
 
    mMyUdpPort = 0;
    mOtherUdpIPAddress[0]=0;
@@ -52,7 +53,6 @@ void UdpSettings::reset()
 
 void UdpSettings::show()
 {
-   char tBuffer[40];
    printf("\n");
    printf("UdpSettings************************************************ %s\n", mTargetSection);
 
@@ -66,7 +66,7 @@ void UdpSettings::show()
    printf("\n");
    printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
    printf("NumWords                %16d\n", mNumWords);
-   printf("PrintLevel              %16s\n", mPrintLevel.asString(tBuffer));
+   printf("PrintLevel              %16d\n", mPrintLevel);
 
    printf("UdpSettings************************************************\n");
    printf("\n");
@@ -92,7 +92,7 @@ void UdpSettings::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("ThreadTimerPeriod"))   mThreadTimerPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("NumWords"))            mNumWords = aCmd->argInt(1);
-   if (aCmd->isCmd("PrintLevel"))          mPrintLevel.readArgs(aCmd);
+   if (aCmd->isCmd("PrintLevel"))          mPrintLevel = aCmd->argInt(1);
 }
 
 //******************************************************************************

@@ -234,7 +234,7 @@ void SerialStringThread::sendString(const char* aString, bool aTerminator)
    }
    else
    {
-      mSerialPort.doSendBytes(aString, strlen(aString));
+      mSerialPort.doSendBytes(aString, (int)strlen(aString));
    }
 }
 
@@ -254,7 +254,7 @@ void SerialStringThread::sendString(std::string* aString, bool aTerminator)
    }
    else
    {
-      mSerialPort.doSendBytes(aString->c_str(), strlen(aString->c_str()));
+      mSerialPort.doSendBytes(aString->c_str(), (int)strlen(aString->c_str()));
    }
    delete aString;
 }

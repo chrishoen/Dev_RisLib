@@ -12,6 +12,9 @@ my_special1()
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
+add_subdirectory ("ThreadServices")
+return()
+
 add_subdirectory ("Program")
 add_subdirectory ("ProtoMsg")
 add_subdirectory ("ProtoSerial")

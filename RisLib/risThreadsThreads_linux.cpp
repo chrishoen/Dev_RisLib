@@ -476,13 +476,12 @@ void BaseThread::showThreadInfo()
 {
    int tThreadPriority = getThreadPriority();
 
-   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d %1d",
+   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d",
       mThreadLocal->mThreadName,
       mThreadRunProcessor,
       tThreadPriority,
       asStringThreadRunState(),
-      mThreadLocal->mPrintLevel.mOutLevel,
-      mThreadLocal->mPrintLevel.mLogLevel);
+      mThreadLocal->mPrintLevel);
 }
 
 //******************************************************************************

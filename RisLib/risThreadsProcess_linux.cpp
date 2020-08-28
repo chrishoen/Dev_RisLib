@@ -80,13 +80,12 @@ void showCurrentThreadInfo()
    int tThreadPriority = param.sched_priority;
 
    TS::print(1, "");
-   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d %1d",
+   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d",
       "main",
       tCurrentProcessorNumber,
       tThreadPriority,
       "running",
-      TS::tls()->mPrintLevel.mOutLevel,
-      TS::tls()->mPrintLevel.mLogLevel);
+      TS::tls()->mPrintLevel);
 }
 
 //******************************************************************************

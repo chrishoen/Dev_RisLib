@@ -36,8 +36,7 @@ void print(int aLevel, const char* aFormat, ...)
    if (!gShare.mPrintEnableFlag) return;
    if (gPrintThread == 0) return;
    if (!isEnabled()) return;
-   if (aLevel > tls()->mPrintLevel.mOutLevel && 
-       aLevel > tls()->mPrintLevel.mLogLevel) return;
+   if (aLevel > tls()->mPrintLevel) return;
 
    //*************************************************************************
    //*************************************************************************
@@ -102,7 +101,7 @@ void print(int aLevel, const char* aFormat, ...)
 
    // Create a new string instance and send it to the print thread.
    PrintString* tPrintString = new PrintString(tOutputString);
-   tPrintString->mOutFlag = aLevel <= tls()->mPrintLevel.mOutLevel;
+   tPrintString->mOutFlag = aLevel <= tls()->mPrintLevel;
    tPrintString->sendToPrintThread();
 }
 

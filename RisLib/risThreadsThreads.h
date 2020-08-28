@@ -97,7 +97,7 @@ public:
    void setThreadName(const char* aThreadName);
 
    // Set the thread services print level in the thread local storage.
-   void setThreadPrintLevel(TS::PrintLevel aPrintLevel);
+   void setThreadPrintLevel(int aPrintLevel);
 
    //***************************************************************************
    //***************************************************************************

@@ -23,9 +23,8 @@ namespace TS
 
    void reset ();
    void setProgramName(const char* aName);
-   void setProgramLogFilepath(const char* aFilepath);
-   void setProgramPrintLevel(PrintLevel  aPrintLevel);
-   void getProgramPrintLevel(PrintLevel& aPrintLevel);
+   void setProgramPrintLevel(int aPrintLevel);
+   int  getProgramPrintLevel();
    void initialize();
    void finalize();
 

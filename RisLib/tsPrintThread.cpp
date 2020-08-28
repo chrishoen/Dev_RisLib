@@ -25,7 +25,7 @@ PrintThread::PrintThread()
 {
    // Set base class thread parameters.
    BaseClass::setThreadName("TSPrint");
-   BaseClass::setThreadPrintLevel(TS::PrintLevel(0, 3));
+   BaseClass::setThreadPrintLevel(0);
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTsPrint);
 
    // Initialize variables.
@@ -41,61 +41,6 @@ PrintThread::~PrintThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-void PrintThread::doFileOpenNew()
-{
-   char tBuf[400];
-   char tFileName[40];
-   strcpy(tFileName, gShare.mProgramName);
-   strcat(tFileName, "Log.txt");
-
-   if (gShare.mProgramLogFilepath[0] == 0)
-   {
-      mFile = fopen(Ris::getAlphaFilePath_Log(tBuf, tFileName), "w");
-   }
-   else
-   {
-      mFile = fopen(gShare.mProgramLogFilepath, "w");
-   }
-}
-
-void PrintThread::doFileOpenAppend()
-{
-   char tBuf[400];
-   char tFileName[400];
-   strcpy(tFileName, gShare.mProgramName);
-   strcat(tFileName, "Log.txt");
-
-   if (gShare.mProgramLogFilepath[0] == 0)
-   {
-      mFile = fopen(Ris::getAlphaFilePath_Log(tBuf, tFileName), "a");
-   }
-   else
-   {
-      mFile = fopen(gShare.mProgramLogFilepath, "w");
-   }
-   if (mFile == 0)
-   {
-      printf("TS print file open error\n");
-   }
-}
-
-void PrintThread::doFileClose()
-{
-   if (mFile)
-   {
-      fclose(mFile);
-      mFile = 0;
-   }
-}
-
-void PrintThread::doFileFlush()
-{
-   fflush(mFile);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Thread init function. This is called by the base class immediately 
 // after the thread starts running. This opens the file.
 
@@ -103,9 +48,6 @@ void PrintThread::threadInitFunction()
 {
    // Initialize the string queue.
    mStringQueue.initialize(cQueueSize);
-
-   // Open the log file.
-   doFileOpenNew();
 }
 
 //******************************************************************************
@@ -135,9 +77,6 @@ void  PrintThread::threadExitFunction()
 
    // Finalize the string queue.
    mStringQueue.finalize();
-
-   // Close the log file.
-   doFileClose();
 }
 
 //******************************************************************************

@@ -31,19 +31,14 @@ void setProgramName(const char* aName)
    strncpy(gShare.mProgramName, aName, cMaxStringSize);
 }
 
-void setProgramLogFilepath(const char* aPath)
-{
-   strncpy(gShare.mProgramLogFilepath, aPath, cMaxStringSize);
-}
-
-void setProgramPrintLevel(PrintLevel aPrintLevel)
+void setProgramPrintLevel(int aPrintLevel)
 {
    gShare.mMainThreadLocal->mPrintLevel = aPrintLevel;
 }
 
-void getProgramPrintLevel(PrintLevel& aPrintLevel)
+int getProgramPrintLevel()
 {
-   aPrintLevel = gShare.mMainThreadLocal->mPrintLevel;
+   return gShare.mMainThreadLocal->mPrintLevel;
 }
 
 

@@ -143,17 +143,6 @@ public:
    // It writes to the string queue and posts to the semaphore, which
    // then wakes up the thread run function to process the string queue.
    bool tryWriteString(PrintString* aString);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // File open and close.
-   void doFileOpenNew();
-   void doFileOpenAppend();
-   void doFileClose();
-   void doFileFlush();
 };
 
 //******************************************************************************

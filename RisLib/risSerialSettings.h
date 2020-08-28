@@ -68,8 +68,8 @@ public:
    // Thread processor number and priority.
    Ris::Threads::Priority mThreadPriority;
 
-   // Thread print and log levels.
-   TS::PrintLevel mPrintLevel;
+   // Thread services print level.
+   int mPrintLevel;
 
    // Message monkey creator.
    BaseMsgMonkeyCreator* mMonkeyCreator;

@@ -27,6 +27,7 @@ Settings::Settings()
    mUdpWrapFlag = false;
    mMaxSessions = 0;
    mFlags = 0;
+   mPrintLevel = 0;
    mMonkeyCreator = 0;
    mThreadPriority = Ris::Threads::gPriorities.mUdp;
 }

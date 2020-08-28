@@ -21,7 +21,7 @@ namespace Threads
 
 BaseQCallThread::BaseQCallThread()
 {
-   setThreadPrintLevel(TS::PrintLevel(0, 3));
+   setThreadPrintLevel(0);
    setThreadPriority(Ris::Threads::gPriorities.mQCall);
 
    mTerminateFlag = false;

@@ -49,8 +49,8 @@ public:
    // Thread name.
    char mThreadName[cMaxStringSize];
 
-   // The print and log levels for the thread. 
-   PrintLevel mPrintLevel;
+   // The print level for the thread. 
+   int mPrintLevel;
 
    // Count the number of times that print is called with a
    // level at or above 4.

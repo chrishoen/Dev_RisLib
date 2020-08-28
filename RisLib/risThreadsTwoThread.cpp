@@ -85,11 +85,11 @@ BaseTwoThread::BaseTwoThread()
    mShortThread = new TwoThreadShortThread;
    mLongThread  = new TwoThreadLongThread;
 
-   mShortThread->setThreadPrintLevel(TS::PrintLevel(0, 3));
+   mShortThread->setThreadPrintLevel(0);
    mShortThread->setThreadPriority(Ris::Threads::gPriorities.mShort);
    mLongThread->mTimerPeriod = 0;
    
-   mLongThread->setThreadPrintLevel(TS::PrintLevel(0, 3));
+   mLongThread->setThreadPrintLevel(0);
    mLongThread->setThreadPriority(Ris::Threads::gPriorities.mLong);
    mLongThread->mTimerPeriod = 0;
 

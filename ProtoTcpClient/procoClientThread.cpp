@@ -25,7 +25,7 @@ ClientThread::ClientThread()
    // Set base class thread variables.
    BaseClass::setThreadName("Client");
    BaseClass::setThreadPriorityHigh();
-   BaseClass::setThreadPrintLevel(TS::PrintLevel(1, 0));
+   BaseClass::setThreadPrintLevel(1);
    BaseClass::mTimerPeriod = gTcpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.

@@ -22,7 +22,7 @@ TestThread::TestThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Test");
-   BaseClass::setThreadPrintLevel(TS::PrintLevel(5, 3));
+   BaseClass::setThreadPrintLevel(5);
    BaseClass::setThreadPriorityHigh();
 
    mTimerPeriod = gThreadParms.mTimerThreadPeriod;

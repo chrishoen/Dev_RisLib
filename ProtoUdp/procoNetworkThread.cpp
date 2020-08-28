@@ -26,7 +26,7 @@ NetworkThread::NetworkThread()
    // Set base class thread variables.
    BaseClass::setThreadName("Network");
    BaseClass::setThreadPriorityHigh();
-   BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
+   BaseClass::setThreadPrintLevel(3);
    BaseClass::mTimerPeriod = gUdpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.

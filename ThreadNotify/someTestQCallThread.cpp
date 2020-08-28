@@ -23,7 +23,7 @@ TestQCallThread::TestQCallThread()
 {
    // Set base class thread variables.
    BaseClass::setThreadName("TestQCall");
-   BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
+   BaseClass::setThreadPrintLevel(3);
    BaseClass::setThreadPriorityHigh();
    BaseClass::mTimerPeriod = 1000;
 

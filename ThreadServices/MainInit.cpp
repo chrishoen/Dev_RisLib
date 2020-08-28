@@ -23,7 +23,7 @@ void main_initialize(int argc,char** argv)
 
    TS::reset();
    TS::setProgramName("ThreadServices");
-   TS::setProgramPrintLevel(TS::PrintLevel(2,3));
+   TS::setProgramPrintLevel(2);
    TS::initialize();
 
    //***************************************************************************

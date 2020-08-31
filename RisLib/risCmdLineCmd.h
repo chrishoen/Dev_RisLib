@@ -132,6 +132,7 @@ public:
    unsigned argUnsigned   (int aArgIndex);
    bool     argBool       (int aArgIndex);
    double   argDouble     (int aArgIndex);
+   float    argFloat      (int aArgIndex);
    double   argAngle      (int aArgIndex);
    char*    argString     (int aArgIndex);
 

@@ -315,6 +315,25 @@ double CmdLineCmd::argDouble(int aArgIndex)
 //******************************************************************************
 // Return argument value.
 
+float CmdLineCmd::argFloat(int aArgIndex)
+{
+   float tValue = 0.0;
+
+   // Guard.
+   if (!mArgFlag[aArgIndex]) return 0;
+
+   // Convert argument string.
+   tValue = (float)atof(mArgPtr[aArgIndex]);
+
+   // Return argument value.
+   return tValue;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
+
 double CmdLineCmd::argAngle(int aArgIndex)
 {
    double tValue=0.0;

@@ -7,9 +7,7 @@ My math functions
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-//------------------------------------------------------------------------------
-// Arithmentic
+// Arithmentic.
 
 // Min,Max
 double my_fmin (double aA,double aB);
@@ -43,8 +41,10 @@ int    my_irand(int aA,int aB);
 // Return random flag with probability P
 bool my_randflag(double aP);
 
-//------------------------------------------------------------------------------
-// String
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// String.
 
 // Trim CRLF from the end of a string
 void my_trimCRLF(char* aString);
@@ -59,10 +59,19 @@ char* my_string_from_true(bool aValue);
 // Return string "pass" "fail" for a bool
 char* my_string_from_pass(bool aValue);
 
+// Return string from llu.
 char* my_stringLLU(char* aString,unsigned long long aValue);
 
-//------------------------------------------------------------------------------
-// Time
+// Return formatted string from float.
+char* my_string_from_float(char* aString, const char* aFormat, float aValue);
+
+// Return formatted string from double.
+char* my_string_from_double(char* aString, const char* aFormat, double aValue);
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Time.
 
 // Return seconds from sec,min or hour
 //    1.0 == my_time_from_string("1.0")
@@ -80,8 +89,10 @@ char*  my_timestamp(char* aBuffer);
 // Convert seconds to millisecond ticks
 int    my_ticks_from_time (double aTime);
 
-//------------------------------------------------------------------------------
-// Index arithmetic
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Index arithmetic.
 
 // Index arithmetic for queues, wraps around
 inline int my_index_add(int aIndex, int aDelta, int aSize)
@@ -99,8 +110,10 @@ inline int my_index_sub(int aIndex, int aDelta, int aSize)
 
 }
 
-//------------------------------------------------------------------------------
-// Round up to 16 byte boundary
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Round up to 16 byte boundary.
 
 inline int my_round_upto16(int aValue)
 {
@@ -108,22 +121,20 @@ inline int my_round_upto16(int aValue)
 
 }
 
-//------------------------------------------------------------------------------
-// File functions
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// File functions.
 
 void my_strupr(char* aString);
-
 void my_strncpy(char* aDestin,const char* aSource,unsigned int aSize);
-
-//------------------------------------------------------------------------------
-// File operations
-
 bool my_copy_file(char* aSourcePath, char* aDestinPath);
-
 bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes);
 
-//------------------------------------------------------------------------------
-// Program halt
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Program halt.
 
 void my_halt(char* aString=0);
 

@@ -158,6 +158,21 @@ char* my_string_from_pass(bool aValue)
    return aValue ? (char*)"PASS" : (char*)"FAIL";
 }
 
+// Return formatted string from float.
+char* my_string_from_float(char* aString, const char* aFormat, float aValue)
+{
+   sprintf(aString, aFormat, aValue);
+   return aString;
+}
+
+// Return formatted string from double.
+char* my_string_from_double(char* aString, const char* aFormat, double aValue)
+{
+   sprintf(aString, aFormat, aValue);
+   return aString;
+}
+
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

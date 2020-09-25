@@ -72,9 +72,14 @@ void resetVariables()
 
 void resetPrint()
 {
-   // Read from settings file.
+   // Reset the settings.
    gPrintSettings.reset();
-   gPrintSettings.readSection("default");
+
+   // If the settings file exists then read from it.
+   if (gPrintSettings.fileExists())
+   {
+      gPrintSettings.readSection("default");
+   }
 
    // Reset variables.
    resetVariables();

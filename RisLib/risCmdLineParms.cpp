@@ -64,6 +64,10 @@ void BaseCmdLineParms::setFileName_RelAlphaSettings(const char* aFileName)
    char tBuffer[cMaxStringSize];
    strncpy(mFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aFileName), cMaxStringSize);
 }
+bool BaseCmdLineParms::fileExists()
+{
+   return portableFilePathExists(mFilePath);
+}
 
 //******************************************************************************
 //******************************************************************************

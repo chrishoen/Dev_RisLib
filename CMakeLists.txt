@@ -12,7 +12,7 @@ my_special1()
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
-add_subdirectory ("ThreadServices")
+add_subdirectory ("PrintTest")
 return()
 
 add_subdirectory ("Program")

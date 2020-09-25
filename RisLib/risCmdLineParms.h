@@ -116,6 +116,9 @@ public:
    // relative to the alpha settings directory.
    void setFileName_RelAlphaSettings(const char* aFileName);
 
+   // Return true if the command file exists.
+   bool fileExists();
+
    // Read a section of the command file and set member variables accordingly.
    // Create a command file object, open the file, pass this object to the file
    // object to read the file and apply this object's execution method to each

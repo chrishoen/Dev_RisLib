@@ -50,6 +50,9 @@ public:
    //***************************************************************************
    // Members.
 
+   // Identifier.
+   int mIdent;
+
    // "COM1"
    char mPortDevice[16];
 

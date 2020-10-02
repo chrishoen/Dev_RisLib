@@ -24,8 +24,19 @@ namespace Ris
 
 SerialStringThread::SerialStringThread(SerialSettings& aSettings)
 {
+   // Names.
+   char tThreadName[40];
+   if (aSettings.mIdent < 0)
+   {
+      sprintf(tThreadName, "SerialString");
+   }
+   else
+   {
+      sprintf(tThreadName, "SerialString%d", aSettings.mIdent);
+   }
+
    // Set base class thread services.
-   BaseClass::setThreadName("SerialString");
+   BaseClass::setThreadName(tThreadName);
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
    BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 

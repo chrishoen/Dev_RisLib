@@ -193,6 +193,9 @@ void print(int aFilter, const char* aFormat, ...)
    //*************************************************************************
    // Exit if print not enabled.
 
+   // Exit if filter is less than zero.
+   if (aFilter < 0) return;
+
    // Exit if suppressed and the filter is not zero.
    if (rSuppressFlag && aFilter != 0) return;
 

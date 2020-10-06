@@ -17,6 +17,6 @@ else()
    add_custom_command(
       TARGET  FileFunctions
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx FileFunctions rsync://debian@bbacm/prime/bin
+      COMMAND rsync -azv --chmod=ugo=rwx FileFunctions rsync://debian@bbtgt/prime/bin
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/FileFunctions)
 endif()

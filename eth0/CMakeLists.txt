@@ -17,6 +17,6 @@ else()
    add_custom_command(
       TARGET  eth0
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx eth0 rsync://debian@bbacm/prime/bin
+      COMMAND rsync -azv --chmod=ugo=rwx eth0 rsync://debian@bbtgt/prime/bin
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/eth0)
 endif()

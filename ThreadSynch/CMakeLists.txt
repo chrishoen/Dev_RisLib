@@ -18,6 +18,6 @@ else()
    add_custom_command(
       TARGET  ThreadSynch
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx ThreadSynch rsync://debian@bbacm/prime/bin
+      COMMAND rsync -azv --chmod=ugo=rwx ThreadSynch rsync://debian@bbtgt/prime/bin
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/ThreadSynch)
 endif()

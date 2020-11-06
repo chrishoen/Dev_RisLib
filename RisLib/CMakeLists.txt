@@ -27,7 +27,7 @@ elseif(CMAKE_SYSTEM_VERSION EQUAL 101)
    add_custom_command(
       TARGET  RisLib
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so rsync://debian@devtgt/prime/stage
+      COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so rsync://debian@devtgt/prime/lib
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/RisLib)
 else()
    install(FILES ${inc_files} DESTINATION "/usr/local/include/RisLib")

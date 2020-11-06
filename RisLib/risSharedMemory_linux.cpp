@@ -112,7 +112,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter
    // Create the key.
    mSpecific->mKey = ftok(tFilePath,101);
 
-   Prn::print(mPF, "ftok key %s %d", tFilePath, mSpecific->mKey);
+// Prn::print(mPF, "ftok key %s %d", tFilePath, mSpecific->mKey);
 
    delete tFilePath;
 
@@ -171,10 +171,10 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter
    //***************************************************************************
    // Done.
 
-   Prn::print(mPF, "shm_open %d %d %s",
-      mSpecific->mFd,
-      getNumAttached(),
-      my_string_from_bool(tFirstFlag));
+// Prn::print(mPF, "shm_open %d %d %s",
+//    mSpecific->mFd,
+//    getNumAttached(),
+//    my_string_from_bool(tFirstFlag));
 
    return tFirstFlag;
 }

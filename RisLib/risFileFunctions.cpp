@@ -7,6 +7,7 @@ Print utility
 //******************************************************************************
 
 #include "stdafx.h"
+#include <sys/stat.h>
 #include <random>
 
 #include "risSystemCalls.h"
@@ -105,6 +106,8 @@ void doWriteJsonToFile(
    Json::StyledStreamWriter tWriter;
    tWriter.write(tOutputFile, aJsonValue);
    tOutputFile.close();
+   // Set permissions.
+   chmod(aFilePath.c_str(), 0666);
 }
 
 //******************************************************************************
@@ -119,6 +122,28 @@ void doReadJsonFromFile(
    // Read the json value from the input file.
    std::ifstream tInputFile(aFilePath);
    tInputFile >> aJsonValue;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// chmod a file for 666.
+
+void doFilePermissions666(const char* aFilePath)
+{
+   char tString[200];
+   sprintf(tString, "sudo chmod 666 %s", aFilePath);
+   Ris::doSystemCommand(tString);
+   chmod(aFilePath, 0666);
+}
+
+// chmod a file for 666.
+void doFilePermissions666(std::string& aFilePath)
+{
+   char tString[200];
+   sprintf(tString, "sudo chmod 666 %s", aFilePath.c_str());
+   Ris::doSystemCommand(tString);
+   chmod(aFilePath.c_str(), 0666);
 }
 
 //****************************************************************************

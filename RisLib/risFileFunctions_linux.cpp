@@ -13,7 +13,7 @@ Print utility
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-
+#include <sys/stat.h>
 
 #include "risSystemCalls.h"
 #include "risFileFunctions.h"
@@ -95,6 +95,22 @@ void doLockFile_UnlockAndClose(void* aFileDesc)
 
    fcntl(tFileDesc, F_SETLK, &lock);
    close(tFileDesc);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// chmod a file for 666.
+
+void doFilePermissions666(const char* aFilePath)
+{
+   chmod(aFilePath, 0666);
+}
+
+// chmod a file for 666.
+void doFilePermissions666(const std::string& aFilePath)
+{
+   chmod(aFilePath.c_str(), 0666);
 }
 
 //****************************************************************************

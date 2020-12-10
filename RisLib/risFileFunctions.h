@@ -77,7 +77,7 @@ void doLockFile_UnlockAndClose(void* aFileDesc);
 void doFilePermissions666(const char* aFilePath);
 
 // chmod a file for 666.
-void doFilePermissions666(std::string& aFilePath);
+void doFilePermissions666(const std::string& aFilePath);
 
 //******************************************************************************
 //******************************************************************************

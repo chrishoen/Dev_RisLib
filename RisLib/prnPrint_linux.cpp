@@ -48,6 +48,9 @@ Ris::Net::UdpTxStringSocket rConsoleSocket[cMaxConsoles];
 // The port number for the print view console.
 int rConsolePort[cMaxConsoles];
 
+
+PrintFilterTable* rPrintFilterTable = &gPrintFilterTable;
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -108,6 +111,13 @@ void useConsole(int aConsole)
    rConsoleFlag[aConsole] = true;
 }
 
+// Use an application specific filter table. This is used by programs
+// that use shared memory.
+void usePrintFilterTable(PrintFilterTable* aTable)
+{
+   rPrintFilterTable = aTable;
+}
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -164,7 +174,7 @@ void finalizePrint()
 
 void setFilter(int aFilter, bool aEnable, int aConsole)
 {
-   gPrintFilterTable.setFilter(aFilter,aEnable, aConsole);
+   rPrintFilterTable->setFilter(aFilter,aEnable, aConsole);
 }   	
 
 //****************************************************************************
@@ -177,7 +187,7 @@ void setFilter(int aFilter, bool aEnable, int aConsole)
 
 void enableFilter(int aFilter, bool aEnable)
 {
-   gPrintFilterTable.enableFilter(aFilter, aEnable);
+   rPrintFilterTable->enableFilter(aFilter, aEnable);
 }
 
 //****************************************************************************
@@ -190,7 +200,7 @@ void enableFilter(int aFilter, bool aEnable)
 
 bool getFilter(int aFilter)
 {
-   return gPrintFilterTable.getFilter(aFilter);
+   return rPrintFilterTable->getFilter(aFilter);
 }
 
 //****************************************************************************
@@ -213,7 +223,7 @@ void print(int aFilter, const char* aFormat, ...)
    if (rSuppressFlag && aFilter != 0) return;
 
    // Exit if the filter table entry is disabled.
-   if (gPrintFilterTable.mEnable[aFilter] == false) return;
+   if (rPrintFilterTable->mEnable[aFilter] == false) return;
 
    //*************************************************************************
    //*************************************************************************
@@ -243,7 +253,7 @@ void print(int aFilter, const char* aFormat, ...)
    // Print the string.
 
    // Get the console index assigned to the filter.
-   int tConsole = gPrintFilterTable.mConsole[aFilter];
+   int tConsole = rPrintFilterTable->mConsole[aFilter];
 
    if (tConsole == 0 && !rConsoleFlag[0])
    {

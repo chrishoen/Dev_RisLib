@@ -30,7 +30,7 @@ public:
    // Constants.
 
    // Filter table size.
-   static const int cFilterTableSize = 300;
+   static const int cFilterTableSize = 400;
 
    // Max number of print view consoles.
    static const int cMaxConsoles = 10;

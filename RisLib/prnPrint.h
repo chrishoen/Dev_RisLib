@@ -20,6 +20,7 @@ filter index are stored in the filter table.
 //******************************************************************************
 
 #include "prnPrintFilters.h"
+#include "prnPrintFilterTable.h"
 
 namespace Prn
 {
@@ -27,21 +28,30 @@ namespace Prn
 //******************************************************************************
 //******************************************************************************
 // Initializes the print facility.
-//
-// The resetPrint method is called to reset settings to defaults.
-// The InitializePrint method does the initialization.
-// The finalizePrint method shuts down any PrintView processes that were
-// launched.
-//
-// useConsole specifies a print view console to use. If it is greater
-// than zero then additional PrintView console applications are launched
-// and prints are redirected to them via sockets.
 
+// Reset settings to defaults.
 void resetPrint();
+
+// Reset settings to defaults.
+// Supply the print view udp ip address. This will override that which is
+// specified in the default print settings file.
 void resetPrint(const char* aPrintViewIPAddress, int aPrintViewIPPort = 58000);
+
+// Specifie a print view console to use. If it is greater than zero 
+// then an additional PrintView console application launched
+// and prints are redirected to them via udp sockets.
 void useConsole(int   aConsole);
+
+// Use an application specific filter table. This is used by programs
+// that use shared memory.
+void usePrintFilterTable(PrintFilterTable* aTable);
+
+// Initialize prints using the effects of the above functions.
 void initializePrint();
+
+// Close the udp sockets.
 void finalizePrint();
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

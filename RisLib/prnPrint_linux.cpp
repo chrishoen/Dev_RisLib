@@ -48,8 +48,19 @@ Ris::Net::UdpTxStringSocket rConsoleSocket[cMaxConsoles];
 // The port number for the print view console.
 int rConsolePort[cMaxConsoles];
 
-
+// Print filter table defaults to the global.
 PrintFilterTable* rPrintFilterTable = &gPrintFilterTable;
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Use an application specific filter table. This is used by programs
+// that use shared memory.
+
+void usePrintFilterTable(PrintFilterTable* aTable)
+{
+   rPrintFilterTable = aTable;
+}
 
 //****************************************************************************
 //****************************************************************************
@@ -109,13 +120,6 @@ void useConsole(int aConsole)
 {
    if (aConsole > cMaxConsoles-1) return;
    rConsoleFlag[aConsole] = true;
-}
-
-// Use an application specific filter table. This is used by programs
-// that use shared memory.
-void usePrintFilterTable(PrintFilterTable* aTable)
-{
-   rPrintFilterTable = aTable;
 }
 
 //****************************************************************************

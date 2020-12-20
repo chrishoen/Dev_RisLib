@@ -74,6 +74,13 @@ public:
    // aFilter is the index of the filter.
    // aEnable is the value stored in the table at the filter index.
    void enableFilter(int aFilter, bool aEnable);
+
+   // Get a filter in the filter table.
+   //
+   // aFilter is the index of the filter.
+   // Return true if the filter is enabled.
+   bool getFilter(int aFilter);
+
 };
 
 //******************************************************************************

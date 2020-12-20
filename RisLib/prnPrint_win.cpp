@@ -189,6 +189,19 @@ void enableFilter(int aFilter, bool aEnable)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Get a filter in the filter table.
+//
+// aFilter is the index of the filter.
+// Return true if the filter is enabled.
+
+bool getFilter(int aFilter)
+{
+   return gPrintFilterTable.getFilter(aFilter);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 // Filtered print, if the corresponding entry in the filter table is true
 // then the print is executed.
 

@@ -15,12 +15,7 @@ namespace Prn
 //******************************************************************************
 // Constructor.
 
-PrintFilterTable::PrintFilterTable()
-{
-   reset();
-}
-
-void PrintFilterTable::reset()
+void PrintFilterTable::initialize()
 {
    // All disabled, except entry zero
    for(int i=0;i<cFilterTableSize;i++)

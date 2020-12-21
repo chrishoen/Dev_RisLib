@@ -53,9 +53,9 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Constructor.
-   PrintFilterTable();
-   void reset();
+   // Initialize, there's no constructor, because instances might live
+   // in shared memory.
+   void initialize();
 
    //***************************************************************************
    //***************************************************************************

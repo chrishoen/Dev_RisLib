@@ -137,31 +137,44 @@ namespace Prn
    static const int  TTA2              = 209;
    static const int  TTA3              = 210;
    static const int  TTA4              = 211;
+   static const int  TTA5              = 212;
+   static const int  TTA6              = 213;
+   static const int  TTA7              = 214;
+   static const int  TTA8              = 215;
 
-   static const int  DA1               = 212;
-   static const int  DA2               = 213;
-   static const int  DA3               = 214;
-   static const int  DA4               = 215;
+   static const int  DA1               = 216;
+   static const int  DA2               = 217;
+   static const int  DA3               = 218;
+   static const int  DA4               = 219;
+   static const int  DA5               = 220;
+   static const int  DA6               = 221;
+   static const int  DA7               = 222;
+   static const int  DA8               = 223;
 
-   static const int  HLC1              = 216;
-   static const int  HLC2              = 217;
-   static const int  HLC3              = 218;
-   static const int  HLC4              = 219;
+   static const int  Init1             = 224;
+   static const int  Init2             = 225;
+   static const int  Init3             = 226;
+   static const int  Init4             = 227;
 
-   static const int  EVT1              = 220;
-   static const int  EVT2              = 221;
-   static const int  EVT3              = 222;
-   static const int  EVT4              = 223;
+   static const int  HLC1              = 228;
+   static const int  HLC2              = 229;
+   static const int  HLC3              = 230;
+   static const int  HLC4              = 231;
 
-   static const int  Comm1             = 224;
-   static const int  Comm2             = 225;
-   static const int  Comm3             = 226;
-   static const int  Comm4             = 227;
+   static const int  EVT1              = 232;
+   static const int  EVT2              = 233;
+   static const int  EVT3              = 234;
+   static const int  EVT4              = 235;
 
-   static const int  Show1             = 228;
-   static const int  Show2             = 229;
-   static const int  Show3             = 230;
-   static const int  Show4             = 231;
+   static const int  Comm1             = 236;
+   static const int  Comm2             = 237;
+   static const int  Comm3             = 238;
+   static const int  Comm4             = 239;
+
+   static const int  Show1             = 240;
+   static const int  Show2             = 241;
+   static const int  Show3             = 242;
+   static const int  Show4             = 243;
 
    //******************************************************************************
 //******************************************************************************

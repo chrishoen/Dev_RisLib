@@ -72,6 +72,9 @@ Waitable::~Waitable()
 
 void Waitable::initialize (int aTimerPeriod)
 {
+   // If already exists then finalize.
+   finalize();
+
    // Initialize variables.
    mTimerCount = 0;
    mWasTimerFlag = false;
@@ -127,7 +130,7 @@ void Waitable::finalize()
    mSpecific->mSemaphoreFd = 0;
 
    // Set invalid.
-   mValidFlag = true;
+   mValidFlag = false;
 }
 
 //******************************************************************************

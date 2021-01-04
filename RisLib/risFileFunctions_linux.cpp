@@ -59,7 +59,7 @@ void touchFile(const char* aFilePath)
 // Open a lock file and lock it. Return a file descriptor to the
 // opened lock file.
 
-void* doLockFile_OpenAndLock(const char* aLockName)
+int doLockFile_OpenAndLock(const char* aLockName)
 {
    char tFilePath[200];
    sprintf(tFilePath, "/var/lock/%s", aLockName);
@@ -74,7 +74,7 @@ void* doLockFile_OpenAndLock(const char* aLockName)
 
    fcntl(tFileDesc, F_SETLKW, &lock);
 
-   return (void*)tFileDesc;
+   return tFileDesc;
 }     
 
 //****************************************************************************
@@ -82,10 +82,8 @@ void* doLockFile_OpenAndLock(const char* aLockName)
 //****************************************************************************
 // Unlock on opened lock file and close it.
 
-void doLockFile_UnlockAndClose(void* aFileDesc)
+void doLockFile_UnlockAndClose(int aFileDesc)
 {
-   int tFileDesc = (int)aFileDesc;
-
    struct flock lock;
    lock.l_type = F_WRLCK;    /* read/write (exclusive versus shared) lock */
    lock.l_whence = SEEK_SET; /* base for seek offsets */
@@ -93,8 +91,8 @@ void doLockFile_UnlockAndClose(void* aFileDesc)
    lock.l_len = 0;           /* 0 here means 'until EOF' */
    lock.l_pid = getpid();    /* process id */
 
-   fcntl(tFileDesc, F_SETLK, &lock);
-   close(tFileDesc);
+   fcntl(aFileDesc, F_SETLK, &lock);
+   close(aFileDesc);
 }
 
 //******************************************************************************

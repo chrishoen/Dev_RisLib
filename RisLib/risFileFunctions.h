@@ -63,10 +63,10 @@ std::string doGetRandomFileName();
 
 // Open a lock file and lock it. Return a file descriptor to the
 // opened lock file.
-void* doLockFile_OpenAndLock(const char* aLockName);
+int doLockFile_OpenAndLock(const char* aLockName);
 
 // Unlock on opened lock file and close it.
-void doLockFile_UnlockAndClose(void* aFileDesc);
+void doLockFile_UnlockAndClose(int aFileDesc);
 
 //******************************************************************************
 //******************************************************************************

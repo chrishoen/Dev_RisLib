@@ -15,13 +15,17 @@ my_add_pch (RisLib)
 target_include_directories(RisLib PUBLIC ${PROJECT_SOURCE_DIR})
 
 if (NOT MSVC)
+   target_link_options(RisLib PUBLIC "-lpthread")
    target_link_options(RisLib PUBLIC "-lrt")
 endif()
 
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
-elseif(CMAKE_SYSTEM_VERSION EQUAL 101)
+elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+   install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
+   install(TARGETS RisLib DESTINATION "/opt/prime/lib")
+else()
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
    add_custom_command(
@@ -29,8 +33,5 @@ elseif(CMAKE_SYSTEM_VERSION EQUAL 101)
       POST_BUILD
       COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so rsync://debian@devtgt/prime/lib
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/RisLib)
-else()
-   install(FILES ${inc_files} DESTINATION "/usr/local/include/RisLib")
-   install(TARGETS RisLib DESTINATION "/usr/local/lib")
 endif()
 

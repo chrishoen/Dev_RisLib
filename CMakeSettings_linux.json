@@ -25,7 +25,7 @@
       "buildCommandArgs": "-j8",
       "ctestCommandArgs": "",
       "inheritEnvironments": [
-        "linux_arm"
+        "linux_x64"
       ]
     }
   ]

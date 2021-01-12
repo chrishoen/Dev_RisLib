@@ -62,7 +62,7 @@ void Interfaces::doSetNetSettingsEth0_static()
 {
    // Input and output files.
    std::ifstream tInputFile("/opt/prime/special/interfaces_static");
-   std::ofstream tOutputFile("/opt/prime/special/tmp_interfaces_static");
+   std::ofstream tOutputFile("/var/tmp/tmp_interfaces_static");
 
    // String variables.
    std::string tInputLine;
@@ -107,7 +107,7 @@ void Interfaces::doSetNetSettingsEth0_static()
    tOutputFile.close();
 
    // Copy the temp file to the interfaces file.
-   doSystemCommand("cp /opt/prime/special/tmp_interfaces_static /etc/network/interfaces");
+   doSystemCommand("cp /var/tmp/tmp_interfaces_static /etc/network/interfaces");
 
    // Guard.
    if (!mEth0ValidFlag)

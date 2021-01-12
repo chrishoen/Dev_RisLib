@@ -29,7 +29,7 @@ Interfaces::Interfaces()
    }
    else
    {
-      mFilePath = "/opt/prime/files/netinterfaces.json";
+      mFilePath = "/opt/files/netinterfaces.json";
    }
 
    mEth0ValidFlag = false;

@@ -47,7 +47,13 @@ BinarySemaphore::BinarySemaphore()
 // Reset the semaphore.
 void BinarySemaphore::reset()
 {
-   sem_init(&mSpecific->mHandle, 0, 0);
+   // If there is a pending event, then clear it.
+   int tCount = 0;
+   sem_getvalue(&mSpecific->mHandle, &tCount);
+   if (tCount > 0)
+   {
+      sem_wait(&mSpecific->mHandle);
+   }
 }
 
 // Destructor. Delete the semaphore.

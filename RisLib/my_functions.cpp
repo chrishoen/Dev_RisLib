@@ -158,6 +158,12 @@ char* my_string_from_pass(bool aValue)
    return aValue ? (char*)"PASS" : (char*)"FAIL";
 }
 
+// Return string "High" "Low" for a bool
+char* my_string_from_high(bool aValue)
+{
+   return aValue ? (char*)"High" : (char*)"Low";
+}
+
 // Return formatted string from float.
 char* my_string_from_float(char* aString, const char* aFormat, float aValue)
 {

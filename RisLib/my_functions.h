@@ -59,6 +59,9 @@ char* my_string_from_true(bool aValue);
 // Return string "pass" "fail" for a bool
 char* my_string_from_pass(bool aValue);
 
+// Return string "High" "Low" for a bool
+char* my_string_from_high(bool aValue);
+
 // Return string from llu.
 char* my_stringLLU(char* aString,unsigned long long aValue);
 

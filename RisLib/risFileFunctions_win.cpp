@@ -51,7 +51,7 @@ void touchFile(const char* aFilePath)
 // Open a lock file and lock it. Return a file descriptor to the
 // opened lock file.
 
-void* doLockFile_OpenAndLock(const char* aLockName)
+int doLockFile_OpenAndLock(const char* aLockName)
 {
    return 0;
 }

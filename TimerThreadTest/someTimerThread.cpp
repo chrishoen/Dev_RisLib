@@ -88,7 +88,9 @@ void TimerThread::executeTest1(int aTimeCount)
    timespec tTOA;
    timespec_get(&tTOA, TIME_UTC);
    char tBuffer[100];
-   Prn::print(Prn::View11, "TIMER %5d $$ %s",
+
+   int tPF = Ris::portableIsWindows() ? Prn::View11 : Prn::View21;
+   Prn::print(tPF, "TIMER %5d $$ %s",
       aTimeCount,
       get_timespec_asString(tTOA, tBuffer));
 }

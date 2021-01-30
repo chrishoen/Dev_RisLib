@@ -7,6 +7,8 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
+#include <time.h>
+
 #include "risProgramTime.h"
 #include "risThreadsPriorities.h"
 #include "tsThreadServices.h"
@@ -31,7 +33,7 @@ TimerThread::TimerThread()
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
 
    // Set timer period.
-   BaseClass::mTimerPeriod = 50;
+   BaseClass::mTimerPeriod = 250;
    mTimeMarker.initialize(100);
 
    // Members
@@ -61,8 +63,9 @@ void TimerThread::executeOnTimer(int aTimeCount)
 
    switch (mTestCode)
    {
-      case 1: executeTest1 (aTimeCount); break;
-      case 2: executeTest2 (aTimeCount); break;
+      case 1: executeTest1(aTimeCount); break;
+      case 2: executeTest2(aTimeCount); break;
+      case 3: executeTest3(aTimeCount); break;
    }
 }
 
@@ -70,7 +73,31 @@ void TimerThread::executeOnTimer(int aTimeCount)
 //******************************************************************************
 //******************************************************************************
 
+char* get_timespec_asString(timespec aTimeSpec, char* aBuffer)
+{
+   char tTemp[40];
+   strftime(tTemp, 40, "%F %T", localtime(&aTimeSpec.tv_sec));
+// sprintf(aBuffer, "%s.%03ld", tTemp, aTimeSpec.tv_nsec / 1000000);
+   strftime(aBuffer, 40, "%F %T", localtime(&aTimeSpec.tv_sec));
+
+   return aBuffer;
+}
+
 void TimerThread::executeTest1(int aTimeCount)
+{
+   timespec tTOA;
+   timespec_get(&tTOA, TIME_UTC);
+   char tBuffer[100];
+   Prn::print(Prn::View11, "TIMER %5d $$ %s",
+      aTimeCount,
+      get_timespec_asString(tTOA, tBuffer));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TimerThread::executeTest2(int aTimeCount)
 {
    mTimeMarker.doUpdate();
 
@@ -94,7 +121,7 @@ void TimerThread::executeTest1(int aTimeCount)
 //******************************************************************************
 //******************************************************************************
 
-void TimerThread::executeTest2(int aTimeCount)
+void TimerThread::executeTest3(int aTimeCount)
 {
    Prn::print(Prn::ThreadRun1, "TEST2 %5d $$ %3d %10.4f",
       aTimeCount,

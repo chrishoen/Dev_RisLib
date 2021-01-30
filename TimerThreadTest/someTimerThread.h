@@ -44,8 +44,9 @@ public:
    void threadInitFunction() override;
    void executeOnTimer(int aTimeCount) override;
 
-   void executeTest1 (int aTimeCount);
-   void executeTest2 (int aTimeCount);
+   void executeTest1(int aTimeCount);
+   void executeTest2(int aTimeCount);
+   void executeTest3(int aTimeCount);
 };
 
 //******************************************************************************

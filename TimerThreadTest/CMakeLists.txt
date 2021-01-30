@@ -7,8 +7,6 @@ add_executable (TimerThreadTest ${src_files})
 my_add_compile_options (TimerThreadTest)
 my_add_pch (TimerThreadTest)
 
-
-
 my_inc_import_RisLib(TimerThreadTest)
 my_inc_import_CommonLib(TimerThreadTest)
 

@@ -59,6 +59,9 @@ void CmdLineExec::executeTest(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0, "print test");
+   Prn::print(Prn::View11, "print test");
+   Prn::print(Prn::View21, "print test");
 }
 
 //******************************************************************************

@@ -24,7 +24,7 @@ QCallTestTarget::QCallTestTarget()
    mTest1QCall.bind(this, &QCallTestTarget::executeTest1);
 
    // Initialize member variables.
-   mTPFlag = true;
+   mTPFlag = false;
 }
 
 QCallTestTarget::~QCallTestTarget()

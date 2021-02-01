@@ -192,6 +192,9 @@ public:
       mTarget=0;
    }
 
+   // Destructor.
+   virtual ~BaseQCall() {}
+
    // Return true if this qcall was bound.
    bool isValid(){return mTarget !=0;}
 

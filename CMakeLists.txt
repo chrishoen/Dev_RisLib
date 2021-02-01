@@ -10,9 +10,8 @@ project ("Dev_RisLib")
 
 my_special1()
 
-add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
-add_subdirectory ("TimerThreadTest")
+add_subdirectory ("QCallTest")
 return()
 
 add_subdirectory ("QCallTest")

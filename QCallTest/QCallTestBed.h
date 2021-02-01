@@ -1,21 +1,13 @@
 #pragma once
 
 /*==============================================================================
-
- 
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
-
-#include "risThreadsQCall.h"
-#include "risLCPointerQueue.h"
-
-//******************************************************************************
-//******************************************************************************
 //******************************************************************************
 
-class QCallTestTarget : public Ris::Threads::BaseQCallTarget
+class QCallTestBed
 {
 public:
    //***************************************************************************
@@ -23,55 +15,21 @@ public:
    //***************************************************************************
    // Members.
 
-   // Pointer queue that contains pointers to qcalls.
-   // QCall invocations enqueue qcalls to this queue.
-   // This thread dequeues qcalls from it.
-   Ris::LCPointerQueue mCallQueue;
-
-   // Call queue size. Inheritors can set this in their constructors.
-   int mCallQueSize;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // TP flag.
-   bool mTPFlag;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
    // Constructor.
-   QCallTestTarget();
-  ~QCallTestTarget();
+   QCallTestBed();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods, qcall target overloads:
+   // Methods.
 
-   // Process the call queue.
-   void doProcessCallQueue();
-
-   // Try to write a qcall to the to the target queue. Return true if
-   // successful. This is called by qcall invocations to enqueue a qcall.
-   // It writes to the call queue and posts to the waitable semaphore, which
-   // then wakes up the thread run function to process the call queue.
-   bool tryWriteQCall(Ris::Threads::BaseQCall* aQCall) override;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.qcalls.
-
-   // Test qcall. It is invoked by the tester.
-   Ris::Threads::QCall1<int> mTest1QCall;
-
-   // Test function. This is bound to the qcall.
-   void executeTest1(int aCode);
+   // Execute a test.
+   void doRun1(int aNumIterations);
 };
 
 //******************************************************************************
@@ -79,10 +37,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _QCALLTESTTARGET_CPP_
-QCallTestTarget gQCallTestTarget;
+#ifdef _QCALLTESTBED_CPP_
+QCallTestBed gQCallTestBed;
 #else
-extern QCallTestTarget gQCallTestTarget;
+extern QCallTestBed gQCallTestBed;
 #endif
 
 //******************************************************************************

@@ -6,8 +6,8 @@
 
 #include "prnPrint.h"
 
+#define _QCALLTESTTARGET_CPP_
 #include "QCallTestTarget.h"
-
 
 //******************************************************************************
 //******************************************************************************
@@ -16,8 +16,15 @@
 
 QCallTestTarget::QCallTestTarget()
 {
-   mCallQueSize=1000;
+   // Initialize base class variables.
+   mCallQueSize = 1000;
    mCallQueue.initialize(mCallQueSize);
+
+   // Initialize qcalls.
+   mTest1QCall.bind(this, &QCallTestTarget::executeTest1);
+
+   // Initialize member variables.
+   mTPFlag = true;
 }
 
 QCallTestTarget::~QCallTestTarget()
@@ -61,6 +68,19 @@ bool QCallTestTarget::tryWriteQCall(Ris::Threads::BaseQCall* aQCall)
 
    // Successful.
    return true;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test function. This is bound to the qcall.
+
+void QCallTestTarget::executeTest1(int aCode)
+{
+   if (mTPFlag)
+   {
+      Prn::print(Prn::View11, "executeTest1 %d", aCode);
+   }
 }
 
 //******************************************************************************

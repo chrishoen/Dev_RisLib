@@ -11,7 +11,6 @@ project ("Dev_RisLib")
 my_special1()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("QCallTest")
 return()
 
 add_subdirectory ("QCallTest")

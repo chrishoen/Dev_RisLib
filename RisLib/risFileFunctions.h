@@ -37,6 +37,12 @@ std::string& getSafeFilePath(std::string& aBuffer, const std::string& aFilePath)
 //******************************************************************************
 // Methods.
 
+// Copy a file.
+void copyFile(const char* aDestinFilePath, const char* aSourceFilePath);
+
+// Move a file.
+void moveFile(const char* aDestinFilePath, const char* aSourceFilePath);
+
 // Delete a file.
 void deleteFile(const char* aFilePath);
 

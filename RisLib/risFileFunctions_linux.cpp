@@ -28,6 +28,32 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Copy a file.
+
+void copyFile(const char* aDestinFilePath, const char* aSourceFilePath)
+{
+   char* tString = new char[2000];
+   sprintf(tString, "cp %s %s", aSourceFilePath, aDestinFilePath);
+   Ris::doSystemCommand(tString);
+   delete tString;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Move a file.
+
+void moveFile(const char* aDestinFilePath, const char* aSourceFilePath)
+{
+   char* tString = new char[2000];
+   sprintf(tString, "mv %s %s", aSourceFilePath, aDestinFilePath);
+   Ris::doSystemCommand(tString);
+   delete tString;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Delete a file.
 
 void deleteFile(const char* aFilePath)

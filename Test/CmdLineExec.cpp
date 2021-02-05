@@ -1,5 +1,10 @@
 #include "stdafx.h"
 
+#include <stdlib.h>
+#include <stddef.h>
+#include <stdio.h>
+#include "string.h"
+
 #include "risProgramTime.h"
 #include "risNetWait.h"
 #include "CmdLineExec.h"
@@ -46,17 +51,31 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   double tTime = Ris::getCurrentProgramTime();
-   Prn::print(0, "Ris::getCurrentProgramTime     %10.6f", tTime);
+   const char* cmd = "date +%s";
+   FILE* cmdfile = popen(cmd, "r");
+   char timestring[40];
+   fgets(timestring, 39, cmdfile);
+   pclose(cmdfile);
+   printf("timestring %s\n", timestring);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
+void my_get_timestring(char* destin)
+{
+   const char* cmd = "date +%s";
+   FILE* cmdfile = popen(cmd, "r");
+   fgets(destin, 39, cmdfile);
+   pclose(cmdfile);
+}
+
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Net::doWaitForNetwork();
+   char timestring[40];
+   my_get_timestring(timestring);
+   printf("timestring %s\n", timestring);
 }
 
 //******************************************************************************
@@ -65,6 +84,8 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   double tTime = Ris::getCurrentProgramTime();
+   Prn::print(0, "Ris::getCurrentProgramTime     %10.6f", tTime);
 }
 
 //******************************************************************************

@@ -86,8 +86,11 @@ double my_time_from_string(char* aString);
 // Return "01:02:03" from seconds
 char*  my_string_from_time(double aTime, char* aBuffer);
 
-// Return current timestamp
-char*  my_timestamp(char* aBuffer);
+// Return current timestamp. 2021-02-11.19:29:10
+char*  my_timestamp1(char* aBuffer);
+
+// Return current timestamp. 2021-02-11.19:29:10.001
+char* my_timestamp2(char* aBuffer);
 
 // Convert seconds to millisecond ticks
 int    my_ticks_from_time (double aTime);

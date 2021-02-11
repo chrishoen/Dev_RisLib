@@ -6,7 +6,7 @@
 #include "string.h"
 
 #include "risProgramTime.h"
-#include "risNetWait.h"
+#include "my_functions.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -51,31 +51,17 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   const char* cmd = "date +%s";
-   FILE* cmdfile = popen(cmd, "r");
-   char timestring[40];
-   fgets(timestring, 39, cmdfile);
-   pclose(cmdfile);
-   printf("timestring %s\n", timestring);
+   char tBuffer[40];
+   Prn::print(0, "my_timestamp1 %s", my_timestamp1(tBuffer));
+   Prn::print(0, "my_timestamp2 %s", my_timestamp2(tBuffer));
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-void my_get_timestring(char* destin)
-{
-   const char* cmd = "date +%s";
-   FILE* cmdfile = popen(cmd, "r");
-   fgets(destin, 39, cmdfile);
-   pclose(cmdfile);
-}
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   char timestring[40];
-   my_get_timestring(timestring);
-   printf("timestring %s\n", timestring);
 }
 
 //******************************************************************************

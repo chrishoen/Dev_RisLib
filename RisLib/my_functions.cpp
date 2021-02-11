@@ -236,20 +236,36 @@ char*  my_string_from_time(double aTime, char* aBuffer)
    return aBuffer;
 }
 
-char*  my_timestamp(char* aBuffer)
-{
-   time_t     now = time(0);
-   struct tm  tstruct;
-   tstruct = *localtime(&now);
-   strftime(aBuffer, 40, "%Y-%m-%d.%X", &tstruct);
-   return aBuffer;
-}
-
-
 // Convert seconds to millisecond ticks
 int  my_ticks_from_time(double aTime)
 {
    return int(round(aTime*1000.0));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+char* my_timestamp1(char* aBuffer)
+{
+   timespec tTimeSpec;
+   timespec_get(&tTimeSpec, TIME_UTC);
+
+   strftime(aBuffer, 40, "%F %T", localtime(&tTimeSpec.tv_sec));
+
+   return aBuffer;
+}
+
+char* my_timestamp2(char* aBuffer)
+{
+   timespec tTimeSpec;
+   timespec_get(&tTimeSpec, TIME_UTC);
+
+   char tTemp[40];
+   strftime(tTemp, 40, "%F %T", localtime(&tTimeSpec.tv_sec));
+   sprintf(aBuffer, "%s.%03ld", tTemp, tTimeSpec.tv_nsec / 1000000);
+
+   return aBuffer;
 }
 
 //******************************************************************************

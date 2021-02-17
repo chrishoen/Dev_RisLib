@@ -13,12 +13,14 @@ my_inc_import_CommonLib(TimerThreadTest)
 my_lib_import_CommonLib(TimerThreadTest)
 my_lib_import_RisLib(TimerThreadTest)
 
-
-if(CMAKE_SYSTEM_VERSION EQUAL 101)
-   add_custom_command(  
-      TARGET TimerThreadTest
+if(MSVC)
+   install(TARGETS TimerThreadTest DESTINATION "C:/aaa_prime/RisLib")
+elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+   install(TARGETS TimerThreadTest DESTINATION "/opt/prime/bin")
+else()
+   add_custom_command(
+      TARGET  TimerThreadTest
       POST_BUILD
       COMMAND rsync -azv --chmod=ugo=rwx TimerThreadTest rsync://debian@devtgt/prime/bin
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/TimerThreadTest)
 endif()
-

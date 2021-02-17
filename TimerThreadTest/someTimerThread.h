@@ -46,7 +46,6 @@ public:
 
    void executeTest1(int aTimeCount);
    void executeTest2(int aTimeCount);
-   void executeTest3(int aTimeCount);
 };
 
 //******************************************************************************

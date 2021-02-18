@@ -23,9 +23,12 @@ namespace Ris
 PeriodicTimeMarker::PeriodicTimeMarker()
 {
    mTimeAtUpdateUS = 0.0;
+   mTimeAtUpdateUS = 0.0;
    mTimeAtLastUpdateUS = 0.0;
+   mTimeDifferenceUS = 0.0;
    mFirstFlag = true;
    mChangeCount = 0;
+   mStatistics.initialize(1);
 }
 
 //******************************************************************************
@@ -84,8 +87,9 @@ void PeriodicTimeMarker::doUpdate()
 
 TrialTimeMarker::TrialTimeMarker()
 {
-   mTimeAtStartUS = 0.0;
-   mTimeAtStopUS = 0.0;
+   mTimeAtStartUS = 0;
+   mTimeAtStopUS = 0;
+   mTimeDifferenceUS = 0;
    mStartFlag = false;
 }
 
@@ -95,8 +99,9 @@ TrialTimeMarker::TrialTimeMarker()
 
 void TrialTimeMarker::startTrial(double aXLimit)
 {
-   mTimeAtStartUS = 0.0;
-   mTimeAtStopUS = 0.0;
+   mTimeAtStartUS = 0;
+   mTimeAtStopUS = 0;
+   mTimeDifferenceUS = 0;
    mStartFlag = false;
 
    // Initialize statistics.

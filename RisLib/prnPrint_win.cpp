@@ -31,7 +31,7 @@ HANDLE rCreatePrintView(int aConsole);
 //****************************************************************************
 // Constants.
 
-static const int cMaxPrintStringSize = 400;
+static const int cMaxPrintStringSize = 1000;
 static const int cMaxConsoles = PrintFilterTable::cMaxConsoles;
 
 //****************************************************************************
@@ -69,7 +69,7 @@ void resetVariables()
       rConsolePort[i] = gPrintSettings.mPrintViewIPPort + i;
       rConsoleHandle[i] = 0;
    }
-   // rConsoleFlag[0] = true;
+   //  rConsoleFlag[0] = true;
 }
 
 //****************************************************************************
@@ -79,6 +79,9 @@ void resetVariables()
 
 void resetPrint()
 {
+   // Initialize the filter table.
+   gPrintFilterTable.initialize();
+
    // Read from settings file.
    gPrintSettings.reset();
    gPrintSettings.readSection("default");

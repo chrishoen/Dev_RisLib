@@ -34,7 +34,7 @@ TimerThread::TimerThread()
 
    // Set timer period.
    BaseClass::mTimerPeriod = 250;
-   mTimeMarker.initialize(100);
+   mTimeMarker.initialize(100, 250*1000);
 
    // Members
    mTPFlag = false;
@@ -87,7 +87,7 @@ void TimerThread::executeTest1(int aTimeCount)
          mTimeMarker.mStatistics.mStdDev,
          mTimeMarker.mStatistics.mMinX,
          mTimeMarker.mStatistics.mMaxX,
-         mTimeMarker.mStatistics.mMaxX - mTimeMarker.mStatistics.mMinX);
+         mTimeMarker.mStatistics.mMaxError);
       mTimeMarker.mStatistics.mEndOfPeriod = false;
    }
 }

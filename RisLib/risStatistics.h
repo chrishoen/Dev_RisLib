@@ -21,7 +21,7 @@ class PeriodicStatistics
 {
 public:
    // Initialize
-   void initialize(int aSize);
+   void initialize(int aSize, double aPeriod);
    void show();
 
    // Put input value
@@ -29,6 +29,7 @@ public:
 
    // Members
    int mSize;
+   double mPeriod;
    bool mFirstFlag;
 
    // Output values
@@ -41,6 +42,7 @@ public:
    double  mMean;         // expectation (mean)
    double  mStdDev;       // uncertainty (standard deviation)
 
+   double  mMaxError;     // maximum error.
 
    double  mEXSquare;     // expectation of X squared
    double  mVariance;     // variance
@@ -51,8 +53,9 @@ public:
    int     mPutCount;     // Put count
 
    // Current min and max
-   double  mCurrentMinX;  // minimum
-   double  mCurrentMaxX;  // maximum
+   double  mCurrentMinX;      // minimum
+   double  mCurrentMaxX;      // maximum
+   double  mCurrentMaxError;  // maximum error
 
    // Members
    int mK;

@@ -25,9 +25,10 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 
-void PeriodicStatistics::initialize(int aSize)
+void PeriodicStatistics::initialize(int aSize, double aPeriod)
 {
    mSize = aSize;
+   mPeriod = aPeriod;
    mFirstFlag = true;
    mX = 0.0f;
    mEndOfPeriod = false;
@@ -37,10 +38,12 @@ void PeriodicStatistics::initialize(int aSize)
    mStdDev = 0.0f;
    mMinX = 0.0f;
    mMaxX = 0.0f;
+   mMaxError = 0.0f;
    mXSum = 0.0f;
    mXSquareSum = 0.0f;
    mCurrentMinX = 0.0f;
    mCurrentMaxX = 0.0f;
+   mCurrentMaxError = 0.0f;
    mPutCount = 0;
    mK = 0;
 }
@@ -64,12 +67,16 @@ void PeriodicStatistics::put(double aX)
       mFirstFlag = false;
       mCurrentMinX = mX;
       mCurrentMaxX = mX;
+      mCurrentMaxError = fabs(mX - mPeriod);
    }
    // Else, calculate min and max
    else
    {
       if (mX < mCurrentMinX) mCurrentMinX = mX;
       if (mX > mCurrentMaxX) mCurrentMaxX = mX;
+
+      double tCurrentError = fabs(mX - mPeriod);
+      if (tCurrentError > mCurrentMaxError) mCurrentMaxError = tCurrentError;
    }
 
    //--------------------------------------------------------------------------- 
@@ -110,6 +117,7 @@ void PeriodicStatistics::put(double aX)
       // Latch minimum and maximum
       mMinX = mCurrentMinX;
       mMaxX = mCurrentMaxX;
+      mMaxError = mCurrentMaxError;
 
       // Reset sums and counts
       mXSum = 0.0;;

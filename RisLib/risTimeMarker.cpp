@@ -28,14 +28,14 @@ PeriodicTimeMarker::PeriodicTimeMarker()
    mTimeDifferenceUS = 0.0;
    mFirstFlag = true;
    mChangeCount = 0;
-   mStatistics.initialize(1);
+   mStatistics.initialize(1,1000);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void PeriodicTimeMarker::initialize(int aWindowSize)
+void PeriodicTimeMarker::initialize(int aWindowSize, double aPeriod)
 {
    mTimeAtUpdateUS = 0.0;
    mTimeAtLastUpdateUS = 0.0;
@@ -43,7 +43,7 @@ void PeriodicTimeMarker::initialize(int aWindowSize)
    mChangeCount = 0;
 
    // Initialize statistics.
-   mStatistics.initialize(aWindowSize);
+   mStatistics.initialize(aWindowSize, aPeriod);
 }
 
 //******************************************************************************

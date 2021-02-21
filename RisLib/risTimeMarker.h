@@ -51,7 +51,7 @@ public:
 
    // Constructor.
    PeriodicTimeMarker();
-   void initialize(int aWindowSize);
+   void initialize(int aWindowSize, double aPeriod);
 
    //***************************************************************************
    //***************************************************************************

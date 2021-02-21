@@ -5,63 +5,72 @@ Description:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 #include "stdafx.h"
 
-#define  _RISTHREADSPRIORITIES_CPP_
+#include <time.h>
+
+#include "risProgramTime.h"
 #include "risThreadsPriorities.h"
+#include "tsThreadServices.h"
 
-namespace Ris
+#define  _SOMETIMERTESTTHREAD_CPP_
+#include "someTimerTestThread.h"
+
+namespace Some
 {
-namespace Threads
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+TimerTestThread::TimerTestThread()
 {
+   // Set base class variables.
+   BaseClass::setThreadName("TimerTest");
+   BaseClass::setThreadPrintLevel(0);
+   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
+   // Set timer period.
+   BaseClass::mTimerPeriod = 250;
+   mTimeMarker.initialize(100, 250*1000);
 
-Priority::Priority()
-{
-   mProcessor = -1;
-   mPriority = 50;
-}
+   // Set member variables.
+   mTestCode = 1;
+   mTestCount = 0;
 
-Priority::Priority(short aProcessor, short aPriority)
-{
-   mProcessor = aProcessor;
-   mPriority = aPriority;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
-
-Priorities::Priorities()
-{
-   mLow       = Priority(-1, 20);
-   mNormal    = Priority(-1, 50);
-   mHigh      = Priority(-1, 80);
-
-   mQCall     = Priority(-1, 50);
-   mShort     = Priority(-1, 80);
-   mLong      = Priority(-1, 50);
-
-   mUdp       = Priority(-1, 80);
-   mTcpServer = Priority(-1, 50);
-   mTcpClient = Priority(-1, 50);
-   mSerial    = Priority(-1, 80);
-
-   mTsPrint   = Priority(-1, 20);
-
-   mTimerTest = Priority(3, 95);
-   mTimerTest = Priority(-1, 95);
-   mMonitor = Priority(-1, 30);
+   mProcessorNumber = 0;
+   mMean = 0;
+   mStdDev = 0;
+   mMin = 0;
+   mMax = 0;
+   mMaxError = 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-}//namespace
+
+void TimerTestThread::executeOnTimer(int aTimeCount)
+{
+   if (aTimeCount < 20) return;
+
+   mTimeMarker.doUpdate();
+
+   if (mTimeMarker.mStatistics.mEndOfPeriod)
+   {
+      mTestCount++;
+      mProcessorNumber = BaseClass::getThreadProcessorNumber(),
+      mMean = mTimeMarker.mStatistics.mMean;
+      mStdDev = mTimeMarker.mStatistics.mStdDev;
+      mMin = mTimeMarker.mStatistics.mMinX;
+      mMax = mTimeMarker.mStatistics.mMaxX;
+      mMaxError = mTimeMarker.mStatistics.mMaxError;
+      mTimeMarker.mStatistics.mEndOfPeriod = false;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 }//namespace

@@ -5,63 +5,62 @@ Description:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 #include "stdafx.h"
 
-#define  _RISTHREADSPRIORITIES_CPP_
+#include <time.h>
+
+#include "risProgramTime.h"
 #include "risThreadsPriorities.h"
+#include "tsThreadServices.h"
 
-namespace Ris
+#define  _SOMEMONITORTHREAD_CPP_
+#include "someMonitorThread.h"
+
+namespace Some
 {
-namespace Threads
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+MonitorThread::MonitorThread()
 {
+   // Set base class variables.
+   BaseClass::setThreadName("Timer");
+   BaseClass::setThreadPrintLevel(0);
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
+   // Set base class variables.
+   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mMonitor);
 
-Priority::Priority()
-{
-   mProcessor = -1;
-   mPriority = 50;
-}
-
-Priority::Priority(short aProcessor, short aPriority)
-{
-   mProcessor = aProcessor;
-   mPriority = aPriority;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
-
-Priorities::Priorities()
-{
-   mLow       = Priority(-1, 20);
-   mNormal    = Priority(-1, 50);
-   mHigh      = Priority(-1, 80);
-
-   mQCall     = Priority(-1, 50);
-   mShort     = Priority(-1, 80);
-   mLong      = Priority(-1, 50);
-
-   mUdp       = Priority(-1, 80);
-   mTcpServer = Priority(-1, 50);
-   mTcpClient = Priority(-1, 50);
-   mSerial    = Priority(-1, 80);
-
-   mTsPrint   = Priority(-1, 20);
-
-   mTimerTest = Priority(3, 95);
-   mTimerTest = Priority(-1, 95);
-   mMonitor = Priority(-1, 30);
+   // Set timer period.
+   BaseClass::mTimerPeriod = 10*1000;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-}//namespace
+
+void MonitorThread::executeOnTimer(int aTimeCount)
+{
+#if 0
+   if (mTimeMarker.mStatistics.mEndOfPeriod)
+   {
+      Prn::print(0, "TEST %5d %1d %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
+         mTestCount++,
+         BaseClass::getThreadProcessorNumber(),
+         mTimeMarker.mStatistics.mSize,
+         mTimeMarker.mStatistics.mMean,
+         mTimeMarker.mStatistics.mStdDev,
+         mTimeMarker.mStatistics.mMinX,
+         mTimeMarker.mStatistics.mMaxX,
+         mTimeMarker.mStatistics.mMaxError);
+      mTimeMarker.mStatistics.mEndOfPeriod = false;
+   }
+#endif
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 }//namespace

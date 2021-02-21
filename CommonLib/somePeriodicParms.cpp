@@ -32,10 +32,18 @@ PeriodicParms::PeriodicParms()
 void PeriodicParms::reset()
 {
    BaseClass::reset();
-   BaseClass::setFileName_RelAlphaFiles("RisLib/Thread_Parms.txt");
+   if (Ris::portableIsWindows())
+   {
+      BaseClass::setFilePath("c:/aaa_prime/files/Periodic_Parms.txt");
+   }
+   else
+   {
+      BaseClass::setFilePath("/opt/prime/files/Periodic_Parms.txt");
+   }
 
    mMonitorThreadPeriod = 0;
    mTestThreadPeriod = 0;
+   mSampleSize = 0;
 }
 
 //******************************************************************************
@@ -51,6 +59,7 @@ void PeriodicParms::show()
    printf("\n");
    printf("MonitorThreadPeriod      %-10d\n", mMonitorThreadPeriod);
    printf("TestThreadPeriod         %-10d\n", mTestThreadPeriod);
+   printf("SampleSize               %-10d\n", mSampleSize);
 }
 
 //******************************************************************************
@@ -66,6 +75,7 @@ void PeriodicParms::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("MonitorThreadPeriod"))   mMonitorThreadPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("TestThreadPeriod"))      mTestThreadPeriod = aCmd->argInt(1);
+   if (aCmd->isCmd("SampleSize"))            mSampleSize = aCmd->argInt(1);
 }
 
 //******************************************************************************

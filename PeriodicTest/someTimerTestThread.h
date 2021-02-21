@@ -36,6 +36,9 @@ public:
    //******************************************************************************
    // Members.
 
+   // If true then the test variables have been updated.
+   bool mUpdateFlag;
+
    // Test variables.
    int mProcessorNumber;
    double mMean;

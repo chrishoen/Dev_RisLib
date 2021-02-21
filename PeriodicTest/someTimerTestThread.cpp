@@ -11,7 +11,8 @@ Description:
 
 #include "risProgramTime.h"
 #include "risThreadsPriorities.h"
-#include "tsThreadServices.h"
+
+#include "somePeriodicParms.h"
 
 #define  _SOMETIMERTESTTHREAD_CPP_
 #include "someTimerTestThread.h"
@@ -31,13 +32,14 @@ TimerTestThread::TimerTestThread()
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
 
    // Set timer period.
-   BaseClass::mTimerPeriod = 250;
-   mTimeMarker.initialize(100, 250*1000);
+   BaseClass::mTimerPeriod = gPeriodicParms.mTestThreadPeriod;
+   mTimeMarker.initialize(gPeriodicParms.mSampleSize, gPeriodicParms.mTestThreadPeriod*1000);
 
    // Set member variables.
    mTestCode = 1;
    mTestCount = 0;
 
+   mUpdateFlag = false;
    mProcessorNumber = 0;
    mMean = 0;
    mStdDev = 0;
@@ -66,6 +68,7 @@ void TimerTestThread::executeOnTimer(int aTimeCount)
       mMax = mTimeMarker.mStatistics.mMaxX;
       mMaxError = mTimeMarker.mStatistics.mMaxError;
       mTimeMarker.mStatistics.mEndOfPeriod = false;
+      mUpdateFlag = true;
    }
 }
 

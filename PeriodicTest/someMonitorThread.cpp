@@ -11,7 +11,9 @@ Description:
 
 #include "risProgramTime.h"
 #include "risThreadsPriorities.h"
-#include "tsThreadServices.h"
+
+#include "somePeriodicParms.h"
+#include "someTimerTestThread.h"
 
 #define  _SOMEMONITORTHREAD_CPP_
 #include "someMonitorThread.h"
@@ -26,14 +28,14 @@ namespace Some
 MonitorThread::MonitorThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Timer");
+   BaseClass::setThreadName("Monitor");
    BaseClass::setThreadPrintLevel(0);
 
    // Set base class variables.
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mMonitor);
 
    // Set timer period.
-   BaseClass::mTimerPeriod = 10*1000;
+   BaseClass::mTimerPeriod = gPeriodicParms.mMonitorThreadPeriod;
 }
 
 //******************************************************************************
@@ -42,21 +44,19 @@ MonitorThread::MonitorThread()
 
 void MonitorThread::executeOnTimer(int aTimeCount)
 {
-#if 0
-   if (mTimeMarker.mStatistics.mEndOfPeriod)
+
+   if (gTimerTestThread->mUpdateFlag)
    {
-      Prn::print(0, "TEST %5d %1d %5d $$ %10.3f %10.3f %10.3f %10.3f $$ %10.3f",
-         mTestCount++,
-         BaseClass::getThreadProcessorNumber(),
-         mTimeMarker.mStatistics.mSize,
-         mTimeMarker.mStatistics.mMean,
-         mTimeMarker.mStatistics.mStdDev,
-         mTimeMarker.mStatistics.mMinX,
-         mTimeMarker.mStatistics.mMaxX,
-         mTimeMarker.mStatistics.mMaxError);
-      mTimeMarker.mStatistics.mEndOfPeriod = false;
+      gTimerTestThread->mUpdateFlag = false;
+      Prn::print(0, "%5d %1d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
+         gTimerTestThread->mTestCount,
+         gTimerTestThread->mProcessorNumber,
+         gTimerTestThread->mMean,
+         gTimerTestThread->mStdDev,
+         gTimerTestThread->mMin,
+         gTimerTestThread->mMax,
+         gTimerTestThread->mMaxError);
    }
-#endif
 }
 
 //******************************************************************************

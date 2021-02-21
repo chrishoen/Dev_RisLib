@@ -84,8 +84,7 @@ void Waitable::initialize (int aTimerPeriod)
    if (aTimerPeriod > 0)
    {
       // Create the timer.
-//    mSpecific->mTimerFd = timerfd_create(CLOCK_REALTIME, 0);
-      mSpecific->mTimerFd = timerfd_create(CLOCK_BOOTTIME_ALARM, 0);
+      mSpecific->mTimerFd = timerfd_create(CLOCK_MONOTONIC, 0);
 
       // Calculate the timer interval.
       int tSec = aTimerPeriod / 1000;

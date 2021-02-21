@@ -158,7 +158,7 @@ bool portableKbhit()
 unsigned long long int portableGetHiResCounter()
 {
    struct timespec tTimespec;
-   clock_gettime(CLOCK_REALTIME, &tTimespec);
+   clock_gettime(CLOCK_MONOTONIC, &tTimespec);
 
    unsigned long long int tSeconds = (unsigned long long int)tTimespec.tv_sec;
    unsigned long long int tNanoseconds = (unsigned long long int)tTimespec.tv_nsec;

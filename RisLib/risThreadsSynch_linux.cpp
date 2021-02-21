@@ -99,7 +99,7 @@ bool BinarySemaphore::get(int aTimeout)
       long long  tExpireTimeNs;
 
       // Get current timespec at beginning
-      clock_gettime(CLOCK_REALTIME, &tBeginTimespec);
+      clock_gettime(CLOCK_MONOTONIC, &tBeginTimespec);
 
       // Convert to ns
       Ris::NanoConvert::getNsFromTimespec(tBeginTimeNs,&tBeginTimespec);
@@ -114,7 +114,7 @@ bool BinarySemaphore::get(int aTimeout)
       sem_timedwait(&mSpecific->mHandle,&tExpireTimespec);
 
       // Get current timespec at end
-      clock_gettime(CLOCK_REALTIME, &tEndTimespec);
+      clock_gettime(CLOCK_MONOTONIC, &tEndTimespec);
 
       // Convert to ns
       Ris::NanoConvert::getNsFromTimespec(tEndTimeNs,&tEndTimespec);

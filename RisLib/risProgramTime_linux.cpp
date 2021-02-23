@@ -24,7 +24,10 @@ namespace Ris
 inline long long int my_get_hires_count()
 {
    struct timespec tTimespec;
-   clock_gettime(CLOCK_MONOTONIC, &tTimespec);
+// clock_gettime(CLOCK_BOOTTIME_ALARM, &tTimespec);
+
+//   clock_gettime(CLOCK_MONOTONIC_RAW, &tTimespec);
+   clock_gettime(CLOCK_REALTIME, &tTimespec);
 
    long long int tSeconds = (long long int)tTimespec.tv_sec;
    long long int tNanoseconds = (long long int)tTimespec.tv_nsec;

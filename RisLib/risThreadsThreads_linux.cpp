@@ -187,12 +187,6 @@ void BaseThread::launchThread()
    //***************************************************************************
    // Thread attributes, thread priority.
 
-   ret = pthread_attr_setscope(&tAttributes, PTHREAD_SCOPE_SYSTEM);
-   chkerror(ret, "pthread_attr_setscope");
-
-   ret = pthread_attr_setinheritsched(&tAttributes, PTHREAD_EXPLICIT_SCHED);
-   chkerror(ret, "pthread_attr_setinheritsched");
-
    ret = pthread_attr_setschedpolicy(&tAttributes, SCHED_FIFO);
    chkerror(ret, "pthread_attr_setschedpolicy");
 
@@ -200,6 +194,9 @@ void BaseThread::launchThread()
    tSchedParam.sched_priority = mThreadPriority;
    ret = pthread_attr_setschedparam(&tAttributes, &tSchedParam);
    chkerror(ret, "pthread_attr_setschedparam");
+
+   ret = pthread_attr_setinheritsched(&tAttributes, PTHREAD_EXPLICIT_SCHED);
+   chkerror(ret, "pthread_attr_setinheritsched");
 
    //***************************************************************************
    //***************************************************************************

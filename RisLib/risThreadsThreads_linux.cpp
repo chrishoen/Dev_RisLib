@@ -7,6 +7,7 @@
 
 #include "stdafx.h"
 
+#define _GNU_SOURCE
 #include <pthread.h>
 #include <sched.h>
 #include <semaphore.h>
@@ -456,7 +457,6 @@ void BaseThread::showThreadFullInfo()
    printf("\n");
    printf("ThreadPolicy            %8d\n", tThreadPolicy);
    printf("ThreadPriority          %8d\n", tThreadPriority);
-   printf("mThreadPriority         %8d\n", mThreadPriority);
    printf("\n");
    printf("ThreadAffinityMask      %8X\n", tUMask);
    printf("mThreadSingleProcessor  %8X\n", mThreadSingleProcessor);

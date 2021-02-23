@@ -54,6 +54,11 @@ TimerTestThread::TimerTestThread()
 
 void TimerTestThread::executeOnTimer(int aTimeCount)
 {
+   if (aTimeCount == 0)
+   {
+      BaseClass::showThreadFullInfo();
+   }
+
    if (aTimeCount < 20) return;
 
    mTimeMarker.doUpdate();
@@ -61,7 +66,7 @@ void TimerTestThread::executeOnTimer(int aTimeCount)
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
       mTestCount++;
-      mProcessorNumber = BaseClass::getThreadProcessorNumber(),
+      //mProcessorNumber = BaseClass::getThreadProcessorNumber(),
       mMean = mTimeMarker.mStatistics.mMean;
       mStdDev = mTimeMarker.mStatistics.mStdDev;
       mMin = mTimeMarker.mStatistics.mMinX;

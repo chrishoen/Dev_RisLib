@@ -14,7 +14,7 @@
 #include <time.h>
 #include <errno.h>
 #include <assert.h>
-
+#include <sys/resource.h>
 
 #include "risThreadsProcess.h"
 
@@ -45,13 +45,18 @@ int  getProcessTimerResolution()
 
 void enterProcessHigh()
 {
-   signal(SIGPIPE, SIG_IGN);
+   int tRet = 0;
+   int tMaxPriority = sched_get_priority_max(SCHED_FIFO);
+   int tMinPriority = sched_get_priority_min(SCHED_FIFO);
 
-   return;
-   sched_param param;
-   param.sched_priority = sched_get_priority_max(SCHED_FIFO);
-   int ret = sched_setscheduler(getpid(), SCHED_FIFO, &param);
-   if (ret) printf("sched_setschedparam ERROR %d\n", errno);
+   struct rlimit tRLimit;
+   tRLimit.rlim_cur = tMinPriority;
+   tRLimit.rlim_max = tMaxPriority;
+   tRet = setrlimit(RLIMIT_RTPRIO, &tRLimit);
+   if (tRet)
+   {
+      printf("setrlimit ERROR  %d\n", errno);
+   }
 }
 
 void exitProcess()

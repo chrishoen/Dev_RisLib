@@ -7,7 +7,7 @@
 
 #include "stdafx.h"
 
-#define _GNU_SOURCE
+//#define _GNU_SOURCE
 #include <pthread.h>
 #include <sched.h>
 #include <semaphore.h>
@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <assert.h>
 #include <functional>
+#include <sys/resource.h>
 
 #include "tsThreadServices.h"
 
@@ -23,6 +24,7 @@
 #include "risThreadsPriorities.h"
 #include "prnPrint.h"
 #include "risThreadsThreads.h"
+
 
 namespace Ris
 {
@@ -154,7 +156,7 @@ void BaseThread::setThreadPriorityHigh()
 
 void chkerror(int aRet, const char* aLabel)
 {
-   if (aRet == 0)return;
+   if (aRet >= 0)return;
    printf("FAIL %s %d\n", aLabel,aRet);
    exit(1);
 }
@@ -451,6 +453,11 @@ void BaseThread::showThreadFullInfo()
    unsigned tUMask = 0;
    for (int i = 0; i < 32; i++) if (CPU_ISSET(i, &tAffinityMask)) (tUMask |= (1 << i));
 
+   struct rlimit tRLimit;
+   getrlimit(RLIMIT_RTPRIO, &tRLimit);
+   int tRTPriority = tRLimit.rlim_cur;
+   int tRRTMaxPriority = tRLimit.rlim_max;
+
    printf("NumProcessors           %8d\n", tNumProcessors);
    printf("MaxPriority             %8d\n", tMaxPriority);
    printf("MinPriority             %8d\n", tMinPriority);
@@ -461,6 +468,9 @@ void BaseThread::showThreadFullInfo()
    printf("ThreadAffinityMask      %8X\n", tUMask);
    printf("mThreadSingleProcessor  %8X\n", mThreadSingleProcessor);
    printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
+
+   printf("RTPriority              %8d\n", tRTPriority);
+   printf("RRTMaxPriority          %8d\n", tRRTMaxPriority);
 
    printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");
 }

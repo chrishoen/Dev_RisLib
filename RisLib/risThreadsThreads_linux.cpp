@@ -154,7 +154,7 @@ void BaseThread::setThreadPriorityHigh()
 //******************************************************************************
 //******************************************************************************
 
-void chkerror(int aRet, const char* aLabel)
+static void chkerror(int aRet, const char* aLabel)
 {
    if (aRet >= 0)return;
    printf("FAIL %s %d\n", aLabel,aRet);

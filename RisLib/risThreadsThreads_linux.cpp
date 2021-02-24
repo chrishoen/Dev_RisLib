@@ -39,7 +39,7 @@ namespace Threads
 // the thread function because CreateThread can't use member function
 // addresses.
 
-void* BaseThread_Execute (void* argument)
+static void* BaseThread_Execute (void* argument)
 {
    BaseThread* someThread = (BaseThread*)argument;
    someThread->threadFunction();

@@ -54,18 +54,15 @@ void PeriodicTimeMarker::initialize(int aWindowSize, double aPeriod)
 
 void PeriodicTimeMarker::doUpdate()
 {
-   // Store the pervious time.
-   mTimeAtLastUpdateUS = mTimeAtUpdateUS;
-
    // Read current time from hardware.
    mTimeAtUpdateUS = Ris::getCurrentProgramTimeUS();
 
-   // Calculate time difference.
-   mTimeDifferenceUS = mTimeAtUpdateUS - mTimeAtLastUpdateUS;
-
-   // Calculate statistics on delta time.
    if (!mFirstFlag)
    {
+      // Calculate time difference.
+      mTimeDifferenceUS = mTimeAtUpdateUS - mTimeAtLastUpdateUS;
+
+      // Calculate statistics on the difference.
       mStatistics.put(mTimeDifferenceUS);
 
       if (mStatistics.mEndOfPeriod)
@@ -73,6 +70,9 @@ void PeriodicTimeMarker::doUpdate()
          mChangeCount++;
       }
    }
+
+   // Store the previous time.
+   mTimeAtLastUpdateUS = mTimeAtUpdateUS;
 
    // Not first.
    mFirstFlag = false;

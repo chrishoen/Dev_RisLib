@@ -66,7 +66,7 @@ void TimerTestThread::executeOnTimer(int aTimeCount)
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
       mTestCount++;
-      //mProcessorNumber = BaseClass::getThreadProcessorNumber(),
+      mProcessorNumber = BaseClass::getThreadProcessorNumber(),
       mMean = mTimeMarker.mStatistics.mMean;
       mStdDev = mTimeMarker.mStatistics.mStdDev;
       mMin = mTimeMarker.mStatistics.mMinX;

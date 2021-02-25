@@ -173,6 +173,14 @@ void BasePeriodicThread2::launchThread()
 
 void BasePeriodicThread2::threadFunction()
 {
+   // Set the scheduler.
+   int tRet = 0;
+   struct sched_param tSchedParms;
+   memset(&tSchedParms, 0, sizeof(tSchedParms));
+   tSchedParms.sched_priority = mThreadPriority;
+   tRet = sched_setscheduler(0, SCHED_FIFO, &tSchedParms);
+   chkerror(tRet, "threadFunction sched_setscheduler");
+
    // Set the processor that was current at the start of the thread
    // run function.
    mThreadRunProcessor = getThreadProcessorNumber();

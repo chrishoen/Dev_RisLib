@@ -7,6 +7,12 @@ Base thread classes
 //******************************************************************************
 //******************************************************************************
 
+#include "risThreadsPriorities.h"
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Ris
 {
 namespace Threads
@@ -37,7 +43,10 @@ public:
    int mThreadRunProcessor;
 
    // Thread period milliseconds.
-   int    mThreadPeriod;
+   int mTimerPeriod;
+
+   // Timer count.
+   int mTimerCount;
 
    // If true then terminate the thread loop.
    bool mTerminateFlag;
@@ -94,6 +103,20 @@ public:
 
    // Show thread configuration info.
    void showThreadFullInfo();
+
+
+   void showThreadInfo() {}
+   void setThreadName(const char*) {}
+   void setThreadPrintLevel(int) {}
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Inheritor overloads.
+
+   // An overload of this is supplied by the inheritor.
+   // It is called periodically by the threadRunFunction.
+   virtual void executeOnTimer(int aTimerCount) = 0;
 };
 
 //******************************************************************************

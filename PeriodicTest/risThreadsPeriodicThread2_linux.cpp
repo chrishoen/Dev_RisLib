@@ -18,8 +18,9 @@
 #include <sys/resource.h>
 
 #include "my_functions.h"
-#include "risThreadsPriorities.h"
 #include "prnPrint.h"
+#include "risThreadsPriorities.h"
+#include "risNanoConvert.h"
 #include "risThreadsPeriodicThread2.h"
 
 namespace Ris
@@ -64,7 +65,8 @@ BasePeriodicThread2::BasePeriodicThread2()
    mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
-   mThreadPeriod = 0;
+   mTimerPeriod = 1000;
+   mTimerCount = 0;
    mTerminateFlag = false;
 }
 
@@ -175,6 +177,32 @@ void BasePeriodicThread2::threadFunction()
    // run function.
    mThreadRunProcessor = getThreadProcessorNumber();
 
+   // Time variables
+   timespec   tSleepTimespec;
+   long long  tSleepTimeNs;
+   long long  tTimerPeriodNs = Ris::NanoConvert::getNsFromMs(mTimerPeriod);
+
+   // Get current timespec at start.
+   clock_gettime(CLOCK_MONOTONIC, &tSleepTimespec);
+
+   // Convert to ns.
+   Ris::NanoConvert::getNsFromTimespec(tSleepTimeNs, &tSleepTimespec);
+
+   // Loop until thread terminate.
+   while (!mTerminateFlag)
+   {
+      // Advance the sleep time by the period.
+      tSleepTimeNs += tTimerPeriodNs;
+
+      // Convert to timespec.
+      Ris::NanoConvert::getTimespecFromNs(&tSleepTimespec, tSleepTimeNs);
+
+      // Sleep until the absolute sleep time.
+      clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &tSleepTimespec, 0);
+
+      // Call the inheritors handler for the timer.
+      executeOnTimer(mTimerCount++);
+   }
 }
 
 //******************************************************************************

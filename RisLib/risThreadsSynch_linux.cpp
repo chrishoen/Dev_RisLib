@@ -102,13 +102,13 @@ bool BinarySemaphore::get(int aTimeout)
       clock_gettime(CLOCK_REALTIME, &tBeginTimespec);
 
       // Convert to ns
-      Ris::NanoConvert::getNsFromTimespec(tBeginTimeNs,&tBeginTimespec);
+      tBeginTimeNs = Ris::NanoConvert::getNsFromTimespec(&tBeginTimespec);
 
       // Calculate expiration time from timeout (which is in milliseconds)
       tExpireTimeNs = tBeginTimeNs + Ris::NanoConvert::getNsFromMs(aTimeout);
 
       // Convert to timespec
-      Ris::NanoConvert::getTimespecFromNs(&tExpireTimespec,tExpireTimeNs);
+      tExpireTimespec = Ris::NanoConvert::getTimespecFromNs(tExpireTimeNs);
 
       // Semaphore timed wait with expiration timespec
       sem_timedwait(&mSpecific->mHandle,&tExpireTimespec);
@@ -117,7 +117,7 @@ bool BinarySemaphore::get(int aTimeout)
       clock_gettime(CLOCK_REALTIME, &tEndTimespec);
 
       // Convert to ns
-      Ris::NanoConvert::getNsFromTimespec(tEndTimeNs,&tEndTimespec);
+      tEndTimeNs = Ris::NanoConvert::getNsFromTimespec(&tEndTimespec);
 
       // Compare
       bool tNoTimeout = tExpireTimeNs >= tEndTimeNs ? true : false; 

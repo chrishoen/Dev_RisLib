@@ -44,7 +44,7 @@ void BasePeriodicThread::threadRunFunction()
    clock_gettime(CLOCK_MONOTONIC, &tSleepTimespec);
 
    // Convert to ns.
-   Ris::NanoConvert::getNsFromTimespec(tSleepTimeNs, &tSleepTimespec);
+   tSleepTimeNs = Ris::NanoConvert::getNsFromTimespec(&tSleepTimespec);
 
    // Loop until thread terminate.
    while (!BaseClass::mTerminateFlag)
@@ -53,7 +53,7 @@ void BasePeriodicThread::threadRunFunction()
       tSleepTimeNs += tTimerPeriodNs;
 
       // Convert to timespec.
-      Ris::NanoConvert::getTimespecFromNs(&tSleepTimespec, tSleepTimeNs);
+      tSleepTimespec = Ris::NanoConvert::getTimespecFromNs(tSleepTimeNs);
 
       // Sleep until the absolute sleep time.
       clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &tSleepTimespec, 0);

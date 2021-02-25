@@ -37,8 +37,8 @@ int    getUsFromNs   (long long  aTimeNs);
 //------------------------------------------------------------------------------
 // timespec conversions
 
-void getNsFromTimespec (long long&  aTimeNs, void* aTimespec);
-void getTimespecFromNs (void* aTimespec, long long aTimeNs);
+long long getNsFromTimespec (struct timespec* aTimespec);
+struct timespec  getTimespecFromNs (long long aTimeNs);
 
 //------------------------------------------------------------------------------
 // tm conversions
@@ -46,12 +46,6 @@ void getTimespecFromNs (void* aTimespec, long long aTimeNs);
 void getNsFromTm (long long&  aTimeNs, struct tm* aTm);
 void getTmFromNs (struct tm* aTm,  long long      aTimeNs);
 
-//------------------------------------------------------------------------------
-// String conversions
-
-char* asString1(long long aTimeNs,char* aString);
-char* asString2(long long aTimeNs,char* aString);
-char* asString3(long long aTimeNs,char* aString);
 
 //******************************************************************************
 //******************************************************************************

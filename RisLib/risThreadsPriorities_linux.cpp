@@ -57,6 +57,7 @@ Priorities::Priorities()
 
    mTimerTest = Priority(3, 95);
    mTimerTest = Priority(-1, 95);
+   mTimerTest = Priority(-1, 98);
    mMonitor = Priority(-1, 30);
 }
 

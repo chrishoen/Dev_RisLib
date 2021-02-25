@@ -30,6 +30,10 @@ TimerTestThread::TimerTestThread()
    BaseClass::setThreadName("TimerTest");
    BaseClass::setThreadPrintLevel(0);
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
+   BaseClass::setThreadPriority(
+      Ris::Threads::Priority(
+         gPeriodicParms.mTestThreadProcessor,
+         gPeriodicParms.mTestThreadPriority));
 
    // Set timer period.
    BaseClass::mTimerPeriod = gPeriodicParms.mTestThreadPeriod;

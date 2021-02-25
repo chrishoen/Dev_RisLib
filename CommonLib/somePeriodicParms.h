@@ -70,6 +70,8 @@ public:
    // Timer thread periods.
    int  mMonitorThreadPeriod;
    int  mTestThreadPeriod;
+   int  mTestThreadProcessor;
+   int  mTestThreadPriority;
 
    // Sample window size.
    int mSampleSize;

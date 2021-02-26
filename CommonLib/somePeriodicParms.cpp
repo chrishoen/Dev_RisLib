@@ -46,6 +46,9 @@ void PeriodicParms::reset()
    mTestThreadProcessor = -1;
    mTestThreadPriority = 80;
    mSampleSize = 0;
+   mEDFThreadRunTimeUs = 0;
+   mEDFThreadDeadlineUs = 0;
+   mEDFThreadPeriodUs = 0;
 }
 
 //******************************************************************************
@@ -64,6 +67,9 @@ void PeriodicParms::show()
    printf("TestThreadProcessor      %-10d\n", mTestThreadProcessor);
    printf("TestThreadPriority       %-10d\n", mTestThreadPriority);
    printf("SampleSize               %-10d\n", mSampleSize);
+   printf("EDFThreadRuntimeUs       %-10d\n", mEDFThreadRunTimeUs);
+   printf("EDFThreadDeadlineUs      %-10d\n", mEDFThreadDeadlineUs);
+   printf("EDFThreadPeriodUs        %-10d\n", mEDFThreadPeriodUs);
 }
 
 //******************************************************************************
@@ -82,6 +88,9 @@ void PeriodicParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TestThreadProcessor"))   mTestThreadProcessor = aCmd->argInt(1);
    if (aCmd->isCmd("TestThreadPriority"))    mTestThreadPriority = aCmd->argInt(1);
    if (aCmd->isCmd("SampleSize"))            mSampleSize = aCmd->argInt(1);
+   if (aCmd->isCmd("EDFThreadRuntimeUs"))    mEDFThreadRunTimeUs = aCmd->argInt(1);
+   if (aCmd->isCmd("EDFThreadDeadlineUs"))   mEDFThreadDeadlineUs = aCmd->argInt(1);
+   if (aCmd->isCmd("EDFThreadPeriodUs"))     mEDFThreadPeriodUs = aCmd->argInt(1);
 }
 
 //******************************************************************************

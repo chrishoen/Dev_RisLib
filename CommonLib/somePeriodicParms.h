@@ -76,6 +76,11 @@ public:
    // Sample window size.
    int mSampleSize;
 
+   // Deadline thread members.
+   int mEDFThreadRunTimeUs;
+   int mEDFThreadDeadlineUs;
+   int mEDFThreadPeriodUs;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

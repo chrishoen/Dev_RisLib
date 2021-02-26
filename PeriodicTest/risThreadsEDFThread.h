@@ -7,8 +7,6 @@ Base thread classes
 //******************************************************************************
 //******************************************************************************
 
-#include "risThreadsPriorities.h"
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -22,7 +20,7 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
  
-class BaseDeadlineThread
+class BaseEDFThread
 {
 public:
 
@@ -35,18 +33,11 @@ public:
    // Some of these are passed to the CreateThread in launch
    // and some are used by threadFunction.
    int    mThreadStackSize;
-   int    mThreadPriority;
    int    mThreadSingleProcessor;
 
    // The processor that was current at the start of the thread
    // run function.
    int mThreadRunProcessor;
-
-   // Thread period milliseconds.
-   int mTimerPeriod;
-
-   // Timer count.
-   int mTimerCount;
 
    // If true then terminate the thread loop.
    bool mTerminateFlag;
@@ -59,14 +50,15 @@ public:
    class BaseSpecific;
    BaseSpecific* mBaseSpecific;
 
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
    // Constructor.
-   BaseDeadlineThread(); 
-   virtual ~BaseDeadlineThread();
+   BaseEDFThread(); 
+   virtual ~BaseEDFThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -76,9 +68,6 @@ public:
    // Launch the thread.
    virtual void launchThread(); 
 
-   // Thread function.
-   void threadFunction();
-
    // Shutdown the thread
    void shutdownThread();
 
@@ -86,9 +75,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Methods.
-
-   // Set the thread processor number and priority.
-   void setThreadPriority(Priority aPriority);
 
    // Wait for the thread to terminate.
    void waitForThreadTerminate();

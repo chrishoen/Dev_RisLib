@@ -21,7 +21,7 @@
 #include "prnPrint.h"
 #include "risThreadsPriorities.h"
 #include "risNanoConvert.h"
-#include "risThreadsDeadlineThread.h"
+#include "risThreadsEDFThread.h"
 
 namespace Ris
 {
@@ -36,10 +36,10 @@ namespace Threads
 // the thread function because CreateThread can't use member function
 // addresses.
 
-static void* BaseDeadlineThread_Execute (void* argument)
+static void* BaseEDFThread_Execute (void* argument)
 {
-   BaseDeadlineThread* someThread = (BaseDeadlineThread*)argument;
-   someThread->threadFunction();
+   BaseEDFThread* someThread = (BaseEDFThread*)argument;
+   //someThread->threadFunction();
    return 0;
 }
 
@@ -47,7 +47,7 @@ static void* BaseDeadlineThread_Execute (void* argument)
 //******************************************************************************
 //******************************************************************************
 
-class BaseDeadlineThread::BaseSpecific
+class BaseEDFThread::BaseSpecific
 {
 public:
    pthread_t mHandle;
@@ -57,16 +57,13 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-BaseDeadlineThread::BaseDeadlineThread() 
+BaseEDFThread::BaseEDFThread() 
 {
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle = 0;
-   mThreadPriority = gPriorities.mNormal.mPriority;
    mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
-   mTimerPeriod = 1000;
-   mTimerCount = 0;
    mTerminateFlag = false;
 }
 
@@ -74,20 +71,9 @@ BaseDeadlineThread::BaseDeadlineThread()
 //******************************************************************************
 //******************************************************************************
 
-BaseDeadlineThread::~BaseDeadlineThread() 
+BaseEDFThread::~BaseEDFThread() 
 {
    delete mBaseSpecific;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set the thread processor number and priority.
-
-void BaseDeadlineThread::setThreadPriority(Priority aPriority)
-{
-   mThreadSingleProcessor = aPriority.mProcessor;
-   mThreadPriority        = aPriority.mPriority;
 }
 
 //******************************************************************************
@@ -101,7 +87,7 @@ static void chkerror(int aRet, const char* aLabel)
    exit(1);
 }
 
-void BaseDeadlineThread::launchThread()
+void BaseEDFThread::launchThread()
 {
    //***************************************************************************
    //***************************************************************************
@@ -123,7 +109,7 @@ void BaseDeadlineThread::launchThread()
    chkerror(ret, "pthread_attr_setschedpolicy");
 
    sched_param tSchedParam;
-   tSchedParam.sched_priority = mThreadPriority;
+   tSchedParam.sched_priority = 80;
    ret = pthread_attr_setschedparam(&tAttributes, &tSchedParam);
    chkerror(ret, "pthread_attr_setschedparam");
 
@@ -153,7 +139,7 @@ void BaseDeadlineThread::launchThread()
    ret = pthread_create(
       &mBaseSpecific->mHandle,
       &tAttributes,
-      &BaseDeadlineThread_Execute,
+      &BaseEDFThread_Execute,
       (void*)this);
    chkerror(ret, "pthread_create");
 
@@ -168,56 +154,8 @@ void BaseDeadlineThread::launchThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is the function that is executed in the context of the created thread.
-// It calls a sequence of functions that are overloaded by inheritors.
 
-void BaseDeadlineThread::threadFunction()
-{
-   // Set the scheduler.
-   int tRet = 0;
-   struct sched_param tSchedParms;
-   memset(&tSchedParms, 0, sizeof(tSchedParms));
-   tSchedParms.sched_priority = mThreadPriority;
-   tRet = sched_setscheduler(0, SCHED_FIFO, &tSchedParms);
-   chkerror(tRet, "threadFunction sched_setscheduler");
-
-   // Set the processor that was current at the start of the thread
-   // run function.
-   mThreadRunProcessor = getThreadProcessorNumber();
-
-   // Time variables
-   timespec   tSleepTimespec;
-   long long  tSleepTimeNs;
-   long long  tTimerPeriodNs = Ris::NanoConvert::getNsFromMs(mTimerPeriod);
-
-   // Get current timespec at start.
-   clock_gettime(CLOCK_MONOTONIC, &tSleepTimespec);
-
-   // Convert to ns.
-   tSleepTimeNs = Ris::NanoConvert::getNsFromTimespec(&tSleepTimespec);
-
-   // Loop until thread terminate.
-   while (!mTerminateFlag)
-   {
-      // Advance the sleep time by the period.
-      tSleepTimeNs += tTimerPeriodNs;
-
-      // Convert to timespec.
-      tSleepTimespec = Ris::NanoConvert::getTimespecFromNs(tSleepTimeNs);
-
-      // Sleep until the absolute sleep time.
-      clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &tSleepTimespec, 0);
-
-      // Call the inheritors handler for the timer.
-      executeOnTimer(mTimerCount++);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void BaseDeadlineThread::waitForThreadTerminate()
+void BaseEDFThread::waitForThreadTerminate()
 {
    pthread_join(mBaseSpecific->mHandle,NULL);
 }
@@ -226,7 +164,7 @@ void BaseDeadlineThread::waitForThreadTerminate()
 //******************************************************************************
 //******************************************************************************
 
-void BaseDeadlineThread::shutdownThread()
+void BaseEDFThread::shutdownThread()
 {
    mTerminateFlag = true;
    pthread_join(mBaseSpecific->mHandle, NULL);
@@ -236,7 +174,7 @@ void BaseDeadlineThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 
-int BaseDeadlineThread::getThreadProcessorNumber()
+int BaseEDFThread::getThreadProcessorNumber()
 {
    return sched_getcpu();
 }
@@ -247,7 +185,7 @@ int BaseDeadlineThread::getThreadProcessorNumber()
 // This is the function that is executed in the context of the created thread.
 // It calls a sequence of functions that are overloaded by inheritors.
 
-void BaseDeadlineThread::showThreadFullInfo()
+void BaseEDFThread::showThreadFullInfo()
 {
    printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN\n");
 

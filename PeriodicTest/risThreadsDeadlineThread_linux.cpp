@@ -97,7 +97,7 @@ int sched_getattr(pid_t pid,
 #include "prnPrint.h"
 #include "risNanoConvert.h"
 
-#include "risThreadsEDFThread.h"
+#include "risThreadsDeadlineThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -116,9 +116,9 @@ namespace Threads
 // the thread function because CreateThread can't use member function
 // addresses.
 
-static void* BaseEDFThread_Execute (void* argument)
+static void* BaseDeadlineThread_Execute (void* argument)
 {
-   BaseEDFThread* someThread = (BaseEDFThread*)argument;
+   BaseDeadlineThread* someThread = (BaseDeadlineThread*)argument;
    someThread->threadFunction();
    return 0;
 }
@@ -127,7 +127,7 @@ static void* BaseEDFThread_Execute (void* argument)
 //******************************************************************************
 //******************************************************************************
 
-class BaseEDFThread::BaseSpecific
+class BaseDeadlineThread::BaseSpecific
 {
 public:
    pthread_t mHandle;
@@ -137,7 +137,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-BaseEDFThread::BaseEDFThread() 
+BaseDeadlineThread::BaseDeadlineThread() 
 {
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle = 0;
@@ -152,7 +152,7 @@ BaseEDFThread::BaseEDFThread()
 //******************************************************************************
 //******************************************************************************
 
-BaseEDFThread::~BaseEDFThread() 
+BaseDeadlineThread::~BaseDeadlineThread() 
 {
    delete mBaseSpecific;
 }
@@ -168,7 +168,7 @@ static void chkerror(int aRet, const char* aLabel)
    exit(1);
 }
 
-void BaseEDFThread::launchThread()
+void BaseDeadlineThread::launchThread()
 {
    //***************************************************************************
    //***************************************************************************
@@ -180,7 +180,7 @@ void BaseEDFThread::launchThread()
    ret = pthread_create(
       &mBaseSpecific->mHandle,
       0,
-      &BaseEDFThread_Execute,
+      &BaseDeadlineThread_Execute,
       (void*)this);
    chkerror(ret, "pthread_create");
 }
@@ -191,7 +191,7 @@ void BaseEDFThread::launchThread()
 // This is the function that is executed in the context of the created thread.
 // It calls a sequence of functions that are overloaded by inheritors.
 
-void BaseEDFThread::threadFunction()
+void BaseDeadlineThread::threadFunction()
 {
    int tRet = 0;
 
@@ -225,7 +225,7 @@ void BaseEDFThread::threadFunction()
 //******************************************************************************
 //******************************************************************************
 
-void BaseEDFThread::waitForThreadTerminate()
+void BaseDeadlineThread::waitForThreadTerminate()
 {
    pthread_join(mBaseSpecific->mHandle,NULL);
 }
@@ -234,7 +234,7 @@ void BaseEDFThread::waitForThreadTerminate()
 //******************************************************************************
 //******************************************************************************
 
-void BaseEDFThread::shutdownThread()
+void BaseDeadlineThread::shutdownThread()
 {
    mTerminateFlag = true;
    pthread_join(mBaseSpecific->mHandle, NULL);

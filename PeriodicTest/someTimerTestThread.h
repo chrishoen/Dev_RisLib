@@ -8,6 +8,7 @@ Timer test thread.
 //******************************************************************************
 //******************************************************************************
 #include "risThreadsPeriodicThread2.h"
+#include "risThreadsDeadlineThread.h"
 #include "risTimeMarker.h"
 
 namespace Some
@@ -16,10 +17,10 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class TimerTestThread : public Ris::Threads::BasePeriodicThread2
+class TimerTestThread : public Ris::Threads::BaseDeadlineThread
 {
 public:
-   typedef Ris::Threads::BasePeriodicThread2 BaseClass;
+   typedef Ris::Threads::BaseDeadlineThread BaseClass;
 
    //******************************************************************************
    //******************************************************************************

@@ -35,6 +35,11 @@ TimerTestThread::TimerTestThread()
          gPeriodicParms.mTestThreadProcessor,
          gPeriodicParms.mTestThreadPriority));
 
+   // Set deadline parameters.
+   BaseClass::mThreadEDFRunTimeUs = gPeriodicParms.mEDFRunTimeUs;
+   BaseClass::mThreadEDFDeadlineUs = gPeriodicParms.mEDFDeadlineUs;
+   BaseClass::mThreadEDFPeriodUs = gPeriodicParms.mEDFPeriodUs;
+
    // Set timer period.
    BaseClass::mTimerPeriod = gPeriodicParms.mTestThreadPeriod;
    mTimeMarker.initialize(gPeriodicParms.mSampleSize, gPeriodicParms.mTestThreadPeriod*1000);
@@ -58,6 +63,10 @@ TimerTestThread::TimerTestThread()
 
 void TimerTestThread::executeOnTimer(int aTimeCount)
 {
+   printf("timer %d\n", aTimeCount);
+   return;
+
+
    if (aTimeCount == 0)
    {
       BaseClass::showThreadFullInfo();

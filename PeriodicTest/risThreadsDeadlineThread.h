@@ -7,6 +7,8 @@ Base thread classes
 //******************************************************************************
 //******************************************************************************
 
+#include "risThreadsPriorities.h"
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -20,7 +22,7 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
  
-class BaseEDFThread
+class BaseDeadlineThread
 {
 public:
 
@@ -37,6 +39,9 @@ public:
 
    // Timer count.
    int mTimerCount;
+
+   // Timer count.
+   int mTimerPeriod;
 
    // If true then terminate the thread loop.
    bool mTerminateFlag;
@@ -56,8 +61,8 @@ public:
    // Methods.
 
    // Constructor.
-   BaseEDFThread(); 
-   virtual ~BaseEDFThread();
+   BaseDeadlineThread(); 
+   virtual ~BaseDeadlineThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -85,6 +90,9 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Methods.
+
+   // Set the thread processor number and priority.
+   void setThreadPriority(Priority aPriority) {}
 
    // Return the thread processor number.
    int  getThreadProcessorNumber() { return -1; }

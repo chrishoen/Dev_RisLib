@@ -17,11 +17,91 @@
 #include <functional>
 #include <sys/resource.h>
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <linux/unistd.h>
+#include <linux/kernel.h>
+#include <linux/types.h>
+#include <sys/syscall.h>
+#include <pthread.h>
+
+/* XXX use the proper syscall numbers */
+#ifdef __x86_64__
+#define __NR_sched_setattr		314
+#define __NR_sched_getattr		315
+#endif
+
+#ifdef __i386__
+#define __NR_sched_setattr		351
+#define __NR_sched_getattr		352
+#endif
+
+#ifdef __arm__
+#define __NR_sched_setattr		380
+#define __NR_sched_getattr		381
+#endif
+
+static volatile int done;
+
+struct sched_attr {
+   __u32 size;
+
+   __u32 sched_policy;
+   __u64 sched_flags;
+
+   /* SCHED_NORMAL, SCHED_BATCH */
+   __s32 sched_nice;
+
+   /* SCHED_FIFO, SCHED_RR */
+   __u32 sched_priority;
+
+   /* SCHED_DEADLINE (nsec) */
+   __u64 sched_runtime;
+   __u64 sched_deadline;
+   __u64 sched_period;
+};
+
+int sched_setattr(pid_t pid,
+   const struct sched_attr* attr,
+   unsigned int flags)
+{
+   return syscall(__NR_sched_setattr, pid, attr, flags);
+}
+
+int sched_getattr(pid_t pid,
+   struct sched_attr* attr,
+   unsigned int size,
+   unsigned int flags)
+{
+   return syscall(__NR_sched_getattr, pid, attr, size, flags);
+}
+
+
+#define gettid() syscall(__NR_gettid)
+
+#define SCHED_DEADLINE	6
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 #include "my_functions.h"
 #include "prnPrint.h"
-#include "risThreadsPriorities.h"
 #include "risNanoConvert.h"
+
 #include "risThreadsEDFThread.h"
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 namespace Ris
 {
@@ -39,7 +119,7 @@ namespace Threads
 static void* BaseEDFThread_Execute (void* argument)
 {
    BaseEDFThread* someThread = (BaseEDFThread*)argument;
-   //someThread->threadFunction();
+   someThread->threadFunction();
    return 0;
 }
 
@@ -61,10 +141,11 @@ BaseEDFThread::BaseEDFThread()
 {
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle = 0;
-   mThreadSingleProcessor = -1;
-   mThreadStackSize = 0;
-   mThreadRunProcessor = -1;
+   mTimerCount;
    mTerminateFlag = false;
+   mThreadEDFRunTimeUs = 0;
+   mThreadEDFDeadlineUs = 0;
+   mThreadEDFPeriodUs = 0;
 }
 
 //******************************************************************************
@@ -92,63 +173,52 @@ void BaseEDFThread::launchThread()
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Thread attributes.
-
-   // Thread attributes, initialize.
-   pthread_attr_t tAttributes;
-   pthread_attr_init(&tAttributes);
-   
-   int ret;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Thread attributes, thread priority.
-
-   ret = pthread_attr_setschedpolicy(&tAttributes, SCHED_FIFO);
-   chkerror(ret, "pthread_attr_setschedpolicy");
-
-   sched_param tSchedParam;
-   tSchedParam.sched_priority = 80;
-   ret = pthread_attr_setschedparam(&tAttributes, &tSchedParam);
-   chkerror(ret, "pthread_attr_setschedparam");
-
-   ret = pthread_attr_setinheritsched(&tAttributes, PTHREAD_EXPLICIT_SCHED);
-   chkerror(ret, "pthread_attr_setinheritsched");
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Thread attributes, affinity mask.
-
-   if (mThreadSingleProcessor >= 0)
-   {
-      cpu_set_t tAffinityMask;
-      CPU_ZERO(&tAffinityMask);
-      CPU_SET(mThreadSingleProcessor, &tAffinityMask);
-      ret = pthread_attr_setaffinity_np(&tAttributes, sizeof(tAffinityMask), &tAffinityMask);
-      chkerror(ret, "pthread_attr_setaffinity_np");
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Create the thread. The following threadRunFunction will execute
+   // Create the thread. The following threadFunction will execute
    // in the context of the created thread.
 
+   int ret;
    ret = pthread_create(
       &mBaseSpecific->mHandle,
-      &tAttributes,
+      0,
       &BaseEDFThread_Execute,
       (void*)this);
    chkerror(ret, "pthread_create");
+}
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Thread attributes, finalize.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is the function that is executed in the context of the created thread.
+// It calls a sequence of functions that are overloaded by inheritors.
 
-   pthread_attr_destroy(&tAttributes);
+void BaseEDFThread::threadFunction()
+{
+   int tRet = 0;
+
+   // Set the scheduler.
+   struct sched_attr tSchedAttr;
+
+   tSchedAttr.size = sizeof(tSchedAttr);
+   tSchedAttr.sched_flags = 0;
+   tSchedAttr.sched_nice = 0;
+   tSchedAttr.sched_priority = 0;
+
+   tSchedAttr.sched_policy = SCHED_DEADLINE;
+   tSchedAttr.sched_runtime  = mThreadEDFRunTimeUs * 1000;
+   tSchedAttr.sched_deadline = mThreadEDFDeadlineUs * 1000;
+   tSchedAttr.sched_period   = mThreadEDFPeriodUs * 1000;
+
+   tRet = sched_setattr(0, &tSchedAttr, 0);
+   chkerror(tRet, "threadFunction sched_setscheduler");
+
+   // Loop until thread terminate.
+   while (!mTerminateFlag)
+   {
+      // Call the inheritor's timer handler.
+      executeOnTimer(mTimerCount++);
+      // Indicate that execution is finished.
+      sched_yield();
+   }
 }
 
 //******************************************************************************
@@ -168,63 +238,6 @@ void BaseEDFThread::shutdownThread()
 {
    mTerminateFlag = true;
    pthread_join(mBaseSpecific->mHandle, NULL);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-int BaseEDFThread::getThreadProcessorNumber()
-{
-   return sched_getcpu();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is the function that is executed in the context of the created thread.
-// It calls a sequence of functions that are overloaded by inheritors.
-
-void BaseEDFThread::showThreadFullInfo()
-{
-   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN\n");
-
-   int tMaxPriority = sched_get_priority_max(SCHED_FIFO);
-   int tMinPriority = sched_get_priority_min(SCHED_FIFO);
-
-   sched_param tThreadSchedParam;
-   int tThreadPolicy = 0;
-   pthread_getschedparam(mBaseSpecific->mHandle, &tThreadPolicy, &tThreadSchedParam);
-   int tThreadPriority = tThreadSchedParam.__sched_priority;
-
-   int tNumProcessors = sysconf(_SC_NPROCESSORS_ONLN);
-   int tCurrentProcessorNumber = sched_getcpu();
-
-   cpu_set_t tAffinityMask;
-   pthread_getaffinity_np(mBaseSpecific->mHandle, sizeof(tAffinityMask), &tAffinityMask);
-   unsigned tUMask = 0;
-   for (int i = 0; i < 32; i++) if (CPU_ISSET(i, &tAffinityMask)) (tUMask |= (1 << i));
-
-   struct rlimit tRLimit;
-   getrlimit(RLIMIT_RTPRIO, &tRLimit);
-   int tRTPriority = tRLimit.rlim_cur;
-   int tRRTMaxPriority = tRLimit.rlim_max;
-
-   printf("NumProcessors           %8d\n", tNumProcessors);
-   printf("MaxPriority             %8d\n", tMaxPriority);
-   printf("MinPriority             %8d\n", tMinPriority);
-   printf("\n");
-   printf("ThreadPolicy            %8d\n", tThreadPolicy);
-   printf("ThreadPriority          %8d\n", tThreadPriority);
-   printf("\n");
-   printf("ThreadAffinityMask      %8X\n", tUMask);
-   printf("mThreadSingleProcessor  %8X\n", mThreadSingleProcessor);
-   printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
-
-   printf("RTPriority              %8d\n", tRTPriority);
-   printf("RRTMaxPriority          %8d\n", tRRTMaxPriority);
-
-   printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");
 }
 
 //******************************************************************************

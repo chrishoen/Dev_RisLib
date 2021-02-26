@@ -29,15 +29,14 @@ public:
    //***************************************************************************
    // Members.
 
-   // Configuration variables.
-   // Some of these are passed to the CreateThread in launch
-   // and some are used by threadFunction.
-   int    mThreadStackSize;
-   int    mThreadSingleProcessor;
+   // Earliest deadline first variables.
+   // runtime <= deadline <= period.
+   int mThreadEDFRunTimeUs;
+   int mThreadEDFDeadlineUs;
+   int mThreadEDFPeriodUs;
 
-   // The processor that was current at the start of the thread
-   // run function.
-   int mThreadRunProcessor;
+   // Timer count.
+   int mTimerCount;
 
    // If true then terminate the thread loop.
    bool mTerminateFlag;
@@ -68,6 +67,9 @@ public:
    // Launch the thread.
    virtual void launchThread(); 
 
+   // Thread function.
+   void threadFunction();
+
    // Shutdown the thread
    void shutdownThread();
 
@@ -85,10 +87,10 @@ public:
    // Methods.
 
    // Return the thread processor number.
-   int  getThreadProcessorNumber();
+   int  getThreadProcessorNumber() { return -1; }
 
    // Show thread configuration info.
-   void showThreadFullInfo();
+   void showThreadFullInfo() {}
 
 
    void showThreadInfo() {}

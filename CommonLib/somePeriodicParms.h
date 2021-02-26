@@ -76,10 +76,10 @@ public:
    // Sample window size.
    int mSampleSize;
 
-   // Deadline thread members.
-   int mEDFThreadRunTimeUs;
-   int mEDFThreadDeadlineUs;
-   int mEDFThreadPeriodUs;
+   // Earliest deadline first variables.
+   int mEDFRunTimeUs;
+   int mEDFDeadlineUs;
+   int mEDFPeriodUs;
 
    //***************************************************************************
    //***************************************************************************

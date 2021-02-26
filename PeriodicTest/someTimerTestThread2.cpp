@@ -14,8 +14,8 @@ Description:
 
 #include "somePeriodicParms.h"
 
-#define  _SOMETIMERTESTTHREAD_CPP_
-#include "someTimerTestThread.h"
+#define  _SOMETIMERTESTTHREAD2_CPP_
+#include "someTimerTestThread2.h"
 
 namespace Some
 {
@@ -24,7 +24,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-TimerTestThread::TimerTestThread()
+TimerTestThread2::TimerTestThread2()
 {
    // Set base class variables.
    BaseClass::setThreadName("TimerTest");
@@ -61,33 +61,9 @@ TimerTestThread::TimerTestThread()
 //******************************************************************************
 //******************************************************************************
 
-void TimerTestThread::executeOnTimer(int aTimeCount)
+void TimerTestThread2::executeOnTimer(int aTimeCount)
 {
-   printf("timer %d\n", aTimeCount);
-   return;
-
-
-   if (aTimeCount == 0)
-   {
-      BaseClass::showThreadFullInfo();
-   }
-
-   if (aTimeCount < 20) return;
-
-   mTimeMarker.doUpdate();
-
-   if (mTimeMarker.mStatistics.mEndOfPeriod)
-   {
-      mTestCount++;
-      mProcessorNumber = BaseClass::getThreadProcessorNumber(),
-      mMean = mTimeMarker.mStatistics.mMean;
-      mStdDev = mTimeMarker.mStatistics.mStdDev;
-      mMin = mTimeMarker.mStatistics.mMinX;
-      mMax = mTimeMarker.mStatistics.mMaxX;
-      mMaxError = mTimeMarker.mStatistics.mMaxError;
-      mTimeMarker.mStatistics.mEndOfPeriod = false;
-      mUpdateFlag = true;
-   }
+   mTestCount = aTimeCount;
 }
 
 //******************************************************************************

@@ -41,6 +41,7 @@ void PeriodicParms::reset()
       BaseClass::setFilePath("/opt/prime/files/Periodic_Parms.txt");
    }
 
+   mTestMode = 1;
    mMonitorThreadPeriod = 0;
    mTestThreadPeriod = 0;
    mTestThreadProcessor = -1;
@@ -61,6 +62,8 @@ void PeriodicParms::show()
    printf("\n");
    printf("PeriodicParms************************************************ %s\n", mTargetSection);
 
+   printf("\n");
+   printf("TestMode                 %-10d\n", mTestMode);
    printf("\n");
    printf("MonitorThreadPeriod      %-10d\n", mMonitorThreadPeriod);
    printf("TestThreadPeriod         %-10d\n", mTestThreadPeriod);
@@ -83,6 +86,8 @@ void PeriodicParms::show()
 void PeriodicParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
+
+   if (aCmd->isCmd("TestMode"))              mTestMode = aCmd->argInt(1);
 
    if (aCmd->isCmd("MonitorThreadPeriod"))   mMonitorThreadPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("TestThreadPeriod"))      mTestThreadPeriod = aCmd->argInt(1);

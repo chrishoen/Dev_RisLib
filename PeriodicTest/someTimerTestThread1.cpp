@@ -13,11 +13,9 @@ Description:
 #include "risThreadsPriorities.h"
 
 #include "somePeriodicParms.h"
-#include "someTimerTestThread1.h"
-#include "someTimerTestThread2.h"
 
-#define  _SOMEMONITORTHREAD_CPP_
-#include "someMonitorThread.h"
+#define  _SOMETIMERTESTTHREAD1_CPP_
+#include "someTimerTestThread1.h"
 
 namespace Some
 {
@@ -26,48 +24,64 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-MonitorThread::MonitorThread()
+TimerTestThread1::TimerTestThread1()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Monitor");
+   BaseClass::setThreadName("TimerTest");
    BaseClass::setThreadPrintLevel(0);
-
-   // Set base class variables.
-   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mMonitor);
+   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
+   BaseClass::setThreadPriority(
+      Ris::Threads::Priority(
+         gPeriodicParms.mTestThreadProcessor,
+         gPeriodicParms.mTestThreadPriority));
 
    // Set timer period.
-   BaseClass::mTimerPeriod = gPeriodicParms.mMonitorThreadPeriod;
+   BaseClass::mTimerPeriod = gPeriodicParms.mTestThreadPeriod;
+   mTimeMarker.initialize(gPeriodicParms.mSampleSize, gPeriodicParms.mTestThreadPeriod*1000);
+
+   // Set member variables.
+   mTestCode = 1;
+   mTestCount = 0;
+
+   mUpdateFlag = false;
+   mProcessorNumber = 0;
+   mMean = 0;
+   mStdDev = 0;
+   mMin = 0;
+   mMax = 0;
+   mMaxError = 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void MonitorThread::executeOnTimer(int aTimeCount)
+void TimerTestThread1::executeOnTimer(int aTimeCount)
 {
-   if (Some::gPeriodicParms.mTestMode == 1)
+   if (aTimeCount == 0)
    {
-      if (gTimerTestThread1->mUpdateFlag)
-      {
-         gTimerTestThread1->mUpdateFlag = false;
-         Prn::print(0, "Timer1 %5d %1d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
-            gTimerTestThread1->mTestCount,
-            gTimerTestThread1->mProcessorNumber,
-            gTimerTestThread1->mMean,
-            gTimerTestThread1->mStdDev,
-            gTimerTestThread1->mMin,
-            gTimerTestThread1->mMax,
-            gTimerTestThread1->mMaxError);
-      }
+      BaseClass::showThreadFullInfo();
    }
-   else if (Some::gPeriodicParms.mTestMode == 2)
+
+   if (aTimeCount < 20) return;
+
+   mTimeMarker.doUpdate();
+
+   if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
-      Prn::print(0, "Timer2 %5d", gTimerTestThread2->mTestCount);
+      mTestCount++;
+      mProcessorNumber = BaseClass::getThreadProcessorNumber(),
+      mMean = mTimeMarker.mStatistics.mMean;
+      mStdDev = mTimeMarker.mStatistics.mStdDev;
+      mMin = mTimeMarker.mStatistics.mMinX;
+      mMax = mTimeMarker.mStatistics.mMaxX;
+      mMaxError = mTimeMarker.mStatistics.mMaxError;
+      mTimeMarker.mStatistics.mEndOfPeriod = false;
+      mUpdateFlag = true;
    }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 }//namespace

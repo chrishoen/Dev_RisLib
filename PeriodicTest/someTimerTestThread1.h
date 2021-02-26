@@ -7,8 +7,7 @@ Timer test thread.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risThreadsPeriodicThread2.h"
-#include "risThreadsDeadlineThread.h"
+#include "risThreadsPeriodicThread.h"
 #include "risTimeMarker.h"
 
 namespace Some
@@ -17,10 +16,10 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class TimerTestThread : public Ris::Threads::BaseDeadlineThread
+class TimerTestThread1 : public Ris::Threads::BasePeriodicThread
 {
 public:
-   typedef Ris::Threads::BaseDeadlineThread BaseClass;
+   typedef Ris::Threads::BasePeriodicThread BaseClass;
 
    //******************************************************************************
    //******************************************************************************
@@ -54,7 +53,7 @@ public:
    // Methods.
 
    // Constructor.
-   TimerTestThread();
+   TimerTestThread1();
 
    // Base class overloads.
    void executeOnTimer(int aTimeCount) override;
@@ -65,10 +64,10 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _SOMETIMERTESTTHREAD_CPP_
-          TimerTestThread* gTimerTestThread = 0;
+#ifdef _SOMETIMERTESTTHREAD1_CPP_
+          TimerTestThread1* gTimerTestThread1 = 0;
 #else
-   extern TimerTestThread* gTimerTestThread;
+   extern TimerTestThread1* gTimerTestThread1;
 #endif
 
 //******************************************************************************

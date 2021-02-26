@@ -67,6 +67,9 @@ public:
    //***************************************************************************
    // Members.
 
+   // Test mode 1,2.
+   int  mTestMode;
+
    // Timer thread periods.
    int  mMonitorThreadPeriod;
    int  mTestThreadPeriod;

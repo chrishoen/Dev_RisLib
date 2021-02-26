@@ -21,7 +21,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#define _GNU_SOURCE
+//#define _GNU_SOURCE
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -141,7 +141,7 @@ BaseDeadlineThread::BaseDeadlineThread()
 {
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle = 0;
-   mTimerCount;
+   mTimerCount = 0;
    mTerminateFlag = false;
    mThreadEDFRunTimeUs = 0;
    mThreadEDFDeadlineUs = 0;

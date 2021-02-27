@@ -79,11 +79,6 @@ public:
    // Sample window size.
    int mSampleSize;
 
-   // Earliest deadline first variables.
-   int mEDFRunTimeUs;
-   int mEDFDeadlineUs;
-   int mEDFPeriodUs;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

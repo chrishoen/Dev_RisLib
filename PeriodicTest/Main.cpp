@@ -7,7 +7,6 @@
 
 #include "somePeriodicParms.h"
 #include "someTimerTestThread1.h"
-#include "someTimerTestThread2.h"
 #include "someMonitorThread.h"
 
 //******************************************************************************
@@ -28,16 +27,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   if (Some::gPeriodicParms.mTestMode == 1)
-   {
-      Some::gTimerTestThread1 = new Some::TimerTestThread1;
-      Some::gTimerTestThread1->launchThread();
-   }
-   else if (Some::gPeriodicParms.mTestMode == 2)
-   {
-      Some::gTimerTestThread2 = new Some::TimerTestThread2;
-      Some::gTimerTestThread2->launchThread();
-   }
+   Some::gTimerTestThread1 = new Some::TimerTestThread1;
+   Some::gTimerTestThread1->launchThread();
    Some::gMonitorThread = new Some::MonitorThread;
    Some::gMonitorThread->launchThread();
 
@@ -47,14 +38,7 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   if (Some::gPeriodicParms.mTestMode == 1)
-   {
-      Some::gTimerTestThread1->showThreadInfo();
-   }
-   else if (Some::gPeriodicParms.mTestMode == 2)
-   {
-      Some::gTimerTestThread2->showThreadInfo();
-   }
+   Some::gTimerTestThread1->showThreadInfo();
    Some::gMonitorThread->showThreadInfo();
 
 
@@ -72,19 +56,13 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program Threads.
 
-   if (Some::gPeriodicParms.mTestMode == 1)
-   {
-      Some::gTimerTestThread1->shutdownThread();
-      delete Some::gTimerTestThread1;
-      Some::gTimerTestThread1 = 0;
-   }
-   else if (Some::gPeriodicParms.mTestMode == 2)
-   {
-      Some::gTimerTestThread2->shutdownThread();
-      delete Some::gTimerTestThread2;
-      Some::gTimerTestThread2 = 0;
-   }
+   Some::gTimerTestThread1->shutdownThread();
+   delete Some::gTimerTestThread1;
+   Some::gTimerTestThread1 = 0;
+
    Some::gMonitorThread->shutdownThread();
+   delete Some::gMonitorThread;
+   Some::gMonitorThread = 0;
 
    //***************************************************************************
    //***************************************************************************

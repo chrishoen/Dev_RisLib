@@ -5,7 +5,6 @@
 
 #include "somePeriodicParms.h"
 #include "someTimerTestThread1.h"
-#include "someTimerTestThread2.h"
 using namespace Some;
 
 //******************************************************************************

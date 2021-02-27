@@ -63,7 +63,29 @@ TimerTestThread2::TimerTestThread2()
 
 void TimerTestThread2::executeOnTimer(int aTimeCount)
 {
-   mTestCount = aTimeCount;
+// mTestCount = aTimeCount;
+
+   if (aTimeCount == 0)
+   {
+      BaseClass::showThreadFullInfo();
+   }
+
+   if (aTimeCount < 20) return;
+
+   mTimeMarker.doUpdate();
+
+   if (mTimeMarker.mStatistics.mEndOfPeriod)
+   {
+      mTestCount++;
+      mProcessorNumber = BaseClass::getThreadProcessorNumber(),
+      mMean = mTimeMarker.mStatistics.mMean;
+      mStdDev = mTimeMarker.mStatistics.mStdDev;
+      mMin = mTimeMarker.mStatistics.mMinX;
+      mMax = mTimeMarker.mStatistics.mMaxX;
+      mMaxError = mTimeMarker.mStatistics.mMaxError;
+      mTimeMarker.mStatistics.mEndOfPeriod = false;
+      mUpdateFlag = true;
+   }
 }
 
 //******************************************************************************

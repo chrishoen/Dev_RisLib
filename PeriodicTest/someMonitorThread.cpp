@@ -63,6 +63,18 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    else if (Some::gPeriodicParms.mTestMode == 2)
    {
       Prn::print(0, "Timer2 %5d", gTimerTestThread2->mTestCount);
+      if (gTimerTestThread2->mUpdateFlag)
+      {
+         gTimerTestThread2->mUpdateFlag = false;
+         Prn::print(0, "Timer2 %5d %1d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
+            gTimerTestThread2->mTestCount,
+            gTimerTestThread2->mProcessorNumber,
+            gTimerTestThread2->mMean,
+            gTimerTestThread2->mStdDev,
+            gTimerTestThread2->mMin,
+            gTimerTestThread2->mMax,
+            gTimerTestThread2->mMaxError);
+      }
    }
 }
 

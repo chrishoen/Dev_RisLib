@@ -15,6 +15,9 @@
 #include <errno.h>
 #include <assert.h>
 #include <sys/resource.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/fcntl.h>
 
 #include "risThreadsProcess.h"
 
@@ -43,8 +46,43 @@ int  getProcessTimerResolution()
 //******************************************************************************
 //******************************************************************************
 
+static int latency_target_fd = -1;
+static int latency_target_value = 0;
+
+static void set_latency_target(void)
+{
+   printf("LINE101 set_latency_target\n");
+
+   struct stat s;
+	int err;
+
+	err = stat("/dev/cpu_dma_latency", &s);
+	if (err == -1) {
+		printf("WARN: stat /dev/cpu_dma_latency failed\n");
+		return;
+	}
+
+	errno = 0;
+	latency_target_fd = open("/dev/cpu_dma_latency", O_RDWR);
+	if (latency_target_fd == -1) {
+		printf("WARN: open /dev/cpu_dma_latency\n");
+		return;
+	}
+
+	errno = 0;
+	err = write(latency_target_fd, &latency_target_value, 4);
+	if (err < 1) {
+		printf("# error setting cpu_dma_latency to %d\n", latency_target_value);
+		close(latency_target_fd);
+		return;
+	}
+	printf("# /dev/cpu_dma_latency set to %dus\n", latency_target_value);
+}
+
 void enterProcessHigh()
 {
+   set_latency_target();
+
    int tRet = 0;
    int tMaxPriority = sched_get_priority_max(SCHED_FIFO);
    int tMinPriority = sched_get_priority_min(SCHED_FIFO);
@@ -61,6 +99,7 @@ void enterProcessHigh()
 
 void exitProcess()
 {
+   close(latency_target_fd);
 }
 
 //******************************************************************************

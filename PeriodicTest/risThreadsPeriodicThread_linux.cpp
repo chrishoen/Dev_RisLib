@@ -21,7 +21,7 @@
 #include "prnPrint.h"
 #include "risThreadsPriorities.h"
 #include "risNanoConvert.h"
-#include "risThreadsPeriodicThread2.h"
+#include "risThreadsPeriodicThread.h"
 
 namespace Ris
 {
@@ -36,9 +36,9 @@ namespace Threads
 // the thread function because CreateThread can't use member function
 // addresses.
 
-static void* BasePeriodicThread2_Execute (void* argument)
+static void* BasePeriodicThread_Execute (void* argument)
 {
-   BasePeriodicThread2* someThread = (BasePeriodicThread2*)argument;
+   BasePeriodicThread* someThread = (BasePeriodicThread*)argument;
    someThread->threadFunction();
    return 0;
 }
@@ -47,7 +47,7 @@ static void* BasePeriodicThread2_Execute (void* argument)
 //******************************************************************************
 //******************************************************************************
 
-class BasePeriodicThread2::BaseSpecific
+class BasePeriodicThread::BaseSpecific
 {
 public:
    pthread_t mHandle;
@@ -57,7 +57,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-BasePeriodicThread2::BasePeriodicThread2() 
+BasePeriodicThread::BasePeriodicThread() 
 {
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle = 0;
@@ -74,7 +74,7 @@ BasePeriodicThread2::BasePeriodicThread2()
 //******************************************************************************
 //******************************************************************************
 
-BasePeriodicThread2::~BasePeriodicThread2() 
+BasePeriodicThread::~BasePeriodicThread() 
 {
    delete mBaseSpecific;
 }
@@ -84,7 +84,7 @@ BasePeriodicThread2::~BasePeriodicThread2()
 //******************************************************************************
 // Set the thread processor number and priority.
 
-void BasePeriodicThread2::setThreadPriority(Priority aPriority)
+void BasePeriodicThread::setThreadPriority(Priority aPriority)
 {
    mThreadSingleProcessor = aPriority.mProcessor;
    mThreadPriority        = aPriority.mPriority;
@@ -101,7 +101,7 @@ static void chkerror(int aRet, const char* aLabel)
    exit(1);
 }
 
-void BasePeriodicThread2::launchThread()
+void BasePeriodicThread::launchThread()
 {
    //***************************************************************************
    //***************************************************************************
@@ -153,7 +153,7 @@ void BasePeriodicThread2::launchThread()
    ret = pthread_create(
       &mBaseSpecific->mHandle,
       &tAttributes,
-      &BasePeriodicThread2_Execute,
+      &BasePeriodicThread_Execute,
       (void*)this);
    chkerror(ret, "pthread_create");
 
@@ -171,7 +171,7 @@ void BasePeriodicThread2::launchThread()
 // This is the function that is executed in the context of the created thread.
 // It calls a sequence of functions that are overloaded by inheritors.
 
-void BasePeriodicThread2::threadFunction()
+void BasePeriodicThread::threadFunction()
 {
    // Set the scheduler.
    int tRet = 0;
@@ -217,7 +217,7 @@ void BasePeriodicThread2::threadFunction()
 //******************************************************************************
 //******************************************************************************
 
-void BasePeriodicThread2::waitForThreadTerminate()
+void BasePeriodicThread::waitForThreadTerminate()
 {
    pthread_join(mBaseSpecific->mHandle,NULL);
 }
@@ -226,7 +226,7 @@ void BasePeriodicThread2::waitForThreadTerminate()
 //******************************************************************************
 //******************************************************************************
 
-void BasePeriodicThread2::shutdownThread()
+void BasePeriodicThread::shutdownThread()
 {
    mTerminateFlag = true;
    pthread_join(mBaseSpecific->mHandle, NULL);
@@ -236,7 +236,7 @@ void BasePeriodicThread2::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 
-int BasePeriodicThread2::getThreadProcessorNumber()
+int BasePeriodicThread::getThreadProcessorNumber()
 {
    return sched_getcpu();
 }
@@ -247,7 +247,7 @@ int BasePeriodicThread2::getThreadProcessorNumber()
 // This is the function that is executed in the context of the created thread.
 // It calls a sequence of functions that are overloaded by inheritors.
 
-void BasePeriodicThread2::showThreadFullInfo()
+void BasePeriodicThread::showThreadFullInfo()
 {
    printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN\n");
 

@@ -22,7 +22,7 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
  
-class BasePeriodicThread2
+class BasePeriodicThread
 {
 public:
 
@@ -65,8 +65,8 @@ public:
    // Methods.
 
    // Constructor.
-   BasePeriodicThread2(); 
-   virtual ~BasePeriodicThread2();
+   BasePeriodicThread(); 
+   virtual ~BasePeriodicThread();
 
    //***************************************************************************
    //***************************************************************************

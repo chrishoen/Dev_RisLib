@@ -51,8 +51,6 @@ static int latency_target_value = 0;
 
 static void set_latency_target(void)
 {
-   printf("LINE101 set_latency_target\n");
-
    struct stat s;
 	int err;
 

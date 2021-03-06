@@ -38,7 +38,6 @@ SerialStringThread::SerialStringThread(SerialSettings& aSettings)
    // Set base class thread services.
    BaseClass::setThreadName(tThreadName);
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
-   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 
    mSettings = aSettings;
    mSessionQCall = aSettings.mSessionQCall;

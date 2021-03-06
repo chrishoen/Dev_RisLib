@@ -27,7 +27,6 @@ SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
    // Set base class thread services.
    BaseClass::setThreadName("SerialMsg");
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
-   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 
    mSettings = aSettings;
    mRxMsgQCall = aSettings.mRxMsgQCall;

@@ -267,8 +267,6 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    // Guard.
    if (!isValid()) return cRetCodeError;
 
-   int tPrintLevel = TS::getProgramPrintLevel();
-
    // Local variables.
    DWORD tNumWritten;
    DWORD tRet  = 0;

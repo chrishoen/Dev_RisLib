@@ -18,8 +18,6 @@
 #include <functional>
 #include <sys/resource.h>
 
-#include "tsThreadServices.h"
-
 #include "my_functions.h"
 #include "risThreadsPriorities.h"
 #include "prnPrint.h"
@@ -55,9 +53,7 @@ static void* BaseThread_Execute (void* argument)
 void BaseThread_Cleanup(void* argument)
 {
    BaseThread* someThread = (BaseThread*)argument;
-   TS::print(1, "threadExitFunction from cleanup BEGIN");
    someThread->threadExitFunction();
-   TS::print(1, "threadExitFunction from cleanup END");
 }
 
 //******************************************************************************
@@ -83,12 +79,6 @@ BaseThread::BaseThread()
    mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
-
-
-   // Create this now in the thread context of the thread creator.
-   // It will be copied to the thread local storage variable at the
-   // start of the thread run function.
-   mThreadLocal = new TS::ThreadLocal;
 }
 
 //******************************************************************************
@@ -98,27 +88,16 @@ BaseThread::BaseThread()
 BaseThread::~BaseThread() 
 {
    delete mBaseSpecific;
-   delete mThreadLocal;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Set the thread services thread name in the thread local storage.
+// Set the thread name.
 
 void BaseThread::setThreadName(const char* aThreadName)
 {
-   mThreadLocal->setThreadName(aThreadName);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set the thread services print level in the thread local storage.
-
-void BaseThread::setThreadPrintLevel(int aPrintLevel)
-{
-   mThreadLocal->mPrintLevel = aPrintLevel;
+   strcpy(mThreadName, aThreadName);
 }
 
 //******************************************************************************
@@ -167,9 +146,6 @@ void BaseThread::launchThread()
    //***************************************************************************
    //***************************************************************************
    // Do this first.
-
-   TS::print(1, "");
-   TS::print(1, "launchThread %s", mThreadLocal->mThreadName);
 
    // Set the run state.
    mThreadRunState = cThreadRunState_Launching;
@@ -251,11 +227,6 @@ void BaseThread::launchThread()
 
 void BaseThread::threadFunction()
 {
-   // Set the thread local storage pointer to the address of the
-   // thread local storage object.
-   TS::setThreadLocal(mThreadLocal);
-   TS::print(1, "threadFunction BEGIN");
-
    // Set the processor that was current at the start of the thread
    // run function.
    mThreadRunProcessor = getThreadProcessorNumber();
@@ -276,17 +247,14 @@ void BaseThread::threadFunction()
       // Initialization section, overload provided by inheritors
       // It is intended that this will be overloaded by 
       // inheriting thread base classes and by inheriting user classes
-      TS::print(1, "threadInitFunction");
       mThreadRunState = cThreadRunState_InitF;
       threadInitFunction();
       // Post to the thread init semaphore.
       mThreadInitSem.put();
       // Run section, overload provided by inheritors 
-      TS::print(1, "threadRunFunction");
       mThreadRunState = cThreadRunState_Running;
       threadRunFunction();
       // Exit section, overload provided by inheritors
-      TS::print(1, "threadExitFunction");
       mThreadRunState = cThreadRunState_ExitF;
       threadExitFunction();
       // This is used by inheritors to finalize resources. This should be
@@ -307,10 +275,6 @@ void BaseThread::threadFunction()
 
    // Set the run state.
    mThreadRunState = cThreadRunState_Terminated;
-
-   TS::print(1, "threadFunction END");
-   // Zero the thread local storage pointer.
-   TS::setThreadLocal(0);
 }
 
 //******************************************************************************
@@ -358,9 +322,7 @@ void BaseThread::forceTerminateThread()
 
 void BaseThread::waitForThreadTerminate()
 {
-   TS::print(1, "waitForThreadTerminate BEGIN %s", mThreadLocal->mThreadName);
    pthread_join(mBaseSpecific->mHandle,NULL);
-   TS::print(1, "waitForThreadTerminate END   %s", mThreadLocal->mThreadName);
 }
 
 //******************************************************************************
@@ -369,8 +331,6 @@ void BaseThread::waitForThreadTerminate()
 
 void BaseThread::shutdownThreadPrologue()
 {
-   TS::print(1, "");
-   TS::print(1, "shutdownThread %s", mThreadLocal->mThreadName);
 }
 
 //******************************************************************************
@@ -435,7 +395,7 @@ int BaseThread::getThreadProcessorNumber()
 
 void BaseThread::showThreadFullInfo()
 {
-   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", mThreadLocal->mThreadName);
+   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", mThreadName);
 
    int tMaxPriority = sched_get_priority_max(SCHED_FIFO);
    int tMinPriority = sched_get_priority_min(SCHED_FIFO);
@@ -483,12 +443,11 @@ void BaseThread::showThreadInfo()
 {
    int tThreadPriority = getThreadPriority();
 
-   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d",
-      mThreadLocal->mThreadName,
+   printf("ThreadInfo %-20s %1d %3d %-8s\n",
+      mThreadName,
       mThreadRunProcessor,
       tThreadPriority,
-      asStringThreadRunState(),
-      mThreadLocal->mPrintLevel);
+      asStringThreadRunState());
 }
 
 //******************************************************************************

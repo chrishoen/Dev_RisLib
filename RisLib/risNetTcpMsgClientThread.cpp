@@ -27,7 +27,6 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
    // Base class variables.
    BaseClass::setThreadName("TcpMsgClient");
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
-   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 
    // Store settings.
    mSettings = aSettings;

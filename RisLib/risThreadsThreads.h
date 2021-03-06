@@ -9,7 +9,6 @@ Base thread classes
 
 #include "risThreadsSynch.h"
 #include "risThreadsPriorities.h"
-#include "tsThreadLocal.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -37,6 +36,13 @@ public:
    //***************************************************************************
    // Constants.
 
+   static const int cMaxStringSize = 128;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constants.
+
    // Thread run states.
    static const int cThreadRunState_Launching  = 1;
    static const int cThreadRunState_InitR      = 2;
@@ -51,15 +57,18 @@ public:
    //***************************************************************************
    // Members.
 
+   // Thread name.
+   char mThreadName[cMaxStringSize];
+
    // Thread run state.
    int mThreadRunState;
 
    // Configuration variables.
    // Some of these are passed to the CreateThread in launch
    // and some are used by threadFunction.
-   int    mThreadStackSize;
-   int    mThreadPriority;
-   int    mThreadSingleProcessor;
+   int mThreadStackSize;
+   int mThreadPriority;
+   int mThreadSingleProcessor;
 
    // Init semaphore.
    // It is posted to after the end of threadInitFunction.
@@ -88,16 +97,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // Thread local storage. This is created in the constructor. The pointer
-   // is copied to the thread local storage variable at the beginning of
-   // the thread run function.
-   TS::ThreadLocal* mThreadLocal;
-
    // Set the thread services thread name in the thread local storage.
    void setThreadName(const char* aThreadName);
-
-   // Set the thread services print level in the thread local storage.
-   void setThreadPrintLevel(int aPrintLevel);
 
    //***************************************************************************
    //***************************************************************************

@@ -27,7 +27,6 @@ UdpStringThread::UdpStringThread(Settings& aSettings)
    // Base class variables.
    BaseClass::setThreadName("UdpString");
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
-   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 
    // Store settings.
    mSettings = aSettings;

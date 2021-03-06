@@ -11,7 +11,6 @@
 #include "risPortableCalls.h"
 #include "risThreadsThreads.h"
 #include "my_functions.h"
-#include "tsThreadServices.h"
 #include "prnPrint.h"
 
 #define  _RISCMDLINECONSOLE_CPP_
@@ -35,9 +34,6 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
    //***************************************************************************
    // Initialize console input.
 
-   TS::print(1, "");
-   TS::print(1, "Command Line Executive BEGIN");
-
    // Reset the executive.
    aExec->reset();
 
@@ -59,7 +55,6 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
 
       if (fgets(tCommandLine, 200, stdin) == 0)
       {
-         TS::print(1, "Command Line Executive END");
          return;
       }
 
@@ -129,7 +124,6 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
    }
 
    // Done.
-   TS::print(1, "Command Line Executive END");
    return;
 }
 

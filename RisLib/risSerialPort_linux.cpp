@@ -171,7 +171,7 @@ bool SerialPort::doOpen()
  
    //tcgetattr(mSpecific->mPortFd, &tOptions);
    //int tBaud = cfgetispeed(&tOptions);
-   //TS::print(1, "SerialPort baud  $ %d", tBaud);
+   //printf("SerialPort baud  $ %d\n", tBaud);
 
    if (!mSettings.m485Flag)
    {

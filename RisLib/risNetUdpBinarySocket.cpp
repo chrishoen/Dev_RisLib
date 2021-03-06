@@ -63,13 +63,13 @@ void UdpRxBinarySocket::configure()
    // Show.
    if (mValidFlag)
    {
-      TS::print(0, "UdpRxBinarySocket  PASS %16s : %5d",
+      printf("UdpRxBinarySocket  PASS %16s : %5d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      TS::print(0, "UdpRxBinarySocket  FAIL %16s : %5d $ %d %d",
+      printf("UdpRxBinarySocket  FAIL %16s : %5d $ %d %d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -97,7 +97,7 @@ bool UdpRxBinarySocket::doRecvBinary ()
    // Guard.
    if (!mValidFlag)
    {
-      TS::print(0, "ERROR UdpRxBinarySocket INVALID SOCKET");
+      printf("ERROR UdpRxBinarySocket INVALID SOCKET\n");
       return false;
    }
 
@@ -117,16 +117,16 @@ bool UdpRxBinarySocket::doRecvBinary ()
    {
       if (BaseClass::mError == 0)
       {
-         TS::print(1, "UdpRxBinarySocket CLOSED");
+         //printf("UdpRxBinarySocket CLOSED\n");
       }
       else
       {
-         TS::print(0, "ERROR UdpRxBinarySocket %d %d", BaseClass::mStatus, BaseClass::mError);
+         printf("ERROR UdpRxBinarySocket %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }
 
-   TS::print(3, "UdpRxBinarySocket rx message %d", mRxLength);
+   //printf("UdpRxBinarySocket rx message %d\n", mRxLength);
    
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
@@ -183,13 +183,13 @@ void UdpTxBinarySocket::configure()
    // Show.
    if (mValidFlag)
    {
-      TS::print(0, "UdpTxBinarySocket  PASS %16s : %5d",
+      printf("UdpTxBinarySocket  PASS %16s : %5d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      TS::print(0, "UdpTxBinarySocket  FAIL %16s : %5d $ %d %d",
+      printf("UdpTxBinarySocket  FAIL %16s : %5d $ %d %d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,

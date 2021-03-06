@@ -72,13 +72,13 @@ void UdpRxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      TS::print(0, "UdpRxMsgSocket     PASS %16s : %5d",
+      printf("UdpRxMsgSocket     PASS %16s : %5d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      TS::print(0, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
+      printf("UdpRxMsgSocket     FAIL %16s : %5d $ %d %d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -108,7 +108,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      TS::print(0, "ERROR UdpRxMsgSocket INVALID SOCKET");
+      printf("ERROR UdpRxMsgSocket INVALID SOCKET\n");
       return false;
    }
 
@@ -131,17 +131,17 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    {
       if (BaseClass::mError == 0)
       {
-         TS::print(1, "UdpRxMsgSocket CLOSED");
+         //printf("UdpRxMsgSocket CLOSED\n");
       }
       else
       {
-         TS::print(0, "ERROR UdpRxMsgSocket %d %d", BaseClass::mStatus, BaseClass::mError);
+         printf("ERROR UdpRxMsgSocket %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }
 
-   TS::print(3, "UdpRxMsgSocket rx message %d", mRxLength);
-   TS::print(3, "UdpRxMsgSocket     FROM %16s : %5d",
+   printf("UdpRxMsgSocket rx message %d\n", mRxLength);
+   printf("UdpRxMsgSocket     FROM %16s : %5d\n",
       mFromAddress.mString,
       mLocal.mPort);
 
@@ -157,14 +157,14 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Extract the header.
    mMonkey->extractMessageHeaderParms(&tByteBuffer);
 
-   TS::print(4, "UdpRxMsgSocket rx header %d %d",
+   printf("UdpRxMsgSocket rx header %d %d\n",
       mMonkey->mHeaderValidFlag,
       mMonkey->mHeaderLength);
 
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      TS::print(0, "ERROR UdpRxMsgSocket INVALID HEADER", mStatus, mError);
+      printf("ERROR UdpRxMsgSocket INVALID HEADER\n", mStatus, mError);
       return false;
    }
 
@@ -181,7 +181,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Test for errors.
    if (aMsg == 0)
    {
-      TS::print(0, "ERROR UdpRxMsgSocket INVALID MESSAGE", mStatus, mError);
+      printf("ERROR UdpRxMsgSocket INVALID MESSAGE\n", mStatus, mError);
       mStatus = tByteBuffer.getError();
       return false;
    }
@@ -254,13 +254,13 @@ void UdpTxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      TS::print(0, "UdpTxMsgSocket     PASS %16s : %5d",
+      printf("UdpTxMsgSocket     PASS %16s : %5d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      TS::print(0, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
+      printf("UdpTxMsgSocket     FAIL %16s : %5d $ %d %d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
@@ -280,7 +280,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      TS::print(0, "ERROR UdpTxMsgSocket INVALID SOCKET");
+      printf("ERROR UdpTxMsgSocket INVALID SOCKET\n");
       delete aMsg;
       return false;
    }
@@ -307,11 +307,11 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 
    if (tRet)
    {
-      TS::print(3, "UdpTxMsgSocket tx message %d", mTxLength);
+      //printf("UdpTxMsgSocket tx message %d\n", mTxLength);
    }
    else
    {
-      TS::print(0, "ERROR UdpTxMsgSocket INVALID SEND");
+      printf("ERROR UdpTxMsgSocket INVALID SEND\n");
    }
 
    // Done.

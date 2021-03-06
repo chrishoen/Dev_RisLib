@@ -203,7 +203,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Read the header from the socket.
    tByteBuffer.setCopyTo();
    tRet = BaseClass::doRecv(tHeaderBuffer,tHeaderLength,tStatus);
-   TS::print(3, "doRecvH %d %d",mStatus,mError);
+   //printf("doRecvH %d %d\n",mStatus,mError);
 
    // Guard.
    // If bad status then return false.

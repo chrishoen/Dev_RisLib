@@ -86,7 +86,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      TS::print(0, "ERROR doSend when Invalid");
+      printf("ERROR doSend when Invalid\n");
       mMonkey->destroyMsg(aMsg);
       return false;
    }
@@ -107,7 +107,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    int tRet = 0;
    int tLength=tByteBuffer.getLength();
    tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(),tLength);
-   TS::print(4, "doSendMsg %d %d",tRet,tLength);
+   //printf("doSendMsg %d %d\n",tRet,tLength);
 
    mTxMsgCount++;
 
@@ -117,7 +117,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Test for errors.
    if (tRet<0)
    {
-      TS::print(0, "ERROR SerialMsgPort::doSendMsg FAIL");
+      printf("ERROR SerialMsgPort::doSendMsg FAIL\n");
       return false;
    }
 
@@ -136,7 +136,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 
 bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 {
-   TS::print(5, "SerialMsgPort::doReceiveMsg***********************************");
+   //printf("SerialMsgPort::doReceiveMsg***********************************\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -150,7 +150,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      TS::print(0, "ERROR SerialMsgPort::doReceiveMsg when Invalid");
+      printf("ERROR SerialMsgPort::doReceiveMsg when Invalid\n");
       return false;
    }
 
@@ -177,11 +177,11 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // If bad status then return false.
       if (tRet == mHeaderLength)
       {
-         TS::print(5, "receive header all %d", tRet);
+         printf("receive header all %d\n", tRet);
       }
       else
       {
-         TS::print(1, "receive header all ERROR %d", tRet);
+         printf("receive header all ERROR %d\n", tRet);
          return false;
       }
 
@@ -196,12 +196,12 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // the header buffer one byte at a time.
       if (mMonkey->mHeaderValidFlag)
       {
-         TS::print(5, "receive header all PASS");
+         printf("receive header all PASS\n");
          mHeaderAllCount++;
       }
       else
       {
-         TS::print(1, "receive header all FAIL");
+         printf("receive header all FAIL\n");
          mHeaderReadState = cHeaderReadOne;
       }
    }
@@ -233,7 +233,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
          // If bad status then return false.
          if (tRet != 1)
          {
-            TS::print(0, "receive header2 ERROR %d", tRet);
+            printf("receive header2 ERROR %d\n", tRet);
             return false;
          }
 
@@ -259,7 +259,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
             // If the header is not valid then continue with the loop.
             if (mMonkey->mHeaderValidFlag)
             {
-               TS::print(5, "receive header one PASS");
+               //printf("receive header one PASS\n");
                mHeaderOneCount++;
                mHeaderReadState = cHeaderReadAll;
                tGoing = false;
@@ -282,11 +282,11 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // If bad status then return false.
    if (tRet == tPayloadLength)
    {
-      TS::print(5, "receive payload %d", tRet);
+      //printf("receive payload %d\n", tRet);
    }
    else
    {
-      TS::print(0, "receive payload ERROR %d", tRet);
+      printf("receive payload ERROR %d\n", tRet);
       return false;
    }
 
@@ -306,19 +306,19 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
-      TS::print(0, "ERROR getMsgFromBuffer");
+      printf("ERROR getMsgFromBuffer\n");
       return false;
    }
 
    // Test for message footer errors.
    if (!mMonkey->validateMessageFooter(&tByteBuffer,aMsg))
    {
-      TS::print(0, "ERROR validateMessageFooter");
+      printf("ERROR validateMessageFooter\n");
       return false;
    }
 
    // Done.
-   TS::print(4, "SerialMsgPort::doReceiveMsg PASS");
+   //printf("SerialMsgPort::doReceiveMsg PASS\n");
    mRxMsgCount++;
    return true;
 }

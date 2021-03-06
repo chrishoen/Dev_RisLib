@@ -157,7 +157,7 @@ void UdpStringThread::processRxString(std::string* aString)
    // Guard.
    if (!mRxStringQCall.isValid()) return;
 
-   TS::print(3, "UdpRxStringThread processRxString call qcall");
+   //printf("UdpRxStringThread processRxString call qcall\n");
 
    // Invoke the receive callback qcall.
    mRxStringQCall(aString);

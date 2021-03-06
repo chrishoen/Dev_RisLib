@@ -28,14 +28,12 @@ bool doWaitForNetwork()
       int tRet = Ris::doSystemCommand("ping -c 1 72.217.3.100");
       if (tRet == 0)
       {
-         TS::print(0, "doWaitForNetwork PASS");
          printf("doWaitForNetwork PASS\n");
          tSuccess = true;
          break;
       }
       else
       {
-         TS::print(0, "doWaitForNetwork FAIL %d", tRet);
          printf("doWaitForNetwork FAIL %d\n", tRet);
          Ris::Threads::threadSleep(1000);
       }

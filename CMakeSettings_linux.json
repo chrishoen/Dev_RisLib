@@ -22,7 +22,7 @@
       "rsyncCommandArgs": "-t --delete --delete-excluded",
       "remoteCopyBuildOutput": false,
       "cmakeCommandArgs": "",
-      "buildCommandArgs": "-j8",
+      "buildCommandArgs": "-j12",
       "ctestCommandArgs": "",
       "inheritEnvironments": [
         "linux_x64"

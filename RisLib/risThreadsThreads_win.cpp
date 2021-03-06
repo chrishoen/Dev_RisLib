@@ -273,13 +273,6 @@ void BaseThread::waitForThreadTerminate()
    WaitForSingleObject(mBaseSpecific->mHandle,INFINITE);
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void BaseThread::shutdownThreadPrologue()
-{
-}
 
 //******************************************************************************
 //******************************************************************************
@@ -296,7 +289,6 @@ BaseThreadWithTermFlag::BaseThreadWithTermFlag()
 
 void BaseThreadWithTermFlag::shutdownThread()
 {
-   shutdownThreadPrologue();
    mTerminateFlag = true;
    waitForThreadTerminate();
 }
@@ -307,7 +299,6 @@ void BaseThreadWithTermFlag::shutdownThread()
 
 void BaseThreadWithTermSem::shutdownThread()
 {
-   shutdownThreadPrologue();
    mTerminateSem.put();
    waitForThreadTerminate();
 }

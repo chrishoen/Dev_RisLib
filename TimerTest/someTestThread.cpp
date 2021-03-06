@@ -83,8 +83,6 @@ void TestThread::threadExitFunction()
 
 void TestThread::shutdownThread()
 {
-   BaseClass::shutdownThreadPrologue();
-
    BaseClass::mTerminateFlag = true;
    mWaitable.postSemaphore();
    BaseClass::waitForThreadTerminate();

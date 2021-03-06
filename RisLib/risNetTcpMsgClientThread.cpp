@@ -165,7 +165,6 @@ void TcpMsgClientThread::threadExitFunction()
 
 void TcpMsgClientThread::shutdownThread()
 {
-   shutdownThreadPrologue();
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
    mSocket.doClose();

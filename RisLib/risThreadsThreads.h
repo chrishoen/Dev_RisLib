@@ -192,9 +192,6 @@ public:
    // This virtual is overloaded by inheritors to shutdown the thread
    virtual void shutdownThread() {}
 
-   // Overloaded shutodwns should call this first.
-   void shutdownThreadPrologue();
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

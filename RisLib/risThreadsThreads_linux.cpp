@@ -325,13 +325,6 @@ void BaseThread::waitForThreadTerminate()
    pthread_join(mBaseSpecific->mHandle,NULL);
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void BaseThread::shutdownThreadPrologue()
-{
-}
 
 //******************************************************************************
 //******************************************************************************
@@ -348,7 +341,6 @@ BaseThreadWithTermFlag::BaseThreadWithTermFlag()
 
 void BaseThreadWithTermFlag::shutdownThread()
 {
-   shutdownThreadPrologue();
    mTerminateFlag = true;
    waitForThreadTerminate();
 }

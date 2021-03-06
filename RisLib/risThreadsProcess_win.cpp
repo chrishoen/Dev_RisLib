@@ -75,13 +75,11 @@ void showCurrentThreadInfo()
    int tThreadPriority = GetThreadPriority(GetCurrentThread());
    int tCurrentProcessorNumber = GetCurrentProcessorNumber();
 
-   TS::print(1, "");
-   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d $  %3d",
+   printf("ThreadInfo %-20s %1d %3d %-8s $  %3d\n",
       "main",
       tCurrentProcessorNumber,
       tThreadPriority,
       "running",
-      TS::tls()->mPrintLevel,
       tPriorityClass);
 }
 
@@ -91,7 +89,3 @@ void showCurrentThreadInfo()
 }//namespace
 }//namespace
 
-#if 0
-int tPriorityClass = GetPriorityClass(GetCurrentProcess());
-printf("GetPriorityClass %08X\n", tPriorityClass);
-#endif

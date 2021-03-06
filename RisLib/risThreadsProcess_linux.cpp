@@ -121,13 +121,11 @@ void showCurrentThreadInfo()
    pthread_getschedparam(pthread_self(), &policy, &param);
    int tThreadPriority = param.sched_priority;
 
-   TS::print(1, "");
-   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d",
+   printf("ThreadInfo %-20s %2d %3d %-8s\n",
       "main",
       tCurrentProcessorNumber,
       tThreadPriority,
-      "running",
-      TS::tls()->mPrintLevel);
+      "running");
 }
 
 //******************************************************************************

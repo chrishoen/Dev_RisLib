@@ -277,50 +277,6 @@ public:
    //to terminate. The inheritor thread run function should polls this
    //flag and terminate if it is true.
    virtual void shutdownThread();
-
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is an extension of virtual base class for general purpose threads.
-// It provides a termination mechanism where an inheritor thread run
-// function pends on a termination semaphore.
-//
-// This can be used for threads whose purpose is to create and hold other
-// threads (a platform thread). An inheritor thread run function can create 
-// other threads and then pend on the termination semaphore. When it is
-// signalled, the thread wakes up, terminates its child threads and terminates
-// itself.
-
-class BaseThreadWithTermSem : public BaseThread
-{
-public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Termination semaphore
-   BinarySemaphore mTerminateSem;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Intrastructure.
-
-   virtual ~BaseThreadWithTermSem(){} 
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   //This posts to the termination semaphore.
-   //The inheritor thread run function should pend on the semaphore
-   //and terminate if it is signaled.
-   virtual void shutdownThread();
 };
 
 //******************************************************************************

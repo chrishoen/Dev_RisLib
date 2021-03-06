@@ -150,8 +150,6 @@ void Waitable::waitForTimerOrSemaphore()
    // Guard.
    if (!mValidFlag) return;
 
-   TS::print(5, "Waitable waitForTimerOrSemaphore*******************************BEGIN");
-
    // Add the timer and semaphore fds to a read set.
    int tRet;
    fd_set  tReadSet;
@@ -160,14 +158,12 @@ void Waitable::waitForTimerOrSemaphore()
    FD_SET(mSpecific->mSemaphoreFd, &tReadSet);
 
    // Select on the readset. This blocks until one of the handles is readable.
-   TS::print(5, "Waitable wait select");
    select(FD_SETSIZE, &tReadSet, 0, 0, 0);
 
    // Test if the timer is ready to be read.
    if (FD_ISSET(mSpecific->mTimerFd, &tReadSet))
    {
       // Read the timer. Because of the select this should not be blocked.
-      TS::print(5, "Waitable wait read timer");
       unsigned long long tExpired = 0;
       read(mSpecific->mTimerFd, &tExpired, sizeof(tExpired));
       
@@ -180,14 +176,11 @@ void Waitable::waitForTimerOrSemaphore()
    if (FD_ISSET(mSpecific->mSemaphoreFd, &tReadSet))
    {
       // Read the semaphore. Because of the select this should not be blocked.
-      TS::print(5, "Waitable wait read semaphore>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       unsigned long long tValue = 0;
       read(mSpecific->mSemaphoreFd, &tValue, sizeof(tValue));
       // Set the flag.
       mWasSemaphoreFlag = true;
    }
-
-   TS::print(5, "Waitable waitForTimerOrSemaphore*******************************END");
 }
 //******************************************************************************
 //******************************************************************************

@@ -57,13 +57,13 @@ void TcpServerHubSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      TS::print(0, "TcpServerHubSocket PASS %16s : %5d",
+      printf("TcpServerHubSocket PASS %16s : %5d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      TS::print(0, "TcpServerHubSocket FAIL %16s : %d $ %d %d",
+      printf(0, "TcpServerHubSocket FAIL %16s : %d $ %d %d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,

@@ -72,7 +72,7 @@ void TcpMsgServerThread::threadRunFunction()
    // Do a nonblocking listen to put the hub socket in listen mode.
    mHubSocket.doListen();
    mListenFlag = true;
-   TS::print(3, "doListen %d %d",mHubSocket.mStatus,mHubSocket.mError);
+   //printf("doListen %d %d\n",mHubSocket.mStatus,mHubSocket.mError);
 
    bool tGoing = true;
    while(tGoing)
@@ -159,7 +159,7 @@ void TcpMsgServerThread::threadRunFunction()
                // has been established.
                processSessionChange(tSessionIndex,true);
 
-               TS::print(3, "doAccept %d",tSessionIndex);
+               //printf("doAccept %d\n",tSessionIndex);
 
                // Test if the number of sessions has reached the maximum.
                if (mNumSessions == mMaxSessions)
@@ -168,7 +168,7 @@ void TcpMsgServerThread::threadRunFunction()
                   // Close the hub socket and set the listening state false.
                   // This will cause any client connect calls to be refused.
                   // The hub socket will be reopened when one of the sessions is closed.
-                  TS::print(1, "Session limit was reached, closing listener %d",mNumSessions);
+                  //printf("Session limit was reached, closing listener %d\n",mNumSessions);
                   mHubSocket.doClose();
                   mListenFlag=false;
                }
@@ -212,7 +212,7 @@ void TcpMsgServerThread::threadRunFunction()
                   {
                      // The receive failed, so the connection was shutdown by the client.
                      // Therefore, disestablish the session.  
-                     TS::print(3, "Recv failed, closing session %d",tSessionIndex);
+                     //printf("Recv failed, closing session %d\n",tSessionIndex);
                      // Reset the socket.
                      mNodeSocket[tSessionIndex].doClose();
                      mNodeSocket[tSessionIndex].reset();
@@ -232,7 +232,7 @@ void TcpMsgServerThread::threadRunFunction()
                         mHubSocket.reconfigure();
                         mHubSocket.doListen();
                         mListenFlag=true;
-                        TS::print(3, "opening listener, doListen %d %d",mHubSocket.mStatus,mHubSocket.mError);
+                        //printf("opening listener, doListen %d %d\n",mHubSocket.mStatus,mHubSocket.mError);
                      } 
                   }   
                }
@@ -242,7 +242,7 @@ void TcpMsgServerThread::threadRunFunction()
       // Test if the select call failed.
       else if (retVal<0)
       {
-         TS::print(1, "ERROR TcpServerThread::threadRunFunction select fail %d",retVal);
+         printf("ERROR TcpServerThread::threadRunFunction select fail %d\n",retVal);
       }
    }
 }
@@ -312,7 +312,7 @@ void TcpMsgServerThread::sendMsg(int aSessionIndex, ByteContent* aMsg)
    }
    else
    {
-      TS::print(0, "ERROR doSendMsg FAIL session invalid %d", aSessionIndex);
+      printf("ERROR doSendMsg FAIL session invalid %d\n", aSessionIndex);
       delete aMsg;
    }
 }

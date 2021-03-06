@@ -76,7 +76,7 @@ void TcpMsgClientThread::threadRunFunction()
          if (mSocket.doConnect())
          {
             // Connection was established.
-            TS::print(3, "Connected");
+            //printf("Connected\n");
             mConnectionFlag = true;
 
             // Process a session change because a
@@ -86,7 +86,7 @@ void TcpMsgClientThread::threadRunFunction()
          else 
          {
             // Connection was not established.
-            TS::print(3, "Not Connected");
+            //printf("Not Connected\n");
 
             mConnectionFlag = false;
 
@@ -122,7 +122,7 @@ void TcpMsgClientThread::threadRunFunction()
          {
             // Message was not correctly received, so
             // Connection was lost.
-            TS::print(3, "Recv failed, Connection lost");
+            //printf("Recv failed, Connection lost\n");
             mConnectionFlag = false;
 
             // Process a session change because a
@@ -187,7 +187,7 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
    // Guard.
    if (!mSessionQCall.isValid())
    {
-      TS::print(0, "ERROR processSessionChange qcall invalid");
+      printf("ERROR processSessionChange qcall invalid\n");
       return;
    }
 

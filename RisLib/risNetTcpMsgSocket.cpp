@@ -83,13 +83,13 @@ void TcpMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      TS::print(0, "TcpMsgSocket       PASS %16s : %5d",
+      printf("TcpMsgSocket       PASS %16s : %5d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      TS::print(0, "TcpMsgSocket       FAIL %16s : %5d $ %d %d",
+      printf("TcpMsgSocket       FAIL %16s : %5d $ %d %d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
@@ -122,7 +122,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      TS::print(0, "ERROR TcpMsgSocket INVALID SOCKET");
+      printf("ERROR TcpMsgSocket INVALID SOCKET\n");
       delete aMsg;
       return false;
    }
@@ -149,11 +149,11 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 
    if (tRet)
    {
-      TS::print(3, "TcpMsgSocket tx message %d", mTxLength);
+      printf("TcpMsgSocket tx message %d\n", mTxLength);
    }
    else
    {
-      TS::print(0, "ERROR TcpMsgSocket INVALID SEND");
+      printf("ERROR TcpMsgSocket INVALID SEND\n");
    }
 
    // Done.
@@ -184,7 +184,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      TS::print(0, "ERROR TcpMsgSocket INVALID SOCKET");
+      printf("ERROR TcpMsgSocket INVALID SOCKET\n");
       return false;
    }
 
@@ -211,7 +211,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Returning false means socket was closed.
    if (!tRet || tStatus<=0)
    {
-      TS::print(0, "ERROR TcpMsgSocket INVALID READ");
+      printf("ERROR TcpMsgSocket INVALID READ\n");
       return false;
    }
 
@@ -225,7 +225,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      TS::print(0, "ERROR TcpMsgSocket INVALID HEADER");
+      printf("ERROR TcpMsgSocket INVALID HEADER\n");
       return false;
    }
 
@@ -241,12 +241,12 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Read the payload from the socket.
    tByteBuffer.setCopyTo();
    tRet = BaseClass::doRecv(tPayloadBuffer,tPayloadLength,tStatus);
-   TS::print(3, "doRecvP %d %d %d",mStatus,mError,tPayloadLength);
+   //printf("doRecvP %d %d %d\n",mStatus,mError,tPayloadLength);
 
    // If bad status then return false.
    if (!tRet || tStatus<=0)
    {
-      TS::print(0, "ERROR doRecv2 INVALID RECV");
+      printf("ERROR doRecv2 INVALID RECV\n");
       return false;
    }
 
@@ -266,7 +266,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
-      TS::print(0, "ERROR TcpMsgSocket INVALID MESSAGE");
+      printf("ERROR TcpMsgSocket INVALID MESSAGE\n");
       mStatus=tByteBuffer.getError();
       return false;
    }

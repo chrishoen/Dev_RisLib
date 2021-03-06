@@ -73,7 +73,7 @@ bool SerialPort::doOpen()
 {
    mValidFlag = false;
 
-   TS::print(1, "SerialPort::doOpen %s", mSettings.mPortDevice);
+   //printf("SerialPort::doOpen %s\n", mSettings.mPortDevice);
 
    //***************************************************************************
    //***************************************************************************
@@ -84,7 +84,7 @@ bool SerialPort::doOpen()
 
    if (mSpecific->mPortFd < 0)
    {
-      TS::print(0, "serial_open_error_1 %d %s", errno, strerror(errno));
+      printf("serial_open_error_1 %d %s\n", errno, strerror(errno));
       return false;
    }
 
@@ -97,7 +97,7 @@ bool SerialPort::doOpen()
 
    if (mSpecific->mPortFd < 0)
    {
-      TS::print(1, "serial_open_error_2 %d", errno);
+      //printf("serial_open_error_2 %d\n", errno);
       return false;
    }
 
@@ -133,7 +133,7 @@ bool SerialPort::doOpen()
 
    if (tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions) < 0)
    {
-      TS::print(1, "serial_open_error_baud", errno);
+      //printf("serial_open_error_baud\n", errno);
       return false;
    }
 
@@ -151,7 +151,7 @@ bool SerialPort::doOpen()
       
       if (ioctl(mSpecific->mPortFd, TIOCSRS485, &t485conf) < 0)
       {
-         TS::print(1, "serial_open_error_485 %d", errno);
+         //printf("serial_open_error_485 %d\n", errno);
          return false;
       }
    }
@@ -175,15 +175,15 @@ bool SerialPort::doOpen()
 
    if (!mSettings.m485Flag)
    {
-   TS::print(1, "SerialPort initialize PASS  $ %s : %16s",
-      mSettings.mPortDevice,
-      mSettings.mPortSetup);
+   //printf("SerialPort initialize PASS  $ %s : %16s\n",
+   // mSettings.mPortDevice,
+   // mSettings.mPortSetup);
    }
    else
    {
-   TS::print(1, "SerialPort initialize PASS  $ %s : %16s RS485",
-      mSettings.mPortDevice,
-      mSettings.mPortSetup);
+   //print("SerialPort initialize PASS  $ %s : %16s RS485\n",
+   // mSettings.mPortDevice,
+   // mSettings.mPortSetup);
    }
 
 
@@ -201,7 +201,7 @@ void SerialPort::doClose()
    int tRet = 0;
    if (!mValidFlag) return;
 
-   TS::print(1, "SerialPort::doClose %s", mSettings.mPortDevice);
+   //printf("SerialPort::doClose %s\n", mSettings.mPortDevice);
 
    //***************************************************************************
    //***************************************************************************
@@ -221,7 +221,7 @@ void SerialPort::doClose()
    // Test the return code.
    if (tRet != 0)
    {
-      TS::print(1, "serial_close_error_2 %d", errno);
+      //printf("serial_close_error_2 %d\n", errno);
    }
 
    // Done.
@@ -259,18 +259,18 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    // Test the return code.
    if (tRet < 0)
    {
-      TS::print(0, "serial_write_error_1 %d", errno);
+      printf("serial_write_error_1 %d\n", errno);
       return cRetCodeError;
    }
 
    if (tRet != aNumBytes)
    {
-      TS::print(0, "serial_write_error_2 %d", tRet);
+      printf("serial_write_error_2 %d\n", tRet);
       return cRetCodeError;
    }
 
    // Write was successful. Return the number of bytes written.
-   TS::print(4, "SerialPort::doSendBytes PASS %d",aNumBytes);
+   //printf("SerialPort::doSendBytes PASS %d\n",aNumBytes);
    return tRet;
 }
 
@@ -467,7 +467,7 @@ int  SerialPort::doReceiveOne(char *aData)
 
 int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
 {
-   TS::print(5, "SerialPort::doReceiveBytes START %d", aNumBytes);
+   //printf("SerialPort::doReceiveBytes START %d\n", aNumBytes);
 
    // Locals.
    int tRet  = 0;
@@ -488,7 +488,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Poll the port for a read or a close.
 
    // Read.
-   TS::print(5, "serial_poll_start");
+   //printf("serial_poll_start\n");
 
    struct pollfd tPollFd[2];
    tPollFd[0].fd = mSpecific->mPortFd;
@@ -504,42 +504,42 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Test the valid flag for closing.
    if (!mValidFlag)
    {
-      TS::print(1, "serial_poll_invalid close");
+      //printf("serial_poll_invalid close\n");
       return cRetCodeError;
    }
 
    // Test the return code for error.
    if (tRet < 0)
    {
-      TS::print(1, "serial_poll_error_1 %d", errno);
+      //printf("serial_poll_error_1 %d\n", errno);
       return cRetCodeError;
    }
 
    // Test the return code for timeout.
    if (tRet == 0)
    {
-      TS::print(1, "serial_poll_error_2 timeout");
+      //printf("serial_poll_error_2 timeout\n");
       return cRetCodeTimeout;
    }
 
    if (tPollFd[0].revents & POLLIN)
    {
-      TS::print(5, "serial_poll_event0 %d %04X",tRet, tPollFd[0].revents);
+      //printf("serial_poll_event0 %d %04X\n",tRet, tPollFd[0].revents);
    }
 
    if (tPollFd[1].revents & POLLIN)
    {
-      TS::print(5, "serial_poll_event1 %d %04X", tRet, tPollFd[1].revents);
+      //printf("serial_poll_event1 %d %04X\n", tRet, tPollFd[1].revents);
    }
 
    // Test the return code for closed port.
    if (tRet == 2)
    {
-      TS::print(1, "serial_poll_error_3 close");
+      //printf("serial_poll_error_3 close\n");
       return cRetCodeError;
    }
 
-   TS::print(5, "serial_poll_pass %d",tRet);
+   //printf("serial_poll_pass %d\n",tRet);
 
    //***************************************************************************
    //***************************************************************************
@@ -547,23 +547,23 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Read from port.
 
    // Read.
-   TS::print(5, "serial_read_start");
+   //printf("serial_read_start\n");
    tRet = (int)read(mSpecific->mPortFd, aData, (size_t)aNumBytes);
 
    // Test the return code.
    if (tRet < 0)
    {
-      TS::print(0, "serial_read_error_1 %d", errno);
+      printf("serial_read_error_1 %d\n", errno);
       return cRetCodeError;
    }
 
    if (tRet != aNumBytes)
    {
-      TS::print(0, "serial_read_error_2 %d", tRet);
+      printf("serial_read_error_2 %d\n", tRet);
       return cRetCodeError;
    }
 
-   TS::print(5, "serial_read_pass");
+   //printf("serial_read_pass\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -571,7 +571,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Done.
 
    // Read was successful. Return the number of bytes read.
-   TS::print(4, "SerialPort::doReceiveBytes PASS %d", aNumBytes);
+   //printf("SerialPort::doReceiveBytes PASS %d\n", aNumBytes);
    return tRet;
 }
 

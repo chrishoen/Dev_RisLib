@@ -1,14 +1,13 @@
 #pragma once
-
 /*==============================================================================
-Periodic thread base class
+Base thread classes
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risThreadsThreads.h"
+#include "risThreadsPriorities.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -22,27 +21,43 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is an extension of the virtual base class for general purpose threads.
-// It provides a basis for a periodic thread that uses a polling termination
-// policy.
-
-class  BasePeriodicThread : public BaseThreadWithTermFlag
+ 
+class BasePeriodicThread2
 {
 public:
-
-   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // Timer period, milliseconds. Inheritors should set this in their
-   // constructors. 
-   int   mTimerPeriod;
+   // Configuration variables.
+   // Some of these are passed to the CreateThread in launch
+   // and some are used by threadFunction.
+   int    mThreadStackSize;
+   int    mThreadPriority;
+   int    mThreadSingleProcessor;
 
-   // Timer count incremented at each timer execution.
-   int   mTimerCount;
+   // The processor that was current at the start of the thread
+   // run function.
+   int mThreadRunProcessor;
+
+   // Thread period milliseconds.
+   int mTimerPeriod;
+
+   // Timer count.
+   int mTimerCount;
+
+   // If true then terminate the thread loop.
+   bool mTerminateFlag;
+
+   // Pimpl pattern. Used to hide details of the operating system specific
+   // variables, like the thread handle, from the .h file so that this
+   // include file can be complied by different compliers. The class is
+   // defined in the .cpp file, where there is a different version for
+   // different compilers.
+   class BaseSpecific;
+   BaseSpecific* mBaseSpecific;
 
    //***************************************************************************
    //***************************************************************************
@@ -50,17 +65,49 @@ public:
    // Methods.
 
    // Constructor.
-   BasePeriodicThread(); 
+   BasePeriodicThread2(); 
+   virtual ~BasePeriodicThread2();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. Base class overloads.
+   // Methods.
 
-   // Thread run function. This is called by the base class immediately 
-   // after the thread init function. It runs a loop that waits for the
-   // timer or the termination event.
-   void threadRunFunction() override;
+   // Launch the thread.
+   virtual void launchThread(); 
+
+   // Thread function.
+   void threadFunction();
+
+   // Shutdown the thread
+   void shutdownThread();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Set the thread processor number and priority.
+   void setThreadPriority(Priority aPriority);
+
+   // Wait for the thread to terminate.
+   void waitForThreadTerminate();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Return the thread processor number.
+   int  getThreadProcessorNumber();
+
+   // Show thread configuration info.
+   void showThreadFullInfo();
+
+
+   void showThreadInfo() {}
+   void setThreadName(const char*) {}
+   void setThreadPrintLevel(int) {}
 
    //***************************************************************************
    //***************************************************************************
@@ -69,7 +116,7 @@ public:
 
    // An overload of this is supplied by the inheritor.
    // It is called periodically by the threadRunFunction.
-   virtual void executeOnTimer(int aTimerCount)=0;
+   virtual void executeOnTimer(int aTimerCount) = 0;
 };
 
 //******************************************************************************

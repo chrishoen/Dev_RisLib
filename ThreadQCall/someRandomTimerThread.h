@@ -24,11 +24,11 @@ namespace Some
 // This is a test timer thread that drives the test qcall thread.
 //   
 
-class RandomTimerThread : public Ris::Threads::BaseThreadWithTermFlag
+class RandomTimerThread : public Ris::Threads::BaseThread
 {
 public:
 
-   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
+   typedef Ris::Threads::BaseThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************

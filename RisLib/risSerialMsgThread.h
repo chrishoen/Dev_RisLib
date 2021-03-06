@@ -44,10 +44,10 @@ namespace Ris
 // receives a message it invokes the message qcall to pass it to the parent
 // for processing.
 
-class SerialMsgThread : public Ris::Threads::BaseThreadWithTermFlag
+class SerialMsgThread : public Ris::Threads::BaseThread
 {
 public:
-   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
+   typedef Ris::Threads::BaseThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************

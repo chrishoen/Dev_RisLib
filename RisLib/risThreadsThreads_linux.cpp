@@ -79,6 +79,7 @@ BaseThread::BaseThread()
    mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
+   mTerminateFlag = false;
 }
 
 //******************************************************************************
@@ -238,8 +239,6 @@ void BaseThread::threadFunction()
    // Thread execution
    try
    {
-      // Seed thread random number.
-      my_srand();
       // This is used by inheritors to initialize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
       mThreadRunState = cThreadRunState_InitR;
@@ -325,21 +324,11 @@ void BaseThread::waitForThreadTerminate()
    pthread_join(mBaseSpecific->mHandle,NULL);
 }
 
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-BaseThreadWithTermFlag::BaseThreadWithTermFlag() 
-{
-   mTerminateFlag = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void BaseThreadWithTermFlag::shutdownThread()
+void BaseThread::shutdownThread()
 {
    mTerminateFlag = true;
    waitForThreadTerminate();

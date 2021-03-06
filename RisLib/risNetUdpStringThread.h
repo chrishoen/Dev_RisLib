@@ -45,10 +45,10 @@ namespace Net
 // receives a string it invokes the string qcall to pass it to the parent
 // for processing.
 
-class UdpStringThread : public Ris::Threads::BaseThreadWithTermFlag
+class UdpStringThread : public Ris::Threads::BaseThread
 {
 public:
-   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
+   typedef Ris::Threads::BaseThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************

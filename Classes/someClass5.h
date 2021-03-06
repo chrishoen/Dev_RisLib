@@ -22,7 +22,7 @@ namespace Some
 //******************************************************************************
 
 template <class MsgTraits>
-class Class5 : public Ris::Threads::BaseThreadWithTermFlag
+class Class5 : public Ris::Threads::BaseThread
 {
 public:
 

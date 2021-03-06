@@ -20,10 +20,10 @@ namespace Some
 //******************************************************************************
 // Sensor receiver thread class.
 
-class SerialRxThread : public Ris::Threads::BaseThreadWithTermFlag
+class SerialRxThread : public Ris::Threads::BaseThread
 {
 public:
-   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
+   typedef Ris::Threads::BaseThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************

@@ -92,6 +92,9 @@ public:
    class BaseSpecific;
    BaseSpecific* mBaseSpecific;
 
+   //Termination Flag
+   bool mTerminateFlag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -190,7 +193,7 @@ public:
    virtual void threadExceptionFunction(char* aStr);
 
    // This virtual is overloaded by inheritors to shutdown the thread
-   virtual void shutdownThread() {}
+   virtual void shutdownThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -236,44 +239,6 @@ public:
 
    // Helpers.
    char* asStringThreadRunState();
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is an extension of virtual base class for general purpose threads.
-// It provides a polled termination mechanism where an inheritor thread run
-// function should poll a termination flag.
-
-class BaseThreadWithTermFlag : public BaseThread
-{
-public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   //Termination Flag
-   bool mTerminateFlag;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Intrastructure.
-
-   BaseThreadWithTermFlag(); 
-   virtual ~BaseThreadWithTermFlag(){} 
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   //This sets the terminate flag and waits on the handle for the thread
-   //to terminate. The inheritor thread run function should polls this
-   //flag and terminate if it is true.
-   virtual void shutdownThread();
 };
 
 //******************************************************************************

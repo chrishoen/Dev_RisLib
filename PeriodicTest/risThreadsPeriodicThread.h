@@ -26,11 +26,11 @@ namespace Threads
 // It provides a basis for a periodic thread that uses a polling termination
 // policy.
 
-class  BasePeriodicThread : public BaseThreadWithTermFlag
+class  BasePeriodicThread : public BaseThread
 {
 public:
 
-   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
+   typedef Ris::Threads::BaseThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************

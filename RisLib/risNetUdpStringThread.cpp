@@ -136,11 +136,11 @@ void UdpStringThread::threadExitFunction()
 
 void UdpStringThread::shutdownThread()
 {
-   BaseThreadWithTermFlag::mTerminateFlag = true;
+   BaseThread::mTerminateFlag = true;
 
    mRxSocket.doClose();
 
-   BaseThreadWithTermFlag::waitForThreadTerminate();
+   BaseThread::waitForThreadTerminate();
 }
 
 //******************************************************************************

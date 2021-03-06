@@ -76,10 +76,10 @@ namespace Net
 // notify the parent. When the child thread receives a message it invokes a
 // message qcall to pass it to the parent for processing.
 
-class TcpMsgServerThread : public Threads::BaseThreadWithTermFlag
+class TcpMsgServerThread : public Threads::BaseThread
 {
 public:
-   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
+   typedef Ris::Threads::BaseThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************

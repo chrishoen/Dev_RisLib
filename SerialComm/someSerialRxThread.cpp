@@ -105,11 +105,11 @@ void SerialRxThread::threadExitFunction()
 
 void SerialRxThread::shutdownThread()
 {
-   BaseThreadWithTermFlag::mTerminateFlag = true;
+   BaseThread::mTerminateFlag = true;
 
    mSerialPort.doClose();
 
-   BaseThreadWithTermFlag::waitForThreadTerminate();
+   BaseThread::waitForThreadTerminate();
 }
 
 //******************************************************************************

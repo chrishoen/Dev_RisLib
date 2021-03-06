@@ -118,11 +118,11 @@ void SerialMsgThread::threadExitFunction()
 
 void SerialMsgThread::shutdownThread()
 {
-   BaseThreadWithTermFlag::mTerminateFlag = true;
+   BaseThread::mTerminateFlag = true;
 
    mSerialMsgPort.doClose();
 
-   BaseThreadWithTermFlag::waitForThreadTerminate();
+   BaseThread::waitForThreadTerminate();
 }
 
 //******************************************************************************

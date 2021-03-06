@@ -278,7 +278,7 @@ void BaseThread::waitForThreadTerminate()
 //******************************************************************************
 //******************************************************************************
 
-BaseThreadWithTermFlag::BaseThreadWithTermFlag() 
+BaseThread::BaseThread() 
 {
    mTerminateFlag = false;
 }
@@ -287,7 +287,7 @@ BaseThreadWithTermFlag::BaseThreadWithTermFlag()
 //******************************************************************************
 //******************************************************************************
 
-void BaseThreadWithTermFlag::shutdownThread()
+void BaseThread::shutdownThread()
 {
    mTerminateFlag = true;
    waitForThreadTerminate();

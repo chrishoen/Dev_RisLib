@@ -139,8 +139,6 @@ void Waitable::waitForTimerOrSemaphore()
    // Guard.
    if (!mValidFlag) return;
 
-   TS::print(6, "Waitable waitForTimerOrSemaphore*******************************BEGIN");
-
    // If waiting for timer or semaphore.
    if (mSpecific->mTimerHandle)
    {
@@ -150,14 +148,12 @@ void Waitable::waitForTimerOrSemaphore()
       tObjects[0] = mSpecific->mTimerHandle;
       tObjects[1] = mSpecific->mSemaphoreHandle;
       tRet = WaitForMultipleObjects(2, tObjects, FALSE, -1);
-      TS::print(5, "Waitable WaitForMultipleObjects %d", tRet);
 
       // Test if the timer was signaled or both the timer and the semaphore
       // were signaled.
       if (tRet == WAIT_OBJECT_0)
       {
          // The timer was signaled and maybe the semaphore was signaled.
-         TS::print(5, "Waitable timer or both");
 
          // Increment the timer count and set the flag.
          mTimerCount++;
@@ -177,7 +173,6 @@ void Waitable::waitForTimerOrSemaphore()
       if (tRet == WAIT_OBJECT_0 + 1)
       {
          // The timer was not signaled and the semaphore was signaled.
-         TS::print(5, "Waitable semaphore only");
 
          // Test the semaphore count.
          if (mSpecific->mSemaphoreCount > 0)
@@ -195,13 +190,11 @@ void Waitable::waitForTimerOrSemaphore()
       // Wait for the semaphore.
       DWORD tRet = 0;
       tRet = WaitForSingleObject(mSpecific->mSemaphoreHandle, -1);
-      TS::print(5, "Waitable WaitForSingleObject %d", tRet);
 
       // Test if the semaphore was signaled.
       if (tRet == WAIT_OBJECT_0)
       {
          // The semaphore was signaled.
-         TS::print(5, "Waitable semaphore only");
 
          // Test the semaphore count.
          if (mSpecific->mSemaphoreCount > 0)
@@ -213,8 +206,6 @@ void Waitable::waitForTimerOrSemaphore()
          }
       }
    }
-
-   TS::print(6, "Waitable waitForTimerOrSemaphore*******************************END");
 }
 
 //******************************************************************************

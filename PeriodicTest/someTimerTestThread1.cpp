@@ -28,7 +28,6 @@ TimerTestThread1::TimerTestThread1()
 {
    // Set base class variables.
    BaseClass::setThreadName("TimerTest");
-   BaseClass::setThreadPrintLevel(0);
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
    BaseClass::setThreadPriority(
       Ris::Threads::Priority(

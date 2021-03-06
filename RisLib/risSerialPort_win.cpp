@@ -63,7 +63,7 @@ bool SerialPort::doOpen()
 {
    mValidFlag=false;
 
-   TS::print(1, "SerialPort::doOpen %s", mSettings.mPortDevice);
+   printf("SerialPort::doOpen %s\n", mSettings.mPortDevice);
 
    //***************************************************************************
    //***************************************************************************
@@ -93,7 +93,7 @@ bool SerialPort::doOpen()
 
       if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
       {
-         TS::print(1, "serial_open_error_1 %d %s", GetLastError(), mSettings.mPortDevice);
+         //printf("serial_open_error_1 %d %s\n", GetLastError(), mSettings.mPortDevice);
          Sleep(2000);
       }
       else
@@ -115,7 +115,7 @@ bool SerialPort::doOpen()
 
    if (GetLastError() != ERROR_SUCCESS)
    {
-      TS::print(1, "serial_create_error_2 %d", GetLastError());
+      //printf("serial_create_error_2 %d\n", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
       return false; 
@@ -159,13 +159,12 @@ bool SerialPort::doOpen()
          else
          {
             // Failed, continue to retry
-            TS::print(1, "serial_create_retry %d", GetLastError());
+            //printf("serial_create_retry %d\n", GetLastError());
             doPurge();
             Sleep(100);
             // Retry failed, abort initialization
             if (count++ == 10)
             {
-               Prn::print(Prn::SerialErrorP1, "serial_create_error_3 %d", GetLastError());
                CloseHandle(mSpecific->mPortHandle);
                mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
                return false;
@@ -189,7 +188,7 @@ bool SerialPort::doOpen()
 
    if(!SetCommTimeouts(mSpecific->mPortHandle, &tComTimeout))
    {
-      TS::print(1, "serial_create_error_4 %d", GetLastError());
+      //printf("serial_create_error_4 %d\n", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
       return false;
@@ -210,7 +209,7 @@ bool SerialPort::doOpen()
  
    mValidFlag = true;
 
-   TS::print(1, "SerialPort initialize PASS  $ %s : %16s",
+   printf("SerialPort initialize PASS  $ %s : %16s\n",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
 
@@ -226,7 +225,7 @@ void SerialPort::doClose()
    mTerminateFlag = true;
    if (mValidFlag)
    {
-      TS::print(1, "SerialPort::doClose %s", mSettings.mPortDevice);
+      //printf("SerialPort::doClose %s\n", mSettings.mPortDevice);
       CancelIoEx(mSpecific->mPortHandle,0);
       CloseHandle(mSpecific->mPortHandle);
       CloseHandle(mSpecific->mRxEventHandle);
@@ -264,7 +263,7 @@ void SerialPort::doPurge()
 
 int SerialPort::doSendBytes(const char* aData, int aNumBytes)
 {
-   TS::print(4, "SerialPort::doSendBytes START %d", aNumBytes);
+   //printf("SerialPort::doSendBytes START %d\n", aNumBytes);
    // Guard.
    if (!isValid()) return cRetCodeError;
 
@@ -282,7 +281,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    if (WriteFile(mSpecific->mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped))
    {
       // Write was successful.
-      TS::print(4, "SerialPort::doSendBytes PASS1 %d",aNumBytes);
+      //printf("SerialPort::doSendBytes PASS1 %d\n",aNumBytes);
       return 0;
    }
 
@@ -295,24 +294,24 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       {
          if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
          {
-            TS::print(4, "SerialPort::doSendBytes PASS1 %d",aNumBytes);
+            //prinft("SerialPort::doSendBytes PASS1 %d\n",aNumBytes);
             return 0;
          }
          else
          {
-            TS::print(1, "ERROR SerialPort::doSendBytes ERROR 101, %d", GetLastError());
+            //printf("ERROR SerialPort::doSendBytes ERROR 101, %d\n", GetLastError());
             return cRetCodeError;
          }
       }
       break;
       default:
       {
-         TS::print(1, "ERROR SerialPort::doSendBytes ERROR 102, %d", GetLastError());
+         //printf("ERROR SerialPort::doSendBytes ERROR 102, %d\n", GetLastError());
          return cRetCodeError;
       }
       break;
    }
-   TS::print(4, "SerialPort::doSendBytes PASS3 %d",aNumBytes);
+   //printf("SerialPort::doSendBytes PASS3 %d\n",aNumBytes);
    return 0;
 }
 
@@ -534,7 +533,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       }
       else
       {
-         TS::print(1, "SerialPort::doReceiveBytes ERROR 101 %d", GetLastError());
+         //printf("SerialPort::doReceiveBytes ERROR 101 %d\n", GetLastError());
          return cRetCodeError;
       }
    }
@@ -557,7 +556,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
          {
             if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tBytesRead, FALSE))
             {
-               TS::print(1, "ERROR SerialPort::doReceiveBytes ERROR 102 %d", GetLastError());
+               //printf("ERROR SerialPort::doReceiveBytes ERROR 102 %d\n", GetLastError());
                return cRetCodeError;
             }
             else
@@ -570,12 +569,12 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
          // Read timeput.
          case WAIT_TIMEOUT:
          {
-            TS::print(1, "ERROR SerialPort::doReceiveBytes TIMEOUT %d", GetLastError());
+            //printf("ERROR SerialPort::doReceiveBytes TIMEOUT %d\n", GetLastError());
             return cRetCodeError;
          }
          default:
          {
-            TS::print(1, "ERROR SerialPort::doReceiveBytes ERROR 104 %d", GetLastError());
+            //printf("ERROR SerialPort::doReceiveBytes ERROR 104 %d\n", GetLastError());
             return cRetCodeError;
          }
       }
@@ -585,7 +584,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // If the read was aborted then clear hardware error.
    if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
-      TS::print(1, "ERROR SerialPort::doReceiveBytes ERROR 105 %d", GetLastError());
+      //printf("ERROR SerialPort::doReceiveBytes ERROR 105 %d\n", GetLastError());
       ClearCommError(mSpecific->mPortHandle, 0, 0);
       return cRetCodeError;
    }
@@ -593,12 +592,12 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // If the number of bytes read was wrong then error.
    if (tBytesRead != aNumBytes)
    {
-      TS::print(1, "ERROR SerialPort::doReceiveBytes ERROR 106 %d", GetLastError());
+      //printf("ERROR SerialPort::doReceiveBytes ERROR 106 %d\n", GetLastError());
       return cRetCodeTimeout;
    }
 
    // Done.
-   TS::print(1, "SerialPort::doReceiveBytes PASS1 %d", tBytesRead);
+   //printf("SerialPort::doReceiveBytes PASS1 %d\n", tBytesRead);
    return tBytesRead;
 }
 

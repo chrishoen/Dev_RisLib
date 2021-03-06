@@ -93,7 +93,6 @@ void  SerialStringThread::threadRunFunction()
          if (mSerialPort.doOpen())
          {
             // Connection was established.
-            TS::print(2, "serial port open Connected");
             mConnectionFlag = true;
 
             // Process a session change because a
@@ -103,8 +102,6 @@ void  SerialStringThread::threadRunFunction()
          else
          {
             // Connection was not established.
-            TS::print(2, "serial port not open Not Connected");
-
             // If termination request, exit the loop
             // This is set by shutdown, see below.
             if (mTerminateFlag) break;
@@ -142,7 +139,7 @@ void  SerialStringThread::threadRunFunction()
 
             // Message was not correctly received, so
             // Connection was lost.
-            TS::print(2, "serial port Recv failed, Connection lost");
+            //printf("serial port Recv failed, Connection lost\n");
             mConnectionFlag = false;
 
             // Process a session change because a

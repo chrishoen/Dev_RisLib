@@ -2,7 +2,6 @@
 
 #include <sys/mman.h>
 
-#include "tsThreadServices.h"
 #include "risThreadsProcess.h"
 #include "somePeriodicParms.h"
 
@@ -23,17 +22,6 @@ void main_initialize(int argc,char** argv)
    // Lock memory.
 
    mlockall(MCL_CURRENT | MCL_FUTURE);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Initialize thread services.
-
-   TS::reset();
-   TS::reset();
-   TS::setProgramName("Periodic");
-   TS::setProgramPrintLevel(0);
-   TS::initialize();
 
    //***************************************************************************
    //***************************************************************************
@@ -87,9 +75,6 @@ void main_finalize()
 
    // Exit process.
    Ris::Threads::exitProcess();
-
-   // Finalize thread services.
-   TS::finalize();
 
    // Done.
    printf("\n");

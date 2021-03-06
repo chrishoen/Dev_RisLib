@@ -12,7 +12,6 @@ Byte content message network socket settings class.
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 #include "risThreadsQCall.h"
-#include "tsDefs.h"
 #include "risThreadsPriorities.h"
 
 //******************************************************************************

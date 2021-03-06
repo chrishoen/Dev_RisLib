@@ -443,7 +443,7 @@ void BaseThread::showThreadInfo()
 {
    int tThreadPriority = getThreadPriority();
 
-   printf("ThreadInfo %-20s %1d %3d %-8s\n",
+   printf("ThreadInfo %-20s %2d %3d %-8s\n",
       mThreadName,
       mThreadRunProcessor,
       tThreadPriority,

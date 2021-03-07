@@ -12,6 +12,11 @@ my_special1()
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
+add_subdirectory ("TimerThreadTest")
+return()
+
+add_subdirectory ("CommonLib")
+add_subdirectory ("RisLib")
 add_subdirectory ("PeriodicTest")
 return()
 
@@ -19,10 +24,6 @@ add_subdirectory ("RisLib")
 add_subdirectory ("Test")
 return()
 
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
-add_subdirectory ("TimerThreadTest")
-return()
 
 add_subdirectory ("Program")
 add_subdirectory ("ProtoMsg")

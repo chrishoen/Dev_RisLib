@@ -192,7 +192,7 @@ public:
    // Exceptions should throw a char*.
    virtual void threadExceptionFunction(char* aStr);
 
-   // This virtual is overloaded by inheritors to shutdown the thread
+   // This virtual is overloaded by inheritors to shutdown the thread.
    virtual void shutdownThread();
 
    //***************************************************************************

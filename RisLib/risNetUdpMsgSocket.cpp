@@ -164,7 +164,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      printf("ERROR UdpRxMsgSocket INVALID HEADER\n", mStatus, mError);
+      printf("ERROR UdpRxMsgSocket INVALID HEADER %d %d\n", mStatus, mError);
       return false;
    }
 
@@ -181,7 +181,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Test for errors.
    if (aMsg == 0)
    {
-      printf("ERROR UdpRxMsgSocket INVALID MESSAGE\n", mStatus, mError);
+      printf("ERROR UdpRxMsgSocket INVALID MESSAGE %d %d\n", mStatus, mError);
       mStatus = tByteBuffer.getError();
       return false;
    }

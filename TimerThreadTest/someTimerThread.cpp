@@ -11,7 +11,6 @@ Description:
 
 #include "risProgramTime.h"
 #include "risThreadsPriorities.h"
-#include "tsThreadServices.h"
 
 #define  _SOMETIMERTHREAD_CPP_
 #include "someTimerThread.h"
@@ -27,8 +26,7 @@ TimerThread::TimerThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Timer");
-   BaseClass::setThreadPrintLevel(0);
-
+   
    // Set base class variables.
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
 

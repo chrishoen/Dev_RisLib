@@ -61,12 +61,7 @@ BaseThread::BaseThread()
    mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
-
-
-   // Create this now in the thread context of the thread creator.
-   // It will be copied to the thread local storage variable at the
-   // start of the thread run function.
-   mThreadLocal = new TS::ThreadLocal;
+   mTerminateFlag = false;
 }
 
 //******************************************************************************
@@ -278,28 +273,9 @@ void BaseThread::waitForThreadTerminate()
 //******************************************************************************
 //******************************************************************************
 
-BaseThread::BaseThread() 
-{
-   mTerminateFlag = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void BaseThread::shutdownThread()
 {
    mTerminateFlag = true;
-   waitForThreadTerminate();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void BaseThreadWithTermSem::shutdownThread()
-{
-   mTerminateSem.put();
    waitForThreadTerminate();
 }
 
@@ -336,7 +312,7 @@ int BaseThread::getThreadProcessorNumber()
 
 void BaseThread::showThreadFullInfo()
 {
-   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", mThreadLocal->mThreadName);
+   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", mThreadName);
 
    unsigned tPriorityClass = GetPriorityClass(GetCurrentProcess());
    int tThreadPriority = GetThreadPriority(mBaseSpecific->mHandle);
@@ -369,7 +345,7 @@ void BaseThread::showThreadInfo()
    int tThreadPriority = getThreadPriority();
 
    printf("ThreadInfo %-20s %1d %3d %-8s\n",
-      mThreadLocal->mThreadName,
+      mThreadName,
       mThreadRunProcessor,
       tThreadPriority,
       asStringThreadRunState());

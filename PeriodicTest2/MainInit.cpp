@@ -12,9 +12,9 @@
 
 void main_initialize(int argc,char** argv)
 {
-   printf("PeriodicTest Program****************************************BEGIN\n");
-   printf("PeriodicTest Program****************************************BEGIN\n");
-   printf("PeriodicTest Program****************************************BEGIN\n\n");
+   printf("PeriodicTest2 Program****************************************BEGIN\n");
+   printf("PeriodicTest2 Program****************************************BEGIN\n");
+   printf("PeriodicTest2 Program****************************************BEGIN\n\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -78,7 +78,7 @@ void main_finalize()
 
    // Done.
    printf("\n");
-   printf("PeriodicTest Program****************************************END\n\n");
+   printf("PeriodicTest2 Program****************************************END\n\n");
 }
 
 //******************************************************************************

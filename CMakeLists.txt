@@ -12,7 +12,8 @@ my_special1()
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
-add_subdirectory ("PeriodicTest")
+add_subdirectory ("PeriodicTest1")
+add_subdirectory ("PeriodicTest2")
 return()
 
 add_subdirectory ("CommonLib")

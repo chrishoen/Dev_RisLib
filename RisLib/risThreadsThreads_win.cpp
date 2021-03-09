@@ -61,6 +61,7 @@ BaseThread::BaseThread()
    mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
+   mThreadCurrentProcessor = 0;
    mTerminateFlag = false;
 }
 
@@ -303,7 +304,8 @@ int BaseThread::getThreadPriority()
 
 int BaseThread::getThreadProcessorNumber()
 {
-   return GetCurrentProcessorNumber();
+   mThreadCurrentProcessor = GetCurrentProcessorNumber();
+   return mThreadCurrentProcessor;
 }
 
 //******************************************************************************

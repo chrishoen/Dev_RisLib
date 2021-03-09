@@ -84,6 +84,10 @@ public:
    // run function.
    int mThreadRunProcessor;
 
+   // The processor that was current at the last call to get
+   // the current processor.
+   int mThreadCurrentProcessor;
+
    // Pimpl pattern. Used to hide details of the operating system specific
    // variables, like the thread handle, from the .h file so that this
    // include file can be complied by different compliers. The class is

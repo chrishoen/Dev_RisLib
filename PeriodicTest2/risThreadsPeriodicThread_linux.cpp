@@ -164,7 +164,7 @@ void BasePeriodicThread::threadRunFunction()
       // Test for end of trial.
       if (mStatTimerCount == mStatTimerCountMax - 1)
       {
-         Prn::print(0, "finishTrial1 %d", mStatTimerCount);
+         Prn::print(0, "finishTrial1 %d %d", mStatTimerCount, mStatJitter.mPutCount);
          // Finish the statistics.
          mStatJitter.finishTrial();
          mStatExec.finishTrial();

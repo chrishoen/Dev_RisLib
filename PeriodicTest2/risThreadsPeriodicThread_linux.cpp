@@ -74,7 +74,7 @@ void BasePeriodicThread::threadRunFunction()
    // Convert to ns.
    tSleepTimeNs = Ris::NanoConvert::getNsFromTimespec(&tSleepTimespec);
 
-   // initialize statistics variables.
+   // Initialize statistics variables.
    mStatTimerCountMax = mStatPeriod / mTimerPeriod;
 
    //***************************************************************************
@@ -89,7 +89,7 @@ void BasePeriodicThread::threadRunFunction()
       //************************************************************************
       // Advance periodically according to the system clock. 
       
-      // Advance the sleep time by the period.
+      // Advance the absolute sleep time by the period.
       tSleepTimeNs += tTimerPeriodNs;
 
       // Convert to timespec.
@@ -120,13 +120,16 @@ void BasePeriodicThread::threadRunFunction()
       // Test if this is the first time.
       if (mTimerCount == 0)
       {
+         // Store the first begin time as the current last.
+         mStatLastBeginTimeUs = mStatBeginTimeUs;
+
          // Ignore everything else.
          mTimerCount++;
          continue;
       }
 
       // Calculate the time durations.
-      mStatJitterTimeUs = mStatBeginTimeUs - mStatLastBeginTimeUs;
+      mStatJitterTimeUs = mStatBeginTimeUs - mStatLastBeginTimeUs - tTimerPeriodUs;
       mStatLastBeginTimeUs = mStatBeginTimeUs;
       mStatExecTimeUs = mStatEndTimeUs - mStatBeginTimeUs;
 
@@ -135,29 +138,21 @@ void BasePeriodicThread::threadRunFunction()
       //************************************************************************
       // Calculate statistics on the times. 
 
-      // Timer and count flags.
-      bool tStartTrial = mStatTimerCount == 0;
-      bool tEndTrial = mStatTimerCount == mStatTimerCountMax - 1;
-
       // Test for the start of trial.
       if (mStatTimerCount == 0)
       {
          // Start the statistics.
-         //Prn::print(0, "startTrial1  %d", mStatTimerCount);
          mStatJitter.startTrial();
          mStatExec.startTrial();
       }
 
       // Update the statistics.
-      //Prn::print(0, "updateTrial1 %d", mStatTimerCount);
       mStatJitter.put(mStatJitterTimeUs);
       mStatExec.put(mStatExecTimeUs);
 
       // Test for end of trial.
       if (mStatTimerCount == mStatTimerCountMax - 1)
       {
-         //Prn::print(0, "finishTrial1 %d %d", mStatTimerCount, mStatJitter.mPutCount);
-
          // Finish the statistics.
          mStatJitter.finishTrial();
          mStatExec.finishTrial();

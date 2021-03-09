@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Periodic thread base class
+Periodic thread base class.
 ==============================================================================*/
 
 //******************************************************************************
@@ -23,9 +23,17 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is an extension of the virtual base class for general purpose threads.
-// It provides a basis for a periodic thread that uses a polling termination
-// policy.
+// This provides a base class for periodic timer threads. Inheritors provide
+// a timer handler function that gets called periodically. It inherits from
+// the thread base class to obtain basic thread functionality.
+// 
+// This also measures execution times and provides statistics on periodic
+// jitter and on the exection time of the inheritor supplied timer handler
+// function.
+//   
+// The execution times are repeatedly measured and associtated statistics 
+// are calculated at a specific period. The results are latched and can be
+// polled by a monitoring thread.
 
 class  BasePeriodicThread : public BaseThread
 {
@@ -38,11 +46,11 @@ public:
    //***************************************************************************
    // Members.
 
-   // Timer period, milliseconds. Inheritors should set this in their
-   // constructors. 
+   // Timer period, milliseconds. This is the periodic time that the inheritor
+   // timer handler function gets called.
    int mTimerPeriod;
 
-   // Timer count incremented at each timer execution.
+   // Timer count incremented at each timer handler execution.
    int mTimerCount;
 
    // put in base class.
@@ -53,11 +61,12 @@ public:
    //***************************************************************************
    // Members.
 
-   // Trial statistics for execution periodic jitter and execution time.
+   // Trial statistics for periodic jitter and execution time.
    TrialStatistics mStatJitter;
    TrialStatistics mStatExec;
 
-   // Trial statistics period, milliseconds.
+   // Trial statistics period, milliseconds. This is the time for which
+   // the statistics are measured and calculated.
    int mStatPeriod;
 
    // Latched results. These are copied from the statistics at the end 

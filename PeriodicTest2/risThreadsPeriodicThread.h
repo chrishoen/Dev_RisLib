@@ -9,6 +9,7 @@ Periodic thread base class
 //******************************************************************************
 
 #include "risThreadsThreads.h"
+#include "risStatistics.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -39,10 +40,60 @@ public:
 
    // Timer period, milliseconds. Inheritors should set this in their
    // constructors. 
-   int   mTimerPeriod;
+   int mTimerPeriod;
 
    // Timer count incremented at each timer execution.
-   int   mTimerCount;
+   int mTimerCount;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Trial statistics for execution periodic jitter and execution time.
+   TrialStatistics mStatJitter;
+   TrialStatistics mStatExec;
+
+   // Trial statistics period, milliseconds.
+   int mStatPeriod;
+
+   // Latched results. These are copied from the statistics at the end 
+   // of a repeated trial. They can be used by a monitor thread to poll
+   // the results.
+   double mStatJitterMean;
+   double mStatJitterStdDev;
+   double mStatJitterMin;
+   double mStatJitterMax;
+   double mStatExecMean;
+   double mStatExecStdDev;
+   double mStatExecMin;
+   double mStatExecMax;
+
+   // If true then the above latched results have been updated. This is
+   // used by a monitoring thread to poll the results. The monitoring
+   // thread resets it after reading the above latched results.
+   bool mStatPollFlag;
+
+   // Timer count incremented at each timer execution for statistics.
+   // This resets at the beginning of a statistics trial.
+   int mStatTimerCount;
+
+   // Maximum statistics timer count. This defines how many timer counts
+   // are in a statistics trial. It has a value that is the trial statistics
+   // period divided by the thread timer period.
+   // The statistics timer count varies as 0..timer count max - 1.
+   int mStatTimerCountMax;
+
+   // The beginning time of when the timer execution function is called;
+   // The previous value.
+   // The end time of when the timer execution function is called;
+   double mStatBeginTimeUs;
+   double mStatLastBeginTimeUs;
+   double mStatEndTimeUs;
+
+   // The current jitter and execution times.
+   double mStatJitterTimeUs;
+   double mStatExecTimeUs;
 
    //***************************************************************************
    //***************************************************************************

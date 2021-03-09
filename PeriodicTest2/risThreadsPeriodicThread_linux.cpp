@@ -26,6 +26,7 @@ BasePeriodicThread::BasePeriodicThread()
    mTimerPeriod = 1000;
    mTimerCount = 0;
    mTerminateFlag = false;
+   mPollThreadProcessor = false;
 
    // Set class variables.
    mStatPeriod = 0;
@@ -109,6 +110,13 @@ void BasePeriodicThread::threadRunFunction()
       // Call the inheritor's timer handler function.
       executeOnTimer(mTimerCount);
 
+      // Test the poll processor flag and end of trial.
+      if (mPollThreadProcessor && mStatTimerCount == mStatTimerCountMax - 1)
+      {
+         // Get the current processor number.
+         BaseClass::getThreadProcessorNumber();
+      }
+
       // Get the time after timer handler execution.
       mStatEndTimeUs = getCurrentProgramTimeUS();;
 
@@ -123,7 +131,7 @@ void BasePeriodicThread::threadRunFunction()
          // Store the first begin time as the current last.
          mStatLastBeginTimeUs = mStatBeginTimeUs;
 
-         // Ignore everything else.
+         // Ignore everything else in this loop.
          mTimerCount++;
          continue;
       }

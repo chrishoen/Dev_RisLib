@@ -70,12 +70,13 @@ public:
    // Test mode 1,2.
    int  mTestMode;
 
-   // Timer thread periods.
+   // Timer thread variables.
    int  mMonitorThreadPeriod;
    int  mTestThreadPeriod;
    int  mTestThreadProcessor;
    int  mTestThreadPriority;
    int  mStatPeriod;
+   bool mPollThreadProcessor;
 
    // Sample window size.
    int mSampleSize;

@@ -48,6 +48,7 @@ void PeriodicParms::reset()
    mTestThreadPriority = 80;
    mStatPeriod = 0;
    mSampleSize = 0;
+   mPollThreadProcessor = false;
 }
 
 //******************************************************************************
@@ -69,6 +70,7 @@ void PeriodicParms::show()
    printf("TestThreadPriority       %-10d\n", mTestThreadPriority);
    printf("StatPeriod               %-10d\n", mStatPeriod);
    printf("SampleSize               %-10d\n", mSampleSize);
+   printf("PollThreadProcessor      %-10s\n", my_string_from_bool(mPollThreadProcessor));
 }
 
 //******************************************************************************
@@ -90,6 +92,7 @@ void PeriodicParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TestThreadPriority"))    mTestThreadPriority = aCmd->argInt(1);
    if (aCmd->isCmd("StatPeriod"))            mStatPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("SampleSize"))            mSampleSize = aCmd->argInt(1);
+   if (aCmd->isCmd("PollThreadProcessor"))   mPollThreadProcessor = aCmd->argBool(1);
 }
 
 //******************************************************************************

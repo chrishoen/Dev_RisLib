@@ -43,17 +43,16 @@ MonitorThread::MonitorThread()
 
 void MonitorThread::executeOnTimer(int aTimeCount)
 {
-   if (gTimerTestThread1->mUpdateFlag)
+   if (gTimerTestThread1->mStatPollFlag || true)
    {
-      gTimerTestThread1->mUpdateFlag = false;
-      Prn::print(0, "Timer1 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
-         gTimerTestThread1->mTestCount,
+      gTimerTestThread1->mStatPollFlag = false;
+      Prn::print(0, "Timer2 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f",
+         gTimerTestThread1->mStatCount,
          gTimerTestThread1->mProcessorNumber,
-         gTimerTestThread1->mMean,
-         gTimerTestThread1->mStdDev,
-         gTimerTestThread1->mMin,
-         gTimerTestThread1->mMax,
-         gTimerTestThread1->mMaxError);
+         gTimerTestThread1->mStatJitterMean,
+         gTimerTestThread1->mStatJitterStdDev,
+         gTimerTestThread1->mStatJitterMin,
+         gTimerTestThread1->mStatJitterMax);
    }
 }
 

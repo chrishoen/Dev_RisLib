@@ -9,7 +9,6 @@ Timer test thread.
 //******************************************************************************
 
 #include "risThreadsPeriodicThread.h"
-#include "risTimeMarker.h"
 
 namespace Some
 {
@@ -27,26 +26,10 @@ public:
    //******************************************************************************
    // Members.
 
-   Ris::PeriodicTimeMarker mTimeMarker;
-
-   int  mTestCode;
-   int  mTestCount;
-
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
    // Members.
-
-   // If true then the test variables have been updated.
-   bool mUpdateFlag;
-
-   // Test variables.
-   int mProcessorNumber;
-   double mMean;
-   double mStdDev;
-   double mMin;
-   double mMax;
-   double mMaxError;
 
    //******************************************************************************
    //******************************************************************************

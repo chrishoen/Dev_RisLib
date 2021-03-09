@@ -45,6 +45,9 @@ public:
    // Timer count incremented at each timer execution.
    int mTimerCount;
 
+   // put in base class.
+   int mProcessorNumber;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -77,6 +80,9 @@ public:
    // Timer count incremented at each timer execution for statistics.
    // This resets at the beginning of a statistics trial.
    int mStatTimerCount;
+
+   // Count incremented at each periodic evaluation of statistics.
+   int mStatCount;
 
    // Maximum statistics timer count. This defines how many timer counts
    // are in a statistics trial. It has a value that is the trial statistics

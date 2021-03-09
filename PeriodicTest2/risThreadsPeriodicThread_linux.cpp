@@ -22,10 +22,30 @@ namespace Threads
 
 BasePeriodicThread::BasePeriodicThread()
 {
+   // Set base class variables.
    mTimerPeriod = 1000;
    mTimerCount = 0;
    mTerminateFlag = false;
 
+   // Set class variables.
+   mStatPeriod = 0;
+   mStatJitterMean = 0;
+   mStatJitterStdDev = 0;
+   mStatJitterMin = 0;
+   mStatJitterMax = 0;
+   mStatExecMean = 0;
+   mStatExecStdDev = 0;
+   mStatExecMin = 0;
+   mStatExecMax = 0;
+   mStatPollFlag = false;
+   mStatTimerCount = 0;
+   mStatCount = 0;
+   mStatTimerCountMax = 0;
+   mStatBeginTimeUs = 0;
+   mStatLastBeginTimeUs = 0;
+   mStatEndTimeUs = 0;
+   mStatJitterTimeUs = 0;
+   mStatExecTimeUs = 0;
 }
 
 //******************************************************************************
@@ -148,6 +168,9 @@ void BasePeriodicThread::threadRunFunction()
          mStatExecStdDev = mStatExec.mStdDev;
          mStatExecMin = mStatExec.mMinX;
          mStatExecMax = mStatExec.mMaxX;
+
+         // Increment for each trial evaluation.
+         mStatCount++;
 
          // Set the poll flag.
          mStatPollFlag = true;

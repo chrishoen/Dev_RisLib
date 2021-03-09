@@ -43,7 +43,7 @@ MonitorThread::MonitorThread()
 
 void MonitorThread::executeOnTimer(int aTimeCount)
 {
-   if (gTimerTestThread1->mStatPollFlag || true)
+   if (gTimerTestThread1->mStatPollFlag)
    {
       gTimerTestThread1->mStatPollFlag = false;
       Prn::print(0, "Timer2 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f",

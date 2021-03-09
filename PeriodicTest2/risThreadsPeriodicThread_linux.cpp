@@ -122,14 +122,21 @@ void BasePeriodicThread::threadRunFunction()
       {
          // Store the initial last.
          mStatLastBeginTimeUs = mStatBeginTimeUs;
+
+         // Start the statistics.
+         Prn::print(0, "startTrial1  %d", mStatTimerCount);
+         mStatJitter.startTrial();
+         mStatExec.startTrial();
+
+         // Ignore everything else.
+         mTimerCount++;
+         continue;
       }
-      else
-      {
-         // Calculate the time durations.
-         mStatJitterTimeUs = mStatBeginTimeUs - mStatLastBeginTimeUs;
-         mStatLastBeginTimeUs = mStatBeginTimeUs;
-         mStatExecTimeUs = mStatEndTimeUs - mStatBeginTimeUs;
-      }
+
+      // Calculate the time durations.
+      mStatJitterTimeUs = mStatBeginTimeUs - mStatLastBeginTimeUs;
+      mStatLastBeginTimeUs = mStatBeginTimeUs;
+      mStatExecTimeUs = mStatEndTimeUs - mStatBeginTimeUs;
 
       //************************************************************************
       //************************************************************************
@@ -140,26 +147,19 @@ void BasePeriodicThread::threadRunFunction()
       bool tStartTrial = mStatTimerCount == 0;
       bool tEndTrial = mStatTimerCount == mStatTimerCountMax - 1;
 
-      // Test for the first start of trial.
-      if (mTimerCount == 0)
+      // Test for the start of trial.
+      if (mStatTimerCount == 0)
       {
          // Start the statistics.
          Prn::print(0, "startTrial1  %d", mStatTimerCount);
          mStatJitter.startTrial();
          mStatExec.startTrial();
+      }
 
-         // Update some of the statistics.
-         Prn::print(0, "updateTrial1 %d", mStatTimerCount);
-         mStatExec.put(mStatExecTimeUs);
-      }
-      // Test for a valid sample.
-      else if (mTimerCount > 1)
-      {
-         // Update the statistics.
-         Prn::print(0, "updateTrial2 %d", mStatTimerCount);
-         mStatJitter.put(mStatJitterTimeUs);
-         mStatExec.put(mStatExecTimeUs);
-      }
+      // Update the statistics.
+      Prn::print(0, "updateTrial1 %d", mStatTimerCount);
+      mStatJitter.put(mStatExecTimeUs);
+      mStatExec.put(mStatExecTimeUs);
 
       // Test for end of trial.
       if (mStatTimerCount == mStatTimerCountMax - 1)
@@ -184,16 +184,6 @@ void BasePeriodicThread::threadRunFunction()
 
          // Set the poll flag.
          mStatPollFlag = true;
-
-         Prn::print(0, "startTrial2  %d", mStatTimerCount);
-         // Start the statistics.
-         mStatJitter.startTrial();
-         mStatExec.startTrial();
-
-         // Update the statistics.
-         Prn::print(0, "updateTrial2 %d", mStatTimerCount);
-         mStatJitter.put(mStatJitterTimeUs);
-         mStatExec.put(mStatExecTimeUs);
       }
 
       //************************************************************************

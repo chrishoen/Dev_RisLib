@@ -43,6 +43,7 @@ MonitorThread::MonitorThread()
 
 void MonitorThread::executeOnTimer(int aTimeCount)
 {
+   return;
    if (gTimerTestThread1->mStatPollFlag || true)
    {
       gTimerTestThread1->mStatPollFlag = false;

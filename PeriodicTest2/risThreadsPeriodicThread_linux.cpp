@@ -120,8 +120,7 @@ void BasePeriodicThread::threadRunFunction()
       // Timer and count flags.
       bool tFirstFlag = mTimerCount == 0;
       bool tStartTrial = mStatTimerCount == 0;
-      bool tEndTrial = mStatTimerCount == mStatTimerCount - 1;
-      if(++mStatTimerCount== mStatTimerCountMax) mStatTimerCount = 0;
+      bool tEndTrial = mStatTimerCount == mStatTimerCountMax - 1;
 
       // Calculate the time durations.
       if (tFirstFlag)
@@ -138,6 +137,7 @@ void BasePeriodicThread::threadRunFunction()
       // Test for start of trial.
       if (tStartTrial)
       {
+         Prn::print(0, "startTrial  %d", mStatTimerCount);
          // Start the statistics.
          mStatJitter.startTrial();
          mStatExec.startTrial();
@@ -147,6 +147,7 @@ void BasePeriodicThread::threadRunFunction()
       }
       else
       {
+         Prn::print(0, "updateTrial %d", mStatTimerCount);
          // Update the statistics.
          mStatJitter.put(mStatJitterTimeUs);
          mStatExec.put(mStatExecTimeUs);
@@ -155,6 +156,7 @@ void BasePeriodicThread::threadRunFunction()
       // Test for end of trial.
       if (tEndTrial)
       {
+         Prn::print(0, "finishTrial %d", mStatTimerCount);
          // Finish the statistics.
          mStatJitter.finishTrial();
          mStatExec.finishTrial();
@@ -175,6 +177,9 @@ void BasePeriodicThread::threadRunFunction()
          // Set the poll flag.
          mStatPollFlag = true;
       }
+
+      // Update the counter.
+      if (++mStatTimerCount == mStatTimerCountMax) mStatTimerCount = 0;
    }
 }
 

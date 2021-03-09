@@ -46,6 +46,7 @@ void PeriodicParms::reset()
    mTestThreadPeriod = 0;
    mTestThreadProcessor = -1;
    mTestThreadPriority = 80;
+   mStatPeriod = 0;
    mSampleSize = 0;
 }
 
@@ -66,6 +67,7 @@ void PeriodicParms::show()
    printf("TestThreadPeriod         %-10d\n", mTestThreadPeriod);
    printf("TestThreadProcessor      %-10d\n", mTestThreadProcessor);
    printf("TestThreadPriority       %-10d\n", mTestThreadPriority);
+   printf("StatPeriod               %-10d\n", mStatPeriod);
    printf("SampleSize               %-10d\n", mSampleSize);
 }
 
@@ -86,6 +88,7 @@ void PeriodicParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TestThreadPeriod"))      mTestThreadPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("TestThreadProcessor"))   mTestThreadProcessor = aCmd->argInt(1);
    if (aCmd->isCmd("TestThreadPriority"))    mTestThreadPriority = aCmd->argInt(1);
+   if (aCmd->isCmd("StatPeriod"))            mStatPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("SampleSize"))            mSampleSize = aCmd->argInt(1);
 }
 

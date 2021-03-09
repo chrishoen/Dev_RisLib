@@ -120,6 +120,7 @@ void BasePeriodicThread::threadRunFunction()
       // Test if this is the first time.
       if (mTimerCount == 0)
       {
+#if 0
          // Store the initial last.
          mStatLastBeginTimeUs = mStatBeginTimeUs;
 
@@ -127,7 +128,7 @@ void BasePeriodicThread::threadRunFunction()
          Prn::print(0, "startTrial1  %d", mStatTimerCount);
          mStatJitter.startTrial();
          mStatExec.startTrial();
-
+#endif
          // Ignore everything else.
          mTimerCount++;
          continue;
@@ -165,6 +166,7 @@ void BasePeriodicThread::threadRunFunction()
       if (mStatTimerCount == mStatTimerCountMax - 1)
       {
          Prn::print(0, "finishTrial1 %d %d", mStatTimerCount, mStatJitter.mPutCount);
+
          // Finish the statistics.
          mStatJitter.finishTrial();
          mStatExec.finishTrial();

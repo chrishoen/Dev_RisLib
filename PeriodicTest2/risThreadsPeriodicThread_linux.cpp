@@ -107,7 +107,7 @@ void BasePeriodicThread::threadRunFunction()
       mStatBeginTimeUs = getCurrentProgramTimeUS();;
 
       // Call the inheritor's timer handler function.
-      executeOnTimer(mTimerCount++);
+      executeOnTimer(mTimerCount);
 
       // Get the time after timer handler execution.
       mStatEndTimeUs = getCurrentProgramTimeUS();;
@@ -115,48 +115,56 @@ void BasePeriodicThread::threadRunFunction()
       //************************************************************************
       //************************************************************************
       //************************************************************************
-      // Calculate statistics on the times. 
+      // Calculate the time durations. 
 
-      // Timer and count flags.
-      bool tFirstFlag = mTimerCount == 0;
-      bool tStartTrial = mStatTimerCount == 0;
-      bool tEndTrial = mStatTimerCount == mStatTimerCountMax - 1;
-
-      // Calculate the time durations.
-      if (tFirstFlag)
+      // Test if this is the first time.
+      if (mTimerCount == 0)
       {
+         // Store the initial last.
          mStatLastBeginTimeUs = mStatBeginTimeUs;
       }
       else
       {
+         // Calculate the time durations.
          mStatJitterTimeUs = mStatBeginTimeUs - mStatLastBeginTimeUs;
          mStatLastBeginTimeUs = mStatBeginTimeUs;
          mStatExecTimeUs = mStatEndTimeUs - mStatBeginTimeUs;
       }
 
-      // Test for start of trial.
-      if (tStartTrial)
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Calculate statistics on the times. 
+
+      // Timer and count flags.
+      bool tStartTrial = mStatTimerCount == 0;
+      bool tEndTrial = mStatTimerCount == mStatTimerCountMax - 1;
+
+      // Test for the first start of trial.
+      if (mTimerCount == 0)
       {
-         Prn::print(0, "startTrial  %d", mStatTimerCount);
          // Start the statistics.
+         Prn::print(0, "startTrial1  %d", mStatTimerCount);
          mStatJitter.startTrial();
          mStatExec.startTrial();
 
-         // Update the statistics.
+         // Update some of the statistics.
+         Prn::print(0, "updateTrial1 %d", mStatTimerCount);
          mStatExec.put(mStatExecTimeUs);
       }
-      else
+      // Test for a valid sample.
+      else if (mTimerCount > 1)
       {
-         Prn::print(0, "updateTrial %d", mStatTimerCount);
          // Update the statistics.
+         Prn::print(0, "updateTrial2 %d", mStatTimerCount);
          mStatJitter.put(mStatJitterTimeUs);
          mStatExec.put(mStatExecTimeUs);
       }
 
       // Test for end of trial.
-      if (tEndTrial)
+      if (mStatTimerCount == mStatTimerCountMax - 1)
       {
-         Prn::print(0, "finishTrial %d", mStatTimerCount);
+         Prn::print(0, "finishTrial1 %d", mStatTimerCount);
          // Finish the statistics.
          mStatJitter.finishTrial();
          mStatExec.finishTrial();
@@ -176,10 +184,29 @@ void BasePeriodicThread::threadRunFunction()
 
          // Set the poll flag.
          mStatPollFlag = true;
+
+         Prn::print(0, "startTrial2  %d", mStatTimerCount);
+         // Start the statistics.
+         mStatJitter.startTrial();
+         mStatExec.startTrial();
+
+         // Update the statistics.
+         Prn::print(0, "updateTrial2 %d", mStatTimerCount);
+         mStatJitter.put(mStatJitterTimeUs);
+         mStatExec.put(mStatExecTimeUs);
       }
+
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Loop done.
+
+      // Update the counter.
+      mTimerCount++;
 
       // Update the counter.
       if (++mStatTimerCount == mStatTimerCountMax) mStatTimerCount = 0;
+
    }
 }
 

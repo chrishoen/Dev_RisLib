@@ -77,10 +77,12 @@ public:
    double mStatJitterStdDev;
    double mStatJitterMin;
    double mStatJitterMax;
+   double mStatJitterMaxMax;
    double mStatExecMean;
    double mStatExecStdDev;
    double mStatExecMin;
    double mStatExecMax;
+   double mStatExecMaxMax;
 
    // If true then the above latched results have been updated. This is
    // used by a monitoring thread to poll the results. The monitoring

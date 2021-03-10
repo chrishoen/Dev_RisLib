@@ -95,6 +95,7 @@ public:
    double   mUX;           // uncertainty (standard deviation)
    double   mMinX;         // minimum 
    double   mMaxX;         // maximum
+   double   mMaxMaxX;      // maximum for all times
    double   mMean;         // expectation (mean)
    double   mStdDev;       // uncertainty (standard deviation)
    double   mVariance;     // variance

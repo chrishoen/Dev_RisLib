@@ -34,10 +34,12 @@ BasePeriodicThread::BasePeriodicThread()
    mStatJitterStdDev = 0;
    mStatJitterMin = 0;
    mStatJitterMax = 0;
+   mStatJitterMaxMax = 0;
    mStatExecMean = 0;
    mStatExecStdDev = 0;
    mStatExecMin = 0;
    mStatExecMax = 0;
+   mStatExecMaxMax = 0;
    mStatPollFlag = false;
    mStatTimerCount = 0;
    mStatCount = 0;
@@ -170,10 +172,12 @@ void BasePeriodicThread::threadRunFunction()
          mStatJitterStdDev = mStatJitter.mStdDev;
          mStatJitterMin = mStatJitter.mMinX;
          mStatJitterMax = mStatJitter.mMaxX;
+         mStatJitterMaxMax = mStatJitter.mMaxMaxX;
          mStatExecMean = mStatExec.mMean;
          mStatExecStdDev = mStatExec.mStdDev;
          mStatExecMin = mStatExec.mMinX;
          mStatExecMax = mStatExec.mMaxX;
+         mStatExecMaxMax = mStatExec.mMaxMaxX;
 
          // Increment for each trial evaluation.
          mStatCount++;

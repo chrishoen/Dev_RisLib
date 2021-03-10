@@ -172,6 +172,7 @@ void PeriodicStatistics::show()
 
 TrialStatistics::TrialStatistics()
 {
+   mMaxMaxX = -1E9;
    startTrial();
 }
 
@@ -229,6 +230,7 @@ void TrialStatistics::put(double aX)
    {
       if (mX < mMinX) mMinX = mX;
       if (mX > mMaxX) mMaxX = mX;
+      if (mX > mMaxMaxX) mMaxMaxX = mX;
    }
 
    //--------------------------------------------------------------------------- 

@@ -72,7 +72,7 @@ void BasePeriodicThread::threadRunFunction()
    double     tTimerPeriodUs = tTimerPeriodNs / 1000.0;
 
    // Get current timespec at start.
-   clock_gettime(CLOCK_MONOTONIC, &tSleepTimespec);
+   clock_gettime(CLOCK_REALTIME, &tSleepTimespec);
 
    // Convert to ns.
    tSleepTimeNs = Ris::NanoConvert::getNsFromTimespec(&tSleepTimespec);
@@ -99,7 +99,7 @@ void BasePeriodicThread::threadRunFunction()
       tSleepTimespec = Ris::NanoConvert::getTimespecFromNs(tSleepTimeNs);
 
       // Sleep until the absolute sleep time.
-      clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &tSleepTimespec, 0);
+      clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &tSleepTimespec, 0);
 
       //************************************************************************
       //************************************************************************
@@ -184,6 +184,9 @@ void BasePeriodicThread::threadRunFunction()
 
          // Set the poll flag.
          mStatPollFlag = true;
+
+         // Get the current processor number for this thread.
+         BaseThread::getThreadProcessorNumber();
       }
 
       //************************************************************************

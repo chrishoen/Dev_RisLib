@@ -53,9 +53,12 @@ public:
    // Timer count incremented at each timer handler execution.
    int mTimerCount;
 
-   // if true then get the thread processor number when the statistics
+   // If true then get the thread processor number when the statistics
    // are finished.
-   bool mPollThreadProcessor;
+   bool mPollProcessor;
+
+   // Clock selector,
+   int  mClockSelect;
 
    //***************************************************************************
    //***************************************************************************

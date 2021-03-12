@@ -27,7 +27,6 @@ BasePeriodicThread::BasePeriodicThread()
    mTimerCount = 0;
    mTerminateFlag = false;
    mPollProcessor = false;
-   mClockSelect = 0;
 
    // Set class variables.
    mStatPeriod = 0;
@@ -73,15 +72,7 @@ void BasePeriodicThread::threadRunFunction()
    double     tTimerPeriodUs = tTimerPeriodNs / 1000.0;
 
    // Get current timespec at start.
-   if (mClockSelect == 0)
-   {
-      clock_gettime(CLOCK_MONOTONIC, &tSleepTimespec);
-   }
-   else
-   {
-      clock_gettime(CLOCK_REALTIME, &tSleepTimespec);
-   }
-
+   clock_gettime(CLOCK_MONOTONIC, &tSleepTimespec);
 
    // Convert to ns.
    tSleepTimeNs = Ris::NanoConvert::getNsFromTimespec(&tSleepTimespec);
@@ -108,14 +99,7 @@ void BasePeriodicThread::threadRunFunction()
       tSleepTimespec = Ris::NanoConvert::getTimespecFromNs(tSleepTimeNs);
 
       // Sleep until the absolute sleep time.
-      if (mClockSelect == 0)
-      {
-         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &tSleepTimespec, 0);
-      }
-      else
-      {
-         clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &tSleepTimespec, 0);
-      }
+      clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &tSleepTimespec, 0);
 
       //************************************************************************
       //************************************************************************

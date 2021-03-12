@@ -77,7 +77,6 @@ public:
    int  mTestThreadPriority;
    int  mStatPeriod;
    bool mPollProcessor;
-   int  mClockSelect;
 
    // Sample window size.
    int mSampleSize;

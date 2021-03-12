@@ -49,7 +49,6 @@ void PeriodicParms::reset()
    mStatPeriod = 0;
    mSampleSize = 0;
    mPollProcessor = false;
-   mClockSelect = 0;
 }
 
 //******************************************************************************
@@ -72,7 +71,6 @@ void PeriodicParms::show()
    printf("StatPeriod               %-10d\n", mStatPeriod);
    printf("SampleSize               %-10d\n", mSampleSize);
    printf("PollProcessor            %-10s\n", my_string_from_bool(mPollProcessor));
-   printf("ClockSelect              %-10d\n", mClockSelect);
 }
 
 //******************************************************************************
@@ -95,7 +93,6 @@ void PeriodicParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("StatPeriod"))            mStatPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("SampleSize"))            mSampleSize = aCmd->argInt(1);
    if (aCmd->isCmd("PollProcessor"))         mPollProcessor = aCmd->argBool(1);
-   if (aCmd->isCmd("ClockSelect"))           mClockSelect = aCmd->argInt(1);
 }
 
 //******************************************************************************

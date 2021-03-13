@@ -175,18 +175,20 @@ namespace Prn
    static const int  Show2             = 241;
    static const int  Show3             = 242;
    static const int  Show4             = 243;
+   static const int  Show5             = 244;
+   static const int  Show6             = 245;
 
-   static const int  Calc1             = 244;
-   static const int  Calc2             = 245;
-   static const int  Calc3             = 246;
-   static const int  Calc4             = 247;
+   static const int  Calc1             = 246;
+   static const int  Calc2             = 247;
+   static const int  Calc3             = 248;
+   static const int  Calc4             = 249;
 
-   static const int  DspRun1           = 248;
-   static const int  DspRun2           = 249;
-   static const int  DspRun3           = 250;
-   static const int  DspRun4           = 251;
+   static const int  DspRun1           = 250;
+   static const int  DspRun2           = 251;
+   static const int  DspRun3           = 252;
+   static const int  DspRun4           = 253;
 
-   //******************************************************************************
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace

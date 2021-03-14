@@ -116,6 +116,7 @@ void BasePeriodicThread2::threadRunFunction()
 
    // Get current nanotime at start.
    tSleepTimeNs = get_Nanotime();
+   mStatBeginTimeNs = tSleepTimeNs;
 
    // Initialize statistics variables.
    mStatTimerCountMax = mStatPeriod / mTimerPeriod;
@@ -133,7 +134,8 @@ void BasePeriodicThread2::threadRunFunction()
       // Advance periodically according to the system clock. 
       
       // Advance the absolute sleep time by the period.
-      tSleepTimeNs += tTimerPeriodNs;
+//    tSleepTimeNs += tTimerPeriodNs;
+      tSleepTimeNs = mStatBeginTimeNs + tTimerPeriodNs;
 
       // Convert to timespec.
       tSleepTimespec = get_TimespecFromNs(tSleepTimeNs);

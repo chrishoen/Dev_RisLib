@@ -149,7 +149,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 
    if (tRet)
    {
-      printf("TcpMsgSocket tx message %d\n", mTxLength);
+      //printf("TcpMsgSocket tx message %d\n", mTxLength);
    }
    else
    {

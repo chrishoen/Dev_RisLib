@@ -140,10 +140,10 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
       return false;
    }
 
-   printf("UdpRxMsgSocket rx message %d\n", mRxLength);
-   printf("UdpRxMsgSocket     FROM %16s : %5d\n",
-      mFromAddress.mString,
-      mLocal.mPort);
+   //printf("UdpRxMsgSocket rx message %d\n", mRxLength);
+   //printf("UdpRxMsgSocket     FROM %16s : %5d\n",
+   //   mFromAddress.mString,
+   //   mLocal.mPort);
 
    // Set the buffer length.
    tByteBuffer.setLength(mRxLength);
@@ -157,9 +157,9 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Extract the header.
    mMonkey->extractMessageHeaderParms(&tByteBuffer);
 
-   printf("UdpRxMsgSocket rx header %d %d\n",
-      mMonkey->mHeaderValidFlag,
-      mMonkey->mHeaderLength);
+   //printf("UdpRxMsgSocket rx header %d %d\n",
+   //   mMonkey->mHeaderValidFlag,
+   //   mMonkey->mHeaderLength);
 
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)

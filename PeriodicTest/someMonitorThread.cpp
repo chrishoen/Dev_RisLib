@@ -46,7 +46,7 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    if (gTimerTestThread1->mStatPollFlag)
    {
       gTimerTestThread1->mStatPollFlag = false;
-      Prn::print(0, "Timer2 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
+      Prn::print(0, "Timer1 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
          gTimerTestThread1->mStatCount,
          gTimerTestThread1->mThreadCurrentProcessor,
          gTimerTestThread1->mStatJitterMean,

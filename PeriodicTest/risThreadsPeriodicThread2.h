@@ -105,9 +105,9 @@ public:
    // The beginning time of when the timer execution function is called;
    // The previous value.
    // The end time of when the timer execution function is called;
-   double mStatBeginTimeUs;
-   double mStatLastBeginTimeUs;
-   double mStatEndTimeUs;
+   long long mStatBeginTimeNs;
+   long long mStatLastBeginTimeNs;
+   long long mStatEndTimeNs;
 
    // The current jitter and execution times.
    double mStatJitterTimeUs;

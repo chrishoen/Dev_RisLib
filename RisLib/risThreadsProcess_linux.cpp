@@ -56,25 +56,25 @@ static void set_latency_target(void)
 
 	err = stat("/dev/cpu_dma_latency", &s);
 	if (err == -1) {
-		printf("WARN: stat /dev/cpu_dma_latency failed\n");
+		//printf("WARN: stat /dev/cpu_dma_latency failed\n");
 		return;
 	}
 
 	errno = 0;
 	latency_target_fd = open("/dev/cpu_dma_latency", O_RDWR);
 	if (latency_target_fd == -1) {
-		printf("WARN: open /dev/cpu_dma_latency\n");
+		//printf("WARN: open /dev/cpu_dma_latency\n");
 		return;
 	}
 
 	errno = 0;
 	err = write(latency_target_fd, &latency_target_value, 4);
 	if (err < 1) {
-		printf("# error setting cpu_dma_latency to %d\n", latency_target_value);
+		//printf("# error setting cpu_dma_latency to %d\n", latency_target_value);
 		close(latency_target_fd);
 		return;
 	}
-	printf("# /dev/cpu_dma_latency set to %dus\n", latency_target_value);
+	//printf("# /dev/cpu_dma_latency set to %dus\n", latency_target_value);
 }
 
 void enterProcessHigh()

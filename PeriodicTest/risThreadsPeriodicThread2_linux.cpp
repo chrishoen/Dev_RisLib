@@ -134,8 +134,8 @@ void BasePeriodicThread2::threadRunFunction()
       // Advance periodically according to the system clock. 
       
       // Advance the absolute sleep time by the period.
-//    tSleepTimeNs += tTimerPeriodNs;
-      tSleepTimeNs = mStatBeginTimeNs + tTimerPeriodNs;
+      tSleepTimeNs += tTimerPeriodNs;
+      //tSleepTimeNs = mStatBeginTimeNs + tTimerPeriodNs;
 
       // Convert to timespec.
       tSleepTimespec = get_TimespecFromNs(tSleepTimeNs);

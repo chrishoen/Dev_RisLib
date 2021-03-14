@@ -10,7 +10,7 @@
 #include "risNanoConvert.h"
 #include "risProgramTime.h"
 
-#include "risThreadsPeriodicThread.h"
+#include "risThreadsPeriodicThread2.h"
 
 namespace Ris
 {
@@ -20,8 +20,30 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Regionals.
 
-BasePeriodicThread::BasePeriodicThread()
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return the current high resolution timer value in nanoseconds. 
+
+inline long long int my_get_hires_count()
+{
+   struct timespec tTimespec;
+   clock_gettime(CLOCK_MONOTONIC, &tTimespec);
+
+   long long int tSeconds = (long long int)tTimespec.tv_sec;
+   long long int tNanoseconds = (long long int)tTimespec.tv_nsec;
+   long long int tTimeNs = tSeconds * 1000 * 1000 * 1000 + tNanoseconds;
+
+   return tTimeNs;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+BasePeriodicThread2::BasePeriodicThread2()
 {
    // Set base class variables.
    mTimerPeriod = 1000;
@@ -59,7 +81,7 @@ BasePeriodicThread::BasePeriodicThread()
 // after the thread init function. It runs a loop that waits for the
 // timer or the termination event.
 
-void BasePeriodicThread::threadRunFunction()
+void BasePeriodicThread2::threadRunFunction()
 {
    //***************************************************************************
    //***************************************************************************

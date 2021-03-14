@@ -8,7 +8,7 @@ Timer test thread.
 //******************************************************************************
 //******************************************************************************
 
-#include "risThreadsPeriodicThread.h"
+#include "risThreadsPeriodicThread2.h"
 
 namespace Some
 {
@@ -16,10 +16,10 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class TimerTestThread1 : public Ris::Threads::BasePeriodicThread
+class TimerTestThread1 : public Ris::Threads::BasePeriodicThread2
 {
 public:
-   typedef Ris::Threads::BasePeriodicThread BaseClass;
+   typedef Ris::Threads::BasePeriodicThread2 BaseClass;
 
    //******************************************************************************
    //******************************************************************************

@@ -24,17 +24,16 @@ public:
    //***************************************************************************
    // Constants.
 
-   static const int cDirectionNone = 0;
-   static const int cDirectionUp = 1;
-   static const int cDirectionDown = -1;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
    // If true then enable modificatios.
-   bool mEnableFlag;
+   bool mEnable;
+
+   int mPF;
+
 
    // Adjustment for z direction changes.
    double mAdjustZ;
@@ -48,11 +47,11 @@ public:
    bool mFirstFlag;
 
    // If true then a direction change happened.
-   bool mDirectionChangeFlag;
+   bool mUpChangeFlag;
 
-   // Direction.
-   int mDirection;
-   int mLastDirection;
+   // If true then up else down
+   int mUpFlag;
+   int mLastUpFlag;
 
    //***************************************************************************
    //***************************************************************************
@@ -61,14 +60,15 @@ public:
 
    // Constructor.
    Model();
+   void reset();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Modify a gcode.
-   void doModify(char* aString);
+   // Modify a gcode.Return true if there was a change.
+   bool doModify(char* aGCodeString);
 };
 
 //******************************************************************************

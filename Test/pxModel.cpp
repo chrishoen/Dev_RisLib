@@ -23,32 +23,94 @@ namespace PX
 
 Model::Model()
 {
-   mEnableFlag = false;
+   reset();
+}
+
+void Model::reset()
+{
+   mEnable = true;
+   mPF = 1;
    mAdjustZ = 0.050;
    mFirstFlag = true;
-   mDirectionChangeFlag = false;
-   mDirection = 0;
-   mLastDirection = 0;
+   mUpFlag = false;
+   mLastUpFlag = false;
+   mUpChangeFlag = false;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Modify a gcode.
+// Modify a gcode.Return true if there was a change.
 
-void Model::doModify(char* aString)
+bool Model::doModify(char* aGCodeString)
 {
-   Ris::CmdLineCmd* tCmd = new Ris::CmdLineCmd(aString);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Do this first.
+   
+   // Guard.
+   if (!mEnable) return false;
+
+   // Copy the gcode string into a command line command and parse it.
+   Ris::CmdLineCmd* tCmd = new Ris::CmdLineCmd(aGCodeString);
+
+   // Guard.
    if (!(tCmd->isCmd("G1") && tCmd->gcodeIsValidZ()))
    {
-      Prn::print(0, "doModify************************IGNORE");
-      return;
+      Prn::print(mPF, "doModify************************IGNORE");
+      return false;
    }
 
-   double tZ = tCmd->gcodeDoubleZ();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Process the direction.
+
+   // Locals.
+   double tInputZ = tCmd->gcodeDoubleZ();
+   double tOutputZ = 0;
+
+   Prn::print(mPF, "doModify************************  %.3f", tInputZ);
+
+   // If first.
+   if (mFirstFlag)
+   {
+      mFirstFlag = false;
+      mUpFlag = tInputZ > 0;
+      mLastUpFlag = tInputZ > 0;
+   }
+   // If not first.
+   else
+   {
+      mLastUpFlag = mUpFlag;
+      mUpFlag = tInputZ > 0;
+   }
+
+   // Test for a change in direction.
+   mUpChangeFlag = mUpFlag != mLastUpFlag;
+
+   // If no change then done.
+   if (!mUpChangeFlag) return false;
 
 
-   Prn::print(0, "doModify************************%.3f", tZ);
+   // Adjust the z.
+   if (mUpFlag)
+   {
+      Prn::print(mPF, "change up");
+      tOutputZ = tInputZ + mAdjustZ;
+   }
+   else
+   {
+      Prn::print(mPF, "change down");
+      tOutputZ = tInputZ - mAdjustZ;
+   }
+
+   // Modify the gcode string.
+   sprintf(aGCodeString, "G1 Z%.3f", tOutputZ);
+
+   // Done.
+   return true;
 }
 
 

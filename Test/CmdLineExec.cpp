@@ -7,6 +7,7 @@
 
 #include "risProgramTime.h"
 #include "my_functions.h"
+#include "pxModel.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -51,9 +52,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   char tBuffer[40];
-   Prn::print(0, "my_timestamp1 %s", my_timestamp1(tBuffer));
-   Prn::print(0, "my_timestamp2 %s", my_timestamp2(tBuffer));
+   char tString[40];
+   aCmd->copyArgWhole(tString, 40);
+   PX::gModel.doModify(tString);
 }
 
 //******************************************************************************

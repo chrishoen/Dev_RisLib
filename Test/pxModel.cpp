@@ -23,7 +23,12 @@ namespace PX
 
 Model::Model()
 {
-   mDirection = false;
+   mEnableFlag = false;
+   mAdjustZ = 0.050;
+   mFirstFlag = true;
+   mDirectionChangeFlag = false;
+   mDirection = 0;
+   mLastDirection = 0;
 }
 
 //******************************************************************************
@@ -34,15 +39,16 @@ Model::Model()
 void Model::doModify(char* aString)
 {
    Ris::CmdLineCmd* tCmd = new Ris::CmdLineCmd(aString);
-   if (tCmd->isCmd("G1") && tCmd->gcodeIsValidZ())
+   if (!(tCmd->isCmd("G1") && tCmd->gcodeIsValidZ()))
    {
-      Prn::print(0, "PROC G1 %.2f", tCmd->gcodeDoubleZ());
-   }
-   else
-   {
-      Prn::print(0, "IGNORE");
+      Prn::print(0, "doModify************************IGNORE");
+      return;
    }
 
+   double tZ = tCmd->gcodeDoubleZ();
+
+
+   Prn::print(0, "doModify************************%.3f", tZ);
 }
 
 

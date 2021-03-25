@@ -188,7 +188,16 @@ namespace Prn
    static const int  DspRun3           = 252;
    static const int  DspRun4           = 253;
 
-//******************************************************************************
+   static const int  Calc11            = 254;
+   static const int  Calc12            = 255;
+   static const int  Calc13            = 256;
+   static const int  Calc14            = 257;
+   static const int  Calc21            = 258;
+   static const int  Calc22            = 259;
+   static const int  Calc23            = 260;
+   static const int  Calc24            = 261;
+
+   //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace

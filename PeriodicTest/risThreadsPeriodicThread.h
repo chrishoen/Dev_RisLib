@@ -25,7 +25,7 @@ namespace Threads
 //******************************************************************************
 // This provides a base class for periodic timer threads. Inheritors provide
 // a timer handler function that gets called periodically. It inherits from
-// the thread base class to obtain basic thread functionality.
+// the thread base class to obtain basic thread functionality. git test
 // 
 // This also measures execution times and provides statistics on periodic
 // jitter and on the exection time of the inheritor supplied timer handler

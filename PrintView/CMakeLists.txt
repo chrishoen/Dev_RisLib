@@ -10,7 +10,9 @@ my_add_pch (PrintView)
 my_inc_import_RisLib(PrintView)
 my_lib_import_RisLib(PrintView)
 
-if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+if (MSVC)
+   install(TARGETS PrintView DESTINATION "C:/Alpha/Bin")
+elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
    install(TARGETS PrintView DESTINATION "/opt/prime/bin")
 else()
    add_custom_command(

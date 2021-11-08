@@ -15,8 +15,8 @@ my_add_pch (RisLib)
 target_include_directories(RisLib PUBLIC ${PROJECT_SOURCE_DIR})
 
 if (NOT MSVC)
-   target_link_options(RisLib PUBLIC "-lpthread")
-   target_link_options(RisLib PUBLIC "-lrt")
+   #target_link_options(RisLib PUBLIC "-lpthread")
+   #target_link_options(RisLib PUBLIC "-lrt")
 endif()
 
 if (MSVC)

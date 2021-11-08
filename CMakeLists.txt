@@ -13,7 +13,6 @@ my_special1()
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
 add_subdirectory ("PeriodicTest")
-add_subdirectory ("SharedMemory")
 return()
 
 add_subdirectory ("RisLib")

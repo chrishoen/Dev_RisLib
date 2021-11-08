@@ -18,7 +18,7 @@ endfunction()
 #*******************************************************************************
 #*******************************************************************************
 
-function(my_lib_import_RisLib _target)
+function(my_lib_import_RisLib22 _target)
 
    if (MSVC)
       target_link_libraries(${_target} RisLib)
@@ -41,7 +41,7 @@ endfunction()
 #*******************************************************************************
 #*******************************************************************************
 
-function(my_lib_import_RisLib22 _target)
+function(my_lib_import_RisLib _target)
 
    if (MSVC)
       target_link_libraries(${_target} RisLib)
@@ -52,10 +52,10 @@ function(my_lib_import_RisLib22 _target)
          set (MyPThreadImportPath  "C:/Beagle/toolchain/arm-linux-gnueabihf/lib/libpthread.so")
          set (MyRTImportPath  "C:/Beagle/toolchain/arm-linux-gnueabihf/lib/librt.so")
       else()
-         set (MyPThreadImportPath  "/usr/lib/x86_64-linux-gnu/libpthread.so")
-         set (MyRTImportPath  "/usr/lib/x86_64-linux-gnu/librt.so")
          set (MyPThreadImportPath  "/lib64/libpthread.so")
          set (MyRTImportPath  "/lib64/librt.so")
+         set (MyPThreadImportPath  "/usr/lib/x86_64-linux-gnu/libpthread.so")
+         set (MyRTImportPath  "/usr/lib/x86_64-linux-gnu/librt.so")
       endif()
       add_library(PThreadLib SHARED IMPORTED)
       add_library(RTLib SHARED IMPORTED)
@@ -63,8 +63,8 @@ function(my_lib_import_RisLib22 _target)
       set_target_properties(RTLib PROPERTIES IMPORTED_LOCATION ${MyRTImportPath})
 
       target_link_libraries(${_target} RisLib)
-#      target_link_libraries(${_target} PThreadLib)
-#      target_link_libraries(${_target} RTLib)
+      target_link_libraries(${_target} PThreadLib)
+      target_link_libraries(${_target} RTLib)
    endif()
    return()
 

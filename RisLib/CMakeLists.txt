@@ -31,7 +31,7 @@ else()
    add_custom_command(
       TARGET  RisLib
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so rsync://debian@devtgt/prime/lib
+      COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so ${MyRsyncLib}
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/RisLib)
 endif()
 

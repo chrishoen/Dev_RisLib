@@ -21,6 +21,6 @@ else()
    add_custom_command(
       TARGET  PeriodicTest
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx PeriodicTest rsync://debian@devtgt/prime/bin
+      COMMAND rsync -azv --chmod=ugo=rwx PeriodicTest ${MyRsyncBin}
       WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/PeriodicTest)
 endif()

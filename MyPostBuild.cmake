@@ -24,8 +24,7 @@ function(my_post_build_lib _target)
    add_custom_command(
       TARGET  ${_target}
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx lib${_target}.so ${MyRsyncLib}
-      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/${_target})
+      COMMAND rsync -azv --chmod=ugo=rwx lib${_target}.so ${MyRsyncLib})
 
 endfunction()
 
@@ -38,8 +37,7 @@ function(my_post_build_bin _target)
    add_custom_command(
       TARGET  ${_target}
       POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx ${_target} ${MyRsyncBin}
-      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/${_target})
+      COMMAND rsync -azv --chmod=ugo=rwx ${_target} ${MyRsyncBin})
 
 endfunction()
 

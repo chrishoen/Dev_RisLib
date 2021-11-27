@@ -28,10 +28,6 @@ elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
 else()
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
-   add_custom_command(
-      TARGET  RisLib
-      POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx libRisLib.so ${MyRsyncLib}
-      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/RisLib)
+   my_post_build_lib(RisLib)
 endif()
 

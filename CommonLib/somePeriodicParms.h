@@ -70,6 +70,10 @@ public:
    // Test mode 1,2.
    int  mTestMode;
 
+   // Test codes.
+   int mTestCode1;
+   int mTestCode2;
+
    // Timer thread variables.
    int  mMonitorThreadPeriod;
    int  mTestThreadPeriod;
@@ -80,6 +84,7 @@ public:
 
    // Sample window size.
    int mSampleSize;
+
 
    //***************************************************************************
    //***************************************************************************

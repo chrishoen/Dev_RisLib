@@ -35,7 +35,7 @@ namespace Threads
 // are calculated at a specific period. The results are latched and can be
 // polled by a monitoring thread.
 
-class  BasePeriodicThread2 : public BaseThread
+class  BasePeriodicThread : public BaseThread
 {
 public:
 
@@ -119,7 +119,7 @@ public:
    // Methods.
 
    // Constructor.
-   BasePeriodicThread2(); 
+   BasePeriodicThread(); 
 
    //***************************************************************************
    //***************************************************************************

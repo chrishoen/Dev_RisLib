@@ -8,15 +8,17 @@ my_add_compile_options (WaitableTest)
 my_add_pch (WaitableTest)
 
 
-
 my_inc_import_RisLib(WaitableTest)
 my_inc_import_CommonLib(WaitableTest)
 
 my_lib_import_CommonLib(WaitableTest)
 my_lib_import_RisLib(WaitableTest)
 
-add_custom_command(
-   TARGET WaitableTest
-   POST_BUILD
-   COMMAND rsync -azv --chmod=ugo=rwx WaitableTest rsync://debian@devtgt/prime/bin
-   WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/WaitableTest)
+
+if(MSVC)
+   install(TARGETS WaitableTest DESTINATION "C:/aaa_prime/RisLib")
+elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+   install(TARGETS WaitableTest DESTINATION "/opt/prime/bin")
+else()
+   my_post_build_bin(WaitableTest)
+endif()

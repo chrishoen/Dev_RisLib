@@ -11,12 +11,10 @@ my_add_pch (NamedSemaphore)
 my_inc_import_RisLib(NamedSemaphore)
 my_lib_import_RisLib(NamedSemaphore)
 
-if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+if(MSVC)
+   install(TARGETS NamedSemaphore DESTINATION "C:/aaa_prime/RisLib")
+elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
    install(TARGETS NamedSemaphore DESTINATION "/opt/prime/bin")
 else()
-   add_custom_command(
-      TARGET  NamedSemaphore
-      POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx NamedSemaphore rsync://debian@devtgt/prime/bin
-      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/NamedSemaphore)
+   my_post_build_bin(NamedSemaphore)
 endif()

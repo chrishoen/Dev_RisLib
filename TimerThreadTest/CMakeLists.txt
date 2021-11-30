@@ -18,9 +18,5 @@ if(MSVC)
 elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
    install(TARGETS TimerThreadTest DESTINATION "/opt/prime/bin")
 else()
-   add_custom_command(
-      TARGET  TimerThreadTest
-      POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx TimerThreadTest rsync://debian@devtgt/prime/bin
-      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/TimerThreadTest)
+   my_post_build_bin(TimerThreadTest)
 endif()

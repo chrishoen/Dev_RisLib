@@ -11,12 +11,10 @@ my_add_pch (FileFunctions)
 my_inc_import_RisLib(FileFunctions)
 my_lib_import_RisLib(FileFunctions)
 
-if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+if(MSVC)
+   install(TARGETS FileFunctions DESTINATION "C:/aaa_prime/RisLib")
+elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
    install(TARGETS FileFunctions DESTINATION "/opt/prime/bin")
 else()
-   add_custom_command(
-      TARGET  FileFunctions
-      POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx FileFunctions rsync://debian@devtgt/prime/bin
-      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/FileFunctions)
+   my_post_build_bin(FileFunctions)
 endif()

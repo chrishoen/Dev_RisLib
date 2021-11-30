@@ -7,16 +7,13 @@ add_executable (Test ${src_files})
 my_add_compile_options (Test)
 my_add_pch (Test)
 
-
 my_inc_import_RisLib(Test)
 my_lib_import_RisLib(Test)
 
-if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+if(MSVC)
+   install(TARGETS Test DESTINATION "C:/aaa_prime/RisLib")
+elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
    install(TARGETS Test DESTINATION "/opt/prime/bin")
 else()
-   add_custom_command(
-      TARGET  Test
-      POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx Test rsync://debian@devtgt/prime/bin
-      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/Test)
+   my_post_build_bin(Test)
 endif()

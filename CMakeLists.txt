@@ -13,12 +13,6 @@ project ("Dev_RisLib")
 my_special1()
 my_init_post_build_variables()
 
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
-add_subdirectory ("PeriodicTest")
-add_subdirectory ("WaitableTest")
-return()
-
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
 add_subdirectory ("CmdLineTest")
@@ -58,27 +52,14 @@ return()
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
 add_subdirectory ("PeriodicTest")
-return()
-
-add_subdirectory ("RisLib")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("PrintView")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
-add_subdirectory ("TimerThreadTest")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
 add_subdirectory ("WaitableTest")
 return()
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
 add_subdirectory ("PeriodicTest")
+return()
+
+add_subdirectory ("RisLib")
 return()
 

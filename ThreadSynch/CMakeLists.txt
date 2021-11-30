@@ -7,17 +7,14 @@ add_executable (ThreadSynch ${src_files})
 my_add_compile_options (ThreadSynch)
 my_add_pch (ThreadSynch)
 
-
 my_inc_import_RisLib(ThreadSynch)
 
 my_lib_import_RisLib(ThreadSynch)
 
-if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+if(MSVC)
+   install(TARGETS ThreadSynch DESTINATION "C:/aaa_prime/RisLib")
+elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
    install(TARGETS ThreadSynch DESTINATION "/opt/prime/bin")
 else()
-   add_custom_command(
-      TARGET  ThreadSynch
-      POST_BUILD
-      COMMAND rsync -azv --chmod=ugo=rwx ThreadSynch rsync://debian@devtgt/prime/bin
-      WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_RisLib/ThreadSynch)
+   my_post_build_bin(ThreadSynch)
 endif()

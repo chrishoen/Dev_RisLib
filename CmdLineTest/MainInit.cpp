@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include "tsThreadServices.h"
 #include "risThreadsProcess.h"
 
 //******************************************************************************
@@ -13,16 +12,6 @@ void main_initialize(int argc,char** argv)
    printf("CmdLineTest1 Program*******************************************BEGIN\n");
    printf("CmdLineTest1 Program*******************************************BEGIN\n");
    printf("CmdLineTest1 Program*******************************************BEGIN\n\n");
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Initialize thread services.
-
-   TS::reset();
-   TS::setProgramName("CmdLineTest1");
-   TS::setProgramPrintLevel(TS::PrintLevel(3, 3));
-   TS::initialize();
 
    //***************************************************************************
    //***************************************************************************
@@ -67,9 +56,6 @@ void main_finalize()
 
    // Exit process.
    Ris::Threads::exitProcess();
-
-   // Finalize thread services.
-   TS::finalize();
 
    // Done.
    printf("\n");

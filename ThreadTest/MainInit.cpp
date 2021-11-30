@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include "tsThreadServices.h"
 #include "risThreadsProcess.h"
 #include "someThreadParms.h"
 
@@ -14,16 +13,6 @@ void main_initialize(int argc,char** argv)
    printf("ThreadTest Program*********************************************BEGIN\n");
    printf("ThreadTest Program*********************************************BEGIN\n");
    printf("ThreadTest Program*********************************************BEGIN\n\n");
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Initialize thread services.
-
-   TS::reset();
-   TS::setProgramName("ThreadTest");
-   TS::setProgramPrintLevel(3);
-   TS::initialize();
 
    //***************************************************************************
    //***************************************************************************
@@ -76,9 +65,6 @@ void main_finalize()
 
    // Exit process.
    Ris::Threads::exitProcess();
-
-   // Finalize thread services.
-   TS::finalize();
 
    // Done.
    printf("\n");

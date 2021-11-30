@@ -23,7 +23,6 @@ TimerThread::TimerThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Timer");
-   BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
    BaseClass::setThreadPriorityHigh();
    BaseClass::mThreadSingleProcessor = 3;
    BaseClass::mTimerPeriod = 250;

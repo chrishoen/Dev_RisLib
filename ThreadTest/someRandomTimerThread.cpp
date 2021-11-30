@@ -6,7 +6,6 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "tsThreadServices.h"
 #include "someThreadParms.h"
 #include "someMasterThread.h"
 
@@ -96,8 +95,6 @@ void RandomTimerThread::threadExitFunction()
 
 void RandomTimerThread::executeOnTimer(int aCount)
 {
-   TS::print(10, "RandomTimerThread::executeOnTimer %d", aCount);
-
    gMasterThread->mTest1QCall(mIdent, aCount);
 }
 

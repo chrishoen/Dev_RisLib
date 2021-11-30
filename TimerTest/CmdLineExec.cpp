@@ -1,10 +1,8 @@
 
 #include "stdafx.h"
 
-#include "tsThreadServices.h"
 #include "someTestThread.h"
 #include "someThreadParms.h"
-#include "tsPrintThread.h"
 
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
@@ -61,7 +59,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   TS::print(0, "Go2");
 }
 
 //******************************************************************************
@@ -70,7 +67,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   TS::gPrintThread->mSemaphore.put();
 }
 
 //******************************************************************************

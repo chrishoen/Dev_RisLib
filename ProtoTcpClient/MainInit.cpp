@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include "tsThreadServices.h"
 #include "risThreadsProcess.h"
 #include "procoTcpSettings.h"
 
@@ -58,19 +57,6 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Initialize thread services.
-
-   char tProgramName[100];
-   sprintf(tProgramName, "TcpClient%d", ProtoComm::gTcpSettings.mMyAppNumber);
-
-   TS::reset();
-   TS::setProgramName(tProgramName);
-   TS::setProgramPrintLevel(2);
-   TS::initialize();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Done.
 
    Prn::print(0, "ProtoTcpClient***********************************BEGIN %s", argv[1]);
@@ -90,9 +76,6 @@ void main_finalize()
 
    // Exit process.
    Ris::Threads::exitProcess();
-
-   // Finalize thread services.
-   TS::finalize();
 }
 
 //******************************************************************************

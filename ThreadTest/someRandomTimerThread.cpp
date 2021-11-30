@@ -28,13 +28,11 @@ RandomTimerThread::RandomTimerThread(int aIdent)
    if (mIdent == 1)
    {
       BaseClass::setThreadName("RandomTimer1");
-      BaseClass::setThreadPrintLevel(3);
       BaseClass::setThreadPriorityHigh();
    }
    else
    {
       BaseClass::setThreadName("RandomTimer2");
-      BaseClass::setThreadPrintLevel(3);
       BaseClass::setThreadPriorityHigh();
    }
 

@@ -71,7 +71,7 @@ std::string doGetRandomFileName();
 // opened lock file.
 int doLockFile_OpenAndLock(const char* aLockName);
 
-// Unlock on opened lock file and close it.
+// Unlock an opened lock file and close it.
 void doLockFile_UnlockAndClose(int aFileDesc);
 
 //******************************************************************************

@@ -22,7 +22,6 @@ TestThread::TestThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Test");
-   BaseClass::setThreadPrintLevel(0);
    BaseClass::setThreadPriorityHigh();
 
    mTimerPeriod = 1000;

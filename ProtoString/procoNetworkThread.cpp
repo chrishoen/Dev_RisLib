@@ -62,8 +62,6 @@ void NetworkThread::threadInitFunction()
    tSettings.setRemoteAddress(gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
    tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
    tSettings.mRxStringQCall = mRxStringQCall;
-   tSettings.mPrintLevel = gUdpSettings.mPrintLevel;
-
    // Create the child thread with the settings.
    mUdpStringThread = new Ris::Net::UdpStringThread(tSettings);
 

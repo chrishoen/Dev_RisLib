@@ -26,7 +26,6 @@ NetworkThread::NetworkThread()
    // Set base class thread variables.
    BaseClass::setThreadName("Network");
    BaseClass::setThreadPriorityHigh();
-   BaseClass::setThreadPrintLevel(3);
    BaseClass::mTimerPeriod = gUdpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.
@@ -61,7 +60,6 @@ void NetworkThread::threadInitFunction()
    tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mRxMsgQCall = mRxMsgQCall;
-   tSettings.mPrintLevel = gUdpSettings.mPrintLevel;
 
    // Create the child thread with the settings.
    mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);

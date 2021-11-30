@@ -30,13 +30,8 @@ MasterThread::MasterThread()
    // Set base class thread variables.
    BaseClass::mLongThread->setThreadName("MasterLong");
    BaseClass::mLongThread->setThreadPriority(Cmn::gPriorities.mMasterLong);
-   BaseClass::mLongThread->setThreadPrintLevel(3);
-
    BaseClass::mShortThread->setThreadName("MasterShort");
    BaseClass::mShortThread->setThreadPriority(Cmn::gPriorities.mMasterShort);
-   BaseClass::mShortThread->setThreadPrintLevel(3);
-   BaseClass::mShortThread->mTimerPeriod = 1000;
-
    // Set base class call pointers.
    BaseClass::mShortThread->mThreadInitCallPointer           = std::bind(&MasterThread::threadInitFunction, this);
    BaseClass::mShortThread->mThreadExitCallPointer           = std::bind(&MasterThread::threadExitFunction, this);

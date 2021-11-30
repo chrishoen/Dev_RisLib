@@ -29,7 +29,6 @@ SlaveThread::SlaveThread()
 {
    // Set base class thread variables.
    BaseClass::setThreadName("SlaveThread");
-   BaseClass::setThreadPrintLevel(3);
    BaseClass::setThreadPriorityHigh();
    BaseClass::mTimerPeriod = 1000;
 

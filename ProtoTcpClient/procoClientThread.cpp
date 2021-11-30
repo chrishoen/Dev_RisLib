@@ -25,7 +25,6 @@ ClientThread::ClientThread()
    // Set base class thread variables.
    BaseClass::setThreadName("Client");
    BaseClass::setThreadPriorityHigh();
-   BaseClass::setThreadPrintLevel(1);
    BaseClass::mTimerPeriod = gTcpSettings.mThreadTimerPeriod;
 
    // Initialize qcalls.
@@ -60,8 +59,6 @@ void ClientThread::threadInitFunction()
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;
-   tSettings.mPrintLevel = gTcpSettings.mPrintLevel;
-
    // Create the child thread with the settings.
    mTcpMsgClientThread = new Ris::Net::TcpMsgClientThread(tSettings);
 

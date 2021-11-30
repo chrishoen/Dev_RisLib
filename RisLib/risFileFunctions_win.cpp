@@ -61,7 +61,7 @@ int doLockFile_OpenAndLock(const char* aLockName)
 //****************************************************************************
 // Unlock on opened lock file and close it.
 
-void doLockFile_UnlockAndClose(void* aFileDesc)
+void doLockFile_UnlockAndClose(int aFileDesc)
 {
 }
 

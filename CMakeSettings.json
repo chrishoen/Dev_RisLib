@@ -9,7 +9,7 @@
          "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}",
          "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}\\install",
          "cmakeCommandArgs": "",
-         "buildCommandArgs": "-j12",
+         "buildCommandArgs": "-v -j8",
          "ctestCommandArgs": "",
          "cmakeToolchain": "MyBeagleToolchain.cmake",
          "variables": []

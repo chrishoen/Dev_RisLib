@@ -143,6 +143,9 @@ void BasePeriodicThread::threadRunFunction()
       // Sleep until the absolute sleep time.
       clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &tSleepTimespec, 0);
 
+      // Guard.
+      if (BaseClass::mTerminateFlag) break;
+
       //************************************************************************
       //************************************************************************
       //************************************************************************

@@ -1,16 +1,10 @@
 
 #include "stdafx.h"
 
-#include "risSockets.h"
-#include "procoUdpSettings.h"
-#include "procoMsg.h"
-#include "procoMsgHelper.h"
-
-#include "procoNetworkThread.h"
+#include "someSerialParms.h"
+#include "someSerialPortThread.h"
 
 #include "CmdLineExec.h"
-
-using namespace ProtoComm;
 
 //******************************************************************************
 //******************************************************************************
@@ -29,10 +23,7 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        ProtoComm::gNetworkThread->mTPFlag = aCmd->argBool(1);
-   if (aCmd->isCmd("TX"))        executeTx(aCmd);
-   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
-   if (aCmd->isCmd("DATA"))      executeData(aCmd);
+   if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -44,54 +35,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   int tMsgType= aCmd->argInt(1);
-
-   switch (tMsgType)
-   {
-      case 1:
-      {
-         ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-         MsgHelper::initialize(tMsg);
-         gNetworkThread->sendMsg(tMsg);
-         break;
-      }
-      case 5:
-      {
-         ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-         MsgHelper::initialize(tMsg);
-         gNetworkThread->sendMsg(tMsg);
-         break;
-      }
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->setArgDefault(1, 0);
-   int tNumWords = aCmd->argInt(1);
-   
-   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-   MsgHelper::initialize(tMsg,tNumWords);
-   gNetworkThread->sendMsg(tMsg);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
-{
-   ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-   MsgHelper::initialize(tMsg);
-
-   gNetworkThread->sendMsg(tMsg);
+   aCmd->setArgDefault(1, "ABCDEFGH");
+   char tString[100];
+   sprintf(tString, "%s\n", aCmd->argString(1));
+   int tNumBytes = strlen(tString);
+   Some::gSerialPortThread->sendString(tString);
+   Prn::print(0, "send %d", tNumBytes);
 }
 
 //******************************************************************************
@@ -100,7 +51,6 @@ void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
-   gNetworkThread->sendTestMsg();
 }
 
 //******************************************************************************
@@ -109,9 +59,6 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-
-   gNetworkThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -136,7 +83,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gUdpSettings.show();
+   Some::gSerialParms.show();
 }
 
 //******************************************************************************

@@ -50,15 +50,34 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. Thread base class overloads.
+   // Methods. Base class overloads.
 
-   // threadInitFunction opens the serial port.
-   // threadRunFunction does a while loop that does reads from the serial port
-   // threadExitFunction closes the serial port.
-   void threadInitFunction(); 
-   void threadRunFunction(); 
-   void threadExitFunction(); 
-   void shutdownThread(); 
+   // Thread init function. This is called by the base class immediately
+   // after the thread starts running. It initializes something.
+   void threadInitFunction() override;
+
+   // Thread run function. This is called by the base class immediately
+   // after the thread init function. It runs a loop that waits for the
+   // hid keyboard input.
+   void threadRunFunction() override;
+
+   // Thread exit function. This is called by the base class immediately
+   // before the thread is terminated. It is a placeholder.
+   void threadExitFunction() override;
+
+   // Thread shutdown function. This posts to the close event to
+   // terminate the thread and it closes the files.
+   void shutdownThread() override;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Send a null terminated string via the serial port. A newline terminator
+   // is appended to the string before transmission. This executes in the
+   // context of the calling thread.
+   void sendString(const char* aString);
 };
 
 //******************************************************************************

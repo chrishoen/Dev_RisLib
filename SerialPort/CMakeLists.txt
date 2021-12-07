@@ -13,4 +13,9 @@ my_inc_import_CommonLib(SerialPort)
 my_lib_import_CommonLib(SerialPort)
 my_lib_import_RisLib(SerialPort)
 
+if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
+   install(TARGETS SerialPort DESTINATION "/opt/prime/bin")
+else()
+   my_post_build_bin(SerialPort)
+endif()
 

@@ -42,7 +42,7 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Initialize print facility.
 
-   if (Some::gSerialParms.mMyAppNumber == 1)
+   if (Some::gSerialParms.mMyAppNumber == 401)
    {
       // Initialize print.
       Prn::resetPrint();
@@ -70,13 +70,13 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Done.
 
-   Prn::print(0, "SerialPort Program************************************BEGIN %s", argv[1]);
-   Prn::print(0, "SerialPort Program************************************BEGIN %s", argv[1]);
-   Prn::print(0, "SerialPort Program************************************BEGIN %s", argv[1]);
+   Prn::print(0, "SerialPort Program************************************BEGIN %d", Some::gSerialParms.mMyAppNumber);
+   Prn::print(0, "SerialPort Program************************************BEGIN %d", Some::gSerialParms.mMyAppNumber);
+   Prn::print(0, "SerialPort Program************************************BEGIN %d", Some::gSerialParms.mMyAppNumber);
 
-   Prn::print(Prn::View11, "SerialPort Program************************************BEGIN %s", argv[1]);
-   Prn::print(Prn::View11, "SerialPort Program************************************BEGIN %s", argv[1]);
-   Prn::print(Prn::View11, "SerialPort Program************************************BEGIN %s", argv[1]);
+   Prn::print(Prn::View11, "SerialPort Program************************************BEGIN %d", Some::gSerialParms.mMyAppNumber);
+   Prn::print(Prn::View11, "SerialPort Program************************************BEGIN %d", Some::gSerialParms.mMyAppNumber);
+   Prn::print(Prn::View11, "SerialPort Program************************************BEGIN %d", Some::gSerialParms.mMyAppNumber);
 }
 
 //******************************************************************************

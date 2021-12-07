@@ -8,6 +8,7 @@
 
 
 #include "risProgramTime.h"
+#include "someSerialParms.h"
 
 #define  _SOMESERIALPORTTHREAD_CPP_
 #include "someSerialPortThread.h"
@@ -23,6 +24,7 @@ SerialPortThread::SerialPortThread()
 {
    // Initialize base class members.
    BaseClass::setThreadPriorityHigh();
+   BaseClass::setThreadName("Serial");
 
    // Initialize member variables.
    mCount=0;
@@ -36,12 +38,12 @@ SerialPortThread::SerialPortThread()
 
 void SerialPortThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SerialPortThread::threadInitFunction");
+   Prn::print(Prn::View14, "SerialPortThread::threadInitFunction");
 
    // Serial port settings.
    mSettings.reset();
-   mSettings.setPortDevice("COM6");
-   mSettings.setPortSetup("9600,N,8,1");
+   mSettings.setPortDevice(gSerialParms.mSerialPortDevice);
+   mSettings.setPortSetup(gSerialParms.mSerialPortDevice);
    mSettings.mRxTimeout = 2000;
 
    // Initialize and open the serial port.
@@ -69,15 +71,15 @@ void  SerialPortThread::threadRunFunction()
       // Test returned status and print the string.
       if (tStatus >= 0)
       {
-         Prn::print(Prn::ThreadRun1,"SerialPortThread receive $$ %d  %d$ %s",mCount++,tStatus,tString);
+         Prn::print(Prn::View11,"SerialPortThread receive $$ %d  %d$ %s",mCount++,tStatus,tString);
       }
       else if (tStatus == Ris::SerialPort::cRetCodeTimeout)
       {
-         Prn::print(Prn::ThreadRun1,"SerialPortThread receive TIMEOUT %d",tStatus);
+         Prn::print(Prn::View11,"SerialPortThread receive TIMEOUT %d",tStatus);
       }
       else
       {
-         Prn::print(Prn::ThreadRun1,"SerialPortThread receive ERROR %d",tStatus);
+         Prn::print(Prn::View11,"SerialPortThread receive ERROR %d",tStatus);
       }
    }         
 }
@@ -89,7 +91,7 @@ void  SerialPortThread::threadRunFunction()
 
 void SerialPortThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SerialPortThread::threadExitFunction");
+   Prn::print(Prn::View14, "SerialPortThread::threadExitFunction");
 }
 
 //******************************************************************************
@@ -110,6 +112,18 @@ void SerialPortThread::shutdownThread()
    mSerialPort.doClose();
 
    BaseThread::waitForThreadTerminate();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a null terminated string via the serial port. A newline terminator
+// is appended to the string before transmission. This executes in the
+// context of the calling thread.
+
+void SerialPortThread::sendString(const char* aString)
+{
+   mSerialPort.doSendLine(aString);
 }
 
 //******************************************************************************

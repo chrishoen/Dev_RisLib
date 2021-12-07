@@ -97,7 +97,7 @@ bool SerialPort::doOpen()
 
    if (mSpecific->mPortFd < 0)
    {
-      //printf("serial_open_error_2 %d\n", errno);
+      printf("serial_open_error_2 %d\n", errno);
       return false;
    }
 
@@ -133,7 +133,7 @@ bool SerialPort::doOpen()
 
    if (tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions) < 0)
    {
-      //printf("serial_open_error_baud\n", errno);
+      printf("serial_open_error_baud\n", errno);
       return false;
    }
 
@@ -151,7 +151,7 @@ bool SerialPort::doOpen()
       
       if (ioctl(mSpecific->mPortFd, TIOCSRS485, &t485conf) < 0)
       {
-         //printf("serial_open_error_485 %d\n", errno);
+         printf("serial_open_error_485 %d\n", errno);
          return false;
       }
    }
@@ -172,20 +172,20 @@ bool SerialPort::doOpen()
    //tcgetattr(mSpecific->mPortFd, &tOptions);
    //int tBaud = cfgetispeed(&tOptions);
    //printf("SerialPort baud  $ %d\n", tBaud);
-
+#if 0
    if (!mSettings.m485Flag)
    {
-   //printf("SerialPort initialize PASS  $ %s : %16s\n",
-   // mSettings.mPortDevice,
-   // mSettings.mPortSetup);
+      printf("SerialPort initialize PASS  $ %s : %16s\n",
+         mSettings.mPortDevice,
+         mSettings.mPortSetup);
    }
    else
    {
-   //print("SerialPort initialize PASS  $ %s : %16s RS485\n",
-   // mSettings.mPortDevice,
-   // mSettings.mPortSetup);
+      printf("SerialPort initialize PASS  $ %s : %16s RS485\n",
+         mSettings.mPortDevice,
+         mSettings.mPortSetup);
    }
-
+#endif
 
    mValidFlag = true;
    return true;
@@ -221,7 +221,7 @@ void SerialPort::doClose()
    // Test the return code.
    if (tRet != 0)
    {
-      //printf("serial_close_error_2 %d\n", errno);
+      printf("serial_close_error_2 %d\n", errno);
    }
 
    // Done.

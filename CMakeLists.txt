@@ -18,6 +18,11 @@ add_subdirectory ("RisLib")
 add_subdirectory ("PeriodicTest")
 return()
 
+add_subdirectory ("CommonLib")
+add_subdirectory ("RisLib")
+add_subdirectory ("SerialPort")
+return()
+
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
 add_subdirectory ("CmdLineTest")

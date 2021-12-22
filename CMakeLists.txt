@@ -15,6 +15,11 @@ my_init_post_build_variables()
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
+add_subdirectory ("PeriodicTest")
+return()
+
+add_subdirectory ("CommonLib")
+add_subdirectory ("RisLib")
 add_subdirectory ("SerialPort")
 return()
 

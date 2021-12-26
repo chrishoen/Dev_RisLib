@@ -47,9 +47,10 @@ bool my_randflag(double aP);
 // String.
 
 // Trim CRLF from the end of a string.
-// Return 0 if not(CR or LF).  
-// Return 1 if not(CR or LF).  
 int my_trimCRLF(char* aString);
+
+// Convert a string to uppercase.
+void my_string_toupper(char* aString);
 
 // Return string "true" "false" for a bool
 char* my_string_from_bool(bool aValue);

@@ -131,6 +131,16 @@ int my_trimCRLF(char* aString)
    return tCode;
 }
 
+// Convert a string to uppercase.
+void my_string_toupper(char* aString)
+{
+   for (int i = 0; i < strlen(aString); i++)
+   {
+      aString[i] = toupper(aString[i]);
+   }
+}
+
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

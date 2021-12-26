@@ -63,6 +63,16 @@ void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   char tString[40];
+
+   strcpy(tString, "abcd");
+   Prn::print(0, "%d %s", my_trimCRLF(tString), tString);
+
+   strcpy(tString, "abcd\n");
+   Prn::print(0, "%d %s", my_trimCRLF(tString), tString);
+
+   strcpy(tString, "abcd\r\n");
+   Prn::print(0, "%d %s", my_trimCRLF(tString), tString);
 }
 
 //******************************************************************************

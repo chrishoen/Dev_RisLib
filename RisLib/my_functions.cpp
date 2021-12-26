@@ -95,50 +95,46 @@ bool my_randflag(double aP)
 //******************************************************************************
 // Strings
 
-// Trim CRLF from the end of a string
-void my_trimCRLF(char* aString)
+// Trim CRLF from the end of a string. CRLF (\r\n,13,10)
+int my_trimCRLF(char* aString)
 {
-   // Remove cr/lf at end of line
    unsigned tStringLen = (unsigned)strlen(aString);
-
+   int tCode = 0;
+   if (tStringLen == 0) return 0;
    if (tStringLen == 1)
    {
-      if (aString[0] == 0xa) aString[0] = 0;
-      if (aString[0] == 0xd) aString[0] = 0;
+      if (aString[0] == 10)
+      {
+         aString[0] = 0;
+         tCode++;
+      }
+      if (aString[0] == 13)
+      {
+         aString[0] = 0;
+         tCode++;
+      }
    }
-   if (tStringLen >= 2)
+   else if (tStringLen >= 2)
    {
-      if (aString[tStringLen - 1] == 0xa)
+      if (aString[tStringLen - 1] == 10)
       {
          aString[tStringLen - 1] = 0;
+         tCode++;
 
-         if (aString[tStringLen - 2] == 0xd)
+         if (aString[tStringLen - 2] == 13)
          {
             aString[tStringLen - 2] = 0;
+            tCode++;
          }
       }
    }
+   return tCode;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Strings
-
-// Trim CR from the end of a string
-void my_trim_new_line(char* aString)
-{
-   // Remove cr/lf at end of line
-   unsigned tStringLen = (unsigned)strlen(aString);
-
-   if (tStringLen >= 1)
-   {
-      if (aString[tStringLen - 1] == 0xa)
-      {
-         aString[tStringLen - 1] = 0;
-      }
-   }
-}
 
 // Return string "true" "false" for a bool
 char* my_string_from_bool(bool aValue)

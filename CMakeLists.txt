@@ -12,25 +12,6 @@ project ("Dev_RisLib")
 my_init_config_variables() 
 my_special1() 
 
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
-add_subdirectory ("PeriodicTest")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("Test")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
-add_subdirectory ("SerialPort")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("RisLib")
-add_subdirectory ("PeriodicTest")
-return()
-
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
 add_subdirectory ("CmdLineTest")
@@ -66,6 +47,26 @@ add_subdirectory ("TimerTest")
 add_subdirectory ("TimerThreadTest")
 add_subdirectory ("WaitableTest")
 return()
+
+add_subdirectory ("CommonLib")
+add_subdirectory ("RisLib")
+add_subdirectory ("PeriodicTest")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("Test")
+return()
+
+add_subdirectory ("CommonLib")
+add_subdirectory ("RisLib")
+add_subdirectory ("SerialPort")
+return()
+
+add_subdirectory ("CommonLib")
+add_subdirectory ("RisLib")
+add_subdirectory ("PeriodicTest")
+return()
+
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")

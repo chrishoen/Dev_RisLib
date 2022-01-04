@@ -14,8 +14,12 @@ my_add_pch (eth0)
 my_inc_import_RisLib(eth0)
 my_lib_import_RisLib(eth0)
 
-if(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
-   install(TARGETS eth0 DESTINATION "/opt/prime/bin")
-else()
-   my_post_build_bin(eth0)
+if (MSVC)
+elseif (MyTargetType STREQUAL ubuntu)
+   my_post_build_copy_bin(eth0)
+elseif (MyTargetType STREQUAL beagle)
+   my_post_build_scp_bin(eth0)
+elseif (MyTargetType STREQUAL dart)
 endif()
+
+

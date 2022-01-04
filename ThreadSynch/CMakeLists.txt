@@ -11,10 +11,15 @@ my_inc_import_RisLib(ThreadSynch)
 
 my_lib_import_RisLib(ThreadSynch)
 
-if(MSVC)
-   install(TARGETS ThreadSynch DESTINATION "C:/aaa_prime/RisLib")
-elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
-   install(TARGETS ThreadSynch DESTINATION "/opt/prime/bin")
-else()
-   my_post_build_bin(ThreadSynch)
+
+if (MSVC)
+   install(TARGETS ThreadSynch DESTINATION ${MyCopyBinToDir})
+elseif (MyTargetType STREQUAL ubuntu)
+   my_post_build_copy_bin(ThreadSynch)
+elseif (MyTargetType STREQUAL beagle)
+   my_post_build_scp_bin(ThreadSynch)
+elseif (MyTargetType STREQUAL dart)
+   my_post_build_scp_bin(ThreadSynch)
 endif()
+
+

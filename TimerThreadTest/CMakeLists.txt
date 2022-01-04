@@ -13,10 +13,15 @@ my_inc_import_CommonLib(TimerThreadTest)
 my_lib_import_CommonLib(TimerThreadTest)
 my_lib_import_RisLib(TimerThreadTest)
 
-if(MSVC)
-   install(TARGETS TimerThreadTest DESTINATION "C:/aaa_prime/RisLib")
-elseif(NOT CMAKE_SYSTEM_VERSION EQUAL 101)
-   install(TARGETS TimerThreadTest DESTINATION "/opt/prime/bin")
-else()
-   my_post_build_bin(TimerThreadTest)
+
+if (MSVC)
+   install(TARGETS TimerThreadTest DESTINATION ${MyCopyBinToDir})
+elseif (MyTargetType STREQUAL ubuntu)
+   my_post_build_copy_bin(TimerThreadTest)
+elseif (MyTargetType STREQUAL beagle)
+   my_post_build_scp_bin(TimerThreadTest)
+elseif (MyTargetType STREQUAL dart)
+   my_post_build_scp_bin(TimerThreadTest)
 endif()
+
+

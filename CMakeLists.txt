@@ -48,6 +48,9 @@ add_subdirectory ("TimerThreadTest")
 add_subdirectory ("WaitableTest")
 return()
 
+add_subdirectory ("RisLib")
+return()
+
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
 add_subdirectory ("PeriodicTest")

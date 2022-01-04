@@ -1,0 +1,28 @@
+﻿// copied from CMakeSettings_ubuntu.json
+{
+   "configurations": [
+      {
+         "name": "Dev_RisLib",
+         "inheritEnvironments": [ "linux_x64" ],
+         "generator": "Unix Makefiles",
+         "remoteMachineName": "${defaultRemoteMachineName}",
+         "configurationType": "Release",
+         "remoteCMakeListsRoot": "/var/tmp/${name}/src",
+         "cmakeExecutable": "/usr/bin/cmake",
+         "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\build",
+         "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\install",
+         "remoteBuildRoot": "/var/tmp/${name}/build",
+         "remoteInstallRoot": "/var/tmp/install",
+         "remoteCopySources": true,
+         "remoteCopySourcesOutputVerbosity": "Normal",
+         "remoteCopySourcesConcurrentCopies": "10",
+         "remoteCopySourcesMethod": "rsync",
+         "remoteCopySourcesExclusionList": [ ".vs", ".git" ],
+         "rsyncCommandArgs": "-t --delete --delete-excluded",
+         "remoteCopyBuildOutput": false,
+         "cmakeCommandArgs": "",
+         "buildCommandArgs": "-j12",
+         "ctestCommandArgs": ""
+      }
+   ]
+}

@@ -1,4 +1,5 @@
-﻿{
+﻿// copied from CMakeSettings_beagle.json
+{
    "configurations": [
       {
          "name": "Dev_RisLib",
@@ -9,10 +10,10 @@
          "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}",
          "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}\\install",
          "cmakeCommandArgs": "",
-         "buildCommandArgs": "-v -j8",
+         "buildCommandArgs": "-v -j12",
          "ctestCommandArgs": "",
-         "cmakeToolchain": "MyBeagleToolchain.cmake",
-         "variables": []
+         "intelliSenseMode": "linux-gcc-arm",
+         "cmakeToolchain": "MyBeagleToolchain.cmake"
       }
    ]
 }

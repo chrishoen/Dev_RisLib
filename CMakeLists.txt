@@ -1,25 +1,24 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
 set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/MyOverrides.cmake")
-
-include(MyPrecompiledHeader.cmake)
+include(MyConfig.cmake)
 include(MyCodeMacros.cmake)
-include(MyLocalImports.cmake)
 include(MyPostBuild.cmake)
+include(MyLocalImports.cmake)
+include(MyPrecompiledHeader.cmake)
 include(MySpecial.cmake)
 
 project ("Dev_RisLib")
-
-my_special1()
-my_init_post_build_variables()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("Test")
-return()
+my_init_config_variables() 
+my_special1() 
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("RisLib")
 add_subdirectory ("PeriodicTest")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("Test")
 return()
 
 add_subdirectory ("CommonLib")
@@ -76,4 +75,9 @@ return()
 
 add_subdirectory ("RisLib")
 return()
+
+
+
+
+
 

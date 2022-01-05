@@ -48,6 +48,7 @@ public:
 
    // Constructor
    BaseCmdLineExec();
+   virtual ~BaseCmdLineExec() {};
    virtual void reset (){};
 
    //***************************************************************************

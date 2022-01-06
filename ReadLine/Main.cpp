@@ -15,13 +15,17 @@ int main(int argc,char** argv)
 
    char tCommandLine[200];
 
-   while (1)
+   using_history();
+
+   while (char* tLine = readline(""))
    {
-      char* tLine = readline("");
-      if (tLine)
+      if (strcmp(tLine, "e") == 0)
       {
          free(tLine);
+         return 0;
       }
+      add_history(tLine);
+      free(tLine);
    }
 
    return 0;

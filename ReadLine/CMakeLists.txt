@@ -7,7 +7,8 @@ add_executable (ReadLine ${src_files})
 my_add_compile_options (ReadLine)
 my_add_pch (ReadLine)
 
-target_link_libraries(ReadLine readline)
+my_inc_import_RisLib(ReadLine)
+my_lib_import_RisLib(ReadLine)
 
 if (MSVC)
    install(TARGETS ReadLine DESTINATION ${MyCopyBinToDir})

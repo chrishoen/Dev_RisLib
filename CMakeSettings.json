@@ -1,9 +1,9 @@
-﻿// copied from CMakeSettings_dart.json
+﻿// copied from CMakeSettings_ubuntu.json
 {
    "configurations": [
       {
          "name": "Dev_RisLib",
-         "inheritEnvironments": [ "linux_arm64" ],
+         "inheritEnvironments": [ "linux_x64" ],
          "generator": "Unix Makefiles",
          "remoteMachineName": "${defaultRemoteMachineName}",
          "configurationType": "Release",
@@ -22,9 +22,7 @@
          "remoteCopyBuildOutput": false,
          "cmakeCommandArgs": "",
          "buildCommandArgs": "-j12",
-         "ctestCommandArgs": "",
-         "cmakeToolchain": "imx8mm-toolchain.cmake"
+         "ctestCommandArgs": ""
       }
    ]
 }
-

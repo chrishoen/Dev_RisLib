@@ -12,6 +12,9 @@ project ("Dev_RisLib")
 my_init_config_variables() 
 my_special1() 
 
+add_subdirectory ("ReadLine")
+return()
+
 add_subdirectory ("RisLib")
 return()
 

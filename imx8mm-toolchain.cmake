@@ -5,7 +5,7 @@ SET (CMAKE_CXX_STANDARD_REQUIRED on)
 
 #set (YOCTO_BUILD_DIR "$ENV{HOME}/repos/nextgen/build_wayland/tmp")
 #set (YOCTO_BUILD_DIR "$ENV{YOCTO_BUILD_DIR}")
-set (YOCTO_BUILD_DIR "/home/main/work/NextGen/build_wayland/tmp")
+set (YOCTO_BUILD_DIR "/home/main/work/Reader/build_wayland/tmp")
 
 if(NOT EXISTS ${YOCTO_BUILD_DIR})
    message(FATAL_ERROR "########## YOCTO_BUILD_DIR was not set correctly! YOCTO_BUILD_DIR:${YOCTO_BUILD_DIR} ###########")

@@ -7,8 +7,7 @@
 
 #include "stdafx.h"
 
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "my_functions.h"
 
 #define  _RISCMDLINEREADER_CPP_
 #include "risCmdLineReader.h"
@@ -23,14 +22,10 @@ namespace Ris
 
 CmdLineReader::CmdLineReader()
 {
-   // Initialize readline history.
-   using_history();
 }
 
 CmdLineReader::~CmdLineReader()
 {
-   // Clear readline history.
-   clear_history();
 }
 
 //******************************************************************************
@@ -41,20 +36,14 @@ CmdLineReader::~CmdLineReader()
 
 char* CmdLineReader::readLine(char* aString, int aMaxSize)
 {
-   // Read a line from console input.
-   char* tStriing = readline("");
+   // Read from console input.
+   char* tString = fgets(aString, aMaxSize, stdin);
 
    // Guard.
    if (tString == 0) return 0;
 
-   // Copy the line into the input argument.
-   strncpy(aString, tString, aMaxSize - 1);
-
-   // Add the line to the readline history.
-   add_history(tString);
-
-   // The line was allocated by the readline call. free it.
-   free(tString);
+   // Remove cr/lf at end of line.
+   my_trimCRLF(tString);
 
    // Return the string.
    return tString;

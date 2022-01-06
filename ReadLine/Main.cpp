@@ -1,7 +1,5 @@
 #include "stdafx.h"
 
-#include <readline/readline.h>
-#include <readline/history.h>
 
 #include "risCmdLineReader.h"
 
@@ -26,6 +24,9 @@ int main(int argc,char** argv)
 //******************************************************************************
 //******************************************************************************
 #if 0
+
+#include <readline/readline.h>
+#include <readline/history.h>
 
 using_history();
 

@@ -13,7 +13,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This provides a function used to read a of line user console input.
+// This provides a function used to read a string of user console input.
 
 class CmdLineReader
 {
@@ -22,9 +22,9 @@ public:
    CmdLineReader();
    ~CmdLineReader();
 
-   // Read a line of user console input. Copy it into the input argument.
-   // Return a pointer to the line.
-   char* readLine (char* aCmdLine, int aMaxSize);
+   // Read a string of user console input. Copy it into the input argument
+   // string. Return a pointer to the string.
+   char* readLine (char* aString, int aMaxSize);
 };
 
 //******************************************************************************

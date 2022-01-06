@@ -14,7 +14,6 @@ my_special1()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("Test")
-add_subdirectory ("ReadLine")
 return()
 
 return()

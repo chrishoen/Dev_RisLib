@@ -12,6 +12,7 @@
 #include "risThreadsThreads.h"
 #include "my_functions.h"
 #include "prnPrint.h"
+#include "risCmdLineReader.h"
 
 #define  _RISCMDLINECONSOLE_CPP_
 #include "risCmdLineConsole.h"
@@ -53,13 +54,10 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
       //************************************************************************
       // Read console input.
 
-      if (fgets(tCommandLine, 200, stdin) == 0)
+      if (gCmdLineReader.readLine(tCommandLine, 200) == 0)
       {
          return;
       }
-
-      // Remove cr/lf at end of line.
-      my_trimCRLF(tCommandLine);
 
       //************************************************************************
       //************************************************************************

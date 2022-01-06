@@ -42,7 +42,7 @@ CmdLineReader::~CmdLineReader()
 char* CmdLineReader::readLine(char* aString, int aMaxSize)
 {
    // Read a line from console input.
-   char* tStriing = readline("");
+   char* tString = readline("");
 
    // Guard.
    if (tString == 0) return 0;

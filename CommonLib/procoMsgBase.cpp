@@ -187,6 +187,7 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
 
 MsgMonkey::MsgMonkey()
    : Ris::BaseMsgMonkey(ProtoComm::createMsg)
@@ -202,6 +203,8 @@ void  MsgMonkey::configure(int aSourceId)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Extract message header parameters from a buffer and validate them
+// Return true if the header is valid.
 
 bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 {
@@ -233,6 +236,7 @@ bool MsgMonkey::extractMessageHeaderParms(Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Preprocess a message before it is sent.
 
 void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
 {

@@ -211,7 +211,7 @@ public:
    int getMaxBufferSize() override {return MsgDefT::cMsgBufferSize;}
 
    // Extract message header parameters from a buffer and validate them
-   // Returns true if the header is valid.
+   // Return true if the header is valid.
    bool extractMessageHeaderParms(Ris::ByteBuffer* aBuffer) override;
 
    // Preprocess a message before it is sent.

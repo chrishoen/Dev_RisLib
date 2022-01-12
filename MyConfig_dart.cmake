@@ -11,7 +11,7 @@ function(my_init_config_variables)
 
    set (MyCopyBinToDir "/home/root/stenograph/bin" PARENT_SCOPE)
    set (MyCopyLibToDir "/home/root/stenograph/lib" PARENT_SCOPE)
-   set (SRC_LINUX_DIR "/home/main/work/Reader/src_linux"  PARENT_SCOPE)
+   set (SRC_LINUX_DIR "/home/main/work/nextget/src_linux"  PARENT_SCOPE)
 
    set (MySudo "" PARENT_SCOPE)
 

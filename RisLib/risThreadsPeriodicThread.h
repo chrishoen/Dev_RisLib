@@ -138,7 +138,7 @@ public:
 
    // An overload of this is supplied by the inheritor.
    // It is called periodically by the threadRunFunction.
-   virtual void executeOnTimer(int aTimerCount)=0;
+   virtual void executeOnTimer(int aTimerCount) = 0;
 };
 
 //******************************************************************************

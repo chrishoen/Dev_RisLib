@@ -90,7 +90,7 @@ public:
    // Base class override: Execute a command from the command file to set a 
    // member variable. This is called by the associated command file object
    // for each command in the file.
-   void execute(Ris::CmdLineCmd* aCmd)=0;
+   void execute(Ris::CmdLineCmd* aCmd) = 0;
 
    // Calculate expanded member variables. This is called after the entire
    // command file has been processed.

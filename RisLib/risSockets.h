@@ -85,7 +85,7 @@ public:
    virtual ~BaseSocket();
    virtual void reset();
  
-   virtual bool doSocket()=0;
+   virtual bool doSocket() = 0;
 
    virtual bool doBind();
    virtual bool doClose();

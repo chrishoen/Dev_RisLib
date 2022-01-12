@@ -59,7 +59,7 @@ public:
    // This is overridden by inheriting classes to execute individual command
    // lines. This is called by command line processors that process sequences
    // of command lines.
-   virtual void execute(CmdLineCmd* aCmd)=0;
+   virtual void execute(CmdLineCmd* aCmd) = 0;
 
    //***************************************************************************
    //***************************************************************************

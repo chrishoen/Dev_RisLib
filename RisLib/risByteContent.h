@@ -52,7 +52,7 @@ public:
    // buffer. The buffer has a direction flag. If it is true then the class
    // is copied to the buffer, writing it using a binary encode. If it is false 
    // then it is copied from the buffer, reading it using a binary decode.
-   virtual void copyToFrom(Ris::ByteBuffer* aBuffer)=0;
+   virtual void copyToFrom(Ris::ByteBuffer* aBuffer) = 0;
 };
 
 //******************************************************************************

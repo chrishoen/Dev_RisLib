@@ -7,9 +7,9 @@ function(my_init_config_variables)
 
    set (MyTargetType beagle PARENT_SCOPE)
 
-   set (MyTargetHostName "debian@bbx" PARENT_SCOPE)
    set (MyTargetHostName "pi@rpx" PARENT_SCOPE)
-
+   set (MyTargetHostName "debian@bbkbd" PARENT_SCOPE)
+   
    set (MyCopyBinToDir "/opt/prime/bin" PARENT_SCOPE)
    set (MyCopyLibToDir "/opt/prime/lib" PARENT_SCOPE)
 

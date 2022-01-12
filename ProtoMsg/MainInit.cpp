@@ -30,7 +30,7 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Done.
 
-   Prn::print(0,"ExampleMsg Program*******************************************BEGIN");
+   Prn::print(0,"ProtoMsg Program*******************************************BEGIN");
 }
 
 //******************************************************************************
@@ -40,7 +40,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ExampleMsg Program*******************************************END");
+   Prn::print(0,"ProtoMsg Program*******************************************END");
 
    // Close print facility.
    Prn::finalizePrint();

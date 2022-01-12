@@ -70,6 +70,7 @@ EchoRequestMsg::EchoRequestMsg ()
    mCode4 = 104;
 
    mNumWords = 0;
+   mWords[0] = 0;
 } 
 
 void EchoRequestMsg::copyToFrom (Ris::ByteBuffer* aBuffer)
@@ -103,8 +104,8 @@ EchoResponseMsg::EchoResponseMsg()
    mCode3 = 203;
    mCode4 = 204;
 
-   mNumWords = 0;
    mNumWords = MaxWords;
+   mWords[0] = 0;
 }
 
 void EchoResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
@@ -217,11 +218,38 @@ void* createMsg (int aMessageType)
    case MsgIdT::cDataMsg :
       tMsg = new DataMsg;
       break;
+   case MsgIdT::cBlobMsg:
+      tMsg = new BlobMsg;
+      break;
    default :
       return 0;
       break;
    }
    return tMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+BlobMsg::BlobMsg()
+{
+   mMessageType = MsgIdT::cBlobMsg;
+}
+
+void BlobMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
+{
+   mHeader.headerCopyToFrom(aBuffer, this);
+
+   // If copyto then the copy size is set beforehand.
+   // If copyfrom then the copy size is the entire payload size.
+   if (aBuffer->isCopyFrom())
+   {
+      mBytes.mCopySize = mHeader.mMessageLength - Header::cLength;
+   }
+   aBuffer->copy(&mBytes);
+
+   mHeader.headerReCopyToFrom(aBuffer, this);
 }
 
 //******************************************************************************

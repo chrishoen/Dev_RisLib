@@ -151,4 +151,25 @@ void MsgHelper::show(DataMsg* aMsg)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+
+void MsgHelper::initialize(BlobMsg* aMsg)
+{
+   int tInt = 0x10111213;
+   aMsg->mBytes.mCopySize = 4;
+   memcpy(aMsg->mBytes.mMemory, &tInt, 4);
+}
+
+void MsgHelper::show(BlobMsg* aMsg)
+{
+   int tInt = 0;
+   memcpy(&tInt, aMsg->mBytes.mMemory, 4);
+
+   Prn::print(Prn::ThreadRun1, "BlobMsg");
+   Prn::print(Prn::ThreadRun1, "CopySize   %d", aMsg->mBytes.mCopySize);
+   Prn::print(Prn::ThreadRun1, "Memory     %08x", tInt);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 }//namespace

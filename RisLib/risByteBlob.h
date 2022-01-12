@@ -58,7 +58,7 @@ public:
    // Constructor.
    ByteBlob()
    {
-      mMemory = malloc(AllocateSize);
+      mMemory = (char*)malloc(AllocateSize);
       mCopySize = 0;
    }
 

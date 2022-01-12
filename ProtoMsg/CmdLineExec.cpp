@@ -38,7 +38,31 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOnGo1(Ris::CmdLineCmd* aCmd)
+{
+   Ris::ByteBuffer tBuffer(20000);
+
+   ProtoComm::ByteBlobMsg* tTxMsg = new ProtoComm::ByteBlobMsg;
+   ProtoComm::ByteBlobMsg* tRxMsg = 0;
+   MsgHelper::initialize(tTxMsg);
+
+   ProtoComm::MsgMonkey tMonkey;
+
+   tMonkey.putMsgToBuffer(&tBuffer, tTxMsg);
+
+   tRxMsg = (ProtoComm::ByteBlobMsg*)tMonkey.makeMsgFromBuffer(&tBuffer);
+
+   MsgHelper::show(tRxMsg);
+
+   delete tTxMsg;
+   delete tRxMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
 
@@ -56,14 +80,6 @@ void CmdLineExec::executeOnGo1 (Ris::CmdLineCmd* aCmd)
 
    delete tTxMsg;
    delete tRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeOnGo2(Ris::CmdLineCmd* aCmd)
-{
 }
 
 //******************************************************************************

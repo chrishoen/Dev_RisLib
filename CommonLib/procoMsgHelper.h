@@ -19,7 +19,7 @@ public:
    static void initialize(EchoResponseMsg* aMsg);
    static void initialize (DataRecord* aMsg);
    static void initialize(DataMsg* aMsg);
-   static void initialize(BlobMsg* aMsg);
+   static void initialize(ByteBlobMsg* aMsg);
 
    static void show(TestMsg* aMsg);
    static void show(FirstMessageMsg* aMsg);
@@ -27,7 +27,7 @@ public:
    static void show(EchoResponseMsg* aMsg);
    static void show(DataRecord* aMsg);
    static void show(DataMsg* aMsg);
-   static void show(BlobMsg* aMsg);
+   static void show(ByteBlobMsg* aMsg);
 
 };
 

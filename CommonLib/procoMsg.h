@@ -47,7 +47,7 @@ public:
    static const int   cEchoRequestMsg    = 3;
    static const int   cEchoResponseMsg   = 4;
    static const int   cDataMsg           = 5;
-   static const int   cBlobMsg           = 6;
+   static const int   cByteBlobMsg       = 6;
 };
 
 //******************************************************************************
@@ -231,7 +231,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-class BlobMsg : public BaseMsg
+class ByteBlobMsg : public BaseMsg
 {
 public:
 
@@ -247,7 +247,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   BlobMsg();
+   ByteBlobMsg();
    void copyToFrom(Ris::ByteBuffer* aBuffer);
 };
 

@@ -218,8 +218,8 @@ void* createMsg (int aMessageType)
    case MsgIdT::cDataMsg :
       tMsg = new DataMsg;
       break;
-   case MsgIdT::cBlobMsg:
-      tMsg = new BlobMsg;
+   case MsgIdT::cByteBlobMsg:
+      tMsg = new ByteBlobMsg;
       break;
    default :
       return 0;
@@ -232,17 +232,17 @@ void* createMsg (int aMessageType)
 //******************************************************************************
 //******************************************************************************
 
-BlobMsg::BlobMsg()
+ByteBlobMsg::ByteBlobMsg()
 {
-   mMessageType = MsgIdT::cBlobMsg;
+   mMessageType = MsgIdT::cByteBlobMsg;
 }
 
-void BlobMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
+void ByteBlobMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 {
    mHeader.headerCopyToFrom(aBuffer, this);
 
-   // If copyto then the copy size is set beforehand.
-   // If copyfrom then the copy size is the entire payload size.
+   // If copy to   then the copy size is set beforehand.
+   // If copy from then the copy size is the entire payload size.
    if (aBuffer->isCopyFrom())
    {
       mBytes.mCopySize = mHeader.mMessageLength - Header::cLength;

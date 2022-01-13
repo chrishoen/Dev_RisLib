@@ -11,13 +11,19 @@ my_inc_import_RisLib(Test)
 my_lib_import_RisLib(Test)
 
 
+
+
 if (MSVC)
-   install(TARGETS Test DESTINATION ${MyCopyBinToDir})
+   install(TARGETS Test DESTINATION "C:/aaa_prime/RisLib")
 elseif (MyTargetType STREQUAL ubuntu)
-   my_post_build_copy_bin(Test)
+   install(TARGETS Test DESTINATION "/opt/prime/bin")
 elseif (MyTargetType STREQUAL beagle)
-   my_post_build_scp_bin(Test)
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/Test pi@rpx:/opt/prime/bin)")
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/Test debian@bbx:/opt/prime/bin)")
 elseif (MyTargetType STREQUAL dart)
-   my_post_build_scp_bin(Test)
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/Test root@dart:/home/root/stenograph/bin)")
 endif()
 

@@ -1,56 +1,62 @@
 #pragma once
 
 /*==============================================================================
-Kbd hidraw thread.
+Serial port class.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risThreadsThreads.h"
+
+#include "risSerialSettings.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a thread that processes the hidraw inputs from the keyboard.
-// It owns the hidraw file descriptor. It reads the hidraw inputs from
-// the keyboard, modally translates them, and writes them to the host 
-// via the gadget file descriptor that is owned by the gadget thread.
 
-class SerialThread : public Ris::Threads::BaseThread
+namespace Ris
+{
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This class encapsulates a serial port. It provides functions to
+// open, close, and purge a serial port. It provides functions to send and
+// receive bytes via a serial port. The send and receive functions are
+// blocking.
+
+class SerialPort2 
 {
 public:
-   typedef Ris::Threads::BaseThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Constants.
 
-   // Device path for usb acm.
-   static const int cMaxStringSize = 256;
+   // Return codes, if retval >=0 then no error and retval is number of bytes
+   // that were transferred. If retval < 0 then use these return codes.
+   static const int cRetCodeError   = -1;
+   static const int cRetCodeTimeout = -2;
+   static const int cRetCodeAbort   = -3;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // File path for usb port.
-   char mPortPath[64];
+   // Settings.
+   SerialSettings mSettings;
 
-   // File descriptor for usb port.
-   int mPortFd;
+   // True if open and valid.
+   bool mValidFlag;
 
-   // File descriptor for event semaphore used for close.
-   int mEventFd;
+   // True if a thread termination is requested.
+   bool mTerminateFlag;
 
-   // Request buffer.
-   char mRxBuffer[cMaxStringSize];
-
-   // Status.
-   int mErrorCount;
-   int mRestartCount;
-   int mRxCount;
+   // Portable specifics.
+   class Specific;
+   Specific* mSpecific;
 
    //***************************************************************************
    //***************************************************************************
@@ -58,63 +64,53 @@ public:
    // Methods.
 
    // Constructor.
-   SerialThread();
+   SerialPort2();
+  ~SerialPort2();
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods. Base class overloads.
-
-   // Thread init function. This is called by the base class immediately
-   // after the thread starts running. It initializes something.
-   void threadInitFunction() override;
-
-   // Thread run function. This is called by the base class immediately
-   // after the thread init function. It runs a loop that waits for the
-   // hid keyboard input.
-   void threadRunFunction() override;
-
-   // Thread exit function. This is called by the base class immediately
-   // before the thread is terminated. It is a placeholder.
-   void threadExitFunction() override;
-
-   // Thread shutdown function. This posts to the close event to
-   // terminate the thread and it closes the files.
-   void shutdownThread() override;
+   // Initialize with settings.
+   virtual void initialize(SerialSettings& aSettings);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Send a null terminated string via the serial port. A newline terminator
-   // is appended to the string before transmission. This executes in the
-   // context of the calling thread.
-   void sendString(const char* aString);
+   // Open the serial port with the settings.
+   bool doOpen();
+
+   // Close the serial port.
+   void doClose();
+
+   // Abort pending serial port receive.
+   void doAbort();
+
+   // Flush serial port buffers.
+   void doFlush();
+
+   // True if open and valid.
+   bool isValid();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Software tests.
-   void test1();
+   // Send data, fixed number of bytes.
+   int  doSendBytes(const char *aData, int aNumBytes);
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Receive data, fixed number of bytes.
+   int doReceiveBytes(char *aData, int aNumBytes);
+
+   // Return the number of bytes that are available to receive.
+   int getAvailableReceiveBytes();
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Global instance.
-
-#ifdef _SERIALTHREAD_CPP_
-           SerialThread* gSerialThread = 0;
-#else
-   extern  SerialThread* gSerialThread;
-#endif
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-
+}//namespace

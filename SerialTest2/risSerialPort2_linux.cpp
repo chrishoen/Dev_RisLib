@@ -48,7 +48,7 @@ SerialPort2::SerialPort2()
    mSpecific->mPortFd = 0;
    mSpecific->mEventFd = 0;
    mValidFlag = false;
-   mTerminateFlag = false;
+   mAbortFlag = false;
 }
 
 SerialPort2::~SerialPort2()
@@ -66,31 +66,35 @@ void SerialPort2::initialize(SerialSettings& aSettings)
 //******************************************************************************
 //******************************************************************************
 // Open the serial port with the settings.
+//
+// Configure the port for raw, set the baud rate, and optionally 
+// select RS485.
 
 bool SerialPort2::doOpen()
 {
+   // Do this first.
    mValidFlag = false;
+   mAbortFlag = false;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Open the port.
 
+   // Open the port.
    mSpecific->mPortFd = open(mSettings.mPortDevice, O_RDWR | O_NOCTTY | O_SYNC);
 
+   // Test the return code.
    if (mSpecific->mPortFd < 0)
    {
       printf("serial_open_error_1 %d %s\n", errno, strerror(errno));
       return false;
    }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Open the event.
-
    mSpecific->mEventFd = eventfd(0, EFD_SEMAPHORE);
 
+   // Test the return code.
    if (mSpecific->mPortFd < 0)
    {
       printf("serial_open_error_2 %d\n", errno);
@@ -100,12 +104,14 @@ bool SerialPort2::doOpen()
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Configure the port for raw data.
+   // Configure the port from the settings.
 
+   // Configure the port for raw data.
    struct termios tOptions;
    tcgetattr(mSpecific->mPortFd, &tOptions);
    cfmakeraw(&tOptions);
 
+   // Configure the baud rate.
    if (strcmp(mSettings.mPortSetup, "9600") == 0)
    {
       cfsetispeed(&tOptions, B9600);
@@ -133,11 +139,7 @@ bool SerialPort2::doOpen()
       return false;
    }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Configure the port for rs485.
-
    if (mSettings.m485Flag)
    {
       struct serial_rs485 t485conf = { 0 };
@@ -224,12 +226,19 @@ void SerialPort2::doClose()
 //******************************************************************************
 //******************************************************************************
 // Abort pending serial port receive.
+// 
+// Set the abort flag and write bytes to the event semaphore. This will
+// cause a pending receive call poll to return and the receive call will
+// abort because the abort flag is set.
 
 void SerialPort2::doAbort()
 {
    // Guard.
    int tRet = 0;
    if (!mValidFlag) return;
+
+   // Set the abort flag.
+   mAbortFlag = true;
 
    // Write bytes to the event semaphore.
    unsigned long long tCount = 1;
@@ -249,10 +258,11 @@ void SerialPort2::doAbort()
 
 void SerialPort2::doFlush()
 {
+   return;
+
    // Guard.
    int tRet = 0;
    if (!mValidFlag) return;
-   return;
 
    // Flush the buffers.
    tRet = tcflush(mSpecific->mPortFd, TCIFLUSH);
@@ -267,7 +277,7 @@ void SerialPort2::doFlush()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send data, fixed number of bytes.
+// Send a number of bytes, return the actual number of bytes sent.
 
 int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
 {
@@ -308,10 +318,6 @@ int SerialPort2::doReceiveBytes(char* aData, int aNumBytes)
 {
    // Guard.
    if (!mValidFlag) return cRetCodeError;
-
-   //printf("SerialPort::doReceiveBytes START %d\n", aNumBytes);
-
-   // Locals.
    int tRet = 0;
 
    //***************************************************************************
@@ -329,9 +335,7 @@ int SerialPort2::doReceiveBytes(char* aData, int aNumBytes)
    //***************************************************************************
    // Poll the port for a read or a close.
 
-   // Read.
-   //printf("serial_poll_start\n");
-
+   // Setup a poll structure for the port and event fds.
    struct pollfd tPollFd[2];
    tPollFd[0].fd = mSpecific->mPortFd;
    tPollFd[0].events = POLLIN;
@@ -340,14 +344,15 @@ int SerialPort2::doReceiveBytes(char* aData, int aNumBytes)
    tPollFd[1].events = POLLIN;
    tPollFd[1].revents = 0;
 
-   // Poll the port for read.
+   // Blocking poll for "there is data to read". This returns when
+   // the port has received data or the abort event was posted
    tRet = poll(&tPollFd[0], 2, -1);
 
-   // Test the valid flag for closing.
-   if (!mValidFlag)
+   // Test for an abort request.
+   if (!mAbortFlag)
    {
-      //printf("serial_poll_invalid close\n");
-      return cRetCodeError;
+      //printf("serial_poll_abort\n");
+      return cRetCodeAbort;
    }
 
    // Test the return code for error.

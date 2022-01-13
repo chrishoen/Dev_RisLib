@@ -51,8 +51,8 @@ public:
    // True if open and valid.
    bool mValidFlag;
 
-   // True if a thread termination is requested.
-   bool mTerminateFlag;
+   // True if a receive abort is requested.
+   bool mAbortFlag;
 
    // Portable specifics.
    class Specific;
@@ -87,15 +87,12 @@ public:
    // Flush serial port buffers.
    void doFlush();
 
-   // True if open and valid.
-   bool isValid();
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Send data, fixed number of bytes.
+   // Send a number of bytes, return the actual number of bytes sent.
    int  doSendBytes(const char *aData, int aNumBytes);
 
    //***************************************************************************

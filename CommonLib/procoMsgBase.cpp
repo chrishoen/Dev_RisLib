@@ -168,7 +168,7 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
       // Restore buffer parameters
       // to the initial position
       aBuffer->setPosition (mInitialPosition);
-      aBuffer->setLength   (mInitialPosition);
+      aBuffer->setLength   (mInitialLength);
 
       // Copy the adjusted header into the buffer'
       // at the original position
@@ -177,7 +177,7 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
       // Restore buffer parameters
       // to the final position
       aBuffer->setPosition (tFinalPosition);
-      aBuffer->setLength   (tFinalPosition);
+      aBuffer->setLength   (tFinalLength);
    }
    else
    {

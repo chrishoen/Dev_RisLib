@@ -89,25 +89,37 @@ public:
    // Flush serial port buffers.
    void doFlush();
 
+   // Return the number of bytes that are available to read.
+   int doGetAvailableReceiveBytes();
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
    // Send a number of bytes, return the actual number of bytes sent.
-   int  doSendBytes(const char *aData, int aNumBytes);
+   int  doSendBytes(const char *aBytes, int aNumBytes);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Read any available receive bytes. Block until at least one byte has
-   // been received. Return the number of bytes read or a negative error code.
-   int doReadAnyBytes(char *aData, int aMaxNumBytes);
+   // Read any available receive bytes. Block until at least one byte
+   // has been received. Return the number of bytes read or a negative
+   // error code. Copy the bytes into the pointer argument.
+   int doReadAnyBytes(char *aBytes, int aMaxNumBytes);
 
-   // Return the number of bytes that are available to receive.
-   int getAvailableReceiveBytes();
+   // Read a requested number of receive bytes. Block until all of the
+   // bytes have been received and read. Return the number of bytes read
+   // or a negative error code. Copy the bytes into the pointer argument.
+   int doReadAllBytes(char* aBytes, int aRequestBytes);
+
+   // Read one receive byte. Block until the byte has been received
+   // and read. Return one or a negative error code. Copy the byte into
+   // the pointer argument.
+   int doReadOneByte(char* aByte);
+
 };
 
 //******************************************************************************

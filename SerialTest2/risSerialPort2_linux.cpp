@@ -277,9 +277,21 @@ void SerialPort2::doFlush()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Return the number of bytes that are available to receive.
+
+int SerialPort2::doGetAvailableReceiveBytes()
+{
+   int tBytesAvaiable;
+   ioctl(mSpecific->mPortFd, FIONREAD, &tBytesAvaiable);
+   return tBytesAvaiable;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Send a number of bytes, return the actual number of bytes sent.
 
-int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
+int SerialPort2::doSendBytes(const char* aBytes, int aNumBytes)
 {
    // Guard.
    if (!mValidFlag) return cSerialRetError;
@@ -289,7 +301,7 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
    int tRet  = 0;
 
    // Write bytes to the port.
-   tRet = write(mSpecific->mPortFd, aData, aNumBytes);
+   tRet = write(mSpecific->mPortFd, aBytes, aNumBytes);
 
    // Test the return code.
    if (tRet < 0)
@@ -312,25 +324,16 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read any available receive bytes. Block until at least one byte has
-// been received. Return the number of bytes read or a negative error code.
+// Read any available receive bytes. Block until at least one byte
+// has been received. Return the number of bytes read or a negative
+// error code. Copy the bytes into the pointer argument.
 
-int SerialPort2::doReadAnyBytes(char* aData, int aMaxNumBytes)
+int SerialPort2::doReadAnyBytes(char* aBytes, int aMaxNumBytes)
 {
    // Guard.
    if (!mValidFlag) return cSerialRetError;
    int tRet = 0;
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Set the number of bytes to read.
-#if 0
-   struct termios tOptions;
-   tcgetattr(mSpecific->mPortFd, &tOptions);
-   tOptions.c_cc[VMIN] = aNumBytes;
-   tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
-#endif
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -395,7 +398,7 @@ int SerialPort2::doReadAnyBytes(char* aData, int aMaxNumBytes)
    // Read from the serial port.
 
    // Read.
-   tRet = (int)read(mSpecific->mPortFd, aData, (size_t)aMaxNumBytes);
+   tRet = (int)read(mSpecific->mPortFd, aBytes, (size_t)aMaxNumBytes);
 
    // Test the return code.
    if (tRet < 0)
@@ -416,13 +419,62 @@ int SerialPort2::doReadAnyBytes(char* aData, int aMaxNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return the number of bytes that are available to receive.
+// Read a requested number of receive bytes. Block until all of the
+// bytes have been received and read. Return the number of bytes read
+// or a negative error code. Copy the bytes into the pointer argument.
 
-int SerialPort2::getAvailableReceiveBytes()
+int SerialPort2::doReadAllBytes(char* aBytes, int aRequestBytes)
 {
-   int tBytesAvaiable;
-   ioctl(mSpecific->mPortFd, FIONREAD, &tBytesAvaiable);
-   return tBytesAvaiable;
+   // Guard.
+   if (!mValidFlag) return cSerialRetError;
+   if (aRequestBytes == 0) return 0;
+   int tRet = 0;
+
+   // Loop to read all of the requested bytes.
+   int tBytesRequired = aRequestBytes;
+   int tBytesRemaining = aRequestBytes;
+   int tBytesTotal = 0;
+
+   bool tGoing = true;
+   while (tGoing)
+   {
+      // Read any available receive bytes. Block until at least one byte
+      // has been received. Return the number of bytes read or a negative
+      // error code.
+      tRet = doReadAnyBytes(&aBytes[tBytesTotal], tBytesRemaining);
+
+      if (tRet > 0)
+      {
+         tBytesTotal += tRet;
+         tBytesRemaining -= tRet;
+         if (tBytesTotal == tBytesRequired)
+         {
+            tGoing = false;
+            tRet = tBytesTotal;
+         }
+      }
+      else
+      {
+         tGoing = false;
+      }
+   }
+
+   // If success then return the total number of bytes read, which is 
+   // equal to the requested number of bytes. If failure then return
+   // the negative error code.
+   return tRet;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Read one receive byte. Block until the byte has been received
+// and read. Return one or a negative error code. Copy the byte into
+// the pointer argument.
+
+int SerialPort2::doReadOneByte(char* aByte)
+{
+   return doReadAnyBytes(aByte, 1);
 }
 
 //******************************************************************************
@@ -430,3 +482,10 @@ int SerialPort2::getAvailableReceiveBytes()
 //******************************************************************************
 }//namespace
 
+#if 0
+// Set the number of bytes to read.
+struct termios tOptions;
+tcgetattr(mSpecific->mPortFd, &tOptions);
+tOptions.c_cc[VMIN] = aNumBytes;
+tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
+#endif

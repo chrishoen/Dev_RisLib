@@ -265,7 +265,7 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
 {
    //printf("SerialPort2::doSendBytes START %d\n", aNumBytes);
    // Guard.
-   if (!isValid()) return cRetCodeError;
+   if (!isValid()) return cSerialRetError;
 
    // Local variables.
    DWORD tNumWritten;
@@ -298,14 +298,14 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
          else
          {
             //printf("ERROR SerialPort2::doSendBytes ERROR 101, %d\n", GetLastError());
-            return cRetCodeError;
+            return cSerialRetError;
          }
       }
       break;
       default:
       {
          //printf("ERROR SerialPort2::doSendBytes ERROR 102, %d\n", GetLastError());
-         return cRetCodeError;
+         return cSerialRetError;
       }
       break;
    }
@@ -532,7 +532,7 @@ int SerialPort2::doReceiveBytes(char *aData, int aNumBytes)
       else
       {
          //printf("SerialPort2::doReceiveBytes ERROR 101 %d\n", GetLastError());
-         return cRetCodeError;
+         return cSerialRetError;
       }
    }
    else
@@ -555,7 +555,7 @@ int SerialPort2::doReceiveBytes(char *aData, int aNumBytes)
             if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tBytesRead, FALSE))
             {
                //printf("ERROR SerialPort2::doReceiveBytes ERROR 102 %d\n", GetLastError());
-               return cRetCodeError;
+               return cSerialRetError;
             }
             else
             {
@@ -568,12 +568,12 @@ int SerialPort2::doReceiveBytes(char *aData, int aNumBytes)
          case WAIT_TIMEOUT:
          {
             //printf("ERROR SerialPort2::doReceiveBytes TIMEOUT %d\n", GetLastError());
-            return cRetCodeError;
+            return cSerialRetError;
          }
          default:
          {
             //printf("ERROR SerialPort2::doReceiveBytes ERROR 104 %d\n", GetLastError());
-            return cRetCodeError;
+            return cSerialRetError;
          }
       }
    }
@@ -584,14 +584,14 @@ int SerialPort2::doReceiveBytes(char *aData, int aNumBytes)
    {
       //printf("ERROR SerialPort2::doReceiveBytes ERROR 105 %d\n", GetLastError());
       ClearCommError(mSpecific->mPortHandle, 0, 0);
-      return cRetCodeError;
+      return cSerialRetError;
    }
 
    // If the number of bytes read was wrong then error.
    if (tBytesRead != aNumBytes)
    {
       //printf("ERROR SerialPort2::doReceiveBytes ERROR 106 %d\n", GetLastError());
-      return cRetCodeTimeout;
+      return cSerialRetTimeout;
    }
 
    // Done.

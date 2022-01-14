@@ -5,7 +5,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "SerialThread.h"
+#include "someSerialThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -25,8 +25,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   gSerialThread = new SerialThread;
-   gSerialThread->launchThread();
+   Some::gSerialThread = new Some::SerialThread;
+   Some::gSerialThread->launchThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -34,7 +34,7 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   if (gSerialThread)    gSerialThread->showThreadInfo();
+   if (Some::gSerialThread)    Some::gSerialThread->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
@@ -50,17 +50,17 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   if (gSerialThread)     gSerialThread->shutdownThread();
+   if (Some::gSerialThread)     Some::gSerialThread->shutdownThread();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Delete program threads.
 
-   if (gSerialThread)
+   if (Some::gSerialThread)
    {
-      delete gSerialThread;
-      gSerialThread = 0;
+      delete Some::gSerialThread;
+      Some::gSerialThread = 0;
    }
 
    //***************************************************************************

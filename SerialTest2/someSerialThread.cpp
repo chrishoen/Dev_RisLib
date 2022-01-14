@@ -6,24 +6,17 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <termios.h>
-#include <unistd.h>
-
-#include <signal.h>
-#include <poll.h>
-#include <errno.h>
-#include <sys/eventfd.h>
-#include <sys/ioctl.h>
-#include <sys/stat.h>
-#include <linux/serial.h>
-
 #include "someSerialParms.h"
 
-#define  _SERIALTHREAD_CPP_
-#include "SerialThread.h"
+#define  _SOMESERIALTHREAD_CPP_
+#include "someSerialThread.h"
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+namespace Some
+{
 
 //******************************************************************************
 //******************************************************************************
@@ -40,9 +33,6 @@ SerialThread::SerialThread()
    BaseClass::setThreadPriorityHigh();
 
    // Initialize variables.
-   strcpy(mPortPath,Some::gSerialParms.mSerialPortDevice);
-   mPortFd = -1;
-   mEventFd = -1;
    mRxBuffer[0] = 0;
    mErrorCount = 0;
    mRestartCount = 0;
@@ -57,10 +47,16 @@ SerialThread::SerialThread()
 
 void SerialThread::threadInitFunction()
 {
-   printf("SerialThread::threadInitFunction\n");
+   // Serial port settings.
+   mSettings.reset();
+   mSettings.setPortDevice(gSerialParms.mSerialPortDevice);
+   mSettings.setPortSetup(gSerialParms.mSerialPortDevice);
+   mSettings.mRxTimeout = 2000;
 
-   // Open the event.
-   mEventFd = eventfd(0, EFD_SEMAPHORE);
+   // Initialize and open the serial port.
+   mSerialPort.initialize(mSettings);
+   mSerialPort.doOpen();
+
 }
 
 //******************************************************************************
@@ -77,62 +73,32 @@ void SerialThread::threadRunFunction()
 restart:
    // Guard.
    if (mTerminateFlag) return;
+   int tRet = 0;
 
    // Sleep.
-   if (mRestartCount)
+   if (mRestartCount > 0)
    {
       BaseClass::threadSleep(1000);
    }
-   Prn::print(Prn::Show1, "Serial restart %d %s", mRestartCount, mPortPath);
+   Prn::print(Prn::Show1, "Serial restart %d", mRestartCount);
    mRestartCount++;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Local variables.
-
-   int tRet = 0;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Open device.
 
-   // If the device is open then close it.
-   if (mPortFd > 0)
+   // Open the serial port.
+   if (!mSerialPort.doOpen())
    {
-      Prn::print(Prn::Show1, "Serial close");
-      close(mPortFd);
-      mPortFd = -1;
-   }
-
-   // Open the device.
-   mPortFd = open(mPortPath, O_RDWR, S_IRUSR | S_IWUSR);
-   if (mPortFd < 0)
-   {
-      Prn::print(Prn::Show1, "Serial open FAIL 101");
+      // If error then restart.
       goto restart;
    }
 
-   // Configure the port for raw data.
-   struct termios tOptions;
-   tcgetattr(mPortFd, &tOptions);
-   cfmakeraw(&tOptions);
-   cfsetispeed(&tOptions, B115200);
-   cfsetospeed(&tOptions, B115200);
-
-   if (tcsetattr(mPortFd, TCSANOW, &tOptions) < 0)
-   {
-      Prn::print(Prn::Show1, "Serial open FAIL 102");
-      goto restart;
-   }
-
-   Prn::print(Prn::Show1, "Serial open");
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Read string.
+   // Loop to receive strings.
 
    while (!BaseClass::mTerminateFlag)
    {
@@ -141,53 +107,37 @@ restart:
       //************************************************************************
       //************************************************************************
       //************************************************************************
-      // Read report.
-
-      // Blocking poll for read or close.
-      struct pollfd tPollFd[2];
-      tPollFd[0].fd = mPortFd;
-      tPollFd[0].events = POLLIN;
-      tPollFd[0].revents = 0;
-      tPollFd[1].fd = mEventFd;
-      tPollFd[1].events = POLLIN;
-      tPollFd[1].revents = 0;
-
-      tRet = poll(&tPollFd[0], 2, -1);
-      if (tRet < 0)
-      {
-         Prn::print(Prn::Show1, "Serial poll FAIL");
-         goto restart;
-      }
-
-      // Test for abort.
-      if (tPollFd[1].revents & POLLIN)
-      {
-         Prn::print(Prn::Show1, "Serial read abort");
-         return;
-      }
+      // Read a string.
 
       // Read a string. 
-      tRet = read(mPortFd, mRxBuffer, 32);
-      if (tRet < 0)
-      {
-         Prn::print(Prn::Show1, "Serial read FAIL");
-         goto restart;
-      }
+      tRet = mSerialPort.doReadAnyBytes(mRxBuffer, 32);
       if (tRet == 0)
       {
          Prn::print(Prn::Show1, "Serial read EMPTY");
          goto restart;
       }
+      else if (tRet == Ris::cSerialRetError)
+      {
+         Prn::print(Prn::Show1, "Serial read EMPTY");
+         goto restart;
+      }
+      else if (tRet == Ris::cSerialRetAbort)
+      {
+         Prn::print(Prn::Show1, "Serial read ABORT");
+         goto end;
+      }
       // Null terminate.
       mRxBuffer[tRet] = 0;
 
-
-      // strcpy(mRxBuffer, "aaaaaaaa\r\n");
       // Print.
       Prn::print(Prn::Show1, "Serial read  $$$    %2d %d %s",
          tRet, my_trimCRLF(mRxBuffer), mRxBuffer);
 
    }
+   
+   // Done.
+end:
+   return;
 }
 
 //******************************************************************************
@@ -198,7 +148,10 @@ restart:
 
 void SerialThread::threadExitFunction()
 {
-   printf("SerialThread::threadExitFunction\n");
+   printf("someSerialThread::threadExitFunction\n");
+
+   // Close the serial port.
+   mSerialPort.doClose();
 }
 
 //******************************************************************************
@@ -209,49 +162,32 @@ void SerialThread::threadExitFunction()
 
 void SerialThread::shutdownThread()
 {
-   printf("SerialThread::shutdownThread\n");
+   printf("someSerialThread::shutdownThread\n");
 
    // Request thread run function return.
    mTerminateFlag = true;
 
-   // Write bytes to the event semaphore to signal a close. This will
-   // cause the thread to terminate.
-   unsigned long long tCount = 1;
-   write(mEventFd, &tCount, 8);
-
-   // Wait for the thread to terminate.
-   BaseClass::waitForThreadTerminate();
-
-   // Close the device if it is open.
-   if (mPortFd > 0)
-   {
-      Prn::print(Prn::Show1, "Serial close");
-      close(mPortFd);
-      mPortFd = -1;
-   }
-
-   // Close the event semaphore.
-   close(mEventFd);
+   // Abort pending serial port receives
+   mSerialPort.doAbort();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a null terminated string via the serial port. A newline terminator
-// is appended to the string before transmission. This executes in the
+// Send a null terminated string via the serial port. This executes in the
 // context of the calling thread.
 
 void SerialThread::sendString(const char* aString)
 {
    // Guard.
-   if (mPortFd < 0) return;
+   if (!mSerialPort.mValidFlag) return;
+   int tRet = 0;
 
    // Local variables.
    int tNumBytes = strlen(aString);
-   int tRet = 0;
 
    // Write bytes to the port.
-   tRet = write(mPortFd, aString, tNumBytes);
+   tRet = mSerialPort.doSendBytes(aString, tNumBytes);
 
    // Test the return code.
    if (tRet < 0)
@@ -269,8 +205,8 @@ void SerialThread::sendString(const char* aString)
    char tTxBuffer[100];
    strcpy(tTxBuffer, aString);
    Prn::print(Prn::Show1, "Serial write $$$$$$ %2d %d %s",
-         tNumBytes, my_trimCRLF(tTxBuffer), tTxBuffer);
-   
+      tNumBytes, my_trimCRLF(tTxBuffer), tTxBuffer);
+
    return;
 }
 
@@ -281,9 +217,14 @@ void SerialThread::sendString(const char* aString)
 
 void SerialThread::test1()
 {
-   close(mPortFd);
+   mSerialPort.doClose();
 }
 
+void SerialThread::abort()
+{
+   mSerialPort.doAbort();
+}
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+}//namespace

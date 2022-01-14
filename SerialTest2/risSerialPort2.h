@@ -20,6 +20,19 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constants.
+
+// Serial por return codes, if retval >=0 then no error and retval is
+// number of bytes that were transferred. If retval < 0 then use these
+// return codes.
+
+static const int cSerialRetError = -1;
+static const int cSerialRetAbort = -2;
+static const int cSerialRetTimeout = -3;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This class encapsulates a serial port. It provides functions to
 // open, close, and purge a serial port. It provides functions to send and
 // receive bytes via a serial port. The send and receive functions are
@@ -28,17 +41,6 @@ namespace Ris
 class SerialPort2 
 {
 public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Constants.
-
-   // Return codes, if retval >=0 then no error and retval is number of bytes
-   // that were transferred. If retval < 0 then use these return codes.
-   static const int cRetCodeError   = -1;
-   static const int cRetCodeTimeout = -2;
-   static const int cRetCodeAbort   = -3;
 
    //***************************************************************************
    //***************************************************************************
@@ -100,8 +102,9 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Receive data, fixed number of bytes.
-   int doReceiveBytes(char *aData, int aNumBytes);
+   // Read any available receive bytes. Block until at least one byte has
+   // been received. Return the number of bytes read or a negative error code.
+   int doReadAnyBytes(char *aData, int aMaxNumBytes);
 
    // Return the number of bytes that are available to receive.
    int getAvailableReceiveBytes();

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "someSerialParms.h"
-#include "SerialThread.h"
+#include "someSerialThread.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -56,7 +56,7 @@ void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
       sprintf(tString, "%s\n", aCmd->argWhole());
       my_string_toupper(tString);
    }
-   gSerialThread->sendString(tString);
+   Some::gSerialThread->sendString(tString);
 }
 
 //******************************************************************************
@@ -65,7 +65,7 @@ void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 {
-   gSerialThread->test1();
+   Some::gSerialThread->test1();
 }
 
 //******************************************************************************
@@ -74,7 +74,7 @@ void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
-   gSerialThread->test1();
+   Some::gSerialThread->test1();
 }
 
 //******************************************************************************

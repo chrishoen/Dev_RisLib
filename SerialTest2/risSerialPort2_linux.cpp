@@ -282,7 +282,7 @@ void SerialPort2::doFlush()
 int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
 {
    // Guard.
-   if (!mValidFlag) return cRetCodeError;
+   if (!mValidFlag) return cSerialRetError;
 
    // Local variables.
    int tNumWritten = 0;
@@ -295,13 +295,13 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
    if (tRet < 0)
    {
       printf("serial_write_error_1 %d\n", errno);
-      return cRetCodeError;
+      return cSerialRetError;
    }
 
    if (tRet != aNumBytes)
    {
       printf("serial_write_error_2 %d\n", tRet);
-      return cRetCodeError;
+      return cSerialRetError;
    }
 
    // Write was successful. Return the number of bytes written.
@@ -312,24 +312,25 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive bytes.
+// Read any available receive bytes. Block until at least one byte has
+// been received. Return the number of bytes read or a negative error code.
 
-int SerialPort2::doReceiveBytes(char* aData, int aNumBytes)
+int SerialPort2::doReadAnyBytes(char* aData, int aMaxNumBytes)
 {
    // Guard.
-   if (!mValidFlag) return cRetCodeError;
+   if (!mValidFlag) return cSerialRetError;
    int tRet = 0;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Set the number of bytes to read.
-
+#if 0
    struct termios tOptions;
    tcgetattr(mSpecific->mPortFd, &tOptions);
    tOptions.c_cc[VMIN] = aNumBytes;
    tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
-
+#endif
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -352,21 +353,21 @@ int SerialPort2::doReceiveBytes(char* aData, int aNumBytes)
    if (!mAbortFlag)
    {
       //printf("serial_poll_abort\n");
-      return cRetCodeAbort;
+      return cSerialRetAbort;
    }
 
    // Test the return code for error.
    if (tRet < 0)
    {
       //printf("serial_poll_error_1 %d\n", errno);
-      return cRetCodeError;
+      return cSerialRetError;
    }
 
    // Test the return code for timeout.
    if (tRet == 0)
    {
       //printf("serial_poll_error_2 timeout\n");
-      return cRetCodeTimeout;
+      return cSerialRetTimeout;
    }
 
    if (tPollFd[0].revents & POLLIN)
@@ -383,7 +384,7 @@ int SerialPort2::doReceiveBytes(char* aData, int aNumBytes)
    if (tRet == 2)
    {
       //printf("serial_poll_error_3 close\n");
-      return cRetCodeError;
+      return cSerialRetError;
    }
 
    //printf("serial_poll_pass %d\n",tRet);
@@ -391,26 +392,17 @@ int SerialPort2::doReceiveBytes(char* aData, int aNumBytes)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Read from port.
+   // Read from the serial port.
 
    // Read.
-   //printf("serial_read_start\n");
-   tRet = (int)read(mSpecific->mPortFd, aData, (size_t)aNumBytes);
+   tRet = (int)read(mSpecific->mPortFd, aData, (size_t)aMaxNumBytes);
 
    // Test the return code.
    if (tRet < 0)
    {
       printf("serial_read_error_1 %d\n", errno);
-      return cRetCodeError;
+      return cSerialRetError;
    }
-
-   if (tRet != aNumBytes)
-   {
-      printf("serial_read_error_2 %d\n", tRet);
-      return cRetCodeError;
-   }
-
-   //printf("serial_read_pass\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -418,7 +410,6 @@ int SerialPort2::doReceiveBytes(char* aData, int aNumBytes)
    // Done.
 
    // Read was successful. Return the number of bytes read.
-   //printf("SerialPort::doReceiveBytes PASS %d\n", aNumBytes);
    return tRet;
 }
 

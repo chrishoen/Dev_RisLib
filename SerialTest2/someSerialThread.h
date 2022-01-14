@@ -1,21 +1,28 @@
 #pragma once
 
 /*==============================================================================
-Kbd hidraw thread.
+Serial test thread that contains a serial port.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+#include "risSerialPort2.h"
 #include "risThreadsThreads.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a thread that processes the hidraw inputs from the keyboard.
-// It owns the hidraw file descriptor. It reads the hidraw inputs from
-// the keyboard, modally translates them, and writes them to the host 
-// via the gadget file descriptor that is owned by the gadget thread.
+
+namespace Some
+{
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a thread contains a serial port. It initializes and configures
+// the port based on a parms file and then loops on port receives.
 
 class SerialThread : public Ris::Threads::BaseThread
 {
@@ -35,14 +42,16 @@ public:
    //***************************************************************************
    // Members.
 
-   // File path for usb port.
-   char mPortPath[64];
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // File descriptor for usb port.
-   int mPortFd;
+   // Serial port settings.
+   Ris::SerialSettings mSettings;
 
-   // File descriptor for event semaphore used for close.
-   int mEventFd;
+   // Serial port.
+   Ris::SerialPort2 mSerialPort;
 
    // Request buffer.
    char mRxBuffer[cMaxStringSize];
@@ -78,7 +87,7 @@ public:
    // before the thread is terminated. It is a placeholder.
    void threadExitFunction() override;
 
-   // Thread shutdown function. This posts to the close event to
+   // Thread shutdown function. This posts to the abort event to
    // terminate the thread and it closes the files.
    void shutdownThread() override;
 
@@ -87,8 +96,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a null terminated string via the serial port. A newline terminator
-   // is appended to the string before transmission. This executes in the
+   // Send a null terminated string via the serial port. This executes in the
    // context of the calling thread.
    void sendString(const char* aString);
 
@@ -100,6 +108,9 @@ public:
    // Software tests.
    void test1();
 
+   // Abort a pending receive.
+   void abort();
+
 };
 
 //******************************************************************************
@@ -107,14 +118,14 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _SERIALTHREAD_CPP_
-           SerialThread* gSerialThread = 0;
+#ifdef _SOMESERIALTHREAD_CPP_
+SerialThread* gSerialThread = 0;
 #else
-   extern  SerialThread* gSerialThread;
+extern  SerialThread* gSerialThread;
 #endif
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
+}//namespace
 

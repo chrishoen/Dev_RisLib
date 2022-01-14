@@ -53,6 +53,7 @@ SerialPort2::SerialPort2()
 
 SerialPort2::~SerialPort2()
 {
+   return;
    doClose();
    delete mSpecific;
 }
@@ -72,8 +73,18 @@ void SerialPort2::initialize(SerialSettings& aSettings)
 
 bool SerialPort2::doOpen()
 {
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Do this first.
-   mValidFlag = false;
+
+   // Test if already open.
+   if (mValidFlag)
+   {
+      printf("serial_open already open\n");
+      return true;
+   }
+
    mAbortFlag = false;
 
    //***************************************************************************
@@ -179,8 +190,14 @@ bool SerialPort2::doOpen()
 
 void SerialPort2::doClose()
 {
+   // Test if already closed.
+   if (!mValidFlag)
+   {
+      printf("serial_close already closed\n");
+      return;
+   }
+
    int tRet = 0;
-   if (!mValidFlag) return;
 
    // Set invalid.
    mValidFlag = false;

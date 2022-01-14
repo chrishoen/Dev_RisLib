@@ -28,6 +28,7 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
+   if (aCmd->isCmd("REQ"))      Some::gSerialThread->mRxReqNumBytes = aCmd->argInt(1);
    if (aCmd->isCmd("SEND"))     executeSend(aCmd);
    if (aCmd->isCmd("ABORT"))    executeAbort(aCmd);
    if (aCmd->isCmd("TEST1"))    executeTest1(aCmd);
@@ -46,17 +47,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 {
-   char tString[100];
-   if (aCmd->numArg() == 0)
-   {
-      strcpy(tString, "ABCDEFGH\n");
-   }
-   else
-   {
-      sprintf(tString, "%s\n", aCmd->argWhole());
-      my_string_toupper(tString);
-   }
-   Some::gSerialThread->sendString(tString);
+   aCmd->setArgDefault(1, 16);
+   int tNumBytes = aCmd->argInt(1);
+   Some::gSerialThread->sendTestBytes(tNumBytes);
 }
 
 //******************************************************************************
@@ -74,7 +67,6 @@ void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
-   Some::gSerialThread->test1();
 }
 
 //******************************************************************************

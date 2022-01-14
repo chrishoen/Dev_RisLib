@@ -39,6 +39,9 @@ void SerialParms::reset()
    mSerialRxTimeout = 0;
    mThreadTimerPeriod = 0;
    mNumWords = 0;
+   mReadAllFlag = false;
+   mWriteAllFlag = false;
+   mRxReqNumBytes = 16;
 }
 
 //******************************************************************************
@@ -51,15 +54,18 @@ void SerialParms::show()
    printf("\n");
    printf("SerialParms************************************************ %s\n", mTargetSection);
 
-   printf("MyAppNumber             %16d\n", mMyAppNumber);
-
-   printf("SerialPortDevice           %-12s\n", mSerialPortDevice);
-   printf("SerialPortSetup            %-12s\n", mSerialPortSetup);
-   printf("SerialRxTimeout            %5d\n", mSerialRxTimeout);
+   printf("SerialPortDevice        %-12s\n", mSerialPortDevice);
+   printf("SerialPortSetup         %-12s\n", mSerialPortSetup);
+   printf("SerialRxTimeout         %-12d\n", mSerialRxTimeout);
 
    printf("\n");
-   printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
-   printf("NumWords                %16d\n", mNumWords);
+   printf("ThreadTimerPeriod       %-12d\n", mThreadTimerPeriod);
+   printf("NumWords                %-12d\n", mNumWords);
+   printf("NumWords                %-12d\n", mNumWords);
+   printf("\n");
+   printf("ReadAllFlag             %-12s\n", my_string_from_bool(mReadAllFlag));
+   printf("WriteAllFlag            %-12s\n", my_string_from_bool(mWriteAllFlag));
+   printf("RxReqNumBytes           %-12d\n", mRxReqNumBytes);
 
    printf("SerialParms************************************************\n");
    printf("\n");
@@ -84,6 +90,9 @@ void SerialParms::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("ThreadTimerPeriod"))   mThreadTimerPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("NumWords"))            mNumWords = aCmd->argInt(1);
+   if (aCmd->isCmd("ReadAllFlag"))         mReadAllFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("WriteAllFlag"))        mWriteAllFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("RxReqNumBytes"))       mRxReqNumBytes = aCmd->argInt(1);
 }
 
 //******************************************************************************

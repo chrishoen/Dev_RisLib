@@ -66,7 +66,7 @@ public:
    // Application settings.
    int  mMyAppNumber;
 
-   // Serial setup and port.
+   // Serial port setup.
    char mSerialPortDevice[cMaxStringSize];
    char mSerialPortSetup[cMaxStringSize];
    int  mSerialRxTimeout;
@@ -81,6 +81,11 @@ public:
 
    // Echo message number of words.
    int mNumWords;
+
+   // Transfer mode variables.
+   bool mReadAllFlag;
+   bool mWriteAllFlag;
+   int mRxReqNumBytes;
 
    //***************************************************************************
    //***************************************************************************

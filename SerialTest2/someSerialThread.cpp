@@ -33,17 +33,18 @@ SerialThread::SerialThread()
    BaseClass::setThreadPriorityHigh();
 
    // Initialize variables.
-   mRxBuffer[0] = 0;
    mErrorCount = 0;
    mRestartCount = 0;
    mRxCount = 0;
+   mTxCount = 0;
+   mRxReqNumBytes = gSerialParms.mRxReqNumBytes;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Thread init function. This is called by the base class immediately
-// after the thread starts running. It initializes something.
+// after the thread starts running. It initializes the serial port.
 
 void SerialThread::threadInitFunction()
 {
@@ -63,8 +64,8 @@ void SerialThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread run function. This is called by the base class immediately
-// after the thread init function. It runs a loop that waits for the
-// hid keyboard input.
+// after the thread init function. It runs a loop that blocks on 
+// serial port reads and then processes them.
 
 void SerialThread::threadRunFunction()
 {
@@ -110,7 +111,15 @@ restart:
       // Read a string.
 
       // Read a string. 
-      tRet = mSerialPort.doReadAnyBytes(mRxBuffer, 32);
+      if (gSerialParms.mReadAllFlag)
+      {
+         tRet = mSerialPort.doReadAllBytes(mRxBuffer, mRxReqNumBytes);
+      }
+      else
+      {
+         tRet = mSerialPort.doReadAnyBytes(mRxBuffer, cBufferSize);
+      }
+
       if (tRet == 0)
       {
          Prn::print(Prn::Show1, "Serial read EMPTY");
@@ -127,12 +136,10 @@ restart:
          goto end;
       }
       // Null terminate.
-      mRxBuffer[tRet] = 0;
+      mRxCount = tRet;
 
-      // Print.
-      Prn::print(Prn::Show1, "Serial read  $$$    %2d %d %s",
-         tRet, my_trimCRLF(mRxBuffer), mRxBuffer);
-
+      // Show.
+      Prn::print(Prn::Show1, "Serial read  $$$    %d", mRxCount);
    }
    
    // Done.
@@ -144,7 +151,7 @@ end:
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immediately
-// before the thread is terminated. It shuts down the hid api.
+// before the thread is terminated. It is close the serial port.
 
 void SerialThread::threadExitFunction()
 {
@@ -157,8 +164,8 @@ void SerialThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread shutdown function. This posts to the close event to
-// terminate the thread and it closes the files.
+// Thread shutdown function. This aborts the serial port receive and
+// waits for the thread to terminate..
 
 void SerialThread::shutdownThread()
 {
@@ -174,20 +181,17 @@ void SerialThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a null terminated string via the serial port. This executes in the
-// context of the calling thread.
+// Send bytes via the serial port. This executes in the context of
+// the calling thread.
 
-void SerialThread::sendString(const char* aString)
+void SerialThread::sendBytes(const void* aBytes, int aNumBytes)
 {
    // Guard.
    if (!mSerialPort.mValidFlag) return;
    int tRet = 0;
 
-   // Local variables.
-   int tNumBytes = strlen(aString);
-
    // Write bytes to the port.
-   tRet = mSerialPort.doSendBytes(aString, tNumBytes);
+   tRet = mSerialPort.doSendBytes((char*)aBytes, aNumBytes);
 
    // Test the return code.
    if (tRet < 0)
@@ -195,30 +199,42 @@ void SerialThread::sendString(const char* aString)
       Prn::print(Prn::Show1, "Serial write FAIL 101 %d", errno);
       return;
    }
-   if (tRet != tNumBytes)
+   if (tRet != aNumBytes)
    {
       Prn::print(Prn::Show1, "Serial write FAIL 102");
       return;
    }
+   mTxCount = aNumBytes;
 
-   // Print.
-   char tTxBuffer[100];
-   strcpy(tTxBuffer, aString);
-   Prn::print(Prn::Show1, "Serial write $$$$$$ %2d %d %s",
-      tNumBytes, my_trimCRLF(tTxBuffer), tTxBuffer);
+   // Show.
+   Prn::print(Prn::Show1, "Serial write $$$$$$ %d", mTxCount);
 
    return;
+
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send test bytes via the serial port. This executes in the context
+// of the calling thread.
+
+void SerialThread::sendTestBytes(int aNumBytes)
+{
+   // Fill the transmit buffer with constants.
+   for (int i = 0; i < aNumBytes; i++)
+   {
+      mTxBuffer[i] = 0x77;
+   }
+
+   // Send the transmit buffer.
+   return sendBytes(mTxBuffer, aNumBytes);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Software tests.
-
-void SerialThread::test1()
-{
-   mSerialPort.doClose();
-}
 
 void SerialThread::abort()
 {

@@ -35,7 +35,7 @@ public:
    // Constants.
 
    // Device path for usb acm.
-   static const int cMaxStringSize = 256;
+   static const int cBufferSize = 1024*1024;
 
    //***************************************************************************
    //***************************************************************************
@@ -53,13 +53,17 @@ public:
    // Serial port.
    Ris::SerialPort2 mSerialPort;
 
-   // Request buffer.
-   char mRxBuffer[cMaxStringSize];
+   // Buffers.
+   char mRxBuffer[cBufferSize];
+   char mTxBuffer[cBufferSize];
 
    // Status.
    int mErrorCount;
    int mRestartCount;
    int mRxCount;
+   int mTxCount;
+
+   int mRxReqNumBytes;
 
    //***************************************************************************
    //***************************************************************************
@@ -75,20 +79,20 @@ public:
    // Methods. Base class overloads.
 
    // Thread init function. This is called by the base class immediately
-   // after the thread starts running. It initializes something.
+   // after the thread starts running. It initializes the serial port.
    void threadInitFunction() override;
 
    // Thread run function. This is called by the base class immediately
-   // after the thread init function. It runs a loop that waits for the
-   // hid keyboard input.
+   // after the thread init function. It runs a loop that blocks on 
+   // serial port reads and then processes them.
    void threadRunFunction() override;
 
    // Thread exit function. This is called by the base class immediately
-   // before the thread is terminated. It is a placeholder.
+   // before the thread is terminated. It is close the serial port.
    void threadExitFunction() override;
 
-   // Thread shutdown function. This posts to the abort event to
-   // terminate the thread and it closes the files.
+   // Thread shutdown function. This aborts the serial port receive and
+   // waits for the thread to terminate..
    void shutdownThread() override;
 
    //***************************************************************************
@@ -96,17 +100,18 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a null terminated string via the serial port. This executes in the
-   // context of the calling thread.
-   void sendString(const char* aString);
+   // Send bytes via the serial port. This executes in the context of
+   // the calling thread.
+   void sendBytes(const void* aBytes, int aNumBytes);
+
+   // Send test bytes via the serial port. This executes in the context
+   // of the calling thread.
+   void sendTestBytes(int aNumBytes);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
-
-   // Software tests.
-   void test1();
 
    // Abort a pending receive.
    void abort();

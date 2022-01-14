@@ -21,7 +21,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a thread contains a serial port. It initializes and configures
+// This is a thread that uses a serial port. It initializes and configures
 // the port based on a parms file and then loops on port receives.
 
 class SerialThread : public Ris::Threads::BaseThread
@@ -34,13 +34,8 @@ public:
    //***************************************************************************
    // Constants.
 
-   // Device path for usb acm.
-   static const int cBufferSize = 1024*1024;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
+   // Buffers.
+   static const int cBufferSize = 2*1024*1024;
 
    //***************************************************************************
    //***************************************************************************
@@ -57,12 +52,13 @@ public:
    char mRxBuffer[cBufferSize];
    char mTxBuffer[cBufferSize];
 
-   // Status.
+   // Metrics.
    int mErrorCount;
    int mRestartCount;
    int mRxCount;
    int mTxCount;
 
+   // Requested number of bytes to receive.
    int mRxReqNumBytes;
 
    //***************************************************************************
@@ -84,7 +80,8 @@ public:
 
    // Thread run function. This is called by the base class immediately
    // after the thread init function. It runs a loop that blocks on 
-   // serial port reads and then processes them.
+   // serial port receives and then processes them. The loop terminates
+   // when the serial port receive is aborted.
    void threadRunFunction() override;
 
    // Thread exit function. This is called by the base class immediately
@@ -92,8 +89,17 @@ public:
    void threadExitFunction() override;
 
    // Thread shutdown function. This aborts the serial port receive and
-   // waits for the thread to terminate..
+   // waits for the thread to terminate after execution of the thread
+   // exit function.
    void shutdownThread() override;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Abort a pending receive.
+   void abort();
 
    //***************************************************************************
    //***************************************************************************
@@ -107,14 +113,6 @@ public:
    // Send test bytes via the serial port. This executes in the context
    // of the calling thread.
    void sendTestBytes(int aNumBytes);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Abort a pending receive.
-   void abort();
 
 };
 

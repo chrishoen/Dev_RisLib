@@ -34,8 +34,9 @@ static const int cSerialRetTimeout = -3;
 //******************************************************************************
 //******************************************************************************
 // This class encapsulates a serial port. It provides the functionality
-// to configure, open, and close serial ports. It also provides for
-// the transmission and reception of raw bytes.
+// to configure, open, and close serial ports. It provides for the
+// transmission and reception of raw bytes. It is used to support USB and
+// UART serial communication.
 
 class SerialPort2 
 {
@@ -96,7 +97,8 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a number of bytes, return the actual number of bytes sent.
+   // Send a fixed number of bytes. Return the actual number of bytes
+   // sent or a negative error code.
    int  doSendBytes(const char *aBytes, int aNumBytes);
 
    //***************************************************************************
@@ -104,21 +106,20 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Read any available receive bytes. Block until at least one byte
-   // has been received. Return the number of bytes read or a negative
+   // Receive any available bytes. Block until at least one byte has
+   // been received. Return the number of bytes received or a negative
    // error code. Copy the bytes into the pointer argument.
-   int doReadAnyBytes(char *aBytes, int aMaxNumBytes);
+   int doReceiveAnyBytes(char *aBytes, int aMaxNumBytes);
 
-   // Read a requested number of receive bytes. Block until all of the
-   // bytes have been received and read. Return the number of bytes read
-   // or a negative error code. Copy the bytes into the pointer argument.
-   int doReadAllBytes(char* aBytes, int aRequestBytes);
+   // Receive a requested number of bytes. Block until all of the bytes
+   // have been received. Return the number of bytes received or a
+   // negative error code. Copy the bytes into the pointer argument.
+   int doReceiveAllBytes(char* aBytes, int aRequestBytes);
 
-   // Read one receive byte. Block until the byte has been received
-   // and read. Return one or a negative error code. Copy the byte into
-   // the pointer argument.
-   int doReadOneByte(char* aByte);
-
+   // Receive one byte. Block until the byte has been received. Return
+   // one or zero or a negative error code. Copy the byte into the
+   // pointer argument.
+   int doReceiveOneByte(char* aByte);
 };
 
 //******************************************************************************

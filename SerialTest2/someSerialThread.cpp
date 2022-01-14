@@ -65,7 +65,8 @@ void SerialThread::threadInitFunction()
 //******************************************************************************
 // Thread run function. This is called by the base class immediately
 // after the thread init function. It runs a loop that blocks on 
-// serial port reads and then processes them.
+// serial port receives and then processes them. The loop terminates
+// when the serial port receive is aborted.
 
 void SerialThread::threadRunFunction()
 {
@@ -113,11 +114,11 @@ restart:
       // Read a string. 
       if (gSerialParms.mReadAllFlag)
       {
-         tRet = mSerialPort.doReadAllBytes(mRxBuffer, mRxReqNumBytes);
+         tRet = mSerialPort.doReceiveAllBytes(mRxBuffer, mRxReqNumBytes);
       }
       else
       {
-         tRet = mSerialPort.doReadAnyBytes(mRxBuffer, cBufferSize);
+         tRet = mSerialPort.doReceiveAnyBytes(mRxBuffer, cBufferSize);
       }
 
       if (tRet == 0)
@@ -165,7 +166,8 @@ void SerialThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread shutdown function. This aborts the serial port receive and
-// waits for the thread to terminate..
+// waits for the thread to terminate after execution of the thread
+// exit function.
 
 void SerialThread::shutdownThread()
 {
@@ -181,6 +183,16 @@ void SerialThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Abort a pending receive.
+
+void SerialThread::abort()
+{
+   mSerialPort.doAbort();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Send bytes via the serial port. This executes in the context of
 // the calling thread.
 
@@ -190,18 +202,14 @@ void SerialThread::sendBytes(const void* aBytes, int aNumBytes)
    if (!mSerialPort.mValidFlag) return;
    int tRet = 0;
 
-   // Write bytes to the port.
+   // Send a fixed number of bytes. Return the actual number of bytes
+   // sent or a negative error code.
    tRet = mSerialPort.doSendBytes((char*)aBytes, aNumBytes);
 
    // Test the return code.
    if (tRet < 0)
    {
       Prn::print(Prn::Show1, "Serial write FAIL 101 %d", errno);
-      return;
-   }
-   if (tRet != aNumBytes)
-   {
-      Prn::print(Prn::Show1, "Serial write FAIL 102");
       return;
    }
    mTxCount = aNumBytes;
@@ -231,15 +239,6 @@ void SerialThread::sendTestBytes(int aNumBytes)
    return sendBytes(mTxBuffer, aNumBytes);
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Software tests.
-
-void SerialThread::abort()
-{
-   mSerialPort.doAbort();
-}
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

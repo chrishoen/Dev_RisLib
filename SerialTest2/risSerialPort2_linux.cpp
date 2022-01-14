@@ -289,7 +289,8 @@ int SerialPort2::doGetAvailableReadBytes()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a number of bytes, return the actual number of bytes sent.
+// Send a fixed number of bytes. Return the actual number of bytes
+// sent or a negative error code.
 
 int SerialPort2::doSendBytes(const char* aBytes, int aNumBytes)
 {
@@ -324,11 +325,11 @@ int SerialPort2::doSendBytes(const char* aBytes, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read any available receive bytes. Block until at least one byte
-// has been received. Return the number of bytes read or a negative
+// Receive any available bytes. Block until at least one byte has
+// been received. Return the number of bytes received or a negative
 // error code. Copy the bytes into the pointer argument.
 
-int SerialPort2::doReadAnyBytes(char* aBytes, int aMaxNumBytes)
+int SerialPort2::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
 {
    // Guard.
    if (!mValidFlag) return cSerialRetError;
@@ -419,11 +420,11 @@ int SerialPort2::doReadAnyBytes(char* aBytes, int aMaxNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read a requested number of receive bytes. Block until all of the
-// bytes have been received and read. Return the number of bytes read
-// or a negative error code. Copy the bytes into the pointer argument.
+// Receive a requested number of bytes. Block until all of the bytes
+// have been received. Return the number of bytes received or a
+// negative error code. Copy the bytes into the pointer argument.
 
-int SerialPort2::doReadAllBytes(char* aBytes, int aRequestBytes)
+int SerialPort2::doReceiveAllBytes(char* aBytes, int aRequestBytes)
 {
    // Guard.
    if (!mValidFlag) return cSerialRetError;
@@ -441,7 +442,7 @@ int SerialPort2::doReadAllBytes(char* aBytes, int aRequestBytes)
       // Read any available receive bytes. Block until at least one byte
       // has been received. Return the number of bytes read or a negative
       // error code.
-      tRet = doReadAnyBytes(&aBytes[tBytesTotal], tBytesRemaining);
+      tRet = doReceiveAnyBytes(&aBytes[tBytesTotal], tBytesRemaining);
 
       if (tRet > 0)
       {
@@ -468,13 +469,13 @@ int SerialPort2::doReadAllBytes(char* aBytes, int aRequestBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read one receive byte. Block until the byte has been received
-// and read. Return one or a negative error code. Copy the byte into
-// the pointer argument.
+// Receive one byte. Block until the byte has been received. Return
+// one or zero or a negative error code. Copy the byte into the
+// pointer argument.
 
-int SerialPort2::doReadOneByte(char* aByte)
+int SerialPort2::doReceiveOneByte(char* aByte)
 {
-   return doReadAnyBytes(aByte, 1);
+   return doReceiveAnyBytes(aByte, 1);
 }
 
 //******************************************************************************

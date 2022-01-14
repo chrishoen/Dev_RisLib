@@ -52,7 +52,6 @@ void SerialThread::threadInitFunction()
    mSettings.reset();
    mSettings.setPortDevice(gSerialParms.mSerialPortDevice);
    mSettings.setPortSetup(gSerialParms.mSerialPortSetup);
-   mSettings.mRxTimeout = 2000;
 
    // Initialize the serial port.
    mSerialPort.initialize(mSettings);

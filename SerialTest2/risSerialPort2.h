@@ -22,7 +22,7 @@ namespace Ris
 //******************************************************************************
 // Constants.
 
-// Serial por return codes, if retval >=0 then no error and retval is
+// Serial port return codes, if retval >=0 then no error and retval is
 // number of bytes that were transferred. If retval < 0 then use these
 // return codes.
 
@@ -33,10 +33,9 @@ static const int cSerialRetTimeout = -3;
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a serial port. It provides functions to
-// open, close, and purge a serial port. It provides functions to send and
-// receive bytes via a serial port. The send and receive functions are
-// blocking.
+// This class encapsulates a serial port. It provides the functionality
+// to configure, open, and close serial ports. It also provides for
+// the transmission and reception of raw bytes.
 
 class SerialPort2 
 {
@@ -77,20 +76,20 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Open the serial port with the settings.
+   // Open the serial port and configure with the settings.
    bool doOpen();
 
    // Close the serial port.
    void doClose();
 
-   // Abort pending serial port receive.
+   // Abort a pending serial port receive.
    void doAbort();
 
    // Flush serial port buffers.
    void doFlush();
 
    // Return the number of bytes that are available to read.
-   int doGetAvailableReceiveBytes();
+   int doGetAvailableReadBytes();
 
    //***************************************************************************
    //***************************************************************************

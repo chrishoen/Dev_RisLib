@@ -128,7 +128,7 @@ restart:
       }
       else if (tRet == Ris::cSerialRetError)
       {
-         Prn::print(Prn::Show1, "Serial read EMPTY");
+         Prn::print(Prn::Show1, "Serial read ERROR");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetAbort)

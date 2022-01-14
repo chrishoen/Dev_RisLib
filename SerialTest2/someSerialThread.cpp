@@ -51,13 +51,11 @@ void SerialThread::threadInitFunction()
    // Serial port settings.
    mSettings.reset();
    mSettings.setPortDevice(gSerialParms.mSerialPortDevice);
-   mSettings.setPortSetup(gSerialParms.mSerialPortDevice);
+   mSettings.setPortSetup(gSerialParms.mSerialPortSetup);
    mSettings.mRxTimeout = 2000;
 
-   // Initialize and open the serial port.
+   // Initialize the serial port.
    mSerialPort.initialize(mSettings);
-   mSerialPort.doOpen();
-
 }
 
 //******************************************************************************

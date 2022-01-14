@@ -167,21 +167,7 @@ bool SerialPort2::doOpen()
    //***************************************************************************
    // Done.
  
-#if 0
-   if (!mSettings.m485Flag)
-   {
-      printf("SerialPort2 initialize PASS  $ %s : %16s\n",
-         mSettings.mPortDevice,
-         mSettings.mPortSetup);
-   }
-   else
-   {
-      printf("SerialPort2 initialize PASS  $ %s : %16s RS485\n",
-         mSettings.mPortDevice,
-         mSettings.mPortSetup);
-   }
-#endif
-
+   printf("SerialPort2 open PASS  %s\n", mSettings.mPortDevice);
    mValidFlag = true;
    return true;
 }
@@ -489,4 +475,20 @@ struct termios tOptions;
 tcgetattr(mSpecific->mPortFd, &tOptions);
 tOptions.c_cc[VMIN] = aNumBytes;
 tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
+
+
+
+if (!mSettings.m485Flag)
+{
+   printf("SerialPort2 initialize PASS  $ %s : %16s\n",
+      mSettings.mPortDevice,
+      mSettings.mPortSetup);
+}
+else
+{
+   printf("SerialPort2 initialize PASS  $ %s : %16s RS485\n",
+      mSettings.mPortDevice,
+      mSettings.mPortSetup);
+}
+
 #endif

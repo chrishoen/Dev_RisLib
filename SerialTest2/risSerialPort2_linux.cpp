@@ -350,7 +350,7 @@ int SerialPort2::doReadAnyBytes(char* aData, int aMaxNumBytes)
    tRet = poll(&tPollFd[0], 2, -1);
 
    // Test for an abort request.
-   if (!mAbortFlag)
+   if (mAbortFlag)
    {
       //printf("serial_poll_abort\n");
       return cSerialRetAbort;

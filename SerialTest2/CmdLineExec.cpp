@@ -29,7 +29,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("SEND"))     executeSend(aCmd);
-   if (aCmd->isCmd("A"))        executeAbort(aCmd);
+   if (aCmd->isCmd("ABORT"))    executeAbort(aCmd);
    if (aCmd->isCmd("TEST1"))    executeTest1(aCmd);
    if (aCmd->isCmd("GO1"))      executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))      executeGo2(aCmd);
@@ -65,7 +65,7 @@ void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 {
-   Some::gSerialThread->test1();
+   Some::gSerialThread->abort();
 }
 
 //******************************************************************************

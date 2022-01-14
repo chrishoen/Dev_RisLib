@@ -31,7 +31,15 @@ SerialParms::SerialParms()
 void SerialParms::reset()
 {
    BaseClass::reset();
-   BaseClass::setFilePath("/opt/prime/files/Serial_Parms.txt");
+   BaseClass::reset();
+   if (Ris::portableIsWindows())
+   {
+      BaseClass::setFilePath("c:/aaa_prime/files/Serial_Parms.txt");
+   }
+   else
+   {
+      BaseClass::setFilePath("/opt/prime/files/Serial_Parms.txt");
+   }
 
    mMyAppNumber = 0;
    mSerialPortDevice[0] = 0;

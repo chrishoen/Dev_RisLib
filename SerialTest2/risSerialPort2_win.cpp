@@ -39,7 +39,7 @@ SerialPort2::SerialPort2()
    mSpecific->mRxEventHandle = 0;
    mSpecific->mTxEventHandle = 0;
    mValidFlag = false;
-   mTerminateFlag = false;
+   mAbortFlag = false;
 }
 
 SerialPort2::~SerialPort2(void)
@@ -53,15 +53,25 @@ void SerialPort2::initialize(SerialSettings& aSettings)
    mSettings = aSettings;
 }
 
-bool SerialPort2::isValid(){return mValidFlag;}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 bool SerialPort2::doOpen()
 {
-   mValidFlag=false;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Do this first.
+
+   // Close the serial port, if already open.
+   if (mValidFlag)
+   {
+      doClose();
+      return true;
+   }
+
+   mAbortFlag = false;
 
    printf("SerialPort2::doOpen %s\n", mSettings.mPortDevice);
 
@@ -78,28 +88,18 @@ bool SerialPort2::doOpen()
    //***************************************************************************
    // Create file.
 
+   mSpecific->mPortHandle = CreateFile(mSettings.mPortDevice,
+      GENERIC_READ | GENERIC_WRITE,
+      0,
+      0,
+      OPEN_EXISTING,
+      FILE_FLAG_OVERLAPPED,
+      0);
 
-   while (1)
+   if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
    {
-      if (mTerminateFlag) return false;
-
-      mSpecific->mPortHandle = CreateFile(mSettings.mPortDevice,
-         GENERIC_READ | GENERIC_WRITE,
-         0,
-         0,
-         OPEN_EXISTING,
-         FILE_FLAG_OVERLAPPED,
-         0);
-
-      if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
-      {
-         //printf("serial_open_error_1 %d %s\n", GetLastError(), mSettings.mPortDevice);
-         Sleep(2000);
-      }
-      else
-      {
-         break;
-      }
+      printf("serial_open_error_1 %d %s\n", GetLastError(), mSettings.mPortDevice);
+      return false;
    }
 
    SetupComm(mSpecific->mPortHandle,2048,2048);
@@ -111,11 +111,11 @@ bool SerialPort2::doOpen()
 
    Sleep(100);
 
-   doPurge();
+   doFlush();
 
    if (GetLastError() != ERROR_SUCCESS)
    {
-      //printf("serial_create_error_2 %d\n", GetLastError());
+      printf("serial_create_error_2 %d\n", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
       return false; 
@@ -159,8 +159,8 @@ bool SerialPort2::doOpen()
          else
          {
             // Failed, continue to retry
-            //printf("serial_create_retry %d\n", GetLastError());
-            doPurge();
+            printf("serial_create_retry %d\n", GetLastError());
+            doFlush();
             Sleep(100);
             // Retry failed, abort initialization
             if (count++ == 10)
@@ -188,7 +188,7 @@ bool SerialPort2::doOpen()
 
    if(!SetCommTimeouts(mSpecific->mPortHandle, &tComTimeout))
    {
-      //printf("serial_create_error_4 %d\n", GetLastError());
+      printf("serial_create_error_4 %d\n", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
       return false;
@@ -200,7 +200,7 @@ bool SerialPort2::doOpen()
    // Purge.
 
    Sleep(100);
-   doPurge();
+   doFlush();
 
    //***************************************************************************
    //***************************************************************************
@@ -209,7 +209,7 @@ bool SerialPort2::doOpen()
  
    mValidFlag = true;
 
-   printf("SerialPort2 initialize PASS  $ %s : %16s\n",
+   printf("SerialPort2 doOpen PASS  $ %s : %16s\n",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
 
@@ -222,7 +222,6 @@ bool SerialPort2::doOpen()
 
 void SerialPort2::doClose()
 {
-   mTerminateFlag = true;
    if (mValidFlag)
    {
       //printf("SerialPort2::doClose %s\n", mSettings.mPortDevice);
@@ -240,9 +239,22 @@ void SerialPort2::doClose()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Purge the comm channel
+// Abort pending serial port receive.
+// 
+// Set the abort flag and write bytes to the event semaphore. This will
+// cause a pending receive call poll to return and the receive call will
+// abort because the abort flag is set.
 
-void SerialPort2::doPurge()
+void SerialPort2::doAbort()
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Flush serial port buffers.
+
+void SerialPort2::doFlush()
 {
    ClearCommError(mSpecific->mPortHandle,0,0);
 
@@ -265,7 +277,7 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
 {
    //printf("SerialPort2::doSendBytes START %d\n", aNumBytes);
    // Guard.
-   if (!isValid()) return cSerialRetError;
+   if (!mValidFlag) return cSerialRetError;
 
    // Local variables.
    DWORD tNumWritten;
@@ -316,197 +328,9 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send data, null terminated string, append an end of line LF (\n,10)
-
-int SerialPort2::doSendLine(const char *aData)
-{
-   // Copy the input string to a temp buffer and append a terminator.
-   if (mSettings.mTermMode == cSerialTermMode_LF)
-   {
-      char tBuffer[200];
-      strncpy(tBuffer, aData, 196);
-      tBuffer[199] = 0;
-      int tLength = (int)strlen(tBuffer);
-      tBuffer[tLength] = '\n';
-      tLength++;
-      tBuffer[tLength] = 0;
-      return doSendBytes(tBuffer, tLength);
-   }
-   else
-   {
-      char tBuffer[200];
-      strncpy(tBuffer, aData, 195);
-      tBuffer[199] = 0;
-      int tLength = (int)strlen(tBuffer);
-      tBuffer[tLength] = '\r';
-      tLength++;
-      tBuffer[tLength] = '\n';
-      tLength++;
-      tBuffer[tLength] = 0;
-      return doSendBytes(tBuffer, tLength);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send one byte
-
-int SerialPort2::doSendOne(char aData)
-{
-   return doSendBytes(&aData,1);   
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Receive a string, terminated with end of line LF (\n,10) or 
-// CRLF (\r\n,13,10). Trims the  terminator and returns a null terminated
-// string. Termination mode is determined by settings.
-
-int SerialPort2::doReceiveLine(char* aData, int aMaxNumBytes)
-{
-   if (mSettings.mTermMode == cSerialTermMode_LF)
-   {
-      return doReceiveLineLF(aData, aMaxNumBytes);
-   }
-   else
-   {
-      return doReceiveLineCRLF(aData, aMaxNumBytes);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Receive a string, terminated with end of line LF (\n,10).
-
-int SerialPort2::doReceiveLineLF(char* aData, int aMaxNumBytes)
-{
-   int  tStatus = -1;
-   int  tIndex = 0;
-   int  tRxStatus = 0;
-   char tRxChar = 0;
-   bool tGoing = true;
-
-   aData[0] = 0;
-
-   // Loop to read single bytes, store them, and exit
-   // when termination cr/lf is detected
-   while (isValid() && tGoing)
-   {
-      // Read one byte
-      tRxStatus = doReceiveOne(&tRxChar);
-      if (tRxStatus >= 0)
-      {
-         // Read success
-         // Store byte
-         aData[tIndex] = tRxChar;
-
-         // If CR
-         if (tRxChar == 10)
-         {
-            // Terminator detected, strip if off
-            tGoing = false;
-            aData[tIndex] = 0;
-            tStatus = tIndex;
-         }
-         if (tIndex == aMaxNumBytes - 1)
-         {
-            // NumBytes limit was reached
-            tGoing = false;
-            aData[tIndex] = 0;
-            tStatus = tIndex;
-         }
-
-         // Increment
-         tIndex++;
-      }
-      else
-      {
-         // Read failure
-         tStatus = tRxStatus;
-         tGoing = false;
-      }
-   }
-   return tStatus;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Receive a string, terminated with end of line LF (\r\n,13,10).
-
-int SerialPort2::doReceiveLineCRLF(char* aData, int aMaxNumBytes)
-{
-   int  tStatus = -1;
-   int  tIndex = 0;
-   int  tRxStatus = 0;
-   char tRxChar = 0;
-   char tLastRxChar = 0;
-   bool tGoing = true;
-
-   aData[0] = 0;
-
-   // Loop to read single bytes, store them, and exit
-   // when termination cr/lf is detected
-   while (isValid() && tGoing)
-   {
-      // Save last received char.
-      tLastRxChar = tRxChar;
-      // Read one byte.
-      tRxStatus = doReceiveOne(&tRxChar);
-      if (tRxStatus >= 0)
-      {
-         // Read success.
-         // Store byte.
-         aData[tIndex] = tRxChar;
-
-         // If CR
-         if (tRxChar == 10 && tLastRxChar == 13)
-         {
-            // Terminator detected, strip if off
-            tGoing = false;
-            aData[tIndex - 1] = 0;
-            tStatus = tIndex;
-         }
-         if (tIndex == aMaxNumBytes - 1)
-         {
-            // NumBytes limit was reached
-            tGoing = false;
-            aData[tIndex] = 0;
-            tStatus = tIndex;
-         }
-
-         // Increment
-         tIndex++;
-      }
-      else
-      {
-         // Read failure
-         tStatus = tRxStatus;
-         tGoing = false;
-      }
-   }
-   return tStatus;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Receive one byte.
-
-int  SerialPort2::doReceiveOne(char *aData)
-{
-   return doReceiveBytes(aData, 1);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Receive bytes.
 
-int SerialPort2::doReceiveBytes(char *aData, int aNumBytes)
+int SerialPort2::doReceiveAnyBytes(char *aData, int aNumBytes)
 {
    // Locals.
    DWORD tRet  = 0;
@@ -602,9 +426,70 @@ int SerialPort2::doReceiveBytes(char *aData, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Receive a requested number of bytes. Block until all of the bytes
+// have been received. Return the number of bytes received or a
+// negative error code. Copy the bytes into the pointer argument.
+
+int SerialPort2::doReceiveAllBytes(char* aBytes, int aRequestBytes)
+{
+   // Guard.
+   if (!mValidFlag) return cSerialRetError;
+   if (aRequestBytes == 0) return 0;
+   int tRet = 0;
+
+   // Loop to read all of the requested bytes.
+   int tBytesRequired = aRequestBytes;
+   int tBytesRemaining = aRequestBytes;
+   int tBytesTotal = 0;
+
+   bool tGoing = true;
+   while (tGoing)
+   {
+      // Read any available receive bytes. Block until at least one byte
+      // has been received. Return the number of bytes read or a negative
+      // error code.
+      tRet = doReceiveAnyBytes(&aBytes[tBytesTotal], tBytesRemaining);
+
+      if (tRet > 0)
+      {
+         tBytesTotal += tRet;
+         tBytesRemaining -= tRet;
+         if (tBytesTotal == tBytesRequired)
+         {
+            tGoing = false;
+            tRet = tBytesTotal;
+         }
+      }
+      else
+      {
+         tGoing = false;
+      }
+   }
+
+   // If success then return the total number of bytes read, which is 
+   // equal to the requested number of bytes. If failure then return
+   // the negative error code.
+   return tRet;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Receive one byte. Block until the byte has been received. Return
+// one or zero or a negative error code. Copy the byte into the
+// pointer argument.
+
+int SerialPort2::doReceiveOneByte(char* aByte)
+{
+   return doReceiveAnyBytes(aByte, 1);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Return the number of bytes that are available to receive.
 
-int SerialPort2::getAvailableReceiveBytes()
+int SerialPort2::doGetAvailableReceiveBytes()
 {
    COMSTAT tComStat;
    ClearCommError(mSpecific->mPortHandle, 0, &tComStat);

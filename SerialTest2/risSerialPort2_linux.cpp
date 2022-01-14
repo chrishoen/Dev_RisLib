@@ -282,7 +282,7 @@ void SerialPort2::doFlush()
 //******************************************************************************
 // Return the number of bytes that are available to receive.
 
-int SerialPort2::doGetAvailableReadBytes()
+int SerialPort2::doGetAvailableReceiveBytes()
 {
    int tBytesAvaiable;
    ioctl(mSpecific->mPortFd, FIONREAD, &tBytesAvaiable);

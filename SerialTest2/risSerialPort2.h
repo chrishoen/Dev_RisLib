@@ -89,8 +89,8 @@ public:
    // Flush serial port buffers.
    void doFlush();
 
-   // Return the number of bytes that are available to read.
-   int doGetAvailableReadBytes();
+   // Return the number of bytes that are available to receive.
+   int doGetAvailableReceiveBytes();
 
    //***************************************************************************
    //***************************************************************************

@@ -173,19 +173,19 @@ void SerialThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread shutdown function. This aborts the serial port receive and
-// waits for the thread to terminate after execution of the thread
-// exit function.
+// Thread shutdown function. This is called out of the context of
+// this thread. It aborts the serial port receive and waits for the
+// thread to terminate after execution of the thread exit function.
 
 void SerialThread::shutdownThread()
 {
    printf("someSerialThread::shutdownThread\n");
 
-   // Request thread run function return.
-   mTerminateFlag = true;
-
    // Abort pending serial port receives
    mSerialPort.doAbort();
+
+   // Wait for thread to terminate.
+   BaseClass::shutdownThread();
 }
 
 //******************************************************************************

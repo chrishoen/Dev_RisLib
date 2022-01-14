@@ -88,9 +88,9 @@ public:
    // before the thread is terminated. It is close the serial port.
    void threadExitFunction() override;
 
-   // Thread shutdown function. This aborts the serial port receive and
-   // waits for the thread to terminate after execution of the thread
-   // exit function.
+   // Thread shutdown function. It is called out of the context of
+   // this thread. It aborts the serial port receive and waits for the
+   // thread to terminate after execution of the thread exit function.
    void shutdownThread() override;
 
    //***************************************************************************

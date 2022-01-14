@@ -78,10 +78,10 @@ bool SerialPort2::doOpen()
    //***************************************************************************
    // Do this first.
 
-   // Test if already open.
+   // Close the serial port, if already open.
    if (mValidFlag)
    {
-      printf("serial_open already open\n");
+      doClose();
       return true;
    }
 

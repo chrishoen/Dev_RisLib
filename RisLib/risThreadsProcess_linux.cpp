@@ -79,8 +79,9 @@ static void set_latency_target(void)
 
 void enterProcessHigh()
 {
+#if 0 
    set_latency_target();
-
+#endif
    int tRet = 0;
    int tMaxPriority = sched_get_priority_max(SCHED_FIFO);
    int tMinPriority = sched_get_priority_min(SCHED_FIFO);

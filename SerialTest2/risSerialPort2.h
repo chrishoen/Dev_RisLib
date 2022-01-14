@@ -27,8 +27,8 @@ namespace Ris
 // return codes.
 
 static const int cSerialRetError = -1;
-static const int cSerialRetAbort = -2;
-static const int cSerialRetTimeout = -3;
+static const int cSerialRetTimeout = -2;
+static const int cSerialRetAbort = -3;
 
 //******************************************************************************
 //******************************************************************************

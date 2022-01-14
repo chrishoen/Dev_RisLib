@@ -107,9 +107,9 @@ restart:
       //************************************************************************
       //************************************************************************
       //************************************************************************
-      // Read a string.
+      // Read bytes.
 
-      // Read a string. 
+      // Read. 
       if (gSerialParms.mReadAllFlag)
       {
          tRet = mSerialPort.doReceiveAllBytes(mRxBuffer, mRxReqNumBytes);
@@ -119,6 +119,7 @@ restart:
          tRet = mSerialPort.doReceiveAnyBytes(mRxBuffer, cBufferSize);
       }
 
+      // Check the return code.
       if (tRet == 0)
       {
          Prn::print(Prn::Show1, "Serial read EMPTY");
@@ -129,16 +130,25 @@ restart:
          Prn::print(Prn::Show1, "Serial read ERROR");
          goto restart;
       }
+      else if (tRet == Ris::cSerialRetTimeout)
+      {
+         Prn::print(Prn::Show1, "Serial read TIMEOUT");
+         goto restart;
+      }
       else if (tRet == Ris::cSerialRetAbort)
       {
          Prn::print(Prn::Show1, "Serial read ABORT");
          goto end;
       }
-      // Null terminate.
-      mRxCount = tRet;
+      // Process the read.
+      else
+      {
+         // Number of bytes.
+         mRxCount = tRet;
 
-      // Show.
-      Prn::print(Prn::Show1, "Serial read  $$$    %d", mRxCount);
+         // Show.
+         Prn::print(Prn::Show1, "Serial read  $$$    %d", mRxCount);
+      }
    }
    
    // Done.

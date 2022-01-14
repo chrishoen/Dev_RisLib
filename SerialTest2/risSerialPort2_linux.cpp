@@ -231,9 +231,9 @@ void SerialPort2::doAbort()
    tRet = write(mSpecific->mEventFd, &tCount, 8);
 
    // Test the return code.
-   if (tRet != 0)
+   if (tRet < 0)
    {
-      printf("serial_abort_1 %d\n", errno);
+      printf("serial_abort_1 ERROR %d\n", errno);
    }
 }
 

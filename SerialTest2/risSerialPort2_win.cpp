@@ -404,6 +404,7 @@ int SerialPort2::doReceiveAllBytes(char* aData, int aRequestBytes)
    printf("START SerialPort2::doReceiveAllBytes %d\n", aRequestBytes);
    // Locals.
    DWORD tRet = 0;
+   int tError = 0;
    DWORD tBytesRead = 0;
    int tBytesTotal = 0;
 
@@ -457,8 +458,16 @@ int SerialPort2::doReceiveAllBytes(char* aData, int aRequestBytes)
       {
          if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tBytesRead, FALSE))
          {
-            printf("ERROR SerialPort2::doReceiveAllBytes ERROR 102 %d\n", GetLastError());
-            return cSerialRetError;
+            tError = GetLastError();
+            printf("ERROR SerialPort2::doReceiveAllBytes ERROR 102 %d\n", tError);
+            if (tError == 995)
+            {
+               return cSerialRetAbort;
+            }
+            else
+            {
+               return cSerialRetError;
+            }
          }
          else
          {

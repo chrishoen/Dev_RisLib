@@ -121,7 +121,7 @@ void  SerialStringThread::threadRunFunction()
          // If a string was received then process it.
          // If a string was not received then the serial port was closed or 
          // an error occurred.  
-         if (mSerialPort.doReceiveLine(mRxString, cMaxStringSize) > 0)
+         if (mSerialPort.doReceiveString(mRxString, cMaxStringSize) > 0)
          {
             // Metrics.
             mRxCount++;
@@ -228,40 +228,24 @@ void SerialStringThread::processRxString(char* aString)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a null terminated string via the serial port. A newline terminator
-// is appended to the string before transmission. This executes in the
-// context of the The calling thread.
+// Send a null terminated string via the serial port. Append terminator
+// bytes as specified in the settings.
 
-void SerialStringThread::sendString(const char* aString, bool aTerminator)
+void SerialStringThread::sendString(const char* aString)
 {
-   if (aTerminator)
-   {
-      mSerialPort.doSendLine(aString);
-   }
-   else
-   {
-      mSerialPort.doSendBytes(aString, (int)strlen(aString));
-   }
+   mSerialPort.doSendString(aString);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a null terminated string via the serial port. A newline terminator
-// is appended to the string before transmission. This executes in the
-// context of the The calling thread. The string is deleted after
+// Send a null terminated string via the serial port. Append terminator
+// bytes as specified in the settings. The string is deleted after
 // transmission.
 
-void SerialStringThread::sendString(std::string* aString, bool aTerminator)
+void SerialStringThread::sendString(std::string* aString)
 {
-   if (aTerminator)
-   {
-      mSerialPort.doSendLine(aString->c_str());
-   }
-   else
-   {
-      mSerialPort.doSendBytes(aString->c_str(), (int)strlen(aString->c_str()));
-   }
+   mSerialPort.doSendString(aString->c_str());
    delete aString;
 }
 

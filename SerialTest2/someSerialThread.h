@@ -8,7 +8,7 @@ Serial test thread that contains a serial port.
 //******************************************************************************
 //******************************************************************************
 
-#include "risSerialPort2.h"
+#include "risSerialPort.h"
 #include "risThreadsThreads.h"
 
 //******************************************************************************
@@ -46,7 +46,7 @@ public:
    Ris::SerialSettings mSettings;
 
    // Serial port.
-   Ris::SerialPort2 mSerialPort;
+   Ris::SerialPort mSerialPort;
 
    // Buffers.
    char mRxBuffer[cBufferSize];

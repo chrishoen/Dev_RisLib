@@ -20,24 +20,27 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a serial port. It provides functions to
-// open, close, and purge a serial port. It provides functions to send and
-// receive bytes via a serial port. The send and receive functions are
-// blocking.
+// Constants.
+
+// Serial port return codes, if retval >=0 then no error and retval is
+// number of bytes that were transferred. If retval < 0 then use these
+// return codes.
+
+static const int cSerialRetError = -1;
+static const int cSerialRetTimeout = -2;
+static const int cSerialRetAbort = -3;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This class encapsulates a serial port. It provides the functionality
+// to configure, open, and close serial ports. It provides for the
+// transmission and reception of raw bytes. It is used to support USB and
+// UART serial communication.
 
 class SerialPort 
 {
 public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Constants.
-
-   // Return codes, if retval >=0 then no error and retval is number of bytes
-   // that were transferred. If retval < 0 then use these return codes.
-   static const int cRetCodeError   = -1;
-   static const int cRetCodeTimeout = -2;
 
    //***************************************************************************
    //***************************************************************************
@@ -47,11 +50,11 @@ public:
    // Settings.
    SerialSettings mSettings;
 
-   // Validity.
+   // True if open and valid.
    bool mValidFlag;
 
-   // If true then a terminations is requested.
-   bool mTerminateFlag;
+   // True if a receive abort is requested.
+   bool mAbortFlag;
 
    // Portable specifics.
    class Specific;
@@ -64,7 +67,7 @@ public:
 
    // Constructor.
    SerialPort();
-  ~SerialPort(void);
+  ~SerialPort();
 
    // Initialize with settings.
    virtual void initialize(SerialSettings& aSettings);
@@ -74,53 +77,49 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Open/Close serial port.
+   // Open the serial port and configure with the settings.
    bool doOpen();
+
+   // Close the serial port.
    void doClose();
-   void doPurge();
 
-   // True if open and valid.
-   bool isValid();
+   // Abort a pending serial port receive.
+   void doAbort();
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Send data, fixed number of bytes.
-   int  doSendBytes(const char *aData, int aNumBytes);
-
-   // Send a null terminated string, append an end of line LF (\n,10) or
-   // CRLF (\r\n,13,10)
-   int  doSendLine(const char *aData);
-
-   // Send data, one byte.
-   int  doSendOne(char aData);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Receive data, fixed number of bytes.
-   int doReceiveBytes(char *aData, int aNumBytes);
-
-   // Receive a string, terminated with end of line LF (\n,10) or 
-   // CRLF (\r\n,13,10). Trims the  terminator and returns a null terminated
-   // string. Termination mode is determined by settings.
-   int doReceiveLine(char *aData, int aMaxNumBytes);
-
-   // Receive a string, terminated with end of line LF (\n,10). 
-   int doReceiveLineLF(char* aData, int aMaxNumBytes);
-
-   // Receive a string, terminated with end of line CRLF (\r\n,13,10). 
-   int doReceiveLineCRLF(char* aData, int aMaxNumBytes);
-
-   // Receive one byte.
-   int doReceiveOne(char *aData);
+   // Flush serial port buffers.
+   void doFlush();
 
    // Return the number of bytes that are available to receive.
-   int getAvailableReceiveBytes();
+   int doGetAvailableReceiveBytes();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Send a fixed number of bytes. Return the actual number of bytes
+   // sent or a negative error code.
+   int  doSendBytes(const char *aBytes, int aNumBytes);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Receive any available bytes. Block until at least one byte has
+   // been received. Return the number of bytes received or a negative
+   // error code. Copy the bytes into the pointer argument.
+   int doReceiveAnyBytes(char* aBytes, int aMaxNumBytes);
+
+   // Receive a requested number of bytes. Block until all of the bytes
+   // have been received. Return the number of bytes received or a
+   // negative error code. Copy the bytes into the pointer argument.
+   int doReceiveAllBytes(char* aBytes, int aRequestBytes);
+
+   // Receive one byte. Block until the byte has been received. Return
+   // one or zero or a negative error code. Copy the byte into the
+   // pointer argument.
+   int doReceiveOneByte(char* aByte);
 };
 
 //******************************************************************************

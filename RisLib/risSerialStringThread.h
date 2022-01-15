@@ -12,7 +12,7 @@ Serial port string thread.
 
 #include "risThreadsThreads.h"
 #include "risThreadsQCall.h"
-#include "risSerialPort.h"
+#include "risSerialStringPort.h"
 
 namespace Ris
 {
@@ -65,7 +65,7 @@ public:
    SerialSettings mSettings;
 
    // Serial string port.
-   SerialPort mSerialPort;
+   SerialStringPort mSerialPort;
 
    // Rx string.
    char mRxString[cMaxStringSize];
@@ -158,16 +158,14 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a null terminated string via the serial port. A newline terminator
-   // is appended to the string before transmission. This executes in the
-   // context of the The calling thread.
-   void sendString(const char* aString, bool aTerminator = true);
+   // Send a null terminated string via the serial port. Append terminator
+   // bytes as specified in the settings.
+   void sendString(const char* aString);
 
-   // Send a null terminated string via the serial port. A newline terminator
-   // is appended to the string before transmission. This executes in the
-   // context of the The calling thread. The string is deleted after
+   // Send a null terminated string via the serial port. Append terminator
+   // bytes as specified in the settings. The string is deleted after
    // transmission.
-   void sendString(std::string* aString, bool aTerminaltor = true);
+   void sendString(std::string* aString);
 };
 
 //******************************************************************************

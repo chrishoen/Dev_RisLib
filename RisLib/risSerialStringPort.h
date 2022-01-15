@@ -10,7 +10,7 @@ serial string port class.
 
 #include "risThreadsSynch.h"
 #include "risSerialSettings.h"
-#include "risSerialPort2.h"
+#include "risSerialPort.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -30,10 +30,10 @@ namespace Ris
 //
 // SEE END OF FILE NOTES FOR TERMINATION BYTE FORMATS.
 
-class SerialStringPort : public SerialPort2
+class SerialStringPort : public SerialPort
 {
 public:
-   typedef SerialPort2 BaseClass;
+   typedef SerialPort BaseClass;
 
    //***************************************************************************
    //***************************************************************************

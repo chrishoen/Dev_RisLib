@@ -50,12 +50,11 @@ void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
    char tString[100];
    if (aCmd->numArg() == 0)
    {
-      strcpy(tString, "ABCD\n");
+      strcpy(tString, "ABCD");
    }
    else
    {
-      sprintf(tString, "%s\n", aCmd->argWhole());
-      my_string_toupper(tString);
+      sprintf(tString, "%s", aCmd->argWhole());
    }
    Some::gSerialThread->sendString(tString);
 }

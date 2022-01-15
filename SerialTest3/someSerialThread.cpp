@@ -54,9 +54,13 @@ void SerialThread::threadInitFunction()
    mSettings.reset();
    mSettings.setPortDevice(gSerialParms.mSerialPortDevice);
    mSettings.setPortSetup(gSerialParms.mSerialPortSetup);
+   mSettings.mTxTermMode = gSerialParms.mTxTermMode;
+   mSettings.mRxTermMode = gSerialParms.mRxTermMode;
 
    // Initialize the serial port.
    mSerialPort.initialize(mSettings);
+   printf("TxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mSerialPort.mTxTermMode));
+   printf("RxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mSerialPort.mRxTermMode));
 }
 
 //******************************************************************************

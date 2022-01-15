@@ -85,7 +85,8 @@ int SerialStringPort::doSendString(const char* aString)
    if (tLength > mBufferSize - 1) tLength = mBufferSize - 1;
 
    // Copy the string to the transmit buffer.
-   strncpy(mTxBuffer, aString, (size_t)tLength);
+// strncpy(mTxBuffer, aString, mBufferSize - 1);
+   strcpy(mTxBuffer, aString);
 
    // Append termination characters.
    switch (mTxTermMode)
@@ -161,12 +162,15 @@ int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
       // Test for termination byte.
       if (tRxChar == tTermChar)
       {
-         tIndex++;
+         // The termination byte will not be stored.
          break;
       }
       else
       {
+         // Store the byte.
          aString[tIndex++] = tRxChar;
+
+         // Test for overrun.
          if (tIndex == aMaxSize - 1)
          {
             break;
@@ -174,11 +178,15 @@ int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
       }
    }
 
-   // Null terminate the string.
+   // The index points to the byte after the last byte in the string.
+   // Null terminate the string by replacing the byte after the last 
+   // byt with zero. Then the index is also the strlen of the string 
+   // returned to the caller. 
    aString[tIndex] = 0;
 
-   // If this was a CRLF then trim the CR.
-   if (aString[tIndex] == cCR)
+   // If this was a CRLF then trim the CR, which is the last byte
+   // in the string.
+   if (aString[tIndex - 1] == cCR)
    {
       aString[--tIndex] = 0;
    }
@@ -186,7 +194,8 @@ int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
    // Metrics.
    mRxCount++;
 
-   // Return the number of bytes received, excluding the termination.
+   // Return the strlen of the string returned to the caller, 
+   // The returned string does not contain termination bytes.
    return tIndex;
 }
 

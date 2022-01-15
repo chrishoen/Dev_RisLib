@@ -63,9 +63,6 @@ public:
    //***************************************************************************
    // Members. Read from the parameters file.
 
-   // Application settings.
-   int  mMyAppNumber;
-
    // Serial port setup.
    char mSerialPortDevice[cMaxStringSize];
    char mSerialPortSetup[cMaxStringSize];

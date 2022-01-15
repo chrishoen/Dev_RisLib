@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 
-#include "procoSerialSettings.h"
+#include "procoSerialParms.h"
 #include "procoMsg.h"
 #include "procoSerialThread.h"
 
@@ -128,6 +128,6 @@ void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gSerialSettings.show();
+   ProtoComm::gSerialParms.show();
 }
 

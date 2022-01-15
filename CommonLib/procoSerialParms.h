@@ -47,7 +47,7 @@ namespace ProtoComm
 // structure. If so, then this class is the root.
 // 
 
-class SerialSettings : public Ris::BaseCmdLineParms
+class SerialParms : public Ris::BaseCmdLineParms
 {
 public:
 
@@ -80,7 +80,7 @@ public:
 
    // Constructor,
    typedef Ris::BaseCmdLineParms BaseClass;
-   SerialSettings();
+   SerialParms();
    void reset();
    void show();
 
@@ -99,10 +99,10 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _PROCOSERIALSETTINGS_CPP_
-   SerialSettings gSerialSettings;
+#ifdef _PROCOSERIALPARMS_CPP_
+   SerialParms gSerialParms;
 #else
-   extern SerialSettings gSerialSettings;
+   extern SerialParms gSerialParms;
 #endif
 
 //******************************************************************************

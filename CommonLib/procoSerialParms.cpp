@@ -8,8 +8,8 @@
 #include "risPortableCalls.h"
 
 
-#define  _PROCOSERIALSETTINGS_CPP_
-#include "procoSerialSettings.h"
+#define  _PROCOSERIALPARMS_CPP_
+#include "procoSerialParms.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -23,15 +23,22 @@ namespace ProtoComm
 //******************************************************************************
 // Constructor.
 
-SerialSettings::SerialSettings()
+SerialParms::SerialParms()
 {
    reset();
 }
 
-void SerialSettings::reset()
+void SerialParms::reset()
 {
    BaseClass::reset();
-   BaseClass::setFileName_RelAlphaFiles("RisLib/ProtoComm_SerialSettings.txt");
+   if (Ris::portableIsWindows())
+   {
+      BaseClass::setFilePath("c:/aaa_prime/files/ProtoComm_SerialParms.txt");
+   }
+   else
+   {
+      BaseClass::setFilePath("/opt/prime/files/ProtoComm_SerialParms.txt");
+   }
 
    mSerialPortDevice[0] = 0;
    mSerialPortSetup[0] = 0;
@@ -43,16 +50,16 @@ void SerialSettings::reset()
 //******************************************************************************
 // Show.
 
-void SerialSettings::show()
+void SerialParms::show()
 {
    printf("\n");
-   printf("SerialSettings************************************************ %s\n", mTargetSection);
+   printf("SerialParms************************************************ %s\n", mTargetSection);
 
    printf("SerialPortDevice           %-12s\n", mSerialPortDevice);
    printf("SerialPortSetup            %-12s\n", mSerialPortSetup);
    printf("SerialRxTimeout            %5d\n",   mSerialRxTimeout);
 
-   printf("SerialSettings************************************************\n");
+   printf("SerialParms************************************************\n");
    printf("\n");
 }
 
@@ -63,7 +70,7 @@ void SerialSettings::show()
 // member variable.  Only process commands for the target section.This is
 // called by the associated command file object for each command in the file.
 
-void SerialSettings::execute(Ris::CmdLineCmd* aCmd)
+void SerialParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
@@ -78,7 +85,7 @@ void SerialSettings::execute(Ris::CmdLineCmd* aCmd)
 // Calculate expanded member variables. This is called after the entire
 // section of the command file has been processed.
 
-void SerialSettings::expand()
+void SerialParms::expand()
 {
 }
 

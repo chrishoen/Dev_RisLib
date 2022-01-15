@@ -31,7 +31,6 @@ SerialParms::SerialParms()
 void SerialParms::reset()
 {
    BaseClass::reset();
-   BaseClass::reset();
    if (Ris::portableIsWindows())
    {
       BaseClass::setFilePath("c:/aaa_prime/files/Serial_Parms.txt");
@@ -41,7 +40,6 @@ void SerialParms::reset()
       BaseClass::setFilePath("/opt/prime/files/Serial_Parms.txt");
    }
 
-   mMyAppNumber = 0;
    mSerialPortDevice[0] = 0;
    mSerialPortSetup[0] = 0;
    mSerialRxTimeout = 0;
@@ -95,8 +93,6 @@ void SerialParms::show()
 void SerialParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
-
-   if (aCmd->isCmd("MyAppNumber"))       mMyAppNumber = aCmd->argInt(1);
 
    if (aCmd->isCmd("SerialPortDevice"))  aCmd->copyArgString(1, mSerialPortDevice, cMaxStringSize);
    if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup, cMaxStringSize);

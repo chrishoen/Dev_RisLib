@@ -90,7 +90,7 @@ int SerialStringPort::doSendString(const char* aString)
    // Append termination characters.
    switch (mTxTermMode)
    {
-   case cSerialTermMode_Null:
+   case cSerialTermMode_NULL:
       // Transmit the string + null.
       tLength++;
       break;
@@ -137,7 +137,7 @@ int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
    char tTermChar = 0;
    switch (mRxTermMode)
    {
-   case cSerialTermMode_Null: tTermChar = 0; break;
+   case cSerialTermMode_NULL: tTermChar = 0; break;
    case cSerialTermMode_LF: tTermChar = cLF; break;
    case cSerialTermMode_CR: tTermChar = cCR; break;
    case cSerialTermMode_CRLF: tTermChar = cLF; break;

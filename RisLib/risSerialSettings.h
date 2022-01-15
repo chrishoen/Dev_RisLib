@@ -29,7 +29,7 @@ namespace Ris
 // Constants.
 
 // Serial string termination modes.
-static const int cSerialTermMode_Null = 0; // Null terminated.
+static const int cSerialTermMode_NULL = 0; // Null terminated.
 static const int cSerialTermMode_LF   = 1; // LF   (\n,10)
 static const int cSerialTermMode_CR   = 2; // CR   (\r,13)
 static const int cSerialTermMode_CRLF = 3; // CRLF (\r\n,13,10)

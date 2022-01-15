@@ -57,18 +57,18 @@ void SerialSettings::setPortSetup(const char* aPortSetup)
 
 int int_from_string_SerialSettingsTermMode(const char* aTermMode)
 {
-   if (strcmp(aTermMode, "NULL") == 0) return cSerialTermMode_Null;
+   if (strcmp(aTermMode, "NULL") == 0) return cSerialTermMode_NULL;
    else if (strcmp(aTermMode, "LF") == 0) return cSerialTermMode_LF;
    else if (strcmp(aTermMode, "CR") == 0) return cSerialTermMode_CR;
    else if (strcmp(aTermMode, "CRLF") == 0) return cSerialTermMode_CRLF;
-   return cSerialTermMode_Null;
+   return cSerialTermMode_NULL;
 }
 
 char* string_from_int_SerialSettingsTermMode(int aTermMode)
 {
    switch (aTermMode)
    {
-   case cSerialTermMode_Null: return "NULL";
+   case cSerialTermMode_NULL: return "NULL";
    case cSerialTermMode_LF:   return "LF";
    case cSerialTermMode_CR:   return "CR";
    case cSerialTermMode_CRLF: return "CRLF";

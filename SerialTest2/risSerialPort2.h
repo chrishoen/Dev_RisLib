@@ -109,7 +109,7 @@ public:
    // Receive any available bytes. Block until at least one byte has
    // been received. Return the number of bytes received or a negative
    // error code. Copy the bytes into the pointer argument.
-   int doReceiveAnyBytes(char *aBytes, int aMaxNumBytes);
+   int doReceiveAnyBytes(char* aBytes, int aMaxNumBytes);
 
    // Receive a requested number of bytes. Block until all of the bytes
    // have been received. Return the number of bytes received or a

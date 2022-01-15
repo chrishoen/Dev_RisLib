@@ -33,6 +33,8 @@ SerialThread::SerialThread()
    BaseClass::setThreadPriorityHigh();
 
    // Initialize variables.
+   mRxBuffer[0] = 0;
+   mTxBuffer[0] = 0;
    mErrorCount = 0;
    mRestartCount = 0;
    mRxCount = 0;

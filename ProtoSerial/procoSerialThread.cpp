@@ -171,16 +171,17 @@ void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 //******************************************************************************
 // Rx message handler - EchoRequestMsg
 
-void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aMsg)
+void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 {
    if (true)
    {
-      ProtoComm::EchoResponseMsg* tMsg = new ProtoComm::EchoResponseMsg;
-      mSerialMsgThread->sendMsg(tMsg);
+      ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
+      tTxMsg->mCode1 = aRxMsg->mCode1;
+      mSerialMsgThread->sendMsg(tTxMsg);
    }
 
-   MsgHelper::show(aMsg);
-   delete aMsg;
+   MsgHelper::show(aRxMsg);
+   delete aRxMsg;
 }
 
 //******************************************************************************

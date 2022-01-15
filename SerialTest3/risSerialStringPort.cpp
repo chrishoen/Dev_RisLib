@@ -74,15 +74,18 @@ void SerialStringPort::initialize(SerialSettings& aSettings)
 // termination characters. Send the transmit buffer to the serial port
 // with a base class write call. Return true if successful.
 
-bool SerialStringPort::doSendString(const char* aString)
+int SerialStringPort::doSendString(const char* aString)
 {
    // Guard.
    if (!BaseClass::mValidFlag) return false;
    int tRet = 0;
 
+   // Get the string length.
+   int tLength = (int)strlen(aString);
+   if (tLength > mBufferSize - 1) tLength = mBufferSize - 1;
+
    // Copy the string to the transmit buffer.
-   int tLength = strlen(aString);
-   strcpy(mTxBuffer, aString);
+   strncpy(mTxBuffer, aString, (size_t)tLength);
 
    // Append termination characters.
    switch (mTxTermMode)
@@ -108,19 +111,11 @@ bool SerialStringPort::doSendString(const char* aString)
       break;
    }
 
-   // Transmit the buffer.
-   tRet = BaseClass::doSendBytes(mTxBuffer, tLength);
-
-   // Test for errors.
-   if (tRet<0)
-   {
-      printf("ERROR SerialStringPort::doSendString FAIL\n");
-      return false;
-   }
-
-   // Done.
+   // Metrics.
    mTxCount++;
-   return true;
+
+   // Transmit the buffer.
+   return BaseClass::doSendBytes(mTxBuffer, tLength);
 }
 
 //******************************************************************************
@@ -132,9 +127,67 @@ bool SerialStringPort::doSendString(const char* aString)
 // returning false means that the serial port was closed or that there was
 // an error.
 
-bool SerialStringPort::doReceiveString (char* aString)
+int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
 {
-   return true;
+   // Guard.
+   if (!BaseClass::mValidFlag) return false;
+   int tRet = 0;
+
+   // Termination character.
+   char tTermChar = 0;
+   switch (mRxTermMode)
+   {
+   case cSerialTermMode_Null: tTermChar = 0; break;
+   case cSerialTermMode_LF: tTermChar = cLF; break;
+   case cSerialTermMode_CR: tTermChar = cCR; break;
+   case cSerialTermMode_CRLF: tTermChar = cLF; break;
+   default: break;
+   }
+
+   // Loop to receive one byte until a termination byte is 
+   // encountered or the max size is reached.
+   int tIndex = 0;
+   while (true)
+   {
+      // Receive one byte. Block until the byte has been received. Return
+      // one or zero or a negative error code. Copy the byte into the
+      // pointer argument.
+      char tRxChar = 0;
+      tRet = BaseClass::doReceiveOneByte(&tRxChar);
+
+      // Test the return code.
+      if (tRet != 1) return tRet;
+
+      // Test for termination byte.
+      if (tRxChar == tTermChar)
+      {
+         tIndex++;
+         break;
+      }
+      else
+      {
+         aString[tIndex++] = tRxChar;
+         if (tIndex == aMaxSize - 1)
+         {
+            break;
+         }
+      }
+   }
+
+   // Null terminate the string.
+   aString[tIndex] = 0;
+
+   // If this was a CRLF then trim the CR.
+   if (aString[tIndex] == cCR)
+   {
+      aString[--tIndex] = 0;
+   }
+
+   // Metrics.
+   mRxCount++;
+
+   // Return the number of bytes received, excluding the termination.
+   return tIndex;
 }
 
 //******************************************************************************

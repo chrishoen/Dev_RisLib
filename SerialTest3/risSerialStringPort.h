@@ -10,7 +10,7 @@ serial string port class.
 
 #include "risThreadsSynch.h"
 #include "risSerialSettings.h"
-#include "risSerialPort.h"
+#include "risSerialPort2.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -32,10 +32,10 @@ namespace Ris
 // It inherits from SerialPort for serial functionality and
 // provides methods that can be used to send and receive strings.
 
-class SerialStringPort : public SerialPort
+class SerialStringPort : public SerialPort2
 {
 public:
-   typedef SerialPort BaseClass;
+   typedef SerialPort2 BaseClass;
 
    //***************************************************************************
    //***************************************************************************
@@ -87,14 +87,14 @@ public:
    // Copy a string into the transmit buffer and append termination
    // characters. Send the transmit buffer to the serial port with
    // a blocking write call. Return true if successful.
-   bool doSendString(const char* aString);
+   int doSendString(const char* aString);
 
    // Receive a message from the serial port with a blocking read call into a
    // byte buffer and extract a message from the byte buffer. Return the
    // message and true if successful. As part of the termination process,
    // returning false means that the serial port was closed or that there was
    // an error.
-   bool doReceiveString (char* aString);
+   int doReceiveString (char* aString, int aMaxSize);
 };
 
 //******************************************************************************

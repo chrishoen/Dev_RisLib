@@ -31,7 +31,6 @@ static const int cCR = 13; // CR   (\r,13)
 SerialStringPort::SerialStringPort()
 {
    mTxBuffer = 0;
-   mRxBuffer = 0;
    mBufferSize = 0;
    mTxCount = 0;
    mRxCount = 0;
@@ -40,7 +39,6 @@ SerialStringPort::SerialStringPort()
 SerialStringPort::~SerialStringPort()
 {
    if (mTxBuffer) free(mTxBuffer);
-   if (mRxBuffer) free(mRxBuffer);
 }
 
 //******************************************************************************
@@ -60,7 +58,6 @@ void SerialStringPort::initialize(SerialSettings& aSettings)
    // Allocate memory for byte buffers.
    mBufferSize = 16*1024;
    mTxBuffer = (char*)malloc(mBufferSize);
-   mRxBuffer = (char*)malloc(mBufferSize);
 
    // Initialize member variables.
    mTxCount = 0;
@@ -71,8 +68,9 @@ void SerialStringPort::initialize(SerialSettings& aSettings)
 //******************************************************************************
 //******************************************************************************
 // Copy a null terminated string into the transmit buffer and append
-// termination characters. Send the transmit buffer to the serial port
-// with a base class write call. Return true if successful.
+// termination bytes. Send the transmit buffer via the serial port
+// base class. Return the total number of bytes transmitted, including
+// any termination bytes or a negative error code.
 
 int SerialStringPort::doSendString(const char* aString)
 {
@@ -85,7 +83,6 @@ int SerialStringPort::doSendString(const char* aString)
    if (tLength > mBufferSize - 1) tLength = mBufferSize - 1;
 
    // Copy the string to the transmit buffer.
-// strncpy(mTxBuffer, aString, mBufferSize - 1);
    strcpy(mTxBuffer, aString);
 
    // Append termination characters.
@@ -122,11 +119,11 @@ int SerialStringPort::doSendString(const char* aString)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive a message from the serial port with a blocking read call into a
-// byte buffer and extract a message from the byte buffer. Return the
-// message and true if successful. As part of the termination process,
-// returning false means that the serial port was closed or that there was
-// an error.
+// Enter a loop that receives one byte at a time via the serial port
+// base class and tests for a termination byte. Copy the received bytes
+// into the argument pointer. Terminate the loop when a termination byte
+// is received. Return the number of bytes received, excluding termination
+// bytes or return zero or a negative error code.
 
 int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
 {

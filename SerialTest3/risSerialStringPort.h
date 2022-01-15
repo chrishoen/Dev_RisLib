@@ -22,15 +22,13 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Serial string port. This class encapsulates a serial port that
-// communicates strings.
-//
-// It exchanges strings (send and receive) via a serial port.
-// It manages string terminations (NULL, CR, LF, CRLF)
-// It manages transmit and receive buffers.
-//
+// Serial string port. This class encapsulates a serial port that operates
+// on strings that use termination bytes (NULL, CR, LF, CRLF).
+// 
 // It inherits from SerialPort for serial functionality and
 // provides methods that can be used to send and receive strings.
+//
+// SEE END OF FILE NOTES FOR TERMINATION BYTE FORMATS.
 
 class SerialStringPort : public SerialPort2
 {
@@ -47,9 +45,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // Transmit and receive buffers. Allocated at initialization.
+   // Transmit buffer. Allocated at initialization.
    char* mTxBuffer;
-   char* mRxBuffer;
 
    // Buffer size.
    int mBufferSize;
@@ -84,16 +81,17 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Copy a string into the transmit buffer and append termination
-   // characters. Send the transmit buffer to the serial port with
-   // a blocking write call. Return true if successful.
+   // Copy a null terminated string into the transmit buffer and append
+   // termination bytes. Send the transmit buffer via the serial port
+   // base class. Return the total number of bytes transmitted, including
+   // any termination bytes or a negative error code.
    int doSendString(const char* aString);
 
-   // Receive a message from the serial port with a blocking read call into a
-   // byte buffer and extract a message from the byte buffer. Return the
-   // message and true if successful. As part of the termination process,
-   // returning false means that the serial port was closed or that there was
-   // an error.
+   // Enter a loop that receives one byte at a time via the serial port
+   // base class and tests for a termination byte. Copy the received bytes
+   // into the argument pointer. Terminate the loop when a termination byte
+   // is received. Return the number of bytes received, excluding termination
+   // bytes or return zero or a negative error code.
    int doReceiveString (char* aString, int aMaxSize);
 };
 

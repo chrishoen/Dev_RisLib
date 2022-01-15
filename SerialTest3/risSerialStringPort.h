@@ -102,3 +102,42 @@ public:
 //******************************************************************************
 }//namespace
 
+#if 0
+
+ON THE TRANSMIT SIDE doSendString ***************************************
+
+   input null terminated string "ABCD"
+   input strlen      4
+   input memory size 5
+   input memory bytes 'A', 'B', 'C', 'D', 0
+
+   For termination NULL
+
+      transmit size 5
+      transmit bytes 'A', 'B', 'C', 'D', 0
+
+   For termination CR
+
+      transmit size 5
+      transmit bytes 'A', 'B', 'C', 'D', CR
+
+   For termination LF
+
+      transmit size 5
+      transmit bytes 'A', 'B', 'C', 'D', LF
+
+   For termination CRLF
+
+      transmit size 6
+      transmit bytes 'A', 'B', 'C', 'D', CR, LF
+
+ON THE RECEIVE SIDE doReceiveString***************************************
+
+   output null terminated string "ABCD"
+   output strlen      4
+   output memory size 5
+   output memory bytes 'A', 'B', 'C', 'D', 0
+
+   returns     4
+
+#endif

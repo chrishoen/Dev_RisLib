@@ -47,9 +47,17 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 16);
-   int tNumBytes = aCmd->argInt(1);
-   Some::gSerialThread->sendTestBytes(tNumBytes);
+   char tString[100];
+   if (aCmd->numArg() == 0)
+   {
+      strcpy(tString, "ABCD\n");
+   }
+   else
+   {
+      sprintf(tString, "%s\n", aCmd->argWhole());
+      my_string_toupper(tString);
+   }
+   Some::gSerialThread->sendString(tString);
 }
 
 //******************************************************************************

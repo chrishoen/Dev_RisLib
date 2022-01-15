@@ -108,17 +108,10 @@ restart:
       //************************************************************************
       //************************************************************************
       //************************************************************************
-      // Read bytes.
+      // Receive.
 
-      // Read. 
-      if (gSerialParms.mReadAllFlag)
-      {
-         tRet = mSerialPort.doReceiveAllBytes(mRxBuffer, mRxReqNumBytes);
-      }
-      else
-      {
-         tRet = mSerialPort.doReceiveAnyBytes(mRxBuffer, cBufferSize);
-      }
+      // Receive. 
+      tRet = mSerialPort.doReceiveString(mRxBuffer, cBufferSize);
 
       // Check the return code.
       if (tRet == 0)
@@ -148,7 +141,7 @@ restart:
          mRxCount = tRet;
 
          // Show.
-         Prn::print(Prn::Show1, "Serial read  $$$    %d", mRxCount);
+         Prn::print(Prn::Show1, "Serial read  $$$    %d %s", mRxCount, mRxBuffer);
       }
    }
    
@@ -205,7 +198,7 @@ void SerialThread::abort()
 // Send bytes via the serial port. This executes in the context of
 // the calling thread.
 
-void SerialThread::sendBytes(const void* aBytes, int aNumBytes)
+void SerialThread::sendString(const char* aString)
 {
    // Guard.
    if (!mSerialPort.mValidFlag) return;
@@ -213,7 +206,7 @@ void SerialThread::sendBytes(const void* aBytes, int aNumBytes)
 
    // Send a fixed number of bytes. Return the actual number of bytes
    // sent or a negative error code.
-   tRet = mSerialPort.doSendBytes((char*)aBytes, aNumBytes);
+   tRet = mSerialPort.doSendString((char*)aString);
 
    // Test the return code.
    if (tRet < 0)
@@ -221,31 +214,13 @@ void SerialThread::sendBytes(const void* aBytes, int aNumBytes)
       Prn::print(Prn::Show1, "Serial write FAIL 101 %d", errno);
       return;
    }
-   mTxCount = aNumBytes;
+   mTxCount = tRet;
 
    // Show.
    Prn::print(Prn::Show1, "Serial write $$$$$$ %d", mTxCount);
 
    return;
 
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send test bytes via the serial port. This executes in the context
-// of the calling thread.
-
-void SerialThread::sendTestBytes(int aNumBytes)
-{
-   // Fill the transmit buffer with constants.
-   for (int i = 0; i < aNumBytes; i++)
-   {
-      mTxBuffer[i] = 0x77;
-   }
-
-   // Send the transmit buffer.
-   return sendBytes(mTxBuffer, aNumBytes);
 }
 
 //******************************************************************************

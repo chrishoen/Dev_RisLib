@@ -8,8 +8,8 @@ Serial test thread that contains a serial port.
 //******************************************************************************
 //******************************************************************************
 
-#include "risSerialPort2.h"
 #include "risThreadsThreads.h"
+#include "risSerialStringPort.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -46,7 +46,7 @@ public:
    Ris::SerialSettings mSettings;
 
    // Serial port.
-   Ris::SerialPort2 mSerialPort;
+   Ris::SerialStringPort mSerialPort;
 
    // Buffers.
    char mRxBuffer[cBufferSize];
@@ -108,11 +108,7 @@ public:
 
    // Send bytes via the serial port. This executes in the context of
    // the calling thread.
-   void sendBytes(const void* aBytes, int aNumBytes);
-
-   // Send test bytes via the serial port. This executes in the context
-   // of the calling thread.
-   void sendTestBytes(int aNumBytes);
+   void sendString(const char* aString);
 
 };
 

@@ -208,11 +208,11 @@ bool SerialPort2::doOpen()
    // Done.
  
    mValidFlag = true;
-
+#if 0
    printf("SerialPort2 doOpen PASS  $ %s : %16s\n",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
-
+#endif
    return true;
 }
 
@@ -280,7 +280,6 @@ void SerialPort2::doFlush()
 
 int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
 {
-   //printf("SerialPort2::doSendBytes START %d\n", aNumBytes);
    // Guard.
    if (!mValidFlag) return cSerialRetError;
 
@@ -296,11 +295,10 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
    if (WriteFile(mSpecific->mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped))
    {
       // Write was successful.
-      printf("SerialPort2::doSendBytes PASS1 %d\n",aNumBytes);
+      //printf("SerialPort2::doSendBytes PASS1 %d\n",aNumBytes);
       return 0;
    }
 
-   return 0;
    // Write is pending.
    tRet = WaitForSingleObject(tOverlapped.hEvent, INFINITE);
    switch(tRet)
@@ -310,19 +308,19 @@ int SerialPort2::doSendBytes(const char* aData, int aNumBytes)
       {
          if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
          {
-            //prinft("SerialPort2::doSendBytes PASS1 %d\n",aNumBytes);
+            //printf("SerialPort2::doSendBytes PASS1 %d\n",aNumBytes);
             return 0;
          }
          else
          {
-            //printf("ERROR SerialPort2::doSendBytes ERROR 101, %d\n", GetLastError());
+            printf("ERROR SerialPort2::doSendBytes ERROR 101, %d\n", GetLastError());
             return cSerialRetError;
          }
       }
       break;
       default:
       {
-         //printf("ERROR SerialPort2::doSendBytes ERROR 102, %d\n", GetLastError());
+         printf("ERROR SerialPort2::doSendBytes ERROR 102, %d\n", GetLastError());
          return cSerialRetError;
       }
       break;
@@ -340,10 +338,15 @@ int SerialPort2::doReceiveAnyBytes(char *aData, int aNumBytes)
 {
    printf("START SerialPort2::doReceiveAnyBytes %d\n", aNumBytes);
    // Locals.
-   DWORD tRet  = 0;
-   DWORD tBytesRead  = 0;
-   DWORD tEventMask = 0;
+   DWORD tRet = 0;
    int tError = 0;
+   DWORD tBytesRead = 0;
+   int tBytesTotal = 0;
+   bool tReadSuccessful = false;
+   bool tWaitingOnRead = false;
+   OVERLAPPED tOverlapped = { 0 };
+   tOverlapped.hEvent = mSpecific->mRxEventHandle;
+   DWORD tEventMask = 0;
    int tBytesAvailable = 0;
 
    // Wait for receive comm event.
@@ -370,23 +373,96 @@ int SerialPort2::doReceiveAnyBytes(char *aData, int aNumBytes)
 
    // Read available bytes.
    tBytesAvailable = doGetAvailableReceiveBytes();
-   printf("READ1 SerialPort2::doReceiveAnyBytes %d\n", tBytesAvailable);
-   tRet = ReadFile(mSpecific->mPortHandle, aData, tBytesAvailable, &tBytesRead, 0);
-   tBytesAvailable = doGetAvailableReceiveBytes();
-   printf("READ2 SerialPort2::doReceiveAnyBytes %d\n", tBytesAvailable);
+   printf("AVAILABLE1 %d\n", tBytesAvailable);
+   tRet = ReadFile(mSpecific->mPortHandle, aData, tBytesAvailable, &tBytesRead, &tOverlapped);
+   printf("AVAILABLE2 %d\n", doGetAvailableReceiveBytes());
 
-   if (tRet == 0)
+   if (!tRet)
    {
-      tError = GetLastError();
-      printf("SerialPort2::doReceiveAnyBytes ERROR 102 %d\n", tError);
-      if (tError == 995)
+      if (GetLastError() == ERROR_IO_PENDING)
       {
-         return cSerialRetAbort;
+         tWaitingOnRead = true;
       }
       else
       {
+         printf("SerialPort2::doReceiveAnyBytes ERROR 101 %d\n", GetLastError());
          return cSerialRetError;
       }
+   }
+   else
+   {
+      tWaitingOnRead = false;
+      tReadSuccessful = true;
+   }
+
+   if (tWaitingOnRead)
+   {
+      printf("WAIT1 SerialPort2::doReceiveAnyBytes\n");
+      // Wait for overlapped i/o completion.
+      tRet = WaitForSingleObject(tOverlapped.hEvent, -1);
+
+      printf("WAIT2 SerialPort2::doReceiveAnyBytes %d\n", tRet);
+
+      // Test for abort.
+      if (mAbortFlag)
+      {
+         return cSerialRetAbort;
+      }
+
+      // Select on the returned status code.
+      switch (tRet)
+      {
+         // Read completed.
+      case WAIT_OBJECT_0:
+      {
+         if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tBytesRead, FALSE))
+         {
+            tError = GetLastError();
+            printf("ERROR SerialPort2::doReceiveAnyBytes ERROR 102 %d\n", tError);
+            if (tError == 995)
+            {
+               return cSerialRetAbort;
+            }
+            else
+            {
+               return cSerialRetError;
+            }
+         }
+         else
+         {
+            tReadSuccessful = true;
+         }
+         tWaitingOnRead = false;
+      }
+      break;
+      // Read timeput.
+      case WAIT_TIMEOUT:
+      {
+         printf("ERROR SerialPort2::doReceiveAnyBytes TIMEOUT %d\n", GetLastError());
+         return cSerialRetError;
+      }
+      default:
+      {
+         printf("ERROR SerialPort2::doReceiveAnyBytes ERROR 104 %d\n", GetLastError());
+         return cSerialRetError;
+      }
+      }
+   }
+
+
+   // If the read was aborted then clear hardware error.
+   if (GetLastError() == ERROR_OPERATION_ABORTED)
+   {
+      printf("ERROR SerialPort2::doReceiveAnyBytes ERROR 105 %d\n", GetLastError());
+      ClearCommError(mSpecific->mPortHandle, 0, 0);
+      return cSerialRetError;
+   }
+
+   // If the number of bytes read was wrong then error.
+   if (tBytesRead != tBytesAvailable)
+   {
+      printf("ERROR SerialPort2::doReceiveAnyBytes ERROR 106 %d %d\n", GetLastError(), tBytesRead);
+      return cSerialRetError;
    }
 
    // Done.
@@ -401,19 +477,16 @@ int SerialPort2::doReceiveAnyBytes(char *aData, int aNumBytes)
 
 int SerialPort2::doReceiveAllBytes(char* aData, int aRequestBytes)
 {
-   printf("START SerialPort2::doReceiveAllBytes %d\n", aRequestBytes);
+   //printf("START SerialPort2::doReceiveAllBytes %d\n", aRequestBytes);
    // Locals.
    DWORD tRet = 0;
    int tError = 0;
    DWORD tBytesRead = 0;
    int tBytesTotal = 0;
-
    bool tReadSuccessful = false;
    bool tWaitingOnRead = false;
    OVERLAPPED tOverlapped = { 0 };
-
    tOverlapped.hEvent = mSpecific->mRxEventHandle;
-
 
    // Issue read operation.
    tRet = ReadFile(mSpecific->mPortHandle, aData, aRequestBytes, &tBytesRead, &tOverlapped);
@@ -438,11 +511,8 @@ int SerialPort2::doReceiveAllBytes(char* aData, int aRequestBytes)
 
    if (tWaitingOnRead)
    {
-      printf("WAIT1 SerialPort2::doReceiveAllBytes\n");
       // Wait for overlapped i/o completion.
       tRet = WaitForSingleObject(tOverlapped.hEvent, -1);
-
-      printf("WAIT2 SerialPort2::doReceiveAllBytes %d\n", tRet);
 
       // Test for abort.
       if (mAbortFlag)
@@ -459,13 +529,13 @@ int SerialPort2::doReceiveAllBytes(char* aData, int aRequestBytes)
          if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tBytesRead, FALSE))
          {
             tError = GetLastError();
-            printf("ERROR SerialPort2::doReceiveAllBytes ERROR 102 %d\n", tError);
             if (tError == 995)
             {
                return cSerialRetAbort;
             }
             else
             {
+               printf("ERROR SerialPort2::doReceiveAllBytes ERROR 102 %d\n", tError);
                return cSerialRetError;
             }
          }
@@ -503,11 +573,11 @@ int SerialPort2::doReceiveAllBytes(char* aData, int aRequestBytes)
    if (tBytesRead != aRequestBytes)
    {
       printf("ERROR SerialPort2::doReceiveAllBytes ERROR 106 %d %d\n", GetLastError(), tBytesRead);
-      return cSerialRetTimeout;
+      return cSerialRetError;
    }
 
    // Done.
-   printf("SerialPort2::doReceiveAllBytes PASS1 %d\n", tBytesRead);
+// printf("SerialPort2::doReceiveAllBytes PASS1 %d\n", tBytesRead);
    return tBytesRead;
 }
 

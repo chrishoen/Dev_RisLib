@@ -1,12 +1,16 @@
 
 #include "stdafx.h"
 
-#include "procoSerialParms.h"
+#include "risSockets.h"
+#include "procoUdpSettings.h"
 #include "procoMsg.h"
+#include "procoMsgHelper.h"
+
 #include "procoSerialThread.h"
 
-#include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
+
+using namespace ProtoComm;
 
 //******************************************************************************
 //******************************************************************************
@@ -15,7 +19,6 @@
 CmdLineExec::CmdLineExec()
 {
 }
-
 void CmdLineExec::reset()
 {
 }
@@ -23,25 +26,17 @@ void CmdLineExec::reset()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class is the program command line executive. It processes user
-// command line inputs and executes them. It inherits from the command line
-// command executive base class, which provides an interface for executing
-// command line commands. It provides an override execute function that is
-// called by a console executive when it receives a console command line input.
-// The execute function then executes the command.
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("RESET"))     reset();
    if (aCmd->isCmd("TP"))        ProtoComm::gSerialThread->mTPFlag = aCmd->argBool(1);
-   if (aCmd->isCmd("STATUS"))    executeStatus(aCmd);
+   if (aCmd->isCmd("TX"))        executeTx(aCmd);
+   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
+   if (aCmd->isCmd("DATA"))      executeData(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
    if (aCmd->isCmd("GO4"))       executeGo4(aCmd);
-   if (aCmd->isCmd("GO5"))       executeGo5(aCmd);
-   if (aCmd->isCmd("GO5"))       executeGo5(aCmd);
-   if (aCmd->isCmd("Show"))      executeShow(aCmd);
    if (aCmd->isCmd("Parms"))     executeParms(aCmd);
 }
 
@@ -49,31 +44,63 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeStatus(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 11);
+   aCmd->setArgDefault(1,1);
+   int tMsgType= aCmd->argInt(1);
 
-   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-   tMsg->mCode1 = aCmd->argInt(1);
-   ProtoComm::gSerialThread->sendMsg(tMsg);
+   switch (tMsgType)
+   {
+      case 1:
+      {
+         ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+         MsgHelper::initialize(tMsg);
+         gSerialThread->sendMsg(tMsg);
+         break;
+      }
+      case 5:
+      {
+         ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+         MsgHelper::initialize(tMsg);
+         gSerialThread->sendMsg(tMsg);
+         break;
+      }
+   }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 {
-   // Set defaults if no arguments were entered.
-   aCmd->setArgDefault(1, 10);
-   aCmd->setArgDefault(2, 11.1);
+   aCmd->setArgDefault(1, 0);
+   int tNumWords = aCmd->argInt(1);
+   
+   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
+   MsgHelper::initialize(tMsg,tNumWords);
+   gSerialThread->sendMsg(tMsg);
+}
 
-   // Set variables from arguments.
-   int    tInt = aCmd->argInt(1);
-   double tDouble = aCmd->argDouble(2);
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-   // Show variables.
-   Prn::print(0, "Show2 %d %10.6f", tInt, tDouble);
+void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
+{
+   ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+   MsgHelper::initialize(tMsg);
+
+   gSerialThread->sendMsg(tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
+{
+   gSerialThread->sendTestMsg();
 }
 
 //******************************************************************************
@@ -82,11 +109,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   // Set defaults if no arguments were entered.
-   aCmd->setArgDefault(1,"something");
+   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
 
-   // Show arguments.
-   Prn::print(0,"Go2 %s %10.6f",aCmd->argString(1));
+   gSerialThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -109,25 +134,12 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
-{
-   ProtoComm::gSerialThread->show();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gSerialParms.show();
+   ProtoComm::gUdpSettings.show();
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 

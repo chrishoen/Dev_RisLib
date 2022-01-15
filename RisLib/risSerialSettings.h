@@ -108,11 +108,15 @@ public:
    void setPortDevice(const char* aPortDevice);
    void setPortSetup(const char* aPortSetup);
 
-   // Termination mode strings.
-   void setTxTermMode(const char* aTermMode);
-   void setRxTermMode(const char* aTermMode);
-   char* asStringTermMode(int aTermMode);
 };
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Helpers. Serial port settings termination mode strings.
+
+int int_from_string_SerialSettingsTermMode(const char* aTermMode);
+char* string_from_int_SerialSettingsTermMode(int aTermMode);
 
 //******************************************************************************
 //******************************************************************************

@@ -53,27 +53,18 @@ void SerialSettings::setPortSetup(const char* aPortSetup)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Termination mode strings.
+// Helpers. Serial port settings termination mode strings.
 
-void SerialSettings::setTxTermMode(const char* aTermMode)
+int int_from_string_SerialSettingsTermMode(const char* aTermMode)
 {
-   if (strcmp(aTermMode, "NULL") == 0) mTxTermMode = cSerialTermMode_Null;
-   else if (strcmp(aTermMode, "LF") == 0) mTxTermMode = cSerialTermMode_LF;
-   else if (strcmp(aTermMode, "CR") == 0) mTxTermMode = cSerialTermMode_CR;
-   else if (strcmp(aTermMode, "CRLF") == 0) mTxTermMode = cSerialTermMode_CRLF;
-   else mTxTermMode = cSerialTermMode_Null;
+   if (strcmp(aTermMode, "NULL") == 0) return cSerialTermMode_Null;
+   else if (strcmp(aTermMode, "LF") == 0) return cSerialTermMode_LF;
+   else if (strcmp(aTermMode, "CR") == 0) return cSerialTermMode_CR;
+   else if (strcmp(aTermMode, "CRLF") == 0) return cSerialTermMode_CRLF;
+   return cSerialTermMode_Null;
 }
 
-void SerialSettings::setRxTermMode(const char* aTermMode)
-{
-   if (strcmp(aTermMode, "NULL") == 0) mRxTermMode = cSerialTermMode_Null;
-   else if (strcmp(aTermMode, "LF") == 0) mRxTermMode = cSerialTermMode_LF;
-   else if (strcmp(aTermMode, "CR") == 0) mRxTermMode = cSerialTermMode_CR;
-   else if (strcmp(aTermMode, "CRLF") == 0) mRxTermMode = cSerialTermMode_CRLF;
-   else mRxTermMode = cSerialTermMode_Null;
-}
-
-char* SerialSettings::asStringTermMode(int aTermMode)
+char* string_from_int_SerialSettingsTermMode(int aTermMode)
 {
    switch (aTermMode)
    {
@@ -83,6 +74,7 @@ char* SerialSettings::asStringTermMode(int aTermMode)
    case cSerialTermMode_CRLF: return "CRLF";
    default: return "UNKNOWN";
    }
+
 }
 
 //******************************************************************************

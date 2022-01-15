@@ -401,7 +401,6 @@ int SerialPort2::doReceiveAnyBytes(char *aData, int aNumBytes)
 
 int SerialPort2::doReceiveAllBytes(char* aData, int aRequestBytes)
 {
-   aRequestBytes = 1;
    printf("START SerialPort2::doReceiveAllBytes %d\n", aRequestBytes);
    // Locals.
    DWORD tRet = 0;

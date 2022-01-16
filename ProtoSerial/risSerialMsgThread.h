@@ -44,7 +44,7 @@ namespace Ris
 // receives a message it invokes the message qcall to pass it to the parent
 // for processing.
 
-class SerialMsgThread2 : public Ris::Threads::BaseThread
+class SerialMsgThread : public Ris::Threads::BaseThread
 {
 public:
    typedef Ris::Threads::BaseThread BaseClass;
@@ -82,8 +82,8 @@ public:
    // Methods.
 
    // Constructor.
-   SerialMsgThread2(SerialSettings& aSettings);
-   ~SerialMsgThread2();
+   SerialMsgThread(SerialSettings& aSettings);
+   ~SerialMsgThread();
 
    //***************************************************************************
    //***************************************************************************

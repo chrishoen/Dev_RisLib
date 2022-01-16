@@ -74,7 +74,7 @@ void SerialThread::threadInitFunction()
    tSerialSettings.mRxMsgQCall    = mRxMsgQCall;
 
    // Create child thread.
-   mSerialMsgThread = new Ris::SerialMsgThread2(tSerialSettings);
+   mSerialMsgThread = new Ris::SerialMsgThread(tSerialSettings);
 
    // Launch child thread.
    mSerialMsgThread->launchThread(); 

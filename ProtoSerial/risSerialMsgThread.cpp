@@ -12,7 +12,7 @@
 #include "prnPrint.h"
 
 #include "risThreadsPriorities.h"
-#include "risSerialMsgThread2.h"
+#include "risSerialMsgThread.h"
 
 namespace Ris
 {
@@ -22,7 +22,7 @@ namespace Ris
 //******************************************************************************
 // Constructor.
 
-SerialMsgThread2::SerialMsgThread2(SerialSettings& aSettings)
+SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
 {
    // Set base class thread services.
    BaseClass::setThreadName("SerialMsg");
@@ -37,7 +37,7 @@ SerialMsgThread2::SerialMsgThread2(SerialSettings& aSettings)
    mTxCount = 0;
 }
 
-SerialMsgThread2::~SerialMsgThread2()
+SerialMsgThread::~SerialMsgThread()
 {
 }
 
@@ -47,7 +47,7 @@ SerialMsgThread2::~SerialMsgThread2()
 // Thread init function, base class overload.
 // Initialize and open the serial port.
 
-void SerialMsgThread2::threadInitFunction()
+void SerialMsgThread::threadInitFunction()
 {
    // Initialize the serial port.
    mSerialMsgPort.initialize(mSettings);
@@ -61,7 +61,7 @@ void SerialMsgThread2::threadInitFunction()
 // serial port receives and then processes them. The loop terminates
 // when the serial port receive is aborted.
 
-void SerialMsgThread2::threadRunFunction()
+void SerialMsgThread::threadRunFunction()
 {
    // Top of the loop.
    mRestartCount = 0;
@@ -150,7 +150,7 @@ end:
 // Thread exit function. This is called by the base class immediately
 // before the thread is terminated. It is close the serial port.
 
-void SerialMsgThread2::threadExitFunction()
+void SerialMsgThread::threadExitFunction()
 {
    printf("someSerialThread::threadExitFunction\n");
 
@@ -165,7 +165,7 @@ void SerialMsgThread2::threadExitFunction()
 // this thread. It aborts the serial port receive and waits for the
 // thread to terminate after execution of the thread exit function.
 
-void SerialMsgThread2::shutdownThread()
+void SerialMsgThread::shutdownThread()
 {
    printf("someSerialThread::shutdownThread\n");
 
@@ -183,7 +183,7 @@ void SerialMsgThread2::shutdownThread()
 // threadRunFunction when a message is received. It invokes the
 // mRxMsgQCall that is registered at initialization.
 
-void SerialMsgThread2::processRxMsg(Ris::ByteContent* aMsg)
+void SerialMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Guard.
    if (!mRxMsgQCall.isValid()) return;
@@ -199,7 +199,7 @@ void SerialMsgThread2::processRxMsg(Ris::ByteContent* aMsg)
 // blocking send call in the context of the calling thread. It is protected
 // by a mutex semaphore.
 
-void SerialMsgThread2::sendMsg (Ris::ByteContent* aMsg)
+void SerialMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {
    mSerialMsgPort.doSendMsg(aMsg);
 }

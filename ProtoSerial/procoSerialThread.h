@@ -9,7 +9,7 @@ FCom serial thread class.
 //******************************************************************************
 
 #include "risThreadsQCallThread.h"
-#include "risSerialMsgThread.h"
+#include "risSerialMsgThread2.h"
 
 #include "procoMsg.h"
 
@@ -63,7 +63,7 @@ public:
 
    // Serial message thread, this manages serial message connections and
    // message transmission and reception.
-   Ris::SerialMsgThread*  mSerialMsgThread;
+   Ris::SerialMsgThread2*  mSerialMsgThread;
 
    // Message monkey used by mSerialMsgThread.
    MsgMonkeyCreator mMonkeyCreator;
@@ -124,7 +124,7 @@ public:
    // Methods.
 
    // QCalls registered to mSerialMsgThread
-   Ris::SerialMsgThread::RxMsgQCall    mRxMsgQCall;
+   Ris::SerialMsgThread2::RxMsgQCall    mRxMsgQCall;
 
    // Associated QCall methods, these are called by the
    // threadRunFunction to process conditions sent from 

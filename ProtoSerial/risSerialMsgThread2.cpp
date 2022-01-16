@@ -134,57 +134,14 @@ restart:
       {
          // Message was correctly received.
          // Invoke the receive qcall callback, passing the received message
-         // to the thread owner.
+         // to the parent thread.
          processRxMsg(tMsg);
-//       Prn::print(Prn::Show1, "Serial read  $$$    %d %s", mRxCount, mRxBuffer);
       }
    }
 
    // Done.
 end:
    return;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Thread run function, base class overload.
-// It contains a while loop that receives messages and passes them to the
-// attached message handler.
-
-void  SerialMsgThread2::threadRunFunction22()
-{
-   bool tGoing = mSerialMsgPort.mValidFlag;
-
-   while (tGoing)
-   {
-      // Try to receive a message with a blocking receive call.
-      // If a message was received then process it.
-      // If a message was not received then the serial port was closed or 
-      // an error occurred.  
-      ByteContent* tMsg = 0;
-      if (mSerialMsgPort.doReceiveMsg(tMsg))
-      {
-         // Metrics.
-         mRxCount++;
-         // Message was correctly received.
-         // Invoke the receive qcall callback, passing the received message
-         // to the thread owner.
-         processRxMsg(tMsg);
-      }
-      else
-      {
-         // Message was not correctly received.
-         //mRxError++;
-      }
-
-      // If termination request, exit the loop.
-      // This is set by shutdown, see below.
-      if (mTerminateFlag)
-      {
-         tGoing = false;
-      }
-   }
 }
 
 //******************************************************************************

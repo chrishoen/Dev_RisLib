@@ -173,7 +173,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       }
       else
       {
-         printf("receive header all ERROR %d\n", tRet);
+         //printf("receive header all ERROR %d\n", tRet);
          return tRet;
       }
 
@@ -193,7 +193,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       }
       else
       {
-         printf("receive header all FAIL\n");
+         //printf("receive header all FAIL\n");
          mHeaderReadState = cHeaderReadOne;
       }
    }
@@ -282,7 +282,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    }
    else
    {
-      printf("receive payload ERROR %d\n", tRet);
+      //printf("receive payload ERROR %d\n", tRet);
       return tRet;
    }
 

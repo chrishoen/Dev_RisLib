@@ -134,25 +134,17 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 // returning false means that the serial port was closed or that there was
 // an error.
 
-bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
+int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 {
-   //printf("SerialMsgPort::doReceiveMsg***********************************\n");
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Initialize a receive byte buffer.
 
-   // Do this first.
-   aMsg=0;
-   int tRet=0;
-
    // Guard.
-   if (!BaseClass::mValidFlag)
-   {
-      printf("ERROR SerialMsgPort::doReceiveMsg when Invalid\n");
-      return false;
-   }
+   aMsg=0;
+   if (!BaseClass::mValidFlag) return cSerialRetError;
+   int tRet=0;
 
    // Create a byte buffer from preallocated memory.
    ByteBuffer tByteBuffer(mRxMemory, mMemorySize);
@@ -174,15 +166,15 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // Read the header from the serial port into the byte buffer.
       tRet = BaseClass::doReceiveAllBytes(tByteBuffer.getBaseAddress(),mHeaderLength);
 
-      // If bad status then return false.
-      if (tRet == mHeaderLength)
+      // Test the return code.
+      if (tRet > 0)
       {
-         printf("receive header all %d\n", tRet);
+         //printf("receive header all %d\n", tRet);
       }
       else
       {
          printf("receive header all ERROR %d\n", tRet);
-         return false;
+         return tRet;
       }
 
       // Set the buffer length.
@@ -196,7 +188,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // the header buffer one byte at a time.
       if (mMonkey->mHeaderValidFlag)
       {
-         printf("receive header all PASS\n");
+         //printf("receive header all PASS\n");
          mHeaderAllCount++;
       }
       else
@@ -230,11 +222,15 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
          char tByte;
          tRet = BaseClass::doReceiveOneByte(&tByte);
 
-         // If bad status then return false.
-         if (tRet != 1)
+         // Test the return code.
+         if (tRet > 0)
+         {
+            printf("receive header2 %d\n", tRet);
+         }
+         else
          {
             printf("receive header2 ERROR %d\n", tRet);
-            return false;
+            return tRet;
          }
 
          // Put it to the header buffer.
@@ -279,15 +275,15 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 
    tRet = BaseClass::doReceiveAllBytes(tPayloadBuffer,tPayloadLength);
 
-   // If bad status then return false.
-   if (tRet == tPayloadLength)
+   // Test the return code.
+   if (tRet > 0)
    {
       //printf("receive payload %d\n", tRet);
    }
    else
    {
       printf("receive payload ERROR %d\n", tRet);
-      return false;
+      return tRet;
    }
 
    // Set the buffer length.
@@ -307,20 +303,20 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    if (aMsg==0)
    {
       printf("ERROR getMsgFromBuffer\n");
-      return false;
+      return cSerialRetDataError;
    }
 
    // Test for message footer errors.
    if (!mMonkey->validateMessageFooter(&tByteBuffer,aMsg))
    {
       printf("ERROR validateMessageFooter\n");
-      return false;
+      return cSerialRetDataError;
    }
 
    // Done.
    //printf("SerialMsgPort::doReceiveMsg PASS\n");
    mRxMsgCount++;
-   return true;
+   return cSerialRetSuccess;
 }
 
 //******************************************************************************

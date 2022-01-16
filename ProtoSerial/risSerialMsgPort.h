@@ -129,7 +129,7 @@ public:
    // message and true if successful. As part of the termination process,
    // returning false means that the serial port was closed or that there was
    // an error.
-   bool doReceiveMsg (ByteContent*& aRxMsg);
+   int doReceiveMsg (ByteContent*& aRxMsg);
 };
 
 //******************************************************************************

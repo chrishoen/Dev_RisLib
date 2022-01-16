@@ -26,9 +26,12 @@ namespace Ris
 // number of bytes that were transferred. If retval < 0 then use these
 // return codes.
 
-static const int cSerialRetError = -1;
-static const int cSerialRetTimeout = -2;
-static const int cSerialRetAbort = -3;
+static const int cSerialRetSuccess   =  1;  
+static const int cSerialRetEmpty     =  0;
+static const int cSerialRetError     = -1;
+static const int cSerialRetTimeout   = -2;
+static const int cSerialRetAbort     = -3;
+static const int cSerialRetDataError = -4;
 
 //******************************************************************************
 //******************************************************************************

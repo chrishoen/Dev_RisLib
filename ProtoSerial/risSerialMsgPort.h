@@ -25,16 +25,12 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Message serial port. This class encapsulates a serial port that
-// communicates messages that are based on the byte content message
-// encapsulation scheme.
-//
-// It exchanges byte content messages (send and receive) via a serial port.
-//
-// It inherits from SerialPort for serial functionality and
+// Serial message port. This class encapsulates a serial port that operates
+// on messages that are based on the byte content message encapsulation
+// scheme.
+// 
+// It inherits from SerialPort for serial port raw byte functionality and
 // provides methods that can be used to send and receive messages.
-//
-// Messages are based on the byte content message encapsulation scheme.
 
 class SerialMsgPort : public SerialPort
 {
@@ -92,7 +88,9 @@ public:
 
    // Header read state. This determines if the header is read one byte at 
    // a time and the header buffer is used to detect a header or if it is
-   // read all bytes at once.
+   // read all bytes at once. If the header is not synchronized then reads
+   // are done one byte at a time until a header is detected. If the header
+   // is synchronized then the entire header is read.
    int mHeaderReadState;
 
    // Message header length.
@@ -121,14 +119,15 @@ public:
 
    // Copy a message into a byte buffer and then send the byte buffer to the
    // serial port with a blocking write call. Return true if successful.
-   // It is protected by the transmit mutex.
+   // This is protected by the transmit mutex.
    bool doSendMsg(ByteContent*  aTxMsg);
 
-   // Receive a message from the serial port with a blocking read call into a
-   // byte buffer and extract a message from the byte buffer. Return the
-   // message and true if successful. As part of the termination process,
-   // returning false means that the serial port was closed or that there was
-   // an error.
+   // Receive a message from the serial port with blocking read calls into a
+   // byte buffer and extract the message from the byte buffer. If the message
+   // cannot be extracted because the header is incorrect then enter a mode
+   // to resync the header. Return the message and a status code. If the status
+   // code is greater than zero then the receive was successful. If the status
+   // code is less than or equal to zero then there was an abort or error.
    int doReceiveMsg (ByteContent*& aRxMsg);
 };
 

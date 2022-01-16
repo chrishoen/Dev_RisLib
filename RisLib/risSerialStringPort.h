@@ -25,7 +25,7 @@ namespace Ris
 // Serial string port. This class encapsulates a serial port that operates
 // on strings that use termination bytes (NULL, CR, LF, CRLF).
 // 
-// It inherits from SerialPort for serial functionality and
+// It inherits from SerialPort for serial port raw byte functionality and
 // provides methods that can be used to send and receive strings.
 //
 // SEE END OF FILE NOTES FOR TERMINATION BYTE FORMATS.

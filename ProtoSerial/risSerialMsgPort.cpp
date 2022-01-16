@@ -79,7 +79,7 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
 //******************************************************************************
 // Copy a message into a byte buffer and then send the byte buffer to the
 // serial port with a blocking write call. Return true if successful.
-// It is protected by the transmit mutex.
+// This is protected by the transmit mutex.
 
 bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 {
@@ -128,11 +128,12 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive a message from the serial port with a blocking read call into a
-// byte buffer and extract a message from the byte buffer. Return the
-// message and true if successful. As part of the termination process,
-// returning false means that the serial port was closed or that there was
-// an error.
+// Receive a message from the serial port with blocking read calls into a
+// byte buffer and extract the message from the byte buffer. If the message
+// cannot be extracted because the header is incorrect then enter a mode
+// to resync the header. Return the message and a status code. If the status
+// code is greater than zero then the receive was successful. If the status
+// code is less than or equal to zero then there was an abort or error.
 
 int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 {

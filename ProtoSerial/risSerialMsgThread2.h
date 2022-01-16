@@ -71,10 +71,10 @@ public:
    // Members.
 
    // Metrics.
-   int mTxCount;
-   int mTxLength;
+   int mErrorCount;
+   int mRestartCount;
    int mRxCount;
-   int mRxError;
+   int mTxCount;
 
    //***************************************************************************
    //***************************************************************************
@@ -96,6 +96,7 @@ public:
    // Execute a while loop that does receive calls. The loop exits
    // when the serial port is closed and the termination flag is true.
    void threadRunFunction()override;
+   void threadRunFunction22();
 
    // Print.
    void threadExitFunction()override;

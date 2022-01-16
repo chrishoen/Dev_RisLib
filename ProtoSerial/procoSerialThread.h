@@ -150,7 +150,6 @@ public:
    // Send a message via mSerialMsgThread:
    void sendMsg (BaseMsg* aTxMsg);
    void sendTestMsg();
-   void sendSettingsMsg();
 };
 
 //******************************************************************************

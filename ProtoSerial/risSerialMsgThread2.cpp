@@ -31,10 +31,10 @@ SerialMsgThread2::SerialMsgThread2(SerialSettings& aSettings)
    mSettings = aSettings;
    mRxMsgQCall = aSettings.mRxMsgQCall;
 
-   mTxCount = 0;
-   mTxLength = 0;
+   mErrorCount = 0;
+   mRestartCount = 0;
    mRxCount = 0;
-   mRxError = 0;
+   mTxCount = 0;
 }
 
 SerialMsgThread2::~SerialMsgThread2()
@@ -49,9 +49,100 @@ SerialMsgThread2::~SerialMsgThread2()
 
 void SerialMsgThread2::threadInitFunction()
 {
-   // Initialize and open the serial port.
+   // Initialize the serial port.
    mSerialMsgPort.initialize(mSettings);
-   mSerialMsgPort.doOpen();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread run function. This is called by the base class immediately
+// after the thread init function. It runs a loop that blocks on 
+// serial port receives and then processes them. The loop terminates
+// when the serial port receive is aborted.
+
+void SerialMsgThread2::threadRunFunction()
+{
+   // Top of the loop.
+   mRestartCount = 0;
+restart:
+   // Guard.
+   if (mTerminateFlag) return;
+   int tRet = 0;
+
+   // Sleep.
+   if (mRestartCount > 0)
+   {
+      BaseClass::threadSleep(1000);
+   }
+   Prn::print(Prn::Show1, "Serial restart %d", mRestartCount);
+   mRestartCount++;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Open device.
+
+   // Open the serial port.
+   if (!mSerialMsgPort.doOpen())
+   {
+      // If error then restart.
+      goto restart;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Loop to receive strings.
+
+   while (!BaseClass::mTerminateFlag)
+   {
+      Prn::print(Prn::Show4, "Serial read start********************************************** %d", mRxCount++);
+
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Receive.
+
+      // Receive. 
+      ByteContent* tMsg = 0;
+      tRet = mSerialMsgPort.doReceiveMsg(tMsg);
+
+      // Check the return code.
+      if (tRet == 0)
+      {
+         Prn::print(Prn::Show1, "Serial read EMPTY");
+         goto restart;
+      }
+      else if (tRet == Ris::cSerialRetError)
+      {
+         Prn::print(Prn::Show1, "Serial read ERROR");
+         goto restart;
+      }
+      else if (tRet == Ris::cSerialRetTimeout)
+      {
+         Prn::print(Prn::Show1, "Serial read TIMEOUT");
+         goto restart;
+      }
+      else if (tRet == Ris::cSerialRetAbort)
+      {
+         Prn::print(Prn::Show1, "Serial read ABORT");
+         goto end;
+      }
+      // Process the read.
+      else
+      {
+         // Message was correctly received.
+         // Invoke the receive qcall callback, passing the received message
+         // to the thread owner.
+         processRxMsg(tMsg);
+//       Prn::print(Prn::Show1, "Serial read  $$$    %d %s", mRxCount, mRxBuffer);
+      }
+   }
+
+   // Done.
+end:
+   return;
 }
 
 //******************************************************************************
@@ -61,17 +152,17 @@ void SerialMsgThread2::threadInitFunction()
 // It contains a while loop that receives messages and passes them to the
 // attached message handler.
 
-void  SerialMsgThread2::threadRunFunction()
+void  SerialMsgThread2::threadRunFunction22()
 {
-   bool tGoing=mSerialMsgPort.mValidFlag;
- 
-   while(tGoing)
+   bool tGoing = mSerialMsgPort.mValidFlag;
+
+   while (tGoing)
    {
       // Try to receive a message with a blocking receive call.
       // If a message was received then process it.
       // If a message was not received then the serial port was closed or 
       // an error occurred.  
-      ByteContent* tMsg=0;
+      ByteContent* tMsg = 0;
       if (mSerialMsgPort.doReceiveMsg(tMsg))
       {
          // Metrics.
@@ -84,7 +175,7 @@ void  SerialMsgThread2::threadRunFunction()
       else
       {
          // Message was not correctly received.
-         mRxError++;
+         //mRxError++;
       }
 
       // If termination request, exit the loop.
@@ -99,30 +190,33 @@ void  SerialMsgThread2::threadRunFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread exit function, base class overload.
+// Thread exit function. This is called by the base class immediately
+// before the thread is terminated. It is close the serial port.
 
 void SerialMsgThread2::threadExitFunction()
 {
+   printf("someSerialThread::threadExitFunction\n");
+
+   // Close the serial port.
+   mSerialMsgPort.doClose();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Shutdown, base class overload.
-// This sets the terminate request flag and closes the serial port.
-//
-// If the while loop in the threadRunFunction is blocked on doReceiveMsg then
-// closing the serial port will cause doReceiveMsg to return with false and 
-// then the terminate request flag will be polled and the threadRunFunction 
-// will exit.
+// Thread shutdown function. This is called out of the context of
+// this thread. It aborts the serial port receive and waits for the
+// thread to terminate after execution of the thread exit function.
 
 void SerialMsgThread2::shutdownThread()
 {
-   BaseThread::mTerminateFlag = true;
+   printf("someSerialThread::shutdownThread\n");
 
-   mSerialMsgPort.doClose();
+   // Abort pending serial port receives
+   mSerialMsgPort.doAbort();
 
-   BaseThread::waitForThreadTerminate();
+   // Wait for thread to terminate.
+   BaseClass::shutdownThread();
 }
 
 //******************************************************************************

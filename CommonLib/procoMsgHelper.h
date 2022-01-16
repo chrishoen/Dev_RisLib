@@ -21,13 +21,13 @@ public:
    static void initialize(DataMsg* aMsg);
    static void initialize(ByteBlobMsg* aMsg);
 
-   static void show(TestMsg* aMsg);
-   static void show(FirstMessageMsg* aMsg);
-   static void show(EchoRequestMsg* aMsg);
-   static void show(EchoResponseMsg* aMsg);
-   static void show(DataRecord* aMsg);
-   static void show(DataMsg* aMsg);
-   static void show(ByteBlobMsg* aMsg);
+   static void show(int aPF, TestMsg* aMsg);
+   static void show(int aPF, FirstMessageMsg* aMsg);
+   static void show(int aPF, EchoRequestMsg* aMsg);
+   static void show(int aPF, EchoResponseMsg* aMsg);
+   static void show(int aPF, DataRecord* aMsg);
+   static void show(int aPF, DataMsg* aMsg);
+   static void show(int aPF, ByteBlobMsg* aMsg);
 
 };
 

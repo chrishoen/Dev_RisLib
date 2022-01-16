@@ -62,8 +62,6 @@ void SerialThread::show()
 
 void SerialThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SerialThread::threadInitFunction");
-
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
 
@@ -87,8 +85,6 @@ void SerialThread::threadInitFunction()
 
 void  SerialThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SerialThread::threadExitFunction");
-
    // Shutdown the tcp client thread
    mSerialMsgThread->shutdownThread();
 
@@ -149,7 +145,7 @@ void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
       processRxMsg((ProtoComm::DataMsg*)tMsg);
       break;
    default:
-      Prn::print(Prn::ThreadRun1, "SerialThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
+      Prn::print(Prn::Show1, "SerialThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
       delete tMsg;
       break;
    }
@@ -162,7 +158,7 @@ void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
 
 void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 {
-   MsgHelper::show(aMsg);
+   MsgHelper::show(Prn::Show1, aMsg);
    delete aMsg;
 }
 
@@ -180,7 +176,7 @@ void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
       mSerialMsgThread->sendMsg(tTxMsg);
    }
 
-   MsgHelper::show(aRxMsg);
+   MsgHelper::show(Prn::Show1, aRxMsg);
    delete aRxMsg;
 }
 
@@ -191,7 +187,7 @@ void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 
 void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 {
-   MsgHelper::show(aMsg);
+   MsgHelper::show(Prn::Show1, aMsg);
    delete aMsg;
 }
 
@@ -202,7 +198,7 @@ void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 
 void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 {
-   MsgHelper::show(aMsg);
+   MsgHelper::show(Prn::Show1, aMsg);
    delete aMsg;
 }
 

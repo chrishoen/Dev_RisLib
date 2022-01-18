@@ -451,6 +451,74 @@ void ByteBuffer::copyS(unsigned char* aStringPtr) { copyS((char*)aStringPtr); }
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Copy operations for null terminated string type. The string is stored in
+// the buffer as a null terminated string byte,including the null termination
+// zero at the end of the string.
+
+void ByteBuffer::copyZ(char* aString, int aMaxStringSize)
+{
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Copy to.
+
+   if (isCopyTo())
+   {
+      // Get string size, strlen + null termination byte.
+      int tSize = (int)strlen(aString) + 1;
+
+      // Guard.
+      if (tSize > aMaxStringSize)
+      {
+         tSize = aMaxStringSize;
+      }
+
+      // Guard.
+      if (tSize + mWorkingIndex > mMaxLength)
+      {
+         setError(ByteBuffer::cBufferOverflow);
+         return;
+      }
+
+      // Copy the string to the buffer, including the null termination byte.
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      memcpy(tWorkingPtr, aString, tSize);
+
+      // Adjust buffer members.
+      mWorkingIndex += tSize;
+      mWorkingLength += tSize;
+
+      printf("LINE101 %d\n", tSize);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Copy from.
+
+   else
+   {
+      // Copy the string from the buffer.
+      char* tWorkingPtr = &mBaseBytes[mWorkingIndex];
+      strncpy(aString, tWorkingPtr, aMaxStringSize - 1);
+
+      // Guard. Set the string null termination byte.
+      aString[aMaxStringSize - 1] = 0;
+
+      // Get string size, strlen + null termination byte.
+      int tSize = (int)strlen(aString) + 1;
+
+      // Adjust buffer members.
+      mWorkingIndex += tSize;
+      printf("LINE102 %d\n", tSize);
+   }
+}
+
+void ByteBuffer::copyZ(unsigned char* aStringPtr, int aMaxStringSize) { copyZ((char*)aStringPtr, aMaxStringSize); }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Copy operations for a block of memory.
 
 void ByteBuffer::copyBlock (void* aValue, int aSize) 

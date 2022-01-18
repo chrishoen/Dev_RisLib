@@ -187,7 +187,7 @@ void DataMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
    aBuffer->copy( &mBool   );
    aBuffer->copy( &mDataRecord );
    aBuffer->copyS( mString1 );
-   aBuffer->copyS( mString2 );
+   aBuffer->copyZ( mString2, cMaxStringSize);
 
    mHeader.headerReCopyToFrom(aBuffer, this);
 }

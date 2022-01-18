@@ -14,12 +14,17 @@ my_inc_import_CommonLib(ProtoMsg)
 my_lib_import_CommonLib(ProtoMsg)
 my_lib_import_RisLib(ProtoMsg)
 
+
 if (MSVC)
-   install(TARGETS ProtoMsg DESTINATION ${MyCopyBinToDir})
+   install(TARGETS ProtoMsg DESTINATION "C:/aaa_prime/RisLib")
 elseif (MyTargetType STREQUAL ubuntu)
-   my_post_build_copy_bin(ProtoMsg)
+   install(TARGETS ProtoMsg DESTINATION "/opt/prime/bin")
 elseif (MyTargetType STREQUAL beagle)
-   my_post_build_scp_bin(ProtoMsg)
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg pi@rpx:/opt/prime/bin)")
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg debian@bbx:/opt/prime/bin)")
 elseif (MyTargetType STREQUAL dart)
-   my_post_build_scp_bin(ProtoMsg)
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg root@dart:/home/root/stenograph/bin)")
 endif()

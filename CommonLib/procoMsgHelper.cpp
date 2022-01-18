@@ -122,8 +122,8 @@ void MsgHelper::initialize(DataMsg* aMsg)
    aMsg->mBool   = false;
 
 
-   strcpy(aMsg->mString1,"String1");
-   strcpy(aMsg->mString2,"String2");
+   strcpy(aMsg->mString1,"ABCDEFGH");
+   strcpy(aMsg->mString2,"abcdefgh");
 
    initialize(&aMsg->mDataRecord);
 }
@@ -156,17 +156,17 @@ void MsgHelper::initialize(ByteBlobMsg* aMsg)
 {
    int tInt = 0x10111213;
    aMsg->mBytes.mCopySize = 4;
-   memcpy(aMsg->mBytes.mMemory, &tInt, 4);
+   memcpy(aMsg->mBytes.mBytes, &tInt, 4);
 }
 
 void MsgHelper::show(int aPF, ByteBlobMsg* aMsg)
 {
    int tInt = 0;
-   memcpy(&tInt, aMsg->mBytes.mMemory, 4);
+   memcpy(&tInt, aMsg->mBytes.mBytes, 4);
 
    Prn::print(aPF, "ByteBlobMsg");
    Prn::print(aPF, "CopySize   %d", aMsg->mBytes.mCopySize);
-   Prn::print(aPF, "Memory     %08x", tInt);
+   Prn::print(aPF, "Bytes      %08x", tInt);
 }
 
 //****************************************************************************

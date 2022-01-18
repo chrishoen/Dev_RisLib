@@ -204,6 +204,8 @@ public:
 
    void copyS (unsigned char*      aString);
    void copyS (char*               aString);
+   void copyZ (char*               aString, int aMaxStringSize);
+   void copyZ (unsigned char*      aString, int aMaxStringSize);
 
    void copyBlock (void* aValue, int aSize);
 

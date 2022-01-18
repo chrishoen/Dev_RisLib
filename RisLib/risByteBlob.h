@@ -43,11 +43,12 @@ public:
    // Members.
 
    // Allocated memory.
-   char* mMemory;
+   char* mBytes;
 
-   // Number of bytes to copy to/from a byte buffer. This is not copied
-   // to/from the given byte buffer. The parent class must explicely 
-   // set it before doing the copy.
+   // Number of bytes to copy to/from a byte buffer. This is less than or equal
+   // to the allocated size. This variable is not copied to/from the given byte
+   // buffer. The parent class must explicitly set it before doing a copy to.
+   // The parent class must also explicitly set it inside a copy from.
    int mCopySize;
 
    //***************************************************************************
@@ -58,20 +59,20 @@ public:
    // Constructor.
    ByteBlob()
    {
-      mMemory = (char*)malloc(AllocateSize);
+      mBytes = (char*)malloc(AllocateSize);
       mCopySize = 0;
    }
 
    ~ByteBlob()
    {
-      free(mMemory);
+      free(mBytes);
    }
 
    // Copy allocated memory to/from a byte buffer. The copy size must be
    // explicitly set before calling this.
    void copyToFrom(Ris::ByteBuffer* aBuffer) override
    {
-      aBuffer->copyBlock(mMemory, mCopySize);
+      aBuffer->copyBlock(mBytes, mCopySize);
    }
 };
 

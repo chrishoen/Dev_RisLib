@@ -29,6 +29,7 @@ SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
 
    mSettings = aSettings;
+   mSessionQCall = aSettings.mSessionQCall;
    mRxMsgQCall = aSettings.mRxMsgQCall;
 
    mErrorCount = 0;
@@ -65,6 +66,8 @@ void SerialMsgThread::threadRunFunction()
 {
    // Top of the loop.
    mRestartCount = 0;
+   mConnectionFlag = false;
+
 restart:
    // Guard.
    if (mTerminateFlag) return;
@@ -78,6 +81,17 @@ restart:
    Prn::print(Prn::Show1, "Serial restart %d", mRestartCount);
    mRestartCount++;
 
+   // Test if a session is established.
+   if (mConnectionFlag)
+   {
+      // Connection was disestablished.
+      mConnectionFlag = false;
+
+      // Process a session change because a
+      // session has been disestablished.
+      processSessionChange(false);
+   }
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -89,6 +103,13 @@ restart:
       // If error then restart.
       goto restart;
    }
+
+   // Connection was established.
+   mConnectionFlag = true;
+
+   // Process a session change because a
+   // new session has been established.
+   processSessionChange(true);
 
    //***************************************************************************
    //***************************************************************************
@@ -174,6 +195,25 @@ void SerialMsgThread::shutdownThread()
 
    // Wait for thread to terminate.
    BaseClass::shutdownThread();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Notify the parent thread that a session has changed. This is called by
+// the threadRunFunction when a new session is established or an existing
+// session is disestablished. It invokes the mSessionQCall that is
+// registered at initialization. The session is disestablished if the 
+// serial port is closed because of an error and it is established if
+// it is successfully reopened.
+
+void SerialMsgThread::processSessionChange(bool aEstablished)
+{
+   // If the callback qcall is valid then invoke it.
+   if (mSessionQCall.isValid())
+   {
+      mSessionQCall(aEstablished);
+   }
 }
 
 //******************************************************************************

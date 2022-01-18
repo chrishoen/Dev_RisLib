@@ -18,27 +18,23 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
+// Constructor.
 SerialThread::SerialThread()
 {
-   // Set base class thread priority.
+   // Set base class variables.
+   BaseClass::setThreadName("Serial");
    BaseClass::setThreadPriorityHigh();
-
-   // Set timer period.
    BaseClass::mTimerPeriod = 1000;
 
-   // Initialize QCalls.
+   // Initialize qcalls.
+   mSessionQCall.bind(this, &SerialThread::executeSession);
    mRxMsgQCall.bind   (this,&SerialThread::executeRxMsg);
-   mTest1QCall.bind   (this,&SerialThread::executeTest1);
 
-   // Initialize variables.
+   // Initialize member variables.
    mSerialMsgThread = 0;
+   mConnectionFlag = false;
    mTPFlag = false;
 }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
 SerialThread::~SerialThread()
 {
@@ -48,6 +44,7 @@ SerialThread::~SerialThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Place holder.
 
 void SerialThread::show()
 {
@@ -59,6 +56,9 @@ void SerialThread::show()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Thread init function. This is called by the base class immedidately 
+// after the thread starts running. It creates and launches the 
+// child SerialMsgThread.
 
 void SerialThread::threadInitFunction()
 {
@@ -67,11 +67,12 @@ void SerialThread::threadInitFunction()
 
    tSerialSettings.setPortDevice(gSerialParms.mSerialPortDevice);
    tSerialSettings.setPortSetup(gSerialParms.mSerialPortSetup);
-   tSerialSettings.mRxTimeout     = gSerialParms.mSerialRxTimeout;
+   tSerialSettings.mRxTimeout = gSerialParms.mSerialRxTimeout;
    tSerialSettings.mMonkeyCreator = &mMonkeyCreator;
-   tSerialSettings.mRxMsgQCall    = mRxMsgQCall;
+   tSerialSettings.mSessionQCall = mSessionQCall;
+   tSerialSettings.mRxMsgQCall = mRxMsgQCall;
 
-   // Create child thread.
+   // Create child thread with the settings.
    mSerialMsgThread = new Ris::SerialMsgThread(tSerialSettings);
 
    // Launch child thread.
@@ -81,34 +82,22 @@ void SerialThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread exit function, base class overload.
+// Thread exit function. This is called by the base class immedidately
+// before the thread is terminated. It shuts down the child SerialMsgThread.
 
 void  SerialThread::threadExitFunction()
 {
-   // Shutdown the tcp client thread
+   // Shutdown the child thread.
    mSerialMsgThread->shutdownThread();
 
-   // Base class exit
+   // Base class exit.
    BaseClass::threadExitFunction();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Execute the call in the context of the long thread.
-
-void SerialThread::executeTest1(int  aCode)
-{
-   TestMsg* msg = new TestMsg;
-   msg->mCode1 = 201;
-
-   mSerialMsgThread->sendMsg(msg);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// executeOnTimer
+// Execute periodically. This is called by the base class timer.
 
 void SerialThread::executeOnTimer(int aTimerCount)
 {
@@ -122,14 +111,38 @@ void SerialThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall
+// qcall registered to the mSerialMsgThread child thread. It is invoked
+// when a session is established or disestablished (when the serial port
+// is opened or it is closed because of an error or a disconnection). 
+
+void SerialThread::executeSession(bool aConnected)
+{
+   if (aConnected)
+   {
+      Prn::print(Prn::Show1, "SerialThread CONNECTED");
+   }
+   else
+   {
+      Prn::print(Prn::Show1, "SerialThread DISCONNECTED");
+   }
+
+   mConnectionFlag = aConnected;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// qcall registered to the mSerialMsgThread child thread. It is invoked by
+// the child thread when a message is received.
+// Based on the receive message type, call one of the specific receive
+// message handlers. This is bound to the qcall.
 
 void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
    ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
    // Message jump table based on message type.
-   // Calls corresponding specfic message handler method.
+   // Call corresponding specfic message handler method.
    switch (tMsg->mMessageType)
    {
    case ProtoComm::MsgIdT::cTestMsg:
@@ -154,7 +167,7 @@ void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Message handler for TestMsg.
+// Message handler - TestMsg.
 
 void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 {
@@ -165,7 +178,7 @@ void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoRequestMsg
+// Rx message handler - EchoRequestMsg.
 
 void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 {
@@ -183,7 +196,7 @@ void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoResponseMsg
+// Rx message handler - EchoResponseMsg.
 
 void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 {
@@ -194,7 +207,7 @@ void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - DataMsg
+// Rx message handler - DataMsg.
 
 void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 {
@@ -205,7 +218,7 @@ void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Sends a message via the serial thread.
+// Send a message via mSerialMsgThread:
 
 void SerialThread::sendMsg(BaseMsg* aTxMsg)
 {
@@ -215,7 +228,7 @@ void SerialThread::sendMsg(BaseMsg* aTxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via the serial thread.
+// Send a message via mSerialMsgThread:
 
 void SerialThread::sendTestMsg()
 {

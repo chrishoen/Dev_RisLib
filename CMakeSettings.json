@@ -1,19 +1,18 @@
-﻿// copied from CMakeSettings_beagle.json
-{
+﻿{
    "configurations": [
       {
-         "name": "Dev_RisLib",
-         "inheritEnvironments": [ "linux_arm" ],
-         "environments": [ { "INCLUDE": "c:\\beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\8;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\8\\backward;c:\\beagle\\toolchain\\lib\\gcc\\arm-linux-gnueabihf\\8\\include;c:\\beagle\\toolchain\\lib\\gcc\\arm-linux-gnueabihf\\8\\include-fixed;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\include;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\include\\arm-linux-gnueabihf\\c++\\8;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\sysroot\\usr\\include\\arm-linux-gnueabihf;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\sysroot\\usr\\include;" } ],
+         "name": "WSL-GCC-Release",
          "generator": "Ninja",
          "configurationType": "Release",
-         "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}",
-         "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}\\install",
+         "buildRoot": "${projectDir}\\out\\build\\${name}",
+         "installRoot": "${projectDir}\\out\\install\\${name}",
+         "cmakeExecutable": "cmake",
          "cmakeCommandArgs": "",
-         "buildCommandArgs": "-v -j12",
+         "buildCommandArgs": "",
          "ctestCommandArgs": "",
-         "intelliSenseMode": "linux-gcc-arm",
-         "cmakeToolchain": "MyBeagleToolchain.cmake"
+         "inheritEnvironments": [ "linux_arm" ],
+         "wslPath": "${defaultWSLPath}",
+         "cmakeToolchain": "${projectDir}\\imx8mm-toolchain.cmake"
       }
    ]
 }

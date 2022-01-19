@@ -150,6 +150,11 @@ restart:
          Prn::print(Prn::Show1, "Serial read ABORT");
          goto end;
       }
+      else if (tRet == Ris::cSerialRetDataError)
+      {
+         Prn::print(Prn::Show1, "Serial read DATA ERROR");
+         goto restart;
+      }
       // Process the read.
       else
       {

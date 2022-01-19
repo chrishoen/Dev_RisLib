@@ -13,6 +13,11 @@ my_init_config_variables()
 my_special1() 
 
 add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoSerial")
+return()
+
+add_subdirectory ("RisLib")
 return()
 
 add_subdirectory ("RisLib")
@@ -21,11 +26,6 @@ add_subdirectory ("SerialTest1")
 add_subdirectory ("SerialTest2")
 add_subdirectory ("SerialTest3")
 add_subdirectory ("ProtoSerial")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoMsg")
 return()
 
 add_subdirectory ("RisLib")

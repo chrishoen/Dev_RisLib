@@ -89,6 +89,11 @@ void resetPrint()
    // Reset the settings.
    gPrintSettings.reset();
 
+   // Reset the filter table.
+   // DON'T DO THIS FOR SHARED MEMORY
+   // THE PRINT GLOBAL CONSTRUCTOR ISN'T WORKING FOR STATIC LIB 
+   gPrintFilterTable.initialize();
+
    // If the settings file exists then read from it.
    if (gPrintSettings.fileExists())
    {

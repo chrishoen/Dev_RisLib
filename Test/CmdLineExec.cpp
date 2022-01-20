@@ -60,8 +60,10 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   printf("executeGo2 101\n");
-   Prn::print(0, "executeGo2");
+   printf("printf\n");
+   Prn::print(0,          "Prn::print 0");
+   Prn::print(Prn::Show1, "Prn::print Prn::Show1");
+   Prn::print(Prn::Show2, "Prn::print Prn::Show");
 }
 
 //******************************************************************************

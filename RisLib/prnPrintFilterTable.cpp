@@ -13,12 +13,13 @@ namespace Prn
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor.
+// No Constructor.
 
 void PrintFilterTable::initialize()
 {
-   // All disabled, except entry zero
-   for(int i=0;i<cFilterTableSize;i++)
+   //printf("PrintFilterTable::initialize $$$$$$$$$$$$$$$$$$$$$$\n");
+   // All disabled, except entry zero.
+   for (int i = 0; i < cFilterTableSize; i++)
    {
       mEnable  [i] = false;
       mConsole [i] = 0;

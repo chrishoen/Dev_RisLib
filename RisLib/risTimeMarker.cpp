@@ -55,7 +55,7 @@ void PeriodicTimeMarker::initialize(int aWindowSize, double aPeriod)
 void PeriodicTimeMarker::doUpdate()
 {
    // Read current time from hardware.
-   mTimeAtUpdateUS = Ris::getCurrentProgramTimeUS();
+   mTimeAtUpdateUS = Ris::getProgramTimeUS();
 
    if (!mFirstFlag)
    {
@@ -120,7 +120,7 @@ void TrialTimeMarker::finishTrial()
 void TrialTimeMarker::doStart()
 {
    // Read start time from hardware.
-   mTimeAtStartUS = Ris::getCurrentProgramTimeUS();
+   mTimeAtStartUS = Ris::getProgramTimeUS();
 
    // Set flag.
    mStartFlag = true;
@@ -133,7 +133,7 @@ void TrialTimeMarker::doStart()
 void TrialTimeMarker::doStop()
 {
    // Read stop time from hardware.
-   mTimeAtStopUS = Ris::getCurrentProgramTimeUS();
+   mTimeAtStopUS = Ris::getProgramTimeUS();
 
    // Calculate time difference.
    mTimeDifferenceUS = mTimeAtStopUS - mTimeAtStartUS;

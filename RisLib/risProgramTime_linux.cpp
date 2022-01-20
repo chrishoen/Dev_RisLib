@@ -41,7 +41,7 @@ long long int gProgramStartHiresCount = my_get_hires_count();
 //******************************************************************************
 // Return the current program time in seconds.
 
-double getCurrentProgramTime()
+double getProgramTime()
 {
    // Get current hires count.
    long long int tCurrentHiresCount = my_get_hires_count();
@@ -55,13 +55,26 @@ double getCurrentProgramTime()
 //******************************************************************************
 // Return the current program time in milliseconds.
 
-double getCurrentProgramTimeMS()
+double getProgramTimeMS()
 {
    // Get current hires count.
    long long int tCurrentHiresCount = my_get_hires_count();
 
-   // Return the current program time in seconds.
+   // Return the current program time in milliseconds.
    return (double)(tCurrentHiresCount - gProgramStartHiresCount)*1E-6;
+}
+
+// Return the current program time in milliseconds.
+unsigned int getProgramTimeUnsignedMS()
+{
+   // Get current hires count.
+   long long int tCurrentHiresCount = my_get_hires_count();
+
+   // Return the current program time in milliseconds.
+   long long int tCurrentProgramTimeMS = 
+      (tCurrentHiresCount - gProgramStartHiresCount) / (1000 *1000);
+
+   return (unsigned int)(tCurrentProgramTimeMS & 0xffffffff);
 }
 
 //******************************************************************************
@@ -69,7 +82,7 @@ double getCurrentProgramTimeMS()
 //******************************************************************************
 // Return the current program time in microseconds.
 
-double getCurrentProgramTimeUS()
+double getProgramTimeUS()
 {
    // Get current hires count.
    long long int tCurrentHiresCount = my_get_hires_count();
@@ -83,7 +96,7 @@ double getCurrentProgramTimeUS()
 //******************************************************************************
 // Return the current program time in nanoseconds.
 
-long long int getCurrentProgramTimeNS()
+long long int getProgramTimeNS()
 {
    // Get current hires count.
    long long int tCurrentHiresCount = my_get_hires_count();

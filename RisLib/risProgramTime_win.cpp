@@ -43,7 +43,7 @@ double gProgramStartHiresCount = my_get_hires_count();
 //******************************************************************************
 // Return the current program time in seconds.
 
-double getCurrentProgramTime()
+double getProgramTime()
 {
    // Get current hires count.
    double tCurrentHiresCount = my_get_hires_count();
@@ -57,9 +57,9 @@ double getCurrentProgramTime()
 //******************************************************************************
 // Return the current program time in milliseconds.
 
-double getCurrentProgramTimeMS()
+double getProgramTimeMS()
 {
-   return getCurrentProgramTime()*1E3;
+   return getProgramTime()*1E3;
 }
 
 //******************************************************************************
@@ -67,9 +67,9 @@ double getCurrentProgramTimeMS()
 //******************************************************************************
 // Return the current program time in microseconds.
 
-double getCurrentProgramTimeUS()
+double getProgramTimeUS()
 {
-   return getCurrentProgramTime()*1E6;
+   return getProgramTime()*1E6;
 }
 
 //******************************************************************************
@@ -77,9 +77,9 @@ double getCurrentProgramTimeUS()
 //******************************************************************************
 // Return the current program time in nanoseconds.
 
-long long int getCurrentProgramTimeNS()
+long long int getProgramTimeNS()
 {
-   return (long long int)(getCurrentProgramTime()*1E9);
+   return (long long int)(getProgramTime()*1E9);
 }
 
 //******************************************************************************

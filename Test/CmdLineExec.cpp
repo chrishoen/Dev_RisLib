@@ -47,16 +47,11 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   char tString[40];
+   double tTime = Ris::getProgramTime();
+   unsigned int tTimeMS = Ris::getProgramTimeUnsignedMS();
 
-   strcpy(tString, "abcd");
-   Prn::print(0, "%d %s", my_trimCRLF(tString), tString);
-
-   strcpy(tString, "abcd\n");
-   Prn::print(0, "%d %s", my_trimCRLF(tString), tString);
-
-   strcpy(tString, "abcd\r\n");
-   Prn::print(0, "%d %s", my_trimCRLF(tString), tString);
+   Prn::print(0, "Ris::getProgramTime     %10.6f", tTime);
+   Prn::print(0, "Ris::getProgramTime     %10d", tTimeMS);
 }
 
 //******************************************************************************
@@ -65,6 +60,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   printf("executeGo2 101\n");
+   Prn::print(0, "executeGo2");
 }
 
 //******************************************************************************
@@ -73,8 +70,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   double tTime = Ris::getCurrentProgramTime();
-   Prn::print(0, "Ris::getCurrentProgramTime     %10.6f", tTime);
 }
 
 //******************************************************************************

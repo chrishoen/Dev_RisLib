@@ -98,7 +98,7 @@ void TimerThread::executeTest2(int aTimeCount)
    Prn::print(Prn::ThreadRun1, "TEST2 %5d $$ %3d %10.4f",
       aTimeCount,
       BaseClass::getThreadProcessorNumber(),
-      Ris::getCurrentProgramTime());
+      Ris::getProgramTime());
 }
 
 //******************************************************************************

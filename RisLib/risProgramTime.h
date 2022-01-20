@@ -17,16 +17,19 @@ namespace Ris
 // Read current time and subtract program start time.
 
 // Return the current program time in seconds.
-double getCurrentProgramTime();
+double getProgramTime();
 
 // Return the current program time in milliseconds.
-double getCurrentProgramTimeMS();
+double getProgramTimeMS();
 
 // Return the current program time in microseconds.
-double getCurrentProgramTimeUS();
+double getProgramTimeUS();
 
 // Return the current program time in nanoseconds.
-long long int getCurrentProgramTimeNS();
+long long int getProgramTimeNS();
+
+// Return the current program time in milliseconds.
+unsigned int getProgramTimeUnsignedMS();
 
 //*****************************************************************************
 //*****************************************************************************

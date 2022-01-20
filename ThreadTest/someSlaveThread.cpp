@@ -82,7 +82,6 @@ void SlaveThread::executeWorkRequest (int aParm1,Ris::Threads::NotifyWrapper aCo
 
 void SlaveThread::executeTest1(int aSource, int aCode)
 {
-   printf("LINE101\n");
    Prn::print(Prn::View21, "SlaveThread::executeTest1 %d %d", aSource, aCode);
 }
 

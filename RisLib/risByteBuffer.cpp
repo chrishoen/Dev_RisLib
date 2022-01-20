@@ -487,8 +487,6 @@ void ByteBuffer::copyZ(char* aString, int aMaxStringSize)
       // Adjust buffer members.
       mWorkingIndex += tSize;
       mWorkingLength += tSize;
-
-      printf("LINE101 %d\n", tSize);
    }
 
    //***************************************************************************
@@ -510,7 +508,6 @@ void ByteBuffer::copyZ(char* aString, int aMaxStringSize)
 
       // Adjust buffer members.
       mWorkingIndex += tSize;
-      printf("LINE102 %d\n", tSize);
    }
 }
 

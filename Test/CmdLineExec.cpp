@@ -47,11 +47,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   double tTime = Ris::getProgramTime();
-   unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
-
-   Prn::print(0, "Ris::getProgramTime           %10.6f", tTime);
-   Prn::print(0, "Ris::getCpuTimeUIntMs         %10d", tTimeMS);
+   Prn::print(0, "Ris::portableGetCurrentDir() %s", Ris::portableGetCurrentDir());
+   Prn::print(0, "Ris::portableGetProgramDir() %s", Ris::portableGetProgramDir());
 }
 
 //******************************************************************************
@@ -60,10 +57,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   printf("printf\n");
-   Prn::print(0,          "Prn::print 0");
-   Prn::print(Prn::Show1, "Prn::print Prn::Show1");
-   Prn::print(Prn::Show2, "Prn::print Prn::Show");
 }
 
 //******************************************************************************
@@ -80,6 +73,11 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   double tTime = Ris::getProgramTime();
+   unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
+
+   Prn::print(0, "Ris::getProgramTime           %10.6f", tTime);
+   Prn::print(0, "Ris::getCpuTimeUIntMs         %10d", tTimeMS);
 }
 
 //******************************************************************************
@@ -88,5 +86,9 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   printf("printf\n");
+   Prn::print(0, "Prn::print 0");
+   Prn::print(Prn::Show1, "Prn::print Prn::Show1");
+   Prn::print(Prn::Show2, "Prn::print Prn::Show");
 }
 

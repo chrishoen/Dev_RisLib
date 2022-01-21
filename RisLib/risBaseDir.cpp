@@ -21,7 +21,7 @@ namespace Ris
 // Constants.
 
 // Max string size used in subsequent calls.
-static const int cMaxBaseDirStringSize = 400;
+static const int cMaxBaseDirStringSize = 1000;
 
 //****************************************************************************
 //****************************************************************************
@@ -30,6 +30,16 @@ static const int cMaxBaseDirStringSize = 400;
 
 // Base directory path.
 char rBaseDirPath[cMaxBaseDirStringSize] = { 0 };
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Set the program base directory to the current directory.
+
+void setBaseDirectoryToCurrent()
+{
+   setBaseDirectory(portableGetCurrentDir());
+}
 
 //****************************************************************************
 //****************************************************************************

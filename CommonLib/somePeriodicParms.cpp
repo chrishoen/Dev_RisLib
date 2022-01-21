@@ -35,7 +35,7 @@ void PeriodicParms::reset()
    }
    else
    {
-      BaseClass::setFilePath("/opt/prime/files/Periodic_Parms.txt");
+      BaseClass::setFilePath_RelativeToBaseDir("files/Periodic_Parms.txt");
    }
 
    mTestMode = 1;

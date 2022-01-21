@@ -20,9 +20,13 @@ my_lib_import_RisLib(PeriodicTest)
 
 if (MSVC)
 elseif (MyTargetType STREQUAL ubuntu)
-   my_post_build_copy_bin(PeriodicTest)
+   install(TARGETS PeriodicTest DESTINATION "/opt/prime/bin")
 elseif (MyTargetType STREQUAL beagle)
-   my_post_build_scp_bin(PeriodicTest)
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/PeriodicTest pi@rpx:/opt/prime/bin)")
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/PeriodicTest debian@bbx:/opt/prime/bin)")
 elseif (MyTargetType STREQUAL dart)
-   my_post_build_scp_bin(PeriodicTest)
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/PeriodicTest root@dart:/home/root/stenograph/bin)")
 endif()

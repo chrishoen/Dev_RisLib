@@ -28,8 +28,8 @@ double getProgramTimeUS();
 // Return the current program time in nanoseconds.
 long long int getProgramTimeNS();
 
-// Return the current program time in milliseconds.
-unsigned int getProgramTimeUnsignedMS();
+// Return the current cpu time in milliseconds.
+unsigned int getCpuTimeUIntMS();
 
 //*****************************************************************************
 //*****************************************************************************

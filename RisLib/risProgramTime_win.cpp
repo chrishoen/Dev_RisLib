@@ -85,5 +85,22 @@ long long int getProgramTimeNS()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Return the current cpu time in milliseconds.
+
+unsigned int getCpuTimeUIntMS()
+{
+   // Get current hires count.
+   long long int tCurrentHiresCount = my_get_hires_count();
+
+   // Return the current program time in milliseconds.
+   long long int tCurrentProgramTimeMS =
+      (tCurrentHiresCount) / (1000 * 1000);
+
+   return (unsigned int)(tCurrentProgramTimeMS & 0xffffffff);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 

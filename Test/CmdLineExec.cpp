@@ -48,10 +48,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    double tTime = Ris::getProgramTime();
-   unsigned int tTimeMS = Ris::getProgramTimeUnsignedMS();
+   unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
 
-   Prn::print(0, "Ris::getProgramTime     %10.6f", tTime);
-   Prn::print(0, "Ris::getProgramTime     %10d", tTimeMS);
+   Prn::print(0, "Ris::getProgramTime           %10.6f", tTime);
+   Prn::print(0, "Ris::getCpuTimeUIntMs         %10d", tTimeMS);
 }
 
 //******************************************************************************

@@ -31,7 +31,7 @@
          "remoteMachineName": "${defaultRemoteMachineName}",
          "remoteCMakeListsRoot": "$HOME/.vs/${projectDirName}/src",
          "remoteBuildRoot": "$HOME/.vs/${projectDirName}/out/build/${name}",
-         "remoteInstallRoot": "/opt/prime",
+         "remoteInstallRoot": "$HOME/.vs/${projectDirName}/out/build/${name}",
          "remoteCopySources": true,
          "rsyncCommandArgs": "-t --delete --delete-excluded",
          "remoteCopyBuildOutput": false,

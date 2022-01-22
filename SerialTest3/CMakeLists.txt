@@ -16,14 +16,14 @@ my_lib_import_RisLib(SerialTest3)
 
 if (MSVC)
    install(TARGETS SerialTest3 DESTINATION "C:/aaa_prime/RisLib")
-elseif (MyTargetType STREQUAL ubuntu)
+elseif (MYMODE STREQUAL ubuntu)
    install(TARGETS SerialTest3 DESTINATION "/opt/prime/bin")
-elseif (MyTargetType STREQUAL beagle)
+elseif (MYMODE STREQUAL beagle)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/SerialTest3 pi@rpx:/opt/prime/bin)")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/SerialTest3 debian@bbx:/opt/prime/bin)")
-elseif (MyTargetType STREQUAL dart)
+elseif (MYMODE STREQUAL dart)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/SerialTest3 root@dart:/home/root/stenograph/bin)")
 endif()

@@ -90,7 +90,9 @@ long long int getProgramTimeNS()
 unsigned int getCpuTimeUIntMS()
 {
    // Get current hires count.
-   long long int tCurrentHiresCount = my_get_hires_count();
+   LARGE_INTEGER tPerformanceCount;
+   QueryPerformanceCounter(&tPerformanceCount);
+   long long int tCurrentHiresCount = tPerformanceCount.QuadPart;
 
    // Return the current program time in milliseconds.
    long long int tCurrentProgramTimeMS =

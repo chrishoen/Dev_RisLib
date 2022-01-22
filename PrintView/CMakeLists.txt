@@ -13,10 +13,10 @@ my_lib_import_RisLib(PrintView)
 
 if (MSVC)
    install(TARGETS PrintView DESTINATION ${MyCopyBinToDir})
-elseif (MyTargetType STREQUAL ubuntu)
+elseif (MYMODE STREQUAL ubuntu)
    my_post_build_copy_bin(PrintView)
-elseif (MyTargetType STREQUAL beagle)
+elseif (MYMODE STREQUAL beagle)
    my_post_build_scp_bin(PrintView)
-elseif (MyTargetType STREQUAL dart)
+elseif (MYMODE STREQUAL dart)
 endif()
 

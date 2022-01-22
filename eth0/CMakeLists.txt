@@ -15,11 +15,11 @@ my_inc_import_RisLib(eth0)
 my_lib_import_RisLib(eth0)
 
 if (MSVC)
-elseif (MyTargetType STREQUAL ubuntu)
+elseif (MYMODE STREQUAL ubuntu)
    my_post_build_copy_bin(eth0)
-elseif (MyTargetType STREQUAL beagle)
+elseif (MYMODE STREQUAL beagle)
    my_post_build_scp_bin(eth0)
-elseif (MyTargetType STREQUAL dart)
+elseif (MYMODE STREQUAL dart)
 endif()
 
 

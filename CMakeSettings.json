@@ -1,18 +1,33 @@
 ﻿{
    "configurations": [
       {
-         "name": "WSL-GCC-Release",
+         "name": "Dev_RisLib",
+         "inheritEnvironments": [ "msvc_x64_x64" ],
+         "generator": "Ninja",
+         "configurationType": "Release",
+         "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}",
+         "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}\\install",
+         "cmakeCommandArgs": "",
+         "buildCommandArgs": "-v -j4",
+         "ctestCommandArgs": ""
+      },
+      {
+         "name": "win",
          "generator": "Ninja",
          "configurationType": "Release",
          "buildRoot": "${projectDir}\\out\\build\\${name}",
          "installRoot": "${projectDir}\\out\\install\\${name}",
-         "cmakeExecutable": "cmake",
          "cmakeCommandArgs": "",
          "buildCommandArgs": "",
          "ctestCommandArgs": "",
-         "inheritEnvironments": [ "linux_arm" ],
-         "wslPath": "${defaultWSLPath}",
-         "cmakeToolchain": "${projectDir}\\imx8mm-toolchain.cmake"
+         "inheritEnvironments": [ "msvc_x64_x64" ],
+         "variables": [
+            {
+               "name": "MYMODE",
+               "value": "win",
+               "type": "STRING"
+            }
+         ]
       }
    ]
 }

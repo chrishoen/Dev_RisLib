@@ -12,7 +12,7 @@ function(my_special1)
    message(STATUS "DESTDIR                     " ${DESTDIR})
    message(STATUS "PROJECT_SOURCE_DIR          " ${PROJECT_SOURCE_DIR})
 
-   message(STATUS "MyTargetType                " ${MyTargetType})
+   message(STATUS "MYMODE                       " ${MYMODE})
    message(STATUS "MyTargetHostName            " ${MyTargetHostName})
    message(STATUS "MyCopyBinToDir              " ${MyCopyBinToDir})
    message(STATUS "MyCopyLibToDir              " ${MyCopyLibToDir})

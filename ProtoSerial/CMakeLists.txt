@@ -18,14 +18,14 @@ my_lib_import_RisLib(ProtoSerial)
 
 if (MSVC)
    install(TARGETS ProtoSerial DESTINATION "C:/aaa_prime/RisLib")
-elseif (MyTargetType STREQUAL ubuntu)
+elseif (MYMODE STREQUAL ubuntu)
    install(TARGETS ProtoSerial DESTINATION "/opt/prime/bin")
-elseif (MyTargetType STREQUAL beagle)
+elseif (MYMODE STREQUAL beagle)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoSerial pi@rpx:/opt/prime/bin)")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoSerial debian@bbx:/opt/prime/bin)")
-elseif (MyTargetType STREQUAL dart)
+elseif (MYMODE STREQUAL dart)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoSerial root@dart:/home/root/stenograph/bin)")
 endif()

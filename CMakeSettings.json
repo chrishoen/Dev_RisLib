@@ -12,7 +12,7 @@
          "ctestCommandArgs": ""
       },
       {
-         "name": "win",
+         "name": "windows",
          "generator": "Ninja",
          "configurationType": "Release",
          "buildRoot": "${projectDir}\\out\\build\\${name}",
@@ -24,7 +24,33 @@
          "variables": [
             {
                "name": "MYMODE",
-               "value": "win",
+               "value": "windows",
+               "type": "STRING"
+            }
+         ]
+      },
+      {
+         "name": "ubuntu",
+         "generator": "Ninja",
+         "configurationType": "Release",
+         "cmakeExecutable": "cmake",
+         "remoteCopySourcesExclusionList": [ ".vs", ".git", "out" ],
+         "cmakeCommandArgs": "",
+         "buildCommandArgs": "",
+         "ctestCommandArgs": "",
+         "inheritEnvironments": [ "linux_x64" ],
+         "remoteMachineName": "${defaultRemoteMachineName}",
+         "remoteCMakeListsRoot": "$HOME/.vs/${projectDirName}/src",
+         "remoteBuildRoot": "$HOME/.vs/${projectDirName}/out/build/${name}",
+         "remoteInstallRoot": "/opt/prime",
+         "remoteCopySources": true,
+         "rsyncCommandArgs": "-t --delete --delete-excluded",
+         "remoteCopyBuildOutput": false,
+         "remoteCopySourcesMethod": "rsync",
+         "variables": [
+            {
+               "name": "MYMODE",
+               "value": "ubuntu",
                "type": "STRING"
             }
          ]

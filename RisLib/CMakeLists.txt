@@ -25,8 +25,6 @@ elseif(MYMODE STREQUAL beagle)
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so pi@rpx:/opt/prime/lib)")
-   install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so debian@bbx:/opt/prime/lib)")
 elseif(MYMODE STREQUAL dart)
    install(FILES ${inc_files} DESTINATION "${SRC_LINUX_DIR}/gui/local/include/RisLib")
    install(TARGETS RisLib DESTINATION "${SRC_LINUX_DIR}/gui/local/lib")

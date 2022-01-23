@@ -13,6 +13,9 @@ add_subdirectory ("RisLib")
 add_subdirectory ("Test")
 return()
 
+add_subdirectory ("MyProgram1")
+return()
+
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("SerialTest3")

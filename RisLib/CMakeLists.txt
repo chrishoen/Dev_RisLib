@@ -13,7 +13,6 @@ my_add_compile_options (RisLib)
 my_add_pch (RisLib)
 
 target_include_directories(RisLib PUBLIC ${PROJECT_SOURCE_DIR})
-return()
 
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
@@ -25,9 +24,9 @@ elseif(MYMODE STREQUAL beagle)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so pi@rpx:/opt/prime/lib)")
+      COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so pi@rpx:/opt/prime/lib)")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so debian@bbx:/opt/prime/lib)")
+      COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so debian@bbx:/opt/prime/lib)")
 elseif(MYMODE STREQUAL steno)
    install(FILES ${inc_files} DESTINATION "include/RisLib")
    install(TARGETS RisLib DESTINATION "lib")

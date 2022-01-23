@@ -258,7 +258,7 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_pch _target)
-   if (MYMODE STREQUAL dart)
+   if (MYMODE STREQUAL steno)
       return()
    endif()
 

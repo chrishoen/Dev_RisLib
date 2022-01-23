@@ -24,7 +24,7 @@ elseif (MYMODE STREQUAL beagle)
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg pi@rpx:/opt/prime/bin)")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg debian@bbx:/opt/prime/bin)")
-elseif (MYMODE STREQUAL dart)
+elseif (MYMODE STREQUAL steno)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg root@dart:/home/root/stenograph/bin)")
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg root@stenotgt:/home/root/stenograph/bin)")
 endif()

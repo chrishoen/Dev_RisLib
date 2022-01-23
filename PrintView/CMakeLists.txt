@@ -17,6 +17,6 @@ elseif (MYMODE STREQUAL ubuntu)
    my_post_build_copy_bin(PrintView)
 elseif (MYMODE STREQUAL beagle)
    my_post_build_scp_bin(PrintView)
-elseif (MYMODE STREQUAL dart)
+elseif (MYMODE STREQUAL steno)
 endif()
 

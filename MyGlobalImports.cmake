@@ -13,7 +13,7 @@ function(my_init_global_import_variables)
    elseif (MYMODE STREQUAL beagle)
       set (MySharedLibIncludePath "C:/MyTools/MyLib/include/MySharedLib" PARENT_SCOPE)
       set (MySharedLibImportPath  "C:/MyTools/MyLib/lib/libMySharedLib.so" PARENT_SCOPE)
-   elseif (MYMODE STREQUAL dart)
+   elseif (MYMODE STREQUAL steno)
    endif()
 
 

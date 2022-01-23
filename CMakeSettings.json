@@ -96,7 +96,7 @@
          "ctestCommandArgs": "",
          "inheritEnvironments": [ "linux_arm" ],
          "wslPath": "${defaultWSLPath}",
-         "cmakeToolchain": "${projectDir}\\imx8mm-toolchain.cmake",
+         "cmakeToolchain": "${projectDir}\\My-imx8mm-toolchain.cmake",
          "variables": [
             {
                "name": "MYMODE",
@@ -105,6 +105,5 @@
             }
          ]
       }
-
    ]
 }

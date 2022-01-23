@@ -63,6 +63,26 @@
                "type": "STRING"
             }
          ]
+      },
+      {
+         "name": "wsl",
+         "generator": "Ninja",
+         "configurationType": "Release",
+         "buildRoot": "${projectDir}\\out\\build\\${name}",
+         "installRoot": "${projectDir}\\out\\install\\${name}",
+         "cmakeExecutable": "cmake",
+         "cmakeCommandArgs": "",
+         "buildCommandArgs": "",
+         "ctestCommandArgs": "",
+         "inheritEnvironments": [ "linux_x64" ],
+         "wslPath": "${defaultWSLPath}",
+         "variables": [
+            {
+               "name": "MYMODE",
+               "value": "wsl",
+               "type": "STRING"
+            }
+         ],
 
       }
    ]

@@ -15,7 +15,7 @@ my_lib_import_RisLib(Test)
 
 if (MSVC)
    install(TARGETS Test DESTINATION "C:/aaa_prime/RisLib")
-elseif (MYMODE STREQUAL ubuntu)
+elseif (MYMODE STREQUAL ubuntu OR MYMODE STREQUAL wsl) 
    install(TARGETS Test DESTINATION "/opt/prime/bin")
 elseif (MYMODE STREQUAL beagle)
    install(CODE "execute_process(COMMAND_ECHO STDOUT

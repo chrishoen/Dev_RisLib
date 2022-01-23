@@ -13,6 +13,7 @@ my_add_compile_options (RisLib)
 my_add_pch (RisLib)
 
 target_include_directories(RisLib PUBLIC ${PROJECT_SOURCE_DIR})
+return()
 
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")

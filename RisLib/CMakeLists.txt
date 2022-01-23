@@ -26,6 +26,6 @@ elseif(MYMODE STREQUAL beagle)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so pi@rpx:/opt/prime/lib)")
 elseif(MYMODE STREQUAL steno)
-   install(FILES ${inc_files} DESTINATION "C:/Prime/AAA_Stenograph/NextGen/src_linux/gui/local/include/RisLib")
-   install(TARGETS RisLib DESTINATION "C:/Prime/AAA_Stenograph/NextGen/src_linux/gui/local/lib")
+   install(FILES ${inc_files} DESTINATION "include/RisLib")
+   install(TARGETS RisLib DESTINATION "lib")
 endif()

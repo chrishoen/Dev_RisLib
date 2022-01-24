@@ -10,13 +10,3 @@ my_add_pch (ReadLine)
 my_inc_import_RisLib(ReadLine)
 my_lib_import_RisLib(ReadLine)
 
-if (MSVC)
-   install(TARGETS ReadLine DESTINATION ${MyCopyBinToDir})
-elseif (MYMODE STREQUAL ubuntu)
-   my_post_build_copy_bin(ReadLine)
-elseif (MYMODE STREQUAL beagle)
-   my_post_build_scp_bin(ReadLine)
-elseif (MYMODE STREQUAL steno)
-   my_post_build_scp_bin(ReadLine)
-endif()
-

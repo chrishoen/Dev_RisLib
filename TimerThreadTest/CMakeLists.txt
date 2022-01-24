@@ -14,14 +14,3 @@ my_lib_import_CommonLib(TimerThreadTest)
 my_lib_import_RisLib(TimerThreadTest)
 
 
-if (MSVC)
-   install(TARGETS TimerThreadTest DESTINATION ${MyCopyBinToDir})
-elseif (MYMODE STREQUAL ubuntu)
-   my_post_build_copy_bin(TimerThreadTest)
-elseif (MYMODE STREQUAL beagle)
-   my_post_build_scp_bin(TimerThreadTest)
-elseif (MYMODE STREQUAL steno)
-   my_post_build_scp_bin(TimerThreadTest)
-endif()
-
-

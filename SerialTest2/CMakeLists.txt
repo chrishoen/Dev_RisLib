@@ -16,14 +16,15 @@ my_lib_import_RisLib(SerialTest2)
 
 if (MSVC)
    install(TARGETS SerialTest2 DESTINATION "C:/aaa_prime/RisLib")
-elseif (MYMODE STREQUAL ubuntu)
+elseif (MYMODE STREQUAL ubuntu OR MYMODE STREQUAL wsl) 
    install(TARGETS SerialTest2 DESTINATION "/opt/prime/bin")
 elseif (MYMODE STREQUAL beagle)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/SerialTest2 pi@rpx:/opt/prime/bin)")
+      COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/SerialTest2 pi@rpx:/opt/prime/bin)")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/SerialTest2 debian@bbx:/opt/prime/bin)")
+      COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/SerialTest2 debian@bbx:/opt/prime/bin)")
 elseif (MYMODE STREQUAL steno)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/SerialTest2 root@stenotgt:/home/root/stenograph/bin)")
 endif()
+

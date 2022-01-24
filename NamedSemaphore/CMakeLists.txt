@@ -12,13 +12,3 @@ my_inc_import_RisLib(NamedSemaphore)
 my_lib_import_RisLib(NamedSemaphore)
 
 
-if (MSVC)
-   install(TARGETS NamedSemaphore DESTINATION ${MyCopyBinToDir})
-elseif (MYMODE STREQUAL ubuntu)
-   my_post_build_copy_bin(NamedSemaphore)
-elseif (MYMODE STREQUAL beagle)
-   my_post_build_scp_bin(NamedSemaphore)
-elseif (MYMODE STREQUAL steno)
-   my_post_build_scp_bin(NamedSemaphore)
-endif()
-

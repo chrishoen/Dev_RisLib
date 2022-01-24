@@ -11,12 +11,3 @@ my_inc_import_RisLib(PrintView)
 my_lib_import_RisLib(PrintView)
 
 
-if (MSVC)
-   install(TARGETS PrintView DESTINATION ${MyCopyBinToDir})
-elseif (MYMODE STREQUAL ubuntu)
-   my_post_build_copy_bin(PrintView)
-elseif (MYMODE STREQUAL beagle)
-   my_post_build_scp_bin(PrintView)
-elseif (MYMODE STREQUAL steno)
-endif()
-

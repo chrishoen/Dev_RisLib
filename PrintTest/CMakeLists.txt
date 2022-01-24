@@ -11,11 +11,3 @@ my_inc_import_RisLib(PrintTest)
 my_lib_import_RisLib(PrintTest)
 
 
-if (MSVC)
-   install(TARGETS PrintTest DESTINATION ${MyCopyBinToDir})
-elseif (MYMODE STREQUAL ubuntu)
-   my_post_build_copy_bin(PrintTest)
-elseif (MYMODE STREQUAL beagle)
-   my_post_build_scp_bin(PrintTest)
-elseif (MYMODE STREQUAL steno)
-endif()

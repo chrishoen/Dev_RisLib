@@ -15,16 +15,13 @@ my_lib_import_CommonLib(ProtoSerial)
 my_lib_import_RisLib(ProtoSerial)
 
 
-
 if (MSVC)
    install(TARGETS ProtoSerial DESTINATION "C:/aaa_prime/RisLib")
-elseif (MYMODE STREQUAL ubuntu)
+elseif (MYMODE STREQUAL ubuntu OR MYMODE STREQUAL wsl) 
    install(TARGETS ProtoSerial DESTINATION "/opt/prime/bin")
 elseif (MYMODE STREQUAL beagle)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoSerial pi@rpx:/opt/prime/bin)")
-   install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoSerial debian@bbx:/opt/prime/bin)")
+      COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoSerial pi@rpx:/opt/prime/bin)")
 elseif (MYMODE STREQUAL steno)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoSerial root@stenotgt:/home/root/stenograph/bin)")

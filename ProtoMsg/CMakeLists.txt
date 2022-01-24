@@ -17,14 +17,14 @@ my_lib_import_RisLib(ProtoMsg)
 
 if (MSVC)
    install(TARGETS ProtoMsg DESTINATION "C:/aaa_prime/RisLib")
-elseif (MYMODE STREQUAL ubuntu)
+elseif (MYMODE STREQUAL ubuntu OR MYMODE STREQUAL wsl) 
    install(TARGETS ProtoMsg DESTINATION "/opt/prime/bin")
 elseif (MYMODE STREQUAL beagle)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg pi@rpx:/opt/prime/bin)")
-   install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg debian@bbx:/opt/prime/bin)")
+      COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg pi@rpx:/opt/prime/bin)")
 elseif (MYMODE STREQUAL steno)
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg root@stenotgt:/home/root/stenograph/bin)")
 endif()
+
+

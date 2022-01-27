@@ -16,7 +16,7 @@ public:
    static void initialize(TestMsg* aMsg);
    static void initialize(FirstMessageMsg* aMsg);
    static void initialize(EchoRequestMsg* aMsg,int aNumWords = 0);
-   static void initialize(EchoResponseMsg* aMsg);
+   static void initialize(EchoResponseMsg* aMsg, int aNumWords = 0);
    static void initialize (DataRecord* aMsg);
    static void initialize(DataMsg* aMsg);
    static void initialize(ByteBlobMsg* aMsg);

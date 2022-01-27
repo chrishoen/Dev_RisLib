@@ -104,6 +104,7 @@ void SerialThread::executeOnTimer(int aTimerCount)
    if (!mTPFlag) return;
 
    EchoRequestMsg* tMsg = new EchoRequestMsg;
+   MsgHelper::initialize(tMsg, 1000);
    tMsg->mCode1 = aTimerCount;
    sendMsg(tMsg);
 }
@@ -185,6 +186,7 @@ void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
+      MsgHelper::initialize(tTxMsg, 1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mSerialMsgThread->sendMsg(tTxMsg);
    }

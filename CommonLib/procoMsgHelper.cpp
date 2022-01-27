@@ -59,6 +59,7 @@ void MsgHelper::show(int aPF, EchoRequestMsg* aMsg)
 {
    Prn::print(aPF, "EchoRequestMsg");
    Prn::print(aPF, "Code1      %d", aMsg->mCode1);
+   Prn::print(aPF, "NumWords   %d", aMsg->mNumWords);
    Prn::print(aPF, "");
 }
 
@@ -66,7 +67,7 @@ void MsgHelper::show(int aPF, EchoRequestMsg* aMsg)
 //****************************************************************************
 //****************************************************************************
 
-void MsgHelper::initialize(EchoResponseMsg* aMsg)
+void MsgHelper::initialize(EchoResponseMsg* aMsg, int aNumWords)
 {
    aMsg->mCode1 = 401;
    aMsg->mCode2 = 402;
@@ -78,6 +79,7 @@ void MsgHelper::show(int aPF, EchoResponseMsg* aMsg)
 {
    Prn::print(aPF, "EchoResponseMsg");
    Prn::print(aPF, "Code1      %d", aMsg->mCode1);
+   Prn::print(aPF, "NumWords   %d", aMsg->mNumWords);
    Prn::print(aPF, "");
 }
 

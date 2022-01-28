@@ -16,7 +16,7 @@ void main_initialize(int argc,char** argv)
    Ris::Threads::enterProcessHigh();
 
    // Initialize print facility.
-   Prn::resetPrint("192.168.1.31");
+   Prn::resetPrint("192.168.1.134");
    Prn::resetPrint("127.0.0.1");
    Prn::useConsole(1);
    Prn::useConsole(2);

@@ -241,7 +241,15 @@ void print(int aFilter, const char* aFormat, ...)
    tPrintStrSize = vsnprintf(tPrintStr, cMaxPrintStringSize, aFormat, ArgPtr);
    va_end(ArgPtr);
 
-   tPrintStr[tPrintStrSize++] = 0;
+   // If empty string then add one space.
+   if (tPrintStrSize > 0)
+   {
+      tPrintStr[tPrintStrSize] = 0;
+   }
+   else
+   {
+      strcpy(tPrintStr, " ");
+   }
 
    //*************************************************************************
    //*************************************************************************

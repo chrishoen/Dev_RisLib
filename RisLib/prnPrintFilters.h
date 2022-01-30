@@ -197,7 +197,15 @@ namespace Prn
    static const int  Calc23            = 260;
    static const int  Calc24            = 261;
 
-   //******************************************************************************
+   static const int  ShowA             = 262;
+   static const int  ShowB             = 263;
+   static const int  ShowC             = 264;
+   static const int  ShowD             = 265;
+   static const int  ShowS             = 266;
+   static const int  ShowT             = 267;
+
+
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace

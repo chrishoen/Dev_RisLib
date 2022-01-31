@@ -141,6 +141,26 @@ void ByteBuffer::forward (int aSize)
 //******************************************************************************
 // Working index.
 
+void ByteBuffer::reverse(int aSize)
+{
+   if (mWorkingIndex - aSize < 0) return;
+
+   if (mCopyDirection == cCopyTo)
+   {
+      mWorkingIndex -= aSize;
+      mWorkingLength -= aSize;
+   }
+   else
+   {
+      mWorkingIndex -= aSize;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Working index.
+
 void ByteBuffer::advance (int aSize)
 {
    if (aSize + mWorkingIndex > mMaxLength) return;

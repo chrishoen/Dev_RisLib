@@ -132,6 +132,7 @@ public:
    void  reset();
    void  rewind();
    void  forward     (int aByteSize=1);
+   void  reverse     (int aByteSize = 1);
    void  advance     (int aByteSize=1);
    void  fillZero    (int aByteSize=1);
 

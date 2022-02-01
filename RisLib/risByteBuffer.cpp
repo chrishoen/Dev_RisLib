@@ -619,6 +619,62 @@ void ByteBuffer::getFromBuffer (ByteContent* aContent)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Peek operations.
+
+inline void BB_peekValue(ByteBuffer* aBuffer, void* aValue, int aSize)
+{
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Guard.
+
+   if (aSize == 0)
+   {
+      return;
+   }
+
+   if (aBuffer->isCopyTo())
+   {
+      return;
+   }
+
+   if (aSize + aBuffer->mWorkingIndex > aBuffer->mWorkingLength)
+   {
+      aBuffer->setError(ByteBuffer::cBufferOverflow);
+      return;
+   }
+
+   // Source pointer.
+   char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
+
+   // Destination pointer.
+   char* tDestin = (char*)aValue;
+
+   // Copy bytes from buffer.
+   for (int i = 0; i < aSize; i++)
+   {
+      tDestin[i] = tBytes[i];
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Peek operations for value types.
+
+void ByteBuffer::peek(unsigned char* aValue) { BB_peekValue(this, aValue, 1); }
+void ByteBuffer::peek(unsigned short* aValue) { BB_peekValue(this, aValue, 2); }
+void ByteBuffer::peek(unsigned int* aValue) { BB_peekValue(this, aValue, 4); }
+void ByteBuffer::peek(char* aValue) { BB_peekValue(this, aValue, 1); }
+void ByteBuffer::peek(short* aValue) { BB_peekValue(this, aValue, 2); }
+void ByteBuffer::peek(int* aValue) { BB_peekValue(this, aValue, 4); }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 
 

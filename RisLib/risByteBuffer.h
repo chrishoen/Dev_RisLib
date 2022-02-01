@@ -214,6 +214,20 @@ public:
    void copy          (ByteContent* content);
    void putToBuffer   (ByteContent* content);
    void getFromBuffer (ByteContent* content);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, peek operations.
+
+   // Peek at a value from the buffer, if the value of the buffer direction
+   // flag is copyFrom. This is the same as a copyFrom followed by a reverse.
+   void peek(unsigned char* aValue);
+   void peek(unsigned short* aValue);
+   void peek(unsigned int* aValue);
+   void peek(char* aValue);
+   void peek(short* aValue);
+   void peek(int* aValue);
 };
 
 //***************************************************************************

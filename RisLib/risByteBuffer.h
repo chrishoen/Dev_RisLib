@@ -78,6 +78,11 @@ public:
    int    mWorkingLength;
    int    mMaxLength;
 
+   // Marker members.
+   int mMarkerStartIndex;
+   int mMarkerEndIndex;
+   int mMarkerLength;
+
    // Copy direction. This specifies the direction of copy operations.
    // Copy to does a put, copy from does a get.
    static const int cCopyTo   = 0;
@@ -153,6 +158,11 @@ public:
    // Get the buffer address at the working index.
    char* getPositionC ();
    void* getPositionV ();
+
+   // Buffer working index marker.
+   void setMarkerStart();
+   int  setMarkerEnd();
+   int  getMarkerLength();
 
    //***************************************************************************
    //***************************************************************************

@@ -23,13 +23,16 @@ namespace Ris
 
 ByteBuffer::ByteBuffer ()
 {
-   mBaseBytes     = 0;
-   mWorkingIndex  = 0;
+   mBaseBytes = 0;
+   mWorkingIndex = 0;
    mWorkingLength = 0;
-   mMaxLength     = 0;
-   mMemAllocCode  = 0;
+   mMaxLength = 0;
+   mMarkerStartIndex = 0;
+   mMarkerEndIndex = 0;
+   mMarkerLength = 0;
+   mMemAllocCode = 0;
    mCopyDirection = cCopyTo;
-   mError         = 0;
+   mError = 0;
 }
 
 ByteBuffer::ByteBuffer (int aSize)
@@ -45,6 +48,9 @@ ByteBuffer::ByteBuffer (char* aAddress,int aSize)
    mWorkingIndex  = 0;
    mWorkingLength = 0;
    mMaxLength     = aSize;
+   mMarkerStartIndex = 0;
+   mMarkerEndIndex = 0;
+   mMarkerLength = 0;
    mMemAllocCode  = 0;
    mCopyDirection = cCopyTo;
    mError         = 0;
@@ -286,6 +292,22 @@ bool ByteBuffer::isCopyTo()
 bool ByteBuffer::isCopyFrom ()
 {
    return mCopyDirection==cCopyFrom;
+}
+
+// Buffer working index marker.
+void ByteBuffer::setMarkerStart()
+{
+   mMarkerStartIndex = mWorkingIndex;
+}
+int  ByteBuffer::setMarkerEnd()
+{
+   mMarkerEndIndex = mWorkingIndex;
+   mMarkerLength = mMarkerEndIndex - mMarkerStartIndex;
+   return mMarkerLength;
+}
+int  ByteBuffer::getMarkerLength()
+{
+   return mMarkerLength;
 }
 
 //******************************************************************************

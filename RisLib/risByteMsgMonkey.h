@@ -81,6 +81,9 @@ public:
    // Preprocess a message before it is sent.
    virtual void processBeforeSend(Ris::ByteContent* aMsg){};
 
+   // Postprocess a message after it is sent.
+   virtual void processAfterSend(Ris::ByteBuffer* aBuffer, Ris::ByteContent* aMsg) {};
+
    // Copy a message to a byte buffer.
    void putMsgToBuffer (Ris::ByteBuffer* aBuffer,Ris::ByteContent* aMsg);
 

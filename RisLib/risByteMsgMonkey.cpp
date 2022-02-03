@@ -56,6 +56,9 @@ void BaseMsgMonkey::putMsgToBuffer(Ris::ByteBuffer* aBuffer, Ris::ByteContent* a
 
    // Call inheritor's copier to copy from the message to the buffer.
    aMsg->copyToFrom(aBuffer);
+
+   // Call inheritor's override to postprocess the message after it is sent.
+   processAfterSend(aBuffer, aMsg);
 }
 
 //******************************************************************************

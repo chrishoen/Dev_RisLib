@@ -7,7 +7,6 @@ include(MyPrecompiledHeader.cmake)
 include(MySpecial.cmake)
 
 add_subdirectory ("RisLib")
-add_subdirectory ("PrintTest")
 return()
 
 project ("Dev_RisLib")

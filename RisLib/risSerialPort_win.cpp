@@ -224,7 +224,7 @@ void SerialPort::doClose()
 {
    if (mValidFlag)
    {
-      //printf("SerialPort::doClose %s\n", mSettings.mPortDevice);
+      printf("SerialPort::doClose %s BEGIN\n", mSettings.mPortDevice);
       CancelIoEx(mSpecific->mPortHandle,0);
       CloseHandle(mSpecific->mPortHandle);
       CloseHandle(mSpecific->mRxEventHandle);
@@ -233,7 +233,8 @@ void SerialPort::doClose()
       mSpecific->mRxEventHandle = INVALID_HANDLE_VALUE;
       mSpecific->mTxEventHandle = INVALID_HANDLE_VALUE;
       mValidFlag = false;
-   } 
+      printf("SerialPort::doClose %s END\n", mSettings.mPortDevice);
+   }
 }
 
 //******************************************************************************

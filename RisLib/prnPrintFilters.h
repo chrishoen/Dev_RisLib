@@ -204,6 +204,15 @@ namespace Prn
    static const int  ShowS             = 266;
    static const int  ShowT             = 267;
 
+   static const int  ShowTx1           = 268;
+   static const int  ShowTx2           = 269;
+   static const int  ShowTx3           = 270;
+   static const int  ShowTx4           = 271;
+
+   static const int  ShowRx1           = 272;
+   static const int  ShowRx2           = 273;
+   static const int  ShowRx3           = 274;
+   static const int  ShowRx4           = 275;
 
 //******************************************************************************
 //******************************************************************************

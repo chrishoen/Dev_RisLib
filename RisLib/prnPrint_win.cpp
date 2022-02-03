@@ -54,6 +54,9 @@ int rConsolePort[cMaxConsoles];
 // The process handle for the print view console.
 HANDLE rConsoleHandle [cMaxConsoles];
 
+// Print filter table defaults to the global.
+PrintFilterTable* rPrintFilterTable = &gPrintFilterTable;
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -79,12 +82,19 @@ void resetVariables()
 
 void resetPrint()
 {
-   // Initialize the filter table.
+   // Reset the filter table.
+   // DON'T DO THIS FOR SHARED MEMORY
+   // THE PRINT GLOBAL CONSTRUCTOR ISN'T WORKING FOR STATIC LIB 
    gPrintFilterTable.initialize();
 
-   // Read from settings file.
+   // Reset the settings.
    gPrintSettings.reset();
-   gPrintSettings.readSection("default");
+
+   // If the settings file exists then read from it.
+   if (gPrintSettings.fileExists())
+   {
+      gPrintSettings.readSection("default");
+   }
 
    // Reset variables.
    resetVariables();
@@ -92,6 +102,11 @@ void resetPrint()
 
 void resetPrint(const char* aPrintViewIPAddress, int aPrintViewIPPort)
 {
+   // Reset the filter table.
+   // DON'T DO THIS FOR SHARED MEMORY
+   // THE PRINT GLOBAL CONSTRUCTOR ISN'T WORKING FOR STATIC LIB 
+   gPrintFilterTable.initialize();
+
    // Manually set the settings.
    gPrintSettings.reset();
    strncpy(gPrintSettings.mPrintViewIPAddress, aPrintViewIPAddress, 30);
@@ -109,7 +124,8 @@ void resetPrint(const char* aPrintViewIPAddress, int aPrintViewIPPort)
 
 void useConsole(int aConsole)
 {
-   if (aConsole > cMaxConsoles-1) return;
+   if (aConsole <= 0) return;
+   if (aConsole > cMaxConsoles - 1) return;
    rConsoleFlag[aConsole] = true;
 }
 
@@ -124,7 +140,7 @@ void initializePrint()
 
    // For each print view console, create a PrintView process
    // and initialize and configure a socket to send the print to.
-   for (int i = 0; i < cMaxConsoles; i++)
+   for (int i = 1; i < cMaxConsoles; i++)
    {
       if (rConsoleFlag[i])
       {
@@ -173,7 +189,7 @@ void finalizePrint()
 
 void setFilter(int aFilter, bool aEnable, int aConsole)
 {
-   gPrintFilterTable.setFilter(aFilter,aEnable, aConsole);
+   rPrintFilterTable->setFilter(aFilter,aEnable, aConsole);
 }   	
 
 //****************************************************************************
@@ -186,7 +202,7 @@ void setFilter(int aFilter, bool aEnable, int aConsole)
 
 void enableFilter(int aFilter, bool aEnable)
 {
-   gPrintFilterTable.enableFilter(aFilter, aEnable);
+   rPrintFilterTable->enableFilter(aFilter, aEnable);
 }
 
 //****************************************************************************
@@ -199,7 +215,7 @@ void enableFilter(int aFilter, bool aEnable)
 
 bool getFilter(int aFilter)
 {
-   return gPrintFilterTable.getFilter(aFilter);
+   return rPrintFilterTable->getFilter(aFilter);
 }
 
 //****************************************************************************
@@ -215,11 +231,14 @@ void print(int aFilter, const char* aFormat, ...)
    //*************************************************************************
    // Exit if print not enabled.
 
+   // Exit if filter is less than zero.
+   if (aFilter < 0) return;
+
    // Exit if suppressed and the filter is not zero.
-   if (rSuppressFlag && aFilter != 0) return;
+   if (rSuppressFlag && (aFilter != 0)) return;
 
    // Exit if the filter table entry is disabled.
-   if (gPrintFilterTable.mEnable[aFilter] == false) return;
+   if (rPrintFilterTable->mEnable[aFilter] == false) return;
 
    //*************************************************************************
    //*************************************************************************
@@ -257,7 +276,7 @@ void print(int aFilter, const char* aFormat, ...)
    // Print the string.
 
    // Get the console index assigned to the filter.
-   int tConsole = gPrintFilterTable.mConsole[aFilter];
+   int tConsole = rPrintFilterTable->mConsole[aFilter];
 
    if (tConsole == 0 && !rConsoleFlag[0])
    {

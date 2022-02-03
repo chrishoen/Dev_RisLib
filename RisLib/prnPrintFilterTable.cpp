@@ -17,7 +17,7 @@ namespace Prn
 
 void PrintFilterTable::initialize()
 {
-   //printf("PrintFilterTable::initialize $$$$$$$$$$$$$$$$$$$$$$\n");
+   printf("PrintFilterTable::initialize $$$$$$$$$$$$$$$$$$$$$$\n");
    // All disabled, except entry zero.
    for (int i = 0; i < cFilterTableSize; i++)
    {

@@ -86,13 +86,13 @@ void resetVariables()
 
 void resetPrint()
 {
-   // Reset the settings.
-   gPrintSettings.reset();
-
    // Reset the filter table.
    // DON'T DO THIS FOR SHARED MEMORY
    // THE PRINT GLOBAL CONSTRUCTOR ISN'T WORKING FOR STATIC LIB 
    gPrintFilterTable.initialize();
+
+   // Reset the settings.
+   gPrintSettings.reset();
 
    // If the settings file exists then read from it.
    if (gPrintSettings.fileExists())
@@ -106,6 +106,11 @@ void resetPrint()
 
 void resetPrint(const char* aPrintViewIPAddress, int aPrintViewIPPort)
 {
+   // Reset the filter table.
+   // DON'T DO THIS FOR SHARED MEMORY
+   // THE PRINT GLOBAL CONSTRUCTOR ISN'T WORKING FOR STATIC LIB 
+   gPrintFilterTable.initialize();
+
    // Manually set the settings.
    gPrintSettings.reset();
    strncpy(gPrintSettings.mPrintViewIPAddress, aPrintViewIPAddress, 30);
@@ -123,6 +128,7 @@ void resetPrint(const char* aPrintViewIPAddress, int aPrintViewIPPort)
 
 void useConsole(int aConsole)
 {
+   if (aConsole <= 0) return;
    if (aConsole > cMaxConsoles-1) return;
    rConsoleFlag[aConsole] = true;
 }
@@ -138,7 +144,7 @@ void initializePrint()
 
    // For each print view console, create a PrintView process
    // and initialize and configure a socket to send the print to.
-   for (int i = 0; i < cMaxConsoles; i++)
+   for (int i = 1; i < cMaxConsoles; i++)
    {
       if (rConsoleFlag[i])
       {

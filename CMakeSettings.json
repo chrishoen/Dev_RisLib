@@ -55,7 +55,7 @@
          "ctestCommandArgs": "",
          "inheritEnvironments": [ "gcc-arm" ],
          "intelliSenseMode": "linux-gcc-arm",
-         "cmakeToolchain": "MyBeagleToolchain.cmake",
+         "cmakeToolchain": "${projectDir}\\MyBeagleToolchain.cmake",
          "variables": [
             {
                "name": "MYMODE",

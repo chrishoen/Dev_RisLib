@@ -38,9 +38,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO4"   ))  executeGo4     (aCmd);
    if(aCmd->isCmd("GO5"   ))  executeGo5     (aCmd);
    if(aCmd->isCmd("PARMS" ))  executeParms   (aCmd);
-   if (aCmd->isCmd("T"))         Prn::toggleSuppressPrint();
-   if (aCmd->isCmd("S"))         Prn::suppressPrint();
-   if (aCmd->isCmd("U"))         Prn::unsuppressPrint();
+   if (aCmd->isCmd("T"))      Prn::toggleSuppressPrint();
+   if (aCmd->isCmd("S"))      Prn::suppressPrint();
+   if (aCmd->isCmd("U"))      Prn::unsuppressPrint();
 
 }
 
@@ -50,7 +50,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,"Go1 0");
+   printf(                 "Go1 printf******************\n");
+   Prn::print(0,           "Go1 zero");
    Prn::print(Prn::View01, "Go1 Prn::View01");
    Prn::print(Prn::View11, "Go1 Prn::View11");
    Prn::print(Prn::View21, "Go1 Prn::View21");
@@ -62,8 +63,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,"Go2");
-   Log::write(0,"Go2");
+   Prn::print(0, "Go2 ZERO");
 }
 
 //******************************************************************************
@@ -82,7 +82,8 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,"Go4 ZERO");
+   Prn::print(0, "Go4");
+   Log::write(0, "Go4");
 }
 
 //******************************************************************************

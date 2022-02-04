@@ -12,6 +12,7 @@ function(my_special1)
    message(STATUS "PROJECT_SOURCE_DIR     " ${PROJECT_SOURCE_DIR})
 
    message(STATUS "Using toolchain file:  " ${CMAKE_TOOLCHAIN_FILE})
+   message(STATUS "CMAKE_C_COMPILER:      " ${CMAKE_C_COMPILER})
    message(STATUS "my_special1***********************************************************END")
 endfunction()
 

@@ -102,7 +102,7 @@ bool SerialPort::doOpen()
       return false;
    }
 
-   SetupComm(mSpecific->mPortHandle,2048,2048);
+   SetupComm(mSpecific->mPortHandle,0x20000, 0x20000);
 
    //***************************************************************************
    //***************************************************************************
@@ -222,9 +222,8 @@ bool SerialPort::doOpen()
 
 void SerialPort::doClose()
 {
-   if (mValidFlag)
+   if (mValidFlag && mSpecific->mPortHandle != INVALID_HANDLE_VALUE)
    {
-      printf("SerialPort::doClose %s BEGIN\n", mSettings.mPortDevice);
       CancelIoEx(mSpecific->mPortHandle,0);
       CloseHandle(mSpecific->mPortHandle);
       CloseHandle(mSpecific->mRxEventHandle);
@@ -233,7 +232,6 @@ void SerialPort::doClose()
       mSpecific->mRxEventHandle = INVALID_HANDLE_VALUE;
       mSpecific->mTxEventHandle = INVALID_HANDLE_VALUE;
       mValidFlag = false;
-      printf("SerialPort::doClose %s END\n", mSettings.mPortDevice);
    }
 }
 

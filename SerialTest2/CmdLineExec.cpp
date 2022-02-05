@@ -47,7 +47,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 16);
+   aCmd->setArgDefault(1, Some::gSerialParms.mRxReqNumBytes);
    int tNumBytes = aCmd->argInt(1);
    Some::gSerialThread->sendTestBytes(tNumBytes);
 }

@@ -147,21 +147,13 @@ restart:
          // Number of bytes.
          mRxCount = tRet;
          bool tRxTest = true;
-         if (gSerialParms.mReadAllFlag)
+         for (int i = 0; i < mRxCount; i++)
          {
-            for (int i = 0; i < mRxCount; i++)
-            {
-               if (mRxBuffer[i] != i % 37) tRxTest = false;
-            }
-            if (tRxTest)
-            {
-               Prn::print(Prn::Show1, "Serial read  $$$    %5d PASS", mRxCount);
-            }
-            else
-            {
-               Prn::print(Prn::Show1, "Serial read  $$$    %5d FAIL", mRxCount);
-            }
-
+            if (mRxBuffer[i] != i % 37) tRxTest = false;
+         }
+         if (tRxTest)
+         {
+            Prn::print(Prn::Show1, "Serial read  $$$    %5d PASS", mRxCount);
          }
          else
          {

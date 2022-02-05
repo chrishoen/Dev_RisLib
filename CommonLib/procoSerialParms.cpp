@@ -37,7 +37,7 @@ void SerialParms::reset()
    }
    else
    {
-      BaseClass::setFilePath("/opt/prime/files/Serial_Parms.txt");
+      BaseClass::setFilePath_RelativeToBaseDir("files/Serial_Parms.txt");
    }
 
    mSerialPortDevice[0] = 0;

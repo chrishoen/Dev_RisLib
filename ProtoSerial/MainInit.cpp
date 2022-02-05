@@ -2,6 +2,7 @@
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
+#include "risBaseDir.h"
 
 #include "procoSerialParms.h"
 
@@ -21,6 +22,17 @@ void main_initialize(int argc,char** argv)
    // Enter process.
 
    Ris::Threads::enterProcessHigh();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Enter process.
+
+   // Set program process for high priority.
+   Ris::Threads::enterProcessHigh();
+
+   // Set the base directory to the current directory.
+   Ris::setBaseDirectoryToCurrent();
 
    //***************************************************************************
    //***************************************************************************

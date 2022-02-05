@@ -25,6 +25,8 @@ elseif(MYMODE STREQUAL beagle)
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so pi@rpx:/opt/prime/lib)")
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so debian@bbx:/opt/prime/lib)")
 elseif(MYMODE STREQUAL steno)
    install(FILES ${inc_files} DESTINATION "include/RisLib")
    install(TARGETS RisLib DESTINATION "lib")

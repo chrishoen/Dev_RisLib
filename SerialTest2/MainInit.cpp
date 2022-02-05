@@ -1,7 +1,8 @@
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
-#include "risThreadsThreads.h"
+#include "risBaseDir.h"
+
 #include "someSerialParms.h"
 
 //******************************************************************************
@@ -19,6 +20,9 @@ void main_initialize(int argc,char** argv)
 
    // Set program process for high priority.
    Ris::Threads::enterProcessHigh();
+
+   // Set the base directory to the current directory.
+   Ris::setBaseDirectoryToCurrent();
 
    //***************************************************************************
    //***************************************************************************

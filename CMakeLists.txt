@@ -6,11 +6,19 @@ include(MyLocalImports.cmake)
 include(MyPrecompiledHeader.cmake)
 include(MySpecial.cmake)
 
-add_subdirectory ("RisLib")
-return()
-
 project ("Dev_RisLib")
 my_special1() 
+
+add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("SerialTest1")
+add_subdirectory ("SerialTest2")
+add_subdirectory ("SerialTest3")
+add_subdirectory ("ProtoSerial")
+return()
+
+add_subdirectory ("RisLib")
+return()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
@@ -31,14 +39,6 @@ add_subdirectory ("Test")
 return()
 
 add_subdirectory ("RisLib")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("SerialTest1")
-add_subdirectory ("SerialTest2")
-add_subdirectory ("SerialTest3")
-add_subdirectory ("ProtoSerial")
 return()
 
 add_subdirectory ("Test")

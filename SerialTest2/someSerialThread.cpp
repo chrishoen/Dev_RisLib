@@ -146,9 +146,28 @@ restart:
       {
          // Number of bytes.
          mRxCount = tRet;
+         bool tRxTest = true;
+         if (gSerialParms.mReadAllFlag)
+         {
+            for (int i = 0; i < mRxCount; i++)
+            {
+               if (mRxBuffer[i] != i % 37) tRxTest = false;
+            }
+            if (tRxTest)
+            {
+               Prn::print(Prn::Show1, "Serial read  $$$    %5d PASS", mRxCount);
+            }
+            else
+            {
+               Prn::print(Prn::Show1, "Serial read  $$$    %5d FAIL", mRxCount);
+            }
 
+         }
+         else
+         {
+            Prn::print(Prn::Show1, "Serial read  $$$    %5d", mRxCount);
+         }
          // Show.
-         Prn::print(Prn::Show1, "Serial read  $$$    %d", mRxCount);
       }
    }
    
@@ -241,7 +260,7 @@ void SerialThread::sendTestBytes(int aNumBytes)
    // Fill the transmit buffer with constants.
    for (int i = 0; i < aNumBytes; i++)
    {
-      mTxBuffer[i] = 0x77;
+      mTxBuffer[i] = i % 37;
    }
 
    // Send the transmit buffer.

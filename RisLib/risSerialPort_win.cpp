@@ -317,7 +317,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    {
       // Write was successful.
       //printf("SerialPort::doSendBytes PASS1 %d\n",aNumBytes);
-      return 0;
+      return tNumWritten;
    }
 
    // Write is pending.
@@ -330,7 +330,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
          if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
          {
             //printf("SerialPort::doSendBytes PASS1 %d\n",aNumBytes);
-            return 0;
+            return tNumWritten;
          }
          else
          {

@@ -68,9 +68,12 @@ bool SerialPort::doOpen()
    if (mValidFlag)
    {
       doClose();
+      return true;
    }
 
    mAbortFlag = false;
+
+   printf("SerialPort::doOpen %s\n", mSettings.mPortDevice);
 
    //***************************************************************************
    //***************************************************************************
@@ -219,29 +222,17 @@ bool SerialPort::doOpen()
 
 void SerialPort::doClose()
 {
-   // Test if already closed.
-   if (!mValidFlag)
+   if (mValidFlag && mSpecific->mPortHandle != INVALID_HANDLE_VALUE)
    {
-      printf("serial_close already closed\n");
-      return;
+      CancelIoEx(mSpecific->mPortHandle,0);
+      CloseHandle(mSpecific->mPortHandle);
+      CloseHandle(mSpecific->mRxEventHandle);
+      CloseHandle(mSpecific->mTxEventHandle);
+      mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
+      mSpecific->mRxEventHandle = INVALID_HANDLE_VALUE;
+      mSpecific->mTxEventHandle = INVALID_HANDLE_VALUE;
+      mValidFlag = false;
    }
-
-   // Test handle.
-   if (mValidFlag && mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
-   {
-      printf("serial_close invalid handle\n");
-      return;
-   }
-
-   // Cancel any pending i/o and close the handles.
-   CancelIoEx(mSpecific->mPortHandle, 0);
-   CloseHandle(mSpecific->mPortHandle);
-   CloseHandle(mSpecific->mRxEventHandle);
-   CloseHandle(mSpecific->mTxEventHandle);
-   mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
-   mSpecific->mRxEventHandle = INVALID_HANDLE_VALUE;
-   mSpecific->mTxEventHandle = INVALID_HANDLE_VALUE;
-   mValidFlag = false;
 }
 
 //******************************************************************************
@@ -255,14 +246,10 @@ void SerialPort::doClose()
 
 void SerialPort::doAbort()
 {
-   // Set the abort flag.
+   doClose();
+   return;
+
    mAbortFlag = true;
-
-   // Guard.
-   int tRet = 0;
-   if (!mValidFlag) return;
-
-   // Post to the event semaphore.
    SetEvent(mSpecific->mRxEventHandle);
 }
 
@@ -288,20 +275,7 @@ void SerialPort::doFlush()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return the number of bytes that are available to receive.
-
-int SerialPort::doGetAvailableReceiveBytes()
-{
-   COMSTAT tComStat;
-   ClearCommError(mSpecific->mPortHandle, 0, &tComStat);
-   return (int)tComStat.cbInQue;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send a fixed number of bytes. Return the actual number of bytes
-// sent or a negative error code.
+// Send fixed number of bytes
 
 int SerialPort::doSendBytes(const char* aData, int aNumBytes)
 {
@@ -357,10 +331,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive any available bytes. Block until at least one byte has
-// been received. Return the number of bytes received or a negative
-// error code. Copy the bytes into the pointer argument.
-// THERE'S SOMETHING WRONG WITH THIS CODE.
+// Receive bytes.
 
 int SerialPort::doReceiveAnyBytes(char *aData, int aNumBytes)
 {
@@ -501,9 +472,7 @@ int SerialPort::doReceiveAnyBytes(char *aData, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive a requested number of bytes. Block until all of the bytes
-// have been received. Return the number of bytes received or a
-// negative error code. Copy the bytes into the pointer argument.
+// Receive bytes.
 
 int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
 {
@@ -621,6 +590,18 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
 int SerialPort::doReceiveOneByte(char* aByte)
 {
    return doReceiveAllBytes(aByte, 1);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return the number of bytes that are available to receive.
+
+int SerialPort::doGetAvailableReceiveBytes()
+{
+   COMSTAT tComStat;
+   ClearCommError(mSpecific->mPortHandle, 0, &tComStat);
+   return (int)tComStat.cbInQue;
 }
 
 //******************************************************************************

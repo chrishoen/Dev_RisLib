@@ -82,6 +82,7 @@ bool SerialPort::doOpen()
    if (mValidFlag)
    {
       doClose();
+      return true;
    }
 
    mAbortFlag = false;
@@ -235,12 +236,12 @@ void SerialPort::doClose()
 
 void SerialPort::doAbort()
 {
-   // Set the abort flag.
-   mAbortFlag = true;
-
    // Guard.
    int tRet = 0;
    if (!mValidFlag) return;
+
+   // Set the abort flag.
+   mAbortFlag = true;
 
    // Write bytes to the event semaphore.
    unsigned long long tCount = 1;

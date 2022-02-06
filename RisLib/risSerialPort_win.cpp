@@ -44,7 +44,7 @@ SerialPort::SerialPort()
 
 SerialPort::~SerialPort(void)
 {
-   doClose();
+   //doClose();
    delete mSpecific;
 }
 
@@ -229,6 +229,7 @@ void SerialPort::doClose()
       return;
    }
 
+   //printf("serial_close\n");
    // Cancel any pending i/o and close the handles.
    CancelIoEx(mSpecific->mPortHandle, 0);
    CloseHandle(mSpecific->mPortHandle);

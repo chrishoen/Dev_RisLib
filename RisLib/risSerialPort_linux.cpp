@@ -53,8 +53,7 @@ SerialPort::SerialPort()
 
 SerialPort::~SerialPort()
 {
-   return;
-   doClose();
+   //doClose();
    delete mSpecific;
 }
 

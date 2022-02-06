@@ -204,12 +204,8 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Done.
  
+   printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
    mValidFlag = true;
-#if 0
-   printf("SerialPort doOpen PASS  $ %s : %16s\n",
-      mSettings.mPortDevice,
-      mSettings.mPortSetup);
-#endif
    return true;
 }
 
@@ -507,7 +503,7 @@ int SerialPort::doReceiveAnyBytes(char *aData, int aNumBytes)
 
 int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
 {
-   //printf("START SerialPort::doReceiveAllBytes %d\n", aRequestBytes);
+   //printf("SerialPort::doReceiveAllBytes START %d\n", aRequestBytes);
    // Locals.
    DWORD tRet = 0;
    int tError = 0;
@@ -582,11 +578,13 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
          printf("ERROR SerialPort::doReceiveAllBytes TIMEOUT %d\n", GetLastError());
          return cSerialRetError;
       }
+      break;
       default:
       {
          printf("ERROR SerialPort::doReceiveAllBytes ERROR 104 %d\n", GetLastError());
          return cSerialRetError;
       }
+      break;
       }
    }
 
@@ -607,7 +605,7 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    }
 
    // Done.
-// printf("SerialPort::doReceiveAllBytes PASS1 %d\n", tBytesRead);
+   //printf("SerialPort::doReceiveAllBytes PASS1 %d %d\n", tBytesRead, (int)aData[0]);
    return tBytesRead;
 }
 

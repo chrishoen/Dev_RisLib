@@ -167,10 +167,10 @@ bool SerialPort::doOpen()
    //***************************************************************************
    //***************************************************************************
    // Flush.
-
+#if 0
    Ris::Threads::threadSleep(100);
    doFlush();
-
+#endif
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -202,8 +202,10 @@ void SerialPort::doClose()
 
    // Flush the input and output buffers.
    printf("serial_close flush\n");
+   doSuspend();
    doFlush();
-   Ris::Threads::threadSleep(100);
+   //doResume();
+   //Ris::Threads::threadSleep(100);
 
    // Close the event.
    printf("serial_close event\n");
@@ -234,6 +236,69 @@ void SerialPort::doClose()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Flush serial port buffers.
+
+void SerialPort::doFlush()
+{
+   // Guard.
+   int tRet = 0;
+   if (!mValidFlag) return;
+
+   // Flush the buffers.
+   tRet = tcflush(mSpecific->mPortFd, TCIOFLUSH);
+
+   // Test the return code.
+   if (tRet != 0)
+   {
+      printf("serial_flush ERROR 101 %d\n", errno);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Suspend serial port transmits and receives.
+
+void SerialPort::doSuspend()
+{
+   // Guard.
+   int tRet = 0;
+   if (!mValidFlag) return;
+
+   // Suspend output.
+   tRet = tcflow(mSpecific->mPortFd, TCOOFF);
+
+   // Test the return code.
+   if (tRet != 0)
+   {
+      printf("serial_suspend ERROR 101 %d\n", errno);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Resume serial port transmits and receives.
+
+void SerialPort::doResume()
+{
+   // Guard.
+   int tRet = 0;
+   if (!mValidFlag) return;
+
+   // Resume output.
+   tRet = tcflow(mSpecific->mPortFd, TCOOFF);
+
+   // Test the return code.
+   if (tRet != 0)
+   {
+      printf("serial_resume ERROR 101 %d\n", errno);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Abort pending serial port receive.
 // 
 // Set the abort flag and write bytes to the event semaphore. This will
@@ -257,27 +322,6 @@ void SerialPort::doAbort()
    if (tRet < 0)
    {
       printf("serial_abort_1 ERROR %d\n", errno);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Flush serial port buffers.
-
-void SerialPort::doFlush()
-{
-   // Guard.
-   int tRet = 0;
-   if (!mValidFlag) return;
-
-   // Flush the buffers.
-   tRet = tcflush(mSpecific->mPortFd, TCIOFLUSH);
-
-   // Test the return code.
-   if (tRet != 0)
-   {
-      printf("serial_flush_1 %d\n", errno);
    }
 }
 

@@ -129,6 +129,13 @@ restart:
       ByteContent* tMsg = 0;
       tRet = mSerialMsgPort.doReceiveMsg(tMsg);
 
+      // Check for terminate.
+      if (BaseClass::mTerminateFlag)
+      {
+         Prn::print(Prn::Show1, "SerialMsgThread read TERMINATE");
+         goto end;
+      }
+
       // Check the return code.
       if (tRet == 0)
       {
@@ -195,11 +202,6 @@ void SerialMsgThread::threadExitFunction()
 
 void SerialMsgThread::shutdownThread()
 {
-   printf("SerialMsgThread::shutdownThread BEGIN\n");
-   BaseClass::forceTerminateThread();
-   printf("SerialMsgThread::shutdownThread END\n");
-   return;
-
    printf("SerialMsgThread::shutdownThread BEGIN\n");
 
    // Set for thread termination.

@@ -86,14 +86,20 @@ public:
    // Close the serial port.
    void doClose();
 
-   // Abort a pending serial port receive.
-   void doAbort();
-
    // Flush serial port buffers.
    void doFlush();
 
+   // Suspend serial port transmits and receives.
+   void doSuspend();
+
+   // Resume serial port transmits and receives.
+   void doResume();
+
    // Return the number of bytes that are available to receive.
    int doGetAvailableReceiveBytes();
+
+   // Abort a pending serial port receive.
+   void doAbort();
 
    //***************************************************************************
    //***************************************************************************

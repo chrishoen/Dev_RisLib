@@ -102,6 +102,11 @@ public:
    // before the thread is terminated. It shuts down the child SerialMsgThread.
    void threadExitFunction() override;
 
+   // Thread shutdown function. This calls the base class shutdownThread
+   // function to terminate the thread. This executes in the context of
+   // the calling thread.
+   void shutdownThread() override;
+
    // Execute periodically. This is called by the base class timer.
    void executeOnTimer(int aTimerCount) override;
 

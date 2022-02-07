@@ -99,26 +99,8 @@ bool SerialPort::doOpen()
       return false;
    }
 
+   // Setup buffers.
    SetupComm(mSpecific->mPortHandle,0x20000, 0x20000);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Purge 
-
-   Sleep(100);
-
-   doFlush();
-
-   if (GetLastError() != ERROR_SUCCESS)
-   {
-      printf("serial_create_error_2 %d\n", GetLastError());
-      CloseHandle(mSpecific->mPortHandle);
-      mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
-      return false; 
-   }
- 
-   Sleep(100);
 
    //***************************************************************************
    //***************************************************************************
@@ -179,9 +161,15 @@ bool SerialPort::doOpen()
 
    tComTimeout.ReadIntervalTimeout         = 0;
    tComTimeout.ReadTotalTimeoutMultiplier  = 0;
-   tComTimeout.ReadTotalTimeoutConstant    = mSettings.mRxTimeout;
+   tComTimeout.ReadTotalTimeoutConstant    = 0;
    tComTimeout.WriteTotalTimeoutMultiplier = 0;
    tComTimeout.WriteTotalTimeoutConstant   = 0;
+
+   tComTimeout.ReadIntervalTimeout = 0;
+   tComTimeout.ReadTotalTimeoutMultiplier = 0;
+   tComTimeout.ReadTotalTimeoutConstant = 0;
+   tComTimeout.WriteTotalTimeoutMultiplier = 0;
+   tComTimeout.WriteTotalTimeoutConstant = 2000;
 
    if(!SetCommTimeouts(mSpecific->mPortHandle, &tComTimeout))
    {
@@ -196,7 +184,6 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Purge.
 
-   Sleep(100);
    doFlush();
 
    //***************************************************************************
@@ -229,9 +216,15 @@ void SerialPort::doClose()
       return;
    }
 
-   //printf("serial_close\n");
+   // Flush.
+   printf("serial_close flush\n");
+   doFlush();
+
    // Cancel any pending i/o and close the handles.
+   printf("serial_close cancel\n");
    CancelIoEx(mSpecific->mPortHandle, 0);
+
+   printf("serial_close handles\n");
    CloseHandle(mSpecific->mPortHandle);
    CloseHandle(mSpecific->mRxEventHandle);
    CloseHandle(mSpecific->mTxEventHandle);
@@ -239,6 +232,7 @@ void SerialPort::doClose()
    mSpecific->mRxEventHandle = INVALID_HANDLE_VALUE;
    mSpecific->mTxEventHandle = INVALID_HANDLE_VALUE;
    mValidFlag = false;
+   printf("serial_close done\n");
 }
 
 //******************************************************************************
@@ -272,14 +266,13 @@ void SerialPort::doFlush()
 {
    ClearCommError(mSpecific->mPortHandle,0,0);
 
-   DWORD lFlags;
-
-   lFlags = 
+   DWORD lFlags = 
       PURGE_RXABORT | PURGE_RXCLEAR |
       PURGE_TXABORT | PURGE_TXCLEAR;
 
    PurgeComm(mSpecific->mPortHandle, lFlags);
 
+   ClearCommError(mSpecific->mPortHandle, 0, 0);
 }
 
 //******************************************************************************

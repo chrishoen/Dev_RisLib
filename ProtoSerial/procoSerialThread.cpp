@@ -85,7 +85,7 @@ void SerialThread::threadInitFunction()
 // Thread exit function. This is called by the base class immedidately
 // before the thread is terminated. It shuts down the child SerialMsgThread.
 
-void  SerialThread::threadExitFunction()
+void SerialThread::threadExitFunction()
 {
    Prn::print(0, "SerialThread::threadExitFunction BEGIN");
 
@@ -93,6 +93,20 @@ void  SerialThread::threadExitFunction()
    mSerialMsgThread->shutdownThread();
 
    Prn::print(0, "SerialThread::threadExitFunction END");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread shutdown function. This calls the base class shutdownThread
+// function to terminate the thread. This executes in the context of
+// the calling thread.
+
+void SerialThread::shutdownThread()
+{
+   Prn::print(0, "SerialThread::shutdownThread BEGIN");
+   BaseClass::shutdownThread();
+   Prn::print(0, "SerialThread::shutdownThread END");
 }
 
 //******************************************************************************

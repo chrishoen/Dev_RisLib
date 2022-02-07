@@ -60,7 +60,7 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Done.
 
-   Prn::print(0,"ProtoCommS Program**********************************************BEGIN");
+   Prn::print(0,"ProtoSerial Program**********************************************BEGIN");
 
 }
 
@@ -71,7 +71,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoCommS Program**********************************************END");
+   Prn::print(0,"ProtoSerial Program**********************************************END");
 
    // Close print
    Prn::finalizePrint();

@@ -29,7 +29,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("TP"))        ProtoComm::gSerialThread->mTPFlag = aCmd->argBool(1);
-   if (aCmd->isCmd("TX"))        executeTx(aCmd);
+   if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("DATA"))      executeData(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
@@ -43,7 +43,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1);
    int tMsgType= aCmd->argInt(1);

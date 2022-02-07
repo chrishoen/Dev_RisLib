@@ -78,7 +78,7 @@ restart:
    {
       BaseClass::threadSleep(1000);
    }
-   Prn::print(Prn::Show1, "Serial restart %d", mRestartCount);
+   Prn::print(Prn::Show1, "SerialMsgThread restart %d", mRestartCount);
    mRestartCount++;
 
    // Test if a session is established.
@@ -118,7 +118,7 @@ restart:
 
    while (!BaseClass::mTerminateFlag)
    {
-      Prn::print(Prn::Show4, "Serial read start********************************************** %d", mRxCount++);
+      Prn::print(Prn::Show4, "SerialMsgThread read start********************************************** %d", mRxCount++);
 
       //************************************************************************
       //************************************************************************
@@ -132,27 +132,27 @@ restart:
       // Check the return code.
       if (tRet == 0)
       {
-         Prn::print(Prn::Show1, "Serial read EMPTY");
+         Prn::print(Prn::Show1, "SerialMsgThread read EMPTY");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetError)
       {
-         Prn::print(Prn::Show1, "Serial read ERROR");
+         Prn::print(Prn::Show1, "SerialMsgThread read ERROR");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetTimeout)
       {
-         Prn::print(Prn::Show1, "Serial read TIMEOUT");
+         Prn::print(Prn::Show1, "SerialMsgThread read TIMEOUT");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetAbort)
       {
-         Prn::print(Prn::Show1, "Serial read ABORT");
+         Prn::print(Prn::Show1, "SerialMsgThread read ABORT");
          goto end;
       }
       else if (tRet == Ris::cSerialRetDataError)
       {
-         Prn::print(Prn::Show1, "Serial read DATA ERROR");
+         Prn::print(Prn::Show1, "SerialMsgThread read DATA ERROR");
          goto restart;
       }
       // Process the read.
@@ -178,10 +178,12 @@ end:
 
 void SerialMsgThread::threadExitFunction()
 {
-   printf("someSerialThread::threadExitFunction\n");
+   printf("SerialMsgThread::threadExitFunction BEGIN\n");
 
    // Close the serial port.
    mSerialMsgPort.doClose();
+
+   printf("SerialMsgThread::threadExitFunction END\n");
 }
 
 //******************************************************************************
@@ -193,13 +195,23 @@ void SerialMsgThread::threadExitFunction()
 
 void SerialMsgThread::shutdownThread()
 {
-   printf("someSerialThread::shutdownThread\n");
+   printf("SerialMsgThread::shutdownThread BEGIN\n");
+   BaseClass::forceTerminateThread();
+   printf("SerialMsgThread::shutdownThread END\n");
+   return;
+
+   printf("SerialMsgThread::shutdownThread BEGIN\n");
+
+   // Set for thread termination.
+   BaseClass::mTerminateFlag = true;
 
    // Abort pending serial port receives
    mSerialMsgPort.doAbort();
 
    // Wait for thread to terminate.
    BaseClass::shutdownThread();
+
+   printf("SerialMsgThread::shutdownThread END\n");
 }
 
 //******************************************************************************

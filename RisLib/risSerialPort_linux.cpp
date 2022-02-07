@@ -200,7 +200,13 @@ void SerialPort::doClose()
    // Set invalid.
    mValidFlag = false;
 
+   // Flush the input and output buffers.
+   printf("serial_close flush\n");
+   doFlush();
+   Ris::Threads::threadSleep(100);
+
    // Close the event.
+   printf("serial_close event\n");
    tRet = close(mSpecific->mEventFd);
 
    // Test the return code.
@@ -210,6 +216,7 @@ void SerialPort::doClose()
    }
 
    // Close the port.
+   printf("serial_close port\n");
    tRet = close(mSpecific->mPortFd);
 
    // Test the return code.
@@ -217,6 +224,7 @@ void SerialPort::doClose()
    {
       printf("serial_close_error_2 %d\n", errno);
    }
+   printf("serial_close done\n");
 
    // Done.
    mSpecific->mEventFd = 0;
@@ -259,14 +267,12 @@ void SerialPort::doAbort()
 
 void SerialPort::doFlush()
 {
-   return;
-
    // Guard.
    int tRet = 0;
    if (!mValidFlag) return;
 
    // Flush the buffers.
-   tRet = tcflush(mSpecific->mPortFd, TCIFLUSH);
+   tRet = tcflush(mSpecific->mPortFd, TCIOFLUSH);
 
    // Test the return code.
    if (tRet != 0)

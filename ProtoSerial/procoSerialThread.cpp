@@ -87,11 +87,12 @@ void SerialThread::threadInitFunction()
 
 void  SerialThread::threadExitFunction()
 {
+   Prn::print(0, "SerialThread::threadExitFunction BEGIN");
+
    // Shutdown the child thread.
    mSerialMsgThread->shutdownThread();
 
-   // Base class exit.
-   BaseClass::threadExitFunction();
+   Prn::print(0, "SerialThread::threadExitFunction END");
 }
 
 //******************************************************************************

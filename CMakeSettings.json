@@ -1,6 +1,26 @@
 ﻿{
    "configurations": [
       {
+         "name": "beagle",
+         "generator": "Ninja",
+         "configurationType": "Release",
+         "buildRoot": "${projectDir}\\out\\build\\${name}",
+         "installRoot": "${projectDir}\\out\\install\\${name}",
+         "cmakeCommandArgs": "",
+         "buildCommandArgs": "",
+         "ctestCommandArgs": "",
+         "inheritEnvironments": [ "linux-arm" ],
+         "intelliSenseMode": "linux-gcc-arm",
+         "cmakeToolchain": "${projectDir}\\MyBeagleToolchain.cmake",
+         "variables": [
+            {
+               "name": "MYMODE",
+               "value": "beagle",
+               "type": "STRING"
+            }
+         ]
+      },
+      {
          "name": "windows",
          "generator": "Ninja",
          "configurationType": "Release",
@@ -40,26 +60,6 @@
             {
                "name": "MYMODE",
                "value": "ubuntu",
-               "type": "STRING"
-            }
-         ]
-      },
-      {
-         "name": "beagle",
-         "generator": "Ninja",
-         "configurationType": "Release",
-         "buildRoot": "${projectDir}\\out\\build\\${name}",
-         "installRoot": "${projectDir}\\out\\install\\${name}",
-         "cmakeCommandArgs": "",
-         "buildCommandArgs": "",
-         "ctestCommandArgs": "",
-         "inheritEnvironments": [ "gcc-arm" ],
-         "intelliSenseMode": "linux-gcc-arm",
-         "cmakeToolchain": "${projectDir}\\MyBeagleToolchain.cmake",
-         "variables": [
-            {
-               "name": "MYMODE",
-               "value": "beagle",
                "type": "STRING"
             }
          ]

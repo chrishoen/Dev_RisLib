@@ -41,7 +41,7 @@ char* getSafeFilePath(char* aBuffer, const char* aFilePath)
    else if (gCode == 2)
    {
       int j = 0;
-      for (int i = 0; i < strlen(aFilePath); i++)
+      for (int i = 0; i < (int)strlen(aFilePath); i++)
       {
          if (aFilePath[i] == ' ')
          {

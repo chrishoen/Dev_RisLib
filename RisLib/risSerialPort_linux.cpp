@@ -151,7 +151,8 @@ bool SerialPort::doOpen()
    // Configure the port for rs485.
    if (mSettings.m485Flag)
    {
-      struct serial_rs485 t485conf = { 0 };
+      struct serial_rs485 t485conf;
+      memset(&t485conf, 0, sizeof(struct serial_rs485));
       t485conf.flags |= SER_RS485_ENABLED;
       t485conf.flags |= SER_RS485_RTS_ON_SEND;
       t485conf.flags &= ~(SER_RS485_RTS_AFTER_SEND);

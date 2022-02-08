@@ -70,7 +70,7 @@ void Interfaces::doGetNetSettingsEth0Address()
    }
 
    // Parse the list of strings into member variables.
-   for (int i = 0; i < tParse.size(); i++)
+   for (int i = 0; i < (int)tParse.size(); i++)
    {
       if (tParse[i] == "inet") mEth0Address = tParse[i + 1];
       if (tParse[i] == "netmask") mEth0Mask = tParse[i + 1];
@@ -114,7 +114,7 @@ void Interfaces::doGetNetSettingsWlan0Address()
    }
 
    // Parse the list of strings into member variables.
-   for (int i = 0; i < tParse.size(); i++)
+   for (int i = 0; i < (int)tParse.size(); i++)
    {
       if (tParse[i] == "inet") mWlan0Address = tParse[i + 1];
       if (tParse[i] == "netmask") mWlan0Mask = tParse[i + 1];
@@ -163,7 +163,7 @@ void Interfaces::doGetNetSettingsEth0Gateway()
    }
 
    // Parse the list of strings into member variables.
-   for (int i = 0; i < tParse.size(); i++)
+   for (int i = 0; i < (int)tParse.size(); i++)
    {
       if (tParse[i] == "linkdown") mEth0ValidFlag = false;
       if (tParse[i] == "via") mEth0Gateway = tParse[i + 1];
@@ -212,7 +212,7 @@ bool isEth0Valid()
    }
 
    // Parse the list of strings into member variables.
-   for (int i = 0; i < tParse.size(); i++)
+   for (int i = 0; i < (int)tParse.size(); i++)
    {
       if (tParse[i] == "linkdown") tEth0ValidFlag = false;
    }
@@ -262,7 +262,7 @@ void Interfaces::doGetNetSettingsWlan0Gateway()
    }
 
    // Parse the list of strings into member variables.
-   for (int i = 0; i < tParse.size(); i++)
+   for (int i = 0; i < (int)tParse.size(); i++)
    {
       if (tParse[i] == "via") mWlan0Gateway = tParse[i + 1];
       if (tParse[i] == "dhcp") mWlan0DhcpFlag = true;

@@ -48,6 +48,7 @@ namespace Ris
 class ByteContent
 {
 public:
+   virtual ~ByteContent() {}
    // This is overridden by an inheriting class to copy itself to/from a byte 
    // buffer. The buffer has a direction flag. If it is true then the class
    // is copied to the buffer, writing it using a binary encode. If it is false 

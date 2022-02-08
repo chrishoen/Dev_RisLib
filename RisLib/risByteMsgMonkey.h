@@ -63,6 +63,7 @@ public:
 
    // Constructor.
    BaseMsgMonkey(CreateMsgFunctionT aCreate,DestroyMsgFunctionT aDestroy = 0);
+   virtual ~BaseMsgMonkey() {}
 
    //***************************************************************************
    //***************************************************************************

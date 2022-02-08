@@ -45,24 +45,24 @@ void BaseCmdLineParms::reset()
 
 void BaseCmdLineParms::setFilePath(const char* aFilePath)
 {
-   strncpy(mFilePath, aFilePath,cMaxStringSize);
+   strncpy(mFilePath, aFilePath,cMaxStringSize - 1);
 }
 
 void BaseCmdLineParms::setFilePath_RelativeToBaseDir(const char* aRelativeFilePath)
 {
    char tBuffer[cMaxStringSize];
-   strncpy(mFilePath, Ris::getBaseFullFilePath(tBuffer, aRelativeFilePath), cMaxStringSize);
+   strncpy(mFilePath, Ris::getBaseFullFilePath(tBuffer, aRelativeFilePath), cMaxStringSize - 1);
 }
 
 void BaseCmdLineParms::setFileName_RelAlphaFiles(const char* aFileName)
 {
    char tBuffer[cMaxStringSize];
-   strncpy(mFilePath, Ris::getAlphaFilePath_Files(tBuffer, aFileName), cMaxStringSize);
+   strncpy(mFilePath, Ris::getAlphaFilePath_Files(tBuffer, aFileName), cMaxStringSize - 1);
 }
 void BaseCmdLineParms::setFileName_RelAlphaSettings(const char* aFileName)
 {
    char tBuffer[cMaxStringSize];
-   strncpy(mFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aFileName), cMaxStringSize);
+   strncpy(mFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aFileName), cMaxStringSize - 1);
 }
 bool BaseCmdLineParms::fileExists()
 {

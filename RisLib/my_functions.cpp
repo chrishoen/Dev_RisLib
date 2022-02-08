@@ -134,7 +134,7 @@ int my_trimCRLF(char* aString)
 // Convert a string to uppercase.
 void my_string_toupper(char* aString)
 {
-   for (int i = 0; i < strlen(aString); i++)
+   for (int i = 0; i < (int)strlen(aString); i++)
    {
       aString[i] = toupper(aString[i]);
    }
@@ -313,7 +313,7 @@ void my_strncpy(char* aDestin,const char* aSource,unsigned int aSize)
    {
       aDestin[tIndex] = aSource[tIndex];
       if (aSource[tIndex] == 0) break;
-      if (tIndex == aSize - 1) break;
+      if (tIndex == (int)aSize - 1) break;
       tIndex++;
    }
    aDestin[tIndex] = 0;

@@ -113,7 +113,7 @@ void resetPrint(const char* aPrintViewIPAddress, int aPrintViewIPPort)
 
    // Manually set the settings.
    gPrintSettings.reset();
-   strncpy(gPrintSettings.mPrintViewIPAddress, aPrintViewIPAddress, 30);
+   strncpy(gPrintSettings.mPrintViewIPAddress, aPrintViewIPAddress, 29);
    gPrintSettings.mPrintViewIPPort = aPrintViewIPPort;
 
    // Reset variables.

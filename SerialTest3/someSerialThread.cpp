@@ -202,11 +202,17 @@ void SerialThread::abort()
 // Send bytes via the serial port. This executes in the context of
 // the calling thread.
 
-void SerialThread::sendString(const char* aString)
+void SerialThread::sendString(char* aString)
 {
    // Guard.
    if (!mSerialPort.mValidFlag) return;
    int tRet = 0;
+
+   // Append a checksum to the string.
+   if (gSerialParms.mCheckSumFlag)
+   {
+      appendCheckSum(aString);
+   }
 
    // Send a fixed number of bytes. Return the actual number of bytes
    // sent or a negative error code.
@@ -225,6 +231,22 @@ void SerialThread::sendString(const char* aString)
 
    return;
 
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Append a checksum to a send string. 
+
+void SerialThread::appendCheckSum(char* aString)
+{
+   int tLength = (int)strlen(aString);
+   unsigned tCheckSum = 0;
+   for (int i = 0; i < tLength; i++) tCheckSum += (unsigned)aString[i];
+   tCheckSum &= 0xff;
+   char tCheckSumString[10];
+   sprintf(tCheckSumString, "<%02X>", tCheckSum);
+   strcat(aString, tCheckSumString);
 }
 
 //******************************************************************************

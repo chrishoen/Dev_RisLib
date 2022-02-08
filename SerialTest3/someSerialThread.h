@@ -108,8 +108,15 @@ public:
 
    // Send bytes via the serial port. This executes in the context of
    // the calling thread.
-   void sendString(const char* aString);
+   void sendString(char* aString);
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Append a checksum to a send string. 
+   void appendCheckSum(char* aString);
 };
 
 //******************************************************************************

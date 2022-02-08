@@ -29,6 +29,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("REQ"))      Some::gSerialThread->mRxReqNumBytes = aCmd->argInt(1);
+   if (aCmd->isCmd("SUM"))      Some::gSerialParms.mCheckSumFlag = aCmd->argBool(1);
    if (aCmd->isCmd("SEND"))     executeSend(aCmd);
    if (aCmd->isCmd("ABORT"))    executeAbort(aCmd);
    if (aCmd->isCmd("TEST1"))    executeTest1(aCmd);

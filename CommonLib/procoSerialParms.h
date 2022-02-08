@@ -68,6 +68,13 @@ public:
    char mSerialPortSetup[cMaxStringSize];
    int  mSerialRxTimeout;
 
+   // Serial string port termination modes.
+   int mTxTermMode;
+   int mRxTermMode;
+
+   // Message thread timer period.
+   int mThreadTimerPeriod;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

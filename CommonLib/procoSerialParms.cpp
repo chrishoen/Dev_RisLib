@@ -6,7 +6,7 @@
 
 #include "risCmdLineFile.h"
 #include "risPortableCalls.h"
-
+#include "risSerialSettings.h"
 
 #define  _PROCOSERIALPARMS_CPP_
 #include "procoSerialParms.h"
@@ -43,6 +43,9 @@ void SerialParms::reset()
    mSerialPortDevice[0] = 0;
    mSerialPortSetup[0] = 0;
    mSerialRxTimeout = 0;
+   mTxTermMode = 0;
+   mRxTermMode = 0;
+   mThreadTimerPeriod = 0;
 }
 
 //******************************************************************************
@@ -55,9 +58,15 @@ void SerialParms::show()
    printf("\n");
    printf("SerialParms************************************************ %s\n", mTargetSection);
 
-   printf("SerialPortDevice           %-12s\n", mSerialPortDevice);
-   printf("SerialPortSetup            %-12s\n", mSerialPortSetup);
-   printf("SerialRxTimeout            %5d\n",   mSerialRxTimeout);
+   printf("SerialPortDevice        %-12s\n", mSerialPortDevice);
+   printf("SerialPortSetup         %-12s\n", mSerialPortSetup);
+
+   printf("\n");
+   printf("TxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mTxTermMode));
+   printf("RxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mRxTermMode));
+
+   printf("\n");
+   printf("ThreadTimerPeriod       %-12d\n", mThreadTimerPeriod);
 
    printf("SerialParms************************************************\n");
    printf("\n");
@@ -76,7 +85,9 @@ void SerialParms::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("SerialPortDevice"))  aCmd->copyArgString(1, mSerialPortDevice, cMaxStringSize);
    if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup, cMaxStringSize);
-   if (aCmd->isCmd("SerialRxTimeout"))   mSerialRxTimeout = aCmd->argInt(1);
+   if (aCmd->isCmd("TxTermMode"))        mTxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
+   if (aCmd->isCmd("RxTermMode"))        mRxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
+   if (aCmd->isCmd("ThreadTimerPeriod")) mThreadTimerPeriod = aCmd->argInt(1);
 }
 
 //******************************************************************************

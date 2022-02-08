@@ -1,12 +1,11 @@
+
 #include "stdafx.h"
 
-#include "risThreadsProcess.h"
+#include "MainInit.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "procoNetworkThread.h"
-
-#include "MainInit.h"
+#include "procoSerialThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -26,21 +25,13 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   ProtoComm::gNetworkThread = new ProtoComm::NetworkThread;
-   ProtoComm::gNetworkThread->launchThread();
+   ProtoComm::gSerialThread = new ProtoComm::SerialThread;
+   ProtoComm::gSerialThread->launchThread();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Show program threads.
-
-   Ris::Threads::showCurrentThreadInfo();
-   ProtoComm::gNetworkThread->showThreadInfo();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Execute user command line executive, wait for user to exit.
+   // Execute console command line executive, wait for user to exit.
 
    CmdLineExec* tExec = new CmdLineExec;
    Ris::gCmdLineConsole.execute(tExec);
@@ -51,8 +42,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   ProtoComm::gNetworkThread->shutdownThread();
-   delete ProtoComm::gNetworkThread;
+   ProtoComm::gSerialThread->shutdownThread();
+   delete ProtoComm::gSerialThread;
 
    //***************************************************************************
    //***************************************************************************
@@ -61,13 +52,4 @@ int main(int argc,char** argv)
 
    main_finalize();
    return 0;
-
-   printf("press enter\n");
-   getchar();
-   return 0;
 }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-

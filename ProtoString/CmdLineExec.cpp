@@ -1,10 +1,8 @@
 
 #include "stdafx.h"
 
-#include <string>
-#include "procoUdpSettings.h"
-
-#include "procoNetworkThread.h"
+#include "procoSerialParms.h"
+#include "procoSerialThread.h"
 
 #include "CmdLineExec.h"
 
@@ -27,12 +25,12 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        ProtoComm::gNetworkThread->mTPFlag = aCmd->argBool(1);
-   if (aCmd->isCmd("TX"))        executeTx(aCmd);
-   if (aCmd->isCmd("ECHO"))      executeEcho (aCmd);
-   if (aCmd->isCmd("DATA"))      executeData(aCmd);
-   if (aCmd->isCmd("GO1"))       executeGo1  (aCmd);
-   if (aCmd->isCmd("GO2"))       executeGo2  (aCmd);
+   if (aCmd->isCmd("TP"))        ProtoComm::gSerialThread->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("SEND"))      executeSend(aCmd);
+   if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
+   if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
+   if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
+   if (aCmd->isCmd("GO4"))       executeGo4(aCmd);
    if (aCmd->isCmd("Parms"))     executeParms(aCmd);
 }
 
@@ -40,28 +38,18 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeTx (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,"some_string");
-   std::string* tString = new std::string(aCmd->argString(1));
-
-   gNetworkThread->sendString(tString);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
-{
+   char tString[100];
+   if (aCmd->numArg() == 0)
+   {
+      strcpy(tString, "ABCD");
+   }
+   else
+   {
+      sprintf(tString, "%s", aCmd->argWhole());
+   }
+   gSerialThread->sendString(new std::string(tString));
 }
 
 //******************************************************************************
@@ -84,9 +72,25 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gUdpSettings.show();
+   ProtoComm::gSerialParms.show();
 }
 
 //******************************************************************************

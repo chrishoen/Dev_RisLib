@@ -1,12 +1,18 @@
+
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
-#include "procoUdpSettings.h"
+#include "risBaseDir.h"
+
+#include "procoSerialParms.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Initialize.
 
 void main_initialize(int argc,char** argv)
 {
@@ -20,6 +26,17 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Enter process.
+
+   // Set program process for high priority.
+   Ris::Threads::enterProcessHigh();
+
+   // Set the base directory to the current directory.
+   Ris::setBaseDirectoryToCurrent();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize print facility.
 
    // Initialize print.
@@ -27,57 +44,23 @@ void main_initialize(int argc,char** argv)
    Prn::initializePrint();
 
    // Initialize print filters.
-   Prn::setFilter(Prn::SocketInitS1,    true);
-   Prn::setFilter(Prn::SocketInitS2,    false);
-   Prn::setFilter(Prn::SocketRxRunS1,   false);
-   Prn::setFilter(Prn::SocketRxRunS2,   false);
-   Prn::setFilter(Prn::SocketTxRunS1,   false);
-   Prn::setFilter(Prn::SocketTxRunS2,   false);
-   Prn::setFilter(Prn::SocketErrorS1,   true);
-   Prn::setFilter(Prn::SocketErrorS2,   false);
-
-   Prn::setFilter(Prn::SocketInitT1,    true);
-   Prn::setFilter(Prn::SocketInitT2,    false);
-   Prn::setFilter(Prn::SocketRxRunT1,   false);
-   Prn::setFilter(Prn::SocketRxRunT2,   false);
-   Prn::setFilter(Prn::SocketTxRunT1,   false);
-   Prn::setFilter(Prn::SocketTxRunT2,   false);
-   Prn::setFilter(Prn::SocketErrorT1,   true);
-   Prn::setFilter(Prn::SocketErrorT2,   true);
-
-   Prn::setFilter(Prn::ThreadInit1,     true);
-   Prn::setFilter(Prn::ThreadInit1,     true);
-   Prn::setFilter(Prn::ThreadRun1,      true);
-   Prn::setFilter(Prn::ThreadRun2,      false);
-   Prn::setFilter(Prn::ThreadRun3,      false);
-   Prn::setFilter(Prn::ThreadRun4,      false);
+   Prn::setFilter(Prn::Show1, true);
+   Prn::setFilter(Prn::Show2, false);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Read parameters files.
 
-   if (argc == 2)
-   {
-      ProtoComm::gUdpSettings.reset();
-      ProtoComm::gUdpSettings.readSection("default");
-      ProtoComm::gUdpSettings.readSection(argv[1]);
-      ProtoComm::gUdpSettings.show();
-   }
-   else
-   {
-      ProtoComm::gUdpSettings.reset();
-      ProtoComm::gUdpSettings.readSection("default");
-      ProtoComm::gUdpSettings.readSection("UdpPeer1");
-      ProtoComm::gUdpSettings.show();
-   }
+   ProtoComm::gSerialParms.reset();
+   ProtoComm::gSerialParms.readSection("default");
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Done.
 
-   Prn::print(0, "ProtoString Program************************************BEGIN %s", argv[1]);
+   Prn::print(0,"ProtoSerial Program**********************************************BEGIN");
 }
 
 //******************************************************************************
@@ -87,12 +70,12 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoString Program*************************************END");
+   Prn::print(0,"ProtoSerial Program**********************************************END");
 
-   // Finalize print facility.
+   // Close print
    Prn::finalizePrint();
 
-   // Exit process.
+   // Exit process
    Ris::Threads::exitProcess();
 }
 

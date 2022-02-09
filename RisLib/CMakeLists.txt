@@ -4,12 +4,13 @@ project (RisLib CXX)
 
 my_find_src_files (src_files RisLib)
 my_find_inc_files (inc_files)
-if (MSVC OR MYMODE STREQUAL steno)
+if (MSVC OR MYMODE STREQUAL "steno-arm")
    add_library (RisLib STATIC ${src_files})
 else()
    add_library (RisLib SHARED ${src_files})
 endif()
 my_add_compile_options (RisLib)
+
 my_add_pch (RisLib)
 
 target_include_directories(RisLib PUBLIC ${PROJECT_SOURCE_DIR})
@@ -17,17 +18,19 @@ target_include_directories(RisLib PUBLIC ${PROJECT_SOURCE_DIR})
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
-elseif(MYMODE STREQUAL ubuntu OR MYMODE STREQUAL wsl)
+elseif(MYMODE STREQUAL "ubuntu" OR MYMODE STREQUAL "wsl")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS RisLib DESTINATION "/opt/prime/lib")
-elseif(MYMODE STREQUAL beagle)
+elseif(MYMODE STREQUAL "beagle")
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
+
    install(TARGETS RisLib DESTINATION "C:/MyTools/MyLib/lib")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so pi@rpx:/opt/prime/lib)")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/libRisLib.so debian@bbx:/opt/prime/lib)")
-elseif(MYMODE STREQUAL steno)
+elseif(MYMODE STREQUAL "steno-arm")
    install(FILES ${inc_files} DESTINATION "include/RisLib")
    install(TARGETS RisLib DESTINATION "lib/arm")
 endif()
+

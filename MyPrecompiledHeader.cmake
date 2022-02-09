@@ -258,7 +258,7 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_pch _target)
-   if (MYMODE STREQUAL steno)
+   if (MYMODE STREQUAL "steno-arm")
       return()
    endif()
 

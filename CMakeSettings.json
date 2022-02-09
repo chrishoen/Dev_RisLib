@@ -85,7 +85,7 @@
          ]
       },
       {
-         "name": "steno",
+         "name": "steno-arm",
          "generator": "Ninja",
          "configurationType": "Release",
          "buildRoot": "${projectDir}\\out\\build\\${name}",
@@ -100,7 +100,7 @@
          "variables": [
             {
                "name": "MYMODE",
-               "value": "steno",
+               "value": "steno-arm",
                "type": "STRING"
             }
          ]

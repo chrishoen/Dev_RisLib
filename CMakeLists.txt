@@ -10,6 +10,11 @@ project ("Dev_RisLib")
 my_special1() 
 
 add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("SerialTest3")
+return()
+
+add_subdirectory ("RisLib")
 add_subdirectory ("Test")
 return()
 

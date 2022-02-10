@@ -138,8 +138,8 @@ bool SerialPort::doOpen()
    }
    else
    {
-      cfsetispeed(&tOptions, B38400);
-      cfsetospeed(&tOptions, B38400);
+      cfsetispeed(&tOptions, B115200);
+      cfsetospeed(&tOptions, B115200);
    }
 
    if (tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions) < 0)

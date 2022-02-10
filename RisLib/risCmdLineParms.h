@@ -85,7 +85,8 @@ public:
    // Constructor,
    typedef Ris::BaseCmdLineExec BaseClass;
    BaseCmdLineParms();
-   void reset();
+   virtual ~BaseCmdLineParms() {}
+   virtual void reset() override;
 
    // Base class override: Execute a command from the command file to set a 
    // member variable. This is called by the associated command file object

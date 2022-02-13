@@ -106,11 +106,11 @@ function(add_precompiled_header _target _input)
           set(_pch "${_pch_c_pch}")
         endif()
 
-        if(_source STREQUAL "${_PCH_SOURCE_CXX}")
+        if(_source MATCHES "${_PCH_SOURCE_CXX}")
           set(_pch_compile_flags "${_pch_compile_flags} \"/Fp${_pch_cxx_pch}\" \"/Yc${_input}\"")
           set(_pch_source_cxx_found TRUE)
           set_source_files_properties("${_source}" PROPERTIES OBJECT_OUTPUTS "${_pch_cxx_pch}")
-        elseif(_source STREQUAL "${_PCH_SOURCE_C}")
+        elseif(_source MATCHES "${_PCH_SOURCE_C}")
           set(_pch_compile_flags "${_pch_compile_flags} \"/Fp${_pch_c_pch}\" \"/Yc${_input}\"")
           set(_pch_source_c_found TRUE)
           set_source_files_properties("${_source}" PROPERTIES OBJECT_OUTPUTS "${_pch_c_pch}")
@@ -258,7 +258,7 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_pch _target)
-   if (MYMODE STREQUAL "steno-arm")
+   if (MYMODE MATCHES "steno-arm")
       return()
    endif()
 

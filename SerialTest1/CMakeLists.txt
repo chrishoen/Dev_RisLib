@@ -13,12 +13,12 @@ my_lib_import_RisLib(${project})
 
 if (MSVC)
    install(TARGETS ${project} DESTINATION "C:/aaa_prime/RisLib")
-elseif (MYMODE STREQUAL "ubuntu" OR MYMODE STREQUAL "wsl") 
+elseif (MYMODE MATCHES "ubuntu" OR MYMODE MATCHES "wsl") 
    install(TARGETS ${project} DESTINATION "/opt/prime/bin")
-elseif (MYMODE STREQUAL "beagle")
+elseif (MYMODE MATCHES "beagle")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/${project} pi@rpx:/opt/prime/bin)")
-elseif (MYMODE STREQUAL "steno-arm")
+elseif (MYMODE MATCHES "steno-arm")
 
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} root@stenotgt:/home/root/stenograph/bin)")

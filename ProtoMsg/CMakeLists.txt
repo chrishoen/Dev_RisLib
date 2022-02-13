@@ -17,12 +17,12 @@ my_lib_import_RisLib(ProtoMsg)
 
 if (MSVC)
    install(TARGETS ProtoMsg DESTINATION "C:/aaa_prime/RisLib")
-elseif (MYMODE STREQUAL "ubuntu" OR MYMODE STREQUAL "wsl") 
+elseif (MYMODE MATCHES "ubuntu" OR MYMODE MATCHES "wsl") 
    install(TARGETS ProtoMsg DESTINATION "/opt/prime/bin")
-elseif (MYMODE STREQUAL "beagle")
+elseif (MYMODE MATCHES "beagle")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/ProtoMsg pi@rpx:/opt/prime/bin)")
-elseif (MYMODE STREQUAL "steno-arm")
+elseif (MYMODE MATCHES "steno-arm")
 
 
    install(CODE "execute_process(COMMAND_ECHO STDOUT

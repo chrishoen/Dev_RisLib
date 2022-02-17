@@ -67,6 +67,9 @@ char* my_string_from_high(bool aValue);
 // Return string from llu.
 char* my_stringLLU(char* aString,unsigned long long aValue);
 
+// Return string from ll.
+char* my_stringLL(char* aString, long long aValue);
+
 // Return formatted string from float.
 char* my_string_from_float(char* aString, const char* aFormat, float aValue);
 

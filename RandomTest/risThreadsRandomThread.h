@@ -52,7 +52,6 @@ public:
    // timer handler function gets called.
    int mTimerPeriodUs1;
    int mTimerPeriodUs2;
-   int mTimerPeriodUs;
 
    // Timer count incremented at each timer handler execution.
    int mTimerCount;

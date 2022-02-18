@@ -115,21 +115,21 @@ void BaseRandomThread::threadRunFunction()
    //***************************************************************************
    // Do this first.
 
-   // Initial value
-   mTimerPeriodUs = (mTimerPeriodUs1 + mTimerPeriodUs2) / 2;
-
-   // Initialize statistics variables.
-   mStatTimerCountMax = (mStatPeriod * 1000) / mTimerPeriodUs;
-
    // Seed random generator.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
    mRandomDistribution = std::uniform_int_distribution<>(mTimerPeriodUs1, mTimerPeriodUs2);
 
-   // Time variables
-   timespec   tSleepTimespec;
+   // Initial value
+   int tTimerPeriodUs = (mTimerPeriodUs1 + mTimerPeriodUs2) / 2;
+   long long tTimerPeriodNs = get_NsFromUs(tTimerPeriodUs);
+
+   // Initialize statistics variables.
+   mStatTimerCountMax = (mStatPeriod * 1000) / tTimerPeriodUs;
+
+   // Sleep time variables
    long long  tSleepTimeNs = 0;
-   long long  tTimerPeriodNs = 0;
+   timespec   tSleepTimespec;
 
    // Get current nanotime at start.
    tSleepTimeNs = get_Nanotime();
@@ -148,8 +148,8 @@ void BaseRandomThread::threadRunFunction()
       // Advance periodically according to the system clock. 
       
       // Get a random period.
-      mTimerPeriodUs = mRandomDistribution(mRandomGenerator);
-      tTimerPeriodNs = get_NsFromUs(mTimerPeriodUs);
+      tTimerPeriodUs = mRandomDistribution(mRandomGenerator);
+      tTimerPeriodNs = get_NsFromUs(tTimerPeriodUs);
 
       // Advance the absolute sleep time by the period.
       tSleepTimeNs += tTimerPeriodNs;

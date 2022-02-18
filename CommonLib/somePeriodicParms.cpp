@@ -46,6 +46,10 @@ void PeriodicParms::reset()
    mMonitorThreadPeriod = 0;
    mStatPeriod = 0;
    mTestThreadPeriodUs = 0;
+
+   mRandomThreadPeriodUs1 = 0;
+   mRandomThreadPeriodUs2 = 0;
+
 }
 
 //******************************************************************************
@@ -68,6 +72,9 @@ void PeriodicParms::show()
    printf("MonitorThreadPeriod      %-10d\n", mMonitorThreadPeriod);
    printf("StatPeriod               %-10d\n", mStatPeriod);
    printf("TestThreadPeriodUs       %-10d\n", mTestThreadPeriodUs);
+   printf("\n");
+   printf("RandomThreadPeriodUs     %-10d  %-10d\n", mRandomThreadPeriodUs1, mRandomThreadPeriodUs2);
+   printf("\n");
 }
 
 //******************************************************************************
@@ -90,6 +97,12 @@ void PeriodicParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("MonitorThreadPeriod"))   mMonitorThreadPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("StatPeriod"))            mStatPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("TestThreadPeriodUs"))    mTestThreadPeriodUs = aCmd->argInt(1);
+
+   if (aCmd->isCmd("RandomThreadPeriodUs"))
+   {
+      mRandomThreadPeriodUs1 = aCmd->argInt(1);
+      mRandomThreadPeriodUs2 = aCmd->argInt(2);
+   }
 }
 
 //******************************************************************************

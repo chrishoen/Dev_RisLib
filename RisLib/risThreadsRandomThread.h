@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Periodic thread base class.
+Random periodic thread base class.
 ==============================================================================*/
 
 //******************************************************************************
@@ -25,9 +25,9 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This provides a base class for periodic timer threads. Inheritors provide
-// a timer handler function that gets called periodically. It inherits from
-// the thread base class to obtain basic thread functionality.
+// This provides a base class for randomly aperiodic timer threads. Inheritors
+// provide a timer handler function that gets called aperiodically. It inherits
+// from the thread base class to obtain basic thread functionality.
 // 
 // This also measures execution times and provides statistics on periodic
 // jitter and on the exection time of the inheritor supplied timer handler
@@ -48,8 +48,9 @@ public:
    //***************************************************************************
    // Members.
 
-   // Timer period, microseconds. This is the periodic time that the inheritor
-   // timer handler function gets called.
+   // Timer interval range, microseconds. These provide the bounds for a
+   // uniform random number generator that generates a random sleep interval.
+   // The inheritor timer handler function gets called after the random sleep.
    int mTimerPeriodUs1;
    int mTimerPeriodUs2;
 

@@ -46,9 +46,9 @@ public:
    //***************************************************************************
    // Members.
 
-   // Timer period, milliseconds. This is the periodic time that the inheritor
+   // Timer period, microseconds. This is the periodic time that the inheritor
    // timer handler function gets called.
-   int mTimerPeriod;
+   int mTimerPeriodUs;
 
    // Timer count incremented at each timer handler execution.
    int mTimerCount;

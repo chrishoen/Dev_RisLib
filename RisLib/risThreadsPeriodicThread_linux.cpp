@@ -38,10 +38,16 @@ inline long long int get_Nanotime()
    return tTimeNs;
 }
 
-// Nanoseconds from milliseconds
+// Nanoseconds from milliseconds.
 inline long long  get_NsFromMs(int aTimeMs)
 {
    return ((long long)aTimeMs) * (1000 * 1000);
+}
+
+// Nanoseconds from microseconds.
+inline long long  get_NsFromUs(int aTimeMs)
+{
+   return ((long long)aTimeMs) * (1000);
 }
 
 // Microseconds from nanoseconds
@@ -66,7 +72,7 @@ struct timespec  get_TimespecFromNs(long long aTimeNs)
 BasePeriodicThread::BasePeriodicThread()
 {
    // Set base class variables.
-   mTimerPeriod = 1000;
+   mTimerPeriodUs = 1000000;
    mTimerCount = 0;
    mTerminateFlag = false;
    mPollProcessor = false;
@@ -111,15 +117,14 @@ void BasePeriodicThread::threadRunFunction()
    // Time variables
    timespec   tSleepTimespec;
    long long  tSleepTimeNs;
-   long long  tTimerPeriodNs = get_NsFromMs(mTimerPeriod);
-   double     tTimerPeriodUs = mTimerPeriod * 1000.0;
-
+   long long  tTimerPeriodNs = get_NsFromUs(mTimerPeriodUs);
+   double     tTimerPeriodUs = (double)mTimerPeriodUs;
    // Get current nanotime at start.
    tSleepTimeNs = get_Nanotime();
    mStatBeginTimeNs = tSleepTimeNs;
 
    // Initialize statistics variables.
-   mStatTimerCountMax = mStatPeriod / mTimerPeriod;
+   mStatTimerCountMax = (mStatPeriod * 1000) / mTimerPeriodUs;
 
    //***************************************************************************
    //***************************************************************************
@@ -184,7 +189,8 @@ void BasePeriodicThread::threadRunFunction()
       }
 
       // Calculate the time durations.
-      mStatJitterTimeUs = get_UsFromNs(mStatBeginTimeNs - mStatLastBeginTimeNs - tTimerPeriodNs);
+    //mStatJitterTimeUs = get_UsFromNs(mStatBeginTimeNs - mStatLastBeginTimeNs - tTimerPeriodNs);
+      mStatJitterTimeUs = get_UsFromNs(mStatBeginTimeNs - mStatLastBeginTimeNs);
       mStatExecTimeUs = get_UsFromNs(mStatEndTimeNs - mStatBeginTimeNs);
       mStatLastBeginTimeNs = mStatBeginTimeNs;
 

@@ -34,12 +34,9 @@ TimerTestThread1::TimerTestThread1()
          gPeriodicParms.mTestThreadProcessor,
          gPeriodicParms.mTestThreadPriority));
 
-   // Set timer period.
-   BaseClass::mTimerPeriod = gPeriodicParms.mTestThreadPeriod;
    BaseClass::mPollProcessor = gPeriodicParms.mPollProcessor;
+   BaseClass::mTimerPeriodUs = gPeriodicParms.mTestThreadPeriodUs;
    BaseClass::mStatPeriod = gPeriodicParms.mStatPeriod;
-
-   // Set member variables.
 }
 
 //******************************************************************************

@@ -49,16 +49,19 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned tValue = 0x0000ffff;
-   Prn::print(0, "%08x", tValue);
+   std::mt19937 mRandomGenerator;
+   std::uniform_int_distribution<> mRandomDistribution;
 
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   Ris::setBit(&tValue, tBitNum, tBitValue);
+   // Seed generator.
+   std::random_device tRandomDevice;
+   mRandomGenerator.seed(tRandomDevice());
+   mRandomDistribution = std::uniform_int_distribution<>(0, 9);
 
-   Prn::print(0, "%08x", tValue);
+   for (int i = 0; i < 20; i++)
+   {
+      int tValue = mRandomDistribution(mRandomGenerator);
+      Prn::print(0, "%2d %2d", tValue);
+   }
 }
 
 //******************************************************************************

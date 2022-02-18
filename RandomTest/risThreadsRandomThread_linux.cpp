@@ -72,7 +72,8 @@ struct timespec  get_TimespecFromNs(long long aTimeNs)
 BaseRandomThread::BaseRandomThread()
 {
    // Set base class variables.
-   mTimerPeriodUs = 1000000;
+   mTimerPeriodUs1 = 1000000;
+   mTimerPeriodUs2 = 1000000;
    mTimerCount = 0;
    mTerminateFlag = false;
    mPollProcessor = false;
@@ -114,17 +115,25 @@ void BaseRandomThread::threadRunFunction()
    //***************************************************************************
    // Do this first.
 
-   // Time variables
-   timespec   tSleepTimespec;
-   long long  tSleepTimeNs;
-   long long  tTimerPeriodNs = get_NsFromUs(mTimerPeriodUs);
-   double     tTimerPeriodUs = (double)mTimerPeriodUs;
-   // Get current nanotime at start.
-   tSleepTimeNs = get_Nanotime();
-   mStatBeginTimeNs = tSleepTimeNs;
+   // Initial value
+   mTimerPeriodUs = (mTimerPeriodUs1 + mTimerPeriodUs2) / 2;
 
    // Initialize statistics variables.
    mStatTimerCountMax = (mStatPeriod * 1000) / mTimerPeriodUs;
+
+   // Seed random generator.
+   std::random_device tRandomDevice;
+   mRandomGenerator.seed(tRandomDevice());
+   mRandomDistribution = std::uniform_int_distribution<>(mTimerPeriodUs1, mTimerPeriodUs2);
+
+   // Time variables
+   timespec   tSleepTimespec;
+   long long  tSleepTimeNs = 0;
+   long long  tTimerPeriodNs = 0;
+
+   // Get current nanotime at start.
+   tSleepTimeNs = get_Nanotime();
+   mStatBeginTimeNs = tSleepTimeNs;
 
    //***************************************************************************
    //***************************************************************************
@@ -138,6 +147,10 @@ void BaseRandomThread::threadRunFunction()
       //************************************************************************
       // Advance periodically according to the system clock. 
       
+      // Get a random period.
+      mTimerPeriodUs = mRandomDistribution(mRandomGenerator);
+      tTimerPeriodNs = get_NsFromUs(mTimerPeriodUs);
+
       // Advance the absolute sleep time by the period.
       tSleepTimeNs += tTimerPeriodNs;
       //tSleepTimeNs = mStatBeginTimeNs + tTimerPeriodNs;

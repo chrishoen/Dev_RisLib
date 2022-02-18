@@ -35,7 +35,8 @@ TimerTestThread1::TimerTestThread1()
          gPeriodicParms.mTestThreadPriority));
 
    BaseClass::mPollProcessor = gPeriodicParms.mPollProcessor;
-   BaseClass::mTimerPeriodUs = gPeriodicParms.mTestThreadPeriodUs;
+   BaseClass::mTimerPeriodUs1 = gPeriodicParms.mRandomThreadPeriodUs1;
+   BaseClass::mTimerPeriodUs2 = gPeriodicParms.mRandomThreadPeriodUs2;
    BaseClass::mStatPeriod = gPeriodicParms.mStatPeriod;
 }
 

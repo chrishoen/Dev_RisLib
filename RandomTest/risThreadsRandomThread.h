@@ -8,6 +8,8 @@ Periodic thread base class.
 //******************************************************************************
 //******************************************************************************
 
+#include <random>
+
 #include "risThreadsThreads.h"
 #include "risStatistics.h"
 
@@ -48,6 +50,8 @@ public:
 
    // Timer period, microseconds. This is the periodic time that the inheritor
    // timer handler function gets called.
+   int mTimerPeriodUs1;
+   int mTimerPeriodUs2;
    int mTimerPeriodUs;
 
    // Timer count incremented at each timer handler execution.
@@ -56,6 +60,15 @@ public:
    // If true then get the thread processor number when the statistics
    // are finished.
    bool mPollProcessor;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Random numbers.
+   std::mt19937 mRandomGenerator;
+   std::uniform_int_distribution<> mRandomDistribution;
 
    //***************************************************************************
    //***************************************************************************

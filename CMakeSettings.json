@@ -39,7 +39,7 @@
          ]
       },
       {
-         "name": "ubuntu",
+         "name": "cpdev1",
          "generator": "Ninja",
          "configurationType": "Release",
          "cmakeExecutable": "cmake",
@@ -59,7 +59,7 @@
          "variables": [
             {
                "name": "MYMODE",
-               "value": "ubuntu",
+               "value": "cpdev1",
                "type": "STRING"
             }
          ]

@@ -9,7 +9,7 @@ my_add_compile_options (MyProgram1)
 
 if (MSVC)
    install(TARGETS MyProgram1 DESTINATION "C:/aaa_prime/RisLib")
-elseif (MYMODE STREQUAL "ubuntu" OR MYMODE STREQUAL "wsl") 
+elseif (MYMODE STREQUAL "cpdev1" OR MYMODE STREQUAL "wsl") 
    install(TARGETS MyProgram1 DESTINATION "/opt/prime/bin")
 elseif (MYMODE STREQUAL "beagle")
    install(CODE "execute_process(COMMAND_ECHO STDOUT

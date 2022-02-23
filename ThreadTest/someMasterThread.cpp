@@ -32,6 +32,7 @@ MasterThread::MasterThread()
    BaseClass::mLongThread->setThreadPriority(Cmn::gPriorities.mMasterLong);
    BaseClass::mShortThread->setThreadName("MasterShort");
    BaseClass::mShortThread->setThreadPriority(Cmn::gPriorities.mMasterShort);
+
    // Set base class call pointers.
    BaseClass::mShortThread->mThreadInitCallPointer           = std::bind(&MasterThread::threadInitFunction, this);
    BaseClass::mShortThread->mThreadExitCallPointer           = std::bind(&MasterThread::threadExitFunction, this);

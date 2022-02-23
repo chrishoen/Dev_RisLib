@@ -29,11 +29,11 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   Some::gSlaveThread = new Some::SlaveThread;
-   Some::gSlaveThread->launchThread();
-
    Some::gMasterThread = new Some::MasterThread;
    Some::gMasterThread->launchThreads();
+
+   Some::gSlaveThread = new Some::SlaveThread;
+   Some::gSlaveThread->launchThread();
 
    Some::gRandomTimerThread1 = new Some::RandomTimerThread(1);
    Some::gRandomTimerThread1->launchThread();

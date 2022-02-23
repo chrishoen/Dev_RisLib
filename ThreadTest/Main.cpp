@@ -29,17 +29,26 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   Some::gMasterThread = new Some::MasterThread;
-   Some::gMasterThread->launchThreads();
-
-   Some::gSlaveThread = new Some::SlaveThread;
-   Some::gSlaveThread->launchThread();
-
-   Some::gRandomTimerThread1 = new Some::RandomTimerThread(1);
-   Some::gRandomTimerThread1->launchThread();
-
-   Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
-   Some::gRandomTimerThread2->launchThread();
+   if (true)
+   {
+      Some::gMasterThread = new Some::MasterThread;
+      Some::gMasterThread->launchThreads();
+   }
+   if (false)
+   {
+      Some::gSlaveThread = new Some::SlaveThread;
+      Some::gSlaveThread->launchThread();
+   }
+   if (false)
+   {
+      Some::gRandomTimerThread1 = new Some::RandomTimerThread(1);
+      Some::gRandomTimerThread1->launchThread();
+   }
+   if (false)
+   {
+      Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
+      Some::gRandomTimerThread2->launchThread();
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -47,10 +56,10 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   Some::gSlaveThread->showThreadInfo();
-   Some::gMasterThread->showThreadInfo();
-   Some::gRandomTimerThread1->showThreadInfo();
-   Some::gRandomTimerThread2->showThreadInfo();
+   if(Some::gSlaveThread) Some::gSlaveThread->showThreadInfo();
+   if(Some::gMasterThread) Some::gMasterThread->showThreadInfo();
+   if(Some::gRandomTimerThread1)Some::gRandomTimerThread1->showThreadInfo();
+   if(Some::gRandomTimerThread2)Some::gRandomTimerThread2->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
@@ -66,15 +75,20 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program Threads.
 
-   Some::gRandomTimerThread1->shutdownThread();
-   Some::gRandomTimerThread2->shutdownThread();
-   Some::gMasterThread->shutdownThreads();
-   Some::gSlaveThread->shutdownThread();
+   if (Some::gRandomTimerThread1) Some::gRandomTimerThread1->shutdownThread();
+   if (Some::gRandomTimerThread2)Some::gRandomTimerThread2->shutdownThread();
+   if (Some::gMasterThread)Some::gMasterThread->shutdownThreads();
+   if (Some::gSlaveThread) Some::gSlaveThread->shutdownThread();
 
-   delete Some::gRandomTimerThread1;
-   delete Some::gRandomTimerThread2;
-   delete Some::gMasterThread;
-   delete Some::gSlaveThread;
+   if (Some::gRandomTimerThread1) delete Some::gRandomTimerThread1;
+   if (Some::gRandomTimerThread2) delete Some::gRandomTimerThread2;
+   if (Some::gMasterThread) delete Some::gMasterThread;
+   if (Some::gSlaveThread) delete Some::gSlaveThread;
+
+   if (Some::gRandomTimerThread1) Some::gRandomTimerThread1 = 0;
+   if (Some::gRandomTimerThread2) Some::gRandomTimerThread2 = 0;
+   if (Some::gMasterThread) Some::gMasterThread = 0;
+   if (Some::gSlaveThread) Some::gSlaveThread = 0;
 
    //***************************************************************************
    //***************************************************************************

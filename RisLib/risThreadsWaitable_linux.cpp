@@ -80,34 +80,27 @@ void Waitable::initialize (int aTimerPeriod)
    mWasTimerFlag = false;
    mWasSemaphoreFlag = false;
 
-   // If using the timer.
-   if (aTimerPeriod > 0)
+   // Create the timer.
+   mSpecific->mTimerFd = timerfd_create(CLOCK_MONOTONIC, 0);
+   if (mSpecific->mTimerFd == -1)
    {
-      // Create the timer.
-      mSpecific->mTimerFd = timerfd_create(CLOCK_MONOTONIC, 0);
-      if (mSpecific->mTimerFd == -1)
-      {
-         printf("timerfd_create ERROR %d", errno);
-      }
-
-      // Calculate the timer interval.
-      int tSec = aTimerPeriod / 1000;
-      int tMs = (aTimerPeriod % 1000);
-      int tNs = tMs * 1000 * 1000;
-      struct itimerspec tNewValue;
-      tNewValue.it_value.tv_sec = tSec;
-      tNewValue.it_value.tv_nsec = tNs;
-      tNewValue.it_interval.tv_sec = tSec;
-      tNewValue.it_interval.tv_nsec = tNs;
-
-      // Set the timer interval.
-      timerfd_settime(mSpecific->mTimerFd, 0, &tNewValue, NULL);
+      printf("timerfd_create ERROR %d", errno);
+      return;
    }
-   // If not using the timer.
-   else
-   {
-      mSpecific->mTimerFd = -1;
-   }
+
+   // Calculate the timer interval. If aTimerPeriod is zero then
+   // the timer is disarmed.
+   int tSec = aTimerPeriod / 1000;
+   int tMs = (aTimerPeriod % 1000);
+   int tNs = tMs * 1000 * 1000;
+   struct itimerspec tNewValue;
+   tNewValue.it_value.tv_sec = tSec;
+   tNewValue.it_value.tv_nsec = tNs;
+   tNewValue.it_interval.tv_sec = tSec;
+   tNewValue.it_interval.tv_nsec = tNs;
+
+   // Set the timer interval.
+   timerfd_settime(mSpecific->mTimerFd, 0, &tNewValue, NULL);
 
    // Create the semaphore.
    mSpecific->mSemaphoreFd = eventfd(0, EFD_SEMAPHORE);

@@ -29,7 +29,7 @@ TestThread::TestThread()
 {
    BaseClass::setThreadName("TestChild");
    BaseClass::setThreadPriority(Cmn::gPriorities.mMasterShort);
-   BaseClass::mTimerPeriod = 1000;
+   BaseClass::mTimerPeriod = 0;
    return;
 
    BaseClass::setThreadName("Test1");

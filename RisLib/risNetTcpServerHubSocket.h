@@ -32,8 +32,9 @@ namespace Net
 
 class TcpServerHubSocket : public Sockets::BaseTcpServerHubSocket
 {
-public:
+private:
    typedef Sockets::BaseTcpServerHubSocket BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

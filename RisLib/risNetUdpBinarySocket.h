@@ -33,8 +33,9 @@ namespace Net
 
 class UdpRxBinarySocket : public Sockets::BaseUdpSocket
 {
-public:
+private:
    typedef Sockets::BaseUdpSocket BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

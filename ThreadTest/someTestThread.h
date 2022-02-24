@@ -22,6 +22,8 @@ namespace Some
 
 class TestParentThread : public Ris::Threads::BaseQCallThread
 {
+private:
+   typedef Ris::Threads::BaseQCallThread BaseClass;
 public:
 
    //***************************************************************************
@@ -64,8 +66,9 @@ public:
 
 class TestChildThread : public TestParentThread
 {
-public:
+private:
    typedef TestParentThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

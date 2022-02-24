@@ -43,8 +43,9 @@ namespace Net
 
 class TcpMsgSocket : public Sockets::BaseTcpStreamSocket
 {
-public:
+private:
    typedef Sockets::BaseTcpStreamSocket BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

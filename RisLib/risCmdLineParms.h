@@ -46,6 +46,8 @@ namespace Ris
 
 class BaseCmdLineParms : public Ris::BaseCmdLineExec
 {
+private:
+   typedef Ris::BaseCmdLineExec BaseClass;
 public:
 
    //***************************************************************************
@@ -83,7 +85,6 @@ public:
    // Methods.
 
    // Constructor,
-   typedef Ris::BaseCmdLineExec BaseClass;
    BaseCmdLineParms();
    virtual ~BaseCmdLineParms() {}
    virtual void reset() override;

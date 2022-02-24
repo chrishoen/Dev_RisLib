@@ -37,9 +37,9 @@ namespace Threads
 
 class  BasePeriodicThread : public BaseThread
 {
-public:
-
+private:
    typedef Ris::Threads::BaseThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

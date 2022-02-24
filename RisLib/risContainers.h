@@ -387,8 +387,9 @@ public:
 template <int NumOfElements>
 class  Allocator : public Stack<int,NumOfElements>
 {
+private:
+   typedef Stack<int, NumOfElements> BaseClass;
 public:
-   typedef Stack<int,NumOfElements> BaseClass;
 
    Allocator()
    {

@@ -29,9 +29,9 @@ namespace Threads
 
 class  BaseTimerThread : public BaseThread
 {
-public:
-
+private:
    typedef Ris::Threads::BaseThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

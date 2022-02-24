@@ -36,8 +36,9 @@ namespace Net
 
 class UdpRxMsgSocket : public Sockets::BaseUdpSocket
 {
-public:
+private:
    typedef Sockets::BaseUdpSocket BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

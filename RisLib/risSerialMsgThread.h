@@ -46,8 +46,9 @@ namespace Ris
 
 class SerialMsgThread : public Ris::Threads::BaseThread
 {
-public:
+private:
    typedef Ris::Threads::BaseThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

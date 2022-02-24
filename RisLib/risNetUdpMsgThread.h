@@ -47,8 +47,9 @@ namespace Net
 
 class UdpMsgThread : public Ris::Threads::BaseThread
 {
-public:
+private:
    typedef Ris::Threads::BaseThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

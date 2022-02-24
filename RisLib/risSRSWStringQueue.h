@@ -32,8 +32,9 @@ namespace Ris
 template <int StringSize,int QueueSize>
 class SRSWStringQueue : public SRSWObjectQueue<char[StringSize],QueueSize>
 {
-public:
+private:
    typedef SRSWObjectQueue<char[StringSize], QueueSize> BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

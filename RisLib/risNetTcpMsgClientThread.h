@@ -61,8 +61,9 @@ namespace Net
 
 class TcpMsgClientThread : public Ris::Threads::BaseThread
 {
-public:
+private:
    typedef Ris::Threads::BaseThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

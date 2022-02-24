@@ -27,6 +27,8 @@ namespace Some
 
 TestParentThread::TestParentThread()
 {
+   BaseClass::setThreadName("TestChild");
+   BaseClass::setThreadPriority(Cmn::gPriorities.mMasterShort);
    mTimerPeriod = 0;
 }
 

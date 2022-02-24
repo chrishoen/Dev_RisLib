@@ -48,6 +48,8 @@ namespace Prn
 
 class PrintSettings : public Ris::BaseCmdLineParms
 {
+private:
+   typedef Ris::BaseCmdLineParms BaseClass;
 public:
 
    //***************************************************************************
@@ -81,7 +83,6 @@ public:
    // Methods.
 
    // Constructor,
-   typedef Ris::BaseCmdLineParms BaseClass;
    PrintSettings();
    void reset();
    void show();

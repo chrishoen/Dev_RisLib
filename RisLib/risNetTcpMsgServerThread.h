@@ -78,8 +78,9 @@ namespace Net
 
 class TcpMsgServerThread : public Threads::BaseThread
 {
-public:
+private:
    typedef Ris::Threads::BaseThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

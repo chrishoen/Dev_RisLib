@@ -34,8 +34,9 @@ namespace Ris
 
 class SerialMsgPort : public SerialPort
 {
-public:
+private:
    typedef SerialPort BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

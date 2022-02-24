@@ -39,9 +39,9 @@ namespace Threads
 
 class  BaseRandomThread : public BaseThread
 {
-public:
-
+private:
    typedef Ris::Threads::BaseThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************

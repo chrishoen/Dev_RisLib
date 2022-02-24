@@ -10,16 +10,70 @@
 
 namespace Some
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a thread that executes short term qcalls. That is, execution of its
+// thread qcalls is expected to take a short amount of time.
+
+class TestParentThread : public Ris::Threads::BaseQCallThread
+{
+public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Thread call pointers, these are called by the thread base overloads, if 
+   // they are bound. They are bound to functions by the instantiator before
+   // the thread is launched. Any that are not bound result in a no op for the
+   // thread run function.
+   std::function<void(void)>   mThreadInitCallPointer;
+   std::function<void(void)>   mThreadExitCallPointer;
+   std::function<void(int)>    mThreadExecuteOnTimerCallPointer;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Constructor.
+   TestParentThread();
+   ~TestParentThread();
+
+   // Thread init function. This is called by the base class immedidately 
+   // after the thread starts running.
+   // It calls the associated call pointer, if it exists.
+   void threadInitFunction() override;
+
+   // Thread exit function. This is called by the base class immedidately
+   //  before the thread is terminated.
+   // It calls the associated call pointer, if it exists.
+   void threadExitFunction() override;
+
+   // Execute periodically. This is called by the base class timer.
+   // It calls the associated call pointer, if it exists.
+   void executeOnTimer(int aTimerCount) override;
+};
+ 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // This is an example master thread that sends commands to a slave thread
 // and waits for responses.
 
-class TestThread : public Ris::Threads::TwoThreadLongThread
+class TestChildThread : public TestParentThread
 {
 public:
-   typedef Ris::Threads::TwoThreadLongThread BaseClass;
+   typedef TestParentThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
@@ -32,7 +86,7 @@ public:
    // Methods.
 
    // Constructor.
-   TestThread();
+   TestChildThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -41,14 +95,14 @@ public:
 
    // Thread init function. This is called by the base class immediately 
    // before the thread starts running.
-   void threadInitFunction() override;
+   //void threadInitFunction() override;
 
    // Thread exit function. This is called by the base class immediately 
    // after the thread starts running.
-   void threadExitFunction() override;
+   //void threadExitFunction() override;
 
    // Execute periodically. This is called by the base class timer.
-   void executeOnTimer(int aTimerCount) override;
+   //void executeOnTimer(int aTimerCount) override;
 
 
    //***************************************************************************
@@ -70,9 +124,9 @@ public:
 // Global instance.
 
 #ifdef _SOMETESTTHREAD_CPP_
-          TestThread* gTestThread;
+          TestChildThread* gTestChildThread;
 #else
-   extern TestThread* gTestThread;
+   extern TestChildThread* gTestChildThread;
 #endif
 
 //******************************************************************************

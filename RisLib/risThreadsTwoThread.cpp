@@ -33,6 +33,9 @@ namespace Threads
 TwoThreadShortThread::TwoThreadShortThread()
 {
    mTimerPeriod = 0;
+   mThreadInitCallPointer = 0;
+   mThreadExitCallPointer = 0;
+   mThreadExecuteOnTimerCallPointer = 0;
 }
 
 TwoThreadShortThread::~TwoThreadShortThread()

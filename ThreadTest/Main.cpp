@@ -32,8 +32,8 @@ int main(int argc,char** argv)
 
    if (true)
    {
-      Some::gTestChildThread = new Some::TestChildThread;
-      Some::gTestChildThread->launchThread();
+      Some::gTestParentThread = new Some::TestParentThread;
+      Some::gTestParentThread->launchThread();
    }
    if (false)
    {

@@ -29,18 +29,10 @@ public:
    //***************************************************************************
    // Members.
 
-   // Thread call pointers, these are called by the thread base overloads, if 
-   // they are bound. They are bound to functions by the instantiator before
-   // the thread is launched. Any that are not bound result in a no op for the
-   // thread run function.
-   std::function<void(void)>   mThreadInitCallPointer;
-   std::function<void(void)>   mThreadExitCallPointer;
-   std::function<void(int)>    mThreadExecuteOnTimerCallPointer;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members.
+   // Methods.
 
    // Constructor.
    TestParentThread();
@@ -91,23 +83,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. Thread base class overloads.
-
-   // Thread init function. This is called by the base class immediately 
-   // before the thread starts running.
-   //void threadInitFunction() override;
-
-   // Thread exit function. This is called by the base class immediately 
-   // after the thread starts running.
-   //void threadExitFunction() override;
-
-   // Execute periodically. This is called by the base class timer.
-   //void executeOnTimer(int aTimerCount) override;
-
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Methods.qcalls.
 
    // Test qcall. It is invoked by the timer thread.
@@ -124,11 +99,14 @@ public:
 // Global instance.
 
 #ifdef _SOMETESTTHREAD_CPP_
-          TestChildThread* gTestChildThread;
+       TestChildThread* gTestChildThread = 0;
+       TestParentThread* gTestParentThread = 0;
 #else
-   extern TestChildThread* gTestChildThread;
+       extern TestChildThread* gTestChildThread;
+       extern TestParentThread* gTestParentThread;
 #endif
 
+       
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

@@ -5,6 +5,7 @@
 #include "CmdLineExec.h"
 #include "MainInit.h"
 
+#include "someTestThread.h"
 #include "someMasterThread.h"
 #include "someSlaveThread.h"
 #include "someRandomTimerThread.h"
@@ -31,6 +32,11 @@ int main(int argc,char** argv)
 
    if (true)
    {
+      Some::gTestThread = new Some::TestThread;
+      Some::gTestThread->launchThread();
+   }
+   if (false)
+   {
       Some::gMasterThread = new Some::MasterThread;
       Some::gMasterThread->launchThreads();
    }
@@ -56,11 +62,11 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   if(Some::gSlaveThread) Some::gSlaveThread->showThreadInfo();
-   if(Some::gMasterThread) Some::gMasterThread->showThreadInfo();
-   if(Some::gRandomTimerThread1)Some::gRandomTimerThread1->showThreadInfo();
-   if(Some::gRandomTimerThread2)Some::gRandomTimerThread2->showThreadInfo();
-
+   if (Some::gTestThread) Some::gTestThread->showThreadInfo();
+   if (Some::gSlaveThread) Some::gSlaveThread->showThreadInfo();
+   if (Some::gMasterThread) Some::gMasterThread->showThreadInfo();
+   if (Some::gRandomTimerThread1)Some::gRandomTimerThread1->showThreadInfo();
+   if (Some::gRandomTimerThread2)Some::gRandomTimerThread2->showThreadInfo();
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -75,16 +81,19 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program Threads.
 
+   if (Some::gTestThread)Some::gTestThread->shutdownThread();
    if (Some::gRandomTimerThread1) Some::gRandomTimerThread1->shutdownThread();
    if (Some::gRandomTimerThread2)Some::gRandomTimerThread2->shutdownThread();
    if (Some::gMasterThread)Some::gMasterThread->shutdownThreads();
    if (Some::gSlaveThread) Some::gSlaveThread->shutdownThread();
 
+   if (Some::gTestThread) delete Some::gTestThread;
    if (Some::gRandomTimerThread1) delete Some::gRandomTimerThread1;
    if (Some::gRandomTimerThread2) delete Some::gRandomTimerThread2;
    if (Some::gMasterThread) delete Some::gMasterThread;
    if (Some::gSlaveThread) delete Some::gSlaveThread;
 
+   if (Some::gTestThread) Some::gTestThread = 0;
    if (Some::gRandomTimerThread1) Some::gRandomTimerThread1 = 0;
    if (Some::gRandomTimerThread2) Some::gRandomTimerThread2 = 0;
    if (Some::gMasterThread) Some::gMasterThread = 0;

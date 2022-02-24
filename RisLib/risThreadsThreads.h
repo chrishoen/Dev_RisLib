@@ -58,7 +58,7 @@ public:
    // Members.
 
    // Thread name.
-   char mThreadName[cMaxStringSize];
+   char mThreadName[cMaxStringSize + 2];
 
    // Thread run state.
    int mThreadRunState;

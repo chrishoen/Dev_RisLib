@@ -48,7 +48,7 @@ public:
    // Members.
 
    // Label string.
-   char mLabel[cMaxStringSize];
+   char mLabel[cMaxStringSize + 2];
 
    // Array of mask bits.
    bool mMask[cMaxBits];
@@ -69,7 +69,7 @@ public:
    int mExceptionCode;
 
    // Exception description string.
-   char mException[cMaxStringSize];
+   char mException[cMaxStringSize + 2];
 
    // If this true then notification operations are disabled.
    bool mLock;

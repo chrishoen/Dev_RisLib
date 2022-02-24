@@ -74,6 +74,7 @@ BaseThread::BaseThread()
 {
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle = 0;
+   strcpy(mThreadName, "noname");
    mThreadRunState = 0;
    mThreadPriority = gPriorities.mNormal.mPriority;
    mThreadSingleProcessor = -1;

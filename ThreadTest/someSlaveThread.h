@@ -22,8 +22,9 @@ namespace Some
 
 class  SlaveThread : public Ris::Threads::BaseQCallThread
 {
-public:
+private:
    typedef Ris::Threads::BaseQCallThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************
@@ -88,7 +89,7 @@ public:
 // Global instance
 
 #ifdef _SOMESLAVETHREAD_CPP_
-          SlaveThread* gSlaveThread;
+          SlaveThread* gSlaveThread = 0;
 #else
    extern SlaveThread* gSlaveThread;
 #endif

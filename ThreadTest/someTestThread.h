@@ -20,7 +20,7 @@ namespace Some
 // This is a thread that executes short term qcalls. That is, execution of its
 // thread qcalls is expected to take a short amount of time.
 
-class TestParentThread : public Ris::Threads::BaseQCallThread
+class TestThread : public Ris::Threads::BaseQCallThread
 {
 private:
    typedef Ris::Threads::BaseQCallThread BaseClass;
@@ -37,8 +37,8 @@ public:
    // Methods.
 
    // Constructor.
-   TestParentThread();
-   ~TestParentThread();
+   TestThread();
+   ~TestThread();
 
    // Thread init function. This is called by the base class immedidately 
    // after the thread starts running.
@@ -58,55 +58,12 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is an example master thread that sends commands to a slave thread
-// and waits for responses.
-
-class TestChildThread : public TestParentThread
-{
-private:
-   typedef TestParentThread BaseClass;
-public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Constructor.
-   TestChildThread();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.qcalls.
-
-   // Test qcall. It is invoked by the timer thread.
-   Ris::Threads::QCall0 mTest0QCall;
-
-   // Test function. This is bound to the qcall.
-   void executeTest0();
-
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Global instance.
 
 #ifdef _SOMETESTTHREAD_CPP_
-       TestChildThread* gTestChildThread = 0;
-       TestParentThread* gTestParentThread = 0;
+       TestThread* gTestThread = 0;
 #else
-       extern TestChildThread* gTestChildThread;
-       extern TestParentThread* gTestParentThread;
+       extern TestThread* gTestThread;
 #endif
 
        

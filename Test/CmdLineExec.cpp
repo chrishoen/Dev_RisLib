@@ -49,19 +49,13 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   std::mt19937 mRandomGenerator;
-   std::uniform_int_distribution<> mRandomDistribution;
+   char tString[100];
+   long long tInt = 0;
 
-   // Seed generator.
-   std::random_device tRandomDevice;
-   mRandomGenerator.seed(tRandomDevice());
-   mRandomDistribution = std::uniform_int_distribution<>(0, 9);
-
-   for (int i = 0; i < 20; i++)
-   {
-      int tValue = mRandomDistribution(mRandomGenerator);
-      Prn::print(0, "%2d %2d", tValue);
-   }
+   tInt = -123456789;
+   Prn::print(0, "%s", my_stringLL(tString, tInt));
+   tInt = -23456789;
+   Prn::print(0, "%s", my_stringLL(tString, tInt));
 }
 
 //******************************************************************************

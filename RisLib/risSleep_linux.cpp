@@ -22,6 +22,7 @@ namespace Ris
 
 void sleepMs(int aSleepForMs)
 {
+   if (aSleepForMs == 0) return;
    long long tCurrentNs = get_Nanotime();
    long long  tSleepForNs = get_NsFromMs(aSleepForMs);
    long long tSleepUntilNs = tCurrentNs + tSleepForNs;
@@ -36,6 +37,7 @@ void sleepMs(int aSleepForMs)
 
 void sleepUs(int aSleepForUs)
 {
+   if (aSleepForUs == 0) return;
    long long tCurrentNs = get_Nanotime();
    long long  tSleepForNs = get_NsFromUs(aSleepForUs);
    long long tSleepUntilNs = tCurrentNs + tSleepForNs;

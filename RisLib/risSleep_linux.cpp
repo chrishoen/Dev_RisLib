@@ -63,7 +63,8 @@ RandomSleepUs::RandomSleepUs(int aSleepUs1, int aSleepUs2)
 
 void RandomSleepUs::initialize(int aSleepUs1, int aSleepUs2)
 {
-   // Seed random generator.
+   mSleepUs1 = aSleepUs1;
+   mSleepUs2 = aSleepUs2;
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
    mRandomDistribution = std::uniform_int_distribution<>(mSleepUs1, mSleepUs2);
@@ -95,7 +96,8 @@ RandomSleepMs::RandomSleepMs(int aSleepMs1, int aSleepMs2)
 
 void RandomSleepMs::initialize(int aSleepMs1, int aSleepMs2)
 {
-   // Seed random generator.
+   mSleepMs1 = aSleepMs1;
+   mSleepMs2 = aSleepMs2;
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
    mRandomDistribution = std::uniform_int_distribution<>(mSleepMs1, mSleepMs2);

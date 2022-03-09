@@ -7,6 +7,7 @@
 
 #include "risProgramTime.h"
 #include "risBitUtils.h"
+#include "risSleep.h"
 #include "my_functions.h"
 #include "CmdLineExec.h"
 
@@ -49,13 +50,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   char tString[100];
-   long long tInt = 0;
-
-   tInt = -123456789;
-   Prn::print(0, "%s", my_stringLL(tString, tInt));
-   tInt = -23456789;
-   Prn::print(0, "%s", my_stringLL(tString, tInt));
+   Prn::print(0, "BEGIN");
+   Ris::RandomSleepMs tSleep(1000, 3000);
+   tSleep.doSleep();
+   Prn::print(0, "END");
 }
 
 //******************************************************************************

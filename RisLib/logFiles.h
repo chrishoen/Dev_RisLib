@@ -17,8 +17,8 @@ namespace Log
    // Initializes the log files facility.
 
    void reset    ();
-   bool openFile       (int aLogNum,char* aFilePath);
-   bool openFileAppend (int aLogNum,char* aFilePath);
+   bool openFile       (int aLogNum,const char* aFilePath);
+   bool openFileAppend (int aLogNum,const char* aFilePath);
 
    void closeFile      (int aLogNum);
    void closeAllFiles ();

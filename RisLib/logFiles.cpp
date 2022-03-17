@@ -42,7 +42,7 @@ void reset()
 //******************************************************************************
 //******************************************************************************
 
-bool openFile(int aLogNum, char* aFilePath)
+bool openFile(int aLogNum, const char* aFilePath)
 {            
    // char tBuf[400];
    // mFile[aLogNum] = fopen(Ris::getAlphaFilePath_Log(tBuf,aFileName),"w");
@@ -60,7 +60,7 @@ bool openFile(int aLogNum, char* aFilePath)
 //******************************************************************************
 //******************************************************************************
 
-bool openFileAppend(int aLogNum, char* aFilePath)
+bool openFileAppend(int aLogNum, const char* aFilePath)
 {            
 // char tBuf[400];
 // mFile[aLogNum] = fopen(Ris::getAlphaFilePath_Log(tBuf, aFileName), "a");

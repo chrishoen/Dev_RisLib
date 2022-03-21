@@ -49,66 +49,40 @@ void sleepUs(int aSleepForUs)
 //******************************************************************************
 //******************************************************************************
 
-RandomSleepUs::RandomSleepUs()
+RandomSleep::RandomSleep()
 {
    // Set base class variables.
+   mSleepMeanMs = 0;
+   mSleepRandomUs = 0;
    mSleepUs1 = 1000000;
    mSleepUs2 = 1000000;
 }
 
-RandomSleepUs::RandomSleepUs(int aSleepUs1, int aSleepUs2)
+RandomSleep::RandomSleep(int aSleepMeanMs, int aSleepRandomUs)
 {
-   initialize(aSleepUs1, aSleepUs2);
+   initialize(aSleepMeanMs, aSleepRandomUs);
 }
 
-void RandomSleepUs::initialize(int aSleepUs1, int aSleepUs2)
+void RandomSleep::initialize(int aSleepMeanMs, int aSleepRandomUs)
 {
-   mSleepUs1 = aSleepUs1;
-   mSleepUs2 = aSleepUs2;
+   // Sleep time variables.
+   mSleepMeanMs = aSleepMeanMs;
+   mSleepRandomUs = aSleepRandomUs;
+   mSleepUs1 = mSleepMeanMs * 1000 - mSleepRandomUs;
+   mSleepUs2 = mSleepMeanMs * 1000 + mSleepRandomUs;
+
+   // Seed the random number generator.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
    mRandomDistribution = std::uniform_int_distribution<>(mSleepUs1, mSleepUs2);
 }
 
-void RandomSleepUs::doSleep()
+void RandomSleep::doSleep()
 {
    // Get a random sleep time.
    int tSleepUs = mRandomDistribution(mRandomGenerator);
    // Sleep.
    sleepUs(tSleepUs);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-RandomSleepMs::RandomSleepMs()
-{
-   // Set base class variables.
-   mSleepMs1 = 1000;
-   mSleepMs2 = 1000;
-}
-
-RandomSleepMs::RandomSleepMs(int aSleepMs1, int aSleepMs2)
-{
-   initialize(aSleepMs1, aSleepMs2);
-}
-
-void RandomSleepMs::initialize(int aSleepMs1, int aSleepMs2)
-{
-   mSleepMs1 = aSleepMs1;
-   mSleepMs2 = aSleepMs2;
-   std::random_device tRandomDevice;
-   mRandomGenerator.seed(tRandomDevice());
-   mRandomDistribution = std::uniform_int_distribution<>(mSleepMs1, mSleepMs2);
-}
-
-void RandomSleepMs::doSleep()
-{
-   // Get a random sleep time.
-   int tSleepMs = mRandomDistribution(mRandomGenerator);
-   // Sleep.
-   sleepMs(tSleepMs);
 }
 
 //******************************************************************************

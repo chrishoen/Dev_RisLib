@@ -46,7 +46,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members. 
+   // Members. Inheritors set these before thread launch.
 
    // Timer interval range, microseconds. These provide the bounds for a
    // uniform random number generator that generates a random sleep interval.

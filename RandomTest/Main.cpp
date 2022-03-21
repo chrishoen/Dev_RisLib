@@ -6,7 +6,7 @@
 #include "MainInit.h"
 
 #include "somePeriodicParms.h"
-#include "someTimerTestThread1.h"
+#include "someRandomTestThread.h"
 #include "someMonitorThread.h"
 
 //******************************************************************************
@@ -27,8 +27,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   Some::gTimerTestThread1 = new Some::TimerTestThread1;
-   Some::gTimerTestThread1->launchThread();
+   Some::gRandomTestThread = new Some::RandomTestThread;
+   Some::gRandomTestThread->launchThread();
    Some::gMonitorThread = new Some::MonitorThread;
    Some::gMonitorThread->launchThread();
 
@@ -38,7 +38,7 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   Some::gTimerTestThread1->showThreadInfo();
+   Some::gRandomTestThread->showThreadInfo();
    Some::gMonitorThread->showThreadInfo();
 
 
@@ -56,9 +56,9 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program Threads.
 
-   Some::gTimerTestThread1->shutdownThread();
-   delete Some::gTimerTestThread1;
-   Some::gTimerTestThread1 = 0;
+   Some::gRandomTestThread->shutdownThread();
+   delete Some::gRandomTestThread;
+   Some::gRandomTestThread = 0;
 
    Some::gMonitorThread->shutdownThread();
    delete Some::gMonitorThread;

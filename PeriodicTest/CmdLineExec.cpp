@@ -4,7 +4,7 @@
 #include "CmdLineExec.h"
 
 #include "somePeriodicParms.h"
-#include "someTimerTestThread1.h"
+#include "somePeriodicTestThread.h"
 using namespace Some;
 
 //******************************************************************************

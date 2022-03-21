@@ -23,8 +23,10 @@ namespace Threads
 BaseRandomThread::BaseRandomThread()
 {
    // Set base class variables.
-   mTimerPeriodUs1 = 1000000;
-   mTimerPeriodUs2 = 1000000;
+   mIntervalMeanMs = 1000;
+   mIntervalRandomUs = 0;
+   mIntervalUs1 = 0;
+   mIntervalUs2 = 0;
    mTimerCount = 0;
    mTerminateFlag = false;
    mPollProcessor = false;
@@ -66,17 +68,21 @@ void BaseRandomThread::threadRunFunction()
    //***************************************************************************
    // Do this first.
 
+   // Calculate random number generator bounds.
+   mIntervalUs1 = mIntervalMeanMs * 1000 - mIntervalRandomUs;
+   mIntervalUs2 = mIntervalMeanMs * 1000 + mIntervalRandomUs;
+
    // Seed random generator.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
-   mRandomDistribution = std::uniform_int_distribution<>(mTimerPeriodUs1, mTimerPeriodUs2);
+   mRandomDistribution = std::uniform_int_distribution<>(mIntervalUs1, mIntervalUs2);
 
    // Initial value
-   int tTimerPeriodUs = (mTimerPeriodUs1 + mTimerPeriodUs2) / 2;
-   long long tTimerPeriodNs = get_NsFromUs(tTimerPeriodUs);
+   int tIntervalUs = (mIntervalUs1 + mIntervalUs2) / 2;
+   long long tIntervalNs = get_NsFromUs(tIntervalUs);
 
    // Initialize statistics variables.
-   mStatTimerCountMax = (mStatPeriod * 1000) / tTimerPeriodUs;
+   mStatTimerCountMax = (mStatPeriod * 1000) / tIntervalUs;
 
    // Sleep time variables
    long long  tSleepTimeNs = 0;
@@ -99,11 +105,11 @@ void BaseRandomThread::threadRunFunction()
       // Advance periodically according to the system clock. 
       
       // Get a random period.
-      tTimerPeriodUs = mRandomDistribution(mRandomGenerator);
-      tTimerPeriodNs = get_NsFromUs(tTimerPeriodUs);
+      tIntervalUs = mRandomDistribution(mRandomGenerator);
+      tIntervalNs = get_NsFromUs(tIntervalUs);
 
       // Advance the absolute sleep time by the period.
-      tSleepTimeNs += tTimerPeriodNs;
+      tSleepTimeNs += tIntervalNs;
       //tSleepTimeNs = mStatBeginTimeNs + tTimerPeriodNs;
 
       // Convert to timespec.

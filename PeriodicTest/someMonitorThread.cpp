@@ -13,7 +13,7 @@ Description:
 #include "risThreadsPriorities.h"
 
 #include "somePeriodicParms.h"
-#include "someTimerTestThread1.h"
+#include "somePeriodicTestThread.h"
 
 #define  _SOMEMONITORTHREAD_CPP_
 #include "someMonitorThread.h"
@@ -43,17 +43,17 @@ MonitorThread::MonitorThread()
 
 void MonitorThread::executeOnTimer(int aTimeCount)
 {
-   if (gTimerTestThread1->mStatPollFlag)
+   if (gPeriodicTestThread->mStatPollFlag)
    {
-      gTimerTestThread1->mStatPollFlag = false;
+      gPeriodicTestThread->mStatPollFlag = false;
       Prn::print(0, "Timer1 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
-         gTimerTestThread1->mStatCount,
-         gTimerTestThread1->mThreadCurrentProcessor,
-         gTimerTestThread1->mStatJitterMean,
-         gTimerTestThread1->mStatJitterStdDev,
-         gTimerTestThread1->mStatJitterMin,
-         gTimerTestThread1->mStatJitterMax,
-         gTimerTestThread1->mStatJitterMaxMax);
+         gPeriodicTestThread->mStatCount,
+         gPeriodicTestThread->mThreadCurrentProcessor,
+         gPeriodicTestThread->mStatJitterMean,
+         gPeriodicTestThread->mStatJitterStdDev,
+         gPeriodicTestThread->mStatJitterMin,
+         gPeriodicTestThread->mStatJitterMax,
+         gPeriodicTestThread->mStatJitterMaxMax);
    }
 }
 

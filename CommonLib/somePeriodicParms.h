@@ -78,11 +78,11 @@ public:
    // Timer thread variables.
    int  mMonitorThreadPeriod;
    int  mStatPeriod;
-   int  mTestThreadPeriodUs;
+   int  mPeriodUs;
 
    // Random thread variables.
-   int  mRandomThreadPeriodUs1;
-   int  mRandomThreadPeriodUs2;
+   int  mIntervalMeanMs;
+   int  mIntervalRandomUs;
 
    //***************************************************************************
    //***************************************************************************

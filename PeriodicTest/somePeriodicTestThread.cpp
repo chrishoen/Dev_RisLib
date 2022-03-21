@@ -13,10 +13,9 @@ Description:
 #include "risThreadsPriorities.h"
 
 #include "somePeriodicParms.h"
-#include "someRandomTestThread.h"
 
-#define  _SOMEMONITORTHREAD_CPP_
-#include "someMonitorThread.h"
+#define  _SOMEPERIODICTESTTHREAD1_CPP_
+#include "somePeriodicTestThread.h"
 
 namespace Some
 {
@@ -25,40 +24,34 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-MonitorThread::MonitorThread()
+PeriodicTestThread::PeriodicTestThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Monitor");
+   BaseClass::setThreadName("TimerTest");
+   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
+   BaseClass::setThreadPriority(
+      Ris::Threads::Priority(
+         gPeriodicParms.mTestThreadProcessor,
+         gPeriodicParms.mTestThreadPriority));
 
-   // Set base class variables.
-   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mMonitor);
-
-   // Set timer period.
-   BaseClass::mTimerPeriod = gPeriodicParms.mMonitorThreadPeriod;
+   BaseClass::mPollProcessor = gPeriodicParms.mPollProcessor;
+   BaseClass::mStatPeriod = gPeriodicParms.mStatPeriod;
+   BaseClass::mPeriodUs = gPeriodicParms.mPeriodUs;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void MonitorThread::executeOnTimer(int aTimeCount)
+void PeriodicTestThread::executeOnTimer(int aTimeCount)
 {
-   if (gRandomTestThread->mStatPollFlag)
+   if (aTimeCount == 0)
    {
-      gRandomTestThread->mStatPollFlag = false;
-      Prn::print(0, "Timer1 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
-         gRandomTestThread->mStatCount,
-         gRandomTestThread->mThreadCurrentProcessor,
-         gRandomTestThread->mStatJitterMean,
-         gRandomTestThread->mStatJitterStdDev,
-         gRandomTestThread->mStatJitterMin,
-         gRandomTestThread->mStatJitterMax,
-         gRandomTestThread->mStatJitterMaxMax);
+      BaseClass::showThreadFullInfo();
    }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 }//namespace

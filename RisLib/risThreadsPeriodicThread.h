@@ -44,11 +44,16 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members.
+   // Members. Set these before launching the thread.
 
    // Timer period, microseconds. This is the periodic time that the inheritor
    // timer handler function gets called.
-   int mTimerPeriodUs;
+   int mPeriodUs;
+
+   // Timer period, milliseconds. This is the periodic time that the inheritor
+   // timer handler function gets called. This overrides the previous 
+   // microsecond variable.
+   int mPeriodMs;
 
    // Timer count incremented at each timer handler execution.
    int mTimerCount;

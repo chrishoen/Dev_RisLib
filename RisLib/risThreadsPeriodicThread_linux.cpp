@@ -23,7 +23,8 @@ namespace Threads
 BasePeriodicThread::BasePeriodicThread()
 {
    // Set base class variables.
-   mTimerPeriodUs = 1000000;
+   mPeriodUs = 1000000;
+   mPeriodMs = 0;
    mTimerCount = 0;
    mTerminateFlag = false;
    mPollProcessor = false;
@@ -65,17 +66,23 @@ void BasePeriodicThread::threadRunFunction()
    //***************************************************************************
    // Do this first.
 
+   // Override the period.
+   if (mPeriodMs)
+   {
+      mPeriodUs = mPeriodMs * 1000;
+   }
+
    // Time variables
    timespec   tSleepTimespec;
    long long  tSleepTimeNs;
-   long long  tTimerPeriodNs = get_NsFromUs(mTimerPeriodUs);
-   double     tTimerPeriodUs = (double)mTimerPeriodUs;
+   long long  tTimerPeriodNs = get_NsFromUs(mPeriodUs);
+   double     tTimerPeriodUs = (double)mPeriodUs;
    // Get current nanotime at start.
    tSleepTimeNs = get_Nanotime();
    mStatBeginTimeNs = tSleepTimeNs;
 
    // Initialize statistics variables.
-   mStatTimerCountMax = (mStatPeriod * 1000) / mTimerPeriodUs;
+   mStatTimerCountMax = (mStatPeriod * 1000) / mPeriodUs;
 
    //***************************************************************************
    //***************************************************************************

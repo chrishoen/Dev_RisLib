@@ -14,8 +14,8 @@ Description:
 
 #include "somePeriodicParms.h"
 
-#define  _SOMETIMERTESTTHREAD1_CPP_
-#include "someTimerTestThread1.h"
+#define  _SOMERANDOMTESTTHREAD_CPP_
+#include "someRandomTestThread.h"
 
 namespace Some
 {
@@ -24,7 +24,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-TimerTestThread1::TimerTestThread1()
+RandomTestThread::RandomTestThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("TimerTest");
@@ -35,8 +35,8 @@ TimerTestThread1::TimerTestThread1()
          gPeriodicParms.mTestThreadPriority));
 
    BaseClass::mPollProcessor = gPeriodicParms.mPollProcessor;
-   BaseClass::mTimerPeriodUs1 = gPeriodicParms.mRandomThreadPeriodUs1;
-   BaseClass::mTimerPeriodUs2 = gPeriodicParms.mRandomThreadPeriodUs2;
+   BaseClass::mIntervalMeanMs = gPeriodicParms.mIntervalMeanMs;
+   BaseClass::mIntervalRandomUs = gPeriodicParms.mIntervalRandomUs;
    BaseClass::mStatPeriod = gPeriodicParms.mStatPeriod;
 }
 
@@ -44,7 +44,7 @@ TimerTestThread1::TimerTestThread1()
 //******************************************************************************
 //******************************************************************************
 
-void TimerTestThread1::executeOnTimer(int aTimeCount)
+void RandomTestThread::executeOnTimer(int aTimeCount)
 {
    if (aTimeCount == 0)
    {

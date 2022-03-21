@@ -1,57 +1,57 @@
+#pragma once
+
 /*==============================================================================
-Description:
+Timer test thread.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "stdafx.h"
 
-#include <time.h>
-
-#include "risProgramTime.h"
-#include "risThreadsPriorities.h"
-
-#include "somePeriodicParms.h"
-
-#define  _SOMETIMERTESTTHREAD1_CPP_
-#include "someTimerTestThread1.h"
+#include "risThreadsRandomThread.h"
 
 namespace Some
 {
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-TimerTestThread1::TimerTestThread1()
+class RandomTestThread : public Ris::Threads::BaseRandomThread
 {
-   // Set base class variables.
-   BaseClass::setThreadName("TimerTest");
-   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
-   BaseClass::setThreadPriority(
-      Ris::Threads::Priority(
-         gPeriodicParms.mTestThreadProcessor,
-         gPeriodicParms.mTestThreadPriority));
+public:
+   typedef Ris::Threads::BaseRandomThread BaseClass;
 
-   BaseClass::mPollProcessor = gPeriodicParms.mPollProcessor;
-   BaseClass::mTimerPeriodUs = gPeriodicParms.mTestThreadPeriodUs;
-   BaseClass::mStatPeriod = gPeriodicParms.mStatPeriod;
-}
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Members.
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Methods.
+
+   // Constructor.
+   RandomTestThread();
+
+   // Base class overloads.
+   void executeOnTimer(int aTimeCount) override;
+};
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Global instance
 
-void TimerTestThread1::executeOnTimer(int aTimeCount)
-{
-   if (aTimeCount == 0)
-   {
-      BaseClass::showThreadFullInfo();
-   }
-}
+#ifdef _SOMERANDOMTESTTHREAD_CPP_
+          RandomTestThread* gRandomTestThread = 0;
+#else
+   extern RandomTestThread* gRandomTestThread;
+#endif
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace
+
+

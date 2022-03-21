@@ -33,7 +33,7 @@ void sleepUs(int aTimeUs);
 //******************************************************************************
 // This class provides a function that sleeps for a random time. 
 
-class  RandomSleep
+class  RandomSleepMs
 {
 public:
 
@@ -46,9 +46,9 @@ public:
    // uniform random number generator that generates a random sleep interval.
    // The inheritor timer handler function gets called after the random sleep.
    // The bounds are calculated as
-   // [SleepMeanMs*1000 - SleepRandomUs, SleepMeanMs*1000 + SleepRandomUs].
+   // [SleepMeanMs*1000 - SleepRandomMs*1000, SleepMeanMs*1000 + SleepRandomMs*1000].
    int mSleepMeanMs;
-   int mSleepRandomUs;
+   int mSleepRandomMs;
 
    //***************************************************************************
    //***************************************************************************
@@ -75,9 +75,9 @@ public:
    // Methods.
 
    // Constructor.
-   RandomSleep();
-   RandomSleep(int aSleepMeanMs, int aSleepRandomUs);
-   void initialize(int aSleepMeanMs, int aSleepRandomUs);
+   RandomSleepMs();
+   RandomSleepMs(int aSleepMeanMs, int aSleepRandomMss);
+   void initialize(int aSleepMeanMs, int aSleepRandomMs);
 
    //***************************************************************************
    //***************************************************************************

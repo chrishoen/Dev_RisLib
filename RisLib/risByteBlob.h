@@ -83,7 +83,7 @@ public:
    // Return true if there is enough room to add some more bytes.
    bool testRemainingSize(int aSize)
    {
-      return mCopySize + aSize <= Allocate;
+      return mCopySize + aSize <= AllocateSize;
    }
 
    // Add some bytes to the allocated memory array. Increment the copy size.
@@ -91,7 +91,7 @@ public:
    bool putBytes(void* aBytes, int aSize)
    {
       // Guard.
-      if (mCopySize + aSize > Allocate) return false;
+      if (mCopySize + aSize > AllocateSize) return false;
 
       // Add some bytes.
       char* tBytes = (char*)aBytes;

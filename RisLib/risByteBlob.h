@@ -74,6 +74,36 @@ public:
    {
       aBuffer->copyBlock(mBytes, mCopySize);
    }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Return true if there is enough room to add some more bytes.
+   bool testRemainingSize(int aSize)
+   {
+      return mCopySize + aSize <= Allocate;
+   }
+
+   // Add some bytes to the allocated memory array. Increment the copy size.
+   // Return true if successful.
+   bool putBytes(void* aBytes, int aSize)
+   {
+      // Guard.
+      if (mCopySize + aSize > Allocate) return false;
+
+      // Add some bytes.
+      char* tBytes = (char*)aBytes;
+      for (int i = 0; i < aSize; i++)
+      {
+         mBytes[mCopySize + i] = tBytes[i];
+      }
+
+      // Increment the copy size.
+      mCopySize += aSize;
+      return true;
+   }
 };
 
 //******************************************************************************

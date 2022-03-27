@@ -51,6 +51,9 @@ public:
    // The parent class must also explicitly set it inside a copy from.
    int mCopySize;
 
+   // Maximum copy size.
+   int mMaxCopySize;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -61,6 +64,7 @@ public:
    {
       mBytes = (char*)malloc(AllocateSize);
       mCopySize = 0;
+      mMaxCopySize = AllocateSize;
    }
 
    ~ByteBlob()
@@ -83,7 +87,7 @@ public:
    // Return true if there is enough room to add some more bytes.
    bool testRemainingSize(int aSize)
    {
-      return mCopySize + aSize <= AllocateSize;
+      return mCopySize + aSize <= mMaxCopySize;
    }
 
    // Add some bytes to the allocated memory array. Increment the copy size.
@@ -91,7 +95,7 @@ public:
    bool putBytes(void* aBytes, int aSize)
    {
       // Guard.
-      if (mCopySize + aSize > AllocateSize) return false;
+      if (mCopySize + aSize > mMaxCopySize) return false;
 
       // Add some bytes.
       char* tBytes = (char*)aBytes;

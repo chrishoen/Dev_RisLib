@@ -20,6 +20,7 @@ return()
 
 
 add_subdirectory ("RisLib")
+add_subdirectory ("CmdLineTest")
 return()
 
 add_subdirectory ("RisLib")

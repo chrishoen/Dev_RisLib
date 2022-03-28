@@ -7,236 +7,72 @@
 
 #include "stdafx.h"
 
-#include <windows.h> 
-
-#include <atomic> 
-
-#include "risThreadsThreads.h"
-
-#include "risThreadsWaitable.h"
+#include "risSleep.h"
 
 namespace Ris
 {
-namespace Threads
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Sleep milliseconds.
+
+void sleepMs(int aSleepForMs)
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Class definition for implementation specific.
-
-class Waitable::Specific
-{
-public:
-   HANDLE mTimerHandle;
-   HANDLE mSemaphoreHandle;
-   std::atomic<unsigned> mSemaphoreCount;
-
-   Specific()
-   {
-      mTimerHandle = 0;
-      mSemaphoreHandle = 0;
-      mSemaphoreCount.store(0);
-   }
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
-
-Waitable::Waitable()
-{
-   // Initialize members.
-   mTimerCount = 0;
-   mWasTimerFlag = false;
-   mWasSemaphoreFlag = false;
-   mValidFlag = false;
-
-   // Create new specific implementation.
-   mSpecific = new Specific;
-}
-
-Waitable::~Waitable()
-{
-   finalize();
-   delete mSpecific;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize the timer and the counting semaphore. Start the timer
-// periodically, in milliseconds.
+// Sleep microseconds.
 
-void Waitable::initialize (int aTimerPeriod)
+void sleepUs(int aSleepForUs)
 {
-   // Initialize variables.
-   mTimerCount = 0;
-   mWasTimerFlag = false;
-   mWasSemaphoreFlag = false;
-
-   // If using the timer.
-   if (aTimerPeriod > 0)
-   {
-      // Create the timer.
-      mSpecific->mTimerHandle = CreateWaitableTimer(NULL, FALSE, NULL);
-
-      // Calculate the timer interval. (100ns increments)
-      LARGE_INTEGER tDueTime;
-      tDueTime.QuadPart = -1 * aTimerPeriod * 1000 * 10;
-
-      // Set the timer interval.
-      SetWaitableTimer(mSpecific->mTimerHandle, &tDueTime, aTimerPeriod, NULL, NULL, 0);
-   }
-   // If not using the timer.
-   else
-   {
-      mSpecific->mTimerHandle = 0;
-   }
-
-   // Create the semaphore.
-   mSpecific->mSemaphoreHandle = CreateSemaphore(NULL, 0, 1000000, NULL);
-
-   // Set valid.
-   mValidFlag = true;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void Waitable::finalize()
+RandomSleepMs::RandomSleepMs()
 {
-   // Guard.
-   if (!mValidFlag) return;
-
-   // Set invalid.
-   mValidFlag = false;
-
-   // Cancel the timer.
-   if (mSpecific->mTimerHandle) CancelWaitableTimer(mSpecific->mTimerHandle);
-
-   // Close the timer and semaphore.
-   if (mSpecific->mTimerHandle) CloseHandle(mSpecific->mTimerHandle);
-   if (mSpecific->mSemaphoreHandle) CloseHandle(mSpecific->mSemaphoreHandle);
-
-   mSpecific->mTimerHandle = 0;
-   mSpecific->mSemaphoreHandle= 0;
+   // Set base class variables.
+   mSleepMeanMs = 1000;
+   mSleepRandomMs = 0;
+   mSleepUs1 = 0;
+   mSleepUs2 = 0;
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Wait for the timer or counting semaphore.
-
-void Waitable::waitForTimerOrSemaphore()
+RandomSleepMs::RandomSleepMs(int aSleepMeanMs, int aSleepRandomMs)
 {
-   // Reset the flags.
-   mWasTimerFlag = false;
-   mWasSemaphoreFlag = false;
-
-   // Guard.
-   if (!mValidFlag) return;
-
-   // If waiting for timer or semaphore.
-   if (mSpecific->mTimerHandle)
-   {
-      // Wait for the timer or the semaphore.
-      DWORD tRet = 0;
-      HANDLE tObjects[2];
-      tObjects[0] = mSpecific->mTimerHandle;
-      tObjects[1] = mSpecific->mSemaphoreHandle;
-      tRet = WaitForMultipleObjects(2, tObjects, FALSE, -1);
-
-      // Test if the timer was signaled or both the timer and the semaphore
-      // were signaled.
-      if (tRet == WAIT_OBJECT_0)
-      {
-         // The timer was signaled and maybe the semaphore was signaled.
-
-         // Increment the timer count and set the flag.
-         mTimerCount++;
-         mWasTimerFlag = true;
-
-         // Test the semaphore count.
-         if (mSpecific->mSemaphoreCount > 0)
-         {
-            // The semaphore was signaled. Decrement the semaphore count by one.
-            mSpecific->mSemaphoreCount.fetch_sub(1);
-            // Set the flag.
-            mWasSemaphoreFlag = true;
-         }
-      }
-
-      // Test if only the semaphore was signaled.
-      if (tRet == WAIT_OBJECT_0 + 1)
-      {
-         // The timer was not signaled and the semaphore was signaled.
-
-         // Test the semaphore count.
-         if (mSpecific->mSemaphoreCount > 0)
-         {
-            // The semaphore was signaled. Decrement the semaphore count by one.
-            mSpecific->mSemaphoreCount.fetch_sub(1);
-            // Set the flag.
-            mWasSemaphoreFlag = true;
-         }
-      }
-   }
-   // If waiting for semaphore only.
-   else
-   {
-      // Wait for the semaphore.
-      DWORD tRet = 0;
-      tRet = WaitForSingleObject(mSpecific->mSemaphoreHandle, -1);
-
-      // Test if the semaphore was signaled.
-      if (tRet == WAIT_OBJECT_0)
-      {
-         // The semaphore was signaled.
-
-         // Test the semaphore count.
-         if (mSpecific->mSemaphoreCount > 0)
-         {
-            // The semaphore was signaled. Decrement the semaphore count by one.
-            mSpecific->mSemaphoreCount.fetch_sub(1);
-            // Set the flag.
-            mWasSemaphoreFlag = true;
-         }
-      }
-   }
+   initialize(aSleepMeanMs, aSleepRandomMs);
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Return true if the previous wait unblocking was a result of the timer 
-// or the counting semaphore.
-
-bool Waitable::wasTimer() { return mWasTimerFlag; }
-bool Waitable::wasSemaphore() { return mWasSemaphoreFlag; }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Post to the counting semaphore.
-
-void Waitable::postSemaphore()
+void RandomSleepMs::initialize(int aSleepMeanMs, int aSleepRandomMs)
 {
-   // Guard.
-   if (!mValidFlag) return;
+   // Sleep time variables.
+   mSleepMeanMs = aSleepMeanMs;
+   mSleepRandomMs = aSleepRandomMs;
+   mSleepUs1 = mSleepMeanMs * 1000 - mSleepRandomMs * 1000;
+   mSleepUs2 = mSleepMeanMs * 1000 + mSleepRandomMs * 1000;
 
-   // Increment the semaphore count by one.
-   mSpecific->mSemaphoreCount.fetch_add(1);
-
-   // Write to the counting semaphore, increment by one.
-   ReleaseSemaphore(mSpecific->mSemaphoreHandle, 1, NULL);
+   // Seed the random number generator.
+   std::random_device tRandomDevice;
+   mRandomGenerator.seed(tRandomDevice());
+   mRandomDistribution = std::uniform_int_distribution<>(mSleepUs1, mSleepUs2);
 }
 
+void RandomSleepMs::doSleep()
+{
+   // Get a random sleep time.
+   int tSleepUs = mRandomDistribution(mRandomGenerator);
+   // Sleep.
+   sleepUs(tSleepUs);
+}
+
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-}//namespace
 }//namespace
 

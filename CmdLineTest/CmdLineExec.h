@@ -14,6 +14,7 @@ public:
 
   void reset();
   void execute(Ris::CmdLineCmd* aCmd);
+  void special(int aSpecial);
 
   void executeRun1(Ris::CmdLineCmd* aCmd);
   void executeRun2(Ris::CmdLineCmd* aCmd);

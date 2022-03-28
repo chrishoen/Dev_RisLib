@@ -61,6 +61,13 @@ public:
    // of command lines.
    virtual void execute(CmdLineCmd* aCmd) = 0;
 
+   // This is overridden by inheriting classes to execute special command
+   // lines. A special command is one that consists of only a single digit
+   // "0" .. "9" followed by an enter. "0" is reserved to suppress prints
+   // and "9" is reserved to unsuppress prints. This method is called for
+   // "1" through "8".
+   virtual void special(int aSpecial) {};
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

@@ -68,21 +68,6 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
       {
          // Ignore empty command.
       }
-      else if (strcmp(tCommandLine, "e") == 0)
-      {
-         // Exit.
-         break;
-      }
-      else if (strcmp(tCommandLine, "o") == 0)
-      {
-         // Turn off console prints.
-         Prn::suppressPrint();
-      }
-      else if (strcmp(tCommandLine, "p") == 0)
-      {
-         // Turn on console prints.
-         Prn::unsuppressPrint();
-      }
 
       //************************************************************************
       //************************************************************************
@@ -98,14 +83,43 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
          if (tCmd.mValidFlag)
          {
             // Test for exit.
-            if(tCmd.isCmd("EXIT"))
+            if(tCmd.isCmd("EXIT") || tCmd.isCmd("E"))
             {
+               printf("EXIT\n");
                break;
             }
-            // Not exit
+            // Test for special commands, if the first character is a digit.
+            else if (tCmd.mArgNum == 0 &&
+               strlen(tCmd.mCommandLine) == 1 &&
+               isdigit(tCmd.mCommandLine[0]))
+            {
+               int tSpecial = -1;
+               sscanf(tCmd.mCommandLine, "%d", &tSpecial);
+               if (tSpecial == 0)
+               {
+                  printf("SUPPRESS PRINTS\n");
+                  // Turn off console prints.
+                  Prn::suppressPrint();
+               }
+               else if (tSpecial == 9)
+               {
+                  printf("UNSUPPRESS PRINTS\n");
+                  // Turn on console prints.
+                  Prn::unsuppressPrint();
+               }
+               else
+               {
+                  printf("SPECIAL %d\n", tSpecial);
+                  // Execute the  given executive, pass it the the
+                  // speical command line command.
+                  aExec->special(tSpecial);
+               }
+            }
+            // Not exit or special.
             else
             {
-               // Execute the command line command with the given executive.
+               // Execute the  given executive, pass it the the
+               // command line command.
                aExec->execute(&tCmd);
 
                // Test for bad command. This is true if the executive didn't

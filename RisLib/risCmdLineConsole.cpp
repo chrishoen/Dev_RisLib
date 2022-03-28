@@ -95,7 +95,7 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
             {
                int tSpecial = -1;
                sscanf(tCmd.mCommandLine, "%d", &tSpecial);
-               if (tSpecial == 0)
+               if (tSpecial == 8)
                {
                   printf("SUPPRESS PRINTS\n");
                   // Turn off console prints.

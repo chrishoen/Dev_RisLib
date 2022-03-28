@@ -51,13 +51,11 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeRun1(Ris::CmdLineCmd* aCmd)
 {
    gExperiment.doRun1();
-   printf("done\n");
 }
 
 void CmdLineExec::executeRun2(Ris::CmdLineCmd* aCmd)
 {
    gExperiment.doRun2();
-   printf("done\n");
 }
 
 //******************************************************************************

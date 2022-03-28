@@ -3,6 +3,7 @@
 //******************************************************************************
 
 #include "stdafx.h"
+#include <conio.h>
 
 #include "risCmdLineFile.h"
 #include "risPortableCalls.h"
@@ -34,32 +35,32 @@ void Experiment::doRun1()
    while (true)
    {
       // Read first character.
-      int tChar = fgetc(stdin);
+      int tChar = getch();
+      printf("GETCH %c\n", (unsigned char)tChar);
+      // Not a Digit.
+      ungetch(tChar);
 
       // Test if digit.
-      if (isdigit(tChar))
+      if (tChar == '0')
       {
          printf("DIGIT\n");
          continue;
       }
 
-      // Not a Digit.
-      ungetc(tChar, stdin);
-
       // Read from console input.
-      char tString[cMaxStringSize];
-      if (fgets(tString, cMaxStringSize, stdin) == 0)
-      {
-         printf("ERROR 1");
-         return;
-      }
+      char tString2[cMaxStringSize];
+      tString2[0] = cMaxStringSize;
+      char* tString1 = cgets(tString2);
 
       // Remove cr/lf at end of line.
-      my_trimCRLF(tString);
+      my_trimCRLF(tString1);
 
-      if (strcmp(tString, "x") == 0) break;
+      if (tString1)
+      {
+         if (strcmp(tString1, "x") == 0) break;
+      }
 
-      printf("CMD %s\n", tString);
+      printf("CMD %s\n", tString1);
    }
 
    printf("doRun1*****************************************END\n");
@@ -76,8 +77,8 @@ void Experiment::doRun2()
 
    while (true)
    {
-      printf("getchar\n");
-      int tChar = getchar();
+      printf("getch\n");
+      int tChar = getch();
       printf("CHAR %d-\n", tChar);
       if (tChar == 'x') break;
    }

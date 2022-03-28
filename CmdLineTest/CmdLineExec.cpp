@@ -33,6 +33,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TP"))  Some::gTimerThread->mTPFlag = !Some::gTimerThread->mTPFlag;
 
    if (aCmd->isCmd("Run1"))   executeRun1(aCmd);
+   if (aCmd->isCmd("Run2"))   executeRun2(aCmd);
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))    executeGo3(aCmd);
@@ -50,6 +51,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeRun1(Ris::CmdLineCmd* aCmd)
 {
    gExperiment.doRun1();
+   printf("done\n");
+}
+
+void CmdLineExec::executeRun2(Ris::CmdLineCmd* aCmd)
+{
+   gExperiment.doRun2();
    printf("done\n");
 }
 

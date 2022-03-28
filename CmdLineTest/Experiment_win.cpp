@@ -33,6 +33,19 @@ void Experiment::doRun1()
 
    while (true)
    {
+      // Read first character.
+      int tChar = fgetc(stdin);
+
+      // Test if digit.
+      if (isdigit(tChar))
+      {
+         printf("DIGIT\n");
+         continue;
+      }
+
+      // Not a Digit.
+      ungetc(tChar, stdin);
+
       // Read from console input.
       char tString[cMaxStringSize];
       if (fgets(tString, cMaxStringSize, stdin) == 0)
@@ -44,12 +57,32 @@ void Experiment::doRun1()
       // Remove cr/lf at end of line.
       my_trimCRLF(tString);
 
-      if (strcmp(tString, "e") == 0) break;
+      if (strcmp(tString, "x") == 0) break;
 
       printf("CMD %s\n", tString);
    }
 
    printf("doRun1*****************************************END\n");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test .
+
+void Experiment::doRun2()
+{
+   printf("doRun2*****************************************BEGIN\n");
+
+   while (true)
+   {
+      printf("getchar\n");
+      int tChar = getchar();
+      printf("CHAR %d-\n", tChar);
+      if (tChar == 'x') break;
+   }
+
+   printf("doRun2*****************************************END\n");
 }
 
 //******************************************************************************

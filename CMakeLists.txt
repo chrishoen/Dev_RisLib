@@ -11,8 +11,7 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoMsg")
+add_subdirectory ("ByteContent")
 return()
 
 

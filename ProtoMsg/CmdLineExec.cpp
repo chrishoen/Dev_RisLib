@@ -60,6 +60,7 @@ void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
    tBuffer.rewind();
    tBuffer.setCopyFrom();
    tBuffer.copy(&tOutput1);
+   tOutput2.mCopySize = 8;
    tBuffer.copy(&tOutput2);
 
    printf("tOutput1 %8x\n", tOutput1);

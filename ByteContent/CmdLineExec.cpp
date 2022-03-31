@@ -58,6 +58,8 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
    printf("tOutput2 ");
    for (int i = 0; i < tOutput2.mCopySize; i++) printf("%02x ", (int)tOutput2.mBytes[i]);
    printf("\n");
+
+   tBuffer.show("tBuffer", 8);
 }
 
 //******************************************************************************
@@ -67,6 +69,36 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
+
+   int tInput1 = 0x11111111;
+   char tBytes1[8];
+   char tBytes2[8];
+   memset(tBytes1, 0x21, 8);
+   memset(tBytes2, 0x22, 8);
+   Ris::ByteBlob<1000> tInput2;
+   tInput2.putBytes(tBytes1, 8);
+   tInput2.putBytes(tBytes2, 8);
+   printf("tInput2.mCopySize %d\n", tInput2.mCopySize);
+
+   int tOutput1 = 0;
+   Ris::ByteBlob<1000> tOutput2;
+
+   tBuffer.setCopyTo();
+   tBuffer.copy(&tInput1);
+   tBuffer.copy(&tInput2);
+
+   tBuffer.rewind();
+   tBuffer.setCopyFrom();
+   tBuffer.copy(&tOutput1);
+   tOutput2.mCopySize = tInput2.mCopySize;
+   tBuffer.copy(&tOutput2);
+
+   printf("tOutput1 %8x\n", tOutput1);
+   printf("tOutput2 ");
+   for (int i = 0; i < tOutput2.mCopySize; i++) printf("%02x ", (int)tOutput2.mBytes[i]);
+   printf("\n");
+
+   tBuffer.show("tBuffer", 20);
 }
 
 //******************************************************************************

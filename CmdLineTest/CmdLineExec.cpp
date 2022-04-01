@@ -8,6 +8,7 @@
 
 #include "someTimerThread.h"
 #include "Experiment.h"
+#include "MyTypes.h"
 
 #include "CmdLineExec.h"
 
@@ -73,15 +74,8 @@ void CmdLineExec::executeRun2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 101);
-   aCmd->setArgDefault(2, 202.2);
-
-
-   int    tI = aCmd->argInt(1);
-   double tD = aCmd->argDouble(2);
-
-   printf("ArgNum %d\n", aCmd->mArgNum);
-   printf("Args   %d   %f\n", tI, tD);
+   Prn::print(0, "SKeyboardCalibration %d", (int)sizeof(SKeyboardCalibration));
+   Prn::print(0, "SKeyboardConsts      %d", (int)sizeof(SKeyboardConsts));
 }
 
 //******************************************************************************

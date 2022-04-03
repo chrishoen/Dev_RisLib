@@ -83,6 +83,19 @@ void TraceBuffer::doStop(int aBufNum)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Resume a stopped trace on a buffer pair. Enable writes. Don't change
+// the write index.
+
+void TraceBuffer::doResume(int aBufNum)
+{
+   mMutex[aBufNum].lock();
+   mWriteEnableFlag[aBufNum] = true;
+   mMutex[aBufNum].unlock();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // If enabled, write a string to a buffer pair at the write index and
 // advance the write index. For the first buffer of the pair this only 
 // write the first N strings. For the last buffer of the pair this writes

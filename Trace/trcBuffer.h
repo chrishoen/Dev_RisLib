@@ -72,11 +72,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Expanded members that are not read from the parms file.
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Infrastucture.
 
    // Constructor,
@@ -99,6 +94,19 @@ public:
    // write the first N strings. For the last buffer of the pair this writes
    // circulary modulo N.
    void doWrite(int aBufNum, const char* aString);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Helpers.
+
+   // Return a pointer to an element in a first buffer, based on an index.
+   char* Buffer::elementAtFirst(int aBufNum, long long aIndex);
+
+   // Return a pointer to an element in a last buffer, based on an index
+   // modulo the number of elements.
+   char* Buffer::elementAtLast(int aBufNum, long long aIndex);
+
 };
 
 //******************************************************************************

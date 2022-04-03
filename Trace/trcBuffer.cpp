@@ -28,18 +28,11 @@ Buffer::Buffer()
 
 void Buffer::reset()
 {
-   mTestMode = 1;
-   mTestThreadProcessor = -1;
-   mTestThreadPriority = 80;
-   mPollProcessor = false;
-
-   mMonitorThreadPeriod = 0;
-   mStatPeriod = 0;
-   mPeriodUs = 0;
-
-   mIntervalMeanMs = 0;
-   mIntervalRandomUs = 0;
-
+   for (int i = 0; i < cNumBuffers; i++)
+   {
+      mNextWriteIndex[i] = 0;
+      mWriteEnableFlag[i] = false;
+   }
 }
 
 //******************************************************************************

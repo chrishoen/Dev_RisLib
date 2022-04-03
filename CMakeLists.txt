@@ -11,7 +11,7 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
-add_subdirectory ("CmdLineTest")
+add_subdirectory ("Trace")
 return()
 
 

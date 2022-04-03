@@ -6,8 +6,8 @@
 
 #include "risCmdLineFile.h"
 
-#define  _TRCBUFFER_CPP_
-#include "trcBuffer.h"
+#define  _TRCTRACEBUFFER_CPP_
+#include "trcTraceBuffer.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -21,12 +21,12 @@ namespace Trc
 //******************************************************************************
 // Constructor.
 
-Buffer::Buffer()
+TraceBuffer::TraceBuffer()
 {
    reset();
 }
 
-void Buffer::reset()
+void TraceBuffer::reset()
 {
    for (int i = 0; i < cNumBuffers; i++)
    {
@@ -41,7 +41,7 @@ void Buffer::reset()
 // Pointers.
 
 // Return a pointer to an element in a first buffer, based on an index.
-char* Buffer::elementAtFirst(int aBufNum, long long aIndex)
+char* TraceBuffer::elementAtFirst(int aBufNum, long long aIndex)
 {
    aIndex = aIndex < cNumElements ? aIndex : cNumElements - 1;
    return mBufferFirst[aBufNum][aIndex];
@@ -49,7 +49,7 @@ char* Buffer::elementAtFirst(int aBufNum, long long aIndex)
 
 // Return a pointer to an element in a last buffer, based on an index
 // modulo the number of elements.
-char* Buffer::elementAtLast(int aBufNum, long long aIndex)
+char* TraceBuffer::elementAtLast(int aBufNum, long long aIndex)
 {
    aIndex %= cNumElements;
    return mBufferLast[aBufNum][aIndex];
@@ -60,7 +60,7 @@ char* Buffer::elementAtLast(int aBufNum, long long aIndex)
 //******************************************************************************
 // Start a trace on a buffer pair. Reset the write index and enable writes.
 
-void Buffer::doStart(int aBufNum)
+void TraceBuffer::doStart(int aBufNum)
 {
    mMutex[aBufNum].lock();
    mNextWriteIndex[aBufNum] = 0;
@@ -73,7 +73,7 @@ void Buffer::doStart(int aBufNum)
 //******************************************************************************
 // Stop a trace on a buffer pair. Disable writes.
 
-void Buffer::doStop(int aBufNum)
+void TraceBuffer::doStop(int aBufNum)
 {
    mMutex[aBufNum].lock();
    mWriteEnableFlag[aBufNum] = false;
@@ -88,7 +88,7 @@ void Buffer::doStop(int aBufNum)
 // write the first N strings. For the last buffer of the pair this writes
 // circulary modulo N.
 
-void Buffer::doWrite(int aBufNum, const char* aString)
+void TraceBuffer::doWrite(int aBufNum, const char* aString)
 {
    // Guard.
    if (mWriteEnableFlag[aBufNum]) return;

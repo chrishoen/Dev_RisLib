@@ -27,7 +27,7 @@ namespace Trc
 // the last N strings in a trace. Write access to the buffers are protected
 // by mutex semaphores.
 
-class Buffer
+class TraceBuffer
 {
 public:
 
@@ -75,7 +75,7 @@ public:
    // Infrastucture.
 
    // Constructor,
-   Buffer();
+   TraceBuffer();
    void reset();
 
    //***************************************************************************
@@ -101,11 +101,11 @@ public:
    // Methods. Helpers.
 
    // Return a pointer to an element in a first buffer, based on an index.
-   char* Buffer::elementAtFirst(int aBufNum, long long aIndex);
+   char* elementAtFirst(int aBufNum, long long aIndex);
 
    // Return a pointer to an element in a last buffer, based on an index
    // modulo the number of elements.
-   char* Buffer::elementAtLast(int aBufNum, long long aIndex);
+   char* elementAtLast(int aBufNum, long long aIndex);
 
 };
 
@@ -114,8 +114,8 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _TRCBUFFER_CPP_
-   Buffer gBuffer;
+#ifdef _TRCTRACEBUFFER_CPP_
+   TraceBuffer gTraceBuffer;
 #else
    extern Buffer gBuffer;
 #endif

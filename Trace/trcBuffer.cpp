@@ -90,7 +90,32 @@ void Buffer::doStop(int aBufNum)
 
 void Buffer::doWrite(int aBufNum, const char* aString)
 {
+   // Guard.
+   if (mWriteEnableFlag[aBufNum]) return;
 
+   // Lock.
+   mMutex[aBufNum].lock();
+
+   // String destination pointers are determined by the write index.
+   char* tDestinFirst = elementAtFirst(aBufNum, mNextWriteIndex[aBufNum]);
+   char* tDestinLast = elementAtLast(aBufNum, mNextWriteIndex[aBufNum]);
+
+   // Copy to buffer.
+   if (mNextWriteIndex[aBufNum] < cNumElements)
+   {
+      strncpy(tDestinFirst, aString, cMaxStringSize);
+      tDestinFirst[cMaxStringSize] = 0;
+   }
+
+   // Copy to buffer.
+   strncpy(tDestinLast, aString, cMaxStringSize);
+   tDestinLast[cMaxStringSize] = 0;
+
+   // Advance the write index.
+   mNextWriteIndex[aBufNum]++;
+
+   // Unlock.
+   mMutex[aBufNum].unlock();
 }
 
 //******************************************************************************

@@ -61,7 +61,7 @@ public:
    // buffer is only written to for the first N strings and the last buffer
    // is written to modulo N, where N is the number of string elements
    // in a buffer.
-   int mNextWriteIndex[cNumBuffers];
+   long long mNextWriteIndex[cNumBuffers];
 
    // If true then writes are enabled for a buffer pair.
    bool mWriteEnableFlag[cNumBuffers];

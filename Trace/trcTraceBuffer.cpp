@@ -104,7 +104,7 @@ void TraceBuffer::doResume(int aBufNum)
 void TraceBuffer::doWrite(int aBufNum, const char* aString)
 {
    // Guard.
-   if (mWriteEnableFlag[aBufNum]) return;
+   if (!mWriteEnableFlag[aBufNum]) return;
 
    // Lock.
    mMutex[aBufNum].lock();
@@ -138,8 +138,12 @@ void TraceBuffer::doWrite(int aBufNum, const char* aString)
 
 void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
 {
-   printf("TRACE FIRST******************************\n");
-   if (mNextWriteIndex[aBufNum] == 0) return;
+   printf("TRACE FIRST****************************** %d %d\n",aBufNum, aShowSize);
+   if (mNextWriteIndex[aBufNum] == 0)
+   {
+      printf("EMPTY\n");
+      return;
+   }
    if (aShowSize > cNumElements) aShowSize = cNumElements;
    doStop(aBufNum);
    long long tNextWriteIndex = mNextWriteIndex[aBufNum];
@@ -171,8 +175,12 @@ void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
 
 void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
 {
-   printf("TRACE LAST*******************************\n");
-   if (mNextWriteIndex[aBufNum] == 0) return;
+   printf("TRACE LAST******************************* %d %d\n", aBufNum, aShowSize);
+   if (mNextWriteIndex[aBufNum] == 0)
+   {
+      printf("EMPTY\n");
+      return;
+   }
    if (aShowSize > cNumElements) aShowSize = cNumElements;
    doStop(aBufNum);
    long long tNextWriteIndex = mNextWriteIndex[aBufNum];
@@ -195,6 +203,38 @@ void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
       printf("%3lld $ %s\n", tReadIndex, elementAtFirst(aBufNum, tReadIndex));
    }
    printf("\n");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Execute a command line command to manage and show the trace buffers.
+
+void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(2, 1);
+   aCmd->setArgDefault(3, 20);
+   int tBufNum = aCmd->argInt(2);
+   int tShowSize = aCmd->argInt(3);
+   if (aCmd->isArgString(1, "START"))
+   {
+      printf("TRACE START %d\n", tBufNum);
+      doStart(tBufNum);
+   }
+   else if (aCmd->isArgString(1, "STOP"))
+   {
+      printf("TRACE STOP  %d\n", tBufNum);
+      doStop(tBufNum);
+   }
+   else if (aCmd->isArgString(1, "F"))
+   {
+      aCmd->setArgDefault(3, 20);
+      doShowFirst(tBufNum, tShowSize);
+   }
+   else if (aCmd->isArgString(1, "L"))
+   {
+      doShowLast(tBufNum, tShowSize);
+   }
 }
 
 //******************************************************************************

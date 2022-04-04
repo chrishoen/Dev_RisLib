@@ -9,6 +9,7 @@
 #include "risBitUtils.h"
 #include "risSleep.h"
 #include "my_functions.h"
+#include "trcTraceBuffer.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -36,6 +37,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"))   reset();
+   if (aCmd->isCmd("TRC"))    Trc::gTraceBuffer.execute(aCmd);;
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))    executeGo3(aCmd);
@@ -50,10 +52,15 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "BEGIN");
-   Ris::RandomSleepMs tSleep(1000, 3000);
-   tSleep.doSleep();
-   Prn::print(0, "END");
+   aCmd->setArgDefault(1, 10);
+   int tLoopSize = aCmd->argInt(1);
+   Trc::gTraceBuffer.doStart(1);
+   for (int i = 0; i < tLoopSize; i++)
+   {
+      char tString[40];
+      sprintf(tString, "trace %d", i);
+      Trc::gTraceBuffer.doWrite(1, tString);
+   }
 }
 
 //******************************************************************************
@@ -62,6 +69,11 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0, "BEGIN");
+   Ris::RandomSleepMs tSleep(1000, 3000);
+   tSleep.doSleep();
+   Prn::print(0, "END");
+
    aCmd->setArgDefault(1, 0);
    unsigned tValue = 0;
    tValue = 0x00000000;

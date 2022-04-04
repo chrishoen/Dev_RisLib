@@ -9,6 +9,7 @@ Trace buffer.
 //******************************************************************************
 
 #include "risThreadsSynch.h"
+#include "risCmdLineCmd.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -103,6 +104,9 @@ public:
    void doShowFirst(int aBufNum, int aNumStrings);
    void doShowLast(int aBufNum, int aNumStrings);
 
+   // Execute a command line command to manage and show the trace buffers.
+   void execute(Ris::CmdLineCmd* aCmd);
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -125,7 +129,7 @@ public:
 #ifdef _TRCTRACEBUFFER_CPP_
    TraceBuffer gTraceBuffer;
 #else
-   extern Buffer gBuffer;
+   extern TraceBuffer gTraceBuffer;
 #endif
 
 //******************************************************************************

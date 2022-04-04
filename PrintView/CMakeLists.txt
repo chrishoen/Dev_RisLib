@@ -1,13 +1,14 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.10)
+set (project "PrintView")
+project(${project} CXX)
+my_find_src_files (src_files ${project})
+add_executable (${project} ${src_files})
+my_add_compile_options (${project})
+my_add_pch (${project})
 
-project (PrintView CXX)
+my_inc_import_RisLib(${project})
+my_lib_import_RisLib(${project})
 
-my_find_src_files (src_files PrintView)
-add_executable (PrintView ${src_files})
-my_add_compile_options (PrintView)
-my_add_pch (PrintView)
-
-my_inc_import_RisLib(PrintView)
-my_lib_import_RisLib(PrintView)
-
-
+if (MSVC)
+   install(TARGETS ${project} DESTINATION "C:/Alpha/bin")
+endif()

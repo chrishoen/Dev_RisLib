@@ -89,13 +89,15 @@ public:
    // Methods. Write.
 
    // Start a trace on a buffer pair. Reset the write index and enable writes.
+   // If the buffer number is -1 then start all buffers.
    void doStart(int aBufNum);
 
    // Stop a trace on a buffer pair. Disable writes.
+   // If the buffer number is -1 then stop all buffers.
    void doStop(int aBufNum);
 
    // Resume a stopped trace on a buffer pair. Enable writes. Don't change
-   // the write index.
+   // the write index. If the buffer number is -1 then resume all buffers.
    void doResume(int aBufNum);
 
    // If enabled, write a string to a buffer pair at the write index and

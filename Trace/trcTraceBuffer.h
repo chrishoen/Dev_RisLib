@@ -99,6 +99,10 @@ public:
    // circulary modulo N.
    void doWrite(int aBufNum, const char* aString);
 
+   // Stop tracing and show a first or last buffer.
+   void doShowFirst(int aBufNum, int aNumStrings);
+   void doShowLast(int aBufNum, int aNumStrings);
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

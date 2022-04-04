@@ -134,6 +134,50 @@ void TraceBuffer::doWrite(int aBufNum, const char* aString)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Stop tracing and show a first buffer.
+
+void TraceBuffer::doShowFirst(int aBufNum, int aNumStrings)
+{
+   printf("TRACE FIRST*******************************\n");
+   if (mNextWriteIndex[aBufNum] == 0) return;
+   doStop(aBufNum);
+   long long tNextWriteIndex = mNextWriteIndex[aBufNum];
+   long long tNumStrings = (long long)aNumStrings;
+   long long tLoopSize = tNextWriteIndex > tNumStrings ? tNumStrings : tNextWriteIndex;
+   long long tStartIndex = 0;
+   for (long long i = 0; i < tLoopSize; i++)
+   {
+      long long tReadIndex = tStartIndex + i;
+      printf("%3lld $ %s\n", tReadIndex, elementAtFirst(aBufNum, tReadIndex));
+   }
+   printf("\n");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Stop tracing and show a last buffer.
+
+void TraceBuffer::doShowLast(int aBufNum, int aNumStrings)
+{
+   printf("TRACE LAST*******************************\n");
+   if (mNextWriteIndex[aBufNum] == 0) return;
+   doStop(aBufNum);
+   long long tNextWriteIndex = mNextWriteIndex[aBufNum];
+   long long tNumStrings = (long long)aNumStrings;
+   long long tLoopSize = tNextWriteIndex > tNumStrings ? tNumStrings : tNextWriteIndex;
+   long long tStartIndex = tNextWriteIndex - 1 - tLoopSize;
+   for (long long i = 0; i < tLoopSize; i++)
+   {
+      long long tReadIndex = tStartIndex + i;
+      printf("%3lld $ %s\n", tReadIndex, elementAtFirst(aBufNum, tReadIndex));
+   }
+   printf("\n");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Show.
 
 //******************************************************************************

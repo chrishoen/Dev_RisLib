@@ -70,6 +70,10 @@ public:
    // Mutexes that protects all starts, stops, and writes.
    Ris::Threads::MutexSemaphore mMutex[cNumBuffers];
 
+   // Default command line arguments.
+   int mDefaultBufNum;
+   int mDefaultShowSize;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

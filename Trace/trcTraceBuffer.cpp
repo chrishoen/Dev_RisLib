@@ -33,6 +33,8 @@ void TraceBuffer::reset()
       mNextWriteIndex[i] = 0;
       mWriteEnableFlag[i] = false;
    }
+   mDefaultBufNum = 1;
+   mDefaultShowSize = 40;
 }
 
 //******************************************************************************
@@ -62,6 +64,7 @@ char* TraceBuffer::elementAtLast(int aBufNum, long long aIndex)
 
 void TraceBuffer::doStart(int aBufNum)
 {
+   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
    mMutex[aBufNum].lock();
    mNextWriteIndex[aBufNum] = 0;
    mWriteEnableFlag[aBufNum] = true;
@@ -75,6 +78,7 @@ void TraceBuffer::doStart(int aBufNum)
 
 void TraceBuffer::doStop(int aBufNum)
 {
+   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
    mMutex[aBufNum].lock();
    mWriteEnableFlag[aBufNum] = false;
    mMutex[aBufNum].unlock();
@@ -88,6 +92,7 @@ void TraceBuffer::doStop(int aBufNum)
 
 void TraceBuffer::doResume(int aBufNum)
 {
+   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
    mMutex[aBufNum].lock();
    mWriteEnableFlag[aBufNum] = true;
    mMutex[aBufNum].unlock();
@@ -104,6 +109,7 @@ void TraceBuffer::doResume(int aBufNum)
 void TraceBuffer::doWrite(int aBufNum, const char* aString)
 {
    // Guard.
+   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
    if (!mWriteEnableFlag[aBufNum]) return;
 
    // Lock.
@@ -138,6 +144,7 @@ void TraceBuffer::doWrite(int aBufNum, const char* aString)
 
 void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
 {
+   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
    printf("TRACE FIRST****************************** %d %d\n",aBufNum, aShowSize);
    if (mNextWriteIndex[aBufNum] == 0)
    {
@@ -153,17 +160,17 @@ void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
    if (tNextWriteIndex > tShowSize)
    {
       tLoopSize = tShowSize;
-      long long tStartIndex = 0;
+      tStartIndex = 0;
    }
    else
    {
       tLoopSize = tNextWriteIndex;
-      long long tStartIndex = 0;
+      tStartIndex = 0;
    }
    for (long long i = 0; i < tLoopSize; i++)
    {
       long long tReadIndex = tStartIndex + i;
-      printf("%3lld $ %s\n", tReadIndex, elementAtFirst(aBufNum, tReadIndex));
+      printf("%4lld $ %s\n", tReadIndex, elementAtFirst(aBufNum, tReadIndex));
    }
    printf("\n");
 }
@@ -175,6 +182,7 @@ void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
 
 void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
 {
+   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
    printf("TRACE LAST******************************* %d %d\n", aBufNum, aShowSize);
    if (mNextWriteIndex[aBufNum] == 0)
    {
@@ -190,17 +198,17 @@ void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
    if (tNextWriteIndex > tShowSize)
    {
       tLoopSize = tShowSize;
-      long long tStartIndex = tNextWriteIndex - tLoopSize;
+      tStartIndex = tNextWriteIndex - tLoopSize;
    }
    else
    {
       tLoopSize = tNextWriteIndex;
-      long long tStartIndex = tNextWriteIndex - tLoopSize;
+      tStartIndex = tNextWriteIndex - tLoopSize;
    }
    for (long long i = 0; i < tLoopSize; i++)
    {
       long long tReadIndex = tStartIndex + i;
-      printf("%3lld $ %s\n", tReadIndex, elementAtFirst(aBufNum, tReadIndex));
+      printf("%4lld $ %s\n", tReadIndex, elementAtLast(aBufNum, tReadIndex));
    }
    printf("\n");
 }
@@ -212,8 +220,8 @@ void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
 
 void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(2, 1);
-   aCmd->setArgDefault(3, 20);
+   aCmd->setArgDefault(2, mDefaultBufNum);
+   aCmd->setArgDefault(3, mDefaultShowSize);
    int tBufNum = aCmd->argInt(2);
    int tShowSize = aCmd->argInt(3);
    if (aCmd->isArgString(1, "START"))
@@ -234,6 +242,18 @@ void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
    else if (aCmd->isArgString(1, "L"))
    {
       doShowLast(tBufNum, tShowSize);
+   }
+   else if (aCmd->isArgString(1, "B"))
+   {
+      mDefaultBufNum = aCmd->argInt(2);
+   }
+   else if (aCmd->isArgString(1, "S"))
+   {
+      mDefaultShowSize = aCmd->argInt(2);
+   }
+   else
+   {
+      printf("TRACE INVALID COMMAND\n");
    }
 }
 

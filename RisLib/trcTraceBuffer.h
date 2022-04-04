@@ -41,7 +41,7 @@ public:
    static const int cNumBuffers = 4;
 
    // Number of string elements per buffer.
-   static const int cNumElements = 100;
+   static const int cNumElements = 200;
 
    // Max string element size.
    static const int cMaxStringSize = 99;
@@ -107,6 +107,9 @@ public:
    // Stop tracing and show a first or last buffer.
    void doShowFirst(int aBufNum, int aNumStrings);
    void doShowLast(int aBufNum, int aNumStrings);
+
+   // Show trace buffer status.
+   void doShowStatus();
 
    // Execute a command line command to manage and show the trace buffers.
    void execute(Ris::CmdLineCmd* aCmd);

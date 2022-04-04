@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 
+#include "my_functions.h"
 #include "risCmdLineFile.h"
 
 #define  _TRCTRACEBUFFER_CPP_
@@ -33,7 +34,7 @@ void TraceBuffer::reset()
       mNextWriteIndex[i] = 0;
       mWriteEnableFlag[i] = false;
    }
-   mDefaultBufNum = 1;
+   mDefaultBufNum = 0;
    mDefaultShowSize = 40;
 }
 
@@ -64,7 +65,15 @@ char* TraceBuffer::elementAtLast(int aBufNum, long long aIndex)
 
 void TraceBuffer::doStart(int aBufNum)
 {
-   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
+   if (aBufNum < -1 || aBufNum >= cNumBuffers) return;
+   if (aBufNum == -1)
+   {
+      for (int i = 0; i < cNumBuffers; i++)
+      {
+         doStart(i);
+      }
+      return;
+   }
    mMutex[aBufNum].lock();
    mNextWriteIndex[aBufNum] = 0;
    mWriteEnableFlag[aBufNum] = true;
@@ -78,7 +87,15 @@ void TraceBuffer::doStart(int aBufNum)
 
 void TraceBuffer::doStop(int aBufNum)
 {
-   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
+   if (aBufNum < -1 || aBufNum >= cNumBuffers) return;
+   if (aBufNum == -1)
+   {
+      for (int i = 0; i < cNumBuffers; i++)
+      {
+         doStop(i);
+      }
+      return;
+   }
    mMutex[aBufNum].lock();
    mWriteEnableFlag[aBufNum] = false;
    mMutex[aBufNum].unlock();
@@ -92,7 +109,15 @@ void TraceBuffer::doStop(int aBufNum)
 
 void TraceBuffer::doResume(int aBufNum)
 {
-   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
+   if (aBufNum < -1 || aBufNum >= cNumBuffers) return;
+   if (aBufNum == -1)
+   {
+      for (int i = 0; i < cNumBuffers; i++)
+      {
+         doResume(i);
+      }
+      return;
+   }
    mMutex[aBufNum].lock();
    mWriteEnableFlag[aBufNum] = true;
    mMutex[aBufNum].unlock();
@@ -109,7 +134,7 @@ void TraceBuffer::doResume(int aBufNum)
 void TraceBuffer::doWrite(int aBufNum, const char* aString)
 {
    // Guard.
-   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
+   if (aBufNum < 0 || aBufNum >= cNumBuffers) return;
    if (!mWriteEnableFlag[aBufNum]) return;
 
    // Lock.
@@ -216,6 +241,20 @@ void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Show trace buffer status.
+
+void TraceBuffer::doShowStatus()
+{
+   printf("TRACE STATUS*****************************\n");
+   for (int i = 0; i < cNumBuffers; i++)
+   {
+      printf("%5lld %s\n", mNextWriteIndex[i], my_string_from_bool(mWriteEnableFlag[i]));
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Execute a command line command to manage and show the trace buffers.
 
 void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
@@ -224,15 +263,25 @@ void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(3, mDefaultShowSize);
    int tBufNum = aCmd->argInt(2);
    int tShowSize = aCmd->argInt(3);
-   if (aCmd->isArgString(1, "START"))
+   if (aCmd->isArgString(1, "STATUS"))
    {
-      printf("TRACE START %d\n", tBufNum);
+      printf("TRACE SHOW\n");
+      doShowStatus();
+   }
+   else if (aCmd->isArgString(1, "START"))
+   {
+      printf("TRACE START  %d\n", tBufNum);
       doStart(tBufNum);
    }
    else if (aCmd->isArgString(1, "STOP"))
    {
-      printf("TRACE STOP  %d\n", tBufNum);
+      printf("TRACE STOP   %d\n", tBufNum);
       doStop(tBufNum);
+   }
+   else if (aCmd->isArgString(1, "RESUME"))
+   {
+      printf("TRACE RESUME %d\n", tBufNum);
+      doResume(tBufNum);
    }
    else if (aCmd->isArgString(1, "F"))
    {

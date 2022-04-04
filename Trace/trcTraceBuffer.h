@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Trace buffer. 
+Program trace buffer facility. 
 ==============================================================================*/
 
 //******************************************************************************
@@ -122,7 +122,6 @@ public:
    // Return a pointer to an element in a last buffer, based on an index
    // modulo the number of elements.
    char* elementAtLast(int aBufNum, long long aIndex);
-
 };
 
 //******************************************************************************

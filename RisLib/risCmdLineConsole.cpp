@@ -12,6 +12,7 @@
 #include "risThreadsThreads.h"
 #include "my_functions.h"
 #include "prnPrint.h"
+#include "trcTraceBuffer.h"
 #include "risCmdLineReader.h"
 
 #define  _RISCMDLINECONSOLE_CPP_
@@ -87,6 +88,11 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
             {
                printf("EXIT\n");
                break;
+            }
+            // Test for a trace command.
+            else if (tCmd.isCmd("TRC"))
+            {
+               Trc::gTraceBuffer.execute(&tCmd);
             }
             // Test for special commands, if the first character is a digit.
             else if (tCmd.mArgNum == 0 &&

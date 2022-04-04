@@ -53,7 +53,6 @@ public:
    // Methods.
 
    // Execute specific commands.
-   void executeTrace(Ris::CmdLineCmd* aCmd);
    void executeGo1(Ris::CmdLineCmd* aCmd);
    void executeGo2(Ris::CmdLineCmd* aCmd);
    void executeGo3(Ris::CmdLineCmd* aCmd);

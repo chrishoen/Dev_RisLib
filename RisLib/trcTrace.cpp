@@ -56,10 +56,9 @@ void write (int aBufNum, const char* aFormat, ...)
    static const int cMaxStringSize = TraceBuffer::cMaxStringSize;
    char tPrintString[cMaxStringSize + 1];
 
-   int tPrintSize;
    va_list  ArgPtr;
    va_start(ArgPtr, aFormat);
-   tPrintSize = vsnprintf(tPrintString, cMaxStringSize, aFormat, ArgPtr);
+   vsnprintf(tPrintString, cMaxStringSize, aFormat, ArgPtr);
    va_end(ArgPtr);
    tPrintString[cMaxStringSize] = 0;
 

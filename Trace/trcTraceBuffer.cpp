@@ -136,15 +136,26 @@ void TraceBuffer::doWrite(int aBufNum, const char* aString)
 //******************************************************************************
 // Stop tracing and show a first buffer.
 
-void TraceBuffer::doShowFirst(int aBufNum, int aNumStrings)
+void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
 {
-   printf("TRACE FIRST*******************************\n");
+   printf("TRACE FIRST******************************\n");
    if (mNextWriteIndex[aBufNum] == 0) return;
+   if (aShowSize > cNumElements) aShowSize = cNumElements;
    doStop(aBufNum);
    long long tNextWriteIndex = mNextWriteIndex[aBufNum];
-   long long tNumStrings = (long long)aNumStrings;
-   long long tLoopSize = tNextWriteIndex > tNumStrings ? tNumStrings : tNextWriteIndex;
+   long long tShowSize = (long long)aShowSize;
    long long tStartIndex = 0;
+   long long tLoopSize = 0;
+   if (tNextWriteIndex > tShowSize)
+   {
+      tLoopSize = tShowSize;
+      long long tStartIndex = 0;
+   }
+   else
+   {
+      tLoopSize = tNextWriteIndex;
+      long long tStartIndex = 0;
+   }
    for (long long i = 0; i < tLoopSize; i++)
    {
       long long tReadIndex = tStartIndex + i;
@@ -158,15 +169,26 @@ void TraceBuffer::doShowFirst(int aBufNum, int aNumStrings)
 //******************************************************************************
 // Stop tracing and show a last buffer.
 
-void TraceBuffer::doShowLast(int aBufNum, int aNumStrings)
+void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
 {
    printf("TRACE LAST*******************************\n");
    if (mNextWriteIndex[aBufNum] == 0) return;
+   if (aShowSize > cNumElements) aShowSize = cNumElements;
    doStop(aBufNum);
    long long tNextWriteIndex = mNextWriteIndex[aBufNum];
-   long long tNumStrings = (long long)aNumStrings;
-   long long tLoopSize = tNextWriteIndex > tNumStrings ? tNumStrings : tNextWriteIndex;
-   long long tStartIndex = tNextWriteIndex - 1 - tLoopSize;
+   long long tShowSize = (long long)aShowSize;
+   long long tStartIndex = 0;
+   long long tLoopSize = 0;
+   if (tNextWriteIndex > tShowSize)
+   {
+      tLoopSize = tShowSize;
+      long long tStartIndex = tNextWriteIndex - tLoopSize;
+   }
+   else
+   {
+      tLoopSize = tNextWriteIndex;
+      long long tStartIndex = tNextWriteIndex - tLoopSize;
+   }
    for (long long i = 0; i < tLoopSize; i++)
    {
       long long tReadIndex = tStartIndex + i;

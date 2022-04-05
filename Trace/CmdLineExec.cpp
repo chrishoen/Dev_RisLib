@@ -54,12 +54,12 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
    int tLoopSize = aCmd->argInt(1);
-   Trc::gTraceBuffer.doStart(1);
+   Trc::gTraceBuffer.doStart(0);
    for (int i = 0; i < tLoopSize; i++)
    {
       char tString[40];
       sprintf(tString, "trace1 %d", i);
-      Trc::gTraceBuffer.doWrite(1, tString);
+      Trc::gTraceBuffer.doWrite(0, tString);
    }
 }
 
@@ -71,10 +71,10 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
    int tLoopSize = aCmd->argInt(1);
-   Trc::start(1);
+   Trc::start(0);
    for (int i = 0; i < tLoopSize; i++)
    {
-      Trc::write(1, "trace2 %d", i);
+      Trc::write(0, "trace2 %d", i);
    }
 }
 
@@ -85,18 +85,14 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned tValue1 = 0;
-   unsigned tValue2 = 0;
-   tValue1 = 0x00000000;
-   tValue1 = 0x0000ffff;
-   Prn::print(0, "%08x", tValue1);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   tValue2 = Ris::setBit(tValue1, tBitNum, tBitValue);
-
-   Prn::print(0, "%08x", tValue2);
+   aCmd->setArgDefault(2, 10);
+   int tBufNum = aCmd->argInt(1);
+   int tLoopSize = aCmd->argInt(2);
+   Trc::start(tBufNum);
+   for (int i = 0; i < tLoopSize; i++)
+   {
+      Trc::write(tBufNum, "trace2 %d", i);
+   }
 }
 
 //******************************************************************************

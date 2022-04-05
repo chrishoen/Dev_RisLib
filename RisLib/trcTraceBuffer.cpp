@@ -171,7 +171,7 @@ void TraceBuffer::doWrite(int aBufNum, const char* aString)
 
 void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
 {
-   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
+   if (aBufNum < 0 || aBufNum >= cNumBuffers) return;
    printf("TRACE FIRST****************************** %d %d\n",aBufNum, aShowSize);
    if (mNextWriteIndex[aBufNum] == 0)
    {
@@ -209,7 +209,7 @@ void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
 
 void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
 {
-   if (aBufNum < 1 || aBufNum > cNumBuffers) return;
+   if (aBufNum < 0 || aBufNum >= cNumBuffers) return;
    printf("TRACE LAST******************************* %d %d\n", aBufNum, aShowSize);
    if (mNextWriteIndex[aBufNum] == 0)
    {
@@ -248,6 +248,9 @@ void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
 void TraceBuffer::doShowStatus()
 {
    printf("TRACE STATUS*****************************\n");
+   printf("DefaultBufNum     %d\n", mDefaultBufNum);
+   printf("DefaultShowSize   %d\n", mDefaultShowSize);
+   printf("\n");
    for (int i = 0; i < cNumBuffers; i++)
    {
       printf("%5lld %s\n", mNextWriteIndex[i], my_string_from_bool(mWriteEnableFlag[i]));

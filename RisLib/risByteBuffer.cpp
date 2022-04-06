@@ -178,6 +178,22 @@ void ByteBuffer::advance (int aSize)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Advance to the next byte boundary.
+
+void  ByteBuffer::advanceToNextByteBoundary(int aByteBoundary)
+{
+   int tOffset = mWorkingLength % aByteBoundary;
+   if (tOffset) tOffset = aByteBoundary - tOffset;
+
+   if (tOffset + mWorkingIndex > mMaxLength) return;
+
+   mWorkingIndex += tOffset;
+   mWorkingLength += tOffset;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Fill buffer with zeros.
 
 void ByteBuffer::fillZero (int aSize)

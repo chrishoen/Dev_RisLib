@@ -58,27 +58,39 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,false);
-   bool tFlag1 = aCmd->argBool(1);
+   int tInt1 = 101;
+   char tChar1 = 1;
 
    Ris::ByteBuffer tBuffer(1000);
 
    tBuffer.setCopyTo();
-   tBuffer.copy ( &tFlag1 );
-   Prn::print(0,"Flag1          %5s",my_string_from_bool(tFlag1));
+   tBuffer.copy(&tInt1);
+   tBuffer.copy(&tChar1);
    Prn::print(0,"Buffer.Length  %5d",tBuffer.mWorkingLength);
-
-   tBuffer.rewind();
-   tBuffer.setCopyFrom();
-
-   tFlag1 = false;
-   tBuffer.copy ( &tFlag1 );
-   Prn::print(0,"Flag1          %5s",my_string_from_bool(tFlag1));
+   tBuffer.advanceToNextByteBoundary(4);
+   Prn::print(0, "Buffer.Length  %5d", tBuffer.mWorkingLength);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, false);
+   bool tFlag1 = aCmd->argBool(1);
+
+   Ris::ByteBuffer tBuffer(1000);
+
+   tBuffer.setCopyTo();
+   tBuffer.copy(&tFlag1);
+   Prn::print(0, "Flag1          %5s", my_string_from_bool(tFlag1));
+   Prn::print(0, "Buffer.Length  %5d", tBuffer.mWorkingLength);
+
+   tBuffer.rewind();
+   tBuffer.setCopyFrom();
+
+   tFlag1 = false;
+   tBuffer.copy(&tFlag1);
+   Prn::print(0, "Flag1          %5s", my_string_from_bool(tFlag1));
 }
 
 //******************************************************************************

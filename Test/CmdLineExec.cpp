@@ -50,11 +50,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "BEGIN");
-   Ris::RandomSleepMs tSleep(1000, 3000);
-   tSleep.doSleep();
-   Prn::print(0, "END");
+   int tDataLen = aCmd->argInt(1);
+   int tNewDataLen =
+      (tDataLen + sizeof(unsigned int) - 1) & ~(sizeof(unsigned int) - 1); //For safty reasons
+   Prn::print(0, "%d  %d", tDataLen, tNewDataLen);
 }
+
 
 //******************************************************************************
 //******************************************************************************
@@ -62,16 +63,10 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   unsigned tValue = 0;
-   tValue = 0x00000000;
-   tValue = 0x0000ffff;
-   Prn::print(0, "%08x", tValue);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = Ris::getBit(tValue, tBitNum);
-
-   Prn::print(0, "%d", tBitValue);
+   Prn::print(0, "BEGIN");
+   Ris::RandomSleepMs tSleep(1000, 3000);
+   tSleep.doSleep();
+   Prn::print(0, "END");
 }
 
 //******************************************************************************

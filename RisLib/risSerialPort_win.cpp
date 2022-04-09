@@ -509,7 +509,9 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    tOverlapped.hEvent = mSpecific->mRxEventHandle;
 
    // Issue read operation.
+   printf("SerialPort::doReceiveAllBytes READ begin\n");
    tRet = ReadFile(mSpecific->mPortHandle, aData, aRequestBytes, &tBytesRead, &tOverlapped);
+   printf("SerialPort::doReceiveAllBytes READ end 1\n");
 
    if (!tRet)
    {
@@ -533,6 +535,7 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    {
       // Wait for overlapped i/o completion.
       tRet = WaitForSingleObject(tOverlapped.hEvent, -1);
+      printf("SerialPort::doReceiveAllBytes READ end 2\n");
 
       // Test for abort.
       if (mAbortFlag)
@@ -551,6 +554,7 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
             tError = GetLastError();
             if (tError == 995)
             {
+               return cSerialRetEmpty;
                return cSerialRetAbort;
             }
             else
@@ -580,6 +584,10 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
       }
       break;
       }
+   }
+   else
+   {
+      printf("SerialPort::doReceiveAllBytes READ end 3\n");
    }
 
 

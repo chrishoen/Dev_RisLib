@@ -11,6 +11,11 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoSerial")
+return()
+
+add_subdirectory ("RisLib")
 add_subdirectory ("ByteContent")
 return()
 
@@ -38,11 +43,6 @@ return()
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("SerialTest3")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoSerial")
 return()
 
 add_subdirectory ("RisLib")

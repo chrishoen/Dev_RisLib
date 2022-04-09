@@ -96,7 +96,7 @@ bool SerialPort::doOpen()
    // Test the return code.
    if (mSpecific->mPortFd < 0)
    {
-      printf("serial_open_error_1 %d %s\n", errno, strerror(errno));
+      printf("serial_open_error_1 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
       return false;
    }
 
@@ -106,7 +106,7 @@ bool SerialPort::doOpen()
    // Test the return code.
    if (mSpecific->mPortFd < 0)
    {
-      printf("serial_open_error_2 %d\n", errno);
+      printf("serial_open_error_1 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
       return false;
    }
 

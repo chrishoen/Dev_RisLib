@@ -11,12 +11,12 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoSerial")
+add_subdirectory ("Trace")
 return()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("ByteContent")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoSerial")
 return()
 
 

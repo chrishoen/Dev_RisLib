@@ -48,10 +48,35 @@ void TraceBuffer::reset()
    mDefaultShowSize = 40;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void TraceBuffer::initialize()
 {}
+
 void TraceBuffer::finalize()
-{}
+{
+   for (const int& tTraceIndex : mTraceIndexSet)
+   {
+      doStop(tTraceIndex);
+      mMutex[tTraceIndex]->lock();
+      free(mBufferFirst[tTraceIndex]);
+      free(mBufferLast[tTraceIndex]);
+      mBufferFirst[tTraceIndex] = 0;
+      mBufferLast[tTraceIndex] = 0;
+      mBufferExists[tTraceIndex] = false;
+      mNextWriteIndex[tTraceIndex] = 0;
+      mWriteEnable[tTraceIndex] = false;
+      mWriteSuspend[tTraceIndex] = false;
+      mLogExists[tTraceIndex] = false;
+      mLogEnable[tTraceIndex] = false;
+      mWriteLevel[tTraceIndex] = 0;
+      mLogLevel[tTraceIndex] = 0;
+      mMutex[tTraceIndex]->unlock();
+      delete mMutex[tTraceIndex];
+   }
+}
 
 //******************************************************************************
 //******************************************************************************

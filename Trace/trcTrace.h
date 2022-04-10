@@ -16,16 +16,16 @@ namespace Trc
    void reset();
 
    // Start a trace on a buffer.
-   void start(int aBufNum);
+   void start(int aTraceIndex);
 
    // Stop a trace on a buffer.
-   void stop(int aBufNum);
+   void stop(int aTraceIndex);
 
    // Resume a stopped trace on a buffer.
-   void resume(int aBufNum);
+   void resume(int aTraceIndex);
 
    // Write to a trace buffer.
-   void write(int aBufNum, const char* aFormat, ...);
+   void write(int aTraceIndex, int aLevel, const char* aFormat, ...);
 
 //******************************************************************************
 //******************************************************************************

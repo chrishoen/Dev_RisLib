@@ -29,13 +29,45 @@ TraceBuffer::TraceBuffer()
 
 void TraceBuffer::reset()
 {
-   for (int i = 0; i < cNumBuffers; i++)
+   for (int i = 0; i < cNumTraces; i++)
    {
+      mBufferFirst[i] = 0;
+      mBufferLast[i] = 0;
+      mBufferExists[i] = false;
       mNextWriteIndex[i] = 0;
-      mWriteEnableFlag[i] = false;
+      mWriteEnable[i] = false;
+      mWriteSuspend[i] = false;
+      mLogExists[i] = false;
+      mLogEnable[i] = false;
+      mWriteLevel[i] = 0;
+      mLogLevel[i] = 0;
    }
-   mDefaultBufNum = 0;
+   mDefaultTraceIndex = 0;
    mDefaultShowSize = 40;
+}
+
+void TraceBuffer::initialize()
+{}
+void TraceBuffer::finalize()
+{}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Validity tests.
+
+// Return true if a trace buffer has been created.
+bool TraceBuffer::isValidTrace(int aTraceIndex)
+{
+   if (aTraceIndex < 1 || aTraceIndex >= cNumTraces) return false;
+   return mBufferExists[aTraceIndex];
+}
+
+// Return true if a trace buffer log file has been created.
+bool TraceBuffer::isValidLog(int aTraceIndex)
+{
+   if (aTraceIndex < 1 || aTraceIndex >= cNumTraces) return false;
+   return mLogExists[aTraceIndex];
 }
 
 //******************************************************************************
@@ -43,19 +75,22 @@ void TraceBuffer::reset()
 //******************************************************************************
 // Pointers.
 
-// Return a pointer to an element in a first buffer, based on an index.
-char* TraceBuffer::elementAtFirst(int aBufNum, long long aIndex)
+// Return a pointer to a string element in a first buffer,
+// based on an index.
+char* TraceBuffer::stringAtFirst(int aTraceIndex, long long aStringIndex)
 {
-   aIndex = aIndex < cNumElements ? aIndex : cNumElements - 1;
-   return mBufferFirst[aBufNum][aIndex];
+   aStringIndex = aStringIndex < cNumStrings ? aStringIndex : cNumStrings - 1;
+   char* tPtr = mBufferFirst[aTraceIndex] + (cMaxStringSize + 1) * aStringIndex;
+   return tPtr;
 }
 
-// Return a pointer to an element in a last buffer, based on an index
-// modulo the number of elements.
-char* TraceBuffer::elementAtLast(int aBufNum, long long aIndex)
+// Return a pointer to a string element in a last buffer,
+// based on an index modulo the number of elements.
+char* TraceBuffer::stringAtLast(int aTraceIndex, long long aStringIndex)
 {
-   aIndex %= cNumElements;
-   return mBufferLast[aBufNum][aIndex];
+   aStringIndex %= cNumStrings;
+   char* tPtr = mBufferFirst[aTraceIndex] + (cMaxStringSize + 1) * aStringIndex;
+   return tPtr;
 }
 
 //******************************************************************************
@@ -64,21 +99,14 @@ char* TraceBuffer::elementAtLast(int aBufNum, long long aIndex)
 // Start a trace on a buffer pair. Reset the write index and enable writes.
 // If the buffer number is -1 then start all buffers. 
 
-void TraceBuffer::doStart(int aBufNum)
+void TraceBuffer::doStart(int aTraceIndex)
 {
-   if (aBufNum < -1 || aBufNum >= cNumBuffers) return;
-   if (aBufNum == -1)
-   {
-      for (int i = 0; i < cNumBuffers; i++)
-      {
-         doStart(i);
-      }
-      return;
-   }
-   mMutex[aBufNum].lock();
-   mNextWriteIndex[aBufNum] = 0;
-   mWriteEnableFlag[aBufNum] = true;
-   mMutex[aBufNum].unlock();
+   if (!isValidTrace(aTraceIndex)) return;
+   mMutex[aTraceIndex].lock();
+   mNextWriteIndex[aTraceIndex] = 0;
+   mWriteEnable[aTraceIndex] = true;
+   mWriteSuspend[aTraceIndex] = false;
+   mMutex[aTraceIndex].unlock();
 }
 
 //******************************************************************************
@@ -87,20 +115,13 @@ void TraceBuffer::doStart(int aBufNum)
 // Stop a trace on a buffer pair. Disable writes.
 // If the buffer number is -1 then stop all buffers.
 
-void TraceBuffer::doStop(int aBufNum)
+void TraceBuffer::doStop(int aTraceIndex)
 {
-   if (aBufNum < -1 || aBufNum >= cNumBuffers) return;
-   if (aBufNum == -1)
-   {
-      for (int i = 0; i < cNumBuffers; i++)
-      {
-         doStop(i);
-      }
-      return;
-   }
-   mMutex[aBufNum].lock();
-   mWriteEnableFlag[aBufNum] = false;
-   mMutex[aBufNum].unlock();
+   if (!isValidTrace(aTraceIndex)) return;
+   mMutex[aTraceIndex].lock();
+   mWriteEnable[aTraceIndex] = false;
+   mWriteSuspend[aTraceIndex] = false;
+   mMutex[aTraceIndex].unlock();
 }
 
 //******************************************************************************
@@ -109,20 +130,26 @@ void TraceBuffer::doStop(int aBufNum)
 // Resume a stopped trace on a buffer pair. Enable writes. Don't change
 // the write index. If the buffer number is -1 then resume all buffers. 
 
-void TraceBuffer::doResume(int aBufNum)
+void TraceBuffer::doSuspend(int aTraceIndex)
 {
-   if (aBufNum < -1 || aBufNum >= cNumBuffers) return;
-   if (aBufNum == -1)
-   {
-      for (int i = 0; i < cNumBuffers; i++)
-      {
-         doResume(i);
-      }
-      return;
-   }
-   mMutex[aBufNum].lock();
-   mWriteEnableFlag[aBufNum] = true;
-   mMutex[aBufNum].unlock();
+   if (!isValidTrace(aTraceIndex)) return;
+   mMutex[aTraceIndex].lock();
+   mWriteSuspend[aTraceIndex] = true;
+   mMutex[aTraceIndex].unlock();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Resume a stopped trace on a buffer pair. Enable writes. Don't change
+// the write index. If the buffer number is -1 then resume all buffers. 
+
+void TraceBuffer::doResume(int aTraceIndex)
+{
+   if (!isValidTrace(aTraceIndex)) return;
+   mMutex[aTraceIndex].lock();
+   mWriteSuspend[aTraceIndex] = false;
+   mMutex[aTraceIndex].unlock();
 }
 
 //******************************************************************************
@@ -133,21 +160,23 @@ void TraceBuffer::doResume(int aBufNum)
 // write the first N strings. For the last buffer of the pair this writes
 // circulary modulo N.
 
-void TraceBuffer::doWrite(int aBufNum, const char* aString)
+void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
 {
    // Guard.
-   if (aBufNum < 0 || aBufNum >= cNumBuffers) return;
-   if (!mWriteEnableFlag[aBufNum]) return;
+   if (!isValidTrace(aTraceIndex)) return;
+   if (!mWriteEnable[aTraceIndex]) return;
+   if (mWriteSuspend[aTraceIndex]) return;
+   if (mWriteLevel[aTraceIndex] > aLevel) return;
 
    // Lock.
-   mMutex[aBufNum].lock();
+   mMutex[aTraceIndex].lock();
 
    // String destination pointers are determined by the write index.
-   char* tDestinFirst = elementAtFirst(aBufNum, mNextWriteIndex[aBufNum]);
-   char* tDestinLast = elementAtLast(aBufNum, mNextWriteIndex[aBufNum]);
+   char* tDestinFirst = stringAtFirst(aTraceIndex, mNextWriteIndex[aTraceIndex]);
+   char* tDestinLast = stringAtLast(aTraceIndex, mNextWriteIndex[aTraceIndex]);
 
    // Copy to buffer.
-   if (mNextWriteIndex[aBufNum] < cNumElements)
+   if (mNextWriteIndex[aTraceIndex] < cNumStrings)
    {
       strncpy(tDestinFirst, aString, cMaxStringSize);
       tDestinFirst[cMaxStringSize] = 0;
@@ -158,10 +187,10 @@ void TraceBuffer::doWrite(int aBufNum, const char* aString)
    tDestinLast[cMaxStringSize] = 0;
 
    // Advance the write index.
-   mNextWriteIndex[aBufNum]++;
+   mNextWriteIndex[aTraceIndex]++;
 
    // Unlock.
-   mMutex[aBufNum].unlock();
+   mMutex[aTraceIndex].unlock();
 }
 
 //******************************************************************************
@@ -169,18 +198,18 @@ void TraceBuffer::doWrite(int aBufNum, const char* aString)
 //******************************************************************************
 // Stop tracing and show a first buffer.
 
-void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
+void TraceBuffer::doShowFirst(int aTraceIndex, int aShowSize)
 {
-   if (aBufNum < 0 || aBufNum >= cNumBuffers) return;
-   printf("TRACE FIRST****************************** %d %d\n",aBufNum, aShowSize);
-   if (mNextWriteIndex[aBufNum] == 0)
+   if (!isValidTrace(aTraceIndex)) return;
+   printf("TRACE FIRST****************************** %d %d\n",aTraceIndex, aShowSize);
+   if (mNextWriteIndex[aTraceIndex] == 0)
    {
       printf("EMPTY\n");
       return;
    }
-   if (aShowSize > cNumElements) aShowSize = cNumElements;
-   doStop(aBufNum);
-   long long tNextWriteIndex = mNextWriteIndex[aBufNum];
+   if (aShowSize > cNumStrings) aShowSize = cNumStrings;
+   doStop(aTraceIndex);
+   long long tNextWriteIndex = mNextWriteIndex[aTraceIndex];
    long long tShowSize = (long long)aShowSize;
    long long tStartIndex = 0;
    long long tLoopSize = 0;
@@ -197,7 +226,7 @@ void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
    for (long long i = 0; i < tLoopSize; i++)
    {
       long long tReadIndex = tStartIndex + i;
-      printf("%4lld $ %s\n", tReadIndex, elementAtFirst(aBufNum, tReadIndex));
+      printf("%4lld $ %s\n", tReadIndex, stringAtFirst(aTraceIndex, tReadIndex));
    }
    printf("\n");
 }
@@ -207,18 +236,18 @@ void TraceBuffer::doShowFirst(int aBufNum, int aShowSize)
 //******************************************************************************
 // Stop tracing and show a last buffer.
 
-void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
+void TraceBuffer::doShowLast(int aTraceIndex, int aShowSize)
 {
-   if (aBufNum < 0 || aBufNum >= cNumBuffers) return;
-   printf("TRACE LAST******************************* %d %d\n", aBufNum, aShowSize);
-   if (mNextWriteIndex[aBufNum] == 0)
+   if (!isValidTrace(aTraceIndex)) return;
+   printf("TRACE LAST******************************* %d %d\n", aTraceIndex, aShowSize);
+   if (mNextWriteIndex[aTraceIndex] == 0)
    {
       printf("EMPTY\n");
       return;
    }
-   if (aShowSize > cNumElements) aShowSize = cNumElements;
-   doStop(aBufNum);
-   long long tNextWriteIndex = mNextWriteIndex[aBufNum];
+   if (aShowSize > cNumStrings) aShowSize = cNumStrings;
+   doStop(aTraceIndex);
+   long long tNextWriteIndex = mNextWriteIndex[aTraceIndex];
    long long tShowSize = (long long)aShowSize;
    long long tStartIndex = 0;
    long long tLoopSize = 0;
@@ -235,7 +264,7 @@ void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
    for (long long i = 0; i < tLoopSize; i++)
    {
       long long tReadIndex = tStartIndex + i;
-      printf("%4lld $ %s\n", tReadIndex, elementAtLast(aBufNum, tReadIndex));
+      printf("%4lld $ %s\n", tReadIndex, stringAtLast(aTraceIndex, tReadIndex));
    }
    printf("\n");
 }
@@ -248,12 +277,12 @@ void TraceBuffer::doShowLast(int aBufNum, int aShowSize)
 void TraceBuffer::doShowStatus()
 {
    printf("TRACE STATUS*****************************\n");
-   printf("DefaultBufNum     %d\n", mDefaultBufNum);
+   printf("DefaultTraceIndex     %d\n", mDefaultTraceIndex);
    printf("DefaultShowSize   %d\n", mDefaultShowSize);
    printf("\n");
-   for (int i = 0; i < cNumBuffers; i++)
+   for (int i = 0; i < cNumTraces; i++)
    {
-      printf("%5lld %s\n", mNextWriteIndex[i], my_string_from_bool(mWriteEnableFlag[i]));
+      printf("%5lld %s\n", mNextWriteIndex[i], my_string_from_bool(mWriteEnable[i]));
    }
 }
 
@@ -264,9 +293,9 @@ void TraceBuffer::doShowStatus()
 
 void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(2, mDefaultBufNum);
+   aCmd->setArgDefault(2, mDefaultTraceIndex);
    aCmd->setArgDefault(3, mDefaultShowSize);
-   int tBufNum = aCmd->argInt(2);
+   int tTraceIndex = aCmd->argInt(2);
    int tShowSize = aCmd->argInt(3);
    if (aCmd->isArgString(1, "STATUS"))
    {
@@ -275,31 +304,40 @@ void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
    }
    else if (aCmd->isArgString(1, "START"))
    {
-      printf("TRACE START  %d\n", tBufNum);
-      doStart(tBufNum);
+      printf("TRACE START  %d\n", tTraceIndex);
+      doStart(tTraceIndex);
    }
    else if (aCmd->isArgString(1, "STOP"))
    {
-      printf("TRACE STOP   %d\n", tBufNum);
-      doStop(tBufNum);
+      printf("TRACE STOP   %d\n", tTraceIndex);
+      doStop(tTraceIndex);
+   }
+   else if (aCmd->isArgString(1, "SUSPEND"))
+   {
+      printf("TRACE RESUME %d\n", tTraceIndex);
+      doSuspend(tTraceIndex);
    }
    else if (aCmd->isArgString(1, "RESUME"))
    {
-      printf("TRACE RESUME %d\n", tBufNum);
-      doResume(tBufNum);
+      printf("TRACE RESUME %d\n", tTraceIndex);
+      doResume(tTraceIndex);
    }
    else if (aCmd->isArgString(1, "F"))
    {
       aCmd->setArgDefault(3, 20);
-      doShowFirst(tBufNum, tShowSize);
+      doSuspend(tTraceIndex);
+      doShowFirst(tTraceIndex, tShowSize);
+      doResume(tTraceIndex);
    }
    else if (aCmd->isArgString(1, "L"))
    {
-      doShowLast(tBufNum, tShowSize);
+      doSuspend(tTraceIndex);
+      doShowLast(tTraceIndex, tShowSize);
+      doResume(tTraceIndex);
    }
    else if (aCmd->isArgString(1, "B"))
    {
-      mDefaultBufNum = aCmd->argInt(2);
+      mDefaultTraceIndex = aCmd->argInt(2);
    }
    else if (aCmd->isArgString(1, "S"))
    {

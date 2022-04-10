@@ -26,21 +26,21 @@ void reset()
 }
 
 // Start a trace on a buffer.
-void start(int aBufNum)
+void start(int aTraceIndex)
 {
-   gTraceBuffer.doStart(aBufNum);
+   gTraceBuffer.doStart(aTraceIndex);
 }
 
 // Stop a trace on a buffer.
-void stop(int aBufNum)
+void stop(int aTraceIndex)
 {
-   gTraceBuffer.doStop(aBufNum);
+   gTraceBuffer.doStop(aTraceIndex);
 }
 
 // Resume a stopped trace on a buffer.
-void resume(int aBufNum)
+void resume(int aTraceIndex)
 {
-   gTraceBuffer.doResume(aBufNum);
+   gTraceBuffer.doResume(aTraceIndex);
 }
 
 //******************************************************************************
@@ -48,24 +48,25 @@ void resume(int aBufNum)
 //******************************************************************************
 // Write to a trace buffer.
 
-void write (int aBufNum, const char* aFormat, ...)
+void write (int aTraceIndex, int aLevel, const char* aFormat, ...)
 {
-   //-----------------------------------------------------
-   // Do a vsprintf with variable arg list into print string
+   // Guard.
+   if (!gTraceBuffer.isValidTrace(aTraceIndex)) return;
+   if (!gTraceBuffer.mWriteEnable[aTraceIndex]) return;
+   if (gTraceBuffer.mWriteSuspend[aTraceIndex]) return;
+   if (gTraceBuffer.mWriteLevel[aTraceIndex] > aLevel) return;
 
+   // Do a vsprintf with variable arg list into print string.
    static const int cMaxStringSize = TraceBuffer::cMaxStringSize;
-   char tPrintString[cMaxStringSize + 1];
-
+   char tString[cMaxStringSize + 1];
    va_list  ArgPtr;
    va_start(ArgPtr, aFormat);
-   vsnprintf(tPrintString, cMaxStringSize, aFormat, ArgPtr);
+   vsnprintf(tString, cMaxStringSize, aFormat, ArgPtr);
    va_end(ArgPtr);
-   tPrintString[cMaxStringSize] = 0;
+   tString[cMaxStringSize] = 0;
 
-   //-----------------------------------------------------
-   // Print the string
-
-   gTraceBuffer.doWrite(aBufNum, tPrintString);
+   // Write the string.
+   gTraceBuffer.doWrite(aTraceIndex, aLevel, tString);
 }
 
 //******************************************************************************

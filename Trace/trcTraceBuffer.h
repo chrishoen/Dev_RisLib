@@ -37,11 +37,11 @@ public:
    //***************************************************************************
    // Constants.
 
-   // Number of buffers.
-   static const int cNumBuffers = 4;
+   // Number of available trace buffers.
+   static const int cNumTraces = 100;
 
    // Number of string elements per buffer.
-   static const int cNumElements = 200;
+   static const int cNumStrings = 200;
 
    // Max string element size.
    static const int cMaxStringSize = 99;
@@ -51,27 +51,58 @@ public:
    //***************************************************************************
    // Members.
 
-   // String buffer that stores the first N writes.
-   char mBufferFirst[cNumBuffers][cNumElements][cMaxStringSize];
+   // Array of pointers to string buffers that stores the first N writes.
+   // This is equivalent to:
+   // char mBufferFirst[cNumTraces][cNumStrings][cMaxStringSize];
+   char* mBufferFirst[cNumTraces];
 
-   // Circular string buffer that stores the last N writes.
-   char mBufferLast[cNumBuffers][cNumElements][cMaxStringSize];
+   // Array of pointers to circular string buffers that stores the last N writes.
+   // This is equivalent to:
+   // char mBufferLast[cNumTraces][cNumStrings][cMaxStringSize];
+   char* mBufferLast[cNumTraces];
+
+   // True if a buffer pair has been created.
+   bool mBufferExists[cNumTraces];
 
    // For each buffer pair, the index of the next string to write to. This is
    // incremented after each write and it increases indefinitely. The first
    // buffer is only written to for the first N strings and the last buffer
    // is written to modulo N, where N is the number of string elements
    // in a buffer.
-   long long mNextWriteIndex[cNumBuffers];
+   long long mNextWriteIndex[cNumTraces];
 
    // If true then writes are enabled for a buffer pair.
-   bool mWriteEnableFlag[cNumBuffers];
+   bool mWriteEnable[cNumTraces];
 
-   // Mutexes that protects all starts, stops, and writes.
-   Ris::Threads::MutexSemaphore mMutex[cNumBuffers];
+   // If true then writes are suspended for a buffer pair.
+   bool mWriteSuspend[cNumTraces];
+
+   // True if a trace log file has been created.
+   bool mLogExists[cNumTraces];
+
+   // If true then logging is enabled. In this case all enabled
+   // writes are written to a log file.
+   bool mLogEnable[cNumTraces];
+
+   // Trace write level. Write calls supply a level argument. If it is
+   // greater than or equal to the write level then the write is executed.
+   int mWriteLevel[cNumTraces];
+
+   // Trace write level. Write calls supply a level argument. If it is
+   // greater than or equal to the log level then the write is written
+   // to a log file.
+   int mLogLevel[cNumTraces];
+
+   // Mutexes that protect all starts, stops, writes, and shows.
+   Ris::Threads::MutexSemaphore mMutex[cNumTraces];
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Default command line arguments.
-   int mDefaultBufNum;
+   int mDefaultTraceIndex;
    int mDefaultShowSize;
 
    //***************************************************************************
@@ -82,33 +113,49 @@ public:
    // Constructor,
    TraceBuffer();
    void reset();
+   void initialize();
+   void finalize();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods. Write.
 
+   // Allocate memory for a trace buffer pair. Set the initial write level
+   // for the trace.
+   void doCreateBuffer(int aTraceIndex, int aWriteLevel);
+
+   // Disable a trace and deallocate its memory.
+   void doDeleteBuffer(int aTraceIndex);
+
+   // Create a log file for a trace. Set the initial log level
+   // for the trace.
+   void doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aFilePath);
+
    // Start a trace on a buffer pair. Reset the write index and enable writes.
    // If the buffer number is -1 then start all buffers.
-   void doStart(int aBufNum);
+   void doStart(int aTraceIndex);
 
    // Stop a trace on a buffer pair. Disable writes.
    // If the buffer number is -1 then stop all buffers.
-   void doStop(int aBufNum);
+   void doStop(int aTraceIndex);
 
-   // Resume a stopped trace on a buffer pair. Enable writes. Don't change
-   // the write index. If the buffer number is -1 then resume all buffers.
-   void doResume(int aBufNum);
+   // Suspend a trace on a buffer pair.
+   void doSuspend(int aTraceIndex);
 
-   // If enabled, write a string to a buffer pair at the write index and
-   // advance the write index. For the first buffer of the pair this only 
-   // write the first N strings. For the last buffer of the pair this writes
-   // circulary modulo N.
-   void doWrite(int aBufNum, const char* aString);
+   // Resume a suspended trace on a buffer pair.
+   void doResume(int aTraceIndex);
 
-   // Stop tracing and show a first or last buffer.
-   void doShowFirst(int aBufNum, int aNumStrings);
-   void doShowLast(int aBufNum, int aNumStrings);
+   // If enabled and not suspended, write a string to a buffer pair at the
+   // write index and advance the write index. For the first buffer of the
+   // pair this only writes the first N strings. For the last buffer of the
+   // pair this writes circulary modulo N. If writes are enabled and logs
+   // are enabled then this writes the string to a log file.
+   void doWrite(int aTraceIndex, int aLevel, const char* aString);
+
+   // Suspend tracing, show a first or last buffer, and resume tracing.
+   void doShowFirst(int aTraceIndex, int aNumStrings);
+   void doShowLast(int aTraceIndex, int aNumStrings);
 
    // Show trace buffer status.
    void doShowStatus();
@@ -121,12 +168,19 @@ public:
    //***************************************************************************
    // Methods. Helpers.
 
-   // Return a pointer to an element in a first buffer, based on an index.
-   char* elementAtFirst(int aBufNum, long long aIndex);
+   // Return true if a trace buffer has been created.
+   bool isValidTrace(int aTraceIndex);
 
-   // Return a pointer to an element in a last buffer, based on an index
-   // modulo the number of elements.
-   char* elementAtLast(int aBufNum, long long aIndex);
+   // Return true if a trace buffer log file has been created.
+   bool isValidLog(int aTraceIndex);
+
+   // Return a pointer to a string element in a first buffer,
+   // based on an index.
+   char* stringAtFirst(int aTraceIndex, long long aStringIndex);
+
+   // Return a pointer to a string element in a last buffer,
+   // based on an index modulo the number of elements.
+   char* stringAtLast(int aTraceIndex, long long aStringIndex);
 };
 
 //******************************************************************************

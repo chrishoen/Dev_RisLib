@@ -60,7 +60,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    {
       char tString[40];
       sprintf(tString, "trace1 %d", i);
-      Trc::gTraceBuffer.doWrite(0, tString);
+      Trc::gTraceBuffer.doWrite(1, 0, tString);
    }
 }
 
@@ -75,7 +75,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    Trc::start(0);
    for (int i = 0; i < tLoopSize; i++)
    {
-      Trc::write(0, "trace2 %d", i);
+      Trc::write(1, 0, "trace2 %d", i);
    }
 }
 
@@ -87,12 +87,12 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 0);
    aCmd->setArgDefault(2, 10);
-   int tBufNum = aCmd->argInt(1);
+   int tTraceIndex = aCmd->argInt(1);
    int tLoopSize = aCmd->argInt(2);
-   Trc::start(tBufNum);
+   Trc::start(tTraceIndex);
    for (int i = 0; i < tLoopSize; i++)
    {
-      Trc::write(tBufNum, "trace2 %d", i);
+      Trc::write(tTraceIndex, 0, "trace2 %d", i);
    }
 }
 
@@ -102,16 +102,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned char tValue = 0x0f;
-   Prn::print(0, "%02x", tValue);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   Ris::setBit(&tValue, tBitNum, tBitValue);
-
-   Prn::print(0, "%02x", tValue);
 }
 
 //******************************************************************************
@@ -120,10 +110,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   printf("printf\n");
-   Prn::print(0, "Prn::print 0");
-   Prn::print(Prn::Show1, "Prn::print Prn::Show1");
-   Prn::print(Prn::Show2, "Prn::print Prn::Show");
 }
 
 //******************************************************************************
@@ -132,12 +118,5 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "Ris::portableGetCurrentDir() %s", Ris::portableGetCurrentDir());
-   Prn::print(0, "Ris::portableGetProgramDir() %s", Ris::portableGetProgramDir());
-   double tTime = Ris::getProgramTime();
-   unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
-
-   Prn::print(0, "Ris::getProgramTime           %10.6f", tTime);
-   Prn::print(0, "Ris::getCpuTimeUIntMs         %10d", tTimeMS);
 }
 

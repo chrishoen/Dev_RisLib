@@ -5,6 +5,7 @@
 #include "stdafx.h"
 
 #include "my_functions.h"
+#include "risProgramTime.h"
 #include "risCmdLineFile.h"
 
 #define  _TRCTRACEBUFFER_CPP_
@@ -37,6 +38,7 @@ void TraceBuffer::reset()
       mNextWriteIndex[i] = 0;
       mWriteEnable[i] = false;
       mWriteSuspend[i] = false;
+      mWriteTimetag[i] = 0;
       mLogExists[i] = false;
       mLogEnable[i] = false;
       mWriteLevel[i] = 0;
@@ -218,6 +220,14 @@ void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
    // Lock.
    mMutex[aTraceIndex]->lock();
 
+   // Set the timetag to the program time.
+   mWriteTimetag[aTraceIndex] = Ris::getProgramTime();
+
+   // Add the timetag and the input string to a temp string.
+   char tString[cMaxStringSize + 1];
+   snprintf(tString, cMaxStringSize, "%7.3f $ %s", mWriteTimetag[aTraceIndex], aString);
+   tString[cMaxStringSize] = 0;
+
    // String destination pointers are determined by the write index.
    char* tDestinFirst = stringAtFirst(aTraceIndex, mNextWriteIndex[aTraceIndex]);
    char* tDestinLast = stringAtLast(aTraceIndex, mNextWriteIndex[aTraceIndex]);
@@ -225,12 +235,12 @@ void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
    // Copy to buffer.
    if (mNextWriteIndex[aTraceIndex] < cNumStrings)
    {
-      strncpy(tDestinFirst, aString, cMaxStringSize);
+      strncpy(tDestinFirst, tString, cMaxStringSize);
       tDestinFirst[cMaxStringSize] = 0;
    }
 
    // Copy to buffer.
-   strncpy(tDestinLast, aString, cMaxStringSize);
+   strncpy(tDestinLast, tString, cMaxStringSize);
    tDestinLast[cMaxStringSize] = 0;
 
    // Advance the write index.

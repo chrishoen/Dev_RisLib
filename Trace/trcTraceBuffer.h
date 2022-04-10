@@ -78,6 +78,9 @@ public:
    // If true then writes are suspended for a buffer pair.
    bool mWriteSuspend[cNumTraces];
 
+   // Timetag of last write, in program time.
+   double mWriteTimetag[cNumTraces];
+
    // True if a trace log file has been created.
    bool mLogExists[cNumTraces];
 

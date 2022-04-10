@@ -8,6 +8,7 @@ Program trace buffer facility.
 //******************************************************************************
 //******************************************************************************
 
+#include <set>
 #include "risThreadsSynch.h"
 #include "risCmdLineCmd.h"
 
@@ -94,7 +95,10 @@ public:
    int mLogLevel[cNumTraces];
 
    // Mutexes that protect all starts, stops, writes, and shows.
-   Ris::Threads::MutexSemaphore mMutex[cNumTraces];
+   Ris::Threads::MutexSemaphore* mMutex[cNumTraces];
+
+   // Set of trace indices for all trace buffers that have been created.
+   std::set<int> mTraceIndexSet;
 
    //***************************************************************************
    //***************************************************************************

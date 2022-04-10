@@ -41,7 +41,9 @@ void TraceBuffer::reset()
       mLogEnable[i] = false;
       mWriteLevel[i] = 0;
       mLogLevel[i] = 0;
+      mMutex[i] = 0;
    }
+   mTraceIndexSet.clear();
    mDefaultTraceIndex = 1;
    mDefaultShowSize = 40;
 }
@@ -67,6 +69,8 @@ void TraceBuffer::doCreateBuffer(int aTraceIndex, int aWriteLevel)
    mBufferLast[aTraceIndex] = (char*)malloc(cNumStrings * (cMaxStringSize + 1));
    mBufferExists[aTraceIndex] = true;
    mWriteLevel[aTraceIndex] = aWriteLevel;
+   mMutex[aTraceIndex] = new Ris::Threads::MutexSemaphore;
+   mTraceIndexSet.insert(aTraceIndex);
 }
 
 //******************************************************************************
@@ -120,11 +124,11 @@ char* TraceBuffer::stringAtLast(int aTraceIndex, long long aStringIndex)
 void TraceBuffer::doStart(int aTraceIndex)
 {
    if (!isValidTrace(aTraceIndex)) return;
-   mMutex[aTraceIndex].lock();
+   mMutex[aTraceIndex]->lock();
    mNextWriteIndex[aTraceIndex] = 0;
    mWriteEnable[aTraceIndex] = true;
    mWriteSuspend[aTraceIndex] = false;
-   mMutex[aTraceIndex].unlock();
+   mMutex[aTraceIndex]->unlock();
 }
 
 //******************************************************************************
@@ -136,10 +140,10 @@ void TraceBuffer::doStart(int aTraceIndex)
 void TraceBuffer::doStop(int aTraceIndex)
 {
    if (!isValidTrace(aTraceIndex)) return;
-   mMutex[aTraceIndex].lock();
+   mMutex[aTraceIndex]->lock();
    mWriteEnable[aTraceIndex] = false;
    mWriteSuspend[aTraceIndex] = false;
-   mMutex[aTraceIndex].unlock();
+   mMutex[aTraceIndex]->unlock();
 }
 
 //******************************************************************************
@@ -151,9 +155,9 @@ void TraceBuffer::doStop(int aTraceIndex)
 void TraceBuffer::doSuspend(int aTraceIndex)
 {
    if (!isValidTrace(aTraceIndex)) return;
-   mMutex[aTraceIndex].lock();
+   mMutex[aTraceIndex]->lock();
    mWriteSuspend[aTraceIndex] = true;
-   mMutex[aTraceIndex].unlock();
+   mMutex[aTraceIndex]->unlock();
 }
 
 //******************************************************************************
@@ -165,9 +169,9 @@ void TraceBuffer::doSuspend(int aTraceIndex)
 void TraceBuffer::doResume(int aTraceIndex)
 {
    if (!isValidTrace(aTraceIndex)) return;
-   mMutex[aTraceIndex].lock();
+   mMutex[aTraceIndex]->lock();
    mWriteSuspend[aTraceIndex] = false;
-   mMutex[aTraceIndex].unlock();
+   mMutex[aTraceIndex]->unlock();
 }
 
 //******************************************************************************
@@ -187,7 +191,7 @@ void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
    if (mWriteLevel[aTraceIndex] < aLevel) return;
 
    // Lock.
-   mMutex[aTraceIndex].lock();
+   mMutex[aTraceIndex]->lock();
 
    // String destination pointers are determined by the write index.
    char* tDestinFirst = stringAtFirst(aTraceIndex, mNextWriteIndex[aTraceIndex]);
@@ -208,7 +212,7 @@ void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
    mNextWriteIndex[aTraceIndex]++;
 
    // Unlock.
-   mMutex[aTraceIndex].unlock();
+   mMutex[aTraceIndex]->unlock();
 }
 
 //******************************************************************************
@@ -296,11 +300,11 @@ void TraceBuffer::doShowStatus()
 {
    printf("TRACE STATUS*****************************\n");
    printf("DefaultTraceIndex     %d\n", mDefaultTraceIndex);
-   printf("DefaultShowSize   %d\n", mDefaultShowSize);
+   printf("DefaultShowSize       %d\n", mDefaultShowSize);
    printf("\n");
-   for (int i = 0; i < cNumTraces; i++)
+   for (const int& i : mTraceIndexSet)
    {
-      printf("%5lld %s\n", mNextWriteIndex[i], my_string_from_bool(mWriteEnable[i]));
+      printf("%3d %5lld %s\n", i, mNextWriteIndex[i], my_string_from_bool(mWriteEnable[i]));
    }
 }
 
@@ -315,7 +319,7 @@ void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(3, mDefaultShowSize);
    int tTraceIndex = aCmd->argInt(2);
    int tShowSize = aCmd->argInt(3);
-   if (aCmd->isArgString(1, "STATUS"))
+   if (aCmd->isArgString(1, "SHOW"))
    {
       printf("TRACE SHOW\n");
       doShowStatus();

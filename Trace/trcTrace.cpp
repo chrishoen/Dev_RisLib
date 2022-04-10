@@ -25,6 +25,25 @@ void reset()
    gTraceBuffer.reset();
 }
 
+// Allocate memory for a trace buffer. Set the initial write level.
+void create_buffer(int aTraceIndex, int aWriteLevel)
+{
+   gTraceBuffer.doCreateBuffer(aTraceIndex, aWriteLevel);
+}
+
+// Initialize.
+void initialize()
+{
+   gTraceBuffer.initialize();
+}
+
+// Finalize.
+void finalize()
+{
+   gTraceBuffer.finalize();
+}
+
+// Initialize.
 // Start a trace on a buffer.
 void start(int aTraceIndex)
 {
@@ -37,7 +56,13 @@ void stop(int aTraceIndex)
    gTraceBuffer.doStop(aTraceIndex);
 }
 
-// Resume a stopped trace on a buffer.
+// Suspend a trace on a buffer.
+void suspend(int aTraceIndex)
+{
+   gTraceBuffer.doSuspend(aTraceIndex);
+}
+
+// Resume a suspended trace on a buffer.
 void resume(int aTraceIndex)
 {
    gTraceBuffer.doResume(aTraceIndex);
@@ -54,7 +79,7 @@ void write (int aTraceIndex, int aLevel, const char* aFormat, ...)
    if (!gTraceBuffer.isValidTrace(aTraceIndex)) return;
    if (!gTraceBuffer.mWriteEnable[aTraceIndex]) return;
    if (gTraceBuffer.mWriteSuspend[aTraceIndex]) return;
-   if (gTraceBuffer.mWriteLevel[aTraceIndex] > aLevel) return;
+   if (gTraceBuffer.mWriteLevel[aTraceIndex] < aLevel) return;
 
    // Do a vsprintf with variable arg list into print string.
    static const int cMaxStringSize = TraceBuffer::cMaxStringSize;

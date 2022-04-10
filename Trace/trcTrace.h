@@ -15,13 +15,25 @@ namespace Trc
    // Reset the trace facility.
    void reset();
 
+   // Allocate memory for a trace buffer. Set the initial write level.
+   void create_buffer(int aTraceIndex, int aWriteLevel);
+
+   // Initialize.
+   void initialize();
+
+   // Initialize.
+   void finalize();
+
    // Start a trace on a buffer.
    void start(int aTraceIndex);
 
    // Stop a trace on a buffer.
    void stop(int aTraceIndex);
 
-   // Resume a stopped trace on a buffer.
+   // Suspend a trace on a buffer.
+   void suspend(int aTraceIndex);
+
+   // Resume a suspended trace on a buffer.
    void resume(int aTraceIndex);
 
    // Write to a trace buffer.

@@ -42,7 +42,7 @@ void TraceBuffer::reset()
       mWriteLevel[i] = 0;
       mLogLevel[i] = 0;
    }
-   mDefaultTraceIndex = 0;
+   mDefaultTraceIndex = 1;
    mDefaultShowSize = 40;
 }
 
@@ -50,6 +50,24 @@ void TraceBuffer::initialize()
 {}
 void TraceBuffer::finalize()
 {}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Allocate memory for a trace buffer pair. Set the initial write level
+// for the trace.
+
+void TraceBuffer::doCreateBuffer(int aTraceIndex, int aWriteLevel)
+{
+   // Guard.
+   if (aTraceIndex < 1 || aTraceIndex >= cNumTraces) return;
+
+   // Allocate memory for the trace buffer pair and set variables.
+   mBufferFirst[aTraceIndex] = (char*)malloc(cNumStrings * (cMaxStringSize + 1));
+   mBufferLast[aTraceIndex] = (char*)malloc(cNumStrings * (cMaxStringSize + 1));
+   mBufferExists[aTraceIndex] = true;
+   mWriteLevel[aTraceIndex] = aWriteLevel;
+}
 
 //******************************************************************************
 //******************************************************************************
@@ -166,7 +184,7 @@ void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
    if (!isValidTrace(aTraceIndex)) return;
    if (!mWriteEnable[aTraceIndex]) return;
    if (mWriteSuspend[aTraceIndex]) return;
-   if (mWriteLevel[aTraceIndex] > aLevel) return;
+   if (mWriteLevel[aTraceIndex] < aLevel) return;
 
    // Lock.
    mMutex[aTraceIndex].lock();

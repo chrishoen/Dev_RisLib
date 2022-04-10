@@ -55,7 +55,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
    int tLoopSize = aCmd->argInt(1);
-   Trc::gTraceBuffer.doStart(0);
+   Trc::gTraceBuffer.doStart(1);
    for (int i = 0; i < tLoopSize; i++)
    {
       char tString[40];
@@ -72,7 +72,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
    int tLoopSize = aCmd->argInt(1);
-   Trc::start(0);
+   Trc::start(1);
    for (int i = 0; i < tLoopSize; i++)
    {
       Trc::write(1, 0, "trace2 %d", i);

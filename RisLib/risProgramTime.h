@@ -31,6 +31,9 @@ long long int getProgramTimeNS();
 // Return the current cpu time in milliseconds.
 unsigned int getCpuTimeUIntMS();
 
+// Return the current cpu time in milliseconds.
+long long getCpuTimeLongLongMS();
+
 //*****************************************************************************
 //*****************************************************************************
 //*****************************************************************************

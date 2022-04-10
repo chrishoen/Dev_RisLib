@@ -348,6 +348,7 @@ bool my_copy_file(char* aSourcePath, char* aDestinPath)
    // Copy source file to destination file
 
    char* tBuffer = (char*)malloc(1024);
+   if (!tBuffer) return false;
    int  tReadResult  = 0;
    int  tWriteResult = 0;
    int  tReadCount   = 0;
@@ -407,6 +408,8 @@ bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes)
 
    char* tBuffer1 = (char*)malloc(aNumOfBytes);
    char* tBuffer2 = (char*)malloc(aNumOfBytes);
+   if (!tBuffer1) return false;
+   if (!tBuffer2) return false;
 
    //--------------------------------------------------------------
    // Read from files
@@ -497,7 +500,7 @@ char* my_stringLLU(char* aString,unsigned long long aValue)
    if (tString3[j-1]==tSkip)j--;
 
    tLen3=j;
-   tString3[tLen3]=0;
+   if (tLen3 >= 0) tString3[tLen3]=0;
 
    for (int i = 0; i< tLen3; i++)
    {
@@ -505,7 +508,7 @@ char* my_stringLLU(char* aString,unsigned long long aValue)
       tString4[j] = tString3[i];
    }
    tLen4=tLen3;
-   tString4[tLen4]=0;
+   if (tLen4 >= 0) tString4[tLen4]=0;
 
    strncpy(aString,tString4,tLen4);
    aString[tLen4]=0;
@@ -557,7 +560,7 @@ char* my_stringLL(char* aString, long long aValue)
    if (tString3[j - 1] == tSkip)j--;
 
    tLen3 = j;
-   tString3[tLen3] = 0;
+   if (tLen3 >= 0) tString3[tLen3] = 0;
 
    for (int i = 0; i < tLen3; i++)
    {
@@ -565,7 +568,7 @@ char* my_stringLL(char* aString, long long aValue)
       tString4[j] = tString3[i];
    }
    tLen4 = tLen3;
-   tString4[tLen4] = 0;
+   if (tLen4 >= 0) tString4[tLen4] = 0;
 
    strncpy(aString, tString4, tLen4);
    aString[tLen4] = 0;

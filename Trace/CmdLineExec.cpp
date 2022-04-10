@@ -102,6 +102,9 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   char tString[100];
+   long long tTime = Ris::getCpuTimeLongLongMS();
+   Prn::print(0, "%lld %s", tTime, my_stringLL(tString, tTime));
 }
 
 //******************************************************************************

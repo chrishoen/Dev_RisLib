@@ -161,6 +161,9 @@ public:
    // Show trace buffer status.
    void doShowStatus();
 
+   // Show trace buffer help.
+   void doShowHelp();
+
    // Execute a command line command to manage and show the trace buffers.
    void execute(Ris::CmdLineCmd* aCmd);
 

@@ -389,13 +389,45 @@ void TraceBuffer::doShowLast(int aTraceIndex, int aShowSize)
 void TraceBuffer::doShowStatus()
 {
    printf("TRACE STATUS*****************************\n");
-   printf("DefaultTraceIndex     %d\n", mDefaultTraceIndex);
-   printf("DefaultShowSize       %d\n", mDefaultShowSize);
+   printf("trace  write  write log     write\n");
+   printf("index  enable level exists  index\n");
    printf("\n");
+
    for (const int& i : mTraceIndexSet)
    {
-      printf("%3d %5lld %s\n", i, mNextWriteIndex[i], my_string_from_bool(mWriteEnable[i]));
+   printf("%-4d   %-5s  %-1d     %-5s   %-5lld \n",
+         i,
+         my_string_from_bool(mWriteEnable[i]),
+         mWriteLevel[i],
+         my_string_from_bool(mLogExists[i]),
+         mNextWriteIndex[i]);
    }
+
+   printf("\n");
+   printf("DefaultTraceIndex   %d\n", mDefaultTraceIndex);
+   printf("DefaultShowSize     %d\n", mDefaultShowSize);
+   printf("\n");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Show trace buffer status.
+
+void TraceBuffer::doShowHelp()
+{
+   printf("TRACE FACILITY***************************\n");
+   printf("TRC SHOW \n");
+   printf("TRC START    tindex              -- start   a trace\n");
+   printf("TRC STOP     tindex              -- stop    a trace\n");
+   printf("TRC SUSPEND  tindex              -- suspend a trace\n");
+   printf("TRC RESUME   tindex              -- resume  a trace\n");
+   printf("TRC F        tindex   showsize   -- show the first trace buffer\n");
+   printf("TRC L        tindex   showsize   -- show the last  trace buffer\n");
+   printf("TRC TI       tindex              -- set the default trace index \n");
+   printf("TRC S        showsize            -- set the default show size\n");
+   printf("TRC LEVEL    tindex   level      -- set the write level\n");
+   printf("\n");
 }
 
 //******************************************************************************
@@ -409,10 +441,14 @@ void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(3, mDefaultShowSize);
    int tTraceIndex = aCmd->argInt(2);
    int tShowSize = aCmd->argInt(3);
+   int tLevel = aCmd->argInt(3);
    if (aCmd->isArgString(1, "SHOW"))
    {
-      printf("TRACE SHOW\n");
       doShowStatus();
+   }
+   else if (aCmd->isArgString(1, "HELP"))
+   {
+      doShowHelp();
    }
    else if (aCmd->isArgString(1, "START"))
    {
@@ -447,13 +483,17 @@ void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
       doShowLast(tTraceIndex, tShowSize);
       doResume(tTraceIndex);
    }
-   else if (aCmd->isArgString(1, "B"))
+   else if (aCmd->isArgString(1, "TI"))
    {
       mDefaultTraceIndex = aCmd->argInt(2);
    }
    else if (aCmd->isArgString(1, "S"))
    {
       mDefaultShowSize = aCmd->argInt(2);
+   }
+   else if (aCmd->isArgString(1, "LEVEL"))
+   {
+      mWriteLevel[tTraceIndex] = tLevel;
    }
    else
    {

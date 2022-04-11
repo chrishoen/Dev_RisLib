@@ -58,7 +58,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(0, "portableGetCurrentDir         %s", Ris::portableGetCurrentDir());
-   Prn::print(0, "portableGetProgramDir         %s", Ris::portableGetProgramDir());
+   Prn::print(0, "portableGetBinDir         %s", Ris::portableGetBinDir());
 }
 
 //******************************************************************************

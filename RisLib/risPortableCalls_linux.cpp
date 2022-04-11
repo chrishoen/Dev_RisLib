@@ -57,11 +57,11 @@ void portableHalt(const char* aString)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-static char rProgramDir[400];
+static char rProgramDir[1000];
 
-char* portableGetProgramDir()
+char* portableGetBinDir()
 {
-   readlink("/proc/self/exe", rProgramDir, 400);
+   readlink("/proc/self/exe", rProgramDir, 1000);
 
    bool tGoing = true;
    int tIndex = strlen(rProgramDir) - 1;
@@ -81,11 +81,11 @@ char* portableGetProgramDir()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-static char rCurrentDir[400];
+static char rCurrentDir[1000];
 
 char* portableGetCurrentDir()
 {
-   getcwd(rCurrentDir,400);
+   getcwd(rCurrentDir,1000);
    strcat(rCurrentDir, "/");
    return rCurrentDir;
 }
@@ -215,6 +215,23 @@ void portableChdir(const char* aFilePath)
 {
    int tRet = chdir(aFilePath);
    if (tRet) printf("portableChdir FAIL %s", aFilePath);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the program current working directory up one level from the 
+// program bin directory.
+
+void portableChdirUpFromBin()
+{
+   char* tString = new char[1000];
+   strncpy(tString, portableGetBinDir(), 999);
+   tString[999] = 0;
+   strncat(tString, "..", 998);
+   tString[998] = 0;
+   portableChdir(tString);
+   delete tString;
 }
 
 //******************************************************************************

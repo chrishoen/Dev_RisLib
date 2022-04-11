@@ -132,7 +132,7 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(0, "Ris::portableGetCurrentDir() %s", Ris::portableGetCurrentDir());
-   Prn::print(0, "Ris::portableGetProgramDir() %s", Ris::portableGetProgramDir());
+   Prn::print(0, "Ris::portableGetBinDir() %s", Ris::portableGetBinDir());
    double tTime = Ris::getProgramTime();
    unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
 

@@ -23,7 +23,7 @@ void portableSleep(int aTicks);
 void portableHalt(const char* aString = 0);
 
 // Return a pointer to the current working directory.
-char* portableGetProgramDir();
+char* portableGetBinDir();
 char* portableGetCurrentDir();
 
 // Wait for key pressed.
@@ -42,6 +42,10 @@ bool portableFilePathExists (const char* aFilePath);
   
 // Set the program current working directory.
 void portableChdir(const char* aFilePath);
+
+// Set the program current working directory up one level from the 
+// program bin directory.
+void portableChdirUpFromBin();
 
 // Return the current time as a string.
 char* portableGetCurrentTimeAsString(char* aBuffer, bool aSecondDecimals = false);

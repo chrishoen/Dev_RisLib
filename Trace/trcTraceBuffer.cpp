@@ -18,65 +18,67 @@
 namespace Trc
 {
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Constructor.
 
-TraceBuffer::TraceBuffer()
-{
-   reset();
-}
-
-void TraceBuffer::reset()
-{
-   for (int i = 0; i < cNumTraces; i++)
+   TraceBuffer::TraceBuffer()
    {
-      mBufferFirst[i] = 0;
-      mBufferLast[i] = 0;
-      mBufferExists[i] = false;
-      mNextWriteIndex[i] = 0;
-      mWriteEnable[i] = false;
-      mWriteSuspend[i] = false;
-      mWriteTimetag[i] = 0;
-      mLogExists[i] = false;
-      mLogEnable[i] = false;
-      mWriteLevel[i] = 0;
-      mLogLevel[i] = 0;
-      mMutex[i] = 0;
+      reset();
    }
-   mTraceIndexSet.clear();
-   mDefaultTraceIndex = 1;
-   mDefaultShowSize = 40;
-}
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void TraceBuffer::initialize()
-{}
-
-void TraceBuffer::finalize()
-{
-   for (const int& tTraceIndex : mTraceIndexSet)
+   void TraceBuffer::reset()
    {
-      doStop(tTraceIndex);
-      mMutex[tTraceIndex]->lock();
-      free(mBufferFirst[tTraceIndex]);
-      free(mBufferLast[tTraceIndex]);
-      mBufferFirst[tTraceIndex] = 0;
-      mBufferLast[tTraceIndex] = 0;
-      mBufferExists[tTraceIndex] = false;
-      mNextWriteIndex[tTraceIndex] = 0;
-      mWriteEnable[tTraceIndex] = false;
-      mWriteSuspend[tTraceIndex] = false;
-      mLogExists[tTraceIndex] = false;
-      mLogEnable[tTraceIndex] = false;
-      mWriteLevel[tTraceIndex] = 0;
-      mLogLevel[tTraceIndex] = 0;
-      mMutex[tTraceIndex]->unlock();
-      delete mMutex[tTraceIndex];
+      for (int i = 0; i < cNumTraces; i++)
+      {
+         mBufferFirst[i] = 0;
+         mBufferLast[i] = 0;
+         mBufferExists[i] = false;
+         mNextWriteIndex[i] = 0;
+         mWriteEnable[i] = false;
+         mWriteSuspend[i] = false;
+         mLogExists[i] = false;
+         mLogFile[i] = 0;
+         mWriteLevel[i] = 0;
+         mLogLevel[i] = 0;
+         mMutex[i] = 0;
+      }
+      mTraceIndexSet.clear();
+      mDefaultTraceIndex = 1;
+      mDefaultShowSize = 40;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   void TraceBuffer::initialize()
+   {}
+
+   void TraceBuffer::finalize()
+   {
+      for (const int& tTraceIndex : mTraceIndexSet)
+      {
+         doStop(tTraceIndex);
+         mMutex[tTraceIndex]->lock();
+         free(mBufferFirst[tTraceIndex]);
+         free(mBufferLast[tTraceIndex]);
+         mBufferFirst[tTraceIndex] = 0;
+         mBufferLast[tTraceIndex] = 0;
+         mBufferExists[tTraceIndex] = false;
+         mNextWriteIndex[tTraceIndex] = 0;
+         mWriteEnable[tTraceIndex] = false;
+         mWriteSuspend[tTraceIndex] = false;
+         mWriteLevel[tTraceIndex] = 0;
+         mLogLevel[tTraceIndex] = 0;
+         mMutex[tTraceIndex]->unlock();
+         delete mMutex[tTraceIndex];
+         if (mLogExists[tTraceIndex])
+         {
+            fclose(mLogFile[tTraceIndex]);
+         }
+         mLogExists[tTraceIndex] = false;
    }
 }
 
@@ -96,8 +98,33 @@ void TraceBuffer::doCreateBuffer(int aTraceIndex, int aWriteLevel)
    mBufferLast[aTraceIndex] = (char*)malloc(cNumStrings * (cMaxStringSize + 1));
    mBufferExists[aTraceIndex] = true;
    mWriteLevel[aTraceIndex] = aWriteLevel;
+   mWriteEnable[aTraceIndex] = false;
    mMutex[aTraceIndex] = new Ris::Threads::MutexSemaphore;
    mTraceIndexSet.insert(aTraceIndex);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Create a log file for a trace. Set the initial log level
+// for the trace.
+
+void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aFilePath)
+{
+   // Guard.
+   if (aTraceIndex < 1 || aTraceIndex >= cNumTraces) return;
+
+   // Create the log file.
+   mLogFile[aTraceIndex] = fopen(aFilePath, "w");
+   if (mLogFile[aTraceIndex] == 0)
+   {
+      printf("FILE ERROR COULD NOT CREATE LOG FILE %s", aFilePath);
+      return;
+   }
+
+   // Set log file variables..
+   mLogLevel[aTraceIndex] = aLogLevel;
+   mLogExists[aTraceIndex] = true;
 }
 
 //******************************************************************************
@@ -211,40 +238,68 @@ void TraceBuffer::doResume(int aTraceIndex)
 
 void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
 {
+   // Determine whether or not to write to the buffers.
+   bool tWriteToBuffer =
+      mWriteEnable[aTraceIndex] &&
+      !mWriteSuspend[aTraceIndex] &&
+      aLevel <= mWriteLevel[aTraceIndex];
+
+   // Determine whether or not to write to the log file.
+   bool tWriteToLog =
+      mWriteEnable[aTraceIndex] &&
+      mLogExists[aTraceIndex] &&
+      aLevel <= mLogLevel[aTraceIndex];
+
    // Guard.
-   if (!isValidTrace(aTraceIndex)) return;
-   if (!mWriteEnable[aTraceIndex]) return;
-   if (mWriteSuspend[aTraceIndex]) return;
-   if (mWriteLevel[aTraceIndex] < aLevel) return;
+   if (!tWriteToBuffer && !tWriteToLog) return;
 
    // Lock.
    mMutex[aTraceIndex]->lock();
 
-   // Set the timetag to the program time.
-   mWriteTimetag[aTraceIndex] = Ris::getProgramTime();
+   // Get a timetag from the program time.
+   double tTimetag = Ris::getProgramTime();
 
    // Add the timetag and the input string to a temp string.
    char tString[cMaxStringSize + 1];
-   snprintf(tString, cMaxStringSize, "%7.3f $ %s", mWriteTimetag[aTraceIndex], aString);
+   snprintf(tString, cMaxStringSize, "%7.3f $ %s", tTimetag, aString);
    tString[cMaxStringSize] = 0;
 
-   // String destination pointers are determined by the write index.
-   char* tDestinFirst = stringAtFirst(aTraceIndex, mNextWriteIndex[aTraceIndex]);
-   char* tDestinLast = stringAtLast(aTraceIndex, mNextWriteIndex[aTraceIndex]);
-
-   // Copy to buffer.
-   if (mNextWriteIndex[aTraceIndex] < cNumStrings)
+   // Write to the buffers.
+   if (tWriteToBuffer)
    {
-      strncpy(tDestinFirst, tString, cMaxStringSize);
-      tDestinFirst[cMaxStringSize] = 0;
+      // Get buffer destination pointers,  they are determined by the
+      // write index.
+      char* tDestinFirst = 
+         stringAtFirst(aTraceIndex, mNextWriteIndex[aTraceIndex]);
+      char* tDestinLast = 
+         stringAtLast(aTraceIndex, mNextWriteIndex[aTraceIndex]);
+
+      // Copy to buffer.
+      if (mNextWriteIndex[aTraceIndex] < cNumStrings)
+      {
+         strncpy(tDestinFirst, tString, cMaxStringSize);
+         tDestinFirst[cMaxStringSize] = 0;
+      }
+
+      // Copy to buffer.
+      strncpy(tDestinLast, tString, cMaxStringSize);
+      tDestinLast[cMaxStringSize] = 0;
+
+      // Advance the write index.
+      mNextWriteIndex[aTraceIndex]++;
    }
 
-   // Copy to buffer.
-   strncpy(tDestinLast, tString, cMaxStringSize);
-   tDestinLast[cMaxStringSize] = 0;
-
-   // Advance the write index.
-   mNextWriteIndex[aTraceIndex]++;
+   // Write to the log file.
+   if (tWriteToLog)
+   {
+      // Append a cr to the string.
+      strncat(tString, "\n", cMaxStringSize);
+      tString[cMaxStringSize] = 0;
+      // Write the string to the log file.
+      fputs(tString, mLogFile[aTraceIndex]);
+      // flush the write.
+      fflush(mLogFile[aTraceIndex]);
+   }
 
    // Unlock.
    mMutex[aTraceIndex]->unlock();

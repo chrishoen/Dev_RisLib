@@ -8,6 +8,7 @@ Program trace buffer facility.
 //******************************************************************************
 //******************************************************************************
 
+#include <stdio.h>
 #include <set>
 #include "risThreadsSynch.h"
 #include "risCmdLineCmd.h"
@@ -78,15 +79,11 @@ public:
    // If true then writes are suspended for a buffer pair.
    bool mWriteSuspend[cNumTraces];
 
-   // Timetag of last write, in program time.
-   double mWriteTimetag[cNumTraces];
-
    // True if a trace log file has been created.
    bool mLogExists[cNumTraces];
 
-   // If true then logging is enabled. In this case all enabled
-   // writes are written to a log file.
-   bool mLogEnable[cNumTraces];
+   // The log file.
+   FILE* mLogFile[cNumTraces];
 
    // Trace write level. Write calls supply a level argument. If it is
    // greater than or equal to the write level then the write is executed.
@@ -131,9 +128,6 @@ public:
    // Allocate memory for a trace buffer pair. Set the initial write level
    // for the trace.
    void doCreateBuffer(int aTraceIndex, int aWriteLevel);
-
-   // Disable a trace and deallocate its memory.
-   void doDeleteBuffer(int aTraceIndex);
 
    // Create a log file for a trace. Set the initial log level
    // for the trace.

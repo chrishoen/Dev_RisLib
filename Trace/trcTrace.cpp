@@ -31,6 +31,13 @@ void create_buffer(int aTraceIndex, int aWriteLevel)
    gTraceBuffer.doCreateBuffer(aTraceIndex, aWriteLevel);
 }
 
+// Create a log file for a trace. Set the initial log level
+// for the trace.
+void create_log(int aTraceIndex, int aLogLevel, const char* aFilePath)
+{
+   gTraceBuffer.doCreateLogFile(aTraceIndex, aLogLevel, aFilePath);
+}
+
 // Initialize.
 void initialize()
 {

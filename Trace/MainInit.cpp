@@ -44,6 +44,7 @@ void main_initialize(int argc,char** argv)
    Trc::reset();
    Trc::create_buffer(1, 3);
    Trc::create_buffer(4, 6);
+   Trc::create_log(1, 4, "log/trace1.log");
    Trc::initialize();
 
    //***************************************************************************

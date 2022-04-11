@@ -18,6 +18,10 @@ namespace Trc
    // Allocate memory for a trace buffer. Set the initial write level.
    void create_buffer(int aTraceIndex, int aWriteLevel);
 
+   // Create a log file for a trace. Set the initial log level
+   // for the trace.
+   void create_log(int aTraceIndex, int aLogLevel, const char* aFilePath);
+
    // Initialize.
    void initialize();
 

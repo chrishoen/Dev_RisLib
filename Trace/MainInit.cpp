@@ -13,8 +13,13 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Enter process
+   // Process configuration.
 
+   // Set the program current working directory up one level from the 
+   // program bin directory.
+   Ris::portableChdirUpFromBin();
+
+   // Set the process priority class.
    Ris::Threads::enterProcessHigh();
 
    //***************************************************************************
@@ -46,6 +51,7 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
 
    Prn::print(0, "Trace *******************************************BEGIN");
+   Prn::print(0, "current dir %s", Ris::portableGetCurrentDir());
 }
 
 //******************************************************************************

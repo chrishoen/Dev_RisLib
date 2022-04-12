@@ -23,7 +23,7 @@ SerialThread::SerialThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Serial");
-   BaseClass::setThreadPriorityHigh();
+   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mHigh);
    BaseClass::mTimerPeriod = 1000;
 
    // Initialize qcalls.
@@ -67,6 +67,7 @@ void SerialThread::threadInitFunction()
 
    tSerialSettings.setPortDevice(gSerialParms.mSerialPortDevice);
    tSerialSettings.setPortSetup(gSerialParms.mSerialPortSetup);
+   tSerialSettings.mThreadPriority = Ris::Threads::gPriorities.mSerial;
    tSerialSettings.mRxTimeout = gSerialParms.mSerialRxTimeout;
    tSerialSettings.mMonkeyCreator = &mMonkeyCreator;
    tSerialSettings.mSessionQCall = mSessionQCall;

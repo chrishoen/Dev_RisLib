@@ -79,11 +79,6 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoSerial Program**********************************************END");
-
-   // Finalize trace facility.
-   Trc::finalize();
-
    // Finalize print facility.
    Prn::finalizePrint();
 
@@ -92,6 +87,8 @@ void main_finalize()
 
    // Exit process
    Ris::Threads::exitProcess();
+
+   Prn::print(0, "ProtoSerial Program**********************************************END");
 }
 
 //******************************************************************************

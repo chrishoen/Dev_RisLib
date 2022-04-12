@@ -57,7 +57,6 @@ SerialPort::SerialPort()
 
 SerialPort::~SerialPort()
 {
-   //doClose();
    delete mSpecific;
 }
 
@@ -88,6 +87,7 @@ bool SerialPort::doOpen()
    if (mOpenFlag)
    {
       printf("serial_open_error already open\n");
+      Trc::write(mTI, 0, "serial_open_error already open");
       return false;
    }
 
@@ -214,6 +214,7 @@ void SerialPort::doClose()
    // Test if already closed.
    if (!mOpenFlag)
    {
+      Trc::write(mTI, 0, "serial_close_error not open");
       printf("serial_close not open\n");
       return;
    }
@@ -287,8 +288,10 @@ void SerialPort::doAbort()
    // Test the return code.
    if (tRet < 0)
    {
+      Trc::write(mTI, 1, "serial_abort_1 ERROR");
       printf("serial_abort_1 ERROR %d\n", errno);
    }
+   Trc::write(mTI, 1, "serial_abort done");
 }
 
 //******************************************************************************
@@ -308,6 +311,7 @@ void SerialPort::doFlush()
    // Test the return code.
    if (tRet != 0)
    {
+      Trc::write(mTI, 1, "serial_flush ERROR 101");
       printf("serial_flush ERROR 101 %d\n", errno);
    }
 }
@@ -329,6 +333,7 @@ void SerialPort::doSuspend()
    // Test the return code.
    if (tRet != 0)
    {
+      Trc::write(mTI, 1, "serial_suspend ERROR 101 %d", errno);
       printf("serial_suspend ERROR 101 %d\n", errno);
    }
 }
@@ -350,6 +355,7 @@ void SerialPort::doResume()
    // Test the return code.
    if (tRet != 0)
    {
+      Trc::write(mTI, 1, "serial_resume ERROR 101 %d", errno);
       printf("serial_resume ERROR 101 %d\n", errno);
    }
 }

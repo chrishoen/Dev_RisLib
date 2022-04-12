@@ -98,7 +98,7 @@ restart:
    // Open device.
 
    // If the serial port is open then close it.
-   if (!mSerialMsgPort.mOpenFlag)
+   if (mSerialMsgPort.mOpenFlag)
    {
       mSerialMsgPort.doClose();
    }

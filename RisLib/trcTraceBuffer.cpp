@@ -168,7 +168,7 @@ char* TraceBuffer::stringAtFirst(int aTraceIndex, long long aStringIndex)
 char* TraceBuffer::stringAtLast(int aTraceIndex, long long aStringIndex)
 {
    aStringIndex %= cNumStrings;
-   char* tPtr = mBufferFirst[aTraceIndex] + (cMaxStringSize + 1) * aStringIndex;
+   char* tPtr = mBufferLast[aTraceIndex] + (cMaxStringSize + 1) * aStringIndex;
    return tPtr;
 }
 

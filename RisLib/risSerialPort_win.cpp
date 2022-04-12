@@ -39,6 +39,7 @@ SerialPort::SerialPort()
    mSpecific->mPortHandle = 0;
    mSpecific->mRxEventHandle = 0;
    mSpecific->mTxEventHandle = 0;
+   mOpenFlag = false;
    mValidFlag = false;
    mAbortFlag = false;
    mTI = 0;
@@ -71,12 +72,14 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Do this first.
 
-   // Close the serial port, if already open.
-   if (mValidFlag)
+   // Guard.
+   if (mOpenFlag)
    {
-      doClose();
+      printf("serial_open_error already open\n");
+      return false;
    }
 
+   mValidFlag = false;
    mAbortFlag = false;
 
    //***************************************************************************
@@ -205,6 +208,7 @@ bool SerialPort::doOpen()
  
    printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
    Trc::write(mTI, 0, "SerialPort open PASS  %s", mSettings.mPortDevice);
+   mOpenFlag = true;
    mValidFlag = true;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
@@ -218,14 +222,20 @@ bool SerialPort::doOpen()
 void SerialPort::doClose()
 {
    // Test if already closed.
-   if (!mValidFlag)
+   if (!mOpenFlag)
    {
-      printf("serial_close already closed\n");
+      printf("serial_close not open\n");
       return;
    }
 
+   int tRet = 0;
+
+   // Set invalid.
+   mOpenFlag = false;
+   mValidFlag = false;
+
    // Test handle.
-   if (mValidFlag && mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
+   if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
    {
       printf("serial_close invalid handle\n");
       return;

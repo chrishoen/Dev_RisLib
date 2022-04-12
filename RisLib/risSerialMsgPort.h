@@ -52,7 +52,6 @@ public:
    // Members.
 
    // Transmit and receive memory. Allocated at initialization.
-   char* mTxMemory;
    char* mRxMemory;
 
    // Size of allocated memory.
@@ -72,9 +71,6 @@ public:
    // message is sent. A specific message monkey is provided by the parent 
    // thread at initialization.
    BaseMsgMonkey* mMonkey;
-
-   // Transmit mutex is used by doSendMsg for mutual exclusion.
-   Threads::MutexSemaphore mTxMutex;
 
    // Metrics.
    int mTxMsgCount;

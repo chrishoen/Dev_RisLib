@@ -48,6 +48,7 @@ SerialPort::SerialPort()
    mSpecific->mPortFd = 0;
    mSpecific->mEventFd = 0;
    mValidFlag = false;
+   mOpenFlag = false;
    mAbortFlag = false;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
@@ -83,12 +84,14 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Do this first.
 
-   // Close the serial port, if already open.
-   if (mValidFlag)
+   // Guard.
+   if (mOpenFlag)
    {
-      doClose();
+      printf("serial_open_error already open\n");
+      return false;
    }
 
+   mValidFlag = false;
    mAbortFlag = false;
 
    //***************************************************************************
@@ -194,6 +197,7 @@ bool SerialPort::doOpen()
  
    printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
    Trc::write(mTI, 0, "SerialPort open PASS  %s", mSettings.mPortDevice);
+   mOpenFlag = true;
    mValidFlag = true;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
@@ -208,15 +212,16 @@ bool SerialPort::doOpen()
 void SerialPort::doClose()
 {
    // Test if already closed.
-   if (!mValidFlag)
+   if (!mOpenFlag)
    {
-      printf("serial_close already closed\n");
+      printf("serial_close not open\n");
       return;
    }
 
    int tRet = 0;
 
    // Set invalid.
+   mOpenFlag = false;
    mValidFlag = false;
 
    // Flush the input and output buffers.
@@ -224,7 +229,7 @@ void SerialPort::doClose()
    doSuspend();
    doFlush();
    //doResume();
-   //Ris::Threads::threadSleep(100);
+   //Ris::Threads::threadSleep(10);
 
    // Close the event.
    Trc::write(mTI, 1, "serial_close event");
@@ -255,6 +260,35 @@ void SerialPort::doClose()
    mSpecific->mEventFd = 0;
    mSpecific->mPortFd = 0;
    mCloseErrorShowCount = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Abort pending serial port receive.
+// 
+// Set the abort flag and write bytes to the event semaphore. This will
+// cause a pending receive call poll to return and the receive call will
+// abort because the abort flag is set.
+
+void SerialPort::doAbort()
+{
+   // Set the abort flag.
+   mAbortFlag = true;
+
+   // Guard.
+   int tRet = 0;
+   if (!mOpenFlag) return;
+
+   // Write bytes to the event semaphore.
+   unsigned long long tCount = 1;
+   tRet = write(mSpecific->mEventFd, &tCount, 8);
+
+   // Test the return code.
+   if (tRet < 0)
+   {
+      printf("serial_abort_1 ERROR %d\n", errno);
+   }
 }
 
 //******************************************************************************
@@ -323,35 +357,6 @@ void SerialPort::doResume()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Abort pending serial port receive.
-// 
-// Set the abort flag and write bytes to the event semaphore. This will
-// cause a pending receive call poll to return and the receive call will
-// abort because the abort flag is set.
-
-void SerialPort::doAbort()
-{
-   // Set the abort flag.
-   mAbortFlag = true;
-
-   // Guard.
-   int tRet = 0;
-   if (!mValidFlag) return;
-
-   // Write bytes to the event semaphore.
-   unsigned long long tCount = 1;
-   tRet = write(mSpecific->mEventFd, &tCount, 8);
-
-   // Test the return code.
-   if (tRet < 0)
-   {
-      printf("serial_abort_1 ERROR %d\n", errno);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Return the number of bytes that are available to receive.
 
 int SerialPort::doGetAvailableReceiveBytes()
@@ -359,42 +364,6 @@ int SerialPort::doGetAvailableReceiveBytes()
    int tBytesAvaiable;
    ioctl(mSpecific->mPortFd, FIONREAD, &tBytesAvaiable);
    return tBytesAvaiable;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send a fixed number of bytes. Return the actual number of bytes
-// sent or a negative error code.
-
-int SerialPort::doSendBytes(const char* aBytes, int aNumBytes)
-{
-   // Guard.
-   if (!mValidFlag) return cSerialRetError;
-
-   // Local variables.
-   int tNumWritten = 0;
-   int tRet  = 0;
-
-   // Write bytes to the port.
-   tRet = write(mSpecific->mPortFd, aBytes, aNumBytes);
-
-   // Test the return code.
-   if (tRet < 0)
-   {
-      printf("serial_write_error_1 %d\n", errno);
-      return cSerialRetError;
-   }
-
-   if (tRet != aNumBytes)
-   {
-      printf("serial_write_error_2 %d\n", tRet);
-      return cSerialRetError;
-   }
-
-   // Write was successful. Return the number of bytes written.
-   //printf("SerialPort::doSendBytes PASS %d\n",aNumBytes);
-   return tRet;
 }
 
 //******************************************************************************
@@ -435,10 +404,18 @@ int SerialPort::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
       return cSerialRetAbort;
    }
 
+   // Test for an invalid port.
+   if (!mValidFlag)
+   {
+      //printf("serial_poll_abort\n");
+      return cSerialRetError;
+   }
+
    // Test the return code for error.
    if (tRet < 0)
    {
       //printf("serial_poll_error_1 %d\n", errno);
+      mValidFlag = false;
       return cSerialRetError;
    }
 
@@ -463,6 +440,7 @@ int SerialPort::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
    if (tRet == 2)
    {
       //printf("serial_poll_error_3 close\n");
+      mValidFlag = false;
       return cSerialRetError;
    }
 
@@ -480,6 +458,7 @@ int SerialPort::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
    if (tRet < 0)
    {
       printf("serial_read_error_1 %d\n", errno);
+      mValidFlag = false;
       return cSerialRetError;
    }
 
@@ -551,6 +530,42 @@ int SerialPort::doReceiveAllBytes(char* aBytes, int aRequestBytes)
 int SerialPort::doReceiveOneByte(char* aByte)
 {
    return doReceiveAnyBytes(aByte, 1);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a fixed number of bytes. Return the actual number of bytes
+// sent or a negative error code.
+
+int SerialPort::doSendBytes(const char* aBytes, int aNumBytes)
+{
+   // Guard.
+   if (!mValidFlag) return cSerialRetError;
+
+   // Local variables.
+   int tNumWritten = 0;
+   int tRet = 0;
+
+   // Write bytes to the port.
+   tRet = write(mSpecific->mPortFd, aBytes, aNumBytes);
+
+   // Test the return code.
+   if (tRet < 0)
+   {
+      printf("serial_write_error_1 %d\n", errno);
+      return cSerialRetError;
+   }
+
+   if (tRet != aNumBytes)
+   {
+      printf("serial_write_error_2 %d\n", tRet);
+      return cSerialRetError;
+   }
+
+   // Write was successful. Return the number of bytes written.
+   //printf("SerialPort::doSendBytes PASS %d\n",aNumBytes);
+   return tRet;
 }
 
 //******************************************************************************

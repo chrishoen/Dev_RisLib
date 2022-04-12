@@ -23,7 +23,6 @@ namespace Ris
 
 SerialMsgPort::SerialMsgPort()
 {
-   mTxMemory = 0;
    mRxMemory = 0;
    mMemorySize = 0;
    mTxMsgCount = 0;
@@ -37,7 +36,6 @@ SerialMsgPort::SerialMsgPort()
 
 SerialMsgPort::~SerialMsgPort()
 {
-   if (mTxMemory) free(mTxMemory);
    if (mRxMemory) free(mRxMemory);
    if (mMonkey) delete mMonkey;
 }
@@ -57,7 +55,6 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
 
    // Allocate memory for byte buffers.
    mMemorySize = mMonkey->getMaxBufferSize();
-   mTxMemory = (char*)malloc(mMemorySize);
    mRxMemory = (char*)malloc(mMemorySize);
 
    // Set the initial header read state.
@@ -72,61 +69,6 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
    mRxMsgCount = 0;
    mHeaderAllCount = 0;
    mHeaderOneCount = 0;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Copy a message into a byte buffer and then send the byte buffer to the
-// serial port with a blocking write call. Return true if successful.
-// This is protected by the transmit mutex.
-
-bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
-{
-   Trc::write(mTI, 2, "SerialMsgPort::doSendMsg begin");
-   // Guard.
-   if (!BaseClass::mValidFlag)
-   {
-      Trc::write(mTI, 0, "ERROR doSend when Invalid");
-      mMonkey->destroyMsg(aMsg);
-      return false;
-   }
-
-   // Mutex.
-   Trc::write(mTI, 2, "SerialPort::doSendBytes lock 1");
-   mTxMutex.lock();
-   Trc::write(mTI, 2, "SerialPort::doSendBytes lock 2");
-
-   // Create a byte buffer from preallocated memory.
-   ByteBuffer tByteBuffer(mTxMemory,mMemorySize);
-
-   // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tByteBuffer,aMsg);
-
-   // Delete the message.
-   mMonkey->destroyMsg(aMsg);
-
-   // Transmit the buffer.
-   int tRet = 0;
-   int tLength=tByteBuffer.getLength();
-   tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(),tLength);
-
-   mTxMsgCount++;
-
-   // Mutex.
-   mTxMutex.unlock();
-
-   // Test for errors.
-   if (tRet<0)
-   {
-      Trc::write(mTI, 2, "SerialMsgPort::doSendMsg FAIL");
-      printf("SerialMsgPort::doSendMsg FAIL\n");
-      return false;
-   }
-
-   // Success.
-   Trc::write(mTI, 2, "SerialMsgPort::doSendMsg PASS");
-   return true;
 }
 
 //******************************************************************************
@@ -322,6 +264,53 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    //printf("SerialMsgPort::doReceiveMsg PASS\n");
    mRxMsgCount++;
    return cSerialRetSuccess;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy a message into a byte buffer and then send the byte buffer to the
+// serial port with a blocking write call. Return true if successful.
+// This is protected by the transmit mutex.
+
+bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
+{
+   Trc::write(mTI, 2, "SerialMsgPort::doSendMsg begin");
+   // Guard.
+   if (!BaseClass::mValidFlag)
+   {
+      Trc::write(mTI, 0, "ERROR doSend when Invalid");
+      mMonkey->destroyMsg(aMsg);
+      return false;
+   }
+
+   // Create a byte buffer from heap memory.
+   ByteBuffer tByteBuffer(mMemorySize);
+
+   // Copy the message to the buffer.
+   mMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
+
+   // Delete the message.
+   mMonkey->destroyMsg(aMsg);
+
+   // Transmit the buffer.
+   int tRet = 0;
+   int tLength = tByteBuffer.getLength();
+   tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(), tLength);
+
+   mTxMsgCount++;
+
+   // Test for errors.
+   if (tRet < 0)
+   {
+      Trc::write(mTI, 2, "SerialMsgPort::doSendMsg FAIL");
+      printf("SerialMsgPort::doSendMsg FAIL\n");
+      return false;
+   }
+
+   // Success.
+   Trc::write(mTI, 2, "SerialMsgPort::doSendMsg PASS");
+   return true;
 }
 
 //******************************************************************************

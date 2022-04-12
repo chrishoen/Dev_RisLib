@@ -53,6 +53,9 @@ public:
    // Settings.
    SerialSettings mSettings;
 
+   // True if open.
+   bool mOpenFlag;
+
    // True if open and valid.
    bool mValidFlag;
 

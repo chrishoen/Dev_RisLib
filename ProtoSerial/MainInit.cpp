@@ -81,6 +81,9 @@ void main_finalize()
 {
    Prn::print(0,"ProtoSerial Program**********************************************END");
 
+   // Finalize trace facility.
+   Trc::finalize();
+
    // Finalize print facility.
    Prn::finalizePrint();
 

@@ -178,6 +178,11 @@ public:
    // Return true if a trace buffer has been created.
    bool isValidTrace(int aTraceIndex);
 
+   // Return true if a trace buffer is writable.
+   bool isWritable(int aTraceIndex, int aLevel);
+   bool isBufferWritable(int aTraceIndex, int aLevel);
+   bool isLogWritable(int aTraceIndex, int aLevel);
+
    // Return true if a trace buffer log file has been created.
    bool isValidLog(int aTraceIndex);
 

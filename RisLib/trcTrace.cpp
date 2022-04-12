@@ -89,11 +89,7 @@ void set_default_trace_index(int aTraceIndex)
 
 void write (int aTraceIndex, int aLevel, const char* aFormat, ...)
 {
-   // Guard.
-   if (!gTraceBuffer.isValidTrace(aTraceIndex)) return;
-   if (!gTraceBuffer.mWriteEnable[aTraceIndex]) return;
-   if (gTraceBuffer.mWriteSuspend[aTraceIndex]) return;
-   if (gTraceBuffer.mWriteLevel[aTraceIndex] < aLevel) return;
+   if (!gTraceBuffer.isWritable(aTraceIndex, aLevel)) return;
 
    // Do a vsprintf with variable arg list into print string.
    static const int cMaxStringSize = TraceBuffer::cMaxStringSize;

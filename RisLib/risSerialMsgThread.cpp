@@ -109,7 +109,6 @@ restart:
 
    // Process a session change because a
    // new session has been established.
-   printf("LINE101\n");
    processSessionChange(true);
 
    //***************************************************************************

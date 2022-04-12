@@ -234,6 +234,40 @@ void TraceBuffer::doResume(int aTraceIndex)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Return true if a trace buffer is writable.
+
+bool TraceBuffer::isBufferWritable(int aTraceIndex, int aLevel)
+{
+   if (!isValidTrace(aTraceIndex)) return false;
+
+   // Determine whether or not to write to the buffers.
+   return
+      mWriteEnable[aTraceIndex] &&
+      !mWriteSuspend[aTraceIndex] &&
+      aLevel <= mWriteLevel[aTraceIndex];
+}
+
+bool TraceBuffer::isLogWritable(int aTraceIndex, int aLevel)
+{
+   if (!isValidTrace(aTraceIndex)) return false;
+
+   // Determine whether or not to write to the log file.
+   return
+      mWriteEnable[aTraceIndex] &&
+      mLogExists[aTraceIndex] &&
+      aLevel <= mLogLevel[aTraceIndex];
+}
+
+bool TraceBuffer::isWritable(int aTraceIndex, int aLevel)
+{
+   return
+      isBufferWritable(aTraceIndex, aLevel) ||
+      isLogWritable(aTraceIndex, aLevel);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // If enabled, write a string to a buffer pair at the write index and
 // advance the write index. For the first buffer of the pair this only 
 // write the first N strings. For the last buffer of the pair this writes
@@ -241,20 +275,10 @@ void TraceBuffer::doResume(int aTraceIndex)
 
 void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
 {
-   // Determine whether or not to write to the buffers.
-   bool tWriteToBuffer =
-      mWriteEnable[aTraceIndex] &&
-      !mWriteSuspend[aTraceIndex] &&
-      aLevel <= mWriteLevel[aTraceIndex];
-
-   // Determine whether or not to write to the log file.
-   bool tWriteToLog =
-      mWriteEnable[aTraceIndex] &&
-      mLogExists[aTraceIndex] &&
-      aLevel <= mLogLevel[aTraceIndex];
-
    // Guard.
-   if (!tWriteToBuffer && !tWriteToLog) return;
+   if (!isWritable(aTraceIndex, aLevel)) return;
+   bool tWriteToBuffer = isBufferWritable(aTraceIndex, aLevel);
+   bool tWriteToLog = isLogWritable(aTraceIndex, aLevel);
 
    // Lock.
    mMutex[aTraceIndex]->lock();
@@ -323,7 +347,6 @@ void TraceBuffer::doShowFirst(int aTraceIndex, int aShowSize)
       return;
    }
    if (aShowSize > cNumStrings) aShowSize = cNumStrings;
-   doStop(aTraceIndex);
    long long tNextWriteIndex = mNextWriteIndex[aTraceIndex];
    long long tShowSize = (long long)aShowSize;
    long long tStartIndex = 0;
@@ -361,7 +384,6 @@ void TraceBuffer::doShowLast(int aTraceIndex, int aShowSize)
       return;
    }
    if (aShowSize > cNumStrings) aShowSize = cNumStrings;
-   doStop(aTraceIndex);
    long long tNextWriteIndex = mNextWriteIndex[aTraceIndex];
    long long tShowSize = (long long)aShowSize;
    long long tStartIndex = 0;
@@ -392,15 +414,16 @@ void TraceBuffer::doShowLast(int aTraceIndex, int aShowSize)
 void TraceBuffer::doShowStatus()
 {
    printf("TRACE STATUS*****************************\n");
-   printf("trace  write  write log     write\n");
-   printf("index  enable level exists  index\n");
+   printf("trace  write  write  write log     write\n");
+   printf("index  enable susp   level exists  index\n");
    printf("\n");
 
    for (const int& i : mTraceIndexSet)
    {
-   printf("%-4d   %-5s  %-1d     %-5s   %-5lld \n",
+      printf("%-4d   %-5s  %-5s  %-1d     %-5s   %-5lld \n",
          i,
          my_string_from_bool(mWriteEnable[i]),
+         my_string_from_bool(mWriteSuspend[i]),
          mWriteLevel[i],
          my_string_from_bool(mLogExists[i]),
          mNextWriteIndex[i]);

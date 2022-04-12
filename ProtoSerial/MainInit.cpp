@@ -60,7 +60,7 @@ void main_initialize(int argc,char** argv)
    Trc::reset();
    Trc::create_buffer(1,  3);
    Trc::create_buffer(11, 3);
- //Trc::create_log(1, 4, "log/trace1.log");
+   Trc::create_log(11, 4, "log/ProtoSerial_trace11.log");
    Trc::set_default_trace_index(11);
    Trc::initialize();
 

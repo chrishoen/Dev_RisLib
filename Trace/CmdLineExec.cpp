@@ -39,7 +39,8 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"))   reset();
-// if (aCmd->isCmd("TRC"))    Trc::gTraceBuffer.execute(aCmd);
+   if (aCmd->isCmd("START"))  executeStart(aCmd);
+   if (aCmd->isCmd("STOP"))   executeStop(aCmd);
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))    executeGo3(aCmd);
@@ -52,16 +53,29 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 1);
+   Trc::start(aCmd->argInt(1));
+}
+
+void CmdLineExec::executeStop(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 1);
+   Trc::stop(aCmd->argInt(1));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
    int tLoopSize = aCmd->argInt(1);
-   Trc::gTraceBuffer.doStart(1);
    for (int i = 0; i < tLoopSize; i++)
    {
-      char tString[40];
-      sprintf(tString, "trace1 %d", i);
-      Trc::gTraceBuffer.doWrite(1, 0, tString);
+      Trc::write(1, 0, "trace1 %d", i);
    }
 }
 
@@ -73,7 +87,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 10);
    int tLoopSize = aCmd->argInt(1);
-   Trc::start(1);
    for (int i = 0; i < tLoopSize; i++)
    {
       Trc::write(1, 0, "trace2 %d", i);

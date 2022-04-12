@@ -554,12 +554,14 @@ int SerialPort::doSendBytes(const char* aBytes, int aNumBytes)
    if (tRet < 0)
    {
       printf("serial_write_error_1 %d\n", errno);
+      doAbort();
       return cSerialRetError;
    }
 
    if (tRet != aNumBytes)
    {
       printf("serial_write_error_2 %d\n", tRet);
+      doAbort();
       return cSerialRetError;
    }
 

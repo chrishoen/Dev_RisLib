@@ -193,7 +193,7 @@ bool SerialPort::doOpen()
    // Done.
  
    printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
-   Trc::write(mTI, 0, "SerialPort open PASS  %s\n", mSettings.mPortDevice);
+   Trc::write(mTI, 0, "SerialPort open PASS  %s", mSettings.mPortDevice);
    mValidFlag = true;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
@@ -220,21 +220,21 @@ void SerialPort::doClose()
    mValidFlag = false;
 
    // Flush the input and output buffers.
-   Trc::write(mTI, 1, "serial_close flush\n");
+   Trc::write(mTI, 1, "serial_close flush");
    doSuspend();
    doFlush();
    //doResume();
    //Ris::Threads::threadSleep(100);
 
    // Close the event.
-   Trc::write(mTI, 1, "serial_close event\n");
+   Trc::write(mTI, 1, "serial_close event");
    tRet = close(mSpecific->mEventFd);
 
    // Test the return code.
    if (tRet != 0)
    {
       printf("serial_close_error_1 %d\n", errno);
-      Trc::write(mTI, 0, "serial_close_error_1 %d\n", errno);
+      Trc::write(mTI, 0, "serial_close_error_1 %d", errno);
       return;
    }
 
@@ -246,10 +246,10 @@ void SerialPort::doClose()
    if (tRet != 0)
    {
       printf("serial_close_error_2 %d\n", errno);
-      Trc::write(mTI, 0, "serial_close_error_2 %d\n", errno);
+      Trc::write(mTI, 0, "serial_close_error_2 %d", errno);
       return;
    }
-   Trc::write(mTI, 1, "serial_close done\n");
+   Trc::write(mTI, 1, "serial_close done");
 
    // Done.
    mSpecific->mEventFd = 0;
@@ -558,26 +558,3 @@ int SerialPort::doReceiveOneByte(char* aByte)
 //******************************************************************************
 }//namespace
 
-#if 0
-// Set the number of bytes to read.
-struct termios tOptions;
-tcgetattr(mSpecific->mPortFd, &tOptions);
-tOptions.c_cc[VMIN] = aNumBytes;
-tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
-
-
-
-if (!mSettings.m485Flag)
-{
-   printf("SerialPort initialize PASS  $ %s : %16s\n",
-      mSettings.mPortDevice,
-      mSettings.mPortSetup);
-}
-else
-{
-   printf("SerialPort initialize PASS  $ %s : %16s RS485\n",
-      mSettings.mPortDevice,
-      mSettings.mPortSetup);
-}
-
-#endif

@@ -25,19 +25,11 @@ void main_initialize(int argc,char** argv)
    // program bin directory.
    Ris::portableChdirUpFromBin();
 
+   // Set the base directory to the current working directory.
+   Ris::setBaseDirectoryToCurrent();
+
    // Set the process priority class.
    Ris::Threads::enterProcessHigh();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Enter process.
-
-   // Set program process for high priority.
-   Ris::Threads::enterProcessHigh();
-
-   // Set the base directory to the current directory.
-   Ris::setBaseDirectoryToCurrent();
 
    //***************************************************************************
    //***************************************************************************

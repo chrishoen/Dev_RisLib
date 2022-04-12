@@ -19,8 +19,13 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Enter process.
+   // Process configuration.
 
+   // Set the program current working directory up one level from the 
+   // program bin directory.
+   Ris::portableChdirUpFromBin();
+
+   // Set the process priority class.
    Ris::Threads::enterProcessHigh();
 
    //***************************************************************************
@@ -50,6 +55,18 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Initialize trace facility.
+
+   Trc::reset();
+   Trc::create_buffer(1,  3);
+   Trc::create_buffer(11, 3);
+ //Trc::create_log(1, 4, "log/trace1.log");
+   Trc::set_default_trace_index(11);
+   Trc::initialize();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Read parameters files.
 
    ProtoComm::gSerialParms.reset();
@@ -72,8 +89,11 @@ void main_finalize()
 {
    Prn::print(0,"ProtoSerial Program**********************************************END");
 
-   // Close print
+   // Finalize print facility.
    Prn::finalizePrint();
+
+   // Finalize trace facility.
+   Trc::finalize();
 
    // Exit process
    Ris::Threads::exitProcess();

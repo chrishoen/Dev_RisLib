@@ -28,7 +28,9 @@ void SerialSettings::reset()
    mPortDevice[0] = 0;
    mPortSetup[0] = 0;
    mRxTimeout = 0;
-   mTermMode = 0;
+   mTxTermMode = 0;
+   mRxTermMode = 0;
+   mTraceIndex = 0;
    m485Flag = false;
    mMonkeyCreator = 0;
    mThreadPriority = Ris::Threads::gPriorities.mSerial;

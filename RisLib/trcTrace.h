@@ -43,6 +43,9 @@ namespace Trc
    // Write to a trace buffer.
    void write(int aTraceIndex, int aLevel, const char* aFormat, ...);
 
+   // Set default show trace index.
+   void set_default_trace_index(int aTraceIndex);
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

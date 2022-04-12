@@ -19,7 +19,7 @@
 
 #include "my_functions.h"
 #include "risThreadsThreads.h"
-#include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risSerialPort.h"
 
@@ -49,6 +49,9 @@ SerialPort::SerialPort()
    mSpecific->mEventFd = 0;
    mValidFlag = false;
    mAbortFlag = false;
+   mOpenErrorShowCount = 0;
+   mCloseErrorShowCount = 0;
+   mTI = 0;
 }
 
 SerialPort::~SerialPort()
@@ -60,6 +63,9 @@ SerialPort::~SerialPort()
 void SerialPort::initialize(SerialSettings& aSettings)
 {
    mSettings = aSettings;
+   mTI = aSettings.mTraceIndex;
+   mOpenErrorShowCount = 0;
+   mCloseErrorShowCount = 0;
 }
 
 //******************************************************************************
@@ -96,7 +102,12 @@ bool SerialPort::doOpen()
    // Test the return code.
    if (mSpecific->mPortFd < 0)
    {
-      printf("serial_open_error_1 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
+      if (mOpenErrorShowCount == 0)
+      {
+         printf("serial_open_error_1 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
+         Trc::write(mTI, 0, "serial_open_error_1 %s %d %s", mSettings.mPortDevice, errno, strerror(errno));
+      }
+      mOpenErrorShowCount++;
       return false;
    }
 
@@ -106,7 +117,12 @@ bool SerialPort::doOpen()
    // Test the return code.
    if (mSpecific->mPortFd < 0)
    {
-      printf("serial_open_error_1 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
+      if (mOpenErrorShowCount == 0)
+      {
+         printf("serial_open_error_2 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
+         Trc::write(mTI, 0, "serial_open_error_2 %s %d %s", mSettings.mPortDevice, errno, strerror(errno));
+      }
+      mOpenErrorShowCount++;
       return false;
    }
 
@@ -177,7 +193,10 @@ bool SerialPort::doOpen()
    // Done.
  
    printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
+   Trc::write(mTI, 0, "SerialPort open PASS  %s\n", mSettings.mPortDevice);
    mValidFlag = true;
+   mOpenErrorShowCount = 0;
+   mCloseErrorShowCount = 0;
    return true;
 }
 
@@ -201,20 +220,22 @@ void SerialPort::doClose()
    mValidFlag = false;
 
    // Flush the input and output buffers.
-   printf("serial_close flush\n");
+   Trc::write(mTI, 1, "serial_close flush\n");
    doSuspend();
    doFlush();
    //doResume();
    //Ris::Threads::threadSleep(100);
 
    // Close the event.
-   printf("serial_close event\n");
+   Trc::write(mTI, 1, "serial_close event\n");
    tRet = close(mSpecific->mEventFd);
 
    // Test the return code.
    if (tRet != 0)
    {
       printf("serial_close_error_1 %d\n", errno);
+      Trc::write(mTI, 0, "serial_close_error_1 %d\n", errno);
+      return;
    }
 
    // Close the port.
@@ -225,12 +246,15 @@ void SerialPort::doClose()
    if (tRet != 0)
    {
       printf("serial_close_error_2 %d\n", errno);
+      Trc::write(mTI, 0, "serial_close_error_2 %d\n", errno);
+      return;
    }
-   printf("serial_close done\n");
+   Trc::write(mTI, 1, "serial_close done\n");
 
    // Done.
    mSpecific->mEventFd = 0;
    mSpecific->mPortFd = 0;
+   mCloseErrorShowCount = 0;
 }
 
 //******************************************************************************

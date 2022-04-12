@@ -71,7 +71,8 @@ void SerialThread::threadInitFunction()
    tSerialSettings.mMonkeyCreator = &mMonkeyCreator;
    tSerialSettings.mSessionQCall = mSessionQCall;
    tSerialSettings.mRxMsgQCall = mRxMsgQCall;
-
+   tSerialSettings.mTraceIndex = 11;
+   Trc::start(11);
    // Create child thread with the settings.
    mSerialMsgThread = new Ris::SerialMsgThread(tSerialSettings);
 

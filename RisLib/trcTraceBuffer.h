@@ -105,6 +105,9 @@ public:
    //***************************************************************************
    // Members.
 
+   // If true then trace has been initialized.
+   int mInitFlag;
+
    // Default command line arguments.
    int mDefaultTraceIndex;
    int mDefaultShowSize;

@@ -45,6 +45,7 @@ namespace Trc
          mMutex[i] = 0;
       }
       mTraceIndexSet.clear();
+      mInitFlag = false;
       mDefaultTraceIndex = 1;
       mDefaultShowSize = 40;
    }
@@ -54,7 +55,9 @@ namespace Trc
    //******************************************************************************
 
    void TraceBuffer::initialize()
-   {}
+   {
+      mInitFlag = true;
+   }
 
    void TraceBuffer::finalize()
    {
@@ -118,7 +121,7 @@ void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aF
    mLogFile[aTraceIndex] = fopen(aFilePath, "w");
    if (mLogFile[aTraceIndex] == 0)
    {
-      printf("FILE ERROR COULD NOT CREATE LOG FILE %s", aFilePath);
+      printf("TRACE ERROR COULD NOT CREATE LOG FILE %s\n", aFilePath);
       return;
    }
 
@@ -442,6 +445,12 @@ void TraceBuffer::execute(Ris::CmdLineCmd* aCmd)
    int tTraceIndex = aCmd->argInt(2);
    int tShowSize = aCmd->argInt(3);
    int tLevel = aCmd->argInt(3);
+   if (!mInitFlag)
+   {
+      printf("TRACE NOT INITIALIZED\n");
+      return;
+   }
+
    if (aCmd->isArgString(1, "SHOW"))
    {
       doShowStatus();

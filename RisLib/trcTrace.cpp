@@ -75,6 +75,13 @@ void resume(int aTraceIndex)
    gTraceBuffer.doResume(aTraceIndex);
 }
 
+// Set default show trace index.
+void set_default_trace_index(int aTraceIndex)
+{
+   gTraceBuffer.mDefaultTraceIndex = aTraceIndex;
+}
+
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

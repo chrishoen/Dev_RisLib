@@ -59,9 +59,16 @@ public:
    // True if a receive abort is requested.
    bool mAbortFlag;
 
+   // Program trace index.
+   int mTI;
+
    // Portable specifics.
    class Specific;
    Specific* mSpecific;
+
+   // Show counts.
+   int mOpenErrorShowCount;
+   int mCloseErrorShowCount;
 
    //***************************************************************************
    //***************************************************************************

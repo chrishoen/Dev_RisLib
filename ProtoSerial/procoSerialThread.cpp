@@ -199,7 +199,7 @@ void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 
 void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 {
-   if (false)
+   if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
       MsgHelper::initialize(tTxMsg, 1000);

@@ -234,6 +234,7 @@ void SerialPort::doClose()
    // Flush.
    Trc::write(mTI, 0, "serial_close flush");
    doFlush();
+   SetEvent(mSpecific->mTxEventHandle);
 
    // Cancel any pending i/o and close the handles.
    Trc::write(mTI, 0, "serial_close cancel");
@@ -300,69 +301,6 @@ int SerialPort::doGetAvailableReceiveBytes()
    COMSTAT tComStat;
    ClearCommError(mSpecific->mPortHandle, 0, &tComStat);
    return (int)tComStat.cbInQue;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send a fixed number of bytes. Return the actual number of bytes
-// sent or a negative error code.
-
-int SerialPort::doSendBytes(const char* aData, int aNumBytes)
-{
-   // Guard.
-   if (!mValidFlag) return cSerialRetError;
-
-   ClearCommError(mSpecific->mPortHandle, 0, 0);
-
-   // Local variables.
-   DWORD tNumWritten;
-   DWORD tRet  = 0;
-
-   OVERLAPPED tOverlapped = {0};
-
-   tOverlapped.hEvent = mSpecific->mTxEventHandle;
-
-   // Write bytes to the port.
-   Trc::write(mTI, 1, "doSendBytes begin");
-   if (WriteFile(mSpecific->mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped))
-   {
-      // Write was successful.
-      Trc::write(mTI, 1, "doSendBytes PASS1");
-      return tNumWritten;
-   }
-
-   // Write is pending.
-   tRet = WaitForSingleObject(tOverlapped.hEvent, INFINITE);
-   switch(tRet)
-   {
-      // OVERLAPPED structure's event has been signaled. 
-      case WAIT_OBJECT_0:
-      {
-         if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
-         {
-            Trc::write(mTI, 1, "doSendBytes PASS2");
-            //printf("SerialPort::doSendBytes PASS1 %d\n",aNumBytes);
-            return tNumWritten;
-         }
-         else
-         {
-            Trc::write(mTI, 1, "ERROR SerialPort::doSendBytes ERROR 101, %d", GetLastError());
-            printf("ERROR SerialPort::doSendBytes ERROR 101, %d\n", GetLastError());
-            return cSerialRetError;
-         }
-      }
-      break;
-      default:
-      {
-         Trc::write(mTI, 1, "ERROR SerialPort::doSendBytes ERROR 102, %d", GetLastError());
-         printf("ERROR SerialPort::doSendBytes ERROR 102, %d\n", GetLastError());
-         return cSerialRetError;
-      }
-      break;
-   }
-   Trc::write(mTI, 1, "doSendBytes PASS3");
-   return 0;
 }
 
 //******************************************************************************
@@ -641,6 +579,71 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
 int SerialPort::doReceiveOneByte(char* aByte)
 {
    return doReceiveAllBytes(aByte, 1);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a fixed number of bytes. Return the actual number of bytes
+// sent or a negative error code.
+
+int SerialPort::doSendBytes(const char* aData, int aNumBytes)
+{
+   // Guard.
+   if (!mValidFlag) return cSerialRetError;
+
+   ClearCommError(mSpecific->mPortHandle, 0, 0);
+
+   // Local variables.
+   DWORD tNumWritten;
+   DWORD tRet = 0;
+
+   OVERLAPPED tOverlapped = { 0 };
+
+   tOverlapped.hEvent = mSpecific->mTxEventHandle;
+
+   // Write bytes to the port.
+   Trc::write(mTI, 1, "doSendBytes begin");
+   if (WriteFile(mSpecific->mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped))
+   {
+      // Write was successful.
+      Trc::write(mTI, 1, "doSendBytes PASS1");
+      return tNumWritten;
+   }
+
+   // Write is pending.
+   Trc::write(mTI, 1, "doSendBytes wait begin");
+   tRet = WaitForSingleObject(tOverlapped.hEvent, INFINITE);
+   Trc::write(mTI, 1, "doSendBytes wait end");
+   switch (tRet)
+   {
+      // OVERLAPPED structure's event has been signaled. 
+   case WAIT_OBJECT_0:
+   {
+      if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
+      {
+         Trc::write(mTI, 1, "doSendBytes PASS2");
+         //printf("SerialPort::doSendBytes PASS1 %d\n",aNumBytes);
+         return tNumWritten;
+      }
+      else
+      {
+         Trc::write(mTI, 1, "ERROR SerialPort::doSendBytes ERROR 101, %d", GetLastError());
+         printf("ERROR SerialPort::doSendBytes ERROR 101, %d\n", GetLastError());
+         return cSerialRetError;
+      }
+   }
+   break;
+   default:
+   {
+      Trc::write(mTI, 1, "ERROR SerialPort::doSendBytes ERROR 102, %d", GetLastError());
+      printf("ERROR SerialPort::doSendBytes ERROR 102, %d\n", GetLastError());
+      return cSerialRetError;
+   }
+   break;
+   }
+   Trc::write(mTI, 1, "doSendBytes PASS3");
+   return 0;
 }
 
 //******************************************************************************

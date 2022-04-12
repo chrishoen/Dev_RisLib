@@ -8,8 +8,8 @@
 #include "stdafx.h"
 
 #include "my_functions.h"
-//#include "risPortableCalls.h"
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risSerialMsgPort.h"
 
@@ -83,16 +83,19 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
 
 bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 {
+   Trc::write(mTI, 2, "SerialMsgPort::doSendMsg begin");
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      printf("ERROR doSend when Invalid\n");
+      Trc::write(mTI, 0, "ERROR doSend when Invalid");
       mMonkey->destroyMsg(aMsg);
       return false;
    }
 
    // Mutex.
+   Trc::write(mTI, 2, "SerialPort::doSendBytes lock 1");
    mTxMutex.lock();
+   Trc::write(mTI, 2, "SerialPort::doSendBytes lock 2");
 
    // Create a byte buffer from preallocated memory.
    ByteBuffer tByteBuffer(mTxMemory,mMemorySize);
@@ -107,7 +110,6 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    int tRet = 0;
    int tLength=tByteBuffer.getLength();
    tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(),tLength);
-   //printf("doSendMsg %d %d\n",tRet,tLength);
 
    mTxMsgCount++;
 
@@ -117,11 +119,13 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Test for errors.
    if (tRet<0)
    {
-      printf("ERROR SerialMsgPort::doSendMsg FAIL\n");
+      Trc::write(mTI, 2, "SerialMsgPort::doSendMsg FAIL");
+      printf("SerialMsgPort::doSendMsg FAIL\n");
       return false;
    }
 
    // Success.
+   Trc::write(mTI, 2, "SerialMsgPort::doSendMsg PASS");
    return true;
 }
 

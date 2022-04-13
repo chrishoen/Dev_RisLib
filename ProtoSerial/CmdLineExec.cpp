@@ -32,6 +32,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("DATA"))      executeData(aCmd);
+   if (aCmd->isCmd("ABORT"))     executeAbort(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -97,7 +98,16 @@ void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeAbort (Ris::CmdLineCmd* aCmd)
+{
+   gSerialThread->mAbortQCall();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    gSerialThread->sendTestMsg();
 }

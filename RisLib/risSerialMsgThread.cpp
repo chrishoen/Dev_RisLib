@@ -161,7 +161,7 @@ restart:
       else if (tRet == Ris::cSerialRetAbort)
       {
          Prn::print(Prn::Show1, "SerialMsgThread read ABORT");
-         goto end;
+         goto restart;
       }
       else if (tRet == Ris::cSerialRetDataError)
       {

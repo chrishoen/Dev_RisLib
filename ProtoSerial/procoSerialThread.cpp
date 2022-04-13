@@ -29,6 +29,7 @@ SerialThread::SerialThread()
    // Initialize qcalls.
    mSessionQCall.bind(this, &SerialThread::executeSession);
    mRxMsgQCall.bind   (this,&SerialThread::executeRxMsg);
+   mAbortQCall.bind(this, &SerialThread::executeAbort);
 
    // Initialize member variables.
    mSerialMsgThread = 0;
@@ -124,6 +125,16 @@ void SerialThread::executeOnTimer(int aTimerCount)
    MsgHelper::initialize(tMsg, 1000);
    tMsg->mCode1 = aTimerCount;
    sendMsg(tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Abort function. This is bound to the qcall. It aborts the serial port.
+
+void SerialThread::executeAbort()
+{
+   mSerialMsgThread->mSerialMsgPort.doAbort();
 }
 
 //******************************************************************************

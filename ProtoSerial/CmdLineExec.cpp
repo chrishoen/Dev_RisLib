@@ -44,6 +44,29 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::special(int aSpecial)
+{
+   if (aSpecial == 0)
+   {
+      ProtoComm::gSerialThread->mTPFlag = false;
+      ProtoComm::gSerialThread->mShowCode = 0;
+   }
+   else if (aSpecial == 1)
+   {
+      ProtoComm::gSerialThread->mTPFlag = false;
+      ProtoComm::gSerialThread->mShowCode = 1;
+   }
+   else if (aSpecial == 2)
+   {
+      ProtoComm::gSerialThread->mTPFlag = true;
+      ProtoComm::gSerialThread->mShowCode = 2;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1);

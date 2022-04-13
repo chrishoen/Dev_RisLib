@@ -14,7 +14,8 @@ public:
   CmdLineExec();
 
   void reset();
-  void execute      (Ris::CmdLineCmd* aCmd);
+  void execute(Ris::CmdLineCmd* aCmd);
+  void special(int aSpecial);
 
   void executeSend      (Ris::CmdLineCmd* aCmd);
   void executeEcho      (Ris::CmdLineCmd* aCmd);

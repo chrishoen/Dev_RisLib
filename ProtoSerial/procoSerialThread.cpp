@@ -25,7 +25,7 @@ SerialThread::SerialThread()
    // Set base class variables.
    BaseClass::setThreadName("Serial");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mHigh);
-   BaseClass::mTimerPeriod = 1000;
+   BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
    mSessionQCall.bind(this, &SerialThread::executeSession);
@@ -36,6 +36,9 @@ SerialThread::SerialThread()
    mSerialMsgThread = 0;
    mConnectionFlag = false;
    mTPFlag = false;
+   mRxCount = 0;
+   mTxCount = 0;
+   mShowCode = 0;
 }
 
 SerialThread::~SerialThread()
@@ -120,12 +123,22 @@ void SerialThread::shutdownThread()
 
 void SerialThread::executeOnTimer(int aTimerCount)
 {
-   if (!mTPFlag) return;
+   if (mTPFlag)
+   {
+      EchoRequestMsg* tMsg = new EchoRequestMsg;
+      MsgHelper::initialize(tMsg, 1000);
+      tMsg->mCode1 = aTimerCount;
+      sendMsg(tMsg);
+   }
 
-   EchoRequestMsg* tMsg = new EchoRequestMsg;
-   MsgHelper::initialize(tMsg, 1000);
-   tMsg->mCode1 = aTimerCount;
-   sendMsg(tMsg);
+   if (mShowCode != 0 && aTimerCount % 10 == 0)
+   {
+
+      Prn::print(Prn::Show1, "%3d $ RX %3d TX %3d",
+         aTimerCount,
+         mRxCount,
+         mTxCount);
+   }
 }
 
 //******************************************************************************
@@ -192,6 +205,7 @@ void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
       delete tMsg;
       break;
    }
+   mRxCount++;
 }
 
 //******************************************************************************
@@ -212,15 +226,17 @@ void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 
 void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 {
-   if (true)
+   if (false)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
       MsgHelper::initialize(tTxMsg, 1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mSerialMsgThread->sendMsg(tTxMsg);
    }
-
-   MsgHelper::show(Prn::Show1, aRxMsg);
+   if (mShowCode == 0)
+   {
+      MsgHelper::show(Prn::Show1, aRxMsg);
+   }
    delete aRxMsg;
 }
 
@@ -231,7 +247,10 @@ void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 
 void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 {
-   MsgHelper::show(Prn::Show1, aMsg);
+   if (mShowCode == 0)
+   {
+      MsgHelper::show(Prn::Show1, aMsg);
+   }
    delete aMsg;
 }
 
@@ -254,6 +273,7 @@ void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 void SerialThread::sendMsg(BaseMsg* aTxMsg)
 {
    mSerialMsgThread->sendMsg(aTxMsg);
+   mTxCount++;
 }
 
 //******************************************************************************

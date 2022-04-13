@@ -121,7 +121,7 @@ public:
    int    mCode3;
    int    mCode4;
 
-   static const int cMaxWords=10000;
+   static const int cMaxWords=1000;
    int  mNumWords;
    int  mWords[cMaxWords];
 

@@ -20,6 +20,7 @@ public:
    static void initialize (DataRecord* aMsg);
    static void initialize(DataMsg* aMsg);
    static void initialize(ByteBlobMsg* aMsg);
+   static void initialize2(ByteBlobMsg* aMsg);
 
    static void show(int aPF, TestMsg* aMsg);
    static void show(int aPF, FirstMessageMsg* aMsg);

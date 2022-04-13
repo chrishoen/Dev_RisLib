@@ -74,7 +74,7 @@ public:
    bool mConnectionFlag;
 
    // State variables.
-   bool mTPFlag;
+   int mTPCode;
    int mRxCount;
    int mTxCount;
    int mShowCode;
@@ -157,6 +157,7 @@ public:
    void processRxMsg(ProtoComm::EchoRequestMsg* aMsg);
    void processRxMsg(ProtoComm::EchoResponseMsg* aMsg);
    void processRxMsg(ProtoComm::DataMsg* aMsg);
+   void processRxMsg(ProtoComm::ByteBlobMsg* aMsg);
 
    //***************************************************************************
    //***************************************************************************

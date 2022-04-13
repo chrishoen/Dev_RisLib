@@ -28,7 +28,7 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        ProtoComm::gSerialThread->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("TP"))        ProtoComm::gSerialThread->mTPCode = aCmd->argInt(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("DATA"))      executeData(aCmd);
@@ -48,17 +48,22 @@ void CmdLineExec::special(int aSpecial)
 {
    if (aSpecial == 0)
    {
-      ProtoComm::gSerialThread->mTPFlag = false;
+      ProtoComm::gSerialThread->mTPCode = 0;
       ProtoComm::gSerialThread->mShowCode = 0;
    }
    else if (aSpecial == 1)
    {
-      ProtoComm::gSerialThread->mTPFlag = false;
+      ProtoComm::gSerialThread->mTPCode = 0;
       ProtoComm::gSerialThread->mShowCode = 1;
    }
    else if (aSpecial == 2)
    {
-      ProtoComm::gSerialThread->mTPFlag = true;
+      ProtoComm::gSerialThread->mTPCode = 1;
+      ProtoComm::gSerialThread->mShowCode = 2;
+   }
+   else if (aSpecial == 3)
+   {
+      ProtoComm::gSerialThread->mTPCode = 2;
       ProtoComm::gSerialThread->mShowCode = 2;
    }
 }

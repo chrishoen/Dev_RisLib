@@ -23,37 +23,47 @@ namespace Ris
 
 ByteBuffer::ByteBuffer ()
 {
-   mBaseBytes = 0;
    mWorkingIndex = 0;
    mWorkingLength = 0;
-   mMaxLength = 0;
    mMarkerStartIndex = 0;
    mMarkerEndIndex = 0;
    mMarkerLength = 0;
-   mMemAllocCode = 0;
    mCopyDirection = cCopyTo;
    mError = 0;
+
+   mBaseBytes = 0;
+   mMaxLength = 0;
+   mMemAllocCode = 0;
 }
 
 ByteBuffer::ByteBuffer (int aSize)
 {
-   memAlloc(aSize);
+   mWorkingIndex = 0;
+   mWorkingLength = 0;
+   mMarkerStartIndex = 0;
+   mMarkerEndIndex = 0;
+   mMarkerLength = 0;
    mCopyDirection = cCopyTo;
    mError = 0;
+
+   mBaseBytes = (char*)malloc(aSize);
+   mMaxLength = aSize;
+   mMemAllocCode = 1;
 }
 
 ByteBuffer::ByteBuffer (char* aAddress,int aSize)
 {
-   mBaseBytes     = aAddress;
-   mWorkingIndex  = 0;
+   mWorkingIndex = 0;
    mWorkingLength = 0;
-   mMaxLength     = aSize;
    mMarkerStartIndex = 0;
    mMarkerEndIndex = 0;
    mMarkerLength = 0;
-   mMemAllocCode  = 0;
    mCopyDirection = cCopyTo;
-   mError         = 0;
+   mError = 0;
+
+   mBaseBytes = aAddress;
+   mMaxLength = aSize;
+   mMemAllocCode = 0;
 }
 
 ByteBuffer::~ByteBuffer ()

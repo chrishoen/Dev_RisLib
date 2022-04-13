@@ -35,7 +35,7 @@ SerialThread::SerialThread()
    // Initialize member variables.
    mSerialMsgThread = 0;
    mConnectionFlag = false;
-   mTPFlag = false;
+   mTPCode = 0;
    mRxCount = 0;
    mTxCount = 0;
    mShowCode = 0;
@@ -123,11 +123,17 @@ void SerialThread::shutdownThread()
 
 void SerialThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPFlag)
+   if (mTPCode == 1)
    {
       EchoRequestMsg* tMsg = new EchoRequestMsg;
       MsgHelper::initialize(tMsg, 1000);
       tMsg->mCode1 = aTimerCount;
+      sendMsg(tMsg);
+   }
+   else if (mTPCode == 2)
+   {
+      ByteBlobMsg* tMsg = new ByteBlobMsg;
+      MsgHelper::initialize2(tMsg);
       sendMsg(tMsg);
    }
 
@@ -200,6 +206,9 @@ void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
    case ProtoComm::MsgIdT::cDataMsg:
       processRxMsg((ProtoComm::DataMsg*)tMsg);
       break;
+   case ProtoComm::MsgIdT::cByteBlobMsg:
+      processRxMsg((ProtoComm::ByteBlobMsg*)tMsg);
+      break;
    default:
       Prn::print(Prn::Show1, "SerialThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
       delete tMsg;
@@ -262,6 +271,20 @@ void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 {
    MsgHelper::show(Prn::Show1, aMsg);
+   delete aMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Rx message handler - ByteBlobMsg.
+
+void SerialThread::processRxMsg(ProtoComm::ByteBlobMsg* aMsg)
+{
+   if (mShowCode == 0)
+   {
+      MsgHelper::show(Prn::Show1, aMsg);
+   }
    delete aMsg;
 }
 

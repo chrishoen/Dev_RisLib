@@ -161,6 +161,12 @@ void MsgHelper::initialize(ByteBlobMsg* aMsg)
    memcpy(aMsg->mBytes.mBytes, &tInt, 4);
 }
 
+void MsgHelper::initialize2(ByteBlobMsg* aMsg)
+{
+   aMsg->mBytes.mCopySize = 1000;
+   memset(aMsg->mBytes.mBytes, 0x77, 1000);
+}
+
 void MsgHelper::show(int aPF, ByteBlobMsg* aMsg)
 {
    int tInt = 0;

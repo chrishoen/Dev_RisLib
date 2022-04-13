@@ -24,13 +24,12 @@ namespace Ris
 // This is a class template for byte blobs, which are opaque sections 
 // of heap allocated memoty.
 // 
-// It inherits from ByteContent and instances are usually members of classes
-// that inherit from byte content.
+// It inherits from ByteContent and instances are usually members of
+// classes that inherit from byte content.
 // 
-// It encapsulates a chunk of heap allocated memory that can be copied
-// to/from byte buffers. The heap memory is allocated/deallocated by the
-// constructor/destructor. The template parameter specifies the number
-// of bytes to allocate on the heap;
+// It encapsulates a chunk of memory that is allocated in place that can
+// be copied to/from byte buffers. The template parameter specifies the
+// number of bytes to allocate in place;
 
 template <int AllocateSize>
 class ByteBlob : public ByteContent
@@ -42,7 +41,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // Allocated memory.
+   // Allocated memory and a pointer to it.
+   char mMemory[AllocateSize];
    char* mBytes;
 
    // Number of bytes to copy to/from a byte buffer. This is less than or equal
@@ -62,14 +62,13 @@ public:
    // Constructor.
    ByteBlob()
    {
-      mBytes = (char*)malloc(AllocateSize);
+      mBytes = &mMemory[0];
       mCopySize = 0;
       mMaxCopySize = AllocateSize;
    }
 
    ~ByteBlob()
    {
-      free(mBytes);
    }
 
    // Copy allocated memory to/from a byte buffer. The copy size must be
@@ -90,7 +89,7 @@ public:
       return mCopySize + aSize <= mMaxCopySize;
    }
 
-   // Add some bytes to the allocated memory array. Increment the copy size.
+   // Put some bytes to the allocated memory array. Increment the copy size.
    // Return true if successful.
    bool putBytes(void* aBytes, int aSize)
    {

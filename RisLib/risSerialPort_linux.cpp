@@ -292,6 +292,7 @@ void SerialPort::doAbort()
       printf("serial_abort_1 ERROR %d\n", errno);
    }
    Trc::write(mTI, 1, "serial_abort done");
+   printf("serial_abort done\n");
 }
 
 //******************************************************************************

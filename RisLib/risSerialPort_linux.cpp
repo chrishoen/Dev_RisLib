@@ -53,6 +53,8 @@ SerialPort::SerialPort()
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
    mTI = 0;
+   mRxByteCount = 0;
+   mTxByteCount = 0;
 }
 
 SerialPort::~SerialPort()
@@ -475,6 +477,7 @@ int SerialPort::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
    // Done.
 
    // Read was successful. Return the number of bytes read.
+   mRxByteCount += tRet;
    return tRet;
 }
 
@@ -524,6 +527,7 @@ int SerialPort::doReceiveAllBytes(char* aBytes, int aRequestBytes)
    // If success then return the total number of bytes read, which is 
    // equal to the requested number of bytes. If failure then return
    // the negative error code.
+   mRxByteCount += tRet;
    return tRet;
 }
 
@@ -574,6 +578,7 @@ int SerialPort::doSendBytes(const char* aBytes, int aNumBytes)
 
    // Write was successful. Return the number of bytes written.
    //printf("SerialPort::doSendBytes PASS %d\n",aNumBytes);
+   mTxByteCount += tRet;
    return tRet;
 }
 

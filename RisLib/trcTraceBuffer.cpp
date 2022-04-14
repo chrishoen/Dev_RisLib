@@ -43,6 +43,9 @@ namespace Trc
          mWriteLevel[i] = 0;
          mLogLevel[i] = 0;
          mMutex[i] = 0;
+         mTraceLabel[i][0] = 0;
+         mFirstTimetag = 0;
+         mWriteFirstFlag = false;
       }
       mTraceIndexSet.clear();
       mInitFlag = false;
@@ -91,7 +94,7 @@ namespace Trc
 // Allocate memory for a trace buffer pair. Set the initial write level
 // for the trace.
 
-void TraceBuffer::doCreateBuffer(int aTraceIndex, int aWriteLevel)
+void TraceBuffer::doCreateBuffer(int aTraceIndex, int aWriteLevel, const char* aLabel)
 {
    // Guard.
    if (aTraceIndex < 1 || aTraceIndex >= cNumTraces) return;
@@ -104,6 +107,8 @@ void TraceBuffer::doCreateBuffer(int aTraceIndex, int aWriteLevel)
    mWriteEnable[aTraceIndex] = false;
    mMutex[aTraceIndex] = new Ris::Threads::MutexSemaphore;
    mTraceIndexSet.insert(aTraceIndex);
+   strncpy(&mTraceLabel[aTraceIndex][0], aLabel, cMaxLabelSize);
+   mTraceLabel[aTraceIndex][cMaxLabelSize] = 0;
 }
 
 //******************************************************************************
@@ -182,6 +187,7 @@ void TraceBuffer::doStart(int aTraceIndex)
 {
    if (!isValidTrace(aTraceIndex)) return;
    mMutex[aTraceIndex]->lock();
+   mWriteFirstFlag = true;
    mNextWriteIndex[aTraceIndex] = 0;
    mWriteEnable[aTraceIndex] = true;
    mWriteSuspend[aTraceIndex] = false;
@@ -286,6 +292,14 @@ void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
    // Get a timetag from the program time.
    double tTimetag = Ris::getProgramTime();
 
+   // Store the first timetag.
+   if (mWriteFirstFlag)
+   {
+      mWriteFirstFlag = false;
+      mFirstTimetag = tTimetag;
+   }
+
+   // 
    // Add the timetag and the input string to a temp string.
    char tString[cMaxStringSize + 1];
    snprintf(tString, cMaxStringSize, "%7.3f $ %s", tTimetag, aString);
@@ -377,7 +391,12 @@ void TraceBuffer::doShowFirst(int aTraceIndex, int aShowSize)
 void TraceBuffer::doShowLast(int aTraceIndex, int aShowSize)
 {
    if (!isValidTrace(aTraceIndex)) return;
-   printf("TRACE LAST******************************* %d %d\n", aTraceIndex, aShowSize);
+   printf("TRACE LAST******************************* %d %d %.3f %.3f\n",
+      aTraceIndex,
+      aShowSize,
+      mFirstTimetag,
+      Ris::getProgramTime());
+
    if (mNextWriteIndex[aTraceIndex] == 0)
    {
       printf("EMPTY\n");
@@ -414,14 +433,15 @@ void TraceBuffer::doShowLast(int aTraceIndex, int aShowSize)
 void TraceBuffer::doShowStatus()
 {
    printf("TRACE STATUS*****************************\n");
-   printf("trace  write  write  write log     write\n");
-   printf("index  enable susp   level exists  index\n");
+   printf("trace  trace               write  write  write log     write\n");
+   printf("index  label               enable susp   level exists  index\n");
    printf("\n");
 
    for (const int& i : mTraceIndexSet)
    {
-      printf("%-4d   %-5s  %-5s  %-1d     %-5s   %-5lld \n",
+      printf("%-4d   %-19s %-5s  %-5s  %-1d     %-5s   %-5lld \n",
          i,
+         &mTraceLabel[i][0],
          my_string_from_bool(mWriteEnable[i]),
          my_string_from_bool(mWriteSuspend[i]),
          mWriteLevel[i],
@@ -430,8 +450,9 @@ void TraceBuffer::doShowStatus()
    }
 
    printf("\n");
-   printf("DefaultTraceIndex   %d\n", mDefaultTraceIndex);
-   printf("DefaultShowSize     %d\n", mDefaultShowSize);
+   printf("DefaultTraceIndex       %d\n", mDefaultTraceIndex);
+   printf("DefaultShowSize         %d\n", mDefaultShowSize);
+   printf("CurrentProgramTime      %.3f\n", Ris::getProgramTime());
    printf("\n");
 }
 

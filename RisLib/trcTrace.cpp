@@ -26,9 +26,9 @@ void reset()
 }
 
 // Allocate memory for a trace buffer. Set the initial write level.
-void create_buffer(int aTraceIndex, int aWriteLevel)
+void create_buffer(int aTraceIndex, int aWriteLevel, const char* aLabel)
 {
-   gTraceBuffer.doCreateBuffer(aTraceIndex, aWriteLevel);
+   gTraceBuffer.doCreateBuffer(aTraceIndex, aWriteLevel, aLabel);
 }
 
 // Create a log file for a trace. Set the initial log level

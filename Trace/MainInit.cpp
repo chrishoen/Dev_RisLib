@@ -42,8 +42,8 @@ void main_initialize(int argc,char** argv)
    // Initialize trace facility.
 
    Trc::reset();
-   Trc::create_buffer(1, 3);
-   Trc::create_buffer(4, 6);
+   Trc::create_buffer(1, 3, "test1");
+   Trc::create_buffer(4, 6, "test4");
    Trc::create_log(1, 4, "log/trace1.log");
    Trc::initialize();
 

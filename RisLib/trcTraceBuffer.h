@@ -48,6 +48,9 @@ public:
    // Max string element size.
    static const int cMaxStringSize = 99;
 
+   // Max trace label size.
+   static const int cMaxLabelSize = 15;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -100,6 +103,15 @@ public:
    // Set of trace indices for all trace buffers that have been created.
    std::set<int> mTraceIndexSet;
 
+   // Array of trace label strings.
+   char mTraceLabel[cNumTraces][cMaxLabelSize + 1];
+
+   // If true then this is the first write after start.
+   bool mWriteFirstFlag;
+
+   // First timetag after start.
+   double mFirstTimetag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -130,7 +142,7 @@ public:
 
    // Allocate memory for a trace buffer pair. Set the initial write level
    // for the trace.
-   void doCreateBuffer(int aTraceIndex, int aWriteLevel);
+   void doCreateBuffer(int aTraceIndex, int aWriteLevel, const char* aLabel);
 
    // Create a log file for a trace. Set the initial log level
    // for the trace.

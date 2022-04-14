@@ -433,19 +433,19 @@ void TraceBuffer::doShowLast(int aTraceIndex, int aShowSize)
 void TraceBuffer::doShowStatus()
 {
    printf("TRACE STATUS*****************************\n");
-   printf("trace  trace               write  write  write log     write\n");
-   printf("index  label               enable susp   level exists  index\n");
+   printf("trace  trace               write  write log     log    write\n");
+   printf("index  label               enable level exists  level  index\n");
    printf("\n");
 
    for (const int& i : mTraceIndexSet)
    {
-      printf("%-4d   %-19s %-5s  %-5s  %-1d     %-5s   %-5lld \n",
+      printf("%-4d   %-19s %-5s  %-1d     %-5s    %-1d     %-5lld\n",
          i,
          &mTraceLabel[i][0],
          my_string_from_bool(mWriteEnable[i]),
-         my_string_from_bool(mWriteSuspend[i]),
          mWriteLevel[i],
          my_string_from_bool(mLogExists[i]),
+         mLogLevel[i],
          mNextWriteIndex[i]);
    }
 

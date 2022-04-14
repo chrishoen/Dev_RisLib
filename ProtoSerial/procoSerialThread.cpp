@@ -140,10 +140,12 @@ void SerialThread::executeOnTimer(int aTimerCount)
    if (mShowCode != 0 && aTimerCount % 10 == 0)
    {
 
-      Prn::print(Prn::Show1, "%3d $ RX %3d TX %3d",
+      Prn::print(Prn::Show1, "%3d $ RX %3d %3d TX  %3d %3d",
          aTimerCount,
          mRxCount,
-         mTxCount);
+         mSerialMsgThread->mSerialMsgPort.mRxByteCount,
+         mTxCount,
+         mSerialMsgThread->mSerialMsgPort.mTxByteCount);
    }
 }
 

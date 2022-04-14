@@ -477,7 +477,7 @@ int SerialPort::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
    // Done.
 
    // Read was successful. Return the number of bytes read.
-   mRxByteCount += tRet;
+// mRxByteCount += tRet;
    return tRet;
 }
 
@@ -540,7 +540,12 @@ int SerialPort::doReceiveAllBytes(char* aBytes, int aRequestBytes)
 
 int SerialPort::doReceiveOneByte(char* aByte)
 {
-   return doReceiveAnyBytes(aByte, 1);
+   int tRet = doReceiveAnyBytes(aByte, 1);
+   if (tRet > 0)
+   {
+      mRxByteCount += tRet;
+   }
+   return tRet;
 }
 
 //******************************************************************************

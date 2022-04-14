@@ -576,6 +576,7 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
 
    // Done.
    Trc::write(mTI, 1, "SerialPort::doReceiveAllBytes PASS1 %d", tBytesRead);
+   mRxByteCount += tBytesRead;
    return tBytesRead;
 }
 
@@ -618,6 +619,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    {
       // Write was successful.
       Trc::write(mTI, 1, "doSendBytes PASS1");
+      mTxByteCount += tNumWritten;
       return tNumWritten;
    }
 
@@ -634,6 +636,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       {
          Trc::write(mTI, 1, "doSendBytes PASS2");
          //printf("SerialPort::doSendBytes PASS1 %d\n",aNumBytes);
+         mTxByteCount += tNumWritten;
          return tNumWritten;
       }
       else
@@ -653,6 +656,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    break;
    }
    Trc::write(mTI, 1, "doSendBytes PASS3");
+   mTxByteCount += tNumWritten;
    return 0;
 }
 

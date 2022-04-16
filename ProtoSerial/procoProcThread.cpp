@@ -10,7 +10,7 @@
 #include "procoSerialParms.h"
 
 #define  _PROCOSERIALTHREAD_CPP_
-#include "procoSerialThread.h"
+#include "procoProcThread.h"
 
 namespace ProtoComm
 {
@@ -20,17 +20,17 @@ namespace ProtoComm
 //******************************************************************************
 // Constructor.
 
-SerialThread::SerialThread()
+ProcThread::ProcThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Serial");
+   BaseClass::setThreadName("Proc");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mHigh);
    BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
-   mSessionQCall.bind(this, &SerialThread::executeSession);
-   mRxMsgQCall.bind   (this,&SerialThread::executeRxMsg);
-   mAbortQCall.bind(this, &SerialThread::executeAbort);
+   mSessionQCall.bind(this, &ProcThread::executeSession);
+   mRxMsgQCall.bind   (this,&ProcThread::executeRxMsg);
+   mAbortQCall.bind(this, &ProcThread::executeAbort);
 
    // Initialize member variables.
    mSerialMsgThread = 0;
@@ -41,7 +41,7 @@ SerialThread::SerialThread()
    mShowCode = 0;
 }
 
-SerialThread::~SerialThread()
+ProcThread::~ProcThread()
 {
    if (mSerialMsgThread) delete mSerialMsgThread;
 }
@@ -51,7 +51,7 @@ SerialThread::~SerialThread()
 //******************************************************************************
 // Place holder.
 
-void SerialThread::show()
+void ProcThread::show()
 {
    Prn::print(0, "SerialMsgPort %d %d",
       mSerialMsgThread->mSerialMsgPort.mHeaderAllCount,
@@ -65,7 +65,7 @@ void SerialThread::show()
 // after the thread starts running. It creates and launches the 
 // child SerialMsgThread.
 
-void SerialThread::threadInitFunction()
+void ProcThread::threadInitFunction()
 {
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
@@ -92,14 +92,14 @@ void SerialThread::threadInitFunction()
 // Thread exit function. This is called by the base class immedidately
 // before the thread is terminated. It shuts down the child SerialMsgThread.
 
-void SerialThread::threadExitFunction()
+void ProcThread::threadExitFunction()
 {
-   Prn::print(0, "SerialThread::threadExitFunction BEGIN");
+   Prn::print(0, "ProcThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
    mSerialMsgThread->shutdownThread();
 
-   Prn::print(0, "SerialThread::threadExitFunction END");
+   Prn::print(0, "ProcThread::threadExitFunction END");
 }
 
 //******************************************************************************
@@ -109,11 +109,11 @@ void SerialThread::threadExitFunction()
 // function to terminate the thread. This executes in the context of
 // the calling thread.
 
-void SerialThread::shutdownThread()
+void ProcThread::shutdownThread()
 {
-   Prn::print(0, "SerialThread::shutdownThread BEGIN");
+   Prn::print(0, "ProcThread::shutdownThread BEGIN");
    BaseClass::shutdownThread();
-   Prn::print(0, "SerialThread::shutdownThread END");
+   Prn::print(0, "ProcThread::shutdownThread END");
 }
 
 //******************************************************************************
@@ -121,31 +121,20 @@ void SerialThread::shutdownThread()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void SerialThread::executeOnTimer(int aTimerCount)
+void ProcThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPCode == 2)
+   if (mTPCode == 1)
    {
       EchoRequestMsg* tMsg = new EchoRequestMsg;
       MsgHelper::initialize(tMsg, 1000);
       tMsg->mCode1 = aTimerCount;
       sendMsg(tMsg);
    }
-   else if (mTPCode == 3)
+   else if (mTPCode == 2)
    {
       ByteBlobMsg* tMsg = new ByteBlobMsg;
       MsgHelper::initialize2(tMsg);
       sendMsg(tMsg);
-   }
-
-   if (mShowCode != 0 && aTimerCount % 10 == 0)
-   {
-
-      Prn::print(Prn::Show1, "%3d $ RX %3d %3d TX  %3d %3d",
-         aTimerCount,
-         mRxCount,
-         mSerialMsgThread->mSerialMsgPort.mRxByteCount,
-         mTxCount,
-         mSerialMsgThread->mSerialMsgPort.mTxByteCount);
    }
 }
 
@@ -154,7 +143,7 @@ void SerialThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // Abort function. This is bound to the qcall. It aborts the serial port.
 
-void SerialThread::executeAbort()
+void ProcThread::executeAbort()
 {
    mSerialMsgThread->mSerialMsgPort.doAbort();
 }
@@ -166,15 +155,15 @@ void SerialThread::executeAbort()
 // when a session is established or disestablished (when the serial port
 // is opened or it is closed because of an error or a disconnection). 
 
-void SerialThread::executeSession(bool aConnected)
+void ProcThread::executeSession(bool aConnected)
 {
    if (aConnected)
    {
-      Prn::print(Prn::Show1, "SerialThread CONNECTED");
+      Prn::print(Prn::Show1, "ProcThread CONNECTED");
    }
    else
    {
-      Prn::print(Prn::Show1, "SerialThread DISCONNECTED");
+      Prn::print(Prn::Show1, "ProcThread DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;
@@ -188,7 +177,7 @@ void SerialThread::executeSession(bool aConnected)
 // Based on the receive message type, call one of the specific receive
 // message handlers. This is bound to the qcall.
 
-void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
+void ProcThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
    ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
@@ -212,7 +201,7 @@ void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
       processRxMsg((ProtoComm::ByteBlobMsg*)tMsg);
       break;
    default:
-      Prn::print(Prn::Show1, "SerialThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
+      Prn::print(Prn::Show1, "ProcThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
       delete tMsg;
       break;
    }
@@ -224,7 +213,7 @@ void SerialThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Message handler - TestMsg.
 
-void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
+void ProcThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 {
    MsgHelper::show(Prn::Show1, aMsg);
    delete aMsg;
@@ -235,7 +224,7 @@ void SerialThread::processRxMsg(ProtoComm::TestMsg*  aMsg)
 //******************************************************************************
 // Rx message handler - EchoRequestMsg.
 
-void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
+void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 {
    if (false)
    {
@@ -256,7 +245,7 @@ void SerialThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - EchoResponseMsg.
 
-void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
+void ProcThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 {
    if (mShowCode == 0)
    {
@@ -270,7 +259,7 @@ void SerialThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 //******************************************************************************
 // Rx message handler - DataMsg.
 
-void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
+void ProcThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 {
    MsgHelper::show(Prn::Show1, aMsg);
    delete aMsg;
@@ -281,7 +270,7 @@ void SerialThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 //******************************************************************************
 // Rx message handler - ByteBlobMsg.
 
-void SerialThread::processRxMsg(ProtoComm::ByteBlobMsg* aMsg)
+void ProcThread::processRxMsg(ProtoComm::ByteBlobMsg* aMsg)
 {
    if (mShowCode == 0)
    {
@@ -295,7 +284,7 @@ void SerialThread::processRxMsg(ProtoComm::ByteBlobMsg* aMsg)
 //******************************************************************************
 // Send a message via mSerialMsgThread:
 
-void SerialThread::sendMsg(BaseMsg* aTxMsg)
+void ProcThread::sendMsg(BaseMsg* aTxMsg)
 {
    mSerialMsgThread->sendMsg(aTxMsg);
    mTxCount++;
@@ -306,7 +295,7 @@ void SerialThread::sendMsg(BaseMsg* aTxMsg)
 //******************************************************************************
 // Send a message via mSerialMsgThread:
 
-void SerialThread::sendTestMsg()
+void ProcThread::sendTestMsg()
 {
    TestMsg* tMsg = new TestMsg;
    tMsg->mCode1 = 201;

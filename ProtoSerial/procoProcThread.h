@@ -49,7 +49,7 @@ namespace ProtoComm
 // messages.
 //
 
-class  SerialThread : public Ris::Threads::BaseQCallThread
+class  ProcThread : public Ris::Threads::BaseQCallThread
 {
 public:
 
@@ -87,8 +87,8 @@ public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
 
    // Constructor.
-   SerialThread();
-  ~SerialThread();
+   ProcThread();
+  ~ProcThread();
   void show();
 
    //***************************************************************************
@@ -175,9 +175,9 @@ public:
 // Global singular instance.
 
 #ifdef _PROCOSERIALTHREAD_CPP_
-         SerialThread* gSerialThread;
+         ProcThread* gProcThread;
 #else
-extern   SerialThread* gSerialThread;
+extern   ProcThread* gProcThread;
 #endif
 
 //******************************************************************************

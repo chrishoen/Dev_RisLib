@@ -1,11 +1,13 @@
 
 #include "stdafx.h"
 
-#include "MainInit.h"
+#include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
+#include "MainInit.h"
 
-#include "procoSerialThread.h"
+#include "procoProcThread.h"
+#include "procoMonitorThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -25,8 +27,20 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   ProtoComm::gSerialThread = new ProtoComm::SerialThread;
-   ProtoComm::gSerialThread->launchThread();
+   ProtoComm::gProcThread = new ProtoComm::ProcThread;
+   ProtoComm::gProcThread->launchThread();
+
+   ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
+   ProtoComm::gMonitorThread->launchThread();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Show program threads.
+
+   Ris::Threads::showCurrentThreadInfo();
+   ProtoComm::gProcThread->showThreadInfo();
+   ProtoComm::gMonitorThread->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
@@ -42,8 +56,13 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   ProtoComm::gSerialThread->shutdownThread();
-   delete ProtoComm::gSerialThread;
+   ProtoComm::gMonitorThread->shutdownThread();
+   delete ProtoComm::gMonitorThread;
+   ProtoComm::gMonitorThread = 0;
+
+   ProtoComm::gProcThread->shutdownThread();
+   delete ProtoComm::gProcThread;
+   ProtoComm::gProcThread = 0;
 
    //***************************************************************************
    //***************************************************************************

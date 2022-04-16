@@ -260,9 +260,11 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       return cSerialRetDataError;
    }
 
-   // Done.
-   //printf("SerialMsgPort::doReceiveMsg PASS\n");
+   // Metrics.
    mRxMsgCount++;
+   mMonkey->mRxMsgMetrics->update(aMsg, mMonkey->mMessageLength);
+
+   // Done.
    return cSerialRetSuccess;
 }
 
@@ -298,8 +300,6 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    int tLength = tByteBuffer.getLength();
    tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(), tLength);
 
-   mTxMsgCount++;
-
    // Test for errors.
    if (tRet < 0)
    {
@@ -307,6 +307,10 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
       printf("SerialMsgPort::doSendMsg FAIL\n");
       return false;
    }
+
+   // Metrics.
+   mTxMsgCount++;
+   mMonkey->mTxMsgMetrics->update(aMsg, tLength);
 
    // Success.
    Trc::write(mTI, 2, "SerialMsgPort::doSendMsg PASS");

@@ -33,6 +33,11 @@ MonitorThread::MonitorThread()
    mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxByteCount);
    mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxByteCount);
 
+   mMon_TxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMonkey->mTxMsgMetrics->mMsgCount);
+   mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMonkey->mRxMsgMetrics->mMsgCount);
+   mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMonkey->mTxMsgMetrics->mByteCount);
+   mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMonkey->mRxMsgMetrics->mByteCount);
+
    // Set member variables.
    mTPFlag = true;
    mShowCode = 0;

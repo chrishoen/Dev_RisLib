@@ -39,6 +39,9 @@ BaseMsgMonkey::BaseMsgMonkey(CreateMsgFunctionT aCreate, DestroyMsgFunctionT aDe
    {
       mDestroyMsgFunction = &defaultDestroy;
    }
+
+   mTxMsgMetrics = &mDefaultTxMsgMetrics;
+   mRxMsgMetrics = &mDefaultRxMsgMetrics;
 }
 
 //******************************************************************************
@@ -142,6 +145,27 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 void BaseMsgMonkey::destroyMsg(Ris::ByteContent* aMsg)
 {
    mDestroyMsgFunction(aMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
+
+BaseMsgMetrics::BaseMsgMetrics()
+{
+   mMsgCount = 0;
+   mByteCount = 0;
+}
+
+// Update the metrics with a message and a length.
+void BaseMsgMetrics::update(ByteContent* aMsg, int aMsgLength)
+{
+   mMsgCount++;
+   mByteCount += aMsgLength;
 }
 
 //******************************************************************************

@@ -42,8 +42,8 @@ public:
    // Message counts.
    Ris::Monitor<int> mMon_TxMsgCount;
    Ris::Monitor<int> mMon_RxMsgCount;
-   Ris::Monitor<int> mMon_TxByteCount;
-   Ris::Monitor<int> mMon_RxByteCount;
+   Ris::Monitor<long long> mMon_TxByteCount;
+   Ris::Monitor<long long> mMon_RxByteCount;
 
    //***************************************************************************
    //***************************************************************************

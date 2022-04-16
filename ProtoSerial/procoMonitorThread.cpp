@@ -60,10 +60,14 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 1)
    {
-      Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d", mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
-      Prn::print(Prn::Show1, "RxMsgCount               %-10d  %d", mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
-      Prn::print(Prn::Show1, "TxByteCount              %-10d  %d", mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
-      Prn::print(Prn::Show1, "RxByteCount              %-10d  %d", mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
+      Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
+         mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
+      Prn::print(Prn::Show1, "RxMsgCount               %-10d  %d", 
+         mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
+      Prn::print(Prn::Show1, "TxByteCount              %-10lld  %lld", 
+         mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
+      Prn::print(Prn::Show1, "RxByteCount              %-10lld  %lld", 
+         mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
       Prn::print(Prn::Show1, "");
    }
 }

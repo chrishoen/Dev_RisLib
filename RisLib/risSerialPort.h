@@ -74,8 +74,8 @@ public:
    int mCloseErrorShowCount;
 
    // Metrics.
-   int mRxByteCount;
-   int mTxByteCount;
+   long long mRxByteCount;
+   long long mTxByteCount;
 
    //***************************************************************************
    //***************************************************************************

@@ -33,10 +33,15 @@ MonitorThread::MonitorThread()
    mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxByteCount);
    mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxByteCount);
 
-   mMon_TxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMonkey->mTxMsgMetrics->mMsgCount);
-   mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMonkey->mRxMsgMetrics->mMsgCount);
-   mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMonkey->mTxMsgMetrics->mByteCount);
-   mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMonkey->mRxMsgMetrics->mByteCount);
+   mMon_TxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMsgMonkey->mTxMsgMetrics->mMsgCount);
+   mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMsgMonkey->mRxMsgMetrics->mMsgCount);
+   mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMsgMonkey->mTxMsgMetrics->mByteCount);
+   mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMsgMonkey->mRxMsgMetrics->mByteCount);
+
+   mMon_TxMsgCount.bind(&gProcThread->mMsgMonkey->mTxMsgMetrics->mMsgCount);
+   mMon_RxMsgCount.bind(&gProcThread->mMsgMonkey->mRxMsgMetrics->mMsgCount);
+   mMon_TxByteCount.bind(&gProcThread->mMsgMonkey->mTxMsgMetrics->mByteCount);
+   mMon_RxByteCount.bind(&gProcThread->mMsgMonkey->mRxMsgMetrics->mByteCount);
 
    // Set member variables.
    mTPFlag = true;

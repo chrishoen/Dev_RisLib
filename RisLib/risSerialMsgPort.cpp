@@ -29,7 +29,7 @@ SerialMsgPort::SerialMsgPort()
    mRxMsgCount = 0;
    mHeaderAllCount = 0;
    mHeaderOneCount = 0;
-   mMonkey = 0;
+   mMsgMonkey = 0;
    mHeaderReadState = 0;
    mHeaderLength = 0;
 }
@@ -37,7 +37,6 @@ SerialMsgPort::SerialMsgPort()
 SerialMsgPort::~SerialMsgPort()
 {
    if (mRxMemory) free(mRxMemory);
-   if (mMonkey) delete mMonkey;
 }
 
 //******************************************************************************
@@ -51,15 +50,15 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
    BaseClass::initialize(aSettings);
 
    // Create a message monkey.
-   mMonkey = BaseClass::mSettings.mMonkeyCreator->createMonkey();
+   mMsgMonkey = BaseClass::mSettings.mMsgMonkey;
 
    // Allocate memory for byte buffers.
-   mMemorySize = mMonkey->getMaxBufferSize();
+   mMemorySize = mMsgMonkey->getMaxBufferSize();
    mRxMemory = (char*)malloc(mMemorySize);
 
    // Set the initial header read state.
    mHeaderReadState = cHeaderReadAll;
-   mHeaderLength = mMonkey->getHeaderLength();
+   mHeaderLength = mMsgMonkey->getHeaderLength();
 
    // Initialize the header buffer and allocate memory for it.
    mHeaderBuffer.initialize(mHeaderLength);
@@ -129,11 +128,11 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 
       // Extract the header parameters from the byte buffer and validate
       // the header.
-      mMonkey->extractMessageHeaderParms(&tByteBuffer);
+      mMsgMonkey->extractMessageHeaderParms(&tByteBuffer);
 
       // If the header is not valid then set the state to read it into 
       // the header buffer one byte at a time.
-      if (mMonkey->mHeaderValidFlag)
+      if (mMsgMonkey->mHeaderValidFlag)
       {
          //printf("receive header all PASS\n");
          mHeaderAllCount++;
@@ -195,12 +194,12 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
             // extract the header parameters and validate the header.
             tByteBuffer.setCopyFrom();
             tByteBuffer.rewind();
-            mMonkey->extractMessageHeaderParms(&tByteBuffer);
+            mMsgMonkey->extractMessageHeaderParms(&tByteBuffer);
 
             // If the header is valid then set the header state to read
             // the next header with all of the bytes and exit the loop.
             // If the header is not valid then continue with the loop.
-            if (mMonkey->mHeaderValidFlag)
+            if (mMsgMonkey->mHeaderValidFlag)
             {
                //printf("receive header one PASS\n");
                mHeaderOneCount++;
@@ -217,7 +216,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Read the message payload into the receive buffer.
  
    // Set payload variables.
-   int   tPayloadLength = mMonkey->mPayloadLength;
+   int   tPayloadLength = mMsgMonkey->mPayloadLength;
    char* tPayloadBuffer = tByteBuffer.getBaseAddress() + mHeaderLength;
 
    tRet = BaseClass::doReceiveAllBytes(tPayloadBuffer,tPayloadLength);
@@ -234,7 +233,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    }
 
    // Set the buffer length.
-   tByteBuffer.setLength(mMonkey->mMessageLength);
+   tByteBuffer.setLength(mMsgMonkey->mMessageLength);
 
    //***************************************************************************
    //***************************************************************************
@@ -244,7 +243,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 
    // Extract the message from the byte buffer.
    tByteBuffer.rewind();
-   aMsg = mMonkey->getMsgFromBuffer(&tByteBuffer);
+   aMsg = mMsgMonkey->getMsgFromBuffer(&tByteBuffer);
 
    // Test for errors.
    if (aMsg==0)
@@ -254,7 +253,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    }
 
    // Test for message footer errors.
-   if (!mMonkey->validateMessageFooter(&tByteBuffer,aMsg))
+   if (!mMsgMonkey->validateMessageFooter(&tByteBuffer,aMsg))
    {
       printf("ERROR validateMessageFooter\n");
       return cSerialRetDataError;
@@ -262,7 +261,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 
    // Metrics.
    mRxMsgCount++;
-   mMonkey->mRxMsgMetrics->update(aMsg, mMonkey->mMessageLength);
+   mMsgMonkey->mRxMsgMetrics->update(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
    return cSerialRetSuccess;
@@ -282,7 +281,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    if (!BaseClass::mValidFlag)
    {
       Trc::write(mTI, 0, "ERROR doSend when Invalid");
-      mMonkey->destroyMsg(aMsg);
+      mMsgMonkey->destroyMsg(aMsg);
       return false;
    }
 
@@ -290,10 +289,10 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    ByteBuffer tByteBuffer(mMemorySize);
 
    // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
+   mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
 
    // Delete the message.
-   mMonkey->destroyMsg(aMsg);
+   mMsgMonkey->destroyMsg(aMsg);
 
    // Transmit the buffer.
    int tRet = 0;
@@ -310,7 +309,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 
    // Metrics.
    mTxMsgCount++;
-   mMonkey->mTxMsgMetrics->update(aMsg, tLength);
+   mMsgMonkey->mTxMsgMetrics->update(aMsg, tLength);
 
    // Success.
    Trc::write(mTI, 2, "SerialMsgPort::doSendMsg PASS");

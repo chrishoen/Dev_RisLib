@@ -23,13 +23,13 @@ UdpRxMsgSocket::UdpRxMsgSocket()
    mRxLength = 0;
    mRxCount = 0;
    mValidFlag = false;
-   mMonkey = 0;
+   mMsgMonkey = 0;
 }
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
    if (mRxMemory) free(mRxMemory);
-   if (mMonkey) delete mMonkey;
+   if (mMsgMonkey) delete mMsgMonkey;
 }
 
 //******************************************************************************
@@ -43,10 +43,10 @@ void UdpRxMsgSocket::initialize(Settings& aSettings)
    mSettings = aSettings;
 
    // Create a message monkey.
-   mMonkey = mSettings.mMonkeyCreator->createMonkey();
+   mMsgMonkey = mSettings.mMsgMonkeyCreator->createMonkey();
 
    // Allocate memory for byte buffers.
-   mMemorySize = mMonkey->getMaxBufferSize();
+   mMemorySize = mMsgMonkey->getMaxBufferSize();
    mRxMemory = (char*)malloc(mMemorySize);
 
    // Metrics.
@@ -155,14 +155,14 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // the header.
 
    // Extract the header.
-   mMonkey->extractMessageHeaderParms(&tByteBuffer);
+   mMsgMonkey->extractMessageHeaderParms(&tByteBuffer);
 
    //printf("UdpRxMsgSocket rx header %d %d\n",
-   //   mMonkey->mHeaderValidFlag,
-   //   mMonkey->mHeaderLength);
+   //   mMsgMonkey->mHeaderValidFlag,
+   //   mMsgMonkey->mHeaderLength);
 
    // If the header is not valid then error.
-   if (!mMonkey->mHeaderValidFlag)
+   if (!mMsgMonkey->mHeaderValidFlag)
    {
       printf("ERROR UdpRxMsgSocket INVALID HEADER %d %d\n", mStatus, mError);
       return false;
@@ -176,7 +176,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 
    // Extract the message.
    tByteBuffer.rewind();
-   aMsg = mMonkey->getMsgFromBuffer(&tByteBuffer);
+   aMsg = mMsgMonkey->getMsgFromBuffer(&tByteBuffer);
 
    // Test for errors.
    if (aMsg == 0)
@@ -202,7 +202,7 @@ UdpTxMsgSocket::UdpTxMsgSocket()
    mTxCount = 0;
    mTxLength = 0;
    mValidFlag = false;
-   mMonkey = 0;
+   mMsgMonkey = 0;
 }
 
 //******************************************************************************
@@ -212,7 +212,7 @@ UdpTxMsgSocket::UdpTxMsgSocket()
 UdpTxMsgSocket::~UdpTxMsgSocket()
 {
    if (mTxMemory) free(mTxMemory);
-   if (mMonkey) delete mMonkey;
+   if (mMsgMonkey) delete mMsgMonkey;
 }
 
 //******************************************************************************
@@ -226,10 +226,10 @@ void UdpTxMsgSocket::initialize(Settings& aSettings)
    mSettings = aSettings;
 
    // Create a message monkey.
-   mMonkey = mSettings.mMonkeyCreator->createMonkey();
+   mMsgMonkey = mSettings.mMsgMonkeyCreator->createMonkey();
 
    // Allocate memory for byte buffers.
-   mMemorySize = mMonkey->getMaxBufferSize();
+   mMemorySize = mMsgMonkey->getMaxBufferSize();
    mTxMemory = (char*)malloc(mMemorySize);
 
    // Metrics.
@@ -292,7 +292,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    ByteBuffer tByteBuffer(mTxMemory, mMemorySize);
 
    // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
+   mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
 
    // Delete the message.
    delete aMsg;

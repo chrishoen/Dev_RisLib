@@ -63,7 +63,7 @@ public:
    Ris::SerialMsgThread*  mSerialMsgThread;
 
    // Message monkey used by mSerialMsgThread.
-   MsgMonkeyCreator mMonkeyCreator;
+   MsgMonkey* mMsgMonkey;
 
    //***************************************************************************
    //***************************************************************************

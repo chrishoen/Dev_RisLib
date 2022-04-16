@@ -72,7 +72,7 @@ public:
    // the message monkey allows the send method to set header data before the
    // message is sent. A specific message monkey is provided by the parent 
    // thread at initialization.
-   BaseMsgMonkey* mMonkey;
+   BaseMsgMonkey* mMsgMonkey;
 
    // True if the socket is valid.
    bool mValidFlag;
@@ -155,7 +155,7 @@ public:
    // from a message header that is contained in a byte buffer. It allows the 
    // receive method to receive and extract a message from a byte buffer
    // without the having the message code visible to it.
-   BaseMsgMonkey* mMonkey;
+   BaseMsgMonkey* mMsgMonkey;
 
    // Transmit mutex is used by doSendMsg for mutual exclusion.
    Threads::MutexSemaphore  mTxMutex;

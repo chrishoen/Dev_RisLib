@@ -32,7 +32,7 @@ void SerialSettings::reset()
    mRxTermMode = 0;
    mTraceIndex = 0;
    m485Flag = false;
-   mMonkeyCreator = 0;
+   mMsgMonkey = 0;
    mThreadPriority = Ris::Threads::gPriorities.mSerial;
    mRxStringCallback = 0;
 }

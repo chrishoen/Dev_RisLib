@@ -31,14 +31,14 @@ TcpMsgSocket::TcpMsgSocket()
    mTxCount = 0;
    mRxCount = 0;
    mValidFlag = false;
-   mMonkey = 0;
+   mMsgMonkey = 0;
 }
 
 TcpMsgSocket::~TcpMsgSocket()
 {
    if (mTxMemory) free(mTxMemory);
    if (mRxMemory) free(mRxMemory);
-   if (mMonkey) delete mMonkey;
+   if (mMsgMonkey) delete mMsgMonkey;
 }
 
 //******************************************************************************
@@ -52,10 +52,10 @@ void TcpMsgSocket::initialize(Settings& aSettings)
    mSettings = aSettings;
 
    // Create a message monkey.
-   mMonkey = mSettings.mMonkeyCreator->createMonkey();
+   mMsgMonkey = mSettings.mMsgMonkeyCreator->createMonkey();
 
    // Allocate memory for byte buffers.
-   mMemorySize = mMonkey->getMaxBufferSize();
+   mMemorySize = mMsgMonkey->getMaxBufferSize();
    mTxMemory = (char*)malloc(mMemorySize);
    mRxMemory = (char*)malloc(mMemorySize);
 
@@ -134,7 +134,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    ByteBuffer tByteBuffer(mTxMemory, mMemorySize);
 
    // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
+   mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
 
    // Delete the message.
    delete aMsg;
@@ -197,7 +197,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Read the message header into the receive buffer.
 
    // Header varaibles.
-   int   tHeaderLength = mMonkey->getHeaderLength();
+   int   tHeaderLength = mMsgMonkey->getHeaderLength();
    char* tHeaderBuffer = tByteBuffer.getBaseAddress();
 
    // Read the header from the socket.
@@ -220,10 +220,10 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 
    // Copy from the receive buffer into the message monkey 
    // and validate the header.
-   mMonkey->extractMessageHeaderParms(&tByteBuffer);
+   mMsgMonkey->extractMessageHeaderParms(&tByteBuffer);
 
    // If the header is not valid then error.
-   if (!mMonkey->mHeaderValidFlag)
+   if (!mMsgMonkey->mHeaderValidFlag)
    {
       printf("ERROR TcpMsgSocket INVALID HEADER\n");
       return false;
@@ -235,7 +235,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Read the message payload into the receive buffer.
 
    // Payload variables.
-   int   tPayloadLength = mMonkey->mPayloadLength;
+   int   tPayloadLength = mMsgMonkey->mPayloadLength;
    char* tPayloadBuffer = tByteBuffer.getBaseAddress() + tHeaderLength;
 
    // Read the payload from the socket.
@@ -251,7 +251,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    }
 
    // Set the buffer length.
-   tByteBuffer.setLength(mMonkey->mMessageLength);
+   tByteBuffer.setLength(mMsgMonkey->mMessageLength);
 
    //***************************************************************************
    //***************************************************************************
@@ -261,7 +261,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 
    // Extract the message.
    tByteBuffer.rewind();
-   aMsg = mMonkey->getMsgFromBuffer(&tByteBuffer);
+   aMsg = mMsgMonkey->getMsgFromBuffer(&tByteBuffer);
 
    // Test for errors.
    if (aMsg==0)

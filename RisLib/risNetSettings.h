@@ -63,7 +63,7 @@ public:
    Ris::Threads::Priority mThreadPriority;
 
    // Message monkey creator.
-   BaseMsgMonkeyCreator* mMonkeyCreator;
+   BaseMsgMonkeyCreator* mMsgMonkeyCreator;
 
    // Session callback qcall.
    Ris::Threads::QCall1<bool>     mClientSessionQCall;

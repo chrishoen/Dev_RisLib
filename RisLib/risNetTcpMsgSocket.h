@@ -80,7 +80,7 @@ public:
    // the message monkey allows the send method to set header data before the
    // message is sent. A specific message monkey is provided by the parent 
    // thread at initialization.
-   BaseMsgMonkey* mMonkey;
+   BaseMsgMonkey* mMsgMonkey;
 
    // Transmit mutex is used by doSendMsg for mutual exclusion.
    Threads::MutexSemaphore  mTxMutex;

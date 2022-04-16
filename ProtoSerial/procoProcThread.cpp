@@ -34,6 +34,7 @@ ProcThread::ProcThread()
 
    // Initialize member variables.
    mSerialMsgThread = 0;
+   mMsgMonkey = new MsgMonkey;
    mConnectionFlag = false;
    mTPCode = 0;
    mRxCount = 0;
@@ -44,6 +45,7 @@ ProcThread::ProcThread()
 ProcThread::~ProcThread()
 {
    if (mSerialMsgThread) delete mSerialMsgThread;
+   delete mMsgMonkey;
 }
 
 //******************************************************************************
@@ -74,7 +76,7 @@ void ProcThread::threadInitFunction()
    tSerialSettings.setPortSetup(gSerialParms.mSerialPortSetup);
    tSerialSettings.mThreadPriority = Ris::Threads::gPriorities.mSerial;
    tSerialSettings.mRxTimeout = gSerialParms.mSerialRxTimeout;
-   tSerialSettings.mMonkeyCreator = &mMonkeyCreator;
+   tSerialSettings.mMsgMonkey = mMsgMonkey;
    tSerialSettings.mSessionQCall = mSessionQCall;
    tSerialSettings.mRxMsgQCall = mRxMsgQCall;
    tSerialSettings.mTraceIndex = 11;

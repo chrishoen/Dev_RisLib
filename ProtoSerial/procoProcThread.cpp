@@ -233,7 +233,7 @@ void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mSerialMsgThread->sendMsg(tTxMsg);
    }
-   if (mShowCode == 0)
+   if (mShowCode == 2)
    {
       MsgHelper::show(Prn::Show1, aRxMsg);
    }
@@ -247,7 +247,7 @@ void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 
 void ProcThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 {
-   if (mShowCode == 0)
+   if (mShowCode == 2)
    {
       MsgHelper::show(Prn::Show1, aMsg);
    }
@@ -272,7 +272,7 @@ void ProcThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 
 void ProcThread::processRxMsg(ProtoComm::ByteBlobMsg* aMsg)
 {
-   if (mShowCode == 0)
+   if (mShowCode == 2)
    {
       MsgHelper::show(Prn::Show1, aMsg);
    }

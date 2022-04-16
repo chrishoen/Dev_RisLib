@@ -123,14 +123,14 @@ void SerialThread::shutdownThread()
 
 void SerialThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPCode == 1)
+   if (mTPCode == 2)
    {
       EchoRequestMsg* tMsg = new EchoRequestMsg;
       MsgHelper::initialize(tMsg, 1000);
       tMsg->mCode1 = aTimerCount;
       sendMsg(tMsg);
    }
-   else if (mTPCode == 2)
+   else if (mTPCode == 3)
    {
       ByteBlobMsg* tMsg = new ByteBlobMsg;
       MsgHelper::initialize2(tMsg);

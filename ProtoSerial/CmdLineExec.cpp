@@ -53,18 +53,18 @@ void CmdLineExec::special(int aSpecial)
    }
    else if (aSpecial == 1)
    {
-      ProtoComm::gSerialThread->mTPCode = 0;
+      ProtoComm::gSerialThread->mTPCode = 1;
       ProtoComm::gSerialThread->mShowCode = 1;
    }
    else if (aSpecial == 2)
    {
-      ProtoComm::gSerialThread->mTPCode = 1;
+      ProtoComm::gSerialThread->mTPCode = 2;
       ProtoComm::gSerialThread->mShowCode = 2;
    }
    else if (aSpecial == 3)
    {
-      ProtoComm::gSerialThread->mTPCode = 2;
-      ProtoComm::gSerialThread->mShowCode = 2;
+      ProtoComm::gSerialThread->mTPCode = 3;
+      ProtoComm::gSerialThread->mShowCode = 3;
    }
 }
 

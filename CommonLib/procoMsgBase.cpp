@@ -187,17 +187,61 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
+
+MsgMetrics::MsgMetrics()
+{
+   mTestMsgCount = 0;
+   mFirstMessageMsgCount = 0;
+   mEchoRequestMsgCount = 0;
+   mEchoResponseMsgCount = 0;
+   mDataMsgCount = 0;
+   mByteBlobMsgCount = 0;
+}
+
+// Update the metrics with a message and a length.
+void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
+{
+   // Update the base class metrics.
+   Baseclass::update(aMsg, aMsgLength);
+
+   // Update specific message metrics.
+   BaseMsg* tMsg = (BaseMsg*)aMsg;
+   switch (tMsg->mMessageType)
+   {
+   case MsgIdT::cTestMsg: mTestMsgCount++; break;
+   case MsgIdT::cFirstMessageMsg: mFirstMessageMsgCount++; break;
+   case MsgIdT::cEchoRequestMsg: mEchoRequestMsgCount++; break;
+   case MsgIdT::cEchoResponseMsg: mEchoResponseMsgCount++; break;
+   case MsgIdT::cDataMsg: mDataMsgCount++; break;
+   case MsgIdT::cByteBlobMsg: mByteBlobMsgCount++; break;
+   default: break;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Constructor.
 
 MsgMonkey::MsgMonkey()
    : Ris::BaseMsgMonkey(ProtoComm::createMsg)
 {
-   mSourceId=0;
+   mSourceId = 0;
+   // Override the base class metrics pointers.
+   Baseclass::mTxMsgMetrics = new MsgMetrics;
+   Baseclass::mRxMsgMetrics = new MsgMetrics;
 }
 
 void  MsgMonkey::configure(int aSourceId)
 {
-   mSourceId=aSourceId;
+   mSourceId = aSourceId;
 }
 
 //******************************************************************************

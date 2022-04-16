@@ -174,6 +174,45 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This is a class for message metrics. An instance is updated by the
+// message monkey during messages trafficing.
+
+class MsgMetrics : public Ris::BaseMsgMetrics
+{
+public:
+   typedef Ris::BaseMsgMetrics Baseclass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Specific message metrics.
+   int   mTestMsgCount;
+   int   mFirstMessageMsgCount;
+   int   mEchoRequestMsgCount;
+   int   mEchoResponseMsgCount;
+   int   mDataMsgCount;
+   int   mByteBlobMsgCount;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Contructor.
+   MsgMetrics();
+
+   // Update the metrics with a message and a length.
+   void update(Ris::ByteContent* aMsg, int aMsgLength) override;
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This is the message monkey. It is used by code that receives messages into
 // byte buffers such that the message classes don't have to be visible to the
 // receiving code. Inheriting classes provide all of the details that are
@@ -184,11 +223,14 @@ public:
 class MsgMonkey : public Ris::BaseMsgMonkey
 {
 public:
+   typedef Ris::BaseMsgMonkey Baseclass; 
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
+   // Source Id that is placed in transmit message headers.
    int mSourceId;
 
    //***************************************************************************

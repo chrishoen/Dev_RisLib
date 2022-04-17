@@ -89,6 +89,29 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 
       Prn::print(Prn::Show1, "");
    }
+
+   // Show.
+   if (mShowCode == 2)
+   {
+      ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mTxMsgMetrics;
+      ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mRxMsgMetrics;
+      Ris::SerialMsgPort* tMsgPort = (Ris::SerialMsgPort*)&gProcThread->mSerialMsgThread->mSerialMsgPort;
+
+      Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
+         mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
+      Prn::print(Prn::Show1, "TxByteCount              %-10lld  %lld",
+         mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
+
+      Prn::print(Prn::Show1, "RxMsgCount               %-10d  %d",
+         mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
+      Prn::print(Prn::Show1, "RxByteCount              %-10lld  %lld",
+         mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
+
+      Prn::print(Prn::Show1, "PortErrorCount           %-10d",
+         tMsgPort->mPortErrorCount);
+
+      Prn::print(Prn::Show1, "");
+   }
 }
 
 //******************************************************************************

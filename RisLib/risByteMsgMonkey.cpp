@@ -21,7 +21,9 @@ void defaultDestroy(void* aMsg)
 {
    delete aMsg;
 }
-BaseMsgMonkey::BaseMsgMonkey(CreateMsgFunctionT aCreate, DestroyMsgFunctionT aDestroy)
+BaseMsgMonkey::BaseMsgMonkey(
+   CreateMsgFunctionT aCreate,
+   DestroyMsgFunctionT aDestroy)
 {
    mHeaderLength=0;
    mMessageLength=0;
@@ -40,9 +42,28 @@ BaseMsgMonkey::BaseMsgMonkey(CreateMsgFunctionT aCreate, DestroyMsgFunctionT aDe
       mDestroyMsgFunction = &defaultDestroy;
    }
 
-   mTxMsgMetrics = &mDefaultTxMsgMetrics;
-   mRxMsgMetrics = &mDefaultRxMsgMetrics;
+   mTxMsgMetrics = new BaseMsgMetrics;
+   mRxMsgMetrics = new BaseMsgMetrics;
 }
+
+BaseMsgMonkey::BaseMsgMonkey(
+   CreateMsgFunctionT aCreate,
+   BaseMsgMetrics* aTxMsgMetrics,
+   BaseMsgMetrics* aRxMsgMetrics)
+{
+   mHeaderLength = 0;
+   mMessageLength = 0;
+   mMessageType = 0;
+   mPayloadLength = 0;
+   mHeaderValidFlag = false;
+
+   mCreateMsgFunction = aCreate;
+   mDestroyMsgFunction = &defaultDestroy;
+
+   mTxMsgMetrics = aTxMsgMetrics;
+   mRxMsgMetrics = aRxMsgMetrics;
+}
+
 
 //******************************************************************************
 //******************************************************************************

@@ -48,7 +48,6 @@ namespace MsgDefT
 {
    // Use this for a buffer size for these messages.
    static const int cMsgBufferSize = 100000;
-
 }//namespace
 
 //******************************************************************************
@@ -232,6 +231,10 @@ public:
 
    // Source Id that is placed in transmit message headers.
    int mSourceId;
+
+   // Message metrics.
+   MsgMetrics mStoreTxMsgMetrics;
+   MsgMetrics mStoreRxMsgMetrics;
 
    //***************************************************************************
    //***************************************************************************

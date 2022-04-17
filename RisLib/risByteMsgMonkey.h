@@ -115,7 +115,13 @@ public:
    // Methods.
 
    // Constructor.
-   BaseMsgMonkey(CreateMsgFunctionT aCreate,DestroyMsgFunctionT aDestroy = 0);
+   BaseMsgMonkey(
+      CreateMsgFunctionT aCreate, 
+      DestroyMsgFunctionT aDestroy = 0);
+   BaseMsgMonkey(
+      CreateMsgFunctionT aCreate,
+      BaseMsgMetrics* aTxMsgMetrics,
+      BaseMsgMetrics* aRxMsgMetrics);
    virtual ~BaseMsgMonkey() {}
 
    //***************************************************************************

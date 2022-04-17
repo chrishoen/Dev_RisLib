@@ -209,7 +209,10 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
    Baseclass::update(aMsg, aMsgLength);
 
    // Update specific message metrics.
+// BaseMsg* tMsg = static_cast<BaseMsg*>(aMsg);
    BaseMsg* tMsg = (BaseMsg*)aMsg;
+
+
    switch (tMsg->mMessageType)
    {
    case MsgIdT::cTestMsg: mTestMsgCount++; break;
@@ -220,6 +223,7 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
    case MsgIdT::cByteBlobMsg: mByteBlobMsgCount++; break;
    default: break;
    }
+   printf("LINE101 %d\n", tMsg->mMessageType);
 }
 
 //******************************************************************************
@@ -231,20 +235,18 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
 // Constructor.
 
 MsgMonkey::MsgMonkey()
-   : Ris::BaseMsgMonkey(ProtoComm::createMsg)
+   : Ris::BaseMsgMonkey(
+      ProtoComm::createMsg,
+      new MsgMetrics,
+      new MsgMetrics)
 {
    // Set member variables.
    mSourceId = 0;
-   
-   // Create the metrics and override the base class metrics pointers.
-   Baseclass::mTxMsgMetrics = new MsgMetrics;
-   Baseclass::mRxMsgMetrics = new MsgMetrics;
+  
 }
 
 MsgMonkey::~MsgMonkey()
 {
-   delete mTxMsgMetrics;
-   delete mRxMsgMetrics;
 }
 
 void  MsgMonkey::configure(int aSourceId)

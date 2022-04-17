@@ -118,9 +118,22 @@ void CmdLineExec::executeAbort (Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void test1(Ris::ByteContent* aMsg)
+{
+   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
+   Prn::print(0, "MessageType %d", tMsg->mMessageType);
+}
+
+void test2(Ris::ByteContent* aMsg)
+{
+   test1(aMsg);
+}
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   gProcThread->sendTestMsg();
+   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+   test1(tMsg);
+   test2(tMsg);
 }
 
 //******************************************************************************

@@ -659,7 +659,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    {
       // Write was successful.
       mTxByteCount += tNumWritten;
-      Trc::write(mTI, 0, "doSendBytes done 1");
+      Trc::write(mTI, 0, "doSendBytes::doSendBytes done 1");
       return tNumWritten;
    }
 
@@ -673,7 +673,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
       {
          mTxByteCount += tNumWritten;
-         Trc::write(mTI, 0, "doSendBytes done 2");
+         Trc::write(mTI, 0, "doSendBytes::doSendBytes done 2");
          return tNumWritten;
       }
       else
@@ -693,7 +693,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    break;
    }
    mTxByteCount += tNumWritten;
-   Trc::write(mTI, 0, "doSendBytes done 3");
+   Trc::write(mTI, 0, "doSendBytes::doSendBytes done 3");
    return 0;
 }
 

@@ -77,6 +77,8 @@ public:
    int mRxMsgCount;
    int mHeaderAllCount;
    int mHeaderOneCount;
+   int mMsgErrorCount;
+   int mMsgResynchCount;
 
    //***************************************************************************
    //***************************************************************************

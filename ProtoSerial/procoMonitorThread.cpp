@@ -110,6 +110,9 @@ void MonitorThread::executeOnTimer(int aTimeCount)
       Prn::print(Prn::Show1, "PortErrorCount           %-10d",
          tMsgPort->mPortErrorCount);
 
+      Prn::print(Prn::Show1, "MsgErrorCount            %-10d",
+         tMsgPort->mMsgErrorCount);
+
       Prn::print(Prn::Show1, "");
    }
 }

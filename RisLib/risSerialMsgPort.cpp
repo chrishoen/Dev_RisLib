@@ -29,6 +29,8 @@ SerialMsgPort::SerialMsgPort()
    mRxMsgCount = 0;
    mHeaderAllCount = 0;
    mHeaderOneCount = 0;
+   mMsgErrorCount = 0;
+   mMsgResynchCount = 0;
    mMsgMonkey = 0;
    mHeaderReadState = 0;
    mHeaderLength = 0;
@@ -82,6 +84,8 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
 
 int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 {
+   Trc::write(mTI, 0, "SerialMsgPort::doReceiveMsg");
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -115,11 +119,10 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // Test the return code.
       if (tRet > 0)
       {
-         //printf("receive header all %d\n", tRet);
       }
       else
       {
-         //printf("receive header all ERROR %d\n", tRet);
+         Trc::write(mTI, 0, "SerialMsgPort::doReceiveMsg ERROR");
          return tRet;
       }
 
@@ -175,7 +178,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
          }
          else
          {
-            printf("receive header2 ERROR %d\n", tRet);
+            Trc::write(mTI, 0, "SerialMsgPort::doReceiveMsg ERROR 2");
             return tRet;
          }
 
@@ -224,11 +227,10 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Test the return code.
    if (tRet > 0)
    {
-      //printf("receive payload %d\n", tRet);
    }
    else
    {
-      //printf("receive payload ERROR %d\n", tRet);
+      Trc::write(mTI, 0, "SerialMsgPort::doReceiveMsg ERROR 3");
       return tRet;
    }
 
@@ -248,14 +250,16 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
-      printf("ERROR getMsgFromBuffer\n");
+      mMsgErrorCount++;
+      Trc::write(mTI, 0, "SerialMsgPort::doReceiveMsg ERROR 4");
       return cSerialRetDataError;
    }
 
    // Test for message footer errors.
    if (!mMsgMonkey->validateMessageFooter(&tByteBuffer,aMsg))
    {
-      printf("ERROR validateMessageFooter\n");
+      mMsgErrorCount++;
+      Trc::write(mTI, 0, "SerialMsgPort::doReceiveMsg ERROR 5");
       return cSerialRetDataError;
    }
 
@@ -264,6 +268,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    mMsgMonkey->mRxMsgMetrics->update(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
+   Trc::write(mTI, 0, "SerialMsgPort::doReceiveMsg done");
    return cSerialRetSuccess;
 }
 
@@ -276,11 +281,11 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 
 bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 {
-   Trc::write(mTI, 2, "SerialMsgPort::doSendMsg begin");
+   Trc::write(mTI, 0, "SerialMsgPort::doSendMsg");
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      Trc::write(mTI, 0, "ERROR doSend when Invalid");
+      Trc::write(mTI, 0, "SerialMsgPort::doSendMsg INVALID");
       mMsgMonkey->destroyMsg(aMsg);
       return false;
    }
@@ -306,13 +311,12 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Test for errors.
    if (tRet < 0)
    {
-      Trc::write(mTI, 2, "SerialMsgPort::doSendMsg FAIL");
-      printf("SerialMsgPort::doSendMsg FAIL\n");
+      Trc::write(mTI, 0, "SerialMsgPort::doSendMsg ERROR 1");
       return false;
    }
 
    // Success.
-   Trc::write(mTI, 2, "SerialMsgPort::doSendMsg PASS");
+   Trc::write(mTI, 0, "SerialMsgPort::doSendMsg done");
    return true;
 }
 

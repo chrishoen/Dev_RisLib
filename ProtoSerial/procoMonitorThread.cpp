@@ -33,8 +33,8 @@ MonitorThread::MonitorThread()
 
    // Bind member variables.
    mMon_TxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxMsgCount);
-   mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxMsgCount);
    mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxByteCount);
+   mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxMsgCount);
    mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxByteCount);
 }
 

@@ -127,22 +127,22 @@ void ProcThread::executeOnTimer(int aTimerCount)
 {
    if (mTPCode == 1)
    {
-      TestMsg* tMsg = new TestMsg;
-      MsgHelper::initialize(tMsg);
-      tMsg->mCode1 = aTimerCount;
-      sendMsg(tMsg);
+      TestMsg* tTxMsg = new TestMsg;
+      MsgHelper::initialize(tTxMsg);
+      tTxMsg->mCode1 = aTimerCount;
+      sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)
    {
-      ByteBlobMsg* tMsg = new ByteBlobMsg;
-      MsgHelper::initialize2(tMsg);
-      sendMsg(tMsg);
+      EchoRequestMsg* tTxMsg = new EchoRequestMsg;
+      MsgHelper::initialize(tTxMsg);
+      sendMsg(tTxMsg);
    }
    else if (mTPCode == 3)
    {
-      ByteBlobMsg* tMsg = new ByteBlobMsg;
-      MsgHelper::initialize2(tMsg);
-      sendMsg(tMsg);
+      ByteBlobMsg* tTxMsg = new ByteBlobMsg;
+      MsgHelper::initialize2(tTxMsg);
+      sendMsg(tTxMsg);
    }
 }
 
@@ -237,7 +237,7 @@ void ProcThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 
 void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 {
-   if (false)
+   if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
       MsgHelper::initialize(tTxMsg, 1000);
@@ -256,13 +256,13 @@ void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - EchoResponseMsg.
 
-void ProcThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
+void ProcThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
 {
    if (mShowCode == 2)
    {
-      MsgHelper::show(Prn::Show1, aMsg);
+      MsgHelper::show(Prn::Show1, aRxMsg);
    }
-   delete aMsg;
+   delete aRxMsg;
 }
 
 //******************************************************************************
@@ -270,10 +270,13 @@ void ProcThread::processRxMsg(ProtoComm::EchoResponseMsg* aMsg)
 //******************************************************************************
 // Rx message handler - DataMsg.
 
-void ProcThread::processRxMsg(ProtoComm::DataMsg* aMsg)
+void ProcThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 {
-   MsgHelper::show(Prn::Show1, aMsg);
-   delete aMsg;
+   if (mShowCode == 2)
+   {
+      MsgHelper::show(Prn::Show1, aRxMsg);
+   }
+   delete aRxMsg;
 }
 
 //******************************************************************************
@@ -281,13 +284,13 @@ void ProcThread::processRxMsg(ProtoComm::DataMsg* aMsg)
 //******************************************************************************
 // Rx message handler - ByteBlobMsg.
 
-void ProcThread::processRxMsg(ProtoComm::ByteBlobMsg* aMsg)
+void ProcThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 {
    if (mShowCode == 2)
    {
-      MsgHelper::show(Prn::Show1, aMsg);
+      MsgHelper::show(Prn::Show1, aRxMsg);
    }
-   delete aMsg;
+   delete aRxMsg;
 }
 
 //******************************************************************************

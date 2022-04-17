@@ -223,7 +223,6 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
    case MsgIdT::cByteBlobMsg: mByteBlobMsgCount++; break;
    default: break;
    }
-   printf("LINE101 %d\n", tMsg->mMessageType);
 }
 
 //******************************************************************************

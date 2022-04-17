@@ -291,13 +291,17 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Copy the message to the buffer.
    mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
 
-   // Delete the message.
-   mMsgMonkey->destroyMsg(aMsg);
-
    // Transmit the buffer.
    int tRet = 0;
    int tLength = tByteBuffer.getLength();
    tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(), tLength);
+
+   // Metrics.
+   mTxMsgCount++;
+   mMsgMonkey->mTxMsgMetrics->update(aMsg, tLength);
+
+   // Delete the message.
+   mMsgMonkey->destroyMsg(aMsg);
 
    // Test for errors.
    if (tRet < 0)
@@ -306,10 +310,6 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
       printf("SerialMsgPort::doSendMsg FAIL\n");
       return false;
    }
-
-   // Metrics.
-   mTxMsgCount++;
-   mMsgMonkey->mTxMsgMetrics->update(aMsg, tLength);
 
    // Success.
    Trc::write(mTI, 2, "SerialMsgPort::doSendMsg PASS");

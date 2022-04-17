@@ -64,6 +64,11 @@ BaseMsgMonkey::BaseMsgMonkey(
    mRxMsgMetrics = aRxMsgMetrics;
 }
 
+BaseMsgMonkey::~BaseMsgMonkey()
+{
+   delete mTxMsgMetrics;
+   delete mRxMsgMetrics;
+}
 
 //******************************************************************************
 //******************************************************************************

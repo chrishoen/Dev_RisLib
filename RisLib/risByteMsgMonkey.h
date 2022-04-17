@@ -98,16 +98,9 @@ public:
    //***************************************************************************
    // Members.
 
-   // Metrics. These pointers are set in the constructor to point to 
-   // the following default metrics. Inheritors can override these
-   // by setting them to point to instances of derived message metrics
-   // classes. 
+   // Metrics. 
    BaseMsgMetrics* mTxMsgMetrics;
    BaseMsgMetrics* mRxMsgMetrics;
-
-   // Default metrics.
-   BaseMsgMetrics mDefaultTxMsgMetrics;
-   BaseMsgMetrics mDefaultRxMsgMetrics;
 
    //***************************************************************************
    //***************************************************************************
@@ -122,7 +115,7 @@ public:
       CreateMsgFunctionT aCreate,
       BaseMsgMetrics* aTxMsgMetrics,
       BaseMsgMetrics* aRxMsgMetrics);
-   virtual ~BaseMsgMonkey() {}
+   virtual ~BaseMsgMonkey();
 
    //***************************************************************************
    //***************************************************************************

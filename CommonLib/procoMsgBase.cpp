@@ -233,10 +233,18 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
 MsgMonkey::MsgMonkey()
    : Ris::BaseMsgMonkey(ProtoComm::createMsg)
 {
+   // Set member variables.
    mSourceId = 0;
-   // Override the base class metrics pointers.
+   
+   // Create the metrics and override the base class metrics pointers.
    Baseclass::mTxMsgMetrics = new MsgMetrics;
    Baseclass::mRxMsgMetrics = new MsgMetrics;
+}
+
+MsgMonkey::~MsgMonkey()
+{
+   delete mTxMsgMetrics;
+   delete mRxMsgMetrics;
 }
 
 void  MsgMonkey::configure(int aSourceId)

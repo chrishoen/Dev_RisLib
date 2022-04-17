@@ -27,25 +27,15 @@ MonitorThread::MonitorThread()
    BaseClass::setThreadPriorityLow();
    BaseClass::mTimerPeriod = 1000;
 
+   // Set member variables.
+   mTPFlag = true;
+   mShowCode = 0;
+
    // Bind member variables.
    mMon_TxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxMsgCount);
    mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxMsgCount);
    mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxByteCount);
    mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxByteCount);
-
-   mMon_TxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMsgMonkey->mTxMsgMetrics->mMsgCount);
-   mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMsgMonkey->mRxMsgMetrics->mMsgCount);
-   mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMsgMonkey->mTxMsgMetrics->mByteCount);
-   mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mMsgMonkey->mRxMsgMetrics->mByteCount);
-
-   mMon_TxMsgCount.bind(&gProcThread->mMsgMonkey->mTxMsgMetrics->mMsgCount);
-   mMon_RxMsgCount.bind(&gProcThread->mMsgMonkey->mRxMsgMetrics->mMsgCount);
-   mMon_TxByteCount.bind(&gProcThread->mMsgMonkey->mTxMsgMetrics->mByteCount);
-   mMon_RxByteCount.bind(&gProcThread->mMsgMonkey->mRxMsgMetrics->mByteCount);
-
-   // Set member variables.
-   mTPFlag = true;
-   mShowCode = 0;
 }
 
 // Update status variables.
@@ -70,14 +60,33 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 1)
    {
+      ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mTxMsgMetrics;
+      ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mRxMsgMetrics;
+
       Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
          mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
-      Prn::print(Prn::Show1, "RxMsgCount               %-10d  %d", 
-         mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
       Prn::print(Prn::Show1, "TxByteCount              %-10lld  %lld", 
          mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
-      Prn::print(Prn::Show1, "RxByteCount              %-10lld  %lld", 
+
+      Prn::print(Prn::Show1, "TxTestMsgCount           %-10d", tTxMsgMetrics->mTestMsgCount);
+      Prn::print(Prn::Show1, "TxFirstMessageMsgCount   %-10d", tTxMsgMetrics->mFirstMessageMsgCount);
+      Prn::print(Prn::Show1, "TxEchoRequestMsgCount    %-10d", tTxMsgMetrics->mEchoRequestMsgCount);
+      Prn::print(Prn::Show1, "TxEchoResponseMsgCount   %-10d", tTxMsgMetrics->mEchoResponseMsgCount);
+      Prn::print(Prn::Show1, "TxDataMsgCount           %-10d", tTxMsgMetrics->mDataMsgCount);
+      Prn::print(Prn::Show1, "TxByteBlobMsgCount       %-10d", tTxMsgMetrics->mByteBlobMsgCount);
+      
+      Prn::print(Prn::Show1, "RxMsgCount               %-10d  %d",
+         mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
+      Prn::print(Prn::Show1, "RxByteCount              %-10lld  %lld",
          mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
+
+      Prn::print(Prn::Show1, "RxTestMsgCount           %-10d", tRxMsgMetrics->mTestMsgCount);
+      Prn::print(Prn::Show1, "RxFirstMessageMsgCount   %-10d", tRxMsgMetrics->mFirstMessageMsgCount);
+      Prn::print(Prn::Show1, "RxEchoRequestMsgCount    %-10d", tRxMsgMetrics->mEchoRequestMsgCount);
+      Prn::print(Prn::Show1, "RxEchoResponseMsgCount   %-10d", tRxMsgMetrics->mEchoResponseMsgCount);
+      Prn::print(Prn::Show1, "RxDataMsgCount           %-10d", tRxMsgMetrics->mDataMsgCount);
+      Prn::print(Prn::Show1, "RxByteBlobMsgCount       %-10d", tRxMsgMetrics->mByteBlobMsgCount);
+
       Prn::print(Prn::Show1, "");
    }
 }

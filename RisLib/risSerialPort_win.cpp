@@ -45,6 +45,9 @@ SerialPort::SerialPort()
    mTI = 0;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
+   mRxByteCount = 0;
+   mTxByteCount = 0;
+   mPortErrorCount = 0;
 }
 
 SerialPort::~SerialPort(void)
@@ -72,15 +75,19 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Do this first.
 
+   Trc::write(mTI, 0, "SerialPort::doOpen");
+
    // Guard.
    if (mOpenFlag)
    {
-      printf("serial_open_error already open\n");
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doOpen ERROR already open");
       return false;
    }
 
    mValidFlag = false;
    mAbortFlag = false;
+
 
    //***************************************************************************
    //***************************************************************************
@@ -108,9 +115,10 @@ bool SerialPort::doOpen()
       if (mOpenErrorShowCount == 0)
       {
          printf("serial_open_error_1 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
-         Trc::write(mTI, 0, "serial_open_error_1 %s %d %s", mSettings.mPortDevice, errno, strerror(errno));
       }
       mOpenErrorShowCount++;
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doOpen ERROR 1");
       return false;
    }
 
@@ -153,7 +161,8 @@ bool SerialPort::doOpen()
          else
          {
             // Failed, continue to retry
-            Trc::write(mTI, 0, "serial_create_retry %d", GetLastError());
+            mPortErrorCount++;
+            Trc::write(mTI, 0, "SerialPort::doOpen retry");
             doFlush();
             Sleep(100);
             // Retry failed, abort initialization
@@ -161,6 +170,8 @@ bool SerialPort::doOpen()
             {
                CloseHandle(mSpecific->mPortHandle);
                mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
+               mPortErrorCount++;
+               Trc::write(mTI, 0, "SerialPort::doOpen ERROR retry");
                return false;
             }
          }
@@ -188,9 +199,10 @@ bool SerialPort::doOpen()
 
    if(!SetCommTimeouts(mSpecific->mPortHandle, &tComTimeout))
    {
-      Trc::write(mTI, 0, "serial_create_error_4 %d", GetLastError());
       CloseHandle(mSpecific->mPortHandle);
       mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doOpen ERROR 4");
       return false;
    }
 
@@ -206,12 +218,12 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Done.
  
-   printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
-   Trc::write(mTI, 0, "SerialPort open PASS  %s", mSettings.mPortDevice);
    mOpenFlag = true;
    mValidFlag = true;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
+   printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
+   Trc::write(mTI, 0, "SerialPort::doOpen done");
    return true;
 }
 
@@ -221,10 +233,13 @@ bool SerialPort::doOpen()
 
 void SerialPort::doClose()
 {
+   Trc::write(mTI, 0, "SerialPort::doClose");
+
    // Test if already closed.
    if (!mOpenFlag)
    {
-      printf("serial_close not open\n");
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doClose ERROR not open");
       return;
    }
 
@@ -237,20 +252,18 @@ void SerialPort::doClose()
    // Test handle.
    if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
    {
-      printf("serial_close invalid handle\n");
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doClose INVALID HANDLE");
       return;
    }
 
    // Flush.
-   Trc::write(mTI, 0, "serial_close flush");
    doFlush();
    SetEvent(mSpecific->mTxEventHandle);
 
    // Cancel any pending i/o and close the handles.
-   Trc::write(mTI, 0, "serial_close cancel");
    CancelIoEx(mSpecific->mPortHandle, 0);
 
-   Trc::write(mTI, 0, "serial_close handles");
    CloseHandle(mSpecific->mPortHandle);
    CloseHandle(mSpecific->mRxEventHandle);
    CloseHandle(mSpecific->mTxEventHandle);
@@ -258,7 +271,7 @@ void SerialPort::doClose()
    mSpecific->mRxEventHandle = INVALID_HANDLE_VALUE;
    mSpecific->mTxEventHandle = INVALID_HANDLE_VALUE;
    mValidFlag = false;
-   Trc::write(mTI, 1, "serial_close done");
+   Trc::write(mTI, 0, "SerialPort::doClose done");
 }
 
 //******************************************************************************
@@ -272,15 +285,29 @@ void SerialPort::doClose()
 
 void SerialPort::doAbort()
 {
+   Trc::write(mTI, 0, "SerialPort::doAbort");
+
    // Set the abort flag.
    mAbortFlag = true;
 
    // Guard.
    int tRet = 0;
-   if (!mValidFlag) return;
+   if (!mOpenFlag)
+   {
+      Trc::write(mTI, 0, "SerialPort::doAbort not open");
+      return;
+   }
+
+   // Guard.
+   if (!mValidFlag)
+   {
+      Trc::write(mTI, 0, "SerialPort::doAbort INVALID");
+      return;
+   }
 
    // Post to the event semaphore.
    SetEvent(mSpecific->mRxEventHandle);
+   Trc::write(mTI, 0, "SerialPort::doAbort done");
 }
 
 //******************************************************************************
@@ -290,6 +317,8 @@ void SerialPort::doAbort()
 
 void SerialPort::doFlush()
 {
+   Trc::write(mTI, 0, "SerialPort::doFlush");
+
    ClearCommError(mSpecific->mPortHandle,0,0);
 
    DWORD lFlags = 
@@ -299,6 +328,8 @@ void SerialPort::doFlush()
    PurgeComm(mSpecific->mPortHandle, lFlags);
 
    ClearCommError(mSpecific->mPortHandle, 0, 0);
+
+   Trc::write(mTI, 0, "SerialPort::doFlush done");
 }
 
 //******************************************************************************
@@ -466,7 +497,8 @@ int SerialPort::doReceiveAnyBytes(char *aData, int aNumBytes)
 
 int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
 {
-   //printf("SerialPort::doReceiveAllBytes START %d\n", aRequestBytes);
+   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes");
+
    // Locals.
    DWORD tRet = 0;
    int tError = 0;
@@ -478,9 +510,7 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    tOverlapped.hEvent = mSpecific->mRxEventHandle;
 
    // Issue read operation.
-   Trc::write(mTI, 1, "SerialPort::doReceiveAllBytes READ begin");
    tRet = ReadFile(mSpecific->mPortHandle, aData, aRequestBytes, &tBytesRead, &tOverlapped);
-   Trc::write(mTI, 1, "SerialPort::doReceiveAllBytes READ end 1");
 
    if (!tRet)
    {
@@ -490,7 +520,8 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
       }
       else
       {
-         printf("SerialPort::doReceiveAllBytes ERROR 101 %d\n", GetLastError());
+         mPortErrorCount++;
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ERROR 1");
          return cSerialRetError;
       }
    }
@@ -504,7 +535,6 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    {
       // Wait for overlapped i/o completion.
       tRet = WaitForSingleObject(tOverlapped.hEvent, -1);
-      Trc::write(mTI, 1, "SerialPort::doReceiveAllBytes READ end 2");
 
       // Test for abort.
       if (mAbortFlag)
@@ -528,7 +558,8 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
             }
             else
             {
-               printf("ERROR SerialPort::doReceiveAllBytes ERROR 102 %d\n", tError);
+               mPortErrorCount++;
+               Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ERROR 2");
                return cSerialRetError;
             }
          }
@@ -542,13 +573,14 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
       // Read timeput.
       case WAIT_TIMEOUT:
       {
-         printf("ERROR SerialPort::doReceiveAllBytes TIMEOUT %d\n", GetLastError());
-         return cSerialRetError;
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes TIMEOUT");
+         return cSerialRetTimeout;
       }
       break;
       default:
       {
-         printf("ERROR SerialPort::doReceiveAllBytes ERROR 104 %d\n", GetLastError());
+         mPortErrorCount++;
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ERROR 3");
          return cSerialRetError;
       }
       break;
@@ -562,21 +594,23 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    // If the read was aborted then clear hardware error.
    if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
-      printf("ERROR SerialPort::doReceiveAllBytes ERROR 105 %d\n", GetLastError());
       ClearCommError(mSpecific->mPortHandle, 0, 0);
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ERROR 4");
       return cSerialRetError;
    }
 
    // If the number of bytes read was wrong then error.
    if (tBytesRead != aRequestBytes)
    {
-      printf("ERROR SerialPort::doReceiveAllBytes ERROR 106 %d %d\n", GetLastError(), tBytesRead);
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ERROR 5");
       return cSerialRetError;
    }
 
    // Done.
-   Trc::write(mTI, 1, "SerialPort::doReceiveAllBytes PASS1 %d", tBytesRead);
    mRxByteCount += tBytesRead;
+   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes done");
    return tBytesRead;
 }
 
@@ -600,10 +634,15 @@ int SerialPort::doReceiveOneByte(char* aByte)
 
 int SerialPort::doSendBytes(const char* aData, int aNumBytes)
 {
+   Trc::write(mTI, 0, "SerialPort::doSendBytes");
    // Guard.
-   if (!mValidFlag) return cSerialRetError;
+   if (!mValidFlag)
+   {
+      Trc::write(mTI, 0, "SerialPort::doSendBytes INVALID");
+      return cSerialRetError;
+   }
 
-   ClearCommError(mSpecific->mPortHandle, 0, 0);
+   // Local variables.
 
    // Local variables.
    DWORD tNumWritten;
@@ -613,20 +652,19 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
 
    tOverlapped.hEvent = mSpecific->mTxEventHandle;
 
+   ClearCommError(mSpecific->mPortHandle, 0, 0);
+
    // Write bytes to the port.
-   Trc::write(mTI, 1, "doSendBytes begin");
    if (WriteFile(mSpecific->mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped))
    {
       // Write was successful.
-      Trc::write(mTI, 1, "doSendBytes PASS1");
       mTxByteCount += tNumWritten;
+      Trc::write(mTI, 0, "doSendBytes done 1");
       return tNumWritten;
    }
 
    // Write is pending.
-   Trc::write(mTI, 1, "doSendBytes wait begin");
    tRet = WaitForSingleObject(tOverlapped.hEvent, INFINITE);
-   Trc::write(mTI, 1, "doSendBytes wait end");
    switch (tRet)
    {
       // OVERLAPPED structure's event has been signaled. 
@@ -634,29 +672,28 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    {
       if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
       {
-         Trc::write(mTI, 1, "doSendBytes PASS2");
-         //printf("SerialPort::doSendBytes PASS1 %d\n",aNumBytes);
          mTxByteCount += tNumWritten;
+         Trc::write(mTI, 0, "doSendBytes done 2");
          return tNumWritten;
       }
       else
       {
-         Trc::write(mTI, 1, "ERROR SerialPort::doSendBytes ERROR 101, %d", GetLastError());
-         printf("ERROR SerialPort::doSendBytes ERROR 101, %d\n", GetLastError());
+         mPortErrorCount++;
+         Trc::write(mTI, 0, "SerialPort::doSendBytes ERROR 1");
          return cSerialRetError;
       }
    }
    break;
    default:
    {
-      Trc::write(mTI, 1, "ERROR SerialPort::doSendBytes ERROR 102, %d", GetLastError());
-      printf("ERROR SerialPort::doSendBytes ERROR 102, %d\n", GetLastError());
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doSendBytes ERROR 2");
       return cSerialRetError;
    }
    break;
    }
-   Trc::write(mTI, 1, "doSendBytes PASS3");
    mTxByteCount += tNumWritten;
+   Trc::write(mTI, 0, "doSendBytes done 3");
    return 0;
 }
 

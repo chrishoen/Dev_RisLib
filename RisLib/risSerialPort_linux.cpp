@@ -91,7 +91,8 @@ bool SerialPort::doOpen()
    // Guard.
    if (mOpenFlag)
    {
-      Trc::write(mTI, 0, "SerialPort::doOpen already open");
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doOpen ERROR already open");
       return false;
    }
 
@@ -114,6 +115,7 @@ bool SerialPort::doOpen()
          printf("serial_open_error_1 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
       }
       mOpenErrorShowCount++;
+      mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doOpen ERROR 1");
       return false;
    }
@@ -128,8 +130,8 @@ bool SerialPort::doOpen()
       {
          printf("serial_open_error_2 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
       }
-      mPortErrorCount++;
       mOpenErrorShowCount++;
+      mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doOpen ERROR 2");
       return false;
    }
@@ -170,6 +172,7 @@ bool SerialPort::doOpen()
    {
       printf("serial_open_error_baud\n", errno);
       mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doOpen ERROR baud");
       return false;
    }
 
@@ -185,6 +188,7 @@ bool SerialPort::doOpen()
       if (ioctl(mSpecific->mPortFd, TIOCSRS485, &t485conf) < 0)
       {
          printf("serial_open_error_485 %d\n", errno);
+         Trc::write(mTI, 0, "SerialPort::doOpen ERROR RS485");
          mPortErrorCount++;
          return false;
       }

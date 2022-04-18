@@ -104,6 +104,9 @@ public:
    // Flush serial port buffers.
    void doFlush();
 
+   // Drain serial port buffers.
+   void doDrain();
+
    // Suspend serial port transmits and receives.
    void doSuspend();
 

@@ -199,18 +199,22 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Flush.
 
-   doFlush();
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Done.
- 
+
+   // Set flags.
    printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
    mOpenFlag = true;
    mValidFlag = true;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
+
+   // Flush.
+   doFlush();
+
+   // Done.
    Trc::write(mTI, 0, "SerialPort::doOpen done");
    return true;
 }
@@ -235,16 +239,10 @@ void SerialPort::doClose()
    int tRet = 0;
 
    // Set invalid.
-   mOpenFlag = false;
    mValidFlag = false;
 
    // Flush the input and output buffers.
-   //Trc::write(mTI, 1, "SerialPort::doClose flush");
-   //doSuspend();
-   //doFlush();
-   //Trc::write(mTI, 1, "SerialPort::doClose flush done");
-   //doResume();
-   //Ris::Threads::threadSleep(10);
+   doFlush();
 
    // Close the event.
    Trc::write(mTI, 1, "SerialPort::doClose close event");
@@ -273,12 +271,13 @@ void SerialPort::doClose()
       return;
    }
    Trc::write(mTI, 1, "SerialPort::doClose close port done");
-   Trc::write(mTI, 0, "SerialPort::doClose done");
+
+   // Set closed.
+   mOpenFlag = false;
 
    // Done.
-   mSpecific->mEventFd = 0;
-   mSpecific->mPortFd = 0;
    mCloseErrorShowCount = 0;
+   Trc::write(mTI, 0, "SerialPort::doClose done");
 }
 
 //******************************************************************************
@@ -334,6 +333,14 @@ void SerialPort::doFlush()
    Trc::write(mTI, 0, "SerialPort::doFlush");
    int tRet = 0;
 
+   // Guard.
+   if (!mOpenFlag)
+   {
+      Trc::write(mTI, 0, "SerialPort::doFlush ERROR not open");
+      mPortErrorCount++;
+      return;
+   }
+
    // Flush the buffers.
    tRet = tcflush(mSpecific->mPortFd, TCIOFLUSH);
 
@@ -351,13 +358,52 @@ void SerialPort::doFlush()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Drain serial port buffers.
+
+void SerialPort::doDrain()
+{
+   Trc::write(mTI, 0, "SerialPort::doDrain");
+   int tRet = 0;
+
+   // Guard.
+   if (!mOpenFlag)
+   {
+      Trc::write(mTI, 0, "SerialPort::doDrain ERROR not open");
+      mPortErrorCount++;
+      return;
+   }
+
+   // Drain the buffers.
+   tRet = tcdrain(mSpecific->mPortFd);
+
+   // Test the return code.
+   if (tRet != 0)
+   {
+      printf("serial_flush ERROR 101 %d\n", errno);
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doDrain ERROR");
+      return;
+   }
+   Trc::write(mTI, 0, "SerialPort::doDrain done");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Suspend serial port transmits and receives.
 
 void SerialPort::doSuspend()
 {
    Trc::write(mTI, 0, "SerialPort::doSuspend");
+
    // Guard.
    int tRet = 0;
+   if (!mOpenFlag)
+   {
+      Trc::write(mTI, 0, "SerialPort::doSuspend ERROR not open");
+      mPortErrorCount++;
+      return;
+   }
 
    // Suspend output.
    tRet = tcflow(mSpecific->mPortFd, TCOOFF);
@@ -383,9 +429,10 @@ void SerialPort::doResume()
    Trc::write(mTI, 0, "SerialPort::doResume");
    // Guard.
    int tRet = 0;
-   if (!mValidFlag)
+   if (!mOpenFlag)
    {
-      Trc::write(mTI, 0, "SerialPort::doResume INVALID");
+      Trc::write(mTI, 0, "SerialPort::doResume ERROR not open");
+      mPortErrorCount++;
       return;
    }
 

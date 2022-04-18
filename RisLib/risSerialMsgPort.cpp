@@ -30,7 +30,7 @@ SerialMsgPort::SerialMsgPort()
    mHeaderAllCount = 0;
    mHeaderOneCount = 0;
    mMsgErrorCount = 0;
-   mMsgResynchCount = 0;
+   mMsgResyncCount = 0;
    mMsgMonkey = 0;
    mHeaderReadState = 0;
    mHeaderLength = 0;
@@ -143,6 +143,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       else
       {
          //printf("receive header all FAIL\n");
+         mMsgResyncCount++;
          mHeaderReadState = cHeaderReadOne;
       }
    }

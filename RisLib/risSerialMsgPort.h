@@ -78,7 +78,7 @@ public:
    int mHeaderAllCount;
    int mHeaderOneCount;
    int mMsgErrorCount;
-   int mMsgResynchCount;
+   int mMsgResyncCount;
 
    //***************************************************************************
    //***************************************************************************

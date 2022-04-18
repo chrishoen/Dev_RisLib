@@ -113,6 +113,9 @@ void MonitorThread::executeOnTimer(int aTimeCount)
       Prn::print(Prn::Show1, "MsgErrorCount            %-10d",
          tMsgPort->mMsgErrorCount);
 
+      Prn::print(Prn::Show1, "MsgResyncCount           %-10d",
+         tMsgPort->mMsgResyncCount);
+
       Prn::print(Prn::Show1, "");
    }
 }

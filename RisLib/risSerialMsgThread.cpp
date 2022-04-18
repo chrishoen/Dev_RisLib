@@ -10,6 +10,7 @@
 #include "my_functions.h"
 #include "risPortableCalls.h"
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
 #include "risSerialMsgThread.h"
@@ -32,6 +33,7 @@ SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
    mSessionQCall = aSettings.mSessionQCall;
    mRxMsgQCall = aSettings.mRxMsgQCall;
 
+   mTI = aSettings.mTraceIndex;
    mErrorCount = 0;
    mRestartCount = 0;
    mRxCount = 0;
@@ -50,8 +52,12 @@ SerialMsgThread::~SerialMsgThread()
 
 void SerialMsgThread::threadInitFunction()
 {
+   Trc::write(mTI, 0, "SerialMsgThread::threadInitFunction");
+
    // Initialize the serial port.
    mSerialMsgPort.initialize(mSettings);
+
+   Trc::write(mTI, 0, "SerialMsgThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -64,6 +70,8 @@ void SerialMsgThread::threadInitFunction()
 
 void SerialMsgThread::threadRunFunction()
 {
+   Trc::write(mTI, 0, "SerialMsgThread::threadRunFunction");
+
    // Top of the loop.
    mRestartCount = 0;
    mConnectionFlag = false;
@@ -180,6 +188,7 @@ restart:
 
    // Done.
 end:
+   Trc::write(mTI, 0, "SerialMsgThread::threadRunFunction done");
    return;
 }
 
@@ -191,12 +200,14 @@ end:
 
 void SerialMsgThread::threadExitFunction()
 {
+   Trc::write(mTI, 0, "SerialMsgThread::threadExitFunction");
    printf("SerialMsgThread::threadExitFunction BEGIN\n");
 
    // Close the serial port.
    mSerialMsgPort.doClose();
 
    printf("SerialMsgThread::threadExitFunction END\n");
+   Trc::write(mTI, 0, "SerialMsgThread::threadExitFunction done");
 }
 
 //******************************************************************************
@@ -208,6 +219,7 @@ void SerialMsgThread::threadExitFunction()
 
 void SerialMsgThread::shutdownThread()
 {
+   Trc::write(mTI, 0, "SerialMsgThread::shutdownThread");
    printf("SerialMsgThread::shutdownThread BEGIN\n");
 
    // Set for thread termination.
@@ -220,6 +232,7 @@ void SerialMsgThread::shutdownThread()
    BaseClass::shutdownThread();
 
    printf("SerialMsgThread::shutdownThread END\n");
+   Trc::write(mTI, 0, "SerialMsgThread::shutdownThread done");
 }
 
 //******************************************************************************

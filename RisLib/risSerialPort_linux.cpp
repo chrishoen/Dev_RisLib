@@ -239,15 +239,17 @@ void SerialPort::doClose()
    mValidFlag = false;
 
    // Flush the input and output buffers.
-   Trc::write(mTI, 1, "serial_close flush");
-   doSuspend();
-   doFlush();
+   //Trc::write(mTI, 1, "SerialPort::doClose flush");
+   //doSuspend();
+   //doFlush();
+   //Trc::write(mTI, 1, "SerialPort::doClose flush done");
    //doResume();
    //Ris::Threads::threadSleep(10);
 
    // Close the event.
    Trc::write(mTI, 1, "SerialPort::doClose close event");
    tRet = close(mSpecific->mEventFd);
+   mSpecific->mEventFd = 0;
 
    // Test the return code.
    if (tRet != 0)
@@ -256,10 +258,12 @@ void SerialPort::doClose()
       Trc::write(mTI, 0, "SerialPort::doClose ERROR 1");
       return;
    }
+   Trc::write(mTI, 1, "SerialPort::doClose close event done");
 
    // Close the port.
-   printf("serial_close port\n");
+   Trc::write(mTI, 1, "SerialPort::doClose close port");
    tRet = close(mSpecific->mPortFd);
+   mSpecific->mPortFd = 0;
 
    // Test the return code.
    if (tRet != 0)
@@ -268,6 +272,7 @@ void SerialPort::doClose()
       Trc::write(mTI, 0, "SerialPort::doClose ERROR 2");
       return;
    }
+   Trc::write(mTI, 1, "SerialPort::doClose close port done");
    Trc::write(mTI, 0, "SerialPort::doClose done");
 
    // Done.
@@ -301,8 +306,11 @@ void SerialPort::doAbort()
    }
 
    // Write bytes to the event semaphore.
+   Trc::write(mTI, 0, "SerialPort::doAbort post event");
    unsigned long long tCount = 1;
    tRet = write(mSpecific->mEventFd, &tCount, 8);
+   Ris::Threads::threadSleep(10);
+   Trc::write(mTI, 0, "SerialPort::doAbort post event done");
 
    // Test the return code.
    if (tRet < 0)
@@ -324,13 +332,7 @@ void SerialPort::doAbort()
 void SerialPort::doFlush()
 {
    Trc::write(mTI, 0, "SerialPort::doFlush");
-   // Guard.
    int tRet = 0;
-   if (!mValidFlag)
-   {
-      Trc::write(mTI, 0, "SerialPort::doFlush INVALID");
-      return;
-   }
 
    // Flush the buffers.
    tRet = tcflush(mSpecific->mPortFd, TCIOFLUSH);
@@ -356,11 +358,6 @@ void SerialPort::doSuspend()
    Trc::write(mTI, 0, "SerialPort::doSuspend");
    // Guard.
    int tRet = 0;
-   if (!mValidFlag)
-   {
-      Trc::write(mTI, 0, "SerialPort::doSuspend INVALID");
-      return;
-   }
 
    // Suspend output.
    tRet = tcflow(mSpecific->mPortFd, TCOOFF);

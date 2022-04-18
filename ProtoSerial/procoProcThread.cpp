@@ -69,6 +69,8 @@ void ProcThread::show()
 
 void ProcThread::threadInitFunction()
 {
+   Trc::write(11, 0, "ProcThread::threadInitFunction");
+
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
 
@@ -86,6 +88,8 @@ void ProcThread::threadInitFunction()
 
    // Launch child thread.
    mSerialMsgThread->launchThread(); 
+
+   Trc::write(11, 0, "ProcThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -96,12 +100,14 @@ void ProcThread::threadInitFunction()
 
 void ProcThread::threadExitFunction()
 {
+   Trc::write(11, 0, "ProcThread::threadExitFunction");
    Prn::print(0, "ProcThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
    mSerialMsgThread->shutdownThread();
 
    Prn::print(0, "ProcThread::threadExitFunction END");
+   Trc::write(11, 0, "ProcThread::threadExitFunction done");
 }
 
 //******************************************************************************
@@ -113,9 +119,11 @@ void ProcThread::threadExitFunction()
 
 void ProcThread::shutdownThread()
 {
+   Trc::write(11, 0, "ProcThread::shutdownThread");
    Prn::print(0, "ProcThread::shutdownThread BEGIN");
    BaseClass::shutdownThread();
    Prn::print(0, "ProcThread::shutdownThread END");
+   Trc::write(11, 0, "ProcThread::shutdownThread done");
 }
 
 //******************************************************************************

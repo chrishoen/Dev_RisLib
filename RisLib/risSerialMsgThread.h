@@ -61,6 +61,9 @@ public:
    // Serial message port.
    SerialMsgPort mSerialMsgPort;
 
+   // Program trace index.
+   int mTI;
+
    // If true then the serial port is open. If false then it is closed
    // because of an error.
    bool mConnectionFlag;

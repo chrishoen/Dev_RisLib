@@ -69,9 +69,9 @@ Priorities::Priorities()
    mSerial    = Priority(-1, THREAD_PRIORITY_TIME_CRITICAL);
 
    mTimerTest = Priority(3,  THREAD_PRIORITY_TIME_CRITICAL);
-   mMonitor   = Priority(-1, THREAD_PRIORITY_NORMAL);
 
-   mTsPrint   = Priority(-1, THREAD_PRIORITY_ABOVE_NORMAL);
+   mProc = Priority(-1, THREAD_PRIORITY_NORMAL);
+   mMonitor = Priority(-1, THREAD_PRIORITY_HIGHEST);
 }
 
 //******************************************************************************

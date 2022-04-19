@@ -89,7 +89,6 @@ public:
    // Constructor.
    ProcThread();
   ~ProcThread();
-  void show();
 
    //***************************************************************************
    //***************************************************************************
@@ -112,6 +111,9 @@ public:
 
    // Execute periodically. This is called by the base class timer.
    void executeOnTimer(int aTimerCount) override;
+
+   // Show thread state info.
+   void showThreadInfo() override;
 
    //***************************************************************************
    //***************************************************************************

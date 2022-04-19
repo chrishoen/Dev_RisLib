@@ -71,9 +71,8 @@ public:
    Priority mTcpClient;
    Priority mSerial;
    Priority mTimerTest;
+   Priority mProc;
    Priority mMonitor;
-
-   Priority mTsPrint;
 
    //***************************************************************************
    //***************************************************************************

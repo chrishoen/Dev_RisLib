@@ -24,7 +24,7 @@ ProcThread::ProcThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Proc");
-   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mHigh);
+   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
    BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
@@ -53,11 +53,14 @@ ProcThread::~ProcThread()
 //******************************************************************************
 // Place holder.
 
-void ProcThread::show()
+   // Show thread state info.
+void ProcThread::showThreadInfo()
 {
-   Prn::print(0, "SerialMsgPort %d %d",
-      mSerialMsgThread->mSerialMsgPort.mHeaderAllCount,
-      mSerialMsgThread->mSerialMsgPort.mHeaderOneCount);
+   BaseClass::showThreadInfo();
+   if (mSerialMsgThread)
+   {
+      mSerialMsgThread->showThreadInfo();
+   }
 }
 
 //******************************************************************************

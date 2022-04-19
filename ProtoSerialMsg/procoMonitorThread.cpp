@@ -32,11 +32,13 @@ MonitorThread::MonitorThread()
    mShowCode = 0;
 
    // Bind member variables.
-   mMon_TxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxMsgCount);
-   mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxByteCount);
-   mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxMsgCount);
-   mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxByteCount);
+   ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mTxMsgMetrics;
+   ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mRxMsgMetrics;
 
+   mMon_TxMsgCount.bind(&tTxMsgMetrics->mMsgCount);
+   mMon_TxByteCount.bind(&tTxMsgMetrics->mByteCount);
+   mMon_RxMsgCount.bind(&tRxMsgMetrics->mMsgCount);
+   mMon_RxByteCount.bind(&tRxMsgMetrics->mByteCount);
    mMon_Test.bind(&mTest);
 
    std::atomic<long long>* tPtr = &mTest;

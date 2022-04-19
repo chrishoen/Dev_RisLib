@@ -125,6 +125,12 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 
       Prn::print(Prn::Show1, "");
    }
+
+   if (mShowCode == 3)
+   {
+      Prn::print(Prn::Show1, "Test                     %-10lld  %lld",
+         mMon_Test.mValue, mMon_Test.mDelta);
+   }
 }
 
 //******************************************************************************

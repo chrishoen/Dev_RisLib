@@ -93,7 +93,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Thread base class overloads.
+   // Methods. Thread base class overloads.
 
    // Thread init function. This is called by the base class immedidately 
    // after the thread starts running. It creates and launches the 
@@ -112,7 +112,7 @@ public:
    // Execute periodically. This is called by the base class timer.
    void executeOnTimer(int aTimerCount) override;
 
-   // Show thread state info.
+   // Show thread info for this thread and for child threads.
    void showThreadInfo() override;
 
    //***************************************************************************

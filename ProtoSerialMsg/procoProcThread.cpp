@@ -51,9 +51,8 @@ ProcThread::~ProcThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Place holder.
+// Show thread info for this thread and for child threads.
 
-   // Show thread state info.
 void ProcThread::showThreadInfo()
 {
    BaseClass::showThreadInfo();

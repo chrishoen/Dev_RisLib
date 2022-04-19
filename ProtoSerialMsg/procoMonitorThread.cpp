@@ -51,7 +51,7 @@ void MonitorThread::update()
    mMon_TxByteCount.update();
    mMon_RxByteCount.update();
 
-   mMon_RxByteCount.update();
+   mMon_Test.update();
 }
 
 //******************************************************************************

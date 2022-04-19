@@ -36,6 +36,11 @@ MonitorThread::MonitorThread()
    mMon_TxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mTxByteCount);
    mMon_RxMsgCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxMsgCount);
    mMon_RxByteCount.bind(&gProcThread->mSerialMsgThread->mSerialMsgPort.mRxByteCount);
+
+   mMon_Test.bind(&mTest);
+
+   std::atomic<long long>* tPtr = &mTest;
+
 }
 
 // Update status variables.
@@ -44,6 +49,8 @@ void MonitorThread::update()
    mMon_TxMsgCount.update();
    mMon_RxMsgCount.update();
    mMon_TxByteCount.update();
+   mMon_RxByteCount.update();
+
    mMon_RxByteCount.update();
 }
 

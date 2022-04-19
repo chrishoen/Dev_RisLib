@@ -45,6 +45,9 @@ public:
    Ris::Monitor<int> mMon_RxMsgCount;
    Ris::Monitor<long long> mMon_RxByteCount;
 
+   Ris::MonitorAtomic<long long> mMon_Test;
+   std::atomic<long long> mTest;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

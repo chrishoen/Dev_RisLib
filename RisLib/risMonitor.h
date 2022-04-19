@@ -99,7 +99,7 @@ public:
 // min, and max.
 
 template <typename T>
-class AtomicMonitor
+class MonitorAtomic
 {
 public:
    //***************************************************************************
@@ -108,7 +108,7 @@ public:
    // Members.
 
    // A pointer to the variable to that this variable is bound to.
-   T* mPtr;
+   std::atomic<T>* mPtr;
 
    // These are updated by the update method.
    T mValue;
@@ -126,7 +126,7 @@ public:
    // Methods.
 
    // Constructor.
-   AtomicMonitor()
+   MonitorAtomic()
    {
       mValue = 0;
       mLastValue = 0;

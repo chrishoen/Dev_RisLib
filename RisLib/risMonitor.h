@@ -148,7 +148,7 @@ public:
       if (mFirstFlag)
       {
          mFirstFlag = false;
-         mValue = *mPtr.load(std::memory_order_relaxed);
+         mValue = *mPtr->load(std::memory_order_relaxed);
          mDelta = 0;
          mMin = mValue;
          mMax = mValue;
@@ -156,7 +156,7 @@ public:
       }
       else
       {
-         mValue = *mPtr;
+         mValue = *mPtr->load(std::memory_order_relaxed);
          mDelta = mValue - mLastValue;
          if (mValue < mMin) mMin = mValue;
          if (mValue > mMax) mMax = mValue;

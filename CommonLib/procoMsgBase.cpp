@@ -239,8 +239,8 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
 MsgMonkey::MsgMonkey()
    : Ris::BaseMsgMonkey(
       ProtoComm::createMsg,
-      new MsgMetrics,
-      new MsgMetrics)
+      &mStoreTxMsgMetrics,
+      &mStoreRxMsgMetrics)
 {
    // Set member variables.
    mSourceId = 0;

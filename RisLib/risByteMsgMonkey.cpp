@@ -42,8 +42,8 @@ BaseMsgMonkey::BaseMsgMonkey(
       mDestroyMsgFunction = &defaultDestroy;
    }
 
-   mTxMsgMetrics = new BaseMsgMetrics;
-   mRxMsgMetrics = new BaseMsgMetrics;
+   mTxMsgMetrics = &mDefaultTxMsgMetrics;
+   mRxMsgMetrics = &mDefaultRxMsgMetrics;
 }
 
 BaseMsgMonkey::BaseMsgMonkey(
@@ -62,12 +62,6 @@ BaseMsgMonkey::BaseMsgMonkey(
 
    mTxMsgMetrics = aTxMsgMetrics;
    mRxMsgMetrics = aRxMsgMetrics;
-}
-
-BaseMsgMonkey::~BaseMsgMonkey()
-{
-   delete mTxMsgMetrics;
-   delete mRxMsgMetrics;
 }
 
 //******************************************************************************

@@ -16,13 +16,13 @@ add_subdirectory ("ProtoSerialMsg")
 return()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Trace")
-return()
-
-add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("PeriodicTest")
 add_subdirectory ("RandomTest")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("Trace")
 return()
 
 add_subdirectory ("RisLib")

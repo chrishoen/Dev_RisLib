@@ -98,9 +98,14 @@ public:
    //***************************************************************************
    // Members.
 
-   // Metrics. 
+   // Message metrics. These point to the default metrics or to an
+   // inheritors metrics, depending on the constructor.
    BaseMsgMetrics* mTxMsgMetrics;
    BaseMsgMetrics* mRxMsgMetrics;
+
+   // Default message metrics.
+   BaseMsgMetrics mDefaultTxMsgMetrics;
+   BaseMsgMetrics mDefaultRxMsgMetrics;
 
    //***************************************************************************
    //***************************************************************************
@@ -115,7 +120,7 @@ public:
       CreateMsgFunctionT aCreate,
       BaseMsgMetrics* aTxMsgMetrics,
       BaseMsgMetrics* aRxMsgMetrics);
-   virtual ~BaseMsgMonkey();
+   virtual ~BaseMsgMonkey() {}
 
    //***************************************************************************
    //***************************************************************************

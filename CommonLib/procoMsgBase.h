@@ -232,7 +232,8 @@ public:
    // Source Id that is placed in transmit message headers.
    int mSourceId;
 
-   // Message metrics.
+   // Message metrics. Pointers to these are supplied to the base class
+   // in its constructor.
    MsgMetrics mStoreTxMsgMetrics;
    MsgMetrics mStoreRxMsgMetrics;
 

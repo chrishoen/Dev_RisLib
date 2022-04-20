@@ -209,6 +209,7 @@ public:
 
    // Set the thread processor number and priority.
    void setThreadPriority(Priority aPriority);
+   void setThreadPriority(int aPriority);
    void setThreadPriorityLow();
    void setThreadPriorityNormal();
    void setThreadPriorityHigh();

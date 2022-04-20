@@ -114,6 +114,12 @@ void BaseThread::setThreadPriority(Priority aPriority)
    mThreadPriority        = aPriority.mPriority;
 }
 
+void BaseThread::setThreadPriority(int aPriority)
+{
+   mThreadSingleProcessor = -1;
+   mThreadPriority = aPriority;
+}
+
 void BaseThread::setThreadPriorityLow()
 {
    mThreadSingleProcessor = gPriorities.mLow.mProcessor;

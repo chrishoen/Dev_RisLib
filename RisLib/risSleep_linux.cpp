@@ -51,35 +51,27 @@ void sleepUs(int aSleepForUs)
 
 RandomSleepMs::RandomSleepMs()
 {
-   // Set base class variables.
    mSleepMeanMs = 1000;
-   mSleepRandomUs = 0;
-   mSleepUs1 = 0;
-   mSleepUs2 = 0;
+   mSleepRandom = 0;
+   mSleepUs1 = 1000;
+   mSleepUs2 = 1000;
 }
 
-void RandomSleepMs::initializeMsMs(int aSleepMeanMs, int aSleepRandomMs)
+RandomSleepMs::RandomSleepMs(int aSleepMeanMs, double aSleepRandom)
 {
-   // Sleep time variables.
-   mSleepMeanMs = aSleepMeanMs;
-   mSleepRandomUs = aSleepRandomMs * 1000;
-   mSleepUs1 = mSleepMeanMs * 1000 - mSleepRandomUs;
-   mSleepUs2 = mSleepMeanMs * 1000 + mSleepRandomUs;
-
-   // Seed the random number generator.
-   std::random_device tRandomDevice;
-   mRandomGenerator.seed(tRandomDevice());
-   mRandomDistribution = std::uniform_int_distribution<>(mSleepUs1, mSleepUs2);
+   initialize(aSleepMeanMs, aSleepRandom);
 }
 
-void RandomSleepMs::initializeMsUs(int aSleepMeanMs, int aSleepRandomUs)
+void RandomSleepMs::initialize(int aSleepMeanMs, double aSleepRandom)
 {
-   // Sleep time variables.
+   // Calculate the time limits for the random number generator.
+   if (aSleepRandom < 0) aSleepRandom = 0;
+   if (aSleepRandom > 1) aSleepRandom = 1;
    mSleepMeanMs = aSleepMeanMs;
-   mSleepRandomUs = aSleepRandomUs;
-   mSleepUs1 = mSleepMeanMs * 1000 - mSleepRandomUs;
-   mSleepUs2 = mSleepMeanMs * 1000 + mSleepRandomUs;
-
+   mSleepRandom = aSleepRandom;
+   mSleepUs1 = (int)(mSleepMeanMs * 1000 * (1.0 - mSleepRandom));
+   mSleepUs2 = (int)(mSleepMeanMs * 1000 * (1.0 + mSleepRandom));
+   
    // Seed the random number generator.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());

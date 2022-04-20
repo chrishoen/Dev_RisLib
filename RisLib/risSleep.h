@@ -46,9 +46,9 @@ public:
    // uniform random number generator that generates a random sleep interval.
    // The inheritor timer handler function gets called after the random sleep.
    // The bounds are calculated as
-   // [SleepMeanMs*1000 - SleepRandomUs, SleepMeanMs*1000 + SleepRandomUs].
+   // [SleepMeanMs*1000*(1 - SleepRandom), SleepMeanMs*1000*(1 + SleepRandom)].
    int mSleepMeanMs;
-   int mSleepRandomUs;
+   double mSleepRandom;
 
    //***************************************************************************
    //***************************************************************************
@@ -57,8 +57,8 @@ public:
 
    // Timer interval range, microseconds. These provide the bounds for a
    // uniform random number generator that generates a random sleep interval.
-   int mSleepUs1;
-   int mSleepUs2;
+   int mSleepUs1; // = SleepMeanMs * 1000 * (1 - SleepRandom)
+   int mSleepUs2; // = SleepMeanMs * 1000 * (1 + SleepRandom)
 
    //***************************************************************************
    //***************************************************************************
@@ -76,8 +76,8 @@ public:
 
    // Constructor.
    RandomSleepMs();
-   void initializeMsMs(int aSleepMeanMs, int aSleepRandomMs);
-   void initializeMsUs(int aSleepMeanMs, int aSleepRandomUs);
+   RandomSleepMs(int aSleepMeanMs, double aSleepRandom);
+   void initialize(int aSleepMeanMs, double aSleepRandom);
 
    //***************************************************************************
    //***************************************************************************

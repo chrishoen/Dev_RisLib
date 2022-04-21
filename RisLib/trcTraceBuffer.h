@@ -46,7 +46,7 @@ public:
    static const int cNumStrings = 200;
 
    // Max string element size.
-   static const int cMaxStringSize = 99;
+   static const int cMaxStringSize = 199;
 
    // Max trace label size.
    static const int cMaxLabelSize = 15;

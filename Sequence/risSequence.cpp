@@ -69,7 +69,7 @@ void ThreeSequence::calc_flags()
    }
    else
    {
-      loopend = last_i && last_j && last_k;
+      loopend = first_i && first_j && first_k;
    }
 }
 

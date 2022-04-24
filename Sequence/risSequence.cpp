@@ -43,10 +43,10 @@ void ThreeSequence::restart()
 
 void ThreeSequence::advance()
 {
-   i = (n / (mj * mk)) % mi;
+   n++;
+   i = (n / ((long long)mj * (long long)mk)) % mi;
    j = (n / mk) % mj;
    k = n % mk;
-   n++;
    calc_flags();
 }
 

@@ -5,8 +5,7 @@
 #include <stdio.h>
 #include "string.h"
 
-#include "risProgramTime.h"
-#include "risBitUtils.h"
+#include "risSequence.h"
 #include "my_functions.h"
 #include "CmdLineExec.h"
 
@@ -49,10 +48,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   int tDataLen = aCmd->argInt(1);
-   int tNewDataLen =
-      (tDataLen + sizeof(unsigned int) - 1) & ~(sizeof(unsigned int) - 1); //For safty reasons
-   Prn::print(0, "%d  %d", tDataLen, tNewDataLen);
+   for (Ris::ThreeSequence tSeq(2, 3, 4); !tSeq.loopend; tSeq.advance())
+   {
+      printf("%3lld %2d %2d %2d\n", tSeq.n, tSeq.i, tSeq.j, tSeq.k);
+   }
 }
 
 
@@ -70,19 +69,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned tValue1 = 0;
-   unsigned tValue2 = 0;
-   tValue1 = 0x00000000;
-   tValue1 = 0x0000ffff;
-   Prn::print(0, "%08x", tValue1);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   tValue2 = Ris::setBit(tValue1, tBitNum, tBitValue);
-
-   Prn::print(0, "%08x", tValue2);
 }
 
 //******************************************************************************
@@ -91,16 +77,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned char tValue = 0x0f;
-   Prn::print(0, "%02x", tValue);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   Ris::setBit(&tValue, tBitNum, tBitValue);
-
-   Prn::print(0, "%02x", tValue);
 }
 
 //******************************************************************************
@@ -110,9 +86,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
    printf("printf\n");
-   Prn::print(0, "Prn::print 0");
-   Prn::print(Prn::Show1, "Prn::print Prn::Show1");
-   Prn::print(Prn::Show2, "Prn::print Prn::Show");
 }
 
 //******************************************************************************
@@ -121,12 +94,5 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "Ris::portableGetCurrentDir() %s", Ris::portableGetCurrentDir());
-   Prn::print(0, "Ris::portableGetBinDir() %s", Ris::portableGetBinDir());
-   double tTime = Ris::getProgramTime();
-   unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
-
-   Prn::print(0, "Ris::getProgramTime           %10.6f", tTime);
-   Prn::print(0, "Ris::getCpuTimeUIntMs         %10d", tTimeMS);
 }
 

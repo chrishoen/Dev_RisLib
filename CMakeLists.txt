@@ -11,7 +11,7 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Sleep")
+add_subdirectory ("Sequence")
 return()
 
 add_subdirectory ("RisLib")

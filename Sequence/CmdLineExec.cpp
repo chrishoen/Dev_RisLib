@@ -50,7 +50,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    for (Ris::ThreeSequence tSeq(2, 3, 4); !tSeq.loopend; tSeq.advance())
    {
-      printf("%3lld %2d %2d %2d\n", tSeq.n, tSeq.i, tSeq.j, tSeq.k);
+      tSeq.show();
    }
 }
 

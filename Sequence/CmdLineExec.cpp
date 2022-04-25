@@ -61,6 +61,10 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   for (Ris::ThreeSequence tSeq(100, 200, 300, 2, 3, 4); !tSeq.loopend; tSeq.advance())
+   {
+      tSeq.show();
+   }
 }
 
 //******************************************************************************

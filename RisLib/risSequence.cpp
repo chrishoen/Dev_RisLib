@@ -15,12 +15,39 @@ namespace Ris
 {
 ThreeSequence::ThreeSequence()
 {
+   offi = 0;
+   offj = 0;
+   offk = 0;
    initialize(1, 1, 1);
 }
 
 ThreeSequence::ThreeSequence(int ami, int amj, int amk)
 {
+   offi = 0;
+   offj = 0;
+   offk = 0;
    initialize(ami, amj, amk);
+}
+
+ThreeSequence::ThreeSequence(int aoffi, int aoffj, int aoffk, int ami, int amj, int amk)
+{
+   offi = aoffi;
+   offj = aoffj;
+   offk = aoffk;
+   initialize(ami, amj, amk);
+}
+
+void ThreeSequence::initialize(int aoffi, int aoffj, int aoffk, int ami, int amj, int amk)
+{
+   offi = aoffi;
+   offj = aoffj;
+   offk = aoffk;
+   initialize(ami, amj, amk);
+}
+
+void ThreeSequence::restart()
+{
+   initialize(mi, mj, mk);
 }
 
 void ThreeSequence::initialize(int ami, int amj, int amk)
@@ -36,11 +63,6 @@ void ThreeSequence::initialize(int ami, int amj, int amk)
    calc_vars();
 }
 
-void ThreeSequence::restart()
-{
-   initialize(mi, mj, mk);
-}
-
 void ThreeSequence::advance()
 {
    n++;
@@ -52,15 +74,15 @@ void ThreeSequence::advance()
 
 void ThreeSequence::calc_vars()
 {
-   first_i = i == 0;
-   first_j = j == 0;
-   first_k = k == 0;
-   half_i = 2 * i == mi - (mi % 2);
-   half_j = 2 * j == mj - (mj % 2);
-   half_k = 2 * k == mk - (mk % 2);
-   last_i = i == (mi - 1);
-   last_j = j == (mj - 1);
-   last_k = k == (mk - 1);
+   firsti = i == 0;
+   firstj = j == 0;
+   firstk = k == 0;
+   halfi = 2 * i == mi - (mi % 2);
+   halfj = 2 * j == mj - (mj % 2);
+   halfk = 2 * k == mk - (mk % 2);
+   lasti = i == (mi - 1);
+   lastj = j == (mj - 1);
+   lastk = k == (mk - 1);
 
    if (firstflag)
    {
@@ -69,17 +91,21 @@ void ThreeSequence::calc_vars()
    }
    else
    {
-      loopend = first_i && first_j && first_k;
+      loopend = firsti && firstj && firstk;
    }
+
+   i += offi;
+   j += offj;
+   k += offk;
 }
 
 void ThreeSequence::show()
 {
    printf("%3lld ijk %2d %2d %2d flagi %1d %1d %1d flagj %1d %1d %1d flagk %1d %1d %1d\n", 
       n, i, j, k,
-      first_i, half_i, last_i,
-      first_j, half_j, last_j,
-      first_k, half_k, last_k);
+      firsti, halfi, lasti,
+      firstj, halfj, lastj,
+      firstk, halfk, lastk);
 }
 
 //******************************************************************************

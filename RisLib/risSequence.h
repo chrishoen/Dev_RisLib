@@ -1,8 +1,7 @@
 #pragma once
 
 /*==============================================================================
-State machine classes that generate sequences of ntuples of nonnegative
-integers.
+State machine classes that generate sequences of ntuples of integers.
 ==============================================================================*/
 
 //******************************************************************************
@@ -16,9 +15,40 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 // This class implements a state machine that generates sequences of
-// three tuples of nonnegative integers. It can be used in loops and
-// other state machines.
+// triples of integers (i,j,k).
 // 
+// Here's an example:
+// 
+// for (Ris::ThreeSequence tSeq(2, 3, 4); !tSeq.loopend; tSeq.advance())
+// {
+//    tSeq.show();
+// }
+//
+// results in the following sequence. 
+//    0  0  0  0
+//    1  0  0  1
+//    2  0  0  2
+//    3  0  0  3
+//    4  0  1  0
+//    5  0  1  1
+//    6  0  1  2
+//    7  0  1  3
+//    8  0  2  0
+//    9  0  2  1
+//   10  0  2  2
+//   11  0  2  3
+//   12  1  0  0
+//   13  1  0  1
+//   14  1  0  2
+//   15  1  0  3
+//   16  1  1  0
+//   17  1  1  1
+//   18  1  1  2
+//   19  1  1  3
+//   20  1  2  0
+//   21  1  2  1
+//   22  1  2  2
+//   23  1  2  3
 
 class ThreeSequence
 {
@@ -35,15 +65,18 @@ public:
    // Sequence values. These are updated in the advance method.
    int i, j, k;
 
-   // incremented each time advance is called.
+   // Incremented each time advance is called.
    long long n;
 
    // Flags. These are updated in the advance method.
    bool firstflag;
    bool loopend;
-   bool first_i, first_j, first_k;
-   bool half_i, half_j, half_k;
-   bool last_i, last_j, last_k;
+   bool firsti, halfi, lasti;
+   bool firstj, halfj, lastj;
+   bool firstk, halfk, lastk;
+
+   // Output offsets.
+   int offi, offj, offk;
 
    //***************************************************************************
    //***************************************************************************
@@ -52,7 +85,9 @@ public:
 
    ThreeSequence();
    ThreeSequence(int ami, int amj, int amk);
+   ThreeSequence(int aoffi, int aoffj, int aoffk, int ami, int amj, int amk);
    void initialize(int ami, int amj, int amk);
+   void initialize(int aoffi, int aoffj, int aoffk, int ami, int amj, int amk);
    void restart();
    void advance();
 

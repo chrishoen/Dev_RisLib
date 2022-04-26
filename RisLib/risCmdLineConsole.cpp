@@ -94,6 +94,10 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
             {
                Trc::gTraceBuffer.execute(&tCmd);
             }
+            else if (tCmd.isCmd("HELP"))
+            {
+               aExec->executeHelp(&tCmd);
+            }
             // Test for special commands, if the first character is a digit.
             else if (tCmd.mArgNum == 0 &&
                strlen(tCmd.mCommandLine) == 1 &&

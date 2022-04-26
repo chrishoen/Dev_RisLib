@@ -68,6 +68,9 @@ public:
    // "0" through "7".
    virtual void special(int aSpecial) {};
 
+   // This is overridden by inheriting classes to execute a help command.
+   virtual void executeHelp(CmdLineCmd* aCmd) {};
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

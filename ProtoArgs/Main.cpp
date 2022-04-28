@@ -19,17 +19,25 @@ int main(int argc,char** argv)
    // Begin program.
 
    gMainArgs.initialize(argc, argv);
-   gMainArgs.show();
-   main_initialize(argc,argv);
+   main_initialize();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Execute console command line executive, wait for user to exit.
 
-   CmdLineExec* tExec = new CmdLineExec;
-   Ris::gCmdLineConsole.execute(tExec);
-   delete tExec;
+   // If the command line interface is enabled.
+   if (gMainArgs.mCLIEnable)
+   {
+      // Execute console command line executive, wait for user to exit.
+      CmdLineExec* tExec = new CmdLineExec;
+      Ris::gCmdLineConsole.execute(tExec);
+      delete tExec;
+   }
+   else
+   {
+      // Wait for program termination. 
+      Ris::Threads::waitForTermination();
+   }
 
    //***************************************************************************
    //***************************************************************************

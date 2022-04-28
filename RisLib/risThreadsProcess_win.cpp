@@ -6,6 +6,7 @@
 
 #include <windows.h> 
 
+#include "risThreadsSynch.h"
 #include "risThreadsProcess.h"
 
 namespace Ris
@@ -81,6 +82,26 @@ void showCurrentThreadInfo()
       tThreadPriority,
       "running",
       tPriorityClass);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+Ris::Threads::BinarySemaphore rTerminateSem;
+
+void sig_handler(int signum)
+{
+   // Post a program termination request.
+   printf("sig_handler %d\n", signum);
+   rTerminateSem.put();
+}
+
+void waitForTermination()
+{
+   printf("WAIT FOR TERMINATE\n");
+   rTerminateSem.get();
+   printf("TERMINATING\n");
 }
 
 //******************************************************************************

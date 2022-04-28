@@ -41,13 +41,6 @@ void MainArgs::help()
 
 void MainArgs::initialize(int argc, char** argv)
 {
-   printf("MainArgs*************************1\n");
-   printf("argc            %d\n", argc);
-
-   for (int i = 1; i < argc; i++)
-   {
-      printf("argv[%d]         %s\n", i, argv[i]);
-   }
    reset();
 
    if (argc >= 2)

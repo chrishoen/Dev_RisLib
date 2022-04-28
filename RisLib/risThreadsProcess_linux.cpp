@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 #include <sys/fcntl.h>
 
+#include "risThreadsSynch.h"
 #include "risThreadsProcess.h"
 
 namespace Ris
@@ -126,6 +127,40 @@ void showCurrentThreadInfo()
       tCurrentProcessorNumber,
       tThreadPriority,
       "running");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void waitForTermination()
+{
+
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+Ris::Threads::BinarySemaphore rTerminateSem;
+
+void sig_handler(int signum)
+{
+   // Post to the termination semaphore.
+   printf("sig_handler %d\n", signum);
+   rTerminateSem.put();
+}
+
+void waitForTermination()
+{
+   // Register signal handler.
+   signal(SIGINT, sig_handler);
+   signal(SIGTERM, sig_handler);
+
+   // Wait for the termination semaphore.
+   printf("WAIT FOR TERMINATE\n");
+   rTerminateSem.get();
+   printf("TERMINATING\n");
 }
 
 //******************************************************************************

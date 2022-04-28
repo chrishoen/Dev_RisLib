@@ -28,6 +28,12 @@ void MainArgs::show()
    printf("CLIEnable       %s\n", my_string_from_bool(mCLIEnable));
 }
 
+void MainArgs::help()
+{
+   printf("MainArgs\n");
+   printf("-cli   enable command line interface\n");
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -43,6 +49,12 @@ void MainArgs::initialize(int argc, char** argv)
       printf("argv[%d]         %s\n", i, argv[i]);
    }
    reset();
+
+   if (argc >= 2)
+   {
+      if (strcmp(argv[1], "-help") == 0) help();
+      if (strcmp(argv[1], "-cli") == 0) mCLIEnable = true;
+   }
 }
 
 //******************************************************************************

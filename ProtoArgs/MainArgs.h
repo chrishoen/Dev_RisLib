@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Communications state variables.
+main program arguments.
 ==============================================================================*/
 
 //******************************************************************************
@@ -11,7 +11,7 @@ Communications state variables.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class contains state member variables.ot. git test.
+// This parses main program arguments into some member variables.
 // 
 
 class MainArgs
@@ -21,44 +21,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Constants.
-
-   static const int cMaxStringSize = 30;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Members.
 
-   // Generic Count.
-   int mCount;
-
-   // Message sequence number.
-   int mRxMsgSeqNum;
-   int mRxBufferLength;
-
-   // Read realtime bytes variables.
-   int mReadBytesFileOffset;
-   int mReadXRayFileOffset;
-   int mReadXRayMaxFrameCount;
-   int mReadXRayMaxCopySize;
-   int mStrokeCount;
-   int mFrameCount;
-   int mXRayByteCount;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // True if the usb serial connection is valid.
-   bool mConnectionFlag;
-
-   // True if a read file is open.
-   bool mFileFlag;
-
-   // True if a job is active.
-   bool mJobFlag;
+   // If true then enable the command line interface.
+   bool mCLIEnable;
 
    //***************************************************************************
    //***************************************************************************
@@ -68,18 +34,7 @@ public:
    // Constructor,
    MainArgs();
    void reset();
-
-   // Update status variables.
-   void update();
-
-   // Show at a given print filter.
-   void show1(int aPF);
-   void show2(int aPF);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods. Helpers.
+   void initialize(int argc, char** argv);
 };
 
 //******************************************************************************
@@ -88,9 +43,9 @@ public:
 // Global instance.
 
 #ifdef _MAINARGS_CPP_
-   MainArgs gSX;
+   MainArgs gMainArgs;
 #else
-   extern MainArgs gSX;
+   extern MainArgs gMainArgs;
 #endif
 
 //******************************************************************************

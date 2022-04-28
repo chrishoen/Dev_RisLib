@@ -31,10 +31,15 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Constructor,
+   // Constructor.
    MainArgs();
    void reset();
+
+   // Parse the main program arguments into member variables.
    void initialize(int argc, char** argv);
+
+   // Helpers.
+   void show();
 };
 
 //******************************************************************************

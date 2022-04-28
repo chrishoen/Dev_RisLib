@@ -19,6 +19,7 @@ int main(int argc,char** argv)
    // Begin program.
 
    gMainArgs.initialize(argc, argv);
+   gMainArgs.show();
    main_initialize(argc,argv);
 
    //***************************************************************************

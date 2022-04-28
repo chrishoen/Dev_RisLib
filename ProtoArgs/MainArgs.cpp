@@ -22,6 +22,12 @@ void MainArgs::reset()
    mCLIEnable = false;
 }
    
+void MainArgs::show()
+{
+   printf("MainArgs*************************\n");
+   printf("CLIEnable       %s\n", my_string_from_bool(mCLIEnable));
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -29,6 +35,13 @@ void MainArgs::reset()
 
 void MainArgs::initialize(int argc, char** argv)
 {
+   printf("MainArgs*************************1\n");
+   printf("argc            %d\n", argc);
+
+   for (int i = 1; i < argc; i++)
+   {
+      printf("argv[%d]         %s\n", i, argv[i]);
+   }
    reset();
 }
 

@@ -132,11 +132,11 @@ void ProcThread::executeSession(bool aConnected)
 {
    if (aConnected)
    {
-      Prn::print(Prn::Show1, "ProcThread CONNECTED");
+      Prn::print(0, "ProcThread CONNECTED");
    }
    else
    {
-      Prn::print(Prn::Show1, "ProcThread DISCONNECTED");
+      Prn::print(0, "ProcThread DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;
@@ -152,7 +152,7 @@ void ProcThread::executeSession(bool aConnected)
 
 void ProcThread::executeRxString(std::string* aString)
 {
-   Prn::print(0, "ProcThread::executeRxString %s", aString->c_str());
+   Prn::print(Prn::Show1, "ProcThread::executeRxString %s", aString->c_str());
    delete aString;
 }
 

@@ -3,6 +3,7 @@
 
 #include "procoSerialParms.h"
 #include "procoProcThread.h"
+#include "procoMonitorThread.h"
 
 #include "CmdLineExec.h"
 
@@ -32,6 +33,31 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
    if (aCmd->isCmd("GO4"))       executeGo4(aCmd);
    if (aCmd->isCmd("Parms"))     executeParms(aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::special(int aSpecial)
+{
+   ProtoComm::gMonitorThread->mShowCode = aSpecial;
+
+   if (aSpecial == 0)
+   {
+      Prn::setFilter(Prn::Show1, false);
+      Prn::setFilter(Prn::Show2, false);
+   }
+   else if (aSpecial == 1)
+   {
+      Prn::setFilter(Prn::Show1, true);
+      Prn::setFilter(Prn::Show2, false);
+   }
+   else if (aSpecial == 2)
+   {
+      Prn::setFilter(Prn::Show1, false);
+      Prn::setFilter(Prn::Show2, true);
+   }
 }
 
 //******************************************************************************

@@ -16,23 +16,22 @@
 
 void main_initialize(int argc,char** argv)
 {
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Enter process.
-
-   Ris::Threads::enterProcessHigh();
+   printf("ProtoSerialString Program****************************************BEGIN\n");
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Enter process.
+   // Process configuration.
 
-   // Set program process for high priority.
-   Ris::Threads::enterProcessHigh();
+   // Set the program current working directory up one level from the 
+   // program bin directory.
+   Ris::portableChdirUpFromBin();
 
-   // Set the base directory to the current directory.
+   // Set the base directory to the current working directory.
    Ris::setBaseDirectoryToCurrent();
+
+   // Set the process priority class.
+   Ris::Threads::enterProcessHigh();
 
    //***************************************************************************
    //***************************************************************************
@@ -50,17 +49,22 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Initialize trace facility.
+
+   Trc::reset();
+   Trc::create_buffer(1,  3, "string");
+   Trc::create_buffer(11, 3, "serial");
+   Trc::set_default_trace_index(11);
+   //Trc::create_log(11, 4, "log/ProtoSerial_trace11.log");
+   Trc::initialize();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Read parameters files.
 
    ProtoComm::gSerialParms.reset();
    ProtoComm::gSerialParms.readSection("default");
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Done.
-
-   Prn::print(0,"ProtoSerial Program**********************************************BEGIN");
 }
 
 //******************************************************************************
@@ -70,13 +74,16 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"ProtoSerial Program**********************************************END");
-
-   // Close print
+   // Finalize print facility.
    Prn::finalizePrint();
+
+   // Finalize trace facility.
+   Trc::finalize();
 
    // Exit process
    Ris::Threads::exitProcess();
+
+   printf("ProtoSerialString Program****************************************END\n");
 }
 
 //******************************************************************************

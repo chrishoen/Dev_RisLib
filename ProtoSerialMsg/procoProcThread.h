@@ -52,6 +52,7 @@ namespace ProtoComm
 class  ProcThread : public Ris::Threads::BaseQCallThread
 {
 public:
+   typedef Ris::Threads::BaseQCallThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
@@ -83,8 +84,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Methods.
-
-   typedef Ris::Threads::BaseQCallThread BaseClass;
 
    // Constructor.
    ProcThread();

@@ -10,10 +10,9 @@
 #include "my_functions.h"
 #include "risPortableCalls.h"
 #include "prnPrint.h"
-#include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
-#include "risSerialMsgThread.h"
+#include "risSerialStringThread.h"
 
 namespace Ris
 {
@@ -23,24 +22,38 @@ namespace Ris
 //******************************************************************************
 // Constructor.
 
-SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
+SerialStringThread::SerialStringThread(SerialSettings& aSettings)
 {
-   // Set base class thread services.
-   BaseClass::setThreadName("SerialMsg");
+   // Names.
+   char tThreadName[40];
+   if (aSettings.mIdent < 0)
+   {
+      sprintf(tThreadName, "SerialString");
+   }
+   else
+   {
+      sprintf(tThreadName, "SerialString%d", aSettings.mIdent);
+   }
+
+   // Set base class variables.
+   BaseClass::setThreadName(tThreadName);
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
 
+   // Set member variables.
    mSettings = aSettings;
    mSessionQCall = aSettings.mSessionQCall;
-   mRxMsgQCall = aSettings.mRxMsgQCall;
+   mSessionCallback = aSettings.mSessionCallback;
+   mRxStringQCall = aSettings.mRxStringQCall;
+   mRxStringCallback = aSettings.mRxStringCallback;
 
-   mTI = aSettings.mTraceIndex;
+   mConnectionFlag = false;
    mErrorCount = 0;
    mRestartCount = 0;
    mRxCount = 0;
    mTxCount = 0;
 }
 
-SerialMsgThread::~SerialMsgThread()
+SerialStringThread::~SerialStringThread()
 {
 }
 
@@ -50,14 +63,10 @@ SerialMsgThread::~SerialMsgThread()
 // Thread init function, base class overload.
 // Initialize and open the serial port.
 
-void SerialMsgThread::threadInitFunction()
+void SerialStringThread::threadInitFunction()
 {
-   Trc::write(mTI, 0, "SerialMsgThread::threadInitFunction");
-
    // Initialize the serial port.
-   mSerialMsgPort.initialize(mSettings);
-
-   Trc::write(mTI, 0, "SerialMsgThread::threadInitFunction done");
+   mSerialStringPort.initialize(mSettings);
 }
 
 //******************************************************************************
@@ -68,10 +77,8 @@ void SerialMsgThread::threadInitFunction()
 // serial port receives and then processes them. The loop terminates
 // when the serial port receive is aborted.
 
-void SerialMsgThread::threadRunFunction()
+void SerialStringThread::threadRunFunction()
 {
-   Trc::write(mTI, 0, "SerialMsgThread::threadRunFunction");
-
    // Top of the loop.
    mRestartCount = 0;
    mConnectionFlag = false;
@@ -86,8 +93,7 @@ restart:
    {
       BaseClass::threadSleep(1000);
    }
-   Trc::write(mTI, 0, "SerialMsgThread restart %d", mRestartCount);
-   Prn::print(Prn::Show1, "SerialMsgThread restart %d", mRestartCount);
+   Prn::print(Prn::Show1, "SerialStringThread restart %d", mRestartCount);
    mRestartCount++;
 
    // Test if a session is established.
@@ -107,13 +113,13 @@ restart:
    // Open device.
 
    // If the serial port is open then close it.
-   if (mSerialMsgPort.mOpenFlag)
+   if (mSerialStringPort.mOpenFlag)
    {
-      mSerialMsgPort.doClose();
+      mSerialStringPort.doClose();
    }
 
    // Open the serial port.
-   if (!mSerialMsgPort.doOpen())
+   if (!mSerialStringPort.doOpen())
    {
       // If error then restart.
       goto restart;
@@ -133,61 +139,61 @@ restart:
 
    while (!BaseClass::mTerminateFlag)
    {
+      Prn::print(Prn::Show4, "SerialStringThread read start********************************************** %d", mRxCount++);
+
       //************************************************************************
       //************************************************************************
       //************************************************************************
       // Receive.
 
       // Receive. 
-      ByteContent* tMsg = 0;
-      tRet = mSerialMsgPort.doReceiveMsg(tMsg);
+      tRet = mSerialStringPort.doReceiveString(mRxString, cMaxStringSize);
 
       // Check for terminate.
       if (BaseClass::mTerminateFlag)
       {
-         Trc::write(mTI, 0, "SerialMsgThread read TERMINATE");
+         Prn::print(Prn::Show1, "SerialStringThread read TERMINATE");
          goto end;
       }
 
       // Check the return code.
       if (tRet == 0)
       {
-         Trc::write(mTI, 0, "SerialMsgThread read EMPTY");
+         Prn::print(Prn::Show1, "SerialStringThread read EMPTY");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetError)
       {
-         Trc::write(mTI, 0, "SerialMsgThread read ERROR");
+         Prn::print(Prn::Show1, "SerialStringThread read ERROR");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetTimeout)
       {
-         Trc::write(mTI, 0, "SerialMsgThread read TIMEOUT");
+         Prn::print(Prn::Show1, "SerialStringThread read TIMEOUT");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetAbort)
       {
-         Trc::write(mTI, 0, "SerialMsgThread read ABORT");
-         goto restart;
+         Prn::print(Prn::Show1, "SerialStringThread read ABORT");
+         goto end;
       }
       else if (tRet == Ris::cSerialRetDataError)
       {
-         Trc::write(mTI, 0, "SerialMsgThread read DATA ERROR");
+         Prn::print(Prn::Show1, "SerialStringThread read DATA ERROR");
          goto restart;
       }
       // Process the read.
       else
       {
          // Message was correctly received.
-         // Invoke the receive qcall callback, passing the received message
+         // Invoke the receive qcall callback, passing the received string
          // to the parent thread.
-         processRxMsg(tMsg);
+         processRxString(mRxString);
       }
    }
 
    // Done.
 end:
-   Trc::write(mTI, 0, "SerialMsgThread::threadRunFunction done");
    return;
 }
 
@@ -197,14 +203,14 @@ end:
 // Thread exit function. This is called by the base class immediately
 // before the thread is terminated. It is close the serial port.
 
-void SerialMsgThread::threadExitFunction()
+void SerialStringThread::threadExitFunction()
 {
-   Trc::write(mTI, 0, "SerialMsgThread::threadExitFunction");
+   printf("SerialStringThread::threadExitFunction BEGIN\n");
 
    // Close the serial port.
-   mSerialMsgPort.doClose();
+   mSerialStringPort.doClose();
 
-   Trc::write(mTI, 0, "SerialMsgThread::threadExitFunction done");
+   printf("SerialStringThread::threadExitFunction END\n");
 }
 
 //******************************************************************************
@@ -214,20 +220,20 @@ void SerialMsgThread::threadExitFunction()
 // this thread. It aborts the serial port receive and waits for the
 // thread to terminate after execution of the thread exit function.
 
-void SerialMsgThread::shutdownThread()
+void SerialStringThread::shutdownThread()
 {
-   Trc::write(mTI, 0, "SerialMsgThread::shutdownThread");
+   printf("SerialStringThread::shutdownThread BEGIN\n");
 
    // Set for thread termination.
    BaseClass::mTerminateFlag = true;
 
    // Abort pending serial port receives
-   mSerialMsgPort.doAbort();
+   mSerialStringPort.doAbort();
 
    // Wait for thread to terminate.
    BaseClass::shutdownThread();
 
-   Trc::write(mTI, 0, "SerialMsgThread::shutdownThread done");
+   printf("SerialStringThread::shutdownThread END\n");
 }
 
 //******************************************************************************
@@ -240,8 +246,14 @@ void SerialMsgThread::shutdownThread()
 // serial port is closed because of an error and it is established if
 // it is successfully reopened.
 
-void SerialMsgThread::processSessionChange(bool aEstablished)
+void SerialStringThread::processSessionChange(bool aEstablished)
 {
+   // If the callback function pointer is valid then call it.
+   if (mSessionCallback)
+   {
+      mSessionCallback(aEstablished);
+   }
+
    // If the callback qcall is valid then invoke it.
    if (mSessionQCall.isValid())
    {
@@ -252,29 +264,47 @@ void SerialMsgThread::processSessionChange(bool aEstablished)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Pass a received message to the parent thread. This is called by the
-// threadRunFunction when a message is received. It invokes the
+// Pass a received string to the parent thread. This is called by the
+// threadRunFunction when a string is received. It invokes the
 // mRxMsgQCall that is registered at initialization.
 
-void SerialMsgThread::processRxMsg(Ris::ByteContent* aMsg)
+void SerialStringThread::processRxString(char* aString)
 {
-   // Guard.
-   if (!mRxMsgQCall.isValid()) return;
+   // If the receive callback function pointer is valid then call it.
+   if (mRxStringCallback)
+   {
+      mRxStringCallback(new std::string(aString));
+   }
 
-   // Invoke the receive callback qcall.
-   mRxMsgQCall(aMsg);
+   // If the receive callback qcall is valid then invoke it.
+   if (mRxStringQCall.isValid())
+   {
+      mRxStringQCall(new std::string(aString));
+   }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a transmit message through the socket to the peer. It executes a
-// blocking send call in the context of the calling thread. It is protected
-// by a mutex semaphore.
+// Send a null terminated string via the serial port. Append terminator
+// bytes as specified in the settings.
 
-void SerialMsgThread::sendMsg (Ris::ByteContent* aMsg)
+void SerialStringThread::sendString(const char* aString)
 {
-   mSerialMsgPort.doSendMsg(aMsg);
+   mSerialStringPort.doSendString(aString);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a null terminated string via the serial port. Append terminator
+// bytes as specified in the settings. The string is deleted after
+// transmission.
+
+void SerialStringThread::sendString(std::string* aString)
+{
+   mSerialStringPort.doSendString(aString->c_str());
+   delete aString;
 }
 
 //******************************************************************************

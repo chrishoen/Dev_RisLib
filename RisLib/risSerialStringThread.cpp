@@ -10,6 +10,7 @@
 #include "my_functions.h"
 #include "risPortableCalls.h"
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
 #include "risSerialStringThread.h"
@@ -65,8 +66,12 @@ SerialStringThread::~SerialStringThread()
 
 void SerialStringThread::threadInitFunction()
 {
+   Trc::write(mTI, 0, "SerialStringThread::threadInitFunction");
+
    // Initialize the serial port.
    mSerialStringPort.initialize(mSettings);
+
+   Trc::write(mTI, 0, "SerialStringThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -79,6 +84,8 @@ void SerialStringThread::threadInitFunction()
 
 void SerialStringThread::threadRunFunction()
 {
+   Trc::write(mTI, 0, "SerialStringThread::threadRunFunction");
+
    // Top of the loop.
    mRestartCount = 0;
    mConnectionFlag = false;
@@ -93,6 +100,7 @@ restart:
    {
       BaseClass::threadSleep(1000);
    }
+   Trc::write(mTI, 0, "SerialStringThread restart %d", mRestartCount);
    Prn::print(Prn::Show1, "SerialStringThread restart %d", mRestartCount);
    mRestartCount++;
 
@@ -139,8 +147,6 @@ restart:
 
    while (!BaseClass::mTerminateFlag)
    {
-      Prn::print(Prn::Show4, "SerialStringThread read start********************************************** %d", mRxCount++);
-
       //************************************************************************
       //************************************************************************
       //************************************************************************
@@ -152,40 +158,40 @@ restart:
       // Check for terminate.
       if (BaseClass::mTerminateFlag)
       {
-         Prn::print(Prn::Show1, "SerialStringThread read TERMINATE");
+         Trc::write(mTI, 0, "SerialStringThread read TERMINATE");
          goto end;
       }
 
       // Check the return code.
       if (tRet == 0)
       {
-         Prn::print(Prn::Show1, "SerialStringThread read EMPTY");
+         Trc::write(mTI, 0, "SerialStringThread read EMPTY");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetError)
       {
-         Prn::print(Prn::Show1, "SerialStringThread read ERROR");
+         Trc::write(mTI, 0, "SerialStringThread read ERROR");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetTimeout)
       {
-         Prn::print(Prn::Show1, "SerialStringThread read TIMEOUT");
+         Trc::write(mTI, 0, "SerialStringThread read TIMEOUT");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetAbort)
       {
-         Prn::print(Prn::Show1, "SerialStringThread read ABORT");
-         goto end;
+         Trc::write(mTI, 0, "SerialStringThread read ABORT");
+         goto restart;
       }
       else if (tRet == Ris::cSerialRetDataError)
       {
-         Prn::print(Prn::Show1, "SerialStringThread read DATA ERROR");
+         Trc::write(mTI, 0, "SerialStringThread read DATA ERROR");
          goto restart;
       }
       // Process the read.
       else
       {
-         // Message was correctly received.
+         // String was correctly received.
          // Invoke the receive qcall callback, passing the received string
          // to the parent thread.
          processRxString(mRxString);
@@ -194,6 +200,7 @@ restart:
 
    // Done.
 end:
+   Trc::write(mTI, 0, "SerialStringThread::threadRunFunction done");
    return;
 }
 
@@ -205,12 +212,12 @@ end:
 
 void SerialStringThread::threadExitFunction()
 {
-   printf("SerialStringThread::threadExitFunction BEGIN\n");
+   Trc::write(mTI, 0, "SerialStringThread::threadExitFunction");
 
    // Close the serial port.
    mSerialStringPort.doClose();
 
-   printf("SerialStringThread::threadExitFunction END\n");
+   Trc::write(mTI, 0, "SerialStringThread::threadExitFunction done");
 }
 
 //******************************************************************************
@@ -222,7 +229,7 @@ void SerialStringThread::threadExitFunction()
 
 void SerialStringThread::shutdownThread()
 {
-   printf("SerialStringThread::shutdownThread BEGIN\n");
+   Trc::write(mTI, 0, "SerialStringThread::shutdownThread");
 
    // Set for thread termination.
    BaseClass::mTerminateFlag = true;
@@ -233,7 +240,7 @@ void SerialStringThread::shutdownThread()
    // Wait for thread to terminate.
    BaseClass::shutdownThread();
 
-   printf("SerialStringThread::shutdownThread END\n");
+   Trc::write(mTI, 0, "SerialStringThread::shutdownThread done");
 }
 
 //******************************************************************************

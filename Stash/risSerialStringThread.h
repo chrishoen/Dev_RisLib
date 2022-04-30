@@ -68,9 +68,6 @@ public:
    // Serial string port.
    SerialStringPort mSerialStringPort;
 
-   // Program trace index.
-   int mTI;
-
    // Rx string.
    char mRxString[cMaxStringSize];
 

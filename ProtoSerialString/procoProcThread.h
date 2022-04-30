@@ -144,7 +144,7 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _PROCOSERIALTHREAD_CPP_
+#ifdef _PROCOPROCTHREAD_CPP_
          ProcThread* gProcThread;
 #else
 extern   ProcThread* gProcThread;

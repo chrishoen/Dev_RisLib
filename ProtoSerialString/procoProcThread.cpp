@@ -8,7 +8,7 @@
 
 #include "procoSerialParms.h"
 
-#define  _PROCOSERIALTHREAD_CPP_
+#define  _PROCOPROCTHREAD_CPP_
 #include "procoProcThread.h"
 
 namespace ProtoComm

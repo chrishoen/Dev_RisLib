@@ -32,8 +32,8 @@ SerialStringPort::SerialStringPort()
 {
    mTxBuffer = 0;
    mBufferSize = 0;
-   mTxCount = 0;
-   mRxCount = 0;
+   mTxStringCount = 0;
+   mRxStringCount = 0;
 }
 
 SerialStringPort::~SerialStringPort()
@@ -60,8 +60,8 @@ void SerialStringPort::initialize(SerialSettings& aSettings)
    mTxBuffer = (char*)malloc(mBufferSize);
 
    // Initialize member variables.
-   mTxCount = 0;
-   mRxCount = 0;
+   mTxStringCount = 0;
+   mRxStringCount = 0;
 }
 
 //******************************************************************************
@@ -110,7 +110,7 @@ int SerialStringPort::doSendString(const char* aString)
    }
 
    // Metrics.
-   mTxCount++;
+   mTxStringCount++;
 
    // Transmit the buffer.
    return BaseClass::doSendBytes(mTxBuffer, tLength);
@@ -189,7 +189,7 @@ int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
    }
 
    // Metrics.
-   mRxCount++;
+   mRxStringCount++;
 
    // Return the strlen of the string returned to the caller, 
    // The returned string does not contain termination bytes.

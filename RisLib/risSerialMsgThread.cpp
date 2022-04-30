@@ -86,6 +86,7 @@ restart:
    {
       BaseClass::threadSleep(1000);
    }
+   Trc::write(mTI, 0, "SerialMsgThread restart %d", mRestartCount);
    Prn::print(Prn::Show1, "SerialMsgThread restart %d", mRestartCount);
    mRestartCount++;
 
@@ -111,7 +112,7 @@ restart:
       mSerialMsgPort.doClose();
    }
 
-   // Open the serial port..
+   // Open the serial port.
    if (!mSerialMsgPort.doOpen())
    {
       // If error then restart.
@@ -132,8 +133,6 @@ restart:
 
    while (!BaseClass::mTerminateFlag)
    {
-      Prn::print(Prn::Show4, "SerialMsgThread read start********************************************** %d", mRxCount++);
-
       //************************************************************************
       //************************************************************************
       //************************************************************************
@@ -146,34 +145,34 @@ restart:
       // Check for terminate.
       if (BaseClass::mTerminateFlag)
       {
-         Prn::print(Prn::Show1, "SerialMsgThread read TERMINATE");
+         Trc::write(mTI, 0, "SerialMsgThread read TERMINATE");
          goto end;
       }
 
       // Check the return code.
       if (tRet == 0)
       {
-         Prn::print(Prn::Show1, "SerialMsgThread read EMPTY");
+         Trc::write(mTI, 0, "SerialMsgThread read EMPTY");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetError)
       {
-         Prn::print(Prn::Show1, "SerialMsgThread read ERROR");
+         Trc::write(mTI, 0, "SerialMsgThread read ERROR");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetTimeout)
       {
-         Prn::print(Prn::Show1, "SerialMsgThread read TIMEOUT");
+         Trc::write(mTI, 0, "SerialMsgThread read TIMEOUT");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetAbort)
       {
-         Prn::print(Prn::Show1, "SerialMsgThread read ABORT");
+         Trc::write(mTI, 0, "SerialMsgThread read ABORT");
          goto restart;
       }
       else if (tRet == Ris::cSerialRetDataError)
       {
-         Prn::print(Prn::Show1, "SerialMsgThread read DATA ERROR");
+         Trc::write(mTI, 0, "SerialMsgThread read DATA ERROR");
          goto restart;
       }
       // Process the read.

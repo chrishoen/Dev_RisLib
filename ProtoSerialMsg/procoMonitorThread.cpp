@@ -39,10 +39,6 @@ MonitorThread::MonitorThread()
    mMon_TxByteCount.bind(&tTxMsgMetrics->mByteCount);
    mMon_RxMsgCount.bind(&tRxMsgMetrics->mMsgCount);
    mMon_RxByteCount.bind(&tRxMsgMetrics->mByteCount);
-   mMon_Test.bind(&mTest);
-
-   std::atomic<long long>* tPtr = &mTest;
-
 }
 
 // Update status variables.
@@ -52,8 +48,6 @@ void MonitorThread::update()
    mMon_RxMsgCount.update();
    mMon_TxByteCount.update();
    mMon_RxByteCount.update();
-
-   mMon_Test.update();
 }
 
 //******************************************************************************
@@ -126,12 +120,6 @@ void MonitorThread::executeOnTimer(int aTimeCount)
          tMsgPort->mMsgResyncCount);
 
       Prn::print(Prn::Show1, "");
-   }
-
-   if (mShowCode == 3)
-   {
-      Prn::print(Prn::Show1, "Test                     %-10lld  %lld",
-         mMon_Test.mValue, mMon_Test.mDelta);
    }
 }
 

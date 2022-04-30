@@ -112,6 +112,12 @@ restart:
    //***************************************************************************
    // Open device.
 
+   // If the serial port is open then close it.
+   if (mSerialStringPort.mOpenFlag)
+   {
+      mSerialStringPort.doClose();
+   }
+
    // Open the serial port.
    if (!mSerialStringPort.doOpen())
    {

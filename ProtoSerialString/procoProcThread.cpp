@@ -9,7 +9,7 @@
 #include "procoSerialParms.h"
 
 #define  _PROCOSERIALTHREAD_CPP_
-#include "procoSerialThread.h"
+#include "procoProcThread.h"
 
 namespace ProtoComm
 {
@@ -18,7 +18,7 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 // Constructor.
-SerialThread::SerialThread()
+ProcThread::ProcThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Serial");
@@ -26,8 +26,8 @@ SerialThread::SerialThread()
    BaseClass::mTimerPeriod = 1000;
 
    // Initialize qcalls.
-   mSessionQCall.bind(this, &SerialThread::executeSession);
-   mRxStringQCall.bind   (this,&SerialThread::executeRxString);
+   mSessionQCall.bind(this, &ProcThread::executeSession);
+   mRxStringQCall.bind   (this,&ProcThread::executeRxString);
 
    // Initialize member variables.
    mSerialStringThread = 0;
@@ -35,7 +35,7 @@ SerialThread::SerialThread()
    mTPFlag = false;
 }
 
-SerialThread::~SerialThread()
+ProcThread::~ProcThread()
 {
    if (mSerialStringThread) delete mSerialStringThread;
 }
@@ -45,7 +45,7 @@ SerialThread::~SerialThread()
 //******************************************************************************
 // Place holder.
 
-void SerialThread::show()
+void ProcThread::show()
 {
 }
 
@@ -56,7 +56,7 @@ void SerialThread::show()
 // after the thread starts running. It creates and launches the 
 // child SerialStringThread.
 
-void SerialThread::threadInitFunction()
+void ProcThread::threadInitFunction()
 {
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
@@ -81,14 +81,14 @@ void SerialThread::threadInitFunction()
 // Thread exit function. This is called by the base class immedidately
 // before the thread is terminated. It shuts down the child SerialStringThread.
 
-void SerialThread::threadExitFunction()
+void ProcThread::threadExitFunction()
 {
-   Prn::print(0, "SerialThread::threadExitFunction BEGIN");
+   Prn::print(0, "ProcThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
    mSerialStringThread->shutdownThread();
 
-   Prn::print(0, "SerialThread::threadExitFunction END");
+   Prn::print(0, "ProcThread::threadExitFunction END");
 }
 
 //******************************************************************************
@@ -98,11 +98,11 @@ void SerialThread::threadExitFunction()
 // function to terminate the thread. This executes in the context of
 // the calling thread.
 
-void SerialThread::shutdownThread()
+void ProcThread::shutdownThread()
 {
-   Prn::print(0, "SerialThread::shutdownThread BEGIN");
+   Prn::print(0, "ProcThread::shutdownThread BEGIN");
    BaseClass::shutdownThread();
-   Prn::print(0, "SerialThread::shutdownThread END");
+   Prn::print(0, "ProcThread::shutdownThread END");
 }
 
 //******************************************************************************
@@ -110,7 +110,7 @@ void SerialThread::shutdownThread()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void SerialThread::executeOnTimer(int aTimerCount)
+void ProcThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
 
@@ -128,15 +128,15 @@ void SerialThread::executeOnTimer(int aTimerCount)
 // when a session is established or disestablished (when the serial port
 // is opened or it is closed because of an error or a disconnection). 
 
-void SerialThread::executeSession(bool aConnected)
+void ProcThread::executeSession(bool aConnected)
 {
    if (aConnected)
    {
-      Prn::print(Prn::Show1, "SerialThread CONNECTED");
+      Prn::print(Prn::Show1, "ProcThread CONNECTED");
    }
    else
    {
-      Prn::print(Prn::Show1, "SerialThread DISCONNECTED");
+      Prn::print(Prn::Show1, "ProcThread DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;
@@ -150,9 +150,9 @@ void SerialThread::executeSession(bool aConnected)
 // Based on the receive string type, call one of the specific receive
 // string handlers. This is bound to the qcall.
 
-void SerialThread::executeRxString(std::string* aString)
+void ProcThread::executeRxString(std::string* aString)
 {
-   Prn::print(0, "SerialThread::executeRxString %s", aString->c_str());
+   Prn::print(0, "ProcThread::executeRxString %s", aString->c_str());
    delete aString;
 }
 
@@ -161,7 +161,7 @@ void SerialThread::executeRxString(std::string* aString)
 //******************************************************************************
 // Send a string via mSerialStringThread:
 
-void SerialThread::sendString(std::string* aString)
+void ProcThread::sendString(std::string* aString)
 {
    mSerialStringThread->sendString(aString);
 }

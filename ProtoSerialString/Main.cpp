@@ -5,7 +5,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "procoSerialThread.h"
+#include "procoProcThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -25,8 +25,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   ProtoComm::gSerialThread = new ProtoComm::SerialThread;
-   ProtoComm::gSerialThread->launchThread();
+   ProtoComm::gProcThread = new ProtoComm::ProcThread;
+   ProtoComm::gProcThread->launchThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -42,8 +42,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   ProtoComm::gSerialThread->shutdownThread();
-   delete ProtoComm::gSerialThread;
+   ProtoComm::gProcThread->shutdownThread();
+   delete ProtoComm::gProcThread;
 
    //***************************************************************************
    //***************************************************************************

@@ -2,7 +2,7 @@
 #include "stdafx.h"
 
 #include "procoSerialParms.h"
-#include "procoSerialThread.h"
+#include "procoProcThread.h"
 
 #include "CmdLineExec.h"
 
@@ -25,7 +25,7 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        ProtoComm::gSerialThread->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("TP"))        ProtoComm::gProcThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
@@ -49,7 +49,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
    {
       sprintf(tString, "%s", aCmd->argWhole());
    }
-   gSerialThread->sendString(new std::string(tString));
+   gProcThread->sendString(new std::string(tString));
 }
 
 //******************************************************************************

@@ -97,6 +97,9 @@ char*  my_timestamp1(char* aBuffer);
 // Return current timestamp. 2021-02-11.19:29:10.001
 char* my_timestamp2(char* aBuffer);
 
+// Return current timestamp. 2021-02-11.19:29:10.001
+char* my_timestamp3(char* aBuffer);
+
 // Convert seconds to millisecond ticks
 int    my_ticks_from_time (double aTime);
 

@@ -274,6 +274,22 @@ char* my_timestamp2(char* aBuffer)
    return aBuffer;
 }
 
+char* my_timestamp3(char* aBuffer)
+{
+   timespec tTimeSpec;
+   timespec_get(&tTimeSpec, TIME_UTC);
+
+   time_t rawtime;
+   struct tm* info;
+   char time_stamp[80];
+   time(&rawtime);
+   info = localtime(&rawtime);
+   strftime(time_stamp, sizeof(time_stamp), "%x-%I:%M:%S%p", info);
+   sprintf(aBuffer, "%s.%li", time_stamp, tTimeSpec.tv_nsec / 1000000);
+
+   return aBuffer;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

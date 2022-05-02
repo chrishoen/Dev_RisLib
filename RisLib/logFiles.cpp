@@ -104,6 +104,44 @@ void closeAllFiles()
 //******************************************************************************
 // Write to the file
 
+void write(int aLogNum, const char* aFormat, ...)
+{
+   //-----------------------------------------------------
+   // Guard
+
+   if (mFile[aLogNum] == 0)
+   {
+      return;
+   }
+
+   //-----------------------------------------------------
+   // Do a vsprintf with variable arg list into print string
+
+   char tPrintString[cMaxStringSize];
+
+   int tPrintSize;
+   va_list  ArgPtr;
+   va_start(ArgPtr, aFormat);
+   tPrintSize = vsnprintf(tPrintString, cMaxStringSize, aFormat, ArgPtr);
+   va_end(ArgPtr);
+
+   if (tPrintSize < cMaxStringSize - 3)
+   {
+      tPrintString[tPrintSize++] = '\n';
+      tPrintString[tPrintSize++] = 0;
+   }
+
+   //-----------------------------------------------------
+   // Print the string
+
+   fputs(tPrintString, mFile[aLogNum]);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write to the file
+
 void write3 (int aLogNum, const char* aFormat, ...)
 {
    //-----------------------------------------------------
@@ -145,6 +183,7 @@ void write3 (int aLogNum, const char* aFormat, ...)
    // Print the string
 
    fputs(tString2, mFile[aLogNum]);
+   fflush(mFile[aLogNum]);
 
    //-----------------------------------------------------
    // done

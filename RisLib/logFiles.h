@@ -29,6 +29,7 @@ namespace Log
    // Write to log file
 
    void write(int aLogNum, const char* aFormat, ...);
+   void write3(int aLogNum, const char* aFormat, ...);
 
 //******************************************************************************
 //******************************************************************************

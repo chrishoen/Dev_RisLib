@@ -104,7 +104,7 @@ void closeAllFiles()
 //******************************************************************************
 // Write to the file
 
-void write (int aLogNum, const char* aFormat, ...)
+void write3 (int aLogNum, const char* aFormat, ...)
 {
    //-----------------------------------------------------
    // Guard
@@ -117,24 +117,40 @@ void write (int aLogNum, const char* aFormat, ...)
    //-----------------------------------------------------
    // Do a vsprintf with variable arg list into print string
 
-   char tPrintString[cMaxStringSize];
+   char* tString1 = new char[cMaxStringSize + 1];
+   char* tString2 = new char[cMaxStringSize + 1];
 
    int tPrintSize;
    va_list  ArgPtr;
    va_start(ArgPtr, aFormat);
-   tPrintSize = vsnprintf(tPrintString, cMaxStringSize, aFormat, ArgPtr);
+   tPrintSize = vsnprintf(tString1, cMaxStringSize, aFormat, ArgPtr);
    va_end(ArgPtr);
+   tString1[cMaxStringSize] = 0;
 
    if (tPrintSize < cMaxStringSize - 3)
    {
-      tPrintString[tPrintSize++] = '\n';
-      tPrintString[tPrintSize++] = 0;
+      tString1[tPrintSize++] = '\n';
+      tString1[tPrintSize++] = 0;
    }
+
+   //-----------------------------------------------------
+   // Add a timestamp.
+
+   char tTimetag[40];
+   my_timestamp3(tTimetag);
+   sprintf(tString2, "%s %s", tTimetag, tString1);
+
 
    //-----------------------------------------------------
    // Print the string
 
-   fputs(tPrintString,mFile[aLogNum]);
+   fputs(tString2, mFile[aLogNum]);
+
+   //-----------------------------------------------------
+   // done
+
+   delete tString1;
+   delete tString2;
 }
 
 //******************************************************************************

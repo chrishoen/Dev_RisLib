@@ -60,6 +60,7 @@ void SerialParms::show()
 
    printf("SerialPortDevice        %-12s\n", mSerialPortDevice);
    printf("SerialPortSetup         %-12s\n", mSerialPortSetup);
+   printf("SerialRxTimeout         %-12d\n", mSerialRxTimeout);
 
    printf("\n");
    printf("TxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mTxTermMode));
@@ -85,6 +86,7 @@ void SerialParms::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("SerialPortDevice"))  aCmd->copyArgString(1, mSerialPortDevice, cMaxStringSize);
    if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup, cMaxStringSize);
+   if (aCmd->isCmd("SerialRxTimeout"))   mSerialRxTimeout = aCmd->argInt(1);
    if (aCmd->isCmd("TxTermMode"))        mTxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
    if (aCmd->isCmd("RxTermMode"))        mRxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
    if (aCmd->isCmd("ThreadTimerPeriod")) mThreadTimerPeriod = aCmd->argInt(1);

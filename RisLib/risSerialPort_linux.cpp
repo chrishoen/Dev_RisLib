@@ -494,9 +494,12 @@ int SerialPort::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
    tPollFd[1].events = POLLIN;
    tPollFd[1].revents = 0;
 
+   // Receive timeout.
+   int tTimeout = mSettings.mRxTimeout > 0 ? mSettings.mRxTimeout : -1;
+   
    // Blocking poll for "there is data to read". This returns when
    // the port has received data or the abort event was posted
-   tRet = poll(&tPollFd[0], 2, -1);
+   tRet = poll(&tPollFd[0], 2, tTimeout);
 
    // Test for an abort request.
    if (mAbortFlag)
@@ -524,7 +527,8 @@ int SerialPort::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
    // Test the return code for timeout.
    if (tRet == 0)
    {
-      //printf("serial_poll_error_2 timeout\n");
+      Trc::write(mTI, 0, "SerialPort::doReceiveAnyBytes timeout");
+      printf("serial_poll_error_2 timeout\n");
       return cSerialRetTimeout;
    }
 

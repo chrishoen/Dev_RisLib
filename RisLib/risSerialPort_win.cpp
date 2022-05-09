@@ -191,11 +191,12 @@ bool SerialPort::doOpen()
    tComTimeout.WriteTotalTimeoutMultiplier = 0;
    tComTimeout.WriteTotalTimeoutConstant   = 0;
 
-   tComTimeout.ReadIntervalTimeout = 0;
-   tComTimeout.ReadTotalTimeoutMultiplier = 0;
-   tComTimeout.ReadTotalTimeoutConstant = 0;
-   tComTimeout.WriteTotalTimeoutMultiplier = 0;
-   tComTimeout.WriteTotalTimeoutConstant = 2000;
+   if (mSettings.mRxTimeout > 0)
+   {
+      tComTimeout.ReadIntervalTimeout = mSettings.mRxTimeout;
+      tComTimeout.ReadTotalTimeoutMultiplier = mSettings.mRxTimeout;
+      tComTimeout.ReadTotalTimeoutConstant = mSettings.mRxTimeout;
+   }
 
    if(!SetCommTimeouts(mSpecific->mPortHandle, &tComTimeout))
    {
@@ -574,6 +575,7 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
       case WAIT_TIMEOUT:
       {
          Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes TIMEOUT");
+         printf("serial_poll_error_2 timeout\n");
          return cSerialRetTimeout;
       }
       break;
@@ -604,7 +606,8 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    if (tBytesRead != aRequestBytes)
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ERROR 5");
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ERROR 5 %d timeout", tBytesRead);
+      printf("serial_poll_error_5 timeout\n");
       return cSerialRetError;
    }
 

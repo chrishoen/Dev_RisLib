@@ -85,6 +85,7 @@ void ProcThread::threadInitFunction()
    tSerialSettings.mRxMsgQCall = mRxMsgQCall;
    tSerialSettings.mTraceIndex = 11;
    Trc::start(11);
+
    // Create child thread with the settings.
    mSerialMsgThread = new Ris::SerialMsgThread(tSerialSettings);
 

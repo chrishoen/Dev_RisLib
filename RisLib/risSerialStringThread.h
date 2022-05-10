@@ -88,7 +88,8 @@ public:
    // This is a function pointer that is called when a session is
    // established or disestablished. It is registered by the parent thread
    // at initialzation. It is called when the serial port is disconnected
-   // because of an error and when it is reconnected.
+   // because of an error and when it is reconnected. It is called in
+   // the context of this thread.
    std::function<void(bool)> mSessionCallback;
 
    // This is a qcall callback that is called when a string is received.
@@ -97,7 +98,8 @@ public:
    RxStringQCall mRxStringQCall;
 
    // This is a function pointer callback that is called when a string is
-   //  received. It is registered by the parent thread at initialzation.
+   // received. It is registered by the parent thread at initialzation.
+   // It is called in the context of this thread.
    std::function<void(std::string*)> mRxStringCallback;
 
    //***************************************************************************

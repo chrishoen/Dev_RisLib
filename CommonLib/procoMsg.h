@@ -76,6 +76,7 @@ public:
    // Methods.
 
    TestMsg();
+   void show(int aPF = 0);
    void copyToFrom (Ris::ByteBuffer* aBuffer);
 };
 
@@ -100,6 +101,7 @@ public:
    // Methods.
 
    FirstMessageMsg();
+   void show(int aPF = 0);
    void copyToFrom (Ris::ByteBuffer* aBuffer);
 };
 
@@ -131,6 +133,8 @@ public:
    // Methods.
 
    EchoRequestMsg();
+   void initialize(int aNumWords);
+   void show(int aPF = 0);
    void copyToFrom (Ris::ByteBuffer* aBuffer);
 };
 
@@ -162,6 +166,8 @@ public:
    // Methods.
 
    EchoResponseMsg();
+   void initialize(int aNumWords);
+   void show(int aPF = 0);
    void copyToFrom(Ris::ByteBuffer* aBuffer);
 };
 
@@ -189,6 +195,7 @@ public:
    // Methods.
 
    DataRecord();
+   void show(int aPF = 0);
    void copyToFrom (Ris::ByteBuffer* aBuffer);
 };
 
@@ -231,6 +238,8 @@ public:
    // Methods.
 
    DataMsg();
+   void initialize();
+   void show(int aPF = 0);
    void copyToFrom(Ris::ByteBuffer* aBuffer);
 };
 
@@ -255,6 +264,9 @@ public:
    // Methods.
 
    ByteBlobMsg();
+   void initialize();
+   void initialize2();
+   void show(int aPF = 0);
    void copyToFrom(Ris::ByteBuffer* aBuffer);
 };
 

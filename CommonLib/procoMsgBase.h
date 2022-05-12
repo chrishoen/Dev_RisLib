@@ -165,6 +165,8 @@ public:
    {
       mMessageType = 0;
    }
+   virtual ~BaseMsg() {}
+   virtual void show(int aPF = 0){}
 };
 
 //******************************************************************************

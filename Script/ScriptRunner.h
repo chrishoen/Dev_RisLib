@@ -57,7 +57,7 @@ public:
    // Execute specific commands.
    void executeRed(Ris::CmdLineCmd* aCmd);
    void executeGreen(Ris::CmdLineCmd* aCmd);
-   void executeBlack(Ris::CmdLineCmd* aCmd);
+   void executeBlue(Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

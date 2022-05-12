@@ -22,7 +22,11 @@ void ScriptRunner::reset()
 
 void ScriptRunner::doRun()
 {
-   mScript.doOpen("files/script101.txt");
+   if (!mScript.doOpen("files/script_rgb.txt"))
+   {
+      printf("ScriptRunner file not found\n");
+   }
+
    Ris::CmdLineCmd* tCmd = new Ris::CmdLineCmd;
    while (true)
    {
@@ -32,6 +36,8 @@ void ScriptRunner::doRun()
          execute(tCmd);
       }
    }
+
+   delete tCmd;
    mScript.doClose();
 }
 
@@ -43,10 +49,10 @@ void ScriptRunner::doRun()
 
 void ScriptRunner::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("RESET"))   reset();
+   if (aCmd->isCmd("RESET"))  reset();
    if (aCmd->isCmd("RED"))    executeRed(aCmd);
    if (aCmd->isCmd("GREEN"))  executeGreen(aCmd);
-   if (aCmd->isCmd("BLACK"))  executeBlack(aCmd);
+   if (aCmd->isCmd("BLUE"))   executeBlue(aCmd);
 }
 
 //******************************************************************************
@@ -67,11 +73,11 @@ void ScriptRunner::executeGreen(Ris::CmdLineCmd* aCmd)
    Prn::print(0, "GREEN   %d", tN);
 }
 
-void ScriptRunner::executeBlack(Ris::CmdLineCmd* aCmd)
+void ScriptRunner::executeBlue(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 111);
    int tN = aCmd->argInt(1);
-   Prn::print(0, "BLACK   %d", tN);
+   Prn::print(0, "BLUE    %d", tN);
 }
 
 //******************************************************************************

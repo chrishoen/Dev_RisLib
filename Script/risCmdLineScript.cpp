@@ -21,6 +21,8 @@ CmdLineScript::CmdLineScript()
 {
    mFile = 0;
    mLineNumber = 0;
+   mLoopStartOffset = 0;
+   mLoopCountZero = 0;
 }
   
 //******************************************************************************
@@ -35,6 +37,8 @@ bool CmdLineScript::doOpen(char* aFilename)
    if (mFile==0) return false;
 
    mLineNumber=0;
+   mLoopStartOffset = 0;
+   mLoopCountZero = 0;
 
    return true;
 }
@@ -101,15 +105,45 @@ bool CmdLineScript::doRead(CmdLineCmd* aCmd)
    // Command line length.
    tCommandLineLen=(int)strlen(tCommandLine);
 
-   // If the command line is not empty and not a comment then process
-   // it, else continue the loop and go on to the next line.
-   if(tCommandLineLen>2 && !tCommentFlag)
+   // If the command line is empty or a comment then ignore it.
+   if (tCommandLineLen <= 2 || tCommentFlag) return false;
+
+   // Parse the command line into the command object.
+   aCmd->parseCmdLine(tCommandLine);
+
+   // Test for a loop command
+   if (aCmd->isCmd("LOOP"))
    {
-      // Parse the command line into the command object.
-      aCmd->parseCmdLine(tCommandLine);
-      return true;
+      // Save the current file position, which would point to the start of 
+      // the next instruction in the file. This will be used at the end of
+      // the loop to restart at the first instruction that follows this one.
+      mLoopStartOffset = ftell(mFile);
+      mLoopCountZero = aCmd->argInt(1);
+      return false;
    }
-   return false;
+
+   // Test for a loop end command
+   if (aCmd->isCmd("LOOPEND"))
+   {
+      // Test if still in the loop.
+      if (mLoopCountZero > 0)
+      {
+         if (--mLoopCountZero == 0)
+         {
+            // End of loop, continue.
+         }
+         else
+         {
+            // Still in the loop, set the current file position to the
+            // first instruction in the loop. The next read will then 
+            // read that instruction.
+            fseek(mFile, mLoopStartOffset, SEEK_SET);
+         }
+      }
+      return false;
+   }
+   // Done.
+   return true;
 }
 
 //******************************************************************************

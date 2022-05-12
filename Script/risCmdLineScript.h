@@ -37,6 +37,12 @@ public:
    // Current line number.
    int  mLineNumber;
 
+   // File offset that a loop starts at.
+   int mLoopStartOffset;
+
+   // Loop count down to zero.
+   int mLoopCountZero;
+   
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

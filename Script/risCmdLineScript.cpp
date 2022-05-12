@@ -58,10 +58,15 @@ void CmdLineScript::doClose()
 //******************************************************************************
 //******************************************************************************
 // Read the next line from the file, parse it into a command line
-// command, and return it in the function argument. If end of file is
-// reached then return "EXIT". Return true if the line contained a
-// valid command, return false if it did not (for example: a commented
-// line).
+// command, and return it in the function argument. If end of file
+// is reached then return "EXIT". If the command is "LOOP n" then 
+// a loop will be started. If the command is "LOOPEND" then the next
+// read will be at the next command after the "LOOP n" command. This
+// will be repeated n times.
+// 
+// Return true if the line contained a valid command, return false
+// if it did not (for example: a commented line, an exit, a loop, or
+// an end loop).
 
 bool CmdLineScript::doRead(CmdLineCmd* aCmd)
 {
@@ -123,11 +128,12 @@ bool CmdLineScript::doRead(CmdLineCmd* aCmd)
    }
 
    // Test for a loop end command
-   if (aCmd->isCmd("LOOPEND"))
+   if (aCmd->isCmd("ENDLOOP"))
    {
       // Test if still in the loop.
       if (mLoopCountZero > 0)
       {
+         // Test if still in the loop.
          if (--mLoopCountZero == 0)
          {
             // End of loop, continue.

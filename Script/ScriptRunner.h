@@ -16,7 +16,7 @@ Program command line executive.
 // This class reads a command line script file and executes command line
 // one by one. 
 
-class ScriptReader
+class ScriptRunner
 {
 public:
 
@@ -33,7 +33,7 @@ public:
    //***************************************************************************
    // Infrastructure.
 
-   ScriptReader();
+   ScriptRunner();
    void reset();
 
    //***************************************************************************
@@ -41,7 +41,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Run a loop that reads command lines from a script file and 
+   // Run a loop that reads command lines from a script file and
    // executes them one by one.
    void doRun();
 

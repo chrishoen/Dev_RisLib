@@ -42,6 +42,10 @@ public:
    //***************************************************************************
    // Methods. 
 
+   // Constructor.
+   CmdLineScript();
+   virtual ~CmdLineScript(){}
+
    // Open the command line script file.
    bool doOpen(char* aFilename);
 

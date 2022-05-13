@@ -43,15 +43,14 @@ void RandomTimerThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread run function. This is called by the base class immediately 
-// after the thread init function. It runs a loop that waits on SDL
-// events and processes posted events. The loop exits when it receives
-// a quit event.
+// after the thread init function. It runs a loop that waits for a 
+// semi-randomly time and then sends a qcall to the test thread.
 
 void RandomTimerThread::threadRunFunction()
 {
    Prn::print(Prn::ThreadRun1, "RandomTimerThread::threadRunFunction BEGIN");
 
-   // Loop to wait for posted events and process them.
+   // Loop until thread termination.
    int tCount = 0;
    while (true)
    {
@@ -60,11 +59,10 @@ void RandomTimerThread::threadRunFunction()
 
       // Wait for a random delay.
       int tDelay = mRandomDis(mRandomGen);
-      Prn::print(Prn::ThreadRun4, "Delay %4d",tDelay);
       BaseClass::threadSleep(tDelay);
 
       // Send a qcall to the test thread.
-      if (mTPFlag) gTestQCallThread->mTest1QCall(mIdent,tCount);
+      gTestQCallThread->mTest1QCall(mIdent,tCount);
       tCount++;
    }
 

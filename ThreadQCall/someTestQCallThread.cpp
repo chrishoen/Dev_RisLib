@@ -75,15 +75,11 @@ void TestQCallThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall registered to the mUdpMsgThread child thread. It is invoked when
-// a message is received. It process the received messages.
+// This is bound to the qcall. It executes a test function.
 
 void TestQCallThread::executeTest1(int aSource,int aCode1)
 {
-   if (gThreadParms.mShowCode == 1 || aSource == 7)
-   {
-      Prn::print(Prn::View21, "TestQCallThread::executeTest1 %d %d", aSource, aCode1);
-   }
+   Prn::print(Prn::View21, "TestQCallThread::executeTest1 %d %d", aSource, aCode1);
    mStatusCount1++;
 }
 

@@ -76,7 +76,7 @@ public:
    // Test qcall. It is invoked by the timer thread.
    Ris::Threads::QCall2<int,int> mTest1QCall;
 
-   // Test function. This is bound to the qcall.
+   // This is bound to the qcall. It executes a test function.
    void executeTest1 (int aSource,int aCode);
 };
 

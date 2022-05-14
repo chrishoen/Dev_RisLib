@@ -138,18 +138,11 @@ void ProcThread::executeOnTimer(int aTimerCount)
 {
    if (mTPCode == 1)
    {
-      TestMsg* tTxMsg = new TestMsg;
-      MsgHelper::initialize(tTxMsg);
-      tTxMsg->mCode1 = aTimerCount;
-      sendMsg(tTxMsg);
-   }
-   else if (mTPCode == 2)
-   {
       EchoRequestMsg* tTxMsg = new EchoRequestMsg;
       MsgHelper::initialize(tTxMsg);
       sendMsg(tTxMsg);
    }
-   else if (mTPCode == 3)
+   else if (mTPCode == 2)
    {
       ByteBlobMsg* tTxMsg = new ByteBlobMsg;
       MsgHelper::initialize2(tTxMsg);
@@ -234,10 +227,7 @@ void ProcThread::executeRxMsg(Ris::ByteContent* aMsg)
 
 void ProcThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 {
-   if (mShowCode == 3)
-   {
-      MsgHelper::show(Prn::Show1, aRxMsg);
-   }
+   MsgHelper::show(Prn::Show1, aRxMsg);
    delete aRxMsg;
 }
 

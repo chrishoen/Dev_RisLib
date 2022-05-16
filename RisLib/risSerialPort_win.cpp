@@ -646,13 +646,9 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    }
 
    // Local variables.
-
-   // Local variables.
-   DWORD tNumWritten;
    DWORD tRet = 0;
-
+   DWORD tNumWritten = 0;
    OVERLAPPED tOverlapped = { 0 };
-
    tOverlapped.hEvent = mSpecific->mTxEventHandle;
 
    ClearCommError(mSpecific->mPortHandle, 0, 0);
@@ -667,7 +663,8 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    }
 
    // Write is pending.
-   tRet = WaitForSingleObject(tOverlapped.hEvent, INFINITE);
+// tRet = WaitForSingleObject(tOverlapped.hEvent, INFINITE);
+   tRet = WaitForSingleObject(tOverlapped.hEvent, 1000);
    switch (tRet)
    {
       // OVERLAPPED structure's event has been signaled. 
@@ -685,6 +682,14 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
          Trc::write(mTI, 0, "SerialPort::doSendBytes ERROR 1");
          return cSerialRetError;
       }
+   }
+   break;
+   case WAIT_TIMEOUT:
+   {
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doSendBytes TIMEOUT");
+      printf("serial port send timeout\n");
+      return cSerialRetTimeout;
    }
    break;
    default:

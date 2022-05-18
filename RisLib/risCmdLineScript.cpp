@@ -124,6 +124,7 @@ bool CmdLineScript::doRead(CmdLineCmd* aCmd)
       // the loop to restart at the first instruction that follows this one.
       mLoopStartOffset = ftell(mFile);
       mLoopCountZero = aCmd->argInt(1);
+      if (mLoopCountZero == 0) mLoopCountZero = 1000000000;
       return false;
    }
 

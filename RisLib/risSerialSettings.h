@@ -56,7 +56,7 @@ public:
    int mIdent;
 
    // "COM1"
-   char mPortDevice[16];
+   char mPortDevice[200];
 
    // "9600,N,8,1". If empty string then use system defaults.
    char mPortSetup[16];

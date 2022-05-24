@@ -132,7 +132,7 @@ bool CmdLineScript::doRead(CmdLineCmd* aCmd)
    if (aCmd->isCmd("ENDLOOP"))
    {
       // Test if still in the loop.
-      if (mLoopCountZero > 0)
+      if (mLoopCountZero != 0)
       {
          // Test if still in the loop.
          if (--mLoopCountZero == 0)

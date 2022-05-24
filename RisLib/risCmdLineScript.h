@@ -53,7 +53,7 @@ public:
    virtual ~CmdLineScript(){}
 
    // Open the command line script file.
-   bool doOpen(char* aFilename);
+   bool doOpen(const char* aFilename);
 
    // Close the command line script file.
    void doClose();

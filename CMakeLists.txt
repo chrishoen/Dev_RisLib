@@ -11,10 +11,10 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Script")
 return()
 
 add_subdirectory ("RisLib")
+add_subdirectory ("Script")
 return()
 
 add_subdirectory ("RisLib")

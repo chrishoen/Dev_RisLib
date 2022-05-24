@@ -30,7 +30,7 @@ CmdLineScript::CmdLineScript()
 //******************************************************************************
 // Open the command line script file.
 
-bool CmdLineScript::doOpen(char* aFilename)
+bool CmdLineScript::doOpen(const char* aFilename)
 {            
    mFile = fopen(aFilename,"r");
 

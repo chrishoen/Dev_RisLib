@@ -39,6 +39,7 @@ ServerThread::ServerThread()
    mRxCount = 0;
    mTxCount = 0;
    mShowCode = 0;
+   mClientAppNumber = 201;
 }
 
 ServerThread::~ServerThread()
@@ -151,18 +152,15 @@ void ServerThread::executeSession(int aSessionIndex, bool aConnected)
 
 void ServerThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPCode == 1)
-   {
-      EchoRequestMsg* tTxMsg = new EchoRequestMsg;
-      MsgHelper::initialize(tTxMsg);
-      sendMsg(0, tTxMsg);
-   }
-   else if (mTPCode == 2)
-   {
-      ByteBlobMsg* tTxMsg = new ByteBlobMsg;
-      MsgHelper::initialize2(tTxMsg);
-      sendMsg(0, tTxMsg);
-   }
+   if (mTPCode != 1) return;
+
+   // Get the session index associated with the application number.
+   int tSessionIndex = mSessionStateList.getIndex(mClientAppNumber);
+   if (tSessionIndex == Ris::Net::SessionStateList::cInvalidValue) return;
+
+   EchoRequestMsg* tTxMsg = new EchoRequestMsg;
+   tTxMsg->initialize(1000);
+   sendMsg(tSessionIndex, tTxMsg);
 }
 
 //******************************************************************************

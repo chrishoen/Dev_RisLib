@@ -30,6 +30,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("TP"))        ProtoComm::gServerThread->mTPCode = aCmd->argInt(1);
+   if (aCmd->isCmd("APP"))       ProtoComm::gServerThread->mClientAppNumber = aCmd->argInt(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("DATA"))      executeData(aCmd);

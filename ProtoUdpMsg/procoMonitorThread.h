@@ -72,7 +72,7 @@ public:
 // Global instance.
 
 #ifdef _PROCOMONITORTHREAD_CPP_
-           MonitorThread* gMonitorThread;
+           MonitorThread* gMonitorThread = 0;
 #else
    extern  MonitorThread* gMonitorThread;
 #endif

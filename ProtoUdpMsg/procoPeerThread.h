@@ -176,7 +176,7 @@ public:
 // Global singular instance.
 
 #ifdef _PROCOPEERTHREAD_CPP_
-         PeerThread* gPeerThread;
+         PeerThread* gPeerThread = 0;
 #else
 extern   PeerThread* gPeerThread;
 #endif

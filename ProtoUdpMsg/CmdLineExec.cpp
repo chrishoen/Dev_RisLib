@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 
-#include "procoSerialParms.h"
+#include "procoUdpSettings.h"
 #include "procoMsg.h"
 #include "procoMsgHelper.h"
 
@@ -169,7 +169,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gSerialParms.show();
+   ProtoComm::gUdpSettings.show();
 }
 
 //******************************************************************************

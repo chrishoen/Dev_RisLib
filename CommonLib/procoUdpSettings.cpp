@@ -31,7 +31,7 @@ UdpSettings::UdpSettings()
 void UdpSettings::reset()
 {
    BaseClass::reset();
-   BaseClass::setFileName_RelAlphaFiles("RisLib/ProtoComm_UdpSettings.txt");
+   BaseClass::setFilePath("files/ProtoComm_UdpSettings.txt");
 
    mMyAppNumber = 0;
 
@@ -57,7 +57,7 @@ void UdpSettings::show()
 
    printf("MyAppNumber             %16d\n", mMyAppNumber);
 
-   printf("MyUdpPort               %16d\n",mMyUdpPort);
+   printf("MyUdpPort               %16d\n", mMyUdpPort);
    printf("OtherUdpAddress         %16s\n", mOtherUdpIPAddress);
    printf("OtherUdpPort            %16d\n", mOtherUdpPort);
    printf("UdpWrapflag             %16s\n", my_string_from_bool(mUdpWrapFlag));

@@ -30,11 +30,17 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   ProtoComm::gPeerThread = new ProtoComm::PeerThread;
-   ProtoComm::gPeerThread->launchThread();
+   if (false)
+   {
+      ProtoComm::gPeerThread = new ProtoComm::PeerThread;
+      ProtoComm::gPeerThread->launchThread();
+   }
 
-   ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
-   ProtoComm::gMonitorThread->launchThread();
+   if (false)
+   {
+      ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
+      ProtoComm::gMonitorThread->launchThread();
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -42,8 +48,8 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   ProtoComm::gPeerThread->showThreadInfo();
-   ProtoComm::gMonitorThread->showThreadInfo();
+   if (ProtoComm::gPeerThread) ProtoComm::gPeerThread->showThreadInfo();
+   if (ProtoComm::gMonitorThread) ProtoComm::gMonitorThread->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
@@ -59,13 +65,19 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   ProtoComm::gMonitorThread->shutdownThread();
-   delete ProtoComm::gMonitorThread;
-   ProtoComm::gMonitorThread = 0;
+   if (ProtoComm::gMonitorThread)
+   {
+      ProtoComm::gMonitorThread->shutdownThread();
+      delete ProtoComm::gMonitorThread;
+      ProtoComm::gMonitorThread = 0;
+   }
 
-   ProtoComm::gPeerThread->shutdownThread();
-   delete ProtoComm::gPeerThread;
-   ProtoComm::gPeerThread = 0;
+   if (ProtoComm::gPeerThread)
+   {
+      ProtoComm::gPeerThread->shutdownThread();
+      delete ProtoComm::gPeerThread;
+      ProtoComm::gPeerThread = 0;
+   }
 
    //***************************************************************************
    //***************************************************************************

@@ -126,58 +126,6 @@ void TcpMsgSocket::reconfigure()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy a message into a byte buffer and then send the byte buffer to the
-// socket with a blocking send call. Return true if successful.
-// It is protected by the transmit mutex.
-
-bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
-{
-   // Guard.
-   if (!mValidFlag)
-   {
-      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SOCKET");
-      printf("ERROR TcpMsgSocket INVALID SOCKET\n");
-      delete aMsg;
-      return false;
-   }
-
-   // Mutex.
-   mTxMutex.lock();
-
-   // Create a byte buffer from preallocated memory.
-   ByteBuffer tByteBuffer(mTxMemory, mMemorySize);
-
-   // Copy the message to the buffer.
-   mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
-
-   // Delete the message.
-   delete aMsg;
-
-   // Transmit the buffer.
-   mTxLength = tByteBuffer.getLength();
-   bool tRet = doSend(tByteBuffer.getBaseAddress(), mTxLength);
-   mTxCount++;
-
-   // Mutex.
-   mTxMutex.unlock();
-
-   if (tRet)
-   {
-      //printf("TcpMsgSocket tx message %d\n", mTxLength);
-   }
-   else
-   {
-      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SEND\n");
-      printf("ERROR TcpMsgSocket INVALID SEND\n");
-   }
-
-   // Done.
-   return tRet;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Receive a message from the socket with a blocking recv call into a
 // byte buffer and extract a message from the byte buffer. Return the
 // message and true if successful. As part of the termination process,
@@ -291,9 +239,68 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
       return false;
    }
 
+   // Metrics.
+   mMsgMonkey->mRxMsgMetrics->update(aMsg, mMsgMonkey->mMessageLength);
+
    // Done.
    mRxCount++;
    return true;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy a message into a byte buffer and then send the byte buffer to the
+// socket with a blocking send call. Return true if successful.
+// It is protected by the transmit mutex.
+
+bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
+{
+   // Guard.
+   if (!mValidFlag)
+   {
+      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SOCKET");
+      printf("ERROR TcpMsgSocket INVALID SOCKET\n");
+      delete aMsg;
+      return false;
+   }
+
+   // Mutex.
+   mTxMutex.lock();
+
+   // Create a byte buffer from preallocated memory.
+   ByteBuffer tByteBuffer(mTxMemory, mMemorySize);
+
+   // Copy the message to the buffer.
+   mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
+
+   // Transmit the buffer.
+   mTxLength = tByteBuffer.getLength();
+   bool tRet = doSend(tByteBuffer.getBaseAddress(), mTxLength);
+   mTxCount++;
+
+   // Mutex.
+   mTxMutex.unlock();
+
+   if (tRet)
+   {
+      //printf("TcpMsgSocket tx message %d\n", mTxLength);
+   }
+   else
+   {
+      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SEND\n");
+      printf("ERROR TcpMsgSocket INVALID SEND\n");
+   }
+
+   // Metrics.
+   mMsgMonkey->mTxMsgMetrics->update(aMsg, mTxLength);
+
+   // Delete the message.
+   delete aMsg;
+
+   // Done.
+   Trc::write(mTI, 1, "TcpMsgSocket doSendMsg %d", mTxLength);
+   return tRet;
 }
 
 //******************************************************************************

@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "procoMsgHelper.h"
-#include "procoSerialParms.h"
+#include "procoUdpSettings.h"
 
 #define  _PROCOPEERTHREAD_CPP_
 #include "procoPeerThread.h"
@@ -23,17 +23,16 @@ namespace ProtoComm
 PeerThread::PeerThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Proc");
+   BaseClass::setThreadName("Peer");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
    BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
-   mSessionQCall.bind(this, &PeerThread::executeSession);
    mRxMsgQCall.bind   (this,&PeerThread::executeRxMsg);
    mAbortQCall.bind(this, &PeerThread::executeAbort);
 
    // Initialize member variables.
-   mSerialMsgThread = 0;
+   mUdpMsgThread = 0;
    mMsgMonkey = new MsgMonkey;
    mConnectionFlag = false;
    mTPCode = 0;
@@ -44,7 +43,7 @@ PeerThread::PeerThread()
 
 PeerThread::~PeerThread()
 {
-   if (mSerialMsgThread) delete mSerialMsgThread;
+   if (mUdpMsgThread) delete mUdpMsgThread;
    delete mMsgMonkey;
 }
 
@@ -56,9 +55,9 @@ PeerThread::~PeerThread()
 void PeerThread::showThreadInfo()
 {
    BaseClass::showThreadInfo();
-   if (mSerialMsgThread)
+   if (mUdpMsgThread)
    {
-      mSerialMsgThread->showThreadInfo();
+      mUdpMsgThread->showThreadInfo();
    }
 }
 
@@ -67,30 +66,29 @@ void PeerThread::showThreadInfo()
 //******************************************************************************
 // Thread init function. This is called by the base class immedidately 
 // after the thread starts running. It creates and launches the 
-// child SerialMsgThread.
+// child UdpMsgThread.
 
 void PeerThread::threadInitFunction()
 {
    Trc::write(11, 0, "PeerThread::threadInitFunction");
 
-   // Instance of serial port settings.
-   Ris::SerialSettings tSerialSettings;
+   // Instance of network socket settings.
+   Ris::Net::Settings tSettings;
 
-   tSerialSettings.setPortDevice(gSerialParms.mSerialPortDevice);
-   tSerialSettings.setPortSetup(gSerialParms.mSerialPortSetup);
-   tSerialSettings.mThreadPriority = Ris::Threads::gPriorities.mSerial;
-   tSerialSettings.mRxTimeout = gSerialParms.mSerialRxTimeout;
-   tSerialSettings.mMsgMonkey = mMsgMonkey;
-   tSerialSettings.mSessionQCall = mSessionQCall;
-   tSerialSettings.mRxMsgQCall = mRxMsgQCall;
-   tSerialSettings.mTraceIndex = 11;
-   Trc::start(11);
+   tSettings.setLocalPort(gUdpSettings.mMyUdpPort);
+   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
+   tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
+   tSettings.mMsgMonkey = mMsgMonkey;
+   tSettings.mRxMsgQCall = mRxMsgQCall;
 
-   // Create child thread with the settings.
-   mSerialMsgThread = new Ris::SerialMsgThread(tSerialSettings);
+   // Create the child thread with the settings.
+   mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);
+
+   // Launch the child thread.
+   mUdpMsgThread->launchThread();
 
    // Launch child thread.
-   mSerialMsgThread->launchThread(); 
+   mUdpMsgThread->launchThread(); 
 
    Trc::write(11, 0, "PeerThread::threadInitFunction done");
 }
@@ -99,7 +97,7 @@ void PeerThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immedidately
-// before the thread is terminated. It shuts down the child SerialMsgThread.
+// before the thread is terminated. It shuts down the child UdpMsgThread.
 
 void PeerThread::threadExitFunction()
 {
@@ -107,7 +105,7 @@ void PeerThread::threadExitFunction()
    Prn::print(0, "PeerThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
-   mSerialMsgThread->shutdownThread();
+   mUdpMsgThread->shutdownThread();
 
    Prn::print(0, "PeerThread::threadExitFunction END");
    Trc::write(11, 0, "PeerThread::threadExitFunction done");
@@ -157,34 +155,13 @@ void PeerThread::executeOnTimer(int aTimerCount)
 
 void PeerThread::executeAbort()
 {
-   mSerialMsgThread->mSerialMsgPort.doAbort();
+// mUdpMsgThread->mRxSocket.doAbort();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// qcall registered to the mSerialMsgThread child thread. It is invoked
-// when a session is established or disestablished (when the serial port
-// is opened or it is closed because of an error or a disconnection). 
-
-void PeerThread::executeSession(bool aConnected)
-{
-   if (aConnected)
-   {
-      Prn::print(Prn::Show1, "PeerThread CONNECTED");
-   }
-   else
-   {
-      Prn::print(Prn::Show1, "PeerThread DISCONNECTED");
-   }
-
-   mConnectionFlag = aConnected;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// qcall registered to the mSerialMsgThread child thread. It is invoked by
+// qcall registered to the mUdpMsgThread child thread. It is invoked by
 // the child thread when a message is received.
 // Based on the receive message type, call one of the specific receive
 // message handlers. This is bound to the qcall.
@@ -243,7 +220,7 @@ void PeerThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
       MsgHelper::initialize(tTxMsg, 1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
-      mSerialMsgThread->sendMsg(tTxMsg);
+      mUdpMsgThread->sendMsg(tTxMsg);
    }
    if (mShowCode == 3)
    {
@@ -297,25 +274,25 @@ void PeerThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via mSerialMsgThread:
+// Send a message via mUdpMsgThread:
 
 void PeerThread::sendMsg(BaseMsg* aTxMsg)
 {
-   mSerialMsgThread->sendMsg(aTxMsg);
+   mUdpMsgThread->sendMsg(aTxMsg);
    mTxCount++;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via mSerialMsgThread:
+// Send a message via mUdpMsgThread:
 
 void PeerThread::sendTestMsg()
 {
    TestMsg* tMsg = new TestMsg;
    tMsg->mCode1 = 201;
 
-   mSerialMsgThread->sendMsg(tMsg);
+   mUdpMsgThread->sendMsg(tMsg);
 }
 
 //******************************************************************************

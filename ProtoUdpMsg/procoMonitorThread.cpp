@@ -96,9 +96,10 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 2)
    {
+#if 0
       ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gPeerThread->mMsgMonkey->mTxMsgMetrics;
       ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gPeerThread->mMsgMonkey->mRxMsgMetrics;
-      Ris::SerialMsgPort* tMsgPort = (Ris::SerialMsgPort*)&gPeerThread->mSerialMsgThread->mSerialMsgPort;
+      Ris::UdpMsgPort* tMsgPort = (Ris::UdpMsgPort*)&gPeerThread->mUdpMsgThread->mUdpMsgPort;
 
       Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
          mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
@@ -120,6 +121,7 @@ void MonitorThread::executeOnTimer(int aTimeCount)
          tMsgPort->mMsgResyncCount);
 
       Prn::print(Prn::Show1, "");
+#endif
    }
 }
 

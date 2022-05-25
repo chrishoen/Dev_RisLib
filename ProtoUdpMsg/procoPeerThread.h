@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Serial message prototype thread class.
+Udp message prototype thread class.
 ==============================================================================*/
 
 //******************************************************************************
@@ -9,7 +9,7 @@ Serial message prototype thread class.
 //******************************************************************************
 
 #include "risThreadsQCallThread.h"
-#include "risSerialMsgThread.h"
+#include "risNetUdpMsgThread.h"
 
 #include "procoMsg.h"
 
@@ -23,7 +23,7 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Serial message prototype thread class. It processes messages that are
+// Udp message prototype thread class. It processes messages that are
 // communicated via a serial channel. The messages follow the byte content
 // binary message scheme.
 //
@@ -59,11 +59,11 @@ public:
    //***************************************************************************
    // Members.
 
-   // Serial message thread, this manages serial message connections and
+   // Udp message thread, this manages serial message connections and
    // message transmission and reception.
-   Ris::SerialMsgThread* mSerialMsgThread;
+   Ris::Net::UdpMsgThread* mUdpMsgThread;
 
-   // Message monkey used by mSerialMsgThread.
+   // Message monkey used by mUdpMsgThread.
    MsgMonkey* mMsgMonkey;
 
    //***************************************************************************
@@ -96,11 +96,11 @@ public:
 
    // Thread init function. This is called by the base class immedidately 
    // after the thread starts running. It creates and launches the 
-   // child SerialMsgThread.
+   // child UdpMsgThread.
    void threadInitFunction() override;
 
    // Thread exit function. This is called by the base class immedidately
-   // before the thread is terminated. It shuts down the child SerialMsgThread.
+   // before the thread is terminated. It shuts down the child UdpMsgThread.
    void threadExitFunction() override;
 
    // Thread shutdown function. This calls the base class shutdownThread
@@ -117,24 +117,11 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. Session qcall.
-
-   // qcall registered to the mSerialMsgThread child thread. It is invoked
-   // when a session is established or disestablished (when the serial port
-   // is opened or it is closed because of an error or a disconnection). 
-   Ris::SerialMsgThread::SessionQCall mSessionQCall;
-
-   // Maintain session state variables. This is bound to the qcall.
-   void executeSession(bool aConnected);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Methods. Receive message qcall.
 
-   // qcall registered to the mSerialMsgThread child thread. It is invoked by
+   // qcall registered to the mUdpMsgThread child thread. It is invoked by
    // the child thread when a message is received.
-   Ris::SerialMsgThread::RxMsgQCall mRxMsgQCall;
+   Ris::Net::UdpMsgThread::RxMsgQCall mRxMsgQCall;
 
    // Based on the receive message type, call one of the specific receive
    // message handlers. This is bound to the qcall.
@@ -154,7 +141,7 @@ public:
 
    // Receive message handlers. There is one for each message that can 
    // be received.
-   void processRxMsg(ProtoComm::TestMsg*  aMsg);
+   void processRxMsg(ProtoComm::TestMsg* aMsg);
    void processRxMsg(ProtoComm::EchoRequestMsg* aMsg);
    void processRxMsg(ProtoComm::EchoResponseMsg* aMsg);
    void processRxMsg(ProtoComm::DataMsg* aMsg);
@@ -165,7 +152,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a message via mSerialMsgThread:
+   // Send a message via mUdpMsgThread:
    void sendMsg (BaseMsg* aTxMsg);
    void sendTestMsg();
 };

@@ -7,7 +7,9 @@
 
 #include "stdafx.h"
 
+#include "my_functions.h"
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
 #include "risNetTcpMsgServerThread.h"
@@ -33,6 +35,7 @@ TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
    mSessionQCall = aSettings.mServerSessionQCall;
    mRxMsgQCall = aSettings.mServerRxMsgQCall;
    mMaxSessions = aSettings.mMaxSessions;
+   mTI = aSettings.mTraceIndex;
 
    // Member variables.
    mNumSessions=0;
@@ -274,6 +277,16 @@ void TcpMsgServerThread::threadExitFunction()
 
 void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
 {
+   // Trace.
+   if (aEstablished)
+   {
+      Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
+   }
+   else
+   {
+      Trc::write(mTI, 0, "TcpMsgClientThread DISCONNECTED");
+   }
+
    // Invoke the session qcall to notify that a session has
    // been established or disestablished.
    mSessionQCall(aSessionIndex,aEstablished);

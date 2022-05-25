@@ -7,7 +7,9 @@
 
 #include "stdafx.h"
 
+#include "my_functions.h"
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
 #include "risNetTcpMsgClientThread.h"
@@ -32,9 +34,11 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
    mSettings = aSettings;
    mSessionQCall = aSettings.mClientSessionQCall;
    mRxMsgQCall = aSettings.mRxMsgQCall;
+   mTI = aSettings.mTraceIndex;
 
    // Member variables.
    mConnectionFlag=false;
+
 }
 
 //******************************************************************************
@@ -75,7 +79,7 @@ void TcpMsgClientThread::threadRunFunction()
          if (mSocket.doConnect())
          {
             // Connection was established.
-            //printf("Connected\n");
+            Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
             mConnectionFlag = true;
 
             // Process a session change because a
@@ -85,13 +89,14 @@ void TcpMsgClientThread::threadRunFunction()
          else 
          {
             // Connection was not established.
-            //printf("Not Connected\n");
+            Trc::write(mTI, 0, "TcpMsgClientThread DISCONNECTED");
 
             mConnectionFlag = false;
 
             // Close the socket and reconfigure.
             mSocket.doClose();
             mSocket.reconfigure();
+//          mSocket.configure();
 
             // Sleep.
             threadSleep(500);

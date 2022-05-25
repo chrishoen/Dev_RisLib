@@ -63,7 +63,7 @@ void TcpServerHubSocket::configure()
    }
    else
    {
-      printf(0, "TcpServerHubSocket FAIL %16s : %d $ %d %d\n",
+      printf("TcpServerHubSocket FAIL %16s : %d $ %d %d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,

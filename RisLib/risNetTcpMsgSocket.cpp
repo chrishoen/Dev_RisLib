@@ -118,6 +118,14 @@ void TcpMsgSocket::configure()
 void TcpMsgSocket::reconfigure()
 {
    // Configure the socket.
+   BaseClass::reset();
+   BaseClass::mRemote.setByHostName(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::doSocket();
+   BaseClass::setOptionKeepAlive();
+   BaseClass::setOptionNoDelay();
+   return;
+   
+   // Configure the socket.
    BaseClass::doSocket();
    BaseClass::setOptionKeepAlive();
    BaseClass::setOptionNoDelay();

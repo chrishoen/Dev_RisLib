@@ -5,6 +5,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 #include "MainInit.h"
+#include "MainArgs.h"
 
 #include "procoPeerThread.h"
 #include "procoMonitorThread.h"
@@ -18,9 +19,11 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Begin program.
+   // Initialize program resources.
 
-   main_initialize(argc,argv);
+   gMainArgs.initialize(argc, argv);
+   gMainArgs.show();
+   main_initialize();
 
    //***************************************************************************
    //***************************************************************************

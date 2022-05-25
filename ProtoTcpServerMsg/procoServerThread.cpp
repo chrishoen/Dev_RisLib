@@ -184,6 +184,9 @@ void ServerThread::executeRxMsg(int aSessionIndex, Ris::ByteContent* aMsg)
    case ProtoComm::MsgIdT::cTestMsg:
       processRxMsg(aSessionIndex, (ProtoComm::TestMsg*)tMsg);
       break;
+   case ProtoComm::MsgIdT::cFirstMessageMsg:
+      processRxMsg(aSessionIndex, (ProtoComm::FirstMessageMsg*)tMsg);
+      break;
    case ProtoComm::MsgIdT::cEchoRequestMsg:
       processRxMsg(aSessionIndex, (ProtoComm::EchoRequestMsg*)tMsg);
       break;

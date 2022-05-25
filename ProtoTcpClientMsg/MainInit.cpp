@@ -14,7 +14,7 @@
 
 void main_initialize()
 {
-   printf("ProtoUdpMsg Program**********************************************BEGIN\n");
+   printf("ProtoTcpClientMsg Program**********************************************BEGIN\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -51,9 +51,9 @@ void main_initialize()
 
    Trc::reset();
    Trc::create_buffer(1,  3, "message");
-   Trc::create_buffer(11, 3, "udp");
+   Trc::create_buffer(11, 3, "tcp");
    Trc::set_default_trace_index(11);
-   Trc::create_log(11, 4, "log/ProtoUdpMsg_trace11.log");
+   Trc::create_log(11, 4, "log/ProtoTcpClientMsg_trace11.log");
    Trc::initialize();
 
    //***************************************************************************
@@ -96,7 +96,7 @@ void main_finalize()
    // Exit process
    Ris::Threads::exitProcess();
 
-   printf("ProtoUdpMsg Program**********************************************BEGIN\n");
+   printf("ProtoTcpClientMsg Program**********************************************BEGIN\n");
 }
 
 //******************************************************************************

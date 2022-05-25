@@ -137,7 +137,7 @@ void ClientThread::executeSession(bool aConnected)
 {
    if (aConnected)
    {
-      Prn::print(Prn::ThreadRun1, "ClientThread CONNECTED");
+      Prn::print(Prn::Show1, "ClientThread CONNECTED");
 
       // Transmit a FirstMessage to the server to inform it of who this 
       // client is.
@@ -146,7 +146,7 @@ void ClientThread::executeSession(bool aConnected)
    }
    else
    {
-      Prn::print(Prn::ThreadRun1, "ClientThread DISCONNECTED");
+      Prn::print(Prn::Show1, "ClientThread DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;

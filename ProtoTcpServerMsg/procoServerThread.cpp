@@ -134,8 +134,8 @@ void ServerThread::shutdownThread()
 
 void ServerThread::executeSession(int aSessionIndex, bool aConnected)
 {
-   if (aConnected) Prn::print(Prn::ThreadRun1, "ServerThread CONNECTED     %d", aSessionIndex);
-   else            Prn::print(Prn::ThreadRun1, "ServerThread DISCONNECTED  %d", aSessionIndex);
+   if (aConnected) Prn::print(Prn::Show1, "ServerThread CONNECTED     %d", aSessionIndex);
+   else            Prn::print(Prn::Show1, "ServerThread DISCONNECTED  %d", aSessionIndex);
 
    if (!aConnected)
    {
@@ -226,7 +226,7 @@ void ServerThread::processRxMsg(int aSessionIndex, ProtoComm::TestMsg*  aRxMsg)
 
 void ServerThread::processRxMsg(int aSessionIndex, FirstMessageMsg* aMsg)
 {
-   Prn::print(Prn::ThreadRun1, "processRxMsg_FirstMessageMsg %d %d", aSessionIndex, aMsg->mHeader.mSourceId);
+   Prn::print(Prn::Show1, "processRxMsg_FirstMessageMsg %d %d", aSessionIndex, aMsg->mHeader.mSourceId);
 
    // Add session to state list.
    mSessionStateList.add(aSessionIndex, aMsg->mHeader.mSourceId);

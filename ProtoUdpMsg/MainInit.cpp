@@ -3,12 +3,10 @@
 
 #include "risThreadsProcess.h"
 #include "risBaseDir.h"
+#include "procoUdpSettings.h"
+#include "MainArgs.h"
+#include "MainInit.h"
 
-#include "procoSerialParms.h"
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -63,8 +61,23 @@ void main_initialize()
    //***************************************************************************
    // Read parameters files.
 
-   ProtoComm::gSerialParms.reset();
-   ProtoComm::gSerialParms.readSection("default");
+   if (gMainArgs.mPeerIdent == 1)
+   {
+      ProtoComm::gUdpSettings.reset();
+      ProtoComm::gUdpSettings.readSection("default");
+      ProtoComm::gUdpSettings.readSection("UdpPeer1");
+   }
+   else if (gMainArgs.mPeerIdent == 2)
+   {
+      ProtoComm::gUdpSettings.reset();
+      ProtoComm::gUdpSettings.readSection("default");
+      ProtoComm::gUdpSettings.readSection("UdpPeer2");
+   }
+   else
+   {
+      printf("MAIN ARGS ERROR\n");
+      exit(-1);
+   }
 }
 
 //******************************************************************************

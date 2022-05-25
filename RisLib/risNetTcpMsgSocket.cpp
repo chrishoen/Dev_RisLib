@@ -51,8 +51,8 @@ void TcpMsgSocket::initialize(Settings& aSettings)
    // Store the settings pointer.
    mSettings = aSettings;
 
-   // Create a message monkey.
-   mMsgMonkey = mSettings.mMsgMonkeyCreator->createMonkey();
+   // Store the message monkey.
+   mMsgMonkey = mSettings.mMsgMonkey;
 
    // Allocate memory for byte buffers.
    mMemorySize = mMsgMonkey->getMaxBufferSize();

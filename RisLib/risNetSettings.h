@@ -62,8 +62,8 @@ public:
    // Thread processor number and priority.
    Ris::Threads::Priority mThreadPriority;
 
-   // Message monkey creator.
-   BaseMsgMonkeyCreator* mMsgMonkeyCreator;
+   // Message monkey.
+   BaseMsgMonkey* mMsgMonkey;
 
    // Session callback qcall.
    Ris::Threads::QCall1<bool>     mClientSessionQCall;

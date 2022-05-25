@@ -307,31 +307,6 @@ void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// MsgMonkey creator
-
-MsgMonkeyCreator::MsgMonkeyCreator()
-{
-   mSourceId = 0;
-}
-
-void MsgMonkeyCreator::configure(int aSourceId)
-{
-   mSourceId = aSourceId;
-}
-
-Ris::BaseMsgMonkey* MsgMonkeyCreator::createMonkey()
-{
-   // New message monkey
-   MsgMonkey* tMsgMonkey = new MsgMonkey();
-   // Configure 
-   tMsgMonkey->configure(mSourceId);
-   // Return base message monkey pointer
-   return (Ris::BaseMsgMonkey*)tMsgMonkey;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 }//namespace
 
 

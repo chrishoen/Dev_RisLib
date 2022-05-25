@@ -7,10 +7,10 @@
 #include "stdafx.h"
 
 #include "procoMsgHelper.h"
-#include "procoUdpSettings.h"
+#include "procoTcpSettings.h"
 
-#define  _PROCOPEERTHREAD_CPP_
-#include "procoPeerThread.h"
+#define  _PROCOCLIENTTHREAD_CPP_
+#include "procoClientThread.h"
 
 namespace ProtoComm
 {
@@ -20,16 +20,16 @@ namespace ProtoComm
 //******************************************************************************
 // Constructor.
 
-PeerThread::PeerThread()
+ClientThread::ClientThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Peer");
+   BaseClass::setThreadName("Client");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
    BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
-   mRxMsgQCall.bind   (this,&PeerThread::executeRxMsg);
-   mAbortQCall.bind(this, &PeerThread::executeAbort);
+   mSessionQCall.bind(this, &ClientThread::executeSession);
+   mRxMsgQCall.bind   (this,&ClientThread::executeRxMsg);
 
    // Initialize member variables.
    mMsgThread = 0;
@@ -41,7 +41,7 @@ PeerThread::PeerThread()
    mShowCode = 0;
 }
 
-PeerThread::~PeerThread()
+ClientThread::~ClientThread()
 {
    if (mMsgThread) delete mMsgThread;
    delete mMsgMonkey;
@@ -52,7 +52,7 @@ PeerThread::~PeerThread()
 //******************************************************************************
 // Show thread info for this thread and for child threads.
 
-void PeerThread::showThreadInfo()
+void ClientThread::showThreadInfo()
 {
    BaseClass::showThreadInfo();
    if (mMsgThread)
@@ -66,48 +66,46 @@ void PeerThread::showThreadInfo()
 //******************************************************************************
 // Thread init function. This is called by the base class immedidately 
 // after the thread starts running. It creates and launches the 
-// child UdpMsgThread.
+// child TcpMsgClientThread.
 
-void PeerThread::threadInitFunction()
+void ClientThread::threadInitFunction()
 {
-   Trc::write(11, 0, "PeerThread::threadInitFunction");
+   Trc::write(11, 0, "ClientThread::threadInitFunction");
 
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
-
-   tSettings.setLocalPort(gUdpSettings.mMyUdpPort);
-   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
-   tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
+   tSettings.setRemoteAddress(gTcpSettings.mTcpServerIPAddress, gTcpSettings.mTcpServerPort);
    tSettings.mMsgMonkey = mMsgMonkey;
+   tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;
    tSettings.mTraceIndex = 11;
    Trc::start(11);
 
    // Create the child thread with the settings.
-   mMsgThread = new Ris::Net::UdpMsgThread(tSettings);
+   mMsgThread = new Ris::Net::TcpMsgClientThread(tSettings);
 
    // Launch the child thread.
    mMsgThread->launchThread();
 
-   Trc::write(11, 0, "PeerThread::threadInitFunction done");
+   Trc::write(11, 0, "ClientThread::threadInitFunction done");
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immedidately
-// before the thread is terminated. It shuts down the child UdpMsgThread.
+// before the thread is terminated. It shuts down the child TcpMsgClientThread.
 
-void PeerThread::threadExitFunction()
+void ClientThread::threadExitFunction()
 {
-   Trc::write(11, 0, "PeerThread::threadExitFunction");
-   Prn::print(0, "PeerThread::threadExitFunction BEGIN");
+   Trc::write(11, 0, "ClientThread::threadExitFunction");
+   Prn::print(0, "ClientThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
    mMsgThread->shutdownThread();
 
-   Prn::print(0, "PeerThread::threadExitFunction END");
-   Trc::write(11, 0, "PeerThread::threadExitFunction done");
+   Prn::print(0, "ClientThread::threadExitFunction END");
+   Trc::write(11, 0, "ClientThread::threadExitFunction done");
 }
 
 //******************************************************************************
@@ -117,13 +115,41 @@ void PeerThread::threadExitFunction()
 // function to terminate the thread. This executes in the context of
 // the calling thread.
 
-void PeerThread::shutdownThread()
+void ClientThread::shutdownThread()
 {
-   Trc::write(11, 0, "PeerThread::shutdownThread");
-   Prn::print(0, "PeerThread::shutdownThread BEGIN");
+   Trc::write(11, 0, "ClientThread::shutdownThread");
+   Prn::print(0, "ClientThread::shutdownThread BEGIN");
    BaseClass::shutdownThread();
-   Prn::print(0, "PeerThread::shutdownThread END");
-   Trc::write(11, 0, "PeerThread::shutdownThread done");
+   Prn::print(0, "ClientThread::shutdownThread END");
+   Trc::write(11, 0, "ClientThread::shutdownThread done");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// QCall registered to the mTcpMsgThread child thread. It is invoked when
+// a session is established or disestablished (when this client connects or
+// disconnects to the server). It maintains session state variables. When
+// a connection is established it sends a FirstMessage to the server to
+// inform it of it's identity.
+
+void ClientThread::executeSession(bool aConnected)
+{
+   if (aConnected)
+   {
+      Prn::print(Prn::ThreadRun1, "ClientThread CONNECTED");
+
+      // Transmit a FirstMessage to the server to inform it of who this 
+      // client is.
+      FirstMessageMsg* msg = new FirstMessageMsg;
+      sendMsg(msg);
+   }
+   else
+   {
+      Prn::print(Prn::ThreadRun1, "ClientThread DISCONNECTED");
+   }
+
+   mConnectionFlag = aConnected;
 }
 
 //******************************************************************************
@@ -131,7 +157,7 @@ void PeerThread::shutdownThread()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void PeerThread::executeOnTimer(int aTimerCount)
+void ClientThread::executeOnTimer(int aTimerCount)
 {
    if (mTPCode == 1)
    {
@@ -150,22 +176,12 @@ void PeerThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Abort function. This is bound to the qcall. It aborts the serial port.
-
-void PeerThread::executeAbort()
-{
-// mMsgThread->mRxSocket.doAbort();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // qcall registered to the mMsgThread child thread. It is invoked by
 // the child thread when a message is received.
 // Based on the receive message type, call one of the specific receive
 // message handlers. This is bound to the qcall.
 
-void PeerThread::executeRxMsg(Ris::ByteContent* aMsg)
+void ClientThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
    ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
@@ -189,7 +205,7 @@ void PeerThread::executeRxMsg(Ris::ByteContent* aMsg)
       processRxMsg((ProtoComm::ByteBlobMsg*)tMsg);
       break;
    default:
-      Prn::print(Prn::Show1, "PeerThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
+      Prn::print(Prn::Show1, "ClientThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
       delete tMsg;
       break;
    }
@@ -201,7 +217,7 @@ void PeerThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Message handler - TestMsg.
 
-void PeerThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
+void ClientThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 {
    MsgHelper::show(Prn::Show1, aRxMsg);
    delete aRxMsg;
@@ -212,7 +228,7 @@ void PeerThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 //******************************************************************************
 // Rx message handler - EchoRequestMsg.
 
-void PeerThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
+void ClientThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 {
    if (true)
    {
@@ -233,7 +249,7 @@ void PeerThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - EchoResponseMsg.
 
-void PeerThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
+void ClientThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -247,7 +263,7 @@ void PeerThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - DataMsg.
 
-void PeerThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
+void ClientThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -261,7 +277,7 @@ void PeerThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - ByteBlobMsg.
 
-void PeerThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
+void ClientThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -275,7 +291,7 @@ void PeerThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 //******************************************************************************
 // Send a message via mMsgThread:
 
-void PeerThread::sendMsg(BaseMsg* aTxMsg)
+void ClientThread::sendMsg(BaseMsg* aTxMsg)
 {
    mMsgThread->sendMsg(aTxMsg);
    mTxCount++;
@@ -286,7 +302,7 @@ void PeerThread::sendMsg(BaseMsg* aTxMsg)
 //******************************************************************************
 // Send a message via mMsgThread:
 
-void PeerThread::sendTestMsg()
+void ClientThread::sendTestMsg()
 {
    TestMsg* tMsg = new TestMsg;
    tMsg->mCode1 = 201;

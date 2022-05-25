@@ -9,7 +9,7 @@ Udp message prototype thread class.
 //******************************************************************************
 
 #include "risThreadsQCallThread.h"
-#include "risNetUdpMsgThread.h"
+#include "risNetTcpMsgClientThread.h"
 
 #include "procoMsg.h"
 
@@ -24,23 +24,23 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 // Udp message prototype thread class. It processes messages that are
-// communicated via a serial channel. The messages follow the byte content
+// communicated via a tcp channel. The messages follow the byte content
 // binary message scheme.
 //
-// This is a prototype serial thread class. It inherits from BaseQCallThread to
+// This is a prototype tcp thread class. It inherits from BaseQCallThread to
 // obtain a call queue based thread functionality.
 //
-// The prototype thread creates a child serial message thread that establishes
-// and manages a serial connection, receives messages and passes them to the
+// The prototype thread creates a child tcp message thread that establishes
+// and manages a tcp connection, receives messages and passes them to the
 // parent via a qcall callback, and allows for the transmission of messages.
-// the child thread also notifies the parent thread of serial connection
+// the child thread also notifies the parent thread of tcp connection
 // establishment/disestablishment via a qcall callback.
 // 
 // The prototype thread is based on a call queue and it uses qcalls to
 // interface to the child thread. When the child thread detects a session
 // change it invokes the prototypes thread's mSessionQCall, which defers
 // execution of its executeSession member function. Likewise, when the child
-// thread receives a message it invokes the serial thread's mRxMsgQCall, which
+// thread receives a message it invokes the tcp thread's mRxMsgQCall, which
 // defers  execution of its executeRxMsg member function. 
 //
 // The child thread provides the execution context for actually managing
@@ -49,7 +49,7 @@ namespace ProtoComm
 // messages.
 //
 
-class  PeerThread : public Ris::Threads::BaseQCallThread
+class  ClientThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
@@ -59,9 +59,9 @@ public:
    //***************************************************************************
    // Members.
 
-   // Udp message thread, this manages serial message connections and
+   // Udp message thread, this manages tcp message connections and
    // message transmission and reception.
-   Ris::Net::UdpMsgThread* mMsgThread;
+   Ris::Net::TcpMsgClientThread* mMsgThread;
 
    // Message monkey used by mMsgThread.
    MsgMonkey* mMsgMonkey;
@@ -71,7 +71,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // True if the serial connection is valid.
+   // True if the tcp connection is valid.
    bool mConnectionFlag;
 
    // State variables.
@@ -86,8 +86,8 @@ public:
    // Methods.
 
    // Constructor.
-   PeerThread();
-  ~PeerThread();
+   ClientThread();
+  ~ClientThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -96,11 +96,11 @@ public:
 
    // Thread init function. This is called by the base class immedidately 
    // after the thread starts running. It creates and launches the 
-   // child UdpMsgThread.
+   // child TcpMsgClientThread.
    void threadInitFunction() override;
 
    // Thread exit function. This is called by the base class immedidately
-   // before the thread is terminated. It shuts down the child UdpMsgThread.
+   // before the thread is terminated. It shuts down the child TcpMsgClientThread.
    void threadExitFunction() override;
 
    // Thread shutdown function. This calls the base class shutdownThread
@@ -117,22 +117,30 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Methods. Session qcall.
+
+   // qcall registered to the mTcpMsgThread child thread. It is invoked when
+   // a session is established or disestablished (when this client connects or
+   // disconnects to the server). 
+   Ris::Net::TcpMsgClientThread::SessionQCall mSessionQCall;
+
+   // Maintain session state variables. When a connection is established it
+   // sends a FirstMessage to the server to inform it of it's identity.This is
+   // bound to the qcall.
+   void executeSession(bool aConnected);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Methods. Receive message qcall.
 
-   // qcall registered to the mMsgThread child thread. It is invoked by
-   // the child thread when a message is received.
-   Ris::Net::UdpMsgThread::RxMsgQCall mRxMsgQCall;
+   // qcall registered to the mTcpMsgThread child thread. It is invoked when
+   // a message is received. It process the received messages.
+   Ris::Net::TcpMsgClientThread::RxMsgQCall mRxMsgQCall;
 
-   // Based on the receive message type, call one of the specific receive
-   // message handlers. This is bound to the qcall.
+   // Call one of the specific receive message handlers. This is bound to the
+   // qcall.
    void executeRxMsg(Ris::ByteContent* aMsg);
-
-   // Abort qcall. It is invoked by the control thread to execute a
-   // an abort in the context of this thread.
-   Ris::Threads::QCall0 mAbortQCall;
-
-   // Abort function. This is bound to the qcall. It aborts the serial port.
-   void executeAbort();
 
    //***************************************************************************
    //***************************************************************************
@@ -162,10 +170,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _PROCOPEERTHREAD_CPP_
-         PeerThread* gPeerThread = 0;
+#ifdef _PROCOCLIENTTHREAD_CPP_
+         ClientThread* gClientThread = 0;
 #else
-extern   PeerThread* gPeerThread;
+extern   ClientThread* gClientThread;
 #endif
 
 //******************************************************************************

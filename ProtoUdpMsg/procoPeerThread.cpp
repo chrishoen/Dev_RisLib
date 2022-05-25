@@ -80,6 +80,8 @@ void PeerThread::threadInitFunction()
    tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mRxMsgQCall = mRxMsgQCall;
+   tSettings.mTraceIndex = 11;
+   Trc::start(11);
 
    // Create the child thread with the settings.
    mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);

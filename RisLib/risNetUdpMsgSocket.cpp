@@ -3,6 +3,7 @@
 //******************************************************************************
 
 #include "stdafx.h"
+#include "trcTrace.h"
 
 #include "risNetUdpMsgSocket.h"
 
@@ -24,6 +25,7 @@ UdpRxMsgSocket::UdpRxMsgSocket()
    mRxCount = 0;
    mValidFlag = false;
    mMsgMonkey = 0;
+   mTI = 0;
 }
 
 UdpRxMsgSocket::~UdpRxMsgSocket()
@@ -52,6 +54,9 @@ void UdpRxMsgSocket::initialize(Settings& aSettings)
    // Metrics.
    mRxCount = 0;
    mRxLength = 0;
+
+   // Trace.
+   mTI = mSettings.mTraceIndex;
 }
 
 //******************************************************************************
@@ -72,12 +77,22 @@ void UdpRxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
+      Trc::write(mTI, 0, "UdpRxMsgSocket     PASS %16s : %5d",
+         BaseClass::mLocal.mString,
+         BaseClass::mLocal.mPort);
+
       printf("UdpRxMsgSocket     PASS %16s : %5d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
+      Trc::write(mTI, 0, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
+         BaseClass::mLocal.mString,
+         BaseClass::mLocal.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
+
       printf("UdpRxMsgSocket     FAIL %16s : %5d $ %d %d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
@@ -108,6 +123,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
+      Trc::write(mTI, 0, "ERROR UdpRxMsgSocket INVALID SOCKET");
       printf("ERROR UdpRxMsgSocket INVALID SOCKET\n");
       return false;
    }
@@ -135,6 +151,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
       }
       else
       {
+         Trc::write(mTI, 0, "ERROR UdpRxMsgSocket %d %d", BaseClass::mStatus, BaseClass::mError);
          printf("ERROR UdpRxMsgSocket %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
@@ -164,6 +181,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMsgMonkey->mHeaderValidFlag)
    {
+      Trc::write(mTI, 0, "ERROR UdpRxMsgSocket INVALID HEADER %d %d", mStatus, mError);
       printf("ERROR UdpRxMsgSocket INVALID HEADER %d %d\n", mStatus, mError);
       return false;
    }
@@ -181,6 +199,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Test for errors.
    if (aMsg == 0)
    {
+      Trc::write(mTI, 0, "ERROR UdpRxMsgSocket INVALID MESSAGE %d %d", mStatus, mError);
       printf("ERROR UdpRxMsgSocket INVALID MESSAGE %d %d\n", mStatus, mError);
       mStatus = tByteBuffer.getError();
       return false;
@@ -203,6 +222,7 @@ UdpTxMsgSocket::UdpTxMsgSocket()
    mTxLength = 0;
    mValidFlag = false;
    mMsgMonkey = 0;
+   mTI = 0;
 }
 
 //******************************************************************************
@@ -235,6 +255,9 @@ void UdpTxMsgSocket::initialize(Settings& aSettings)
    // Metrics.
    mTxCount = 0;
    mTxLength = 0;
+
+   // Trace.
+   mTI = mSettings.mTraceIndex;
 }
 
 //******************************************************************************
@@ -254,12 +277,22 @@ void UdpTxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
+      Trc::write(mTI, 0, "UdpTxMsgSocket     PASS %16s : %5d",
+         BaseClass::mRemote.mString,
+         BaseClass::mRemote.mPort);
+
       printf("UdpTxMsgSocket     PASS %16s : %5d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
+      Trc::write(mTI, 0, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
+         BaseClass::mRemote.mString,
+         BaseClass::mRemote.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
+
       printf("UdpTxMsgSocket     FAIL %16s : %5d $ %d %d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
@@ -280,6 +313,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
+      Trc::write(mTI, 0, "ERROR UdpTxMsgSocket INVALID SOCKET");
       printf("ERROR UdpTxMsgSocket INVALID SOCKET\n");
       delete aMsg;
       return false;
@@ -311,6 +345,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    }
    else
    {
+      Trc::write(mTI, 0, "ERROR UdpTxMsgSocket INVALID SEND");
       printf("ERROR UdpTxMsgSocket INVALID SEND\n");
    }
 

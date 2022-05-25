@@ -26,6 +26,7 @@ Settings::Settings()
    mTestForLocal = false;
    mUdpWrapFlag = false;
    mMaxSessions = 0;
+   mTraceIndex = 0;
    mFlags = 0;
    mMsgMonkey = 0;
    mThreadPriority = Ris::Threads::gPriorities.mUdp;

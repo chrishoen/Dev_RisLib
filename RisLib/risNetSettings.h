@@ -59,6 +59,9 @@ public:
    // Socket flags.
    int mFlags;
 
+   // Program trace index.
+   int mTraceIndex;
+
    // Thread processor number and priority.
    Ris::Threads::Priority mThreadPriority;
 

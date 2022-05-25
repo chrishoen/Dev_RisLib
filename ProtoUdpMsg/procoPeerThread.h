@@ -61,7 +61,7 @@ public:
 
    // Serial message thread, this manages serial message connections and
    // message transmission and reception.
-   Ris::SerialMsgThread*  mSerialMsgThread;
+   Ris::SerialMsgThread* mSerialMsgThread;
 
    // Message monkey used by mSerialMsgThread.
    MsgMonkey* mMsgMonkey;

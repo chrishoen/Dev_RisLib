@@ -87,9 +87,6 @@ void PeerThread::threadInitFunction()
    // Launch the child thread.
    mUdpMsgThread->launchThread();
 
-   // Launch child thread.
-   mUdpMsgThread->launchThread(); 
-
    Trc::write(11, 0, "PeerThread::threadInitFunction done");
 }
 

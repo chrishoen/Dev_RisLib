@@ -30,13 +30,13 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   if (false)
+   if (true)
    {
       ProtoComm::gPeerThread = new ProtoComm::PeerThread;
       ProtoComm::gPeerThread->launchThread();
    }
 
-   if (false)
+   if (true)
    {
       ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
       ProtoComm::gMonitorThread->launchThread();

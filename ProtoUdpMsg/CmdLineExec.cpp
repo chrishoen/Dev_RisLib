@@ -5,7 +5,7 @@
 #include "procoMsg.h"
 #include "procoMsgHelper.h"
 
-#include "procoProcThread.h"
+#include "procoPeerThread.h"
 #include "procoMonitorThread.h"
 
 #include "CmdLineExec.h"
@@ -29,7 +29,7 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        ProtoComm::gProcThread->mTPCode = aCmd->argInt(1);
+   if (aCmd->isCmd("TP"))        ProtoComm::gPeerThread->mTPCode = aCmd->argInt(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("DATA"))      executeData(aCmd);
@@ -47,7 +47,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::special(int aSpecial)
 {
-   ProtoComm::gProcThread->mShowCode = aSpecial;
+   ProtoComm::gPeerThread->mShowCode = aSpecial;
    ProtoComm::gMonitorThread->mShowCode = aSpecial;
 }
 
@@ -66,14 +66,14 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
       {
          ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
          MsgHelper::initialize(tMsg);
-         gProcThread->sendMsg(tMsg);
+         gPeerThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
          ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
          MsgHelper::initialize(tMsg);
-         gProcThread->sendMsg(tMsg);
+         gPeerThread->sendMsg(tMsg);
          break;
       }
    }
@@ -90,7 +90,7 @@ void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
    
    ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
    MsgHelper::initialize(tMsg,tNumWords);
-   gProcThread->sendMsg(tMsg);
+   gPeerThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -102,7 +102,7 @@ void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
    ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
    MsgHelper::initialize(tMsg);
 
-   gProcThread->sendMsg(tMsg);
+   gPeerThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -111,7 +111,7 @@ void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeAbort (Ris::CmdLineCmd* aCmd)
 {
-   gProcThread->mAbortQCall();
+   gPeerThread->mAbortQCall();
 }
 
 //******************************************************************************

@@ -9,8 +9,8 @@
 #include "procoMsgHelper.h"
 #include "procoSerialParms.h"
 
-#define  _PROCOSERIALTHREAD_CPP_
-#include "procoProcThread.h"
+#define  _PROCOPEERTHREAD_CPP_
+#include "procoPeerThread.h"
 
 namespace ProtoComm
 {
@@ -20,7 +20,7 @@ namespace ProtoComm
 //******************************************************************************
 // Constructor.
 
-ProcThread::ProcThread()
+PeerThread::PeerThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Proc");
@@ -28,9 +28,9 @@ ProcThread::ProcThread()
    BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
-   mSessionQCall.bind(this, &ProcThread::executeSession);
-   mRxMsgQCall.bind   (this,&ProcThread::executeRxMsg);
-   mAbortQCall.bind(this, &ProcThread::executeAbort);
+   mSessionQCall.bind(this, &PeerThread::executeSession);
+   mRxMsgQCall.bind   (this,&PeerThread::executeRxMsg);
+   mAbortQCall.bind(this, &PeerThread::executeAbort);
 
    // Initialize member variables.
    mSerialMsgThread = 0;
@@ -42,7 +42,7 @@ ProcThread::ProcThread()
    mShowCode = 0;
 }
 
-ProcThread::~ProcThread()
+PeerThread::~PeerThread()
 {
    if (mSerialMsgThread) delete mSerialMsgThread;
    delete mMsgMonkey;
@@ -53,7 +53,7 @@ ProcThread::~ProcThread()
 //******************************************************************************
 // Show thread info for this thread and for child threads.
 
-void ProcThread::showThreadInfo()
+void PeerThread::showThreadInfo()
 {
    BaseClass::showThreadInfo();
    if (mSerialMsgThread)
@@ -69,9 +69,9 @@ void ProcThread::showThreadInfo()
 // after the thread starts running. It creates and launches the 
 // child SerialMsgThread.
 
-void ProcThread::threadInitFunction()
+void PeerThread::threadInitFunction()
 {
-   Trc::write(11, 0, "ProcThread::threadInitFunction");
+   Trc::write(11, 0, "PeerThread::threadInitFunction");
 
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
@@ -92,7 +92,7 @@ void ProcThread::threadInitFunction()
    // Launch child thread.
    mSerialMsgThread->launchThread(); 
 
-   Trc::write(11, 0, "ProcThread::threadInitFunction done");
+   Trc::write(11, 0, "PeerThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -101,16 +101,16 @@ void ProcThread::threadInitFunction()
 // Thread exit function. This is called by the base class immedidately
 // before the thread is terminated. It shuts down the child SerialMsgThread.
 
-void ProcThread::threadExitFunction()
+void PeerThread::threadExitFunction()
 {
-   Trc::write(11, 0, "ProcThread::threadExitFunction");
-   Prn::print(0, "ProcThread::threadExitFunction BEGIN");
+   Trc::write(11, 0, "PeerThread::threadExitFunction");
+   Prn::print(0, "PeerThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
    mSerialMsgThread->shutdownThread();
 
-   Prn::print(0, "ProcThread::threadExitFunction END");
-   Trc::write(11, 0, "ProcThread::threadExitFunction done");
+   Prn::print(0, "PeerThread::threadExitFunction END");
+   Trc::write(11, 0, "PeerThread::threadExitFunction done");
 }
 
 //******************************************************************************
@@ -120,13 +120,13 @@ void ProcThread::threadExitFunction()
 // function to terminate the thread. This executes in the context of
 // the calling thread.
 
-void ProcThread::shutdownThread()
+void PeerThread::shutdownThread()
 {
-   Trc::write(11, 0, "ProcThread::shutdownThread");
-   Prn::print(0, "ProcThread::shutdownThread BEGIN");
+   Trc::write(11, 0, "PeerThread::shutdownThread");
+   Prn::print(0, "PeerThread::shutdownThread BEGIN");
    BaseClass::shutdownThread();
-   Prn::print(0, "ProcThread::shutdownThread END");
-   Trc::write(11, 0, "ProcThread::shutdownThread done");
+   Prn::print(0, "PeerThread::shutdownThread END");
+   Trc::write(11, 0, "PeerThread::shutdownThread done");
 }
 
 //******************************************************************************
@@ -134,7 +134,7 @@ void ProcThread::shutdownThread()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void ProcThread::executeOnTimer(int aTimerCount)
+void PeerThread::executeOnTimer(int aTimerCount)
 {
    if (mTPCode == 1)
    {
@@ -155,7 +155,7 @@ void ProcThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // Abort function. This is bound to the qcall. It aborts the serial port.
 
-void ProcThread::executeAbort()
+void PeerThread::executeAbort()
 {
    mSerialMsgThread->mSerialMsgPort.doAbort();
 }
@@ -167,15 +167,15 @@ void ProcThread::executeAbort()
 // when a session is established or disestablished (when the serial port
 // is opened or it is closed because of an error or a disconnection). 
 
-void ProcThread::executeSession(bool aConnected)
+void PeerThread::executeSession(bool aConnected)
 {
    if (aConnected)
    {
-      Prn::print(Prn::Show1, "ProcThread CONNECTED");
+      Prn::print(Prn::Show1, "PeerThread CONNECTED");
    }
    else
    {
-      Prn::print(Prn::Show1, "ProcThread DISCONNECTED");
+      Prn::print(Prn::Show1, "PeerThread DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;
@@ -189,7 +189,7 @@ void ProcThread::executeSession(bool aConnected)
 // Based on the receive message type, call one of the specific receive
 // message handlers. This is bound to the qcall.
 
-void ProcThread::executeRxMsg(Ris::ByteContent* aMsg)
+void PeerThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
    ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
 
@@ -213,7 +213,7 @@ void ProcThread::executeRxMsg(Ris::ByteContent* aMsg)
       processRxMsg((ProtoComm::ByteBlobMsg*)tMsg);
       break;
    default:
-      Prn::print(Prn::Show1, "ProcThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
+      Prn::print(Prn::Show1, "PeerThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
       delete tMsg;
       break;
    }
@@ -225,7 +225,7 @@ void ProcThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Message handler - TestMsg.
 
-void ProcThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
+void PeerThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 {
    MsgHelper::show(Prn::Show1, aRxMsg);
    delete aRxMsg;
@@ -236,7 +236,7 @@ void ProcThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 //******************************************************************************
 // Rx message handler - EchoRequestMsg.
 
-void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
+void PeerThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 {
    if (true)
    {
@@ -257,7 +257,7 @@ void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - EchoResponseMsg.
 
-void ProcThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
+void PeerThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -271,7 +271,7 @@ void ProcThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - DataMsg.
 
-void ProcThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
+void PeerThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -285,7 +285,7 @@ void ProcThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - ByteBlobMsg.
 
-void ProcThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
+void PeerThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -299,7 +299,7 @@ void ProcThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 //******************************************************************************
 // Send a message via mSerialMsgThread:
 
-void ProcThread::sendMsg(BaseMsg* aTxMsg)
+void PeerThread::sendMsg(BaseMsg* aTxMsg)
 {
    mSerialMsgThread->sendMsg(aTxMsg);
    mTxCount++;
@@ -310,7 +310,7 @@ void ProcThread::sendMsg(BaseMsg* aTxMsg)
 //******************************************************************************
 // Send a message via mSerialMsgThread:
 
-void ProcThread::sendTestMsg()
+void PeerThread::sendTestMsg()
 {
    TestMsg* tMsg = new TestMsg;
    tMsg->mCode1 = 201;

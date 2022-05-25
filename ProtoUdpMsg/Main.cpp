@@ -6,7 +6,7 @@
 #include "CmdLineExec.h"
 #include "MainInit.h"
 
-#include "procoProcThread.h"
+#include "procoPeerThread.h"
 #include "procoMonitorThread.h"
 
 //******************************************************************************
@@ -27,8 +27,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   ProtoComm::gProcThread = new ProtoComm::ProcThread;
-   ProtoComm::gProcThread->launchThread();
+   ProtoComm::gPeerThread = new ProtoComm::PeerThread;
+   ProtoComm::gPeerThread->launchThread();
 
    ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
    ProtoComm::gMonitorThread->launchThread();
@@ -39,7 +39,7 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   ProtoComm::gProcThread->showThreadInfo();
+   ProtoComm::gPeerThread->showThreadInfo();
    ProtoComm::gMonitorThread->showThreadInfo();
 
    //***************************************************************************
@@ -60,9 +60,9 @@ int main(int argc,char** argv)
    delete ProtoComm::gMonitorThread;
    ProtoComm::gMonitorThread = 0;
 
-   ProtoComm::gProcThread->shutdownThread();
-   delete ProtoComm::gProcThread;
-   ProtoComm::gProcThread = 0;
+   ProtoComm::gPeerThread->shutdownThread();
+   delete ProtoComm::gPeerThread;
+   ProtoComm::gPeerThread = 0;
 
    //***************************************************************************
    //***************************************************************************

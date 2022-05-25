@@ -227,15 +227,15 @@ void ServerThread::processRxMsg(int aSessionIndex, ProtoComm::TestMsg*  aRxMsg)
 // session state list. This message is sent by the client when a connection
 // is established.
 
-void ServerThread::processRxMsg(int aSessionIndex, FirstMessageMsg* aMsg)
+void ServerThread::processRxMsg(int aSessionIndex, FirstMessageMsg* aRxMsg)
 {
-   Prn::print(Prn::Show1, "processRxMsg_FirstMessageMsg %d %d", aSessionIndex, aMsg->mHeader.mSourceId);
+   Prn::print(Prn::Show1, "processRxMsg_FirstMessageMsg %d %d", aSessionIndex, aRxMsg->mCode1);
 
    // Add session to state list.
-   mSessionStateList.add(aSessionIndex, aMsg->mHeader.mSourceId);
+   mSessionStateList.add(aSessionIndex, aRxMsg->mCode1);
 
    // Delete the message
-   delete aMsg;
+   delete aRxMsg;
 }
 
 //******************************************************************************
@@ -326,7 +326,6 @@ void ServerThread::sendTestMsg(int aAppNumber)
    // Send a message on socket at the session index.
    TestMsg* tMsg = new TestMsg;
    tMsg->mCode1 = 201;
-
    mMsgThread->sendMsg(tSessionIndex, tMsg);
 }
 

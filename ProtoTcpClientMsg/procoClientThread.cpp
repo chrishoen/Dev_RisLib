@@ -141,8 +141,9 @@ void ClientThread::executeSession(bool aConnected)
 
       // Transmit a FirstMessage to the server to inform it of who this 
       // client is.
-      FirstMessageMsg* msg = new FirstMessageMsg;
-      sendMsg(msg);
+      FirstMessageMsg* tTxMsg = new FirstMessageMsg;
+      tTxMsg->mCode1 = gTcpSettings.mMyAppNumber;
+      sendMsg(tTxMsg);
    }
    else
    {

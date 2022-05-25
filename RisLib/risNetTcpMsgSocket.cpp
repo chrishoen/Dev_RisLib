@@ -176,7 +176,6 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    if (!tRet || tStatus<=0)
    {
       Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID READ");
-      printf("ERROR TcpMsgSocket INVALID READ\n");
       return false;
    }
 

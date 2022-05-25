@@ -205,7 +205,11 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
       return false;
    }
 
+   // Metrics.
+   mMsgMonkey->mRxMsgMetrics->update(aMsg, mMsgMonkey->mMessageLength);
+
    // Done.
+   Trc::write(mTI, 1, "UdpRxMsgSocket doReceiveMsg %d %d", mStatus, mError);
    mRxCount++;
    return true;
 }
@@ -328,9 +332,6 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    // Copy the message to the buffer.
    mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
 
-   // Delete the message.
-   delete aMsg;
-
    // Transmit the buffer.
    mTxLength = tByteBuffer.getLength();
    bool tRet = doSendTo(mRemote, tByteBuffer.getBaseAddress(), mTxLength);
@@ -349,7 +350,14 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
       printf("ERROR UdpTxMsgSocket INVALID SEND\n");
    }
 
+   // Metrics.
+   mMsgMonkey->mTxMsgMetrics->update(aMsg, mTxLength);
+
+   // Delete the message.
+   delete aMsg;
+
    // Done.
+   Trc::write(mTI, 1, "UdpRxMsgSocket doSendMsg %d", mTxLength);
    return tRet;
 }
 

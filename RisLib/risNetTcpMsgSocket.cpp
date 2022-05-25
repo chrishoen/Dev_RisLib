@@ -8,6 +8,7 @@
 #include "stdafx.h"
 
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risNetTcpMsgSocket.h"
 
@@ -32,6 +33,7 @@ TcpMsgSocket::TcpMsgSocket()
    mRxCount = 0;
    mValidFlag = false;
    mMsgMonkey = 0;
+   mTI = 0;
 }
 
 TcpMsgSocket::~TcpMsgSocket()
@@ -59,6 +61,9 @@ void TcpMsgSocket::initialize(Settings& aSettings)
    mTxMemory = (char*)malloc(mMemorySize);
    mRxMemory = (char*)malloc(mMemorySize);
 
+   // Trace.
+   mTI = mSettings.mTraceIndex;
+
    // Not valid until configured.
    mValidFlag = false;
 }
@@ -83,12 +88,20 @@ void TcpMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
+      Trc::write(mTI, 0, "TcpMsgSocket       PASS %16s : %5d",
+         BaseClass::mRemote.mString,
+         BaseClass::mRemote.mPort);
       printf("TcpMsgSocket       PASS %16s : %5d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
+      Trc::write(mTI, 0, "TcpMsgSocket       FAIL %16s : %5d $ %d %d",
+         BaseClass::mRemote.mString,
+         BaseClass::mRemote.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
       printf("TcpMsgSocket       FAIL %16s : %5d $ %d %d\n",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort,
@@ -122,6 +135,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
+      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SOCKET");
       printf("ERROR TcpMsgSocket INVALID SOCKET\n");
       delete aMsg;
       return false;
@@ -153,6 +167,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    }
    else
    {
+      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SEND\n");
       printf("ERROR TcpMsgSocket INVALID SEND\n");
    }
 
@@ -184,6 +199,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
+      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SOCKET");
       printf("ERROR TcpMsgSocket INVALID SOCKET\n");
       return false;
    }
@@ -211,6 +227,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Returning false means socket was closed.
    if (!tRet || tStatus<=0)
    {
+      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID READ");
       printf("ERROR TcpMsgSocket INVALID READ\n");
       return false;
    }
@@ -225,6 +242,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMsgMonkey->mHeaderValidFlag)
    {
+      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID HEADER");
       printf("ERROR TcpMsgSocket INVALID HEADER\n");
       return false;
    }
@@ -246,6 +264,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // If bad status then return false.
    if (!tRet || tStatus<=0)
    {
+      Trc::write(mTI, 0, "ERROR doRecv2 INVALID RECV");
       printf("ERROR doRecv2 INVALID RECV\n");
       return false;
    }
@@ -266,6 +285,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
+      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID MESSAGE");
       printf("ERROR TcpMsgSocket INVALID MESSAGE\n");
       mStatus=tByteBuffer.getError();
       return false;

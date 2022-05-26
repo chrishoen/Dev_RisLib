@@ -10,7 +10,6 @@ Tcp message socket class.
 
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
-#include "risThreadsSynch.h"
 #include "risNetSettings.h"
 #include "risSockets.h"
 
@@ -61,7 +60,6 @@ public:
    // Members.
 
    // Transmit and receive memory. Allocated at initialization.
-   char* mTxMemory;
    char* mRxMemory;
 
    // Size of allocated memory.
@@ -81,9 +79,6 @@ public:
    // message is sent. A specific message monkey is provided by the parent 
    // thread at initialization.
    BaseMsgMonkey* mMsgMonkey;
-
-   // Transmit mutex is used by doSendMsg for mutual exclusion.
-   Threads::MutexSemaphore  mTxMutex;
 
    // General purpose valid flag.
    bool mValidFlag;

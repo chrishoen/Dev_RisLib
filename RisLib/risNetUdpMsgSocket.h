@@ -11,7 +11,6 @@ UDP transmit message socket.
 
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
-#include "risThreadsSynch.h"
 #include "risNetSettings.h"
 #include "risSockets.h"
 
@@ -159,9 +158,6 @@ public:
    // receive method to receive and extract a message from a byte buffer
    // without the having the message code visible to it.
    BaseMsgMonkey* mMsgMonkey;
-
-   // Transmit mutex is used by doSendMsg for mutual exclusion.
-   Threads::MutexSemaphore  mTxMutex;
 
    // General purpose valid flag.
    bool mValidFlag;

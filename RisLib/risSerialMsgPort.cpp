@@ -34,6 +34,7 @@ SerialMsgPort::SerialMsgPort()
    mMsgMonkey = 0;
    mHeaderReadState = 0;
    mHeaderLength = 0;
+   mTI = 0;
 }
 
 SerialMsgPort::~SerialMsgPort()
@@ -70,6 +71,9 @@ void SerialMsgPort::initialize(SerialSettings& aSettings)
    mRxMsgCount = 0;
    mHeaderAllCount = 0;
    mHeaderOneCount = 0;
+
+   // Trace.
+   mTI = mSettings.mTraceIndex;
 }
 
 //******************************************************************************

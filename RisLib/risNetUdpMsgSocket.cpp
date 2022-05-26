@@ -31,7 +31,6 @@ UdpRxMsgSocket::UdpRxMsgSocket()
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
    if (mRxMemory) free(mRxMemory);
-   if (mMsgMonkey) delete mMsgMonkey;
 }
 
 //******************************************************************************
@@ -314,6 +313,7 @@ void UdpTxMsgSocket::configure()
 
 bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 {
+   Trc::write(mTI, 0, "UdpTxMsgSocket::doSendMsg");
    // Guard.
    if (!mValidFlag)
    {
@@ -322,9 +322,6 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
       delete aMsg;
       return false;
    }
-
-   // Mutex.
-   mTxMutex.lock();
 
    // Create a byte buffer from preallocated memory.
    ByteBuffer tByteBuffer(mTxMemory, mMemorySize);
@@ -336,9 +333,6 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    mTxLength = tByteBuffer.getLength();
    bool tRet = doSendTo(mRemote, tByteBuffer.getBaseAddress(), mTxLength);
    mTxCount++;
-
-   // Mutex.
-   mTxMutex.unlock();
 
    if (tRet)
    {
@@ -357,7 +351,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    delete aMsg;
 
    // Done.
-   Trc::write(mTI, 1, "UdpRxMsgSocket doSendMsg %d", mTxLength);
+   Trc::write(mTI, 1, "UdpRxMsgSocket doSendMsg done %d", mTxLength);
    return tRet;
 }
 

@@ -24,7 +24,6 @@ namespace Net
    
 TcpMsgSocket::TcpMsgSocket()
 {
-   mTxMemory = 0;
    mRxMemory = 0;
    mMemorySize = 0;
    mTxLength = 0;
@@ -38,9 +37,7 @@ TcpMsgSocket::TcpMsgSocket()
 
 TcpMsgSocket::~TcpMsgSocket()
 {
-   if (mTxMemory) free(mTxMemory);
    if (mRxMemory) free(mRxMemory);
-   if (mMsgMonkey) delete mMsgMonkey;
 }
 
 //******************************************************************************
@@ -58,7 +55,6 @@ void TcpMsgSocket::initialize(Settings& aSettings)
 
    // Allocate memory for byte buffers.
    mMemorySize = mMsgMonkey->getMaxBufferSize();
-   mTxMemory = (char*)malloc(mMemorySize);
    mRxMemory = (char*)malloc(mMemorySize);
 
    // Trace.
@@ -272,11 +268,8 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
       return false;
    }
 
-   // Mutex.
-   mTxMutex.lock();
-
    // Create a byte buffer from preallocated memory.
-   ByteBuffer tByteBuffer(mTxMemory, mMemorySize);
+   ByteBuffer tByteBuffer(mMemorySize);
 
    // Copy the message to the buffer.
    mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
@@ -285,9 +278,6 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    mTxLength = tByteBuffer.getLength();
    bool tRet = doSend(tByteBuffer.getBaseAddress(), mTxLength);
    mTxCount++;
-
-   // Mutex.
-   mTxMutex.unlock();
 
    if (tRet)
    {

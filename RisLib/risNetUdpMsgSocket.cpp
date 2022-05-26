@@ -111,6 +111,7 @@ void UdpRxMsgSocket::configure()
 
 bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 {
+   Trc::write(mTI, 0, "UdpRxMsgSocket::doReceiveMsg");
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -146,7 +147,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    {
       if (BaseClass::mError == 0)
       {
-         //printf("UdpRxMsgSocket CLOSED\n");
+         Trc::write(mTI, 0, "UdpRxMsgSocket CLOSED");
       }
       else
       {
@@ -208,7 +209,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    mMsgMonkey->mRxMsgMetrics->update(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
-   Trc::write(mTI, 1, "UdpRxMsgSocket doReceiveMsg %d %d", mStatus, mError);
+   Trc::write(mTI, 1, "UdpRxMsgSocket doReceiveMsg done %d %d", mStatus, mError);
    mRxCount++;
    return true;
 }

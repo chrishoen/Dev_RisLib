@@ -8,6 +8,7 @@
 #include "stdafx.h"
 
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
 #include "risNetUdpMsgThread.h"
@@ -34,6 +35,7 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 
    // Initialize variables.
    mTxConfigFlag = false;
+   mTI = mSettings.mTraceIndex;
 }
 
 //******************************************************************************
@@ -44,6 +46,7 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 
 void UdpMsgThread::threadInitFunction()
 {
+   Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction");
    // Initialize and configure the receive socket.
    mRxSocket.initialize(mSettings);
    mRxSocket.configure();
@@ -56,6 +59,7 @@ void UdpMsgThread::threadInitFunction()
       mTxSocket.configure();
       mTxConfigFlag = true;
    }
+   Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -66,6 +70,7 @@ void UdpMsgThread::threadInitFunction()
 
 void  UdpMsgThread::threadRunFunction()
 {
+   Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction");
    bool tGoing = mRxSocket.mValidFlag;
    bool tFirstFlag = true;
 
@@ -77,6 +82,7 @@ void  UdpMsgThread::threadRunFunction()
       ByteContent* tMsg=0;
       if (mRxSocket.doReceiveMsg(tMsg))
       {
+         Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg");
          // If this is the first correct receive message.
          if (tFirstFlag)
          {
@@ -100,6 +106,7 @@ void  UdpMsgThread::threadRunFunction()
       }
       else
       {
+         Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg ERROR");
          // Message was not correctly received.
       }
 
@@ -110,6 +117,7 @@ void  UdpMsgThread::threadRunFunction()
          tGoing=false;
       }  
    }         
+   Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction done");
 }
 
 //******************************************************************************
@@ -119,6 +127,7 @@ void  UdpMsgThread::threadRunFunction()
 
 void UdpMsgThread::threadExitFunction()
 {
+   Trc::write(mTI, 1, "UdpMsgThread::threadExitFunction");
 }
 
 //******************************************************************************
@@ -134,11 +143,13 @@ void UdpMsgThread::threadExitFunction()
 
 void UdpMsgThread::shutdownThread()
 {
+   Trc::write(mTI, 1, "UdpMsgThread::shutdownThread");
    BaseThread::mTerminateFlag = true;
 
    mRxSocket.doClose();
 
    BaseThread::waitForThreadTerminate();
+   Trc::write(mTI, 1, "UdpMsgThread::shutdownThread done");
 }
 
 //******************************************************************************

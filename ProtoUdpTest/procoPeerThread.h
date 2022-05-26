@@ -126,28 +126,6 @@ public:
    // Based on the receive message type, call one of the specific receive
    // message handlers. This is bound to the qcall.
    void executeRxMsg(Ris::ByteContent* aMsg);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Receive message handlers. There is one for each message that can 
-   // be received.
-   void processRxMsg(ProtoComm::TestMsg* aMsg);
-   void processRxMsg(ProtoComm::EchoRequestMsg* aMsg);
-   void processRxMsg(ProtoComm::EchoResponseMsg* aMsg);
-   void processRxMsg(ProtoComm::DataMsg* aMsg);
-   void processRxMsg(ProtoComm::ByteBlobMsg* aMsg);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Send a message via mMsgThread:
-   void sendMsg (BaseMsg* aTxMsg);
-   void sendTestMsg();
 };
 
 //******************************************************************************

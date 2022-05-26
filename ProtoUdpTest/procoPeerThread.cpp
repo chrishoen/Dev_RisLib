@@ -6,6 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include "risSleep.h"
 #include "procoMsgHelper.h"
 #include "procoUdpSettings.h"
 
@@ -136,18 +137,6 @@ void PeerThread::shutdownThread()
 
 void PeerThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPCode == 1)
-   {
-      EchoRequestMsg* tTxMsg = new EchoRequestMsg;
-      MsgHelper::initialize(tTxMsg);
-      sendMsg(tTxMsg);
-   }
-   else if (mTPCode == 2)
-   {
-      ByteBlobMsg* tTxMsg = new ByteBlobMsg;
-      MsgHelper::initialize2(tTxMsg);
-      sendMsg(tTxMsg);
-   }
 }
 
 //******************************************************************************
@@ -160,131 +149,7 @@ void PeerThread::executeOnTimer(int aTimerCount)
 
 void PeerThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
-   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
-
-   // Message jump table based on message type.
-   // Call corresponding specfic message handler method.
-   switch (tMsg->mMessageType)
-   {
-   case ProtoComm::MsgIdT::cTestMsg:
-      processRxMsg((ProtoComm::TestMsg*)tMsg);
-      break;
-   case ProtoComm::MsgIdT::cEchoRequestMsg:
-      processRxMsg((ProtoComm::EchoRequestMsg*)tMsg);
-      break;
-   case ProtoComm::MsgIdT::cEchoResponseMsg:
-      processRxMsg((ProtoComm::EchoResponseMsg*)tMsg);
-      break;
-   case ProtoComm::MsgIdT::cDataMsg:
-      processRxMsg((ProtoComm::DataMsg*)tMsg);
-      break;
-   case ProtoComm::MsgIdT::cByteBlobMsg:
-      processRxMsg((ProtoComm::ByteBlobMsg*)tMsg);
-      break;
-   default:
-      Prn::print(Prn::Show1, "PeerThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
-      delete tMsg;
-      break;
-   }
-   mRxCount++;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Message handler - TestMsg.
-
-void PeerThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
-{
-   MsgHelper::show(Prn::Show1, aRxMsg);
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - EchoRequestMsg.
-
-void PeerThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
-{
-   if (true)
-   {
-      ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      MsgHelper::initialize(tTxMsg, 1000);
-      tTxMsg->mCode1 = aRxMsg->mCode1;
-      mMsgThread->sendMsg(tTxMsg);
-   }
-   if (mShowCode == 3)
-   {
-      MsgHelper::show(Prn::Show1, aRxMsg);
-   }
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - EchoResponseMsg.
-
-void PeerThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
-{
-   if (mShowCode == 3)
-   {
-      MsgHelper::show(Prn::Show1, aRxMsg);
-   }
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - DataMsg.
-
-void PeerThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
-{
-   if (mShowCode == 3)
-   {
-      MsgHelper::show(Prn::Show1, aRxMsg);
-   }
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - ByteBlobMsg.
-
-void PeerThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
-{
-   if (mShowCode == 3)
-   {
-      MsgHelper::show(Prn::Show1, aRxMsg);
-   }
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send a message via mMsgThread:
-
-void PeerThread::sendMsg(BaseMsg* aTxMsg)
-{
-   mMsgThread->sendMsg(aTxMsg);
-   mTxCount++;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Send a message via mMsgThread:
-
-void PeerThread::sendTestMsg()
-{
-   TestMsg* tMsg = new TestMsg;
-   tMsg->mCode1 = 201;
-
-   mMsgThread->sendMsg(tMsg);
+   delete aMsg;
 }
 
 //******************************************************************************

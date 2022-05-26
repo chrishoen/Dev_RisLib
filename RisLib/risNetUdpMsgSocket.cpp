@@ -236,7 +236,6 @@ UdpTxMsgSocket::UdpTxMsgSocket()
 UdpTxMsgSocket::~UdpTxMsgSocket()
 {
    if (mTxMemory) free(mTxMemory);
-   if (mMsgMonkey) delete mMsgMonkey;
 }
 
 //******************************************************************************

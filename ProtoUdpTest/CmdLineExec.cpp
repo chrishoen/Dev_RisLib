@@ -53,26 +53,6 @@ void CmdLineExec::special(int aSpecial)
 
 void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   int tMsgType= aCmd->argInt(1);
-
-   switch (tMsgType)
-   {
-      case 1:
-      {
-         ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-         MsgHelper::initialize(tMsg);
-         gPeerThread->sendMsg(tMsg);
-         break;
-      }
-      case 5:
-      {
-         ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-         MsgHelper::initialize(tMsg);
-         gPeerThread->sendMsg(tMsg);
-         break;
-      }
-   }
 }
 
 //******************************************************************************
@@ -81,12 +61,6 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   int tNumWords = aCmd->argInt(1);
-   
-   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-   MsgHelper::initialize(tMsg,tNumWords);
-   gPeerThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -95,32 +69,14 @@ void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-   MsgHelper::initialize(tMsg);
-
-   gPeerThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-void test1(Ris::ByteContent* aMsg)
-{
-   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
-   Prn::print(0, "MessageType %d", tMsg->mMessageType);
-}
-
-void test2(Ris::ByteContent* aMsg)
-{
-   test1(aMsg);
-}
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-   test1(tMsg);
-   test2(tMsg);
 }
 
 //******************************************************************************
@@ -129,9 +85,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::MsgMetrics tMsgMetrics;
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-   tMsgMetrics.update(tMsg, 100);
 }
 
 //******************************************************************************

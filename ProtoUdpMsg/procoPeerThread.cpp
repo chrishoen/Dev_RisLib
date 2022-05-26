@@ -29,7 +29,6 @@ PeerThread::PeerThread()
 
    // Initialize qcalls.
    mRxMsgQCall.bind   (this,&PeerThread::executeRxMsg);
-   mAbortQCall.bind(this, &PeerThread::executeAbort);
 
    // Initialize member variables.
    mMsgThread = 0;
@@ -43,7 +42,11 @@ PeerThread::PeerThread()
 
 PeerThread::~PeerThread()
 {
-   if (mMsgThread) delete mMsgThread;
+   if (mMsgThread)
+   {
+      delete mMsgThread;
+      mMsgThread = 0;
+   }
    delete mMsgMonkey;
 }
 
@@ -145,16 +148,6 @@ void PeerThread::executeOnTimer(int aTimerCount)
       MsgHelper::initialize2(tTxMsg);
       sendMsg(tTxMsg);
    }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Abort function. This is bound to the qcall. It aborts the serial port.
-
-void PeerThread::executeAbort()
-{
-// mMsgThread->mRxSocket.doAbort();
 }
 
 //******************************************************************************

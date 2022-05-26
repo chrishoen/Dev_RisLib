@@ -127,13 +127,6 @@ public:
    // message handlers. This is bound to the qcall.
    void executeRxMsg(Ris::ByteContent* aMsg);
 
-   // Abort qcall. It is invoked by the control thread to execute a
-   // an abort in the context of this thread.
-   Ris::Threads::QCall0 mAbortQCall;
-
-   // Abort function. This is bound to the qcall. It aborts the serial port.
-   void executeAbort();
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

@@ -112,7 +112,7 @@ void  UdpMsgThread::threadRunFunction()
 
       // If termination request then exit the loop.
       // This is set by shutdown, see below.
-      if (mTerminateFlag)
+      if (BaseThread::mTerminateFlag)
       {
          tGoing=false;
       }  

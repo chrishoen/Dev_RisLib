@@ -6,6 +6,7 @@
 #include "CmdLineExec.h"
 #include "MainInit.h"
 #include "MainArgs.h"
+#include "MainTest.h"
 
 #include "procoPeerThread.h"
 #include "procoMonitorThread.h"
@@ -24,6 +25,9 @@ int main(int argc,char** argv)
    gMainArgs.initialize(argc, argv);
    gMainArgs.show();
    main_initialize();
+
+   //main_test();
+   //return 0;
 
    //***************************************************************************
    //***************************************************************************

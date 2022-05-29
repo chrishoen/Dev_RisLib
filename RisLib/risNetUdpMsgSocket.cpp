@@ -271,7 +271,8 @@ void UdpTxMsgSocket::initialize(Settings& aSettings)
 void UdpTxMsgSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mRemote.setByHostName(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+// BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
 
    // Set valid flag from base class results.

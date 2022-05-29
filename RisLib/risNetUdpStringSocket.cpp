@@ -211,7 +211,7 @@ void UdpTxStringSocket::initialize(Settings& aSettings)
 void UdpTxStringSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mRemote.setByHostName(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::testRemoteAddress(mSettings.mTestForLocal);
    BaseClass::doSocket();
 

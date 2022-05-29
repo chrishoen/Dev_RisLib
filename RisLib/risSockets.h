@@ -65,7 +65,7 @@ public:
    void reset ();
 
    void setByAddress(unsigned aAddress, int aPort);
-   void setByHostName(const char* aNode, int aPort);
+   void setByAddress(const char* aString, int aPort);
    void setForAny(int aPort);
    void setForBroadcast(int aPort);
 

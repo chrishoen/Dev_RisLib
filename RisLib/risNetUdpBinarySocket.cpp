@@ -173,7 +173,7 @@ void UdpTxBinarySocket::initialize(Settings& aSettings)
 void UdpTxBinarySocket::configure()
 {
    // Configure the socket.
-   BaseClass::mRemote.setByHostName(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::testRemoteAddress(mSettings.mTestForLocal);
    BaseClass::doSocket();
 

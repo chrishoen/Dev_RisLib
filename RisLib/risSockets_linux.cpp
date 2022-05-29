@@ -83,52 +83,12 @@ void SocketAddress::setByAddress(unsigned aAddress, int aPort)
 //******************************************************************************
 //******************************************************************************
 
-void SocketAddress::setByHostName(const char* aNode, int aPort)
+void SocketAddress::setByAddress(const char* aString, int aPort)
 {
    reset();
-
-   unsigned tAddress;
-
-   struct hostent* hostEnt = gethostbyname(aNode);
-
-   if (hostEnt)
-   {
-      char* bytePtr = *hostEnt->h_addr_list;
-      u_long* uintPtr = (u_long*)bytePtr;
-      tAddress = ntohl(*uintPtr);
-   }
-   else
-   {
-      tAddress = 0;
-   }
+   if (strlen(aString) > 16) return;
+   unsigned int tAddress = ntohl(inet_addr(aString));
    setByAddress(tAddress, aPort);
-   return;
-
-
-   struct addrinfo hints;
-   struct addrinfo *result;
-   int s;
-
-   char tPortString[20];
-   sprintf(tPortString, "%d", aPort);
-
-   memset(&hints, 0, sizeof(struct addrinfo));
-   hints.ai_family = AF_INET;
-   hints.ai_socktype = SOCK_DGRAM;
-   hints.ai_flags = (AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV);
-   hints.ai_protocol = 0;
-
-   s = getaddrinfo(aNode, tPortString, &hints, &result);
-   if (s != 0)
-   {
-      printf("ERROR1 getaddrinfo: %s %s\n", aNode, gai_strerror(s));
-      return;
-   }
-
-   sockaddr_in* tAddrIn = (sockaddr_in*)result->ai_addr;
-   setByAddress(ntohl(tAddrIn->sin_addr.s_addr), ntohs(tAddrIn->sin_port));
-
-   freeaddrinfo(result);
 }
 
 //******************************************************************************
@@ -166,8 +126,8 @@ bool SocketAddress::isMulticast()
 {
    SocketAddress tMulticastLo;
    SocketAddress tMulticastHi;
-   tMulticastLo.setByHostName("224.0.0.0", 0);
-   tMulticastHi.setByHostName("239.255.255.255", 0);
+   tMulticastLo.setByAddress("224.0.0.0", 0);
+   tMulticastHi.setByAddress("239.255.255.255", 0);
    return (tMulticastLo.mAddress <= mAddress) && (mAddress <= tMulticastHi.mAddress);
 }
 

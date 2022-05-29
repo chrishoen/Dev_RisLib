@@ -341,6 +341,12 @@ bool BaseSocket::setOptionNoDelay ()
    int tStatus = 0;
    int tValue = 1;
 // tStatus = setsockopt(mBaseSpecific->mDesc,IPPROTO_TCP,TCP_NODELAY,(char*)&tValue,sizeof(bool));
+
+   struct linger sl;
+   sl.l_onoff = 1;		/* non-zero value enables linger option in kernel */
+   sl.l_linger = 0;	/* timeout interval in seconds */
+   setsockopt(mBaseSpecific->mDesc, SOL_SOCKET, SO_LINGER, &sl, sizeof(sl));
+
    return updateError(tStatus);
 }
 

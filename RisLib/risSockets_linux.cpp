@@ -326,7 +326,7 @@ bool BaseSocket::setOptionDontLinger ()
 
    int tStatus = 0;
    int tValue = 1;
-   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_LINGER,&tValue,sizeof(int));
+// tStatus = setsockopt(mBaseSpecific->mDesc, SOL_SOCKET, SO_LINGER, &tValue, sizeof(int));
    return updateError(tStatus);
 }
 
@@ -746,7 +746,7 @@ bool BaseTcpStreamSocket::doSocket()
    if (mBaseSpecific->mDesc == -1) tStatus = -1;
    else                            tStatus =  0;
 
-// setOptionDontLinger();
+   setOptionDontLinger();
 
    return updateError(tStatus);
 }

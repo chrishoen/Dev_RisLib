@@ -761,13 +761,13 @@ bool BaseTcpStreamSocket::doSocket()
 //******************************************************************************
 //******************************************************************************
 
-bool BaseTcpStreamSocket::setOptionKeepAlive ()
+bool BaseTcpStreamSocket::setOptionKeepAlive()
 {
    if (mStatus < 0) return false;
 
    int tStatus = 0;
-   bool bValue=true;
-   tStatus=setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_KEEPALIVE,(char*)&bValue,sizeof(bool));
+   int tValue = 1;
+   tStatus = setsockopt(mBaseSpecific->mDesc, SOL_SOCKET, SO_KEEPALIVE, &tValue, sizeof(int));
    return updateError(tStatus);
 }
 

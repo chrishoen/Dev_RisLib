@@ -75,8 +75,8 @@ void TcpMsgSocket::configure()
    BaseClass::reset();
    BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
-   //BaseClass::setOptionKeepAlive();
-   //BaseClass::setOptionNoDelay();
+   BaseClass::setOptionKeepAlive();
+   BaseClass::setOptionNoDelay();
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;

@@ -744,9 +744,9 @@ bool BaseTcpStreamSocket::doSocket()
    mBaseSpecific->mDesc = socket(AF_INET,mType,mProtocol);
 
    if (mBaseSpecific->mDesc == -1) tStatus = -1;
-   else                                  tStatus =  0;
+   else                            tStatus =  0;
 
-   setOptionDontLinger();
+// setOptionDontLinger();
 
    return updateError(tStatus);
 }

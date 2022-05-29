@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -340,13 +341,14 @@ bool BaseSocket::setOptionDontLinger ()
 //******************************************************************************
 //******************************************************************************
 
-bool BaseSocket::setOptionNoDelay ()
+bool BaseSocket::setOptionNoDelay()
 {
    if (mStatus < 0) return false;
 
    int tStatus = 0;
    int tValue = 1;
-// tStatus = setsockopt(mBaseSpecific->mDesc,IPPROTO_TCP,TCP_NODELAY,(char*)&tValue,sizeof(bool));
+//   tStatus = setsockopt(mBaseSpecific->mDesc, IPPROTO_TCP, TCP_NODELAY, &tValue, sizeof(int));
+   tStatus = setsockopt(mBaseSpecific->mDesc, SOL_TCP, TCP_NODELAY, &tValue, sizeof(int));
    return updateError(tStatus);
 }
 

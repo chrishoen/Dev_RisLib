@@ -49,6 +49,7 @@ void SessionStateList::add(int aIndex,int aIdent)
 // Remove an ordered pair from the list
 void SessionStateList::remove(int aIndex)
 {
+   if (mNumSessions <= 0) return;
    mIdent[aIndex] = cInvalidValue;
    mNumSessions--;
 }

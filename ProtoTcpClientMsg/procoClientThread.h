@@ -59,7 +59,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Udp message thread, this manages tcp message connections and
+   // Tcp message thread, this manages tcp message connections and
    // message transmission and reception.
    Ris::Net::TcpMsgClientThread* mMsgThread;
 

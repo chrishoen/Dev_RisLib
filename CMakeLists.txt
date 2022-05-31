@@ -10,13 +10,13 @@ project ("Dev_RisLib")
 my_special1() 
 
 add_subdirectory ("RisLib")
+return()
+
+add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoTcpClientMsg")
 add_subdirectory ("ProtoTcpServerMsg")
 add_subdirectory ("ProtoUdpMsg")
-return()
-
-add_subdirectory ("RisLib")
 return()
 
 add_subdirectory ("RisLib")

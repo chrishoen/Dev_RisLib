@@ -135,6 +135,14 @@ void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aF
    mLogExists[aTraceIndex] = true;
 }
 
+// Create a log file for a trace. Set the initial log level
+// for the trace. Delete the string when done.
+void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, std::string* aFilePath)
+{
+   doCreateLogFile(aTraceIndex, aLogLevel, aFilePath->c_str());
+   delete aFilePath;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

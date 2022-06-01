@@ -4,10 +4,11 @@
 Implements multiple text log files
 ==============================================================================*/
 
+#include <string>
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// git test
 
 namespace Log
 {
@@ -19,6 +20,8 @@ namespace Log
    void reset    ();
    bool openFile       (int aLogNum,const char* aFilePath);
    bool openFileAppend (int aLogNum,const char* aFilePath);
+   bool openFile       (int aLogNum, std::string* aFilePath);
+   bool openFileAppend (int aLogNum, std::string* aFilePath);
 
    void closeFile      (int aLogNum);
    void closeAllFiles ();

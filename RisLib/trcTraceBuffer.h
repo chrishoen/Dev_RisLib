@@ -9,6 +9,7 @@ Program trace buffer facility.
 //******************************************************************************
 
 #include <stdio.h>
+#include <string>
 #include <set>
 #include "risThreadsSynch.h"
 #include "risCmdLineCmd.h"
@@ -147,6 +148,10 @@ public:
    // Create a log file for a trace. Set the initial log level
    // for the trace.
    void doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aFilePath);
+
+   // Create a log file for a trace. Set the initial log level
+   // for the trace. Delete the string when done.
+   void doCreateLogFile(int aTraceIndex, int aLogLevel, std::string* aFilePath);
 
    // Start a trace on a buffer pair. Reset the write index and enable writes.
    // If the buffer number is -1 then start all buffers.

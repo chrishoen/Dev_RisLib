@@ -56,6 +56,13 @@ bool openFile(int aLogNum, const char* aFilePath)
    return true;
 }
 
+bool openFile(int aLogNum, std::string* aFilePath)
+{
+   bool tPass = openFile(aLogNum, aFilePath->c_str());
+   delete aFilePath;
+   return tPass;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -72,6 +79,13 @@ bool openFileAppend(int aLogNum, const char* aFilePath)
    }
 
    return true;
+}
+
+bool openFileAppend(int aLogNum, std::string* aFilePath)
+{
+   bool tPass = openFileAppend(aLogNum, aFilePath->c_str());
+   delete aFilePath;
+   return tPass;
 }
 
 //******************************************************************************

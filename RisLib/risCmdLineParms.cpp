@@ -48,6 +48,12 @@ void BaseCmdLineParms::setFilePath(const char* aFilePath)
    strncpy(mFilePath, aFilePath,cMaxStringSize - 1);
 }
 
+void BaseCmdLineParms::setFilePath(std::string* aFilePath)
+{
+   strncpy(mFilePath, aFilePath->c_str(), cMaxStringSize - 1);
+   delete aFilePath;
+}
+
 void BaseCmdLineParms::setFilePath_RelativeToBaseDir(const char* aRelativeFilePath)
 {
    char tBuffer[cMaxStringSize];

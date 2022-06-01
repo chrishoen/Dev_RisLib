@@ -8,6 +8,7 @@ Base class for parameters classes whose values are read from a command file.
 //******************************************************************************
 //******************************************************************************
 
+#include <string>
 #include "risCmdLineFile.h"
 
 //******************************************************************************
@@ -105,6 +106,10 @@ public:
 
    // Set the full file path for the parms file.
    void setFilePath(const char* aFilePath);
+
+   // Set the full file path for the parms file. Delete the string
+   // when done.
+   void setFilePath(std::string* aFilePath);
 
    // Set the file name for the parms file. The full file path will be
    // relative to the program base directory.

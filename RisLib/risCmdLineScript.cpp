@@ -28,11 +28,12 @@ CmdLineScript::CmdLineScript()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Open the command line script file.
+// Open.
 
-bool CmdLineScript::doOpen(const char* aFilename)
+// Open the command line script file. Return true if successful.
+bool CmdLineScript::doOpen(const char* aFilePath)
 {            
-   mFile = fopen(aFilename,"r");
+   mFile = fopen(aFilePath,"r");
 
    if (mFile==0) return false;
 
@@ -41,6 +42,15 @@ bool CmdLineScript::doOpen(const char* aFilename)
    mLoopCountZero = 0;
 
    return true;
+}
+
+// Open the command line script file. Delete the string when done.
+// Return true if successful.
+bool CmdLineScript::doOpen(std::string* aFilePath)
+{
+   bool tPass = doOpen(aFilePath->c_str());
+   delete aFilePath;
+   return tPass;
 }
 
 //******************************************************************************

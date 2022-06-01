@@ -9,6 +9,7 @@ Command line script file processor.
 //******************************************************************************
 //******************************************************************************
 #include <stdio.h>
+#include <string>
 
 #include "risCmdLineCmd.h"
 
@@ -52,8 +53,12 @@ public:
    CmdLineScript();
    virtual ~CmdLineScript(){}
 
-   // Open the command line script file.
-   bool doOpen(const char* aFilename);
+   // Open the command line script file. Return true if successful.
+   bool doOpen(const char* aFilePath);
+
+   // Open the command line script file. Delete the string when done.
+   // Return true if successful.
+   bool doOpen(std::string* aFilePath);
 
    // Close the command line script file.
    void doClose();

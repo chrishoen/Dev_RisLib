@@ -20,9 +20,6 @@ add_subdirectory ("ProtoUdpMsg")
 return()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Script")
-return()
-
 add_subdirectory ("ProtoSerialMsg")
 add_subdirectory ("RisLib")
 add_subdirectory ("LogFiles")

@@ -77,6 +77,7 @@ bool CmdLineScript::doRead(CmdLineCmd* aCmd)
 
    // Guard.
    aCmd->reset();
+   aCmd->parseCmdLine("EXIT");
    if (mFile==0) return false;
 
    // Command line variables.

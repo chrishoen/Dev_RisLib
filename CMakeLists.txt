@@ -9,6 +9,9 @@ include(MySpecial.cmake)
 project ("Dev_RisLib")
 my_special1() 
 
+add_subdirectory ("MyProgram1")
+return()
+
 add_subdirectory ("RisLib")
 return()
 

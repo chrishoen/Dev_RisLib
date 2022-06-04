@@ -85,6 +85,7 @@ function(add_precompiled_header _target _input)
   if(NOT _PCH_SOURCE_C)
     set(_PCH_SOURCE_C "${_input_we}.c")
   endif()
+  message(STATUS "my_add_precompiled_header2******************** " ${_target})
 
   if(MSVC)
     set(_pch_cxx_pch "${CMAKE_CFG_INTDIR}/cxx_${_input_we}.pch")
@@ -226,7 +227,7 @@ function(my_add_precompiled_header _target)
 #      return()
 #   endif()
 
-   message(STATUS "my_add_pch************************************ " ${_target})
+   message(STATUS "my_add_precompiled_header1********************* " ${_target})
 
    get_target_property(_src_files      ${_target} SOURCES)
    get_target_property(_tgt_binary_dir ${_target} BINARY_DIR)

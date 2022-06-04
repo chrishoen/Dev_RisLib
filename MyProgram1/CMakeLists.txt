@@ -1,12 +1,14 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-project (MyProgram1 CXX)
+set (project "MyProgram1")
+project(${project} CXX)
+my_find_src_files (src_files ${project})
+add_executable (${project} ${src_files})
+my_add_compile_options (${project})
+my_add_pch (${project})
 
-my_find_src_files (src_files MyProgram1)
-add_executable (MyProgram1 ${src_files})
-my_add_compile_options (MyProgram1)
 
-
+return()
 if (MSVC)
    install(TARGETS MyProgram1 DESTINATION "C:/aaa_prime/RisLib")
 elseif (MYMODE STREQUAL "cpdev1" OR MYMODE STREQUAL "wsl") 

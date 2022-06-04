@@ -88,6 +88,7 @@ function(add_precompiled_header _target _input)
   message(STATUS "my_add_precompiled_header2******************** " ${_target})
 
   if(MSVC)
+    message(STATUS "my_add_precompiled_header2****MSVC")
     set(_pch_cxx_pch "${CMAKE_CFG_INTDIR}/cxx_${_input_we}.pch")
     set(_pch_c_pch "${CMAKE_CFG_INTDIR}/c_${_input_we}.pch")
 
@@ -153,6 +154,7 @@ function(add_precompiled_header _target _input)
   endif(MSVC)
 
   if(CMAKE_COMPILER_IS_GNUCXX)
+    message(STATUS "my_add_precompiled_header2****GNUCXX")
     get_filename_component(_name ${_input} NAME)
     set(_pch_header "${CMAKE_CURRENT_SOURCE_DIR}/${_input}")
     set(_pch_binary_dir "${CMAKE_CURRENT_BINARY_DIR}/${_target}_pch")
@@ -260,7 +262,7 @@ endfunction()
 
 function(my_add_pch _target)
    if (MYMODE STREQUAL "steno-arm")
-      return()
+      #return()
    endif()
 
    if (MSVC)

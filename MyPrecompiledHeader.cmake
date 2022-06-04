@@ -222,9 +222,9 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_precompiled_header _target)
-   if (NOT MSVC)
-      return()
-   endif()
+#   if (NOT MSVC)
+#      return()
+#   endif()
 
    message(STATUS "my_add_pch************************************ " ${_target})
 

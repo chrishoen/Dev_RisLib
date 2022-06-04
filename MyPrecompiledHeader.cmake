@@ -260,7 +260,7 @@ endfunction()
 #*******************************************************************************
 #*******************************************************************************
 
-function(my_add_pch _target)
+function(my_add_pch22 _target)
    if (MYMODE STREQUAL "steno-arm")
       #return()
    endif()
@@ -271,4 +271,13 @@ function(my_add_pch _target)
       message(STATUS "my_add_pch************************************ " ${_target})
       add_precompiled_header (${_target} stdafx.h SOURCE_CXX stdafx.cpp)
    endif()
+endfunction()
+
+#*******************************************************************************
+#*******************************************************************************
+#*******************************************************************************
+
+function(my_add_pch _target)
+   message(STATUS "my_add_pch new******************************** " ${_target})
+   target_precompile_headers(${_target} PRIVATE "stdafx.h")
 endfunction()

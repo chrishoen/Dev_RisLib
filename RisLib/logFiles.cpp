@@ -156,12 +156,67 @@ void write(int aLogNum, const char* aFormat, ...)
 //******************************************************************************
 // Write to the file
 
-void write3 (int aLogNum, const char* aFormat, ...)
+void write2 (int aLogNum, const char* aFormat, ...)
 {
    //-----------------------------------------------------
    // Guard
 
    if (mFile[aLogNum]==0)
+   {
+      return;
+   }
+
+   //-----------------------------------------------------
+   // Do a vsprintf with variable arg list into print string
+
+   char* tString1 = new char[cMaxStringSize + 1];
+   char* tString2 = new char[cMaxStringSize + 1];
+
+   int tPrintSize;
+   va_list  ArgPtr;
+   va_start(ArgPtr, aFormat);
+   tPrintSize = vsnprintf(tString1, cMaxStringSize, aFormat, ArgPtr);
+   va_end(ArgPtr);
+   tString1[cMaxStringSize] = 0;
+
+   if (tPrintSize < cMaxStringSize - 3)
+   {
+      tString1[tPrintSize++] = '\n';
+      tString1[tPrintSize++] = 0;
+   }
+
+   //-----------------------------------------------------
+   // Add a timestamp.
+
+   char tTimetag[40];
+   my_timestamp2(tTimetag);
+   sprintf(tString2, "%s %s", tTimetag, tString1);
+
+
+   //-----------------------------------------------------
+   // Print the string
+
+   fputs(tString2, mFile[aLogNum]);
+   fflush(mFile[aLogNum]);
+
+   //-----------------------------------------------------
+   // done
+
+   delete tString1;
+   delete tString2;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write to the file
+
+void write3(int aLogNum, const char* aFormat, ...)
+{
+   //-----------------------------------------------------
+   // Guard
+
+   if (mFile[aLogNum] == 0)
    {
       return;
    }

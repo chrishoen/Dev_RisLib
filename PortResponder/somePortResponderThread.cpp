@@ -59,7 +59,7 @@ void PortResponderThread::threadInitFunction()
    Ris::Net::Settings tSettings;
    int tPort = 5012;
    tSettings.setLocalPort(tPort);
-//   tSettings.setRemoteAddress("127.0.0.1", gUdpSettings.mOtherUdpPort);
+// tSettings.setRemoteAddress("192.168.1.134", tPort);
    tSettings.setUdpWrapFlag(true);
    tSettings.mUdpWrapFlag = true;
    tSettings.mRxStringQCall = mRxStringQCall;
@@ -124,6 +124,8 @@ void PortResponderThread::executeRxString(std::string* aString)
 {
    Prn::print(Prn::Show1, "PortResponderThread::executeRxString %s", aString->c_str());
    delete aString;
+
+   sendString(new std::string("Mira Hello"));
 }
 
 //******************************************************************************

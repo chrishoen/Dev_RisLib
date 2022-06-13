@@ -8,7 +8,7 @@
 
 #include "someSerialParms.h"
 
-#define  _SOMESERIALTHREAD_CPP_
+#define  _SOMEPORTRESPONDERTHREAD_CPP_
 #include "somePortResponderThread.h"
 
 //******************************************************************************
@@ -50,17 +50,12 @@ PortResponderThread::PortResponderThread()
 
 void PortResponderThread::threadInitFunction()
 {
-   // Serial port settings.
-   mSettings.reset();
-   mSettings.setPortDevice(gSerialParms.mSerialPortDevice);
-   mSettings.setPortSetup(gSerialParms.mSerialPortSetup);
-   mSettings.mTxTermMode = gSerialParms.mTxTermMode;
-   mSettings.mRxTermMode = gSerialParms.mRxTermMode;
+   Trc::write(11, 0, "PortResponderThread::threadInitFunction");
 
-   // Initialize the serial port.
-   mSerialPort.initialize(mSettings);
-   printf("TxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mSerialPort.mTxTermMode));
-   printf("RxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mSerialPort.mRxTermMode));
+   // Instance of network socket settings.
+   Ris::Net::Settings tSettings;
+
+   mRxSocket.configureLocal(5012);
 }
 
 //******************************************************************************
@@ -73,85 +68,10 @@ void PortResponderThread::threadInitFunction()
 
 void PortResponderThread::threadRunFunction()
 {
-   // Top of the loop.
-   mRestartCount = 0;
-restart:
-   // Guard.
-   if (mTerminateFlag) return;
-   int tRet = 0;
-
-   // Sleep.
-   if (mRestartCount > 0)
+   while (mRxSocket.doRecvString())
    {
-      BaseClass::threadSleep(1000);
+      puts(mRxSocket.mRxString);
    }
-   Prn::print(Prn::Show1, "Serial restart %d", mRestartCount);
-   mRestartCount++;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Open device.
-
-   // Open the serial port.
-   if (!mSerialPort.doOpen())
-   {
-      // If error then restart.
-      goto restart;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Loop to receive strings.
-
-   while (!BaseClass::mTerminateFlag)
-   {
-      Prn::print(Prn::Show4, "Serial read start********************************************** %d", mRxCount++);
-
-      //************************************************************************
-      //************************************************************************
-      //************************************************************************
-      // Receive.
-
-      // Receive. 
-      tRet = mSerialPort.doReceiveString(mRxBuffer, cBufferSize);
-
-      // Check the return code.
-      if (tRet == 0)
-      {
-         Prn::print(Prn::Show1, "Serial read EMPTY");
-         goto restart;
-      }
-      else if (tRet == Ris::cSerialRetError)
-      {
-         Prn::print(Prn::Show1, "Serial read ERROR");
-         goto restart;
-      }
-      else if (tRet == Ris::cSerialRetTimeout)
-      {
-         Prn::print(Prn::Show1, "Serial read TIMEOUT");
-         goto restart;
-      }
-      else if (tRet == Ris::cSerialRetAbort)
-      {
-         Prn::print(Prn::Show1, "Serial read ABORT");
-         goto end;
-      }
-      // Process the read.
-      else
-      {
-         // Number of bytes.
-         mRxCount = tRet;
-
-         // Show.
-         Prn::print(Prn::Show1, "Serial read  $$$    %d %s", mRxCount, mRxBuffer);
-      }
-   }
-   
-   // Done.
-end:
-   return;
 }
 
 //******************************************************************************
@@ -165,7 +85,7 @@ void PortResponderThread::threadExitFunction()
    printf("somePortResponderThread::threadExitFunction\n");
 
    // Close the serial port.
-   mSerialPort.doClose();
+   mRxSocket.doClose();
 }
 
 //******************************************************************************
@@ -180,20 +100,10 @@ void PortResponderThread::shutdownThread()
    printf("somePortResponderThread::shutdownThread\n");
 
    // Abort pending serial port receives
-   mSerialPort.doAbort();
+   mRxSocket.doClose();
 
    // Wait for thread to terminate.
    BaseClass::shutdownThread();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Abort a pending receive.
-
-void PortResponderThread::abort()
-{
-   mSerialPort.doAbort();
 }
 
 //******************************************************************************
@@ -204,49 +114,6 @@ void PortResponderThread::abort()
 
 void PortResponderThread::sendString(char* aString)
 {
-   // Guard.
-   if (!mSerialPort.mValidFlag) return;
-   int tRet = 0;
-
-   // Append a checksum to the string.
-   if (gSerialParms.mCheckSumFlag)
-   {
-      appendCheckSum(aString);
-   }
-
-   // Send a fixed number of bytes. Return the actual number of bytes
-   // sent or a negative error code.
-   tRet = mSerialPort.doSendString((char*)aString);
-
-   // Test the return code.
-   if (tRet < 0)
-   {
-      Prn::print(Prn::Show1, "Serial write FAIL 101 %d", errno);
-      return;
-   }
-   mTxCount = tRet;
-
-   // Show.
-   Prn::print(Prn::Show1, "Serial write $$$$$$ %d", mTxCount);
-
-   return;
-
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Append a checksum to a send string. 
-
-void PortResponderThread::appendCheckSum(char* aString)
-{
-   int tLength = (int)strlen(aString);
-   unsigned tCheckSum = 0;
-   for (int i = 0; i < tLength; i++) tCheckSum += (unsigned)aString[i];
-   tCheckSum &= 0xff;
-   char tCheckSumString[10];
-   sprintf(tCheckSumString, "<%02X>", tCheckSum);
-   strcat(aString, tCheckSumString);
 }
 
 //******************************************************************************

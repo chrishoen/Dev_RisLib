@@ -9,7 +9,8 @@ Serial test thread that contains a serial port.
 //******************************************************************************
 
 #include "risThreadsThreads.h"
-#include "risSerialStringPort.h"
+#include "risNetUdpStringSocket.h"
+#include "risNetSettings.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -43,10 +44,10 @@ public:
    // Members.
 
    // Serial port settings.
-   Ris::SerialSettings mSettings;
+   Ris::Net::Settings mSettings;
 
    // Serial port.
-   Ris::SerialStringPort mSerialPort;
+   Ris::Net::UdpRxStringSocket mRxSocket;
 
    // Buffers.
    char mRxBuffer[cBufferSize];
@@ -98,25 +99,9 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Abort a pending receive.
-   void abort();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
    // Send bytes via the serial port. This executes in the context of
    // the calling thread.
    void sendString(char* aString);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Append a checksum to a send string. 
-   void appendCheckSum(char* aString);
 };
 
 //******************************************************************************
@@ -124,7 +109,7 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _SOMESERIALTHREAD_CPP_
+#ifdef _SOMEPORTRESPONDERTHREAD_CPP_
 PortResponderThread* gPortResponderThread = 0;
 #else
 extern  PortResponderThread* gPortResponderThread;

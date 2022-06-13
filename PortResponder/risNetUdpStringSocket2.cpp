@@ -101,9 +101,9 @@ void UdpWrapStringSocket::configureLocal(int aPort)
    // Show.
    if (mValidFlag)
    {
-      //print("UdpWrapStringSocket  PASS %16s : %5d\n",
-      // BaseClass::mLocal.mString,
-      // BaseClass::mLocal.mPort);
+      printf("UdpWrapStringSocket  PASS %16s : %5d\n",
+         BaseClass::mLocal.mString,
+         BaseClass::mLocal.mPort);
    }
    else
    {

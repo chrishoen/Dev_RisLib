@@ -26,7 +26,7 @@ namespace Some
 PortResponderThread::PortResponderThread()
 {
    // Set base class thread services.
-   BaseClass::setThreadName("Serial");
+   BaseClass::setThreadName("PortResponder");
    BaseClass::setThreadPriorityHigh();
 
    // Set base class thread priority.

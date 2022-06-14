@@ -181,6 +181,7 @@ void UdpStringSocket::configureLocal(int aPort)
 
 bool UdpStringSocket::doRecvString ()
 {
+   Trc::write(mTI, 0, "UdpStringSocket::doReceiveString");
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -193,6 +194,7 @@ bool UdpStringSocket::doRecvString ()
    // Guard.
    if (!mValidFlag)
    {
+      Trc::write(mTI, 0, "ERROR UdpStringSocket INVALID SOCKET");
       printf("ERROR UdpStringSocket INVALID SOCKET\n");
       return false;
    }
@@ -213,14 +215,19 @@ bool UdpStringSocket::doRecvString ()
    {
       if (BaseClass::mError == 0)
       {
-         //printf("UdpStringSocket CLOSED\n");
+         Trc::write(mTI, 0, "UdpStringSocket CLOSED");
       }
       else
       {
+         Trc::write(mTI, 0, "ERROR UdpStringSocket %d %d", BaseClass::mStatus, BaseClass::mError);
          printf("ERROR UdpStringSocket %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }
+
+   Trc::write(mTI, 1, "UdpStringSocket::doRecvFrom %16s : %5d  ",
+      mFromAddress.mString,
+      mFromAddress.mPort);
 
    //printf("UdpStringSocket rx message %d\n", mRxLength);
 
@@ -229,6 +236,7 @@ bool UdpStringSocket::doRecvString ()
 
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
+   Trc::write(mTI, 1, "UdpStringSocket doReceiveString done %d %d", mStatus, mError);
    mRxCount++;
    return true;
 }

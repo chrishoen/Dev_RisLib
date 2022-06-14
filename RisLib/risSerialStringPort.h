@@ -46,9 +46,6 @@ public:
    //***************************************************************************
    // Members.
 
-   // Transmit buffer. Allocated at initialization.
-   char* mTxBuffer;
-
    // Buffer size.
    int mBufferSize;
 

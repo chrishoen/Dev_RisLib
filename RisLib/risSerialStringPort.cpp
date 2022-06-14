@@ -30,15 +30,15 @@ static const int cCR = 13; // CR   (\r,13)
 
 SerialStringPort::SerialStringPort()
 {
-   mTxBuffer = 0;
    mBufferSize = 0;
+   mTxTermMode = 0;
+   mRxTermMode = 0;
    mTxStringCount = 0;
    mRxStringCount = 0;
 }
 
 SerialStringPort::~SerialStringPort()
 {
-   if (mTxBuffer) free(mTxBuffer);
 }
 
 //******************************************************************************
@@ -57,63 +57,10 @@ void SerialStringPort::initialize(SerialSettings& aSettings)
 
    // Allocate memory for byte buffers.
    mBufferSize = 16*1024;
-   mTxBuffer = (char*)malloc(mBufferSize);
 
    // Initialize member variables.
    mTxStringCount = 0;
    mRxStringCount = 0;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Copy a null terminated string into the transmit buffer and append
-// termination bytes. Send the transmit buffer via the serial port
-// base class. Return the total number of bytes transmitted, including
-// any termination bytes or a negative error code.
-
-int SerialStringPort::doSendString(const char* aString)
-{
-   // Guard.
-   if (!BaseClass::mValidFlag) return false;
-   int tRet = 0;
-
-   // Get the string length.
-   int tLength = (int)strlen(aString);
-   if (tLength > mBufferSize - 1) tLength = mBufferSize - 1;
-
-   // Copy the string to the transmit buffer.
-   strcpy(mTxBuffer, aString);
-
-   // Append termination characters.
-   switch (mTxTermMode)
-   {
-   case cSerialTermMode_NULL:
-      // Transmit the string + null.
-      tLength++;
-      break;
-   case cSerialTermMode_LF:
-      // Transmit the string + LF.
-      mTxBuffer[tLength++] = cLF;
-      break;
-   case cSerialTermMode_CR:
-      // Transmit the string + CR.
-      mTxBuffer[tLength++] = cCR;
-      break;
-   case cSerialTermMode_CRLF:
-      // Transmit the string + CRLF.
-      mTxBuffer[tLength++] = cCR;
-      mTxBuffer[tLength++] = cLF;
-      break;
-   default:
-      break;
-   }
-
-   // Metrics.
-   mTxStringCount++;
-
-   // Transmit the buffer.
-   return BaseClass::doSendBytes(mTxBuffer, tLength);
 }
 
 //******************************************************************************
@@ -194,6 +141,64 @@ int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
    // Return the strlen of the string returned to the caller, 
    // The returned string does not contain termination bytes.
    return tIndex;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy a null terminated string into the transmit buffer and append
+// termination bytes. Send the transmit buffer via the serial port
+// base class. Return the total number of bytes transmitted, including
+// any termination bytes or a negative error code.
+
+int SerialStringPort::doSendString(const char* aString)
+{
+   // Guard.
+   if (!BaseClass::mValidFlag) return false;
+   int tRet = 0;
+
+   // Get the string length.
+   int tLength = (int)strlen(aString);
+   if (tLength > mBufferSize - 1) tLength = mBufferSize - 1;
+
+   // Allocate a transmit buffer. 
+   char* tTxBuffer = (char*)malloc(mBufferSize);
+
+   // Copy the string to the transmit buffer.
+   strcpy(tTxBuffer, aString);
+
+   // Append termination characters.
+   switch (mTxTermMode)
+   {
+   case cSerialTermMode_NULL:
+      // Transmit the string + null.
+      tLength++;
+      break;
+   case cSerialTermMode_LF:
+      // Transmit the string + LF.
+      tTxBuffer[tLength++] = cLF;
+      break;
+   case cSerialTermMode_CR:
+      // Transmit the string + CR.
+      tTxBuffer[tLength++] = cCR;
+      break;
+   case cSerialTermMode_CRLF:
+      // Transmit the string + CRLF.
+      tTxBuffer[tLength++] = cCR;
+      tTxBuffer[tLength++] = cLF;
+      break;
+   default:
+      break;
+   }
+
+   // Metrics.
+   mTxStringCount++;
+
+   // Transmit the buffer.
+   return BaseClass::doSendBytes(tTxBuffer, tLength);
+
+   // Deallocate the buffer.
+   free(tTxBuffer);
 }
 
 //******************************************************************************

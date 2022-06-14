@@ -163,6 +163,7 @@ int SerialStringPort::doSendString(const char* aString)
 
    // Allocate a transmit buffer. 
    char* tTxBuffer = (char*)malloc(mBufferSize);
+   if (tTxBuffer == 0) return 0;
 
    // Copy the string to the transmit buffer.
    strcpy(tTxBuffer, aString);
@@ -195,10 +196,13 @@ int SerialStringPort::doSendString(const char* aString)
    mTxStringCount++;
 
    // Transmit the buffer.
-   return BaseClass::doSendBytes(tTxBuffer, tLength);
+   tRet = BaseClass::doSendBytes(tTxBuffer, tLength);
 
    // Deallocate the buffer.
    free(tTxBuffer);
+
+   // Done.
+   return tRet;
 }
 
 //******************************************************************************

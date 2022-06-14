@@ -54,6 +54,7 @@ void UdpStringSocket::initialize(Settings& aSettings)
    mValidFlag = false;
    mTI = mSettings.mTraceIndex;
    mPrintDisable = false;
+
 }
 
 //******************************************************************************

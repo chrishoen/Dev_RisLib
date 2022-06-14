@@ -43,8 +43,6 @@ void MonitorThread::update()
 {
    mMon_TxStringCount.update();
    mMon_RxStringCount.update();
-   mMon_TxByteCount.update();
-   mMon_RxByteCount.update();
 }
 
 //******************************************************************************

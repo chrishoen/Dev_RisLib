@@ -75,8 +75,7 @@ void ProcThread::threadInitFunction()
    // Launch the child thread.
    mUdpStringThread->launchThread();
 
-   Trc::write(11, 0, "PeerThread::threadInitFunction done");
-
+   Trc::write(11, 0, "ProcThread::threadInitFunction done");
 }
 
 //******************************************************************************

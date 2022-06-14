@@ -32,7 +32,9 @@ UdpStringThread::UdpStringThread(Settings& aSettings)
    // Store settings.
    mSettings = aSettings;
    mRxStringQCall = aSettings.mRxStringQCall;
-   mTI = 0;
+
+   // Initialize variables.
+   mTI = mSettings.mTraceIndex;
 }
 
 //******************************************************************************
@@ -43,9 +45,11 @@ UdpStringThread::UdpStringThread(Settings& aSettings)
 
 void UdpStringThread::threadInitFunction()
 {
-   // Initialize and configure the receive socket.
+   Trc::write(mTI, 1, "UdpStringThread::threadInitFunction");
+   // Initialize and configure the string socket.
    mStringSocket.initialize(mSettings);
    mStringSocket.configure();
+   Trc::write(mTI, 1, "UdpStringThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -57,6 +61,7 @@ void UdpStringThread::threadInitFunction()
 
 void  UdpStringThread::threadRunFunction()
 {
+   Trc::write(mTI, 1, "UdpStringThread::threadRunFunction");
    bool tGoing=mStringSocket.mValidFlag;
    bool tFirstFlag = true;
 
@@ -82,6 +87,7 @@ void  UdpStringThread::threadRunFunction()
          tGoing=false;
       }  
    }         
+   Trc::write(mTI, 1, "UdpStringThread::threadRunFunction done");
 }
 
 //******************************************************************************
@@ -92,6 +98,7 @@ void  UdpStringThread::threadRunFunction()
 
 void UdpStringThread::threadExitFunction()
 {
+   Trc::write(mTI, 1, "UdpStringThread::threadExitFunction");
 }
 
 //******************************************************************************
@@ -108,11 +115,13 @@ void UdpStringThread::threadExitFunction()
 
 void UdpStringThread::shutdownThread()
 {
+   Trc::write(mTI, 1, "UdpStringThread::shutdownThread");
    BaseThread::mTerminateFlag = true;
 
    mStringSocket.doClose();
 
    BaseThread::waitForThreadTerminate();
+   Trc::write(mTI, 1, "UdpStringThread::shutdownThread done");
 }
 
 //******************************************************************************

@@ -5,6 +5,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 #include "MainInit.h"
+#include "MainArgs.h"
 
 #include "procoProcThread.h"
 #include "procoMonitorThread.h"
@@ -18,20 +19,31 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Begin program.
+   // Initialize program resources.
 
-   main_initialize(argc,argv);
+   gMainArgs.initialize(argc, argv);
+   gMainArgs.show();
+   main_initialize();
+
+   //main_test();
+   //return 0;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Launch program threads.
 
-   ProtoComm::gProcThread = new ProtoComm::ProcThread;
-   ProtoComm::gProcThread->launchThread();
+   if (true)
+   {
+      ProtoComm::gProcThread = new ProtoComm::ProcThread;
+      ProtoComm::gProcThread->launchThread();
+   }
 
-   ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
-   ProtoComm::gMonitorThread->launchThread();
+   if (true)
+   {
+      ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
+      ProtoComm::gMonitorThread->launchThread();
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -39,8 +51,8 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   ProtoComm::gProcThread->showThreadInfo();
-   ProtoComm::gMonitorThread->showThreadInfo();
+   if (ProtoComm::gProcThread) ProtoComm::gProcThread->showThreadInfo();
+   if (ProtoComm::gMonitorThread) ProtoComm::gMonitorThread->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
@@ -56,13 +68,19 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   ProtoComm::gMonitorThread->shutdownThread();
-   delete ProtoComm::gMonitorThread;
-   ProtoComm::gMonitorThread = 0;
+   if (ProtoComm::gMonitorThread)
+   {
+      ProtoComm::gMonitorThread->shutdownThread();
+      delete ProtoComm::gMonitorThread;
+      ProtoComm::gMonitorThread = 0;
+   }
 
-   ProtoComm::gProcThread->shutdownThread();
-   delete ProtoComm::gProcThread;
-   ProtoComm::gProcThread = 0;
+   if (ProtoComm::gProcThread)
+   {
+      ProtoComm::gProcThread->shutdownThread();
+      delete ProtoComm::gProcThread;
+      ProtoComm::gProcThread = 0;
+   }
 
    //***************************************************************************
    //***************************************************************************

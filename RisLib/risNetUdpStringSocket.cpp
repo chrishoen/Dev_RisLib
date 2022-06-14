@@ -52,7 +52,7 @@ void UdpStringSocket::initialize(Settings& aSettings)
    mTxCount = 0;
    mRxCount = 0;
    mValidFlag = false;
-   mTI = 0;
+   mTI = mSettings.mTraceIndex;
    mPrintDisable = false;
 }
 

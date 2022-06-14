@@ -70,7 +70,10 @@ void PortResponderThread::threadRunFunction()
 {
    while (mRxSocket.doRecvString())
    {
-      puts(mRxSocket.mRxString);
+      Prn::print(0, "mRxSocket.doRecvString %16s : %5d",
+         mRxSocket.mFromAddress.mString,
+         mRxSocket.mFromAddress.mPort);
+      Prn::print(0, "mRxSocket.doRecvString %16s", mRxSocket.mRxString);
       mRxSocket.doSendString("Mira in the neighborhood 1234");
    }
 }

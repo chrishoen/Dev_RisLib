@@ -46,7 +46,7 @@ bool rSuppressFlag;
 bool rConsoleFlag [cMaxConsoles];
 
 // The socket for the print view console.
-Ris::Net::UdpTxStringSocket rConsoleSocket[cMaxConsoles];
+Ris::Net::UdpStringSocket rConsoleSocket[cMaxConsoles];
 
 // The port number for the print view console.
 int rConsolePort[cMaxConsoles];

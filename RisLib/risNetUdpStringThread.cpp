@@ -8,6 +8,7 @@
 #include "stdafx.h"
 
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
 #include "risNetUdpStringThread.h"
@@ -31,9 +32,7 @@ UdpStringThread::UdpStringThread(Settings& aSettings)
    // Store settings.
    mSettings = aSettings;
    mRxStringQCall = aSettings.mRxStringQCall;
-
-   // Initialize variables.
-   mTxConfigFlag = false;
+   mTI = 0;
 }
 
 //******************************************************************************
@@ -45,17 +44,8 @@ UdpStringThread::UdpStringThread(Settings& aSettings)
 void UdpStringThread::threadInitFunction()
 {
    // Initialize and configure the receive socket.
-   mRxSocket.initialize(mSettings);
-   mRxSocket.configure();
-
-   // If not wrap mode.
-   if (!mSettings.mUdpWrapFlag)
-   {
-      // Initialize and configure the transmit socket.
-      mTxSocket.initialize(mSettings);
-      mTxSocket.configure();
-      mTxConfigFlag = true;
-   }
+   mStringSocket.initialize(mSettings);
+   mStringSocket.configure();
 }
 
 //******************************************************************************
@@ -67,36 +57,18 @@ void UdpStringThread::threadInitFunction()
 
 void  UdpStringThread::threadRunFunction()
 {
-   bool tGoing=mRxSocket.mValidFlag;
+   bool tGoing=mStringSocket.mValidFlag;
    bool tFirstFlag = true;
 
    while(tGoing)
    {
       // Try to receive a message with a blocking receive call. If a message
-      // was received then process it. If in wrap mode then configure the
-      // transmit socket using the receive from address. 
-      if (mRxSocket.doRecvString())
+      // was received then process it.
+      if (mStringSocket.doRecvString())
       {
-         // If this is the first correct receive message.
-         if (tFirstFlag)
-         {
-            tFirstFlag = false;
-            // If in wrap mode.
-            if (mSettings.mUdpWrapFlag)
-            {
-               // Initialize and configure the transmit socket. Use the
-               // receive from address and the settings port. Turn off
-               // wrap mode.
-               mSettings.setRemoteAddress(mRxSocket.mFromAddress.mString, mSettings.mRemoteIpPort);
-               mSettings.setUdpWrapFlag(false);
-               mTxSocket.initialize(mSettings);
-               mTxSocket.configure();
-               mTxConfigFlag = true;
-            }
-         }
          // Message was correctly received.
          // Call the receive callback qcall.
-         processRxString(new std::string(mRxSocket.mRxString));
+         processRxString(new std::string(mStringSocket.mRxString));
       }
       else
       {
@@ -138,7 +110,7 @@ void UdpStringThread::shutdownThread()
 {
    BaseThread::mTerminateFlag = true;
 
-   mRxSocket.doClose();
+   mStringSocket.doClose();
 
    BaseThread::waitForThreadTerminate();
 }
@@ -170,15 +142,9 @@ void UdpStringThread::processRxString(std::string* aString)
 
 void UdpStringThread::sendString (std::string* aString)
 {
-   // Guard.
-   if (!mTxConfigFlag)
-   {
-      delete aString;
-      return;
-   }
 
    // Send the string.
-   mTxSocket.doSendString(aString->c_str());
+   mStringSocket.doSendString(aString->c_str());
    delete aString;
 }
 
@@ -191,14 +157,8 @@ void UdpStringThread::sendString (std::string* aString)
 
 void UdpStringThread::sendString(const char* aString)
 {
-   // Guard.
-   if (!mTxConfigFlag)
-   {
-      return;
-   }
-
    // Send the string.
-   mTxSocket.doSendString(aString);
+   mStringSocket.doSendString(aString);
 }
 
 //******************************************************************************

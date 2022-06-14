@@ -140,7 +140,6 @@ void UdpMsgSocket::configure()
             BaseClass::mStatus,
             BaseClass::mError);
       }
-
    }
 }
 

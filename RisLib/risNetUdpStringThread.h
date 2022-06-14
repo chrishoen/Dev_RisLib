@@ -60,16 +60,15 @@ public:
    Settings mSettings;
 
    // Socket instance.
-   UdpRxStringSocket mRxSocket;
-   UdpTxStringSocket mTxSocket;
-
-   // If true then the transmit socket has been configured.
-   bool mTxConfigFlag;
+   UdpStringSocket mStringSocket;
 
    // This is a qcall callback that is invoked when a string is received.
    // It is registered by the parent thread at initialzation.
    typedef Ris::Threads::QCall1<std::string*> RxStringQCall;
    RxStringQCall mRxStringQCall;
+
+   // Program trace index.
+   int mTI;
 
    //***************************************************************************
    //***************************************************************************

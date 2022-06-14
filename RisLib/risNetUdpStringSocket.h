@@ -1,8 +1,7 @@
 #pragma once
 
 /*==============================================================================
-UDP receive  string socket.
-UDP transmit string socket.
+UDP string socket.
 ==============================================================================*/
 
 //******************************************************************************
@@ -25,13 +24,10 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Udp receive string socket. This class encapsulates a udp socket that
-// receives strings.
+// Udp string socket. This class encapsulates a udp socket that
+// sends and receives strings.
 
-class UdpRxStringSocket : public Sockets::BaseUdpSocket
+class UdpStringSocket : public Sockets::BaseUdpSocket
 {
 private:
    typedef Sockets::BaseUdpSocket BaseClass;
@@ -43,7 +39,7 @@ public:
    // Constants.
 
    // String size.
-   static const int cStringSize = 2048;
+   static const int cStringSize = 1400;
 
    //***************************************************************************
    //***************************************************************************
@@ -56,17 +52,23 @@ public:
    // The recvfrom address is stored here.
    Sockets::SocketAddress mFromAddress;
 
-   // Number of bytes received.
-   int mRxLength;
-
    // True if the socket is valid.
    bool mValidFlag;
 
-   // Metrics.
-   int mRxCount;
-
    // Received string buffer.
    char mRxString[cStringSize];
+
+   // Metrics.
+   int mTxLength;
+   int mRxLength;
+   int mTxCount;
+   int mRxCount;
+
+   // Program trace index.
+   int mTI;
+
+   // If true then disable status prints.
+   bool mPrintDisable;
 
    //***************************************************************************
    //***************************************************************************
@@ -74,7 +76,7 @@ public:
    // Methods.
 
    // Constructor.
-   UdpRxStringSocket();
+   UdpStringSocket();
 
    // Initialize variables.
    void initialize(Settings& aSettings);
@@ -94,81 +96,12 @@ public:
    // It returns true if successful.
    // The recvfrom address is stored in mFromAddress.
    bool doRecvString ();
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Udp transmit message socket. This class encapsulates a udp socket that
-// transmits a string.
-
-class UdpTxStringSocket : public Sockets::BaseUdpSocket
-{
-public:
-   typedef Sockets::BaseUdpSocket BaseClass;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Constants.
-
-   // String size.
-   static const int cStringSize = 1000;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // Settings.
-   Settings mSettings;
-
-   // The recvfrom address is stored here.
-   Sockets::SocketAddress mFromAddress;
-
-   // Number of bytes transmitted.
-   int mTxLength;
-
-   // True if the socket is valid.
-   bool mValidFlag;
-
-   // Metrics.
-   int mTxCount;
-
-   // If true then status prints are disabled.
-   bool mPrintDisable;
-
-   // Transmit mutex is used by doSendMsg for mutual exclusion.
-   Threads::MutexSemaphore  mTxMutex;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Constructor.
-   UdpTxStringSocket();
-
-   // Initialize variables.
-   void initialize(Settings& aSettings);
-
-   // Configure the socket. This does socket and bind calls.
-   void configure();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
 
    // Send a string over the socket via a blocking send call.
    // It returns true if successful.
    // It is protected by the transmit mutex.
    bool doSendString(const char* aString);
 };
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

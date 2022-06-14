@@ -7,6 +7,7 @@
 
 #include "stdafx.h"
 
+#include "trcTrace.h"
 #include "risNetUdpStringSocket.h"
 
 namespace Ris
@@ -22,12 +23,16 @@ namespace Net
 //******************************************************************************
 // Constructor.
 
-UdpRxStringSocket::UdpRxStringSocket()
+UdpStringSocket::UdpStringSocket()
 {
    mRxString[0] = 0;
+   mTxLength = 0;
    mRxLength = 0;
+   mTxCount = 0;
    mRxCount = 0;
    mValidFlag = false;
+   mTI = 0;
+   mPrintDisable = false;
 }
 
 //******************************************************************************
@@ -35,56 +40,112 @@ UdpRxStringSocket::UdpRxStringSocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpRxStringSocket::initialize(Settings& aSettings)
+void UdpStringSocket::initialize(Settings& aSettings)
 {
    // Store the settings pointer.
    mSettings = aSettings;
 
    // Variables.
    mRxString[0] = 0;
+   mTxLength = 0;
    mRxLength = 0;
+   mTxCount = 0;
    mRxCount = 0;
    mValidFlag = false;
+   mTI = 0;
+   mPrintDisable = false;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// configure the socket.
+// Configure the socket.
 
-void UdpRxStringSocket::configure()
+void UdpStringSocket::configure()
 {
    // Configure the socket.
    BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
+   BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
    BaseClass::doBind();
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
 
+   // Guard.
+   if (mPrintDisable) return;
+
    // Show.
    if (mValidFlag)
    {
-      printf("UdpRxStringSocket  PASS %16s : %5d\n",
-         BaseClass::mLocal.mString,
-         BaseClass::mLocal.mPort);
+      if (!mSettings.mUdpWrapFlag)
+      {
+         Trc::write(mTI, 0, "UdpStringSocket     PASS Rx %16s : %5d Tx %16s : %5d",
+            BaseClass::mLocal.mString,
+            BaseClass::mLocal.mPort,
+            BaseClass::mRemote.mString,
+            BaseClass::mRemote.mPort);
+
+         printf("UdpStringSocket     PASS Rx %16s : %5d Tx %16s : %5d\n",
+            BaseClass::mLocal.mString,
+            BaseClass::mLocal.mPort,
+            BaseClass::mRemote.mString,
+            BaseClass::mRemote.mPort);
+      }
+      else
+      {
+         Trc::write(mTI, 0, "UdpStringSocket     PASS Rx %16s : %5d Tx WRAP",
+            BaseClass::mLocal.mString,
+            BaseClass::mLocal.mPort);
+
+         printf("UdpStringSocket     PASS Rx %16s : %5d Tx WRAP\n",
+            BaseClass::mLocal.mString,
+            BaseClass::mLocal.mPort);
+      }
    }
    else
    {
-      printf("UdpRxStringSocket  FAIL %16s : %5d $ %d %d\n",
-         BaseClass::mLocal.mString,
-         BaseClass::mLocal.mPort,
-         BaseClass::mStatus,
-         BaseClass::mError);
+      if (!mSettings.mUdpWrapFlag)
+      {
+         Trc::write(mTI, 0, "UdpStringSocket     FAIL Rx %16s : %5d Tx %16s : %5d  $ %d %d",
+            BaseClass::mLocal.mString,
+            BaseClass::mLocal.mPort,
+            BaseClass::mRemote.mString,
+            BaseClass::mRemote.mPort,
+            BaseClass::mStatus,
+            BaseClass::mError);
+
+         printf("UdpStringSocket     FAIL Rx %16s : %5d Tx %16s : %5d  $ %d %d\n",
+            BaseClass::mLocal.mString,
+            BaseClass::mLocal.mPort,
+            BaseClass::mRemote.mString,
+            BaseClass::mRemote.mPort,
+            BaseClass::mStatus,
+            BaseClass::mError);
+      }
+      else
+      {
+         Trc::write(mTI, 0, "UdpStringSocket     FAIL Rx %16s : %5d Tx WRAP  $ %d %d",
+            BaseClass::mLocal.mString,
+            BaseClass::mLocal.mPort,
+            BaseClass::mStatus,
+            BaseClass::mError);
+
+         printf("UdpStringSocket     FAIL Rx %16s : %5d Tx WRAP  $ %d %d\n",
+            BaseClass::mLocal.mString,
+            BaseClass::mLocal.mPort,
+            BaseClass::mStatus,
+            BaseClass::mError);
+      }
    }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// configure the socket at the local address at a port number.
+// Configure the socket at the local address at a port number.
 
-void UdpRxStringSocket::configureLocal(int aPort)
+void UdpStringSocket::configureLocal(int aPort)
 {
    // Configure the socket.
    BaseClass::mLocal.setForAny(aPort);
@@ -97,13 +158,13 @@ void UdpRxStringSocket::configureLocal(int aPort)
    // Show.
    if (mValidFlag)
    {
-      //print("UdpRxStringSocket  PASS %16s : %5d\n",
+      //print("UdpStringSocket  PASS %16s : %5d\n",
       // BaseClass::mLocal.mString,
       // BaseClass::mLocal.mPort);
    }
    else
    {
-      printf("UdpRxStringSocket  FAIL %16s : %5d $ %d %d\n",
+      printf("UdpStringSocket  FAIL %16s : %5d $ %d %d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -117,7 +178,7 @@ void UdpRxStringSocket::configureLocal(int aPort)
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpRxStringSocket::doRecvString ()
+bool UdpStringSocket::doRecvString ()
 {
    //***************************************************************************
    //***************************************************************************
@@ -131,7 +192,7 @@ bool UdpRxStringSocket::doRecvString ()
    // Guard.
    if (!mValidFlag)
    {
-      printf("ERROR UdpRxStringSocket INVALID SOCKET\n");
+      printf("ERROR UdpStringSocket INVALID SOCKET\n");
       return false;
    }
 
@@ -151,16 +212,16 @@ bool UdpRxStringSocket::doRecvString ()
    {
       if (BaseClass::mError == 0)
       {
-         //printf("UdpRxStringSocket CLOSED\n");
+         //printf("UdpStringSocket CLOSED\n");
       }
       else
       {
-         printf("ERROR UdpRxStringSocket %d %d\n", BaseClass::mStatus, BaseClass::mError);
+         printf("ERROR UdpStringSocket %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }
 
-   //printf("UdpRxStringSocket rx message %d\n", mRxLength);
+   //printf("UdpStringSocket rx message %d\n", mRxLength);
 
    // Add null terminator.
    mRxString[mRxLength] = 0;
@@ -174,96 +235,57 @@ bool UdpRxStringSocket::doRecvString ()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
-
-UdpTxStringSocket::UdpTxStringSocket()
-{
-   mValidFlag = false;
-   mTxLength = 0;
-   mTxCount = 0;
-   mPrintDisable = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Initialize variables.
-
-void UdpTxStringSocket::initialize(Settings& aSettings)
-{
-   // Store the settings pointer.
-   mSettings = aSettings;
-
-   // Variables.
-   mTxLength = 0;
-   mTxCount = 0;
-   mValidFlag = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Configure the socket.
-
-void UdpTxStringSocket::configure()
-{
-   // Configure the socket.
-   BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
-   BaseClass::testRemoteAddress(mSettings.mTestForLocal);
-   BaseClass::doSocket();
-
-   // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
-
-   // Guard.
-   if (mPrintDisable) return;
-
-   // Show.
-   if (mValidFlag)
-   {
-      printf("UdpTxStringSocket  PASS %16s : %5d\n",
-         BaseClass::mRemote.mString,
-         BaseClass::mRemote.mPort);
-   }
-   else
-   {
-      printf("UdpTxStringSocket  FAIL %16s : %5d $ %d %d\n",
-         BaseClass::mRemote.mString,
-         BaseClass::mRemote.mPort,
-         BaseClass::mStatus,
-         BaseClass::mError);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Send a string over the socket via a blocking send call.
 // It returns true if successful.
 // It is protected by the transmit mutex.
 
-bool UdpTxStringSocket::doSendString(const char* aString)
+bool UdpStringSocket::doSendString(const char* aString)
 {
-   // Guard
-   if (!mValidFlag) return false;
+   Trc::write(mTI, 0, "UdpStringSocket::doSendString");
+   // Guard.
+   if (!mValidFlag)
+   {
+      Trc::write(mTI, 0, "ERROR UdpStringSocket INVALID SOCKET");
+      printf("ERROR UdpStringSocket INVALID SOCKET\n");
+      return false;
+   }
 
-   // Mutex
-   mTxMutex.lock();
+   // Transmit the string.
+   bool tRet = false;
+   int mTxLength = (int)strlen(aString);
+   if (!mSettings.mUdpWrapFlag)
+   {
+      // If this is not wrapping then send to the remote address.
+      tRet = doSendTo(mRemote, aString, mTxLength);
+   }
+   else
+   {
+      // If this is wrapping then send to the last received from address.
+      if (mRxCount)
+      {
+         Trc::write(mTI, 1, "UdpStringSocket::doSendString WRAP Tx %16s : %5d  ",
+            mFromAddress.mString,
+            mFromAddress.mPort);
+         // If this is wrapping then send to the last received from address.
+         tRet = doSendTo(mRemote, aString, mTxLength);
+      }
+   }
 
-   // Transmit the buffer
-   int tLength = (int)strlen(aString);
-   doSendTo(mRemote,aString,tLength);
-
-   mTxLength = tLength;
    mTxCount++;
 
-   // Mutex
-   mTxMutex.unlock();
+   if (tRet)
+   {
+      //printf("UdpStringSocket tx message %d\n", mTxLength);
+   }
+   else
+   {
+      Trc::write(mTI, 0, "ERROR UdpStringSocket INVALID SEND");
+      printf("ERROR UdpStringSocket INVALID SEND\n");
+   }
 
-   return true;
+   // Done.
+   Trc::write(mTI, 1, "UdpStringSocket::doSendString done %d", mTxLength);
+   return tRet;
 }
 
 //******************************************************************************

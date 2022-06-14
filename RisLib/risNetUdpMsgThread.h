@@ -60,11 +60,7 @@ public:
    Settings mSettings;
 
    // Socket instance.
-   UdpRxMsgSocket mRxSocket;
-   UdpTxMsgSocket mTxSocket;
-
-   // If true then the transmit socket has been configured.
-   bool mTxConfigFlag;
+   UdpMsgSocket mMsgSocket;
 
    // This is a qcall callback that is invoked when a message is received.
    // It is registered by the parent thread at initialzation.

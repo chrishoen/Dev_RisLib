@@ -34,7 +34,6 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
    mRxMsgQCall = aSettings.mRxMsgQCall;
 
    // Initialize variables.
-   mTxConfigFlag = false;
    mTI = mSettings.mTraceIndex;
 }
 
@@ -47,18 +46,10 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 void UdpMsgThread::threadInitFunction()
 {
    Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction");
-   // Initialize and configure the receive socket.
-   mRxSocket.initialize(mSettings);
-   mRxSocket.configure();
+   // Initialize and configure the message socket.
+   mMsgSocket.initialize(mSettings);
+   mMsgSocket.configure();
 
-   // If not wrap mode.
-   if (!mSettings.mUdpWrapFlag)
-   {
-      // Initialize and configure the transmit socket.
-      mTxSocket.initialize(mSettings);
-      mTxSocket.configure();
-      mTxConfigFlag = true;
-   }
    Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction done");
 }
 
@@ -71,7 +62,7 @@ void UdpMsgThread::threadInitFunction()
 void  UdpMsgThread::threadRunFunction()
 {
    Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction");
-   bool tGoing = mRxSocket.mValidFlag;
+   bool tGoing = mMsgSocket.mValidFlag;
    bool tFirstFlag = true;
 
    while(tGoing)
@@ -80,26 +71,9 @@ void  UdpMsgThread::threadRunFunction()
       // was received then process it. If in wrap mode then configure the
       // transmit socket using the receive from address. 
       ByteContent* tMsg=0;
-      if (mRxSocket.doReceiveMsg(tMsg))
+      if (mMsgSocket.doReceiveMsg(tMsg))
       {
          Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg");
-         // If this is the first correct receive message.
-         if (tFirstFlag)
-         {
-            tFirstFlag = false;
-            // If in wrap mode.
-            if (mSettings.mUdpWrapFlag)
-            {
-               // Initialize and configure the transmit socket. Use the
-               // receive from address and the settings port. Turn off
-               // wrap mode.
-               mSettings.setRemoteAddress(mRxSocket.mFromAddress.mString, mSettings.mRemoteIpPort);
-               mSettings.setUdpWrapFlag(false);
-               mTxSocket.initialize(mSettings);
-               mTxSocket.configure();
-               mTxConfigFlag = true;
-            }
-         }
          // Message was correctly received.
          // Call the receive callback qcall.
          processRxMsg(tMsg);
@@ -107,7 +81,6 @@ void  UdpMsgThread::threadRunFunction()
       else
       {
          Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg ERROR");
-         // Message was not correctly received.
       }
 
       // If termination request then exit the loop.
@@ -146,7 +119,7 @@ void UdpMsgThread::shutdownThread()
    Trc::write(mTI, 1, "UdpMsgThread::shutdownThread");
    BaseThread::mTerminateFlag = true;
 
-   mRxSocket.doClose();
+   mMsgSocket.doClose();
 
    BaseThread::waitForThreadTerminate();
    Trc::write(mTI, 1, "UdpMsgThread::shutdownThread done");
@@ -176,15 +149,8 @@ void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 
 void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {
-   // Guard.
-   if (!mTxConfigFlag)
-   {
-      delete aMsg;
-      return;
-   }
-
    // Send the message.
-   mTxSocket.doSendMsg(aMsg);
+   mMsgSocket.doSendMsg(aMsg);
 }
 
 //******************************************************************************

@@ -73,6 +73,7 @@ void PeerThread::showThreadInfo()
 
 void PeerThread::threadInitFunction()
 {
+   Trc::start(11);
    Trc::write(11, 0, "PeerThread::threadInitFunction");
 
    // Instance of network socket settings.
@@ -84,7 +85,6 @@ void PeerThread::threadInitFunction()
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mRxMsgQCall = mRxMsgQCall;
    tSettings.mTraceIndex = 11;
-   Trc::start(11);
 
    // Create the child thread with the settings.
    mMsgThread = new Ris::Net::UdpMsgThread(tSettings);

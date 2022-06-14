@@ -1,8 +1,7 @@
 #pragma once
 
 /*==============================================================================
-UDP receive  message socket.
-UDP transmit message socket.
+UDP message socket.
 ==============================================================================*/
 
 //******************************************************************************
@@ -26,14 +25,11 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Udp receive message socket. This class encapsulates a udp socket that
-// receives messages that are based on the byte content message encapsulation
-// scheme.
+// Udp message socket. This class encapsulates a udp socket that
+// sends and receives messages that are based on the byte content message
+// encapsulation scheme.
 
-class UdpRxMsgSocket : public Sockets::BaseUdpSocket
+class UdpMsgSocket : public Sockets::BaseUdpSocket
 {
 private:
    typedef Sockets::BaseUdpSocket BaseClass;
@@ -80,7 +76,9 @@ public:
    Sockets::SocketAddress mFromAddress;
 
    // Metrics.
+   int mTxLength;
    int mRxLength;
+   int mTxCount;
    int mRxCount;
 
    // Program trace index.
@@ -92,8 +90,8 @@ public:
    // Methods.
 
    // Constructor.
-   UdpRxMsgSocket(); 
-   ~UdpRxMsgSocket(); 
+   UdpMsgSocket(); 
+   ~UdpMsgSocket(); 
 
    // Initialize variables.
    void initialize(Settings& aSettings);
@@ -112,82 +110,6 @@ public:
    // returning false means that the socket was closed or that there was
    // an error.
    bool doReceiveMsg (ByteContent*& aRxMsg);
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Udp transmit message socket. This class encapsulates a udp socket that
-// transmits messages that are based on the byte content message encapsulation
-// scheme.
-
-class UdpTxMsgSocket : public Sockets::BaseUdpSocket
-{
-public:
-   typedef Sockets::BaseUdpSocket BaseClass;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // Settings.
-   Settings mSettings;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // Transmit memory. Allocated at initialization.
-   char* mTxMemory;
-
-   // Size of allocated memory.
-   int mMemorySize;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // This is a message monkey that is used to get details about a message 
-   // from a message header that is contained in a byte buffer. It allows the 
-   // receive method to receive and extract a message from a byte buffer
-   // without the having the message code visible to it.
-   BaseMsgMonkey* mMsgMonkey;
-
-   // General purpose valid flag.
-   bool mValidFlag;
-
-   // Metrics.
-   int mTxLength;
-   int mTxCount;
-
-   // Program trace index.
-   int mTI;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Constructor.
-   UdpTxMsgSocket(); 
-   ~UdpTxMsgSocket(); 
-
-   // Initialize variables.
-   void initialize(Settings& aSettings);
-
-   // Configure the socket. This does socket and bind calls.
-   void configure();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
 
    // Copy a message into a byte buffer and then send the byte buffer to the
    // socket with a blocking send call. Return true if successful.

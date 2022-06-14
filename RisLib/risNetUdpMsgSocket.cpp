@@ -296,6 +296,10 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
       // If this is wrapping then send to the last received from address.
       if (mRxCount)
       {
+         Trc::write(mTI, 1, "UdpMsgSocket::doSendMsg WRAP Tx %16s : %5d  ",
+            mFromAddress.mString,
+            mFromAddress.mPort);
+         // If this is wrapping then send to the last received from address.
          tRet = doSendTo(mFromAddress, tByteBuffer.getBaseAddress(), mTxLength);
       }
    }
@@ -319,7 +323,7 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
    delete aMsg;
 
    // Done.
-   Trc::write(mTI, 1, "UdpMsgSocket doSendMsg done %d", mTxLength);
+   Trc::write(mTI, 1, "UdpMsgSocket::doSendMsg done %d", mTxLength);
    return tRet;
 }
 

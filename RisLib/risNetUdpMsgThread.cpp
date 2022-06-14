@@ -68,8 +68,7 @@ void  UdpMsgThread::threadRunFunction()
    while(tGoing)
    {
       // Try to receive a message with a blocking receive call. If a message
-      // was received then process it. If in wrap mode then configure the
-      // transmit socket using the receive from address. 
+      // was received then process it.
       ByteContent* tMsg=0;
       if (mMsgSocket.doReceiveMsg(tMsg))
       {

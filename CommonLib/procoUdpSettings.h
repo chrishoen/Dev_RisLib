@@ -73,10 +73,12 @@ public:
    char mOtherUdpIPAddress[cMaxStringSize];
    int  mOtherUdpPort;
 
-   // If true then use the first receive from ip address as the
-   // transmit ip address. Don't open the transmit socket until
-   // a message is received.
+   // If true then use the last receive from ip address as the
+   // next transmit ip address.
    bool mUdpWrapFlag;
+
+   // If true then broadcast udp sends.
+   bool mUdpBroadcast;
 
    //***************************************************************************
    //***************************************************************************

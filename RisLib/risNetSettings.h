@@ -53,6 +53,9 @@ public:
    // a message is received.
    bool mUdpWrapFlag;
 
+   // If true then broadcast udp sends.
+   bool mUdpBroadcast;
+
    // Max number of tcp server sessions.
    int mMaxSessions;
 

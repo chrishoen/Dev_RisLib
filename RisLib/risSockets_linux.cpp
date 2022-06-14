@@ -284,8 +284,8 @@ bool BaseSocket::setOptionBroadcast ()
    if (mStatus < 0) return false;
 
    int tStatus = 0;
-   bool bValue=true;
-   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_BROADCAST,&bValue,sizeof(bool));
+   int tValue = 1;
+   tStatus = setsockopt(mBaseSpecific->mDesc,SOL_SOCKET,SO_BROADCAST,&tValue,sizeof(int));
    return updateError(tStatus);
 }
 

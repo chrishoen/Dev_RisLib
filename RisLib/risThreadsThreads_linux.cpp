@@ -144,8 +144,8 @@ void BaseThread::setThreadPriorityHigh()
 
 static void chkerror(int aRet, const char* aLabel)
 {
-   if (aRet >= 0)return;
-   printf("FAIL %s %d\n", aLabel,aRet);
+   if (aRet == 0)return;
+   printf("PTHREAD FAIL %s %d\n", aLabel,aRet);
    exit(1);
 }
 

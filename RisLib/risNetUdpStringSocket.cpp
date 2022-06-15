@@ -64,12 +64,26 @@ void UdpStringSocket::initialize(Settings& aSettings)
 
 void UdpStringSocket::configure()
 {
-   // Configure the socket.
-   BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
-   BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   // Set the socket receive address.
+   if (mSettings.mLocalIpPort)
+   {
+      BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
+   }
 
+   // Set the socket send address.
+   if (mSettings.mRemoteIpPort)
+   {
+      BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   }
+
+   // Configure the socket.
    BaseClass::doSocket();
-   BaseClass::doBind();
+
+   // If listening then bind the socket to the receive address.
+   if (BaseClass::mLocal.mPort)
+   {
+      BaseClass::doBind();
+   }
 
    // Test for broadcast.
    if (mSettings.mUdpBroadcast)
@@ -81,7 +95,7 @@ void UdpStringSocket::configure()
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
 
-   // Guard.
+   // Guard for don't print status.
    if (mPrintDisable) return;
 
    // Show.
@@ -152,42 +166,10 @@ void UdpStringSocket::configure()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Configure the socket at the local address at a port number.
-
-void UdpStringSocket::configureLocal(int aPort)
-{
-   // Configure the socket.
-   BaseClass::mLocal.setForAny(aPort);
-   BaseClass::doSocket();
-   BaseClass::doBind();
-
-   // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
-
-   // Show.
-   if (mValidFlag)
-   {
-      //print("UdpStringSocket  PASS %16s : %5d\n",
-      // BaseClass::mLocal.mString,
-      // BaseClass::mLocal.mPort);
-   }
-   else
-   {
-      printf("UdpStringSocket  FAIL %16s : %5d $ %d %d\n",
-         BaseClass::mLocal.mString,
-         BaseClass::mLocal.mPort,
-         BaseClass::mStatus,
-         BaseClass::mError);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpStringSocket::doRecvString ()
+bool UdpStringSocket::doRecvString()
 {
    Trc::write(mTI, 0, "UdpStringSocket::doReceiveString");
    //***************************************************************************

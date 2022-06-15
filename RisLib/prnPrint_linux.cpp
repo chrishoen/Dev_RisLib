@@ -155,7 +155,7 @@ void initializePrint()
          rConsoleSocket[i].initialize(tSettings);
          rConsoleSocket[i].mPrintDisable = true;
          rConsoleSocket[i].configure();
-         if (!rConsoleSocket[i].mValidFlag )
+         if (!rConsoleSocket[i].mValidFlag)
          {
             rConsoleSocket[i].showError("initializePrint");
             rConsoleFlag[i] = false;

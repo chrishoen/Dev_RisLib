@@ -59,7 +59,7 @@ public:
 
    bool mValid;
    unsigned mAddress;
-   char mString[32];
+   char mString[20];
    int mPort;
 
    SocketAddress();

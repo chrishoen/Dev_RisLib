@@ -15,8 +15,10 @@ add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoUdpString")
 return()
 
-
-
+add_subdirectory ("RisLib")
+add_subdirectory ("PrintView")
+add_subdirectory ("PrintTest")
+return()
 
 add_subdirectory ("RisLib")
 return()

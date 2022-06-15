@@ -5,7 +5,8 @@
 
 //******************************************************************************
 
-Ris::Net::UdpRxStringSocket rSocket;
+Ris::Net::UdpStringSocket rSocket;
+Ris::Net::Settings rSettings;
 
 int main(int argc,char** argv)
 {
@@ -16,7 +17,10 @@ int main(int argc,char** argv)
       tPort = atoi(argv[1]);
    }
 
-   rSocket.configureLocal(tPort);
+   rSettings.mLocalIpPort = tPort;
+   rSocket.initialize(rSettings);
+   rSocket.mPrintDisable = true;
+   rSocket.configure();
 
    while (rSocket.doRecvString())
    {

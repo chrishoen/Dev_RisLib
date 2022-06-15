@@ -25,6 +25,7 @@ Settings::Settings()
    mRemoteIpPort = 0;
    mTestForLocal = false;
    mUdpWrapFlag = false;
+   mUdpBroadcast = false;
    mMaxSessions = 0;
    mTraceIndex = 0;
    mFlags = 0;

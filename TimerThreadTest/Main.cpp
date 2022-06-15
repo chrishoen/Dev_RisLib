@@ -35,8 +35,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Show program threads.
 
-   Ris::Threads::showCurrentThreadInfo();
-   Some::gTimerThread->showThreadInfo();
+//   Ris::Threads::showCurrentThreadInfo();
+//   Some::gTimerThread->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************

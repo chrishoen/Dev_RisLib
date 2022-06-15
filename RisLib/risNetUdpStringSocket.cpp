@@ -284,7 +284,7 @@ bool UdpStringSocket::doSendString(const char* aString)
             mFromAddress.mString,
             mFromAddress.mPort);
          // If this is wrapping then send to the last received from address.
-         tRet = doSendTo(mRemote, aString, mTxLength);
+         tRet = doSendTo(mFromAddress, aString, mTxLength);
       }
    }
 

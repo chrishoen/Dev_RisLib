@@ -295,7 +295,7 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
       // If this is wrapping then send to the last received from address.
       if (mRxCount)
       {
-         Trc::write(mTI, 1, "UdpMsgSocket::doSendMsg WRAP Tx %16s : %5d  ",
+         Trc::write(mTI, 1, "UdpMsgSocket::doSendMsg WRAP Tx %16s : %5d",
             mFromAddress.mString,
             mFromAddress.mPort);
          // If this is wrapping then send to the last received from address.

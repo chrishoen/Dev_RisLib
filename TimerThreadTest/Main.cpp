@@ -26,7 +26,9 @@ int main(int argc,char** argv)
    // Launch program threads.
 
    Some::gTimerThread = new Some::TimerThread;
+   printf("Main launch timer thread\n");
    Some::gTimerThread->launchThread();
+   printf("Main launch timer thread done\n");
 
    //***************************************************************************
    //***************************************************************************

@@ -96,6 +96,7 @@ public:
 
    // Set member.
    void setUdpWrapFlag(bool aUdpWrapFlag);
+   void setUdpBroadcast(bool aUdpBroadcast);
 };
 
 //******************************************************************************

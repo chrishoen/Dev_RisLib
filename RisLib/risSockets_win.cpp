@@ -154,7 +154,7 @@ void BaseSocket::reset()
 {
    mStatus       = 0;
    mError        = 0;
-   mBaseSpecific->mDesc         = -1;
+   mBaseSpecific->mDesc  = -1;
    mType         = 0;
    mProtocol     = 0;
    mLocal.reset();

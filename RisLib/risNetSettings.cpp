@@ -51,6 +51,14 @@ void Settings::setUdpWrapFlag(bool aUdpWrapFlag)
    strcpy(mRemoteIpAddr, "UdpWrap");
 }
 
+// Set member.
+void Settings::setUdpBroadcast(bool aUdpBroadcast)
+{
+   mUdpBroadcast = aUdpBroadcast;
+   if (!mUdpBroadcast) return;
+   strcpy(mRemoteIpAddr, "UdpBroadcast");
+}
+
 
 //******************************************************************************
 //******************************************************************************

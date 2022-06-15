@@ -67,8 +67,16 @@ void UdpStringSocket::configure()
    // Configure the socket.
    BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
    BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+
    BaseClass::doSocket();
    BaseClass::doBind();
+
+   // Test for broadcast.
+   if (mSettings.mUdpBroadcast)
+   {
+      BaseClass::mRemote.setForBroadcast(mSettings.mRemoteIpPort);
+      BaseClass::setOptionBroadcast();
+   }
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;

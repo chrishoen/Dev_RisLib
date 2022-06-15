@@ -66,6 +66,7 @@ void ProcThread::threadInitFunction()
    tSettings.setLocalPort(gUdpSettings.mMyUdpPort);
    tSettings.setRemoteAddress(gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
    tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
+   tSettings.setUdpBroadcast(gUdpSettings.mUdpBroadcast);
    tSettings.mRxStringQCall = mRxStringQCall;
    tSettings.mTraceIndex = 11;
 

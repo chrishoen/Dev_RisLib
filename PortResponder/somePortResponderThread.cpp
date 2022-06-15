@@ -6,8 +6,6 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "someSerialParms.h"
-
 #define  _SOMEPORTRESPONDERTHREAD_CPP_
 #include "somePortResponderThread.h"
 
@@ -33,13 +31,6 @@ PortResponderThread::PortResponderThread()
    BaseClass::setThreadPriorityHigh();
 
    // Initialize variables.
-   mRxBuffer[0] = 0;
-   mTxBuffer[0] = 0;
-   mErrorCount = 0;
-   mRestartCount = 0;
-   mRxCount = 0;
-   mTxCount = 0;
-   mRxReqNumBytes = gSerialParms.mRxReqNumBytes;
 }
 
 //******************************************************************************
@@ -54,8 +45,15 @@ void PortResponderThread::threadInitFunction()
 
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
+   tSettings.setLocalPort(5012);
+   tSettings.setUdpWrapFlag(true);
+   tSettings.mTraceIndex = 11;
 
-   mRxSocket.configureLocal(5012);
+   // Configure the socket with the settings.
+   mRxSocket.initialize(tSettings);
+   mRxSocket.configure();
+
+   Trc::write(11, 0, "PortResponderThread::threadInitFunction done");
 }
 
 //******************************************************************************

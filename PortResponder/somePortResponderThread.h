@@ -9,7 +9,7 @@ Serial test thread that contains a serial port.
 //******************************************************************************
 
 #include "risThreadsThreads.h"
-#include "risNetUdpStringSocket2.h"
+#include "risNetUdpStringSocket.h"
 #include "risNetSettings.h"
 
 //******************************************************************************
@@ -47,20 +47,7 @@ public:
    Ris::Net::Settings mSettings;
 
    // Serial port.
-   Ris::Net::UdpWrapStringSocket mRxSocket;
-
-   // Buffers.
-   char mRxBuffer[cBufferSize];
-   char mTxBuffer[cBufferSize];
-
-   // Metrics.
-   int mErrorCount;
-   int mRestartCount;
-   int mRxCount;
-   int mTxCount;
-
-   // Requested number of bytes to receive.
-   int mRxReqNumBytes;
+   Ris::Net::UdpStringSocket mRxSocket;
 
    //***************************************************************************
    //***************************************************************************

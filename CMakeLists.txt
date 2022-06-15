@@ -12,13 +12,14 @@ my_special1()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoUdpString")
+add_subdirectory ("PortResponder")
 return()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("PrintView")
-add_subdirectory ("PrintTest")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoUdpString")
 return()
+
 
 add_subdirectory ("RisLib")
 return()

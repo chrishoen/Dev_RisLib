@@ -10,7 +10,10 @@ include(MySpecial.cmake)
 project ("Dev_RisLib")
 my_special1() 
 
+
 add_subdirectory ("RisLib")
+return()
+
 add_subdirectory ("TimerThreadTest")
 return()
 
@@ -22,10 +25,6 @@ return()
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoUdpString")
-return()
-
-
-add_subdirectory ("RisLib")
 return()
 
 add_subdirectory ("MyProgram1")

@@ -37,7 +37,7 @@ PortResponderThread::PortResponderThread()
 //******************************************************************************
 //******************************************************************************
 // Thread init function. This is called by the base class immediately
-// after the thread starts running. It initializes the serial port.
+// after the thread starts running. It initializes the udp port.
 
 void PortResponderThread::threadInitFunction()
 {
@@ -50,8 +50,8 @@ void PortResponderThread::threadInitFunction()
    tSettings.mTraceIndex = 11;
 
    // Configure the socket with the settings.
-   mRxSocket.initialize(tSettings);
-   mRxSocket.configure();
+   mUdpStringSocket.initialize(tSettings);
+   mUdpStringSocket.configure();
 
    Trc::write(11, 0, "PortResponderThread::threadInitFunction done");
 }
@@ -61,18 +61,18 @@ void PortResponderThread::threadInitFunction()
 //******************************************************************************
 // Thread run function. This is called by the base class immediately
 // after the thread init function. It runs a loop that blocks on 
-// serial port receives and then processes them. The loop terminates
-// when the serial port receive is aborted.
+// udp port receives and then processes them. The loop terminates
+// when the udp port receive is aborted.
 
 void PortResponderThread::threadRunFunction()
 {
-   while (mRxSocket.doRecvString())
+   while (mUdpStringSocket.doRecvString())
    {
-      Prn::print(0, "mRxSocket.doRecvString %16s : %5d",
-         mRxSocket.mFromAddress.mString,
-         mRxSocket.mFromAddress.mPort);
-      Prn::print(0, "mRxSocket.doRecvString %16s", mRxSocket.mRxString);
-      mRxSocket.doSendString("Mira in the neighborhood 1234");
+      Prn::print(0, "mUdpStringSocket.doRecvString %16s : %5d",
+         mUdpStringSocket.mFromAddress.mString,
+         mUdpStringSocket.mFromAddress.mPort);
+      Prn::print(0, "mUdpStringSocket.doRecvString %16s", mUdpStringSocket.mRxString);
+      mUdpStringSocket.doSendString("Mira in the neighborhood 1234");
    }
 }
 
@@ -80,29 +80,29 @@ void PortResponderThread::threadRunFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immediately
-// before the thread is terminated. It is close the serial port.
+// before the thread is terminated. It is close the udp port.
 
 void PortResponderThread::threadExitFunction()
 {
    printf("somePortResponderThread::threadExitFunction\n");
 
-   // Close the serial port.
-   mRxSocket.doClose();
+   // Close the udp port.
+   mUdpStringSocket.doClose();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Thread shutdown function. This is called out of the context of
-// this thread. It aborts the serial port receive and waits for the
+// this thread. It aborts the udp port receive and waits for the
 // thread to terminate after execution of the thread exit function.
 
 void PortResponderThread::shutdownThread()
 {
    printf("somePortResponderThread::shutdownThread\n");
 
-   // Abort pending serial port receives
-   mRxSocket.doClose();
+   // Abort pending udp port receives
+   mUdpStringSocket.doClose();
 
    // Wait for thread to terminate.
    BaseClass::shutdownThread();
@@ -111,7 +111,7 @@ void PortResponderThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send bytes via the serial port. This executes in the context of
+// Send bytes via the udp port. This executes in the context of
 // the calling thread.
 
 void PortResponderThread::sendString(char* aString)

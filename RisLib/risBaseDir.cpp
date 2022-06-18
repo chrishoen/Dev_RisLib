@@ -41,6 +41,12 @@ void setBaseDirectoryToCurrent()
    setBaseDirectory(portableGetCurrentDir());
 }
 
+// Set the program base directory to the program bin directory.
+void setBaseDirectoryToBin()
+{
+   setBaseDirectory(portableGetBinDir());
+}
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************

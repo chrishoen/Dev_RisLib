@@ -19,6 +19,9 @@ namespace Ris
 // Set the program base directory to the current directory.
 void setBaseDirectoryToCurrent();
 
+// Set the program base directory to the program bin directory.
+void setBaseDirectoryToBin();
+
 // Set the program base directory path global variable.
 void setBaseDirectory(char* aDirPath);
 

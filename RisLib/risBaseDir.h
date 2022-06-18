@@ -22,6 +22,13 @@ void setBaseDirectoryToCurrent();
 // Set the program base directory to the program bin directory.
 void setBaseDirectoryToBin();
 
+// Set the program base directory to the program bin directory.
+void setBaseDirectoryToBin();
+
+// Set the program current working directory and the base 
+// directory to the program bin directory.
+void chdirBaseDirectoryToBin();
+
 // Set the program base directory path global variable.
 void setBaseDirectory(char* aDirPath);
 

@@ -237,6 +237,21 @@ void portableChdirUpFromBin()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Set the program current working directory to the program bin
+// directory.
+
+void portableChdirToBin()
+{
+   char* tString = new char[1000];
+   strncpy(tString, portableGetBinDir(), 999);
+   tString[999] = 0;
+   portableChdir(tString);
+   delete tString;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Return the current time as a string.
 
 char* portableGetCurrentTimeAsString(char* aBuffer, bool aSecondDecimals)

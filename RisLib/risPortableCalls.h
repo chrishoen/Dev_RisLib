@@ -47,6 +47,10 @@ void portableChdir(const char* aFilePath);
 // program bin directory.
 void portableChdirUpFromBin();
 
+// Set the program current working directory to the program bin
+// directory.
+void portableChdirToBin();
+
 // Return the current time as a string.
 char* portableGetCurrentTimeAsString(char* aBuffer, bool aSecondDecimals = false);
 

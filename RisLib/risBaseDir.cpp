@@ -47,6 +47,14 @@ void setBaseDirectoryToBin()
    setBaseDirectory(portableGetBinDir());
 }
 
+// Set the program current working directory and the base 
+// directory to the program bin directory.
+void chdirBaseDirectoryToBin()
+{
+   Ris::portableChdirToBin();
+   setBaseDirectory(portableGetBinDir());
+}
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************

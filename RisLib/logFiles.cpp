@@ -50,6 +50,7 @@ bool openFile(int aLogNum, const char* aFilePath)
 
    if (mFile[aLogNum]==0)
    {
+      printf("Log::openFile OPEN FAIL %s\n", aFilePath);
       return false;
    }
 
@@ -75,6 +76,7 @@ bool openFileAppend(int aLogNum, const char* aFilePath)
 
    if (mFile[aLogNum]==0)
    {
+      printf("Log::openFile OPEN FAIL %s\n", aFilePath);
       return false;
    }
 

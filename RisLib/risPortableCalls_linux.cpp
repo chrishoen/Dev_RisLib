@@ -209,6 +209,18 @@ bool portableFilePathExists(const char* aFilePath)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Fill the input buffer with a full file path, removing relative
+// references (../../ etc). If the input buffer is null then
+// create one. Also return the filled buffer.
+
+char* portableFullPath(char* aBuffer, const char* aFilePath)
+{
+   return realpath(aFilePath, aBuffer);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Set the program current working directory.
 
 void portableChdir(const char* aFilePath)

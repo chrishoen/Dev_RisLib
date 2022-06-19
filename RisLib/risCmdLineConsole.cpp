@@ -95,6 +95,11 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
             {
                Trc::gTraceBuffer.execute(&tCmd);
             }
+            // Test for a cwd.
+            else if (tCmd.isCmd("CWD"))
+            {
+               Prn::print(0, "%s", portableGetCurrentDir());
+            }
             else if (tCmd.isCmd("HELP"))
             {
                aExec->executeHelp(&tCmd);

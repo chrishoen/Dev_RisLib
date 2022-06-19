@@ -50,6 +50,12 @@ void BaseCmdLineParms::setFilePath(const char* aFilePath)
 
 void BaseCmdLineParms::setFilePath(std::string* aFilePath)
 {
+   if (aFilePath == 0)
+   {
+      printf("BaseCmdLineParms::setFilePath NULL\n");
+      strcpy(mFilePath, "NULL");
+   }
+
    strncpy(mFilePath, aFilePath->c_str(), cMaxStringSize - 1);
    delete aFilePath;
 }

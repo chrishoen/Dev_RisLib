@@ -139,6 +139,12 @@ void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aF
 // for the trace. Delete the string when done.
 void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, std::string* aFilePath)
 {
+   if (aFilePath == 0)
+   {
+      printf("TraceBuffer::doCreateLogFile NULL\n");
+      return;
+   }
+
    doCreateLogFile(aTraceIndex, aLogLevel, aFilePath->c_str());
    delete aFilePath;
 }

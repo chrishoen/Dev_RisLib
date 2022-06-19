@@ -59,6 +59,12 @@ bool openFile(int aLogNum, const char* aFilePath)
 
 bool openFile(int aLogNum, std::string* aFilePath)
 {
+   if (aFilePath == 0)
+   {
+      printf("Log::openFile OPEN FAIL NULL\n");
+      return false;
+   }
+
    bool tPass = openFile(aLogNum, aFilePath->c_str());
    delete aFilePath;
    return tPass;

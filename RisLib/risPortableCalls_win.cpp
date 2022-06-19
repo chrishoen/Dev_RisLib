@@ -165,6 +165,21 @@ void portableChdirUpFromBin()
    strncat(tString, "..", 998);
    tString[998] = 0;
    portableChdir(tString);
+   delete[] tString;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the program current working directory to the program bin
+// directory.
+
+void portableChdirToBin()
+{
+   char* tString = new char[1000];
+   strncpy(tString, portableGetBinDir(), 999);
+   tString[999] = 0;
+   portableChdir(tString);
    delete tString;
 }
 

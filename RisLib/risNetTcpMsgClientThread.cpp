@@ -64,9 +64,9 @@ void TcpMsgClientThread::threadInitFunction()
 void TcpMsgClientThread::threadRunFunction()
 {
    mConnectionFlag = false;
-   bool going = true;
+   bool tGoing = mSocket.mValidFlag;
 
-   while(going)
+   while(tGoing)
    {
       //************************************************************************
       //************************************************************************
@@ -143,7 +143,7 @@ void TcpMsgClientThread::threadRunFunction()
 
       if (mTerminateFlag)
       {
-         going=false;
+         tGoing=false;
       }  
    }         
 }

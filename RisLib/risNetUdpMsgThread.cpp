@@ -35,6 +35,12 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 
    // Initialize variables.
    mTI = mSettings.mTraceIndex;
+   mConnectionFlag = false;
+   mErrorCount = 0;
+   mRestartCount = 0;
+   mRxCount = 0;
+   mTxCount = 0;
+
 }
 
 //******************************************************************************
@@ -46,11 +52,107 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 void UdpMsgThread::threadInitFunction()
 {
    Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction");
+
+   Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction done");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread run function. This is called by the base class immediately
+// after the thread init function. It runs a loop that blocks on 
+// the udp port receives and then processes them. The loop terminates
+// when the serial port receive is aborted.
+
+void UdpMsgThread::threadRunFunction()
+{
+   Trc::write(mTI, 0, "UdpMsgThread::threadRunFunction");
+
+   // Top of the loop.
+   mRestartCount = 0;
+   mConnectionFlag = false;
+
+restart:
+   // Guard.
+   if (mTerminateFlag) return;
+   int tRet = 0;
+
+   // Sleep.
+   if (mRestartCount > 0)
+   {
+      BaseClass::threadSleep(1000);
+   }
+   Trc::write(mTI, 0, "UdpMsgThread restart %d", mRestartCount);
+   Prn::print(Prn::Show1, "UdpMsgThread restart %d", mRestartCount);
+   mRestartCount++;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Open device.
+
+   // If the socket is open then close it.
+   if (mMsgSocket.mValidFlag)
+   {
+      mMsgSocket.doClose();
+   }
+
    // Initialize and configure the message socket.
    mMsgSocket.initialize(mSettings);
    mMsgSocket.configure();
+   if (!mMsgSocket.mValidFlag)
+   {
+      // If error then restart.
+      goto restart;
+   }
 
-   Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction done");
+   // Connection was established.
+   mConnectionFlag = true;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Loop to receive strings.
+
+   while (!BaseClass::mTerminateFlag)
+   {
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Receive.
+
+      // Try to receive a message with a blocking receive call. If a message
+      // was received then process it.
+      ByteContent* tMsg = 0;
+      if (mMsgSocket.doReceiveMsg(tMsg))
+      {
+         Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg");
+         // Message was correctly received.
+         // Call the receive callback qcall.
+         processRxMsg(tMsg);
+      }
+      else
+      {
+         Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg ERROR");
+
+         // Check for terminate.
+         if (BaseClass::mTerminateFlag)
+         {
+            Trc::write(mTI, 0, "UdpMsgThread read TERMINATE");
+            goto end;
+         }
+         else
+         {
+            mMsgSocket.mValidFlag = false;
+            goto restart;
+         }
+      }
+   }
+
+   // Done.
+end:
+   Trc::write(mTI, 0, "UdpMsgThread::threadRunFunction done");
+   return;
 }
 
 //******************************************************************************
@@ -59,7 +161,7 @@ void UdpMsgThread::threadInitFunction()
 // Thread run function, base class overload.
 // It contains a while loop that receives messages.
 
-void  UdpMsgThread::threadRunFunction()
+void  UdpMsgThread::threadRunFunction22()
 {
    Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction");
    bool tGoing = mMsgSocket.mValidFlag;

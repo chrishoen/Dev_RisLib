@@ -71,6 +71,12 @@ void TcpMsgServerThread::threadInitFunction()
 
 void TcpMsgServerThread::threadRunFunction()
 {
+   // Guard.
+   if (!mHubSocket.mValidFlag)
+   {
+      return;
+   }
+
    // Do a nonblocking listen to put the hub socket in listen mode.
    mHubSocket.doListen();
    mListenFlag = true;

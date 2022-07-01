@@ -47,7 +47,7 @@ int doSystemCommandSuppress(const char* aCommand)
    strcpy(tString, aCommand);
    strcat(tString, " >/dev/null 2>&1");
    int tRet = system(tString);
-   delete tString;
+   delete[] tString;
    return tRet;
 }
 
@@ -82,7 +82,7 @@ int doSystemCommand(const char* aCommand, std::vector<std::string>& aResponse)
 
    // Delete the temp file.
    deleteFile(tTempFileName.c_str());
-   delete tString;
+   delete[] tString;
    return tRet;
 }
 

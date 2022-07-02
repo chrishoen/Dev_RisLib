@@ -217,72 +217,6 @@ void MutexSemaphore::unlock()
 // Named mutex.
 
 // Specific implementation variables.
-class NamedMutex::Specific
-{
-public:
-   bool   mValidFlag;
-   sem_t* mHandle;
-   Specific()
-   {
-      mValidFlag = false;
-      mHandle = 0;
-   }
-};
-
-// Constructor. Create the mutex.
-NamedMutex::NamedMutex(const char* aName)
-{
-   mSpecific = new Specific;
-   initialize(aName);
-}
-
-// Constructor. default. Initialize the data structure.
-NamedMutex::NamedMutex()
-{
-   mSpecific = new Specific;
-}
-
-// Create the mutex. Call this if using default constructor.
-void NamedMutex::initialize(const char* aName)
-{
-   mSpecific->mHandle = sem_open(aName, O_CREAT, O_RDWR, 1);
-   if (mSpecific->mHandle != SEM_FAILED)
-   {
-      mSpecific->mValidFlag = true;
-   }
-   else
-   {
-      printf("NamedMutex failed");
-      mSpecific->mValidFlag = false;
-   }
-
-}
-
-// Destructor. Delete the mutex.
-NamedMutex::~NamedMutex()
-{
-   sem_close(mSpecific->mHandle);
-   delete mSpecific;
-}
-
-// Lock the mutex.
-void NamedMutex::lock()
-{
-   sem_wait(mSpecific->mHandle);
-}
-
-// Unlock the mutex.
-void NamedMutex::unlock()
-{
-   sem_post(mSpecific->mHandle);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Named mutex.
-
-// Specific implementation variables.
 class NamedSemaphore::Specific
 {
 public:
@@ -339,6 +273,72 @@ void NamedSemaphore::get()
 
 // Unlock the mutex.
 void NamedSemaphore::put()
+{
+   sem_post(mSpecific->mHandle);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Named mutex.
+
+// Specific implementation variables.
+class NamedMutex::Specific
+{
+public:
+   bool   mValidFlag;
+   sem_t* mHandle;
+   Specific()
+   {
+      mValidFlag = false;
+      mHandle = 0;
+   }
+};
+
+// Constructor. Create the mutex.
+NamedMutex::NamedMutex(const char* aName)
+{
+   mSpecific = new Specific;
+   initialize(aName);
+}
+
+// Constructor. default. Initialize the data structure.
+NamedMutex::NamedMutex()
+{
+   mSpecific = new Specific;
+}
+
+// Create the mutex. Call this if using default constructor.
+void NamedMutex::initialize(const char* aName)
+{
+   mSpecific->mHandle = sem_open(aName, O_CREAT, O_RDWR, 1);
+   if (mSpecific->mHandle != SEM_FAILED)
+   {
+      mSpecific->mValidFlag = true;
+   }
+   else
+   {
+      printf("NamedMutex failed %d\n", errno);
+      mSpecific->mValidFlag = false;
+   }
+
+}
+
+// Destructor. Delete the mutex.
+NamedMutex::~NamedMutex()
+{
+   sem_close(mSpecific->mHandle);
+   delete mSpecific;
+}
+
+// Lock the mutex.
+void NamedMutex::lock()
+{
+   sem_wait(mSpecific->mHandle);
+}
+
+// Unlock the mutex.
+void NamedMutex::unlock()
 {
    sem_post(mSpecific->mHandle);
 }

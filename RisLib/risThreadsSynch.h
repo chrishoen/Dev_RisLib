@@ -170,51 +170,6 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This encapsulates a named mutex semaphore.
-
-class NamedMutex
-{
-public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // Specific implementation variables.
-   class Specific;
-   Specific* mSpecific;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Constructor. Create the mutex.
-   NamedMutex(const char* aName);
-
-   // Constructor. default. Initialize the data structure.
-   NamedMutex();
-
-   // Create the mutex. Call this if using default constructor.
-   void initialize(const char* aName);
-   bool create(const char* aName);
-   bool open(const char* aName);
-   void close();
-
-   // Destructor. Delete the mutex.
-   virtual ~NamedMutex();
-
-   // Lock the mutex.
-   void lock();
-
-   // Unlock the mutex.
-   void unlock();
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // This encapsulates a named semaphore.
 
 class NamedSemaphore
@@ -255,6 +210,48 @@ public:
 
    // put to the semaphore.
    void put();
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This encapsulates a named mutex semaphore.
+
+class NamedMutex
+{
+public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Specific implementation variables.
+   class Specific;
+   Specific* mSpecific;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor. Create the mutex.
+   NamedMutex(const char* aName);
+
+   // Constructor. default. Initialize the data structure.
+   NamedMutex();
+
+   // Create the mutex. Call this if using default constructor.
+   void initialize(const char* aName);
+
+   // Destructor. Delete the mutex.
+   virtual ~NamedMutex();
+
+   // Lock the mutex.
+   void lock();
+
+   // Unlock the mutex.
+   void unlock();
 };
 
 

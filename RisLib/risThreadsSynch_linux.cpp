@@ -14,6 +14,7 @@
 #include <time.h>
 #include <string.h>
 #include <assert.h>
+#include <errno.h>
 #include "my_functions.h"
 #include "prnPrint.h"
 #include "risNanoConvert.h"
@@ -317,7 +318,7 @@ void NamedSemaphore::initialize(const char* aName)
    }
    else
    {
-      printf("NamedSemaphore failed\n");
+      printf("NamedSemaphore failed %d\n", errno);
       mSpecific->mValidFlag = false;
    }
 

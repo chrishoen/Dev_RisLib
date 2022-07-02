@@ -47,13 +47,13 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
 {
-   mSem.lock();
+   mSem.unlock();
    Prn::print(0, "done");
 }
 
 void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
 {
-   mSem.unlock();
+   mSem.lock();
    Prn::print(0, "done");
 }
 

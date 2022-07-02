@@ -245,7 +245,7 @@ NamedSemaphore::NamedSemaphore()
 // Create the mutex. Call this if using default constructor.
 void NamedSemaphore::initialize(const char* aName)
 {
-   mSpecific->mHandle = sem_open(aName, O_CREAT, O_RDWR, 1);
+   mSpecific->mHandle = sem_open(aName, O_CREAT, 0644, 1);
    if (mSpecific->mHandle != SEM_FAILED)
    {
       mSpecific->mValidFlag = true;
@@ -311,7 +311,7 @@ NamedMutex::NamedMutex()
 // Create the mutex. Call this if using default constructor.
 void NamedMutex::initialize(const char* aName)
 {
-   mSpecific->mHandle = sem_open(aName, O_CREAT, O_RDWR, 1);
+   mSpecific->mHandle = sem_open(aName, O_CREAT, 0644, 1);
    if (mSpecific->mHandle != SEM_FAILED)
    {
       mSpecific->mValidFlag = true;

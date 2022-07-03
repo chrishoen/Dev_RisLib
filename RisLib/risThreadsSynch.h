@@ -88,6 +88,9 @@ public:
    // Destructor. Delete the semaphore.
    virtual ~CountingSemaphore();
 
+   // Reset the semaphore.
+   void reset();
+
    // Put to the semaphore.
    void put();
 

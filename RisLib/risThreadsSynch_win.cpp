@@ -97,6 +97,11 @@ CountingSemaphore::~CountingSemaphore()
    delete mSpecific;
 }
 
+// Reset the semaphore.
+void CountingSemaphore::reset()
+{
+}
+
 // Put to the semaphore.
 void CountingSemaphore::put()
 {

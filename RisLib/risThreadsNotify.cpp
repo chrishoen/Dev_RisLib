@@ -48,7 +48,7 @@ void Notify::reset()
    mAbortFlag = false;
    mTimeoutFlag = false;
    mErrorFlag = 0;
-   mEventSem.reset();
+   mSem.reset();
 }
 
 void Notify::clearFlags()
@@ -269,7 +269,7 @@ void Notify::notify(int aBitNum)
    if ((mAnyFlag && tAnyFound) || (!mAnyFlag && tAllFound))
    {
       // Signal the event.
-      mEventSem.put();
+      mSem.put();
    }
 }
 
@@ -297,7 +297,7 @@ void Notify::abort()
    mAbortFlag = true;
 
    // Signal the event.
-   mEventSem.put();
+   mSem.put();
 }
 
 //******************************************************************************
@@ -347,7 +347,7 @@ void Notify::wait(int aTimeout)
    testException();
 
    // Wait for the event. Set the timeout flag if the wait times out.
-   if (!mEventSem.get(aTimeout))
+   if (!mSem.get(aTimeout))
    {
       // A timeout occurred.
       mTimeoutFlag = true;
@@ -375,7 +375,7 @@ void Notify::waitForTimer(int aTimeout)
    my_strncpy(mLabel, "waitForTimer", cMaxStringSize);
 
    // Wait for the event. Only an abort should signal the event. 
-   mEventSem.get(aTimeout);
+   mSem.get(aTimeout);
 
    // Test for exception conditions.
    testException();

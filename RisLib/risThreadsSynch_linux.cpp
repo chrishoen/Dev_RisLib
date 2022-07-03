@@ -154,6 +154,26 @@ CountingSemaphore::CountingSemaphore(int aInitial)
    sem_init(&mSpecific->mHandle,0,aInitial);
 }
 
+// Reset the semaphore.
+void CountingSemaphore::reset()
+{
+   return;
+   // If there is a pending event, then clear it.
+   while (true)
+   {
+      int tCount = 0;
+      sem_getvalue(&mSpecific->mHandle, &tCount);
+      if (tCount > 0)
+      {
+         sem_wait(&mSpecific->mHandle);
+      }
+      else
+      {
+         break;
+      }
+   }
+}
+
 // Destructor. Delete the semaphore.
 CountingSemaphore::~CountingSemaphore()
 {

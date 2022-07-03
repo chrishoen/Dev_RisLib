@@ -145,32 +145,25 @@ public:
 CountingSemaphore::CountingSemaphore()
 {
    mSpecific = new Specific;
-   sem_init(&mSpecific->mHandle,0,0);
+   sem_init(&mSpecific->mHandle, 0, 0);
 }
 
+// Constructor. Create the semaphore.
 CountingSemaphore::CountingSemaphore(int aInitial)
 {
    mSpecific = new Specific;
-   sem_init(&mSpecific->mHandle,0,aInitial);
+   sem_init(&mSpecific->mHandle, 0, aInitial);
 }
 
 // Reset the semaphore.
 void CountingSemaphore::reset()
 {
-   return;
    // If there is a pending event, then clear it.
-   while (true)
+   int tCount = 0;
+   sem_getvalue(&mSpecific->mHandle, &tCount);
+   if (tCount > 0)
    {
-      int tCount = 0;
-      sem_getvalue(&mSpecific->mHandle, &tCount);
-      if (tCount > 0)
-      {
-         sem_wait(&mSpecific->mHandle);
-      }
-      else
-      {
-         break;
-      }
+      sem_wait(&mSpecific->mHandle);
    }
 }
 
@@ -184,13 +177,66 @@ CountingSemaphore::~CountingSemaphore()
 // Put to the semaphore.
 void CountingSemaphore::put()
 {
+   // Get current semaphore count
+   int tCount = 0;
+   sem_getvalue(&mSpecific->mHandle, &tCount);
+
+   // If not zero then return, this is a binary semaphore
+   if (tCount != 0) return;
+
+   // Post to semahore
    sem_post(&mSpecific->mHandle);
 }
 
 // Get from the semaphore, block until timeout, return true if no timeout.
-bool CountingSemaphore::get(int timeout)
+bool CountingSemaphore::get(int aTimeout)
 {
-   return sem_wait(&mSpecific->mHandle) == 0;
+   switch (aTimeout)
+   {
+   case 0:
+      return true;
+      break;
+   case -1:
+      sem_wait(&mSpecific->mHandle);
+      return true;
+      break;
+   default:
+      // Time variables
+      timespec   tBeginTimespec;
+      timespec   tEndTimespec;
+      timespec   tExpireTimespec;
+      long long  tBeginTimeNs;
+      long long  tEndTimeNs;
+      long long  tExpireTimeNs;
+
+      // Get current timespec at beginning
+      clock_gettime(CLOCK_REALTIME, &tBeginTimespec);
+
+      // Convert to ns
+      tBeginTimeNs = Ris::NanoConvert::getNsFromTimespec(&tBeginTimespec);
+
+      // Calculate expiration time from timeout (which is in milliseconds)
+      tExpireTimeNs = tBeginTimeNs + Ris::NanoConvert::getNsFromMs(aTimeout);
+
+      // Convert to timespec
+      tExpireTimespec = Ris::NanoConvert::getTimespecFromNs(tExpireTimeNs);
+
+      // Semaphore timed wait with expiration timespec
+      sem_timedwait(&mSpecific->mHandle, &tExpireTimespec);
+
+      // Get current timespec at end
+      clock_gettime(CLOCK_REALTIME, &tEndTimespec);
+
+      // Convert to ns
+      tEndTimeNs = Ris::NanoConvert::getNsFromTimespec(&tEndTimespec);
+
+      // Compare
+      bool tNoTimeout = tExpireTimeNs >= tEndTimeNs ? true : false;
+
+      // Result
+      return tNoTimeout;
+   }
+   return false;
 }
 
 //******************************************************************************

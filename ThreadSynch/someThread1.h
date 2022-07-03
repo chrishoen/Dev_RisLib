@@ -30,7 +30,8 @@ public:
    // Members.
 
    // Semaphore.
-   Ris::Threads::BinarySemaphore mSem;
+// Ris::Threads::BinarySemaphore mSem;
+   Ris::Threads::CountingSemaphore mSem;
 
    // Test processing flag.
    bool mTPFlag;

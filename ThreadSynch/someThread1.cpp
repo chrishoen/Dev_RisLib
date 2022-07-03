@@ -25,6 +25,9 @@ Thread1::Thread1()
 {
    // Set base class thread priority
    BaseClass::setThreadPriorityHigh();
+
+   // Initialize member variables.
+   mTPFlag = true;
 }
 
 //******************************************************************************
@@ -33,24 +36,33 @@ Thread1::Thread1()
 
 void Thread1::threadRunFunction()
 {
+   Prn::print(0, "Thread1::threadRunFunction BEGIN");
    while (true)
    {
-      switch (gShare.mTest)
+      if (mTPFlag)
       {
-      case 1:
-         runTest1();
-         break;
-      case 2:
-         runTest2();
-         break;
-      case 3:
-         runTest3();
-         break;
-      default:
-         threadSleep(200);
-         break;
+         switch (gShare.mTest)
+         {
+         case 1:
+            runTest1();
+            break;
+         case 2:
+            runTest2();
+            break;
+         case 3:
+            runTest3();
+            break;
+         default:
+            threadSleep(200);
+            break;
+         }
+      }
+      else
+      {
+         BaseClass::threadSleep(100);
       }
    }
+   Prn::print(0, "Thread1::threadRunFunction END");
 }
 
 //******************************************************************************
@@ -59,6 +71,9 @@ void Thread1::threadRunFunction()
 
 void Thread1::runTest1()
 {
+   Prn::print(0, "runTest1 BEGIN");
+   mSem.get(1000);
+   Prn::print(0, "runTest1 END");
 }
 
 //******************************************************************************

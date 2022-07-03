@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
@@ -11,45 +12,78 @@
 using namespace Some;
 
 //******************************************************************************
-int main(int argc,char** argv)
+//******************************************************************************
+//******************************************************************************
+
+int main(int argc, char** argv)
 {
-   //--------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize program resources.
 
    main_initialize(argc,argv);
-   Experiment::initialize();
 
-   //--------------------------------------------------------------------
-   // Launch threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Launch program threads.
 
-   gThread1 = new Thread1;
-// gThread1->launchThread();
+   if (true)
+   {
+      Some::gThread1 = new Some::Thread1;
+      Some::gThread1->launchThread();
+   }
 
-   gTimerThread = new TimerThread;
-// gTimerThread->launchThread();
+   if (true)
+   {
+      Some::gTimerThread = new Some::TimerThread;
+      Some::gTimerThread->launchThread();
+   }
 
-   //--------------------------------------------------------------------
-   // Start user command line executive,
-   // It returns when user exits
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Show program threads.
+
+   Ris::Threads::showCurrentThreadInfo();
+   if (Some::gThread1) Some::gThread1->showThreadInfo();
+   if (Some::gTimerThread) Some::gTimerThread->showThreadInfo();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Execute console command line executive, wait for user to exit.
 
    CmdLineExec* tExec = new CmdLineExec;
-   Ris::executeCmdLineConsole(tExec);
+   Ris::gCmdLineConsole.execute(tExec);
    delete tExec;
 
-   //--------------------------------------------------------------------
-   // Shutdown threads
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Shutdown program threads.
 
-   gTimerThread->shutdownThread();
-   delete gTimerThread;
+   if (Some::gThread1)
+   {
+      Some::gThread1->shutdownThread();
+      delete Some::gThread1;
+      Some::gThread1 = 0;
+   }
 
-   gThread1->shutdownThread();
-   delete gThread1;
+   if (Some::gTimerThread)
+   {
+      Some::gTimerThread->shutdownThread();
+      delete Some::gTimerThread;
+      Some::gTimerThread = 0;
+   }
 
-   //--------------------------------------------------------------------
-   // Exit
-   
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // End program.
+
    main_finalize();
-
    return 0;
 }
 

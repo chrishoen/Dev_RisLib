@@ -37,7 +37,7 @@ Thread1::Thread1()
 void Thread1::threadRunFunction()
 {
    Prn::print(0, "Thread1::threadRunFunction BEGIN");
-   while (true)
+   while (!BaseClass::mTerminateFlag)
    {
       if (mTPFlag)
       {
@@ -71,9 +71,14 @@ void Thread1::threadRunFunction()
 
 void Thread1::runTest1()
 {
-   Prn::print(0, "runTest1 BEGIN");
-   mSem.get(1000);
-   Prn::print(0, "runTest1 END");
+   if (mSem.get(2000))
+   {
+      Prn::print(0, "runTest1 GET*************************************");
+   }
+   else
+   {
+      Prn::print(0, "runTest1 TIMEOUT");
+   }
 }
 
 //******************************************************************************

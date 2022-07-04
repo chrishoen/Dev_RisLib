@@ -158,12 +158,19 @@ CountingSemaphore::CountingSemaphore(int aInitial)
 // Reset the semaphore.
 void CountingSemaphore::reset()
 {
-   // If there is a pending event, then clear it.
-   int tCount = 0;
-   sem_getvalue(&mSpecific->mHandle, &tCount);
-   if (tCount > 0)
+   while (true)
    {
-      sem_wait(&mSpecific->mHandle);
+      // If there is a pending event, then clear it.
+      int tCount = 0;
+      sem_getvalue(&mSpecific->mHandle, &tCount);
+      if (tCount > 0)
+      {
+         sem_wait(&mSpecific->mHandle);
+      }
+      else
+      {
+         break;
+      }
    }
 }
 
@@ -180,9 +187,6 @@ void CountingSemaphore::put()
    // Get current semaphore count
    int tCount = 0;
    sem_getvalue(&mSpecific->mHandle, &tCount);
-
-   // If not zero then return, this is a binary semaphore
-   if (tCount != 0) return;
 
    // Post to semahore
    sem_post(&mSpecific->mHandle);

@@ -90,8 +90,8 @@ public:
 
    // Binary semaphore event that the owning thread blocks on. It is signaled
    // by other threads to notify the owning thread of a notification event.
-// CountingSemaphore mSem;
-   BinarySemaphore mSem;
+// BinarySemaphore mSem;
+   CountingSemaphore mSem;
 
 public:
    //***************************************************************************

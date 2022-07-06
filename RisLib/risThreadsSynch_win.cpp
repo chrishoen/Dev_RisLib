@@ -100,6 +100,10 @@ CountingSemaphore::~CountingSemaphore()
 // Reset the semaphore.
 void CountingSemaphore::reset()
 {
+   while (true)
+   {
+      if (!get(0)) break;
+   }
 }
 
 // Put to the semaphore.

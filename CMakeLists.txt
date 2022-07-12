@@ -12,10 +12,12 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
-add_subdirectory ("ThreadSynch")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoUdpString")
 return()
 
 add_subdirectory ("RisLib")
+add_subdirectory ("ThreadSynch")
 return()
 
 add_subdirectory ("RisLib")

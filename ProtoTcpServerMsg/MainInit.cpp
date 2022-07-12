@@ -69,7 +69,6 @@ void main_initialize()
    ProtoComm::gTcpSettings.reset();
    ProtoComm::gTcpSettings.readSection("default");
    ProtoComm::gTcpSettings.readSection("TcpServer");
-   ProtoComm::gTcpSettings.show();
 }
 
 //******************************************************************************

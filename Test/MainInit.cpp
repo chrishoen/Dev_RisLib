@@ -1,8 +1,6 @@
 #include "stdafx.h"
 
 
-#include "risThreadsProcess.h"
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -14,8 +12,6 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    // Enter process
-
-   Ris::Threads::enterProcessHigh();
 
    // Initialize print facility
    Prn::resetPrint();
@@ -41,8 +37,5 @@ void main_finalize()
 
    // Close print
    Prn::finalizePrint();
-
-   // Exit process
-   Ris::Threads::exitProcess();
 }
 

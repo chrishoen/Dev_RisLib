@@ -49,10 +49,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   int tDataLen = aCmd->argInt(1);
-   int tNewDataLen =
-      (tDataLen + sizeof(unsigned int) - 1) & ~(sizeof(unsigned int) - 1); //For safty reasons
-   Prn::print(0, "%d  %d", tDataLen, tNewDataLen);
+   Prn::print(0, "start");
+   int tRet = system(
+      "sudo setcap 'cap_sys_nice=eip cap_sys_resource=eip cap_fowner=eip cap_ipc_lock=eip cap_ipc_owner=eip' /opt/prime/bin/captest");
+   Prn::print(0, "finish %d", tRet);
 }
 
 

@@ -14,7 +14,7 @@ my_special1()
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("captest")
-add_subdirectory ("Test")
+add_subdirectory ("ProtoUdpMsg")
 return()
 
 add_subdirectory ("RisLib")

@@ -1,15 +1,8 @@
-
 #include "stdafx.h"
 
-#include "risThreadsProcess.h"
+#include "MainInit.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
-#include "MainInit.h"
-#include "MainArgs.h"
-#include "MainTest.h"
-
-#include "procoPeerThread.h"
-#include "procoMonitorThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -20,45 +13,14 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Initialize program resources.
+   // Initialize the program.
 
-   gMainArgs.initialize(argc, argv);
-   gMainArgs.show();
-   main_initialize();
-
-   //main_test();
-   //return 0;
+   main_initialize(argc,argv);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Launch program threads.
-
-   if (true)
-   {
-      ProtoComm::gPeerThread = new ProtoComm::PeerThread;
-      ProtoComm::gPeerThread->launchThread();
-   }
-
-   if (true)
-   {
-      ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
-      ProtoComm::gMonitorThread->launchThread();
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Show program threads.
-
-   Ris::Threads::showCurrentThreadInfo();
-   if (ProtoComm::gPeerThread) ProtoComm::gPeerThread->showThreadInfo();
-   if (ProtoComm::gMonitorThread) ProtoComm::gMonitorThread->showThreadInfo();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Execute console command line executive, wait for user to exit.
+   // Run the user command line executive, it returns when the user exits.
 
    CmdLineExec* tExec = new CmdLineExec;
    Ris::gCmdLineConsole.execute(tExec);
@@ -67,26 +29,7 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Shutdown program threads.
-
-   if (ProtoComm::gMonitorThread)
-   {
-      ProtoComm::gMonitorThread->shutdownThread();
-      delete ProtoComm::gMonitorThread;
-      ProtoComm::gMonitorThread = 0;
-   }
-
-   if (ProtoComm::gPeerThread)
-   {
-      ProtoComm::gPeerThread->shutdownThread();
-      delete ProtoComm::gPeerThread;
-      ProtoComm::gPeerThread = 0;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // End program.
+   // Finalize the program.
 
    main_finalize();
    return 0;

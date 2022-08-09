@@ -147,6 +147,7 @@ void waitForTermination()
    // Register signal handler.
    signal(SIGINT, sig_handler);
    signal(SIGTERM, sig_handler);
+   signal(SIGKILL, sig_handler);
 
    // Wait for the termination semaphore.
    printf("WAIT FOR TERMINATE\n");

@@ -8,6 +8,7 @@
 #include "stdafx.h"
 
 #include "prnPrint.h"
+#include "trcTrace.h"
 
 #include "risNetTcpServerHubSocket.h"
 
@@ -24,6 +25,7 @@ namespace Net
 TcpServerHubSocket::TcpServerHubSocket()
 {
    mValidFlag = false;
+   mTI = 0;
 }
 
 //******************************************************************************
@@ -33,8 +35,11 @@ TcpServerHubSocket::TcpServerHubSocket()
 
 void TcpServerHubSocket::initialize(Settings& aSettings)
 {
-   // Store the settings pointer.
+   // Store the settings.
    mSettings = aSettings;
+
+   // Trace.
+   mTI = mSettings.mTraceIndex;
 }
 
 //******************************************************************************
@@ -57,12 +62,20 @@ void TcpServerHubSocket::configure()
    // Show.
    if (mValidFlag)
    {
+      Trc::write(mTI, 0, "TcpServerHubSocket PASS %16s : %5d",
+         BaseClass::mLocal.mString,
+         BaseClass::mLocal.mPort);
       printf("TcpServerHubSocket PASS %16s : %5d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
+      Trc::write(mTI, 0, "TcpServerHubSocket FAIL % 16s : % d $ % d % d",
+         BaseClass::mLocal.mString,
+         BaseClass::mLocal.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
       printf("TcpServerHubSocket FAIL %16s : %d $ %d %d\n",
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort,

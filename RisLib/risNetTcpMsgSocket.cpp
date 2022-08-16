@@ -47,7 +47,7 @@ TcpMsgSocket::~TcpMsgSocket()
 
 void TcpMsgSocket::initialize(Settings& aSettings)
 {
-   // Store the settings pointer.
+   // Store the settings.
    mSettings = aSettings;
 
    // Store the message monkey.

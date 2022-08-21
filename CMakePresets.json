@@ -2,16 +2,12 @@
    "version": 3,
    "configurePresets": [
       {
-         "name": "windows-base",
-         "description": "Target Windows with the Visual Studio development environment.",
+         "name": "base",
+         "description": "Windows host with the Visual Studio development environment.",
          "hidden": true,
          "generator": "Ninja",
          "binaryDir": "${sourceDir}/out/build/${presetName}",
          "installDir": "${sourceDir}/out/install/${presetName}",
-         "cacheVariables": {
-            "CMAKE_C_COMPILER": "cl.exe",
-            "CMAKE_CXX_COMPILER": "cl.exe"
-         },
          "condition": {
             "type": "equals",
             "lhs": "${hostSystemName}",
@@ -22,12 +18,14 @@
          "name": "windows",
          "displayName": "windows",
          "description": "Target Windows (64-bit) with the Visual Studio development environment. (Release)",
-         "inherits": "windows-base",
+         "inherits": "base",
          "architecture": {
             "value": "x64",
             "strategy": "external"
          },
          "cacheVariables": {
+            "CMAKE_C_COMPILER": "cl.exe",
+            "CMAKE_CXX_COMPILER": "cl.exe",
             "CMAKE_BUILD_TYPE": "Release",
             "MYMODE": {
                "type": "STRING",
@@ -38,11 +36,8 @@
       {
          "name": "beagle",
          "displayName": "beagle",
-         "hidden": false,
          "description": "Target debian arm7 for beaglebone or rpi",
-         "generator": "Ninja",
-         "binaryDir": "${sourceDir}/out/build/${presetName}",
-         "installDir": "${sourceDir}/out/install/${presetName}",
+         "inherits": "base",
          "toolchainFile": "${sourceDir}\\MyBeagleToolchain.cmake",
          "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",

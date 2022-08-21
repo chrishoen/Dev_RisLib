@@ -65,19 +65,19 @@
             }
          }
       }
-   ],
-   "buildPresets": [
-      {
-         "name": "default-build-windows",
-         "displayName": "Default",
-         "configurePreset": "x64-release",
-         "description": "Vanilla build"
-      },
-      {
-         "name": "verbose-build-windows",
-         "displayName": "Verbose Build",
-         "configurePreset": "x64-release",
-         "inherits": "default-build-windows"
-      }
    ]
+// "buildPresets": [
+//    {
+//       "name": "default-build-windows",
+//       "displayName": "Default",
+//       "configurePreset": "x64-release",
+//       "description": "Vanilla build"
+//    },
+//    {
+//        "name": "verbose-build-windows",
+//        "displayName": "Verbose Build",
+//         "configurePreset": "x64-release",
+//         "inherits": "default-build-windows"
+//      }
+//   ]
 }

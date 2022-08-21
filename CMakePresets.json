@@ -2,27 +2,6 @@
    "version": 3,
    "configurePresets": [
       {
-         "name": "linux-debug",
-         "displayName": "Linux Debug",
-         "description": "Target the Windows Subsystem for Linux (WSL) or a remote Linux system.",
-         "generator": "Ninja",
-         "binaryDir": "${sourceDir}/out/build/${presetName}",
-         "installDir": "${sourceDir}/out/install/${presetName}",
-         "cacheVariables": {
-            "CMAKE_BUILD_TYPE": "Debug"
-         },
-         "condition": {
-            "type": "equals",
-            "lhs": "${hostSystemName}",
-            "rhs": "Linux"
-         },
-         "vendor": {
-            "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
-               "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
-            }
-         }
-      },
-      {
          "name": "windows-base",
          "description": "Target Windows with the Visual Studio development environment.",
          "hidden": true,
@@ -55,20 +34,28 @@
                "value": "windows"
             }
          }
+      },
+      {
+         "name": "beagle",
+         "displayName": "beagle",
+         "hidden": false,
+         "description": "Target debian arm7 for beaglebone or rpi",
+         "generator": "Ninja",
+         "binaryDir": "${sourceDir}/out/build/${presetName}",
+         "installDir": "${sourceDir}/out/install/${presetName}",
+         "toolchainFile": "${sourceDir}\\MyBeagleToolchain.cmake",
+         "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "MYMODE": {
+               "type": "STRING",
+               "value": "beagle"
+            }
+         },
+         "vendor": {
+            "microsoft.com/VisualStudioSettings/CMake/1.0": {
+               "hostOS": [ "Windows" ]
+            }
+         }
       }
    ]
-// "buildPresets": [
-//    {
-//       "name": "default-build-windows",
-//       "displayName": "Default",
-//       "configurePreset": "x64-release",
-//       "description": "Vanilla build"
-//    },
-//    {
-//        "name": "verbose-build-windows",
-//        "displayName": "Verbose Build",
-//         "configurePreset": "x64-release",
-//         "inherits": "default-build-windows"
-//      }
-//   ]
 }

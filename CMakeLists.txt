@@ -12,6 +12,7 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
+add_subdirectory ("Test")
 return()
 
 add_subdirectory ("RisLib")

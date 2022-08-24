@@ -70,7 +70,7 @@ void UdpMsgSocket::initialize(Settings& aSettings)
 void UdpMsgSocket::configure()
 {
    // Configure the socket.
-   BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
+   BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
    BaseClass::doBind();

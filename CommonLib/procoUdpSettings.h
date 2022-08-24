@@ -66,11 +66,12 @@ public:
    // Application settings.
    int  mMyAppNumber;
 
-   // Receive on this port.
+   // Receive on this address and port.
+   char mMyUdpAddress[cMaxStringSize];
    int  mMyUdpPort;
 
    // Transmit to this address and port.
-   char mOtherUdpIPAddress[cMaxStringSize];
+   char mOtherUdpAddress[cMaxStringSize];
    int  mOtherUdpPort;
 
    // If true then use the last receive from ip address as the

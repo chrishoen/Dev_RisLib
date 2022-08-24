@@ -67,7 +67,7 @@ public:
    int  mMyAppNumber;
 
    // TCP server address and port.
-   char mTcpServerIPAddress[cMaxStringSize];
+   char mTcpServerAddress[cMaxStringSize];
    int  mTcpServerPort;
 
    // Maximum number of sessions.

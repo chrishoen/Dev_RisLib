@@ -74,7 +74,7 @@ void ClientThread::threadInitFunction()
 
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
-   tSettings.setRemoteAddress(gTcpSettings.mTcpServerIPAddress, gTcpSettings.mTcpServerPort);
+   tSettings.setRemoteAddress(gTcpSettings.mTcpServerAddress, gTcpSettings.mTcpServerPort);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;

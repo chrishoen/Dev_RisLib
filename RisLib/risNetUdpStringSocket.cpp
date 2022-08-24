@@ -67,7 +67,7 @@ void UdpStringSocket::configure()
    // Set the socket receive address.
    if (mSettings.mLocalIpPort)
    {
-      BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
+      BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    }
 
    // Set the socket send address.

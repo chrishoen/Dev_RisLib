@@ -762,6 +762,7 @@ bool BaseTcpStreamSocket::doSocket()
 
 bool BaseTcpStreamSocket::setOptionKeepAlive ()
 {
+   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;

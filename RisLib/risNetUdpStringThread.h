@@ -70,6 +70,16 @@ public:
    // Program trace index.
    int mTI;
 
+   // If true then the serial port is open. If false then it is closed
+   // because of an error.
+   bool mConnectionFlag;
+
+   // Metrics.
+   int mErrorCount;
+   int mRestartCount;
+   int mRxCount;
+   int mTxCount;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

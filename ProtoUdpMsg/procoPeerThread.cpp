@@ -79,8 +79,8 @@ void PeerThread::threadInitFunction()
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setLocalPort(gUdpSettings.mMyUdpPort);
-   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
+   tSettings.setLocalAddress(gUdpSettings.mMyUdpAddress, gUdpSettings.mMyUdpPort);
+   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpAddress, gUdpSettings.mOtherUdpPort);
    tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mRxMsgQCall = mRxMsgQCall;

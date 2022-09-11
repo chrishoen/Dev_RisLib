@@ -36,9 +36,13 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
    mRxMsgQCall = aSettings.mRxMsgQCall;
    mTI = aSettings.mTraceIndex;
 
-   // Member variables.
-   mConnectionFlag=false;
-
+   // Initialize variables.
+   mTI = mSettings.mTraceIndex;
+   mConnectionFlag = false;
+   mErrorCount = 0;
+   mRestartCount = 0;
+   mRxCount = 0;
+   mTxCount = 0;
 }
 
 //******************************************************************************
@@ -49,9 +53,7 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 
 void TcpMsgClientThread::threadInitFunction()
 {
-   // Initialize and configure the socket.
-   mSocket.initialize(mSettings);
-   mSocket.configure();
+   Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction");
 }
 
 //******************************************************************************
@@ -63,6 +65,12 @@ void TcpMsgClientThread::threadInitFunction()
 
 void TcpMsgClientThread::threadRunFunction()
 {
+   Trc::write(mTI, 0, "TcpMsgClientThread::threadRunFunction");
+
+   // Initialize and configure the socket.
+   mSocket.initialize(mSettings);
+   mSocket.configure();
+
    mConnectionFlag = false;
    bool tGoing = mSocket.mValidFlag;
 

@@ -53,7 +53,143 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 
 void TcpMsgClientThread::threadInitFunction()
 {
-   Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction");
+   Trc::write(mTI, 1, "TcpMsgClientThread::threadInitFunction");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread run function. This is called by the base class immediately
+// after the thread init function. It runs a loop that blocks on 
+// the udp port receives and then processes them. The loop terminates
+// when the serial port receive is aborted.
+
+void TcpMsgClientThread::threadRunFunction()
+{
+   Trc::write(mTI, 0, "TcpMsgClientThread::threadRunFunction");
+
+   // Top of the loop.
+   mRestartCount = 0;
+   mConnectionFlag = false;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Restart.
+
+restart:
+   // Guard.
+   if (mTerminateFlag) return;
+   int tRet = 0;
+
+   // Sleep.
+   if (mRestartCount > 0)
+   {
+      BaseClass::threadSleep(1000);
+   }
+   Trc::write(mTI, 0, "TcpMsgClientThread restart %d", mRestartCount);
+   Prn::print(Prn::Show1, "TcpMsgClientThread restart %d", mRestartCount);
+   mRestartCount++;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Open device.
+
+   // If the socket is open then close it.
+   if (mSocket.mValidFlag)
+   {
+      mSocket.doClose();
+   }
+
+   // Initialize and configure the message socket.
+   mSocket.initialize(mSettings);
+   mSocket.configure();
+   if (!mSocket.mValidFlag)
+   {
+      // If error then restart.
+      goto restart;
+   }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Reconnect.
+
+reconnect:
+   // Guard.
+   if (mTerminateFlag) return;
+   mConnectionFlag = false;
+
+   // Try to connect.
+   if (mSocket.doConnect())
+   {
+      // Connection was established.
+      Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
+      mConnectionFlag = true;
+
+      // Process a session change because a
+      // new session has been established.
+      processSessionChange(true);
+   }
+   else
+   {
+      // Connection failed.
+      Trc::write(mTI, 0, "TcpMsgClientThread CONNECT FAILED");
+
+      // If error then restart.
+      goto restart;
+   }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Rereceive.
+
+rereceive:
+   // Guard.
+   if (mTerminateFlag) return;
+
+   // Try to receive a message with a blocking receive call.
+   // If a message was received then process it.
+   // If a message was not received then the connection was lost.  
+   ByteContent* tMsg = 0;
+   if (mSocket.doReceiveMsg(tMsg))
+   {
+      // Message was correctly received.
+      // Process the receive message.
+      if (tMsg)
+      {
+         processRxMsg(tMsg);
+         // Repeat.
+         goto rereceive;
+      }
+   }
+   else
+   {
+      // Message was not correctly received, so
+      // Connection was lost.
+      mConnectionFlag = false;
+
+      // Process a session change because a
+      // session has been disestablished.
+      processSessionChange(false);
+
+      if (mSocket.mValidFlag)
+      {
+         goto reconnect;
+      }
+      else
+      {
+         goto restart;
+      }
+
+   }
+
+   // Done.
+end:
+   Trc::write(mTI, 0, "TcpMsgClientThread::threadRunFunction done");
+   return;
 }
 
 //******************************************************************************
@@ -63,7 +199,7 @@ void TcpMsgClientThread::threadInitFunction()
 // It contains a while loop that manages the connection to the server and
 // receives messages.
 
-void TcpMsgClientThread::threadRunFunction()
+void TcpMsgClientThread::threadRunFunction22()
 {
    Trc::write(mTI, 0, "TcpMsgClientThread::threadRunFunction");
 

@@ -78,6 +78,7 @@ void TcpMsgClientThread::threadRunFunction()
 // Restart.
 
 restart:
+   printf("$$$$$$$$$$$$$$$$$$$$$$ restart\n");
    // Guard.
    if (mTerminateFlag) return;
    int tRet = 0;
@@ -117,6 +118,7 @@ restart:
 // Reconnect.
 
 reconnect:
+   printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect\n");
    // Guard.
    if (mTerminateFlag) return;
    mConnectionFlag = false;
@@ -147,6 +149,7 @@ reconnect:
 // Rereceive.
 
 rereceive:
+   printf("$$$$$$$$$$$$$$$$$$$$$$ rereceive\n");
    // Guard.
    if (mTerminateFlag) return;
 
@@ -177,10 +180,12 @@ rereceive:
 
       if (mSocket.mValidFlag)
       {
+         printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed VALID\n");
          goto reconnect;
       }
       else
       {
+         printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed INVALID\n");
          goto restart;
       }
 

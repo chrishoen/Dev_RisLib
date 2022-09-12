@@ -127,6 +127,7 @@ reconnect:
    if (mSocket.doConnect())
    {
       // Connection was established.
+      printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect CONNECTED\n");
       Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
       mConnectionFlag = true;
 
@@ -136,11 +137,16 @@ reconnect:
    }
    else
    {
-      // Connection failed.
-      Trc::write(mTI, 0, "TcpMsgClientThread CONNECT FAILED");
-
-      // If error then restart.
-      goto restart;
+      if (mSocket.mValidFlag)
+      {
+         printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect failed VALID\n");
+         goto reconnect;
+      }
+      else
+      {
+         printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect failed INVALID\n");
+         goto restart;
+      }
    }
 
 //******************************************************************************
@@ -159,17 +165,16 @@ rereceive:
    ByteContent* tMsg = 0;
    if (mSocket.doReceiveMsg(tMsg))
    {
+      printf("$$$$$$$$$$$$$$$$$$$$$$ rereceive PASS\n");
       // Message was correctly received.
       // Process the receive message.
-      if (tMsg)
-      {
-         processRxMsg(tMsg);
-         // Repeat.
-         goto rereceive;
-      }
+      processRxMsg(tMsg);
+      // Repeat.
+      goto rereceive;
    }
    else
    {
+      printf("$$$$$$$$$$$$$$$$$$$$$$ rereceive FAIL\n");
       // Message was not correctly received, so
       // Connection was lost.
       mConnectionFlag = false;
@@ -181,14 +186,15 @@ rereceive:
       if (mSocket.mValidFlag)
       {
          printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed VALID\n");
-         goto reconnect;
+         //goto reconnect;
+         mRestartCount = 0;
+         goto restart;
       }
       else
       {
          printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed INVALID\n");
          goto restart;
       }
-
    }
 
    // Done.

@@ -295,7 +295,6 @@ bool BaseSocket::setOptionBroadcast ()
 
 bool BaseSocket::setOptionReuseAddr ()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;
@@ -310,7 +309,6 @@ bool BaseSocket::setOptionReuseAddr ()
 
 bool BaseSocket::setOptionDontRoute()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;
@@ -325,7 +323,6 @@ bool BaseSocket::setOptionDontRoute()
 
 bool BaseSocket::setOptionDontLinger ()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;
@@ -346,7 +343,6 @@ bool BaseSocket::setOptionDontLinger ()
 
 bool BaseSocket::setOptionNoDelay()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;

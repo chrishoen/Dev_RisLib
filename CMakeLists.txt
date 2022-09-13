@@ -14,6 +14,7 @@ my_special1()
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoTcpClientMsg")
+add_subdirectory ("ProtoTcpServerMsg")
 return()
 
 add_subdirectory ("RisLib")

@@ -127,7 +127,7 @@ restart:
 //******************************************************************************
 // Reconnect.
 
-reconnect:
+//reconnect:
    printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect\n");
    // Guard.
    if (mTerminateFlag) return;

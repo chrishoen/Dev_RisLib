@@ -81,8 +81,11 @@ void TcpMsgSocket::configure(bool aShowFlag)
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
 
+   // Don't show.
+   if (!aShowFlag) return;
+
    // Show.
-   if (mValidFlag && aShowFlag)
+   if (mValidFlag)
    {
       Trc::write(mTI, 0, "TcpMsgSocket       PASS %16s : %5d",
          BaseClass::mRemote.mString,

@@ -96,7 +96,10 @@ restart:
    }
    tSleepFlag = true;
    Trc::write(mTI, 0, "TcpMsgClientThread restart %d", mRestartCount);
-   Prn::print(Prn::Show1, "TcpMsgClientThread restart %d", mRestartCount);
+   if (tShowFlag)
+   {
+      Prn::print(Prn::Show1, "TcpMsgClientThread restart %d", mRestartCount);
+   }
    mRestartCount++;
 
    //***************************************************************************
@@ -112,6 +115,7 @@ restart:
 
    // Configure the message socket.
    mSocket.configure(tShowFlag);
+   tShowFlag = false;
    if (!mSocket.mValidFlag)
    {
       // If error then restart.
@@ -199,13 +203,13 @@ receive:
       if (mSocket.mValidFlag)
       {
          printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed VALID\n");
-         //goto reconnect;
-         mRestartCount = 0;
-         goto reconnect;
+         tShowFlag = false;
+         goto restart;
       }
       else
       {
          printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed INVALID\n");
+         tShowFlag = true;
          goto restart;
       }
    }

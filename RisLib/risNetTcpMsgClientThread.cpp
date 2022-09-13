@@ -71,6 +71,8 @@ void TcpMsgClientThread::threadRunFunction()
    // Top of the loop.
    mRestartCount = 0;
    mConnectionFlag = false;
+   int tRet = 0;
+   ByteContent* tMsg = 0;
 
 //******************************************************************************
 //******************************************************************************
@@ -80,8 +82,7 @@ void TcpMsgClientThread::threadRunFunction()
 restart:
    printf("$$$$$$$$$$$$$$$$$$$$$$ restart\n");
    // Guard.
-   if (mTerminateFlag) return;
-   int tRet = 0;
+   if (mTerminateFlag) goto end;
 
    // Sleep.
    if (mRestartCount > 0)
@@ -162,7 +163,6 @@ rereceive:
    // Try to receive a message with a blocking receive call.
    // If a message was received then process it.
    // If a message was not received then the connection was lost.  
-   ByteContent* tMsg = 0;
    if (mSocket.doReceiveMsg(tMsg))
    {
       printf("$$$$$$$$$$$$$$$$$$$$$$ rereceive PASS\n");

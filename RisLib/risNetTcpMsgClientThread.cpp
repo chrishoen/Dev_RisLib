@@ -74,6 +74,8 @@ void TcpMsgClientThread::threadRunFunction()
    // Top of the loop.
    mRestartCount = 0;
    mConnectionFlag = false;
+   bool tSleepFlag = false;
+   bool tShowFlag = true;
    int tRet = 0;
    ByteContent* tMsg = 0;
 
@@ -88,10 +90,11 @@ restart:
    if (mTerminateFlag) goto end;
 
    // Sleep.
-   if (mRestartCount > 0)
+   if (tSleepFlag)
    {
       BaseClass::threadSleep(1000);
    }
+   tSleepFlag = true;
    Trc::write(mTI, 0, "TcpMsgClientThread restart %d", mRestartCount);
    Prn::print(Prn::Show1, "TcpMsgClientThread restart %d", mRestartCount);
    mRestartCount++;
@@ -108,7 +111,7 @@ restart:
    }
 
    // Configure the message socket.
-   mSocket.configure(true);
+   mSocket.configure(tShowFlag);
    if (!mSocket.mValidFlag)
    {
       // If error then restart.
@@ -140,15 +143,23 @@ reconnect:
    }
    else
    {
-      if (mSocket.mValidFlag)
-      {
+//    if (mSocket.mValidFlag)
+      if (mSocket.mStatus = 0)
+         {
          printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect failed VALID\n");
-         goto reconnect;
+         goto restart;
       }
       else
       {
-         printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect failed INVALID\n");
-         goto restart;
+         printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect failed INVALID %d\n", mSocket.mError);
+         if (mSocket.mError == 106)
+         {
+            goto restart;
+         }
+         else
+         {
+            goto restart;
+         }
       }
    }
 
@@ -157,8 +168,8 @@ reconnect:
 //******************************************************************************
 // Rereceive.
 
-rereceive:
-   printf("$$$$$$$$$$$$$$$$$$$$$$ rereceive\n");
+receive:
+   printf("$$$$$$$$$$$$$$$$$$$$$$ receive\n");
    // Guard.
    if (mTerminateFlag) return;
 
@@ -167,16 +178,16 @@ rereceive:
    // If a message was not received then the connection was lost.  
    if (mSocket.doReceiveMsg(tMsg))
    {
-      printf("$$$$$$$$$$$$$$$$$$$$$$ rereceive PASS\n");
+      printf("$$$$$$$$$$$$$$$$$$$$$$ receive PASS\n");
       // Message was correctly received.
       // Process the receive message.
       processRxMsg(tMsg);
       // Repeat.
-      goto rereceive;
+      goto receive;
    }
    else
    {
-      printf("$$$$$$$$$$$$$$$$$$$$$$ rereceive FAIL\n");
+      printf("$$$$$$$$$$$$$$$$$$$$$$ receive FAIL\n");
       // Message was not correctly received, so
       // Connection was lost.
       mConnectionFlag = false;
@@ -190,7 +201,7 @@ rereceive:
          printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed VALID\n");
          //goto reconnect;
          mRestartCount = 0;
-         goto restart;
+         goto reconnect;
       }
       else
       {

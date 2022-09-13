@@ -54,6 +54,9 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 void TcpMsgClientThread::threadInitFunction()
 {
    Trc::write(mTI, 1, "TcpMsgClientThread::threadInitFunction");
+
+   // Initialize the socket.
+   mSocket.initialize(mSettings);
 }
 
 //******************************************************************************
@@ -104,9 +107,8 @@ restart:
       mSocket.doClose();
    }
 
-   // Initialize and configure the message socket.
-   mSocket.initialize(mSettings);
-   mSocket.configure();
+   // Configure the message socket.
+   mSocket.configure(true);
    if (!mSocket.mValidFlag)
    {
       // If error then restart.
@@ -216,7 +218,7 @@ void TcpMsgClientThread::threadRunFunction22()
 
    // Initialize and configure the socket.
    mSocket.initialize(mSettings);
-   mSocket.configure();
+   mSocket.configure(true);
 
    mConnectionFlag = false;
    bool tGoing = mSocket.mValidFlag;
@@ -250,8 +252,7 @@ void TcpMsgClientThread::threadRunFunction22()
 
             // Close the socket and reconfigure.
             mSocket.doClose();
-            mSocket.reconfigure();
-//          mSocket.configure();
+            mSocket.configure(false);
 
             // Sleep.
             threadSleep(500);

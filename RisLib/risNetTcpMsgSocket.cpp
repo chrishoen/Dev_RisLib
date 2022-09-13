@@ -69,7 +69,7 @@ void TcpMsgSocket::initialize(Settings& aSettings)
 //******************************************************************************
 // Configure the socket.
 
-void TcpMsgSocket::configure()
+void TcpMsgSocket::configure(bool aShowFlag)
 {
    // Configure the socket.
    BaseClass::reset();
@@ -82,7 +82,7 @@ void TcpMsgSocket::configure()
    mValidFlag = BaseClass::mStatus == 0;
 
    // Show.
-   if (mValidFlag)
+   if (mValidFlag && aShowFlag)
    {
       Trc::write(mTI, 0, "TcpMsgSocket       PASS %16s : %5d",
          BaseClass::mRemote.mString,
@@ -104,27 +104,6 @@ void TcpMsgSocket::configure()
          BaseClass::mStatus,
          BaseClass::mError);
    }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Reconfigure the socket.
-
-void TcpMsgSocket::reconfigure()
-{
-   // Configure the socket.
-   BaseClass::reset();
-   BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
-   BaseClass::doSocket();
-   BaseClass::setOptionKeepAlive();
-   BaseClass::setOptionNoDelay();
-   return;
-   
-   // Configure the socket.
-   BaseClass::doSocket();
-   BaseClass::setOptionKeepAlive();
-   BaseClass::setOptionNoDelay();
 }
 
 //******************************************************************************

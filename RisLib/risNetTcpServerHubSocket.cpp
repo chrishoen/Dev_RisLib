@@ -54,6 +54,10 @@ void TcpServerHubSocket::configure(bool aShowFlag)
    BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    BaseClass::doSocket();
    BaseClass::setOptionReuseAddr();
+   BaseClass::setOptionNoDelay();
+   BaseClass::setOptionDontLinger();
+
+
    BaseClass::doBind();
 
    // Set valid flag from base class results.

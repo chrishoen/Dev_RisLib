@@ -62,10 +62,7 @@ public:
    void initialize(Settings& aSettings);
 
    // Configure the socket. This does socket and bind calls.
-   void configure();
-
-   // Reconfigure the socket. This does socket and bind calls.
-   void reconfigure();
+   void configure(bool aShowFlag);
 };
 
 //******************************************************************************

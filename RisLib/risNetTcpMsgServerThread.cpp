@@ -52,7 +52,7 @@ void TcpMsgServerThread::threadInitFunction()
 {
    // Initialize and configure the hub socket.
    mHubSocket.initialize(mSettings);
-   mHubSocket.configure();
+   mHubSocket.configure(true);
 
    // Initialize the node sockets.
    for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
@@ -237,7 +237,7 @@ void TcpMsgServerThread::threadRunFunction()
                      mNumSessions--;
                      if (!mListenFlag)
                      {
-                        mHubSocket.reconfigure();
+                        mHubSocket.configure(false);
                         mHubSocket.doListen();
                         mListenFlag=true;
                         //printf("opening listener, doListen %d %d\n",mHubSocket.mStatus,mHubSocket.mError);

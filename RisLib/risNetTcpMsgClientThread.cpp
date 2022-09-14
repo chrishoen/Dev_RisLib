@@ -64,8 +64,7 @@ void TcpMsgClientThread::threadInitFunction()
 //******************************************************************************
 // Thread run function. This is called by the base class immediately
 // after the thread init function. It runs a loop that blocks on 
-// the udp port receives and then processes them. The loop terminates
-// when the serial port receive is aborted.
+// socket connect/receives and then processes them.
 
 void TcpMsgClientThread::threadRunFunction()
 {

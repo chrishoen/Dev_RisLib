@@ -40,6 +40,10 @@ TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
    // Member variables.
    mNumSessions=0;
    mListenFlag=false;
+   mErrorCount = 0;
+   mRestartCount = 0;
+   mRxCount = 0;
+   mTxCount = 0;
 }
 
 //******************************************************************************
@@ -50,6 +54,8 @@ TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
 
 void TcpMsgServerThread::threadInitFunction()
 {
+   Trc::write(mTI, 1, "TcpMsgServerThread::threadInitFunction");
+
    // Initialize and configure the hub socket.
    mHubSocket.initialize(mSettings);
    mHubSocket.configure(true);
@@ -71,10 +77,57 @@ void TcpMsgServerThread::threadInitFunction()
 
 void TcpMsgServerThread::threadRunFunction()
 {
+   Trc::write(mTI, 0, "TcpMsgServerThread::threadRunFunction");
+
+   // Top of the loop.
+   mRestartCount = 0;
+   bool tSleepFlag = false;
+   bool tShowFlag = true;
+   bool tGoing = true;
+   int tRet = 0;
+   ByteContent* tMsg = 0;
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Restart.
+
+restart:
+   printf("$$$$$$$$$$$$$$$$$$$$$$ restart\n");
    // Guard.
+   if (mTerminateFlag) goto end;
+
+   // Sleep.
+   if (tSleepFlag)
+   {
+      BaseClass::threadSleep(1000);
+   }
+   tSleepFlag = true;
+   Trc::write(mTI, 0, "TcpMsgServerThread restart %d", mRestartCount);
+   if (tShowFlag)
+   {
+      Prn::print(Prn::Show1, "TcpMsgServerThread restart %d", mRestartCount);
+   }
+   mRestartCount++;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Open device.
+
+   // If the socket is open then close it.
+   if (mHubSocket.mValidFlag)
+   {
+      mHubSocket.doClose();
+   }
+
+   // Configure the message socket.
+   mHubSocket.configure(tShowFlag);
+   tShowFlag = false;
    if (!mHubSocket.mValidFlag)
    {
-      return;
+      // If error then restart.
+      goto restart;
    }
 
    // Do a nonblocking listen to put the hub socket in listen mode.
@@ -82,7 +135,12 @@ void TcpMsgServerThread::threadRunFunction()
    mListenFlag = true;
    //printf("doListen %d %d\n",mHubSocket.mStatus,mHubSocket.mError);
 
-   bool tGoing = true;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Main loop.
+
+   tGoing = true;
    while(tGoing)
    {
       //************************************************************************
@@ -253,6 +311,12 @@ void TcpMsgServerThread::threadRunFunction()
          printf("ERROR TcpServerThread::threadRunFunction select fail %d\n",tRet);
       }
    }
+
+
+   // Done.
+end:
+   Trc::write(mTI, 0, "TcpMsgServerThread::threadRunFunction done");
+   return;
 }
 
 //******************************************************************************

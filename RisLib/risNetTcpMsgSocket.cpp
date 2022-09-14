@@ -81,11 +81,8 @@ void TcpMsgSocket::configure(bool aShowFlag)
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
 
-   // Don't show.
-   if (!aShowFlag) return;
-
    // Show.
-   if (mValidFlag)
+   if (mValidFlag && aShowFlag)
    {
       Trc::write(mTI, 0, "TcpMsgSocket       PASS %16s : %5d",
          BaseClass::mRemote.mString,
@@ -94,7 +91,7 @@ void TcpMsgSocket::configure(bool aShowFlag)
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
    }
-   else
+   else if (!mValidFlag)
    {
       Trc::write(mTI, 0, "TcpMsgSocket       FAIL %16s : %5d $ %d %d",
          BaseClass::mRemote.mString,

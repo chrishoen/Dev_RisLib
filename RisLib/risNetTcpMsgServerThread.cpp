@@ -119,10 +119,10 @@ void TcpMsgServerThread::threadRunFunction()
       //************************************************************************
       //************************************************************************
       // Call select with the read set.
-      // This blocks until the timeout or until one of the 
+      // This blocks until the timeout (500 ms) or until one of the 
       // sockets in the read set has a read condition.
 
-      int retVal = mHubSocket.selectOnReadSet();
+      int tRet = mHubSocket.selectOnReadSet();
 
       // Test for a termination request 
       if (mTerminateFlag)
@@ -132,7 +132,7 @@ void TcpMsgServerThread::threadRunFunction()
 
       // Test if the select call was successful and that the
       // read set has at least one socket in it
-      else if (retVal > 0)
+      else if (tRet > 0)
       {
          //*********************************************************************
          //*********************************************************************
@@ -248,9 +248,9 @@ void TcpMsgServerThread::threadRunFunction()
          }
       }
       // Test if the select call failed.
-      else if (retVal<0)
+      else if (tRet<0)
       {
-         printf("ERROR TcpServerThread::threadRunFunction select fail %d\n",retVal);
+         printf("ERROR TcpServerThread::threadRunFunction select fail %d\n",tRet);
       }
    }
 }

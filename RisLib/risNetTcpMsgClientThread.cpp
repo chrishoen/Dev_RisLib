@@ -147,24 +147,8 @@ restart:
    }
    else
    {
-//    if (mSocket.mValidFlag)
-      if (mSocket.mStatus = 0)
-         {
-         printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect failed VALID\n");
-         goto restart;
-      }
-      else
-      {
-         printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect failed INVALID %d\n", mSocket.mError);
-         if (mSocket.mError == 106)
-         {
-            goto restart;
-         }
-         else
-         {
-            goto restart;
-         }
-      }
+      printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect FAIL %d\n", mSocket.mError);
+      goto restart;
    }
 
 //******************************************************************************

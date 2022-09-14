@@ -147,8 +147,8 @@ restart:
    else
    {
       printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect FAIL %d\n", mSocket.mError);
-      tSleepFlag = true;
-      tShowFlag = true;
+      tSleepFlag = false;
+      tShowFlag = false;
       goto restart;
    }
 

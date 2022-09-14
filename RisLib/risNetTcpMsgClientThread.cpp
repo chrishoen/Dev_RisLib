@@ -127,7 +127,6 @@ restart:
 //******************************************************************************
 // Reconnect.
 
-//reconnect:
    printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect\n");
    // Guard.
    if (mTerminateFlag) return;
@@ -148,6 +147,8 @@ restart:
    else
    {
       printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect FAIL %d\n", mSocket.mError);
+      tSleepFlag = true;
+      tShowFlag = true;
       goto restart;
    }
 
@@ -187,12 +188,14 @@ receive:
       if (mSocket.mValidFlag)
       {
          printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed VALID\n");
+         tSleepFlag = false;
          tShowFlag = false;
          goto restart;
       }
       else
       {
          printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed INVALID\n");
+         tSleepFlag = false;
          tShowFlag = true;
          goto restart;
       }

@@ -12,6 +12,10 @@ my_special1()
 
 
 add_subdirectory ("RisLib")
+add_subdirectory ("Test")
+return()
+
+add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoTcpClientMsg")
 add_subdirectory ("ProtoTcpServerMsg")
@@ -23,10 +27,6 @@ add_subdirectory ("ProtoTcpClientMsg")
 add_subdirectory ("ProtoTcpServerMsg")
 add_subdirectory ("ProtoUdpMsg")
 add_subdirectory ("ProtoUdpString")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("Test")
 return()
 
 add_subdirectory ("RisLib")

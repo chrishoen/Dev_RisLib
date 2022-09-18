@@ -89,6 +89,7 @@ restart:
    if (mTerminateFlag) goto end;
 
    // Sleep.
+   tSleepFlag = true;
    if (tSleepFlag)
    {
       BaseClass::threadSleep(1000);
@@ -109,10 +110,14 @@ restart:
    // If the socket is open then close it.
    if (mSocket.mValidFlag)
    {
+      printf("$$$$$$$$$$$$$$$$$$$$$$ restart close socket\n");
+      Trc::write(mTI, 0, "restart close socket");
       mSocket.doClose();
+      mSocket.mValidFlag = false;
    }
 
    // Configure the message socket.
+   tShowFlag = true;
    mSocket.configure(tShowFlag);
    tShowFlag = false;
    if (!mSocket.mValidFlag)
@@ -146,6 +151,7 @@ restart:
    else
    {
       printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect FAIL %d\n", mSocket.mError);
+      Trc::write(mTI, 0, "$$$$$$$$$$$$$$$$$$$$$$ reconnect FAIL %d\n", mSocket.mError);
       tSleepFlag = false;
       tShowFlag = false;
       goto restart;

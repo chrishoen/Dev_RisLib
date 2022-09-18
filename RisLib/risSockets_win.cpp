@@ -280,7 +280,6 @@ bool BaseSocket::setOptionBroadcast ()
 
 bool BaseSocket::setOptionReuseAddr ()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;
@@ -295,7 +294,6 @@ bool BaseSocket::setOptionReuseAddr ()
 
 bool BaseSocket::setOptionDontRoute ()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;
@@ -310,7 +308,6 @@ bool BaseSocket::setOptionDontRoute ()
 
 bool BaseSocket::setOptionDontLinger ()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;
@@ -754,8 +751,6 @@ bool BaseTcpStreamSocket::doSocket()
    if (mBaseSpecific->mDesc==INVALID_SOCKET) tStatus = -1;
    else                       tStatus =  0;
 
-   setOptionDontLinger();
-
    return updateError(tStatus);
 }
 
@@ -765,7 +760,6 @@ bool BaseTcpStreamSocket::doSocket()
 
 bool BaseTcpStreamSocket::setOptionKeepAlive ()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;

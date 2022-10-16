@@ -19,6 +19,6 @@ elseif (MYMODE STREQUAL "beagle")
 elseif (MYMODE STREQUAL "steno-arm")
 
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/MyProgram1 root@stenotgt:/opt/prime/bin)")
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/MyProgram1 stenotgt:/opt/prime/bin)")
 endif()
 

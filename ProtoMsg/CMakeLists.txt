@@ -24,5 +24,5 @@ elseif (MYMODE STREQUAL "beagle")
       COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/${project} pi@rpx:/opt/prime/bin)")
 elseif (MYMODE STREQUAL "steno-arm")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} root@stenotgt:/opt/prime/bin)")
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} stenotgt:/opt/prime/bin)")
 endif()

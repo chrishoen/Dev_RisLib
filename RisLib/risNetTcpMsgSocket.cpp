@@ -276,7 +276,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    delete aMsg;
 
    // Done.
-   Trc::write(mTI, 1, "TcpMsgSocket doSendMsg %d", mTxLength);
+   Trc::write(mTI, 4, "TcpMsgSocket doSendMsg %d", mTxLength);
    return tRet;
 }
 

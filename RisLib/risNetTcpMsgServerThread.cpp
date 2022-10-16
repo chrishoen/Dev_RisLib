@@ -54,7 +54,7 @@ TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
 
 void TcpMsgServerThread::threadInitFunction()
 {
-   Trc::write(mTI, 1, "TcpMsgServerThread::threadInitFunction");
+   Trc::write(mTI, 0, "TcpMsgServerThread::threadInitFunction");
 
    // Initialize and configure the hub socket.
    mHubSocket.initialize(mSettings);

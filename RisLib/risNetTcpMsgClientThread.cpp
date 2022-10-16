@@ -53,7 +53,7 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 
 void TcpMsgClientThread::threadInitFunction()
 {
-   Trc::write(mTI, 1, "TcpMsgClientThread::threadInitFunction");
+   Trc::write(mTI, 0, "TcpMsgClientThread::threadInitFunction");
 
    // Initialize the socket.
    mSocket.initialize(mSettings);

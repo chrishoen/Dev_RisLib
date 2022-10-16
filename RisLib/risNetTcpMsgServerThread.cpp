@@ -349,11 +349,11 @@ void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablishe
    // Trace.
    if (aEstablished)
    {
-      Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
+      Trc::write(mTI, 0, "TcpMsgServerThread CONNECTED");
    }
    else
    {
-      Trc::write(mTI, 0, "TcpMsgClientThread DISCONNECTED");
+      Trc::write(mTI, 0, "TcpMsgServerThread DISCONNECTED");
    }
 
    // Invoke the session qcall to notify that a session has

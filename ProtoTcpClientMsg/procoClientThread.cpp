@@ -163,7 +163,7 @@ void ClientThread::executeOnTimer(int aTimerCount)
    if (mTPCode == 1)
    {
       EchoRequestMsg* tTxMsg = new EchoRequestMsg;
-      MsgHelper::initialize(tTxMsg);
+      tTxMsg->initialize(1000);
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)

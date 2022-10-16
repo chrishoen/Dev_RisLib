@@ -93,7 +93,6 @@ void TcpMsgServerThread::threadRunFunction()
    // Restart.
 
 restart:
-   printf("$$$$$$$$$$$$$$$$$$$$$$ restart\n");
    // Guard.
    if (mTerminateFlag) goto end;
 

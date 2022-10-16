@@ -84,7 +84,6 @@ void TcpMsgClientThread::threadRunFunction()
 // Restart.
 
 restart:
-   printf("$$$$$$$$$$$$$$$$$$$$$$ restart\n");
    // Guard.
    if (mTerminateFlag) goto end;
 
@@ -110,7 +109,6 @@ restart:
    // If the socket is open then close it.
    if (mSocket.mValidFlag)
    {
-      printf("$$$$$$$$$$$$$$$$$$$$$$ restart close socket\n");
       Trc::write(mTI, 0, "restart close socket");
       mSocket.doClose();
       mSocket.mValidFlag = false;
@@ -131,7 +129,6 @@ restart:
 //******************************************************************************
 // Reconnect.
 
-   printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect\n");
    // Guard.
    if (mTerminateFlag) return;
    mConnectionFlag = false;
@@ -140,7 +137,6 @@ restart:
    if (mSocket.doConnect())
    {
       // Connection was established.
-      printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect CONNECTED\n");
       Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
       mConnectionFlag = true;
 
@@ -150,8 +146,6 @@ restart:
    }
    else
    {
-      printf("$$$$$$$$$$$$$$$$$$$$$$ reconnect FAIL %d\n", mSocket.mError);
-      Trc::write(mTI, 0, "$$$$$$$$$$$$$$$$$$$$$$ reconnect FAIL %d\n", mSocket.mError);
       tSleepFlag = false;
       tShowFlag = false;
       goto restart;
@@ -163,7 +157,6 @@ restart:
 // Rereceive.
 
 receive:
-   printf("$$$$$$$$$$$$$$$$$$$$$$ receive\n");
    // Guard.
    if (mTerminateFlag) return;
 
@@ -172,7 +165,6 @@ receive:
    // If a message was not received then the connection was lost.  
    if (mSocket.doReceiveMsg(tMsg))
    {
-      printf("$$$$$$$$$$$$$$$$$$$$$$ receive PASS\n");
       // Message was correctly received.
       // Process the receive message.
       processRxMsg(tMsg);
@@ -181,7 +173,6 @@ receive:
    }
    else
    {
-      printf("$$$$$$$$$$$$$$$$$$$$$$ receive FAIL\n");
       // Message was not correctly received, so
       // Connection was lost.
       mConnectionFlag = false;
@@ -192,14 +183,12 @@ receive:
 
       if (mSocket.mValidFlag)
       {
-         printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed VALID\n");
          tSleepFlag = false;
          tShowFlag = false;
          goto restart;
       }
       else
       {
-         printf("$$$$$$$$$$$$$$$$$$$$$$ receive failed INVALID\n");
          tSleepFlag = false;
          tShowFlag = true;
          goto restart;

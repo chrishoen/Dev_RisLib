@@ -323,7 +323,6 @@ void ServerThread::sendTestMsg(int aAppNumber)
 
    // Send a message on socket at the session index.
    TestMsg* tMsg = new TestMsg;
-   tMsg->mCode1 = 201;
    mMsgThread->sendMsg(tSessionIndex, tMsg);
 }
 

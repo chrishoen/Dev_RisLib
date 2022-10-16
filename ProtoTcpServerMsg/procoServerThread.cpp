@@ -81,6 +81,7 @@ void ServerThread::threadInitFunction()
    tSettings.mServerSessionQCall = mSessionQCall;
    tSettings.mServerRxMsgQCall = mRxMsgQCall;
    tSettings.mTraceIndex = 11;
+   Trc::start(1);
    Trc::start(11);
 
    // Create the child thread with the settings.

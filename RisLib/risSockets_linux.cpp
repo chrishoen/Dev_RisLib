@@ -753,8 +753,6 @@ bool BaseTcpStreamSocket::doSocket()
    if (mBaseSpecific->mDesc == -1) tStatus = -1;
    else                            tStatus =  0;
 
-   setOptionDontLinger();
-
    return updateError(tStatus);
 }
 
@@ -764,7 +762,6 @@ bool BaseTcpStreamSocket::doSocket()
 
 bool BaseTcpStreamSocket::setOptionKeepAlive()
 {
-   return true;
    if (mStatus < 0) return false;
 
    int tStatus = 0;

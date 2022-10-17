@@ -137,8 +137,8 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SOCKET");
-      printf("ERROR TcpMsgSocket INVALID SOCKET\n");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID SOCKET");
+      printf("TcpMsgSocket ERROR INVALID SOCKET\n");
       return false;
    }
 
@@ -165,7 +165,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Returning false means socket was closed.
    if (!tRet || tStatus<=0)
    {
-      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID READ");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID READ");
       return false;
    }
 
@@ -179,8 +179,8 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMsgMonkey->mHeaderValidFlag)
    {
-      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID HEADER");
-      printf("ERROR TcpMsgSocket INVALID HEADER\n");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID HEADER");
+      printf("TcpMsgSocket ERROR INVALID HEADER\n");
       return false;
    }
 
@@ -201,8 +201,8 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // If bad status then return false.
    if (!tRet || tStatus<=0)
    {
-      Trc::write(mTI, 0, "ERROR doRecv2 INVALID RECV");
-      printf("ERROR doRecv2 INVALID RECV\n");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID RECV");
+      printf("TcpMsgSocket ERROR INVALID RECV\n");
       return false;
    }
 
@@ -222,8 +222,8 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
-      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID MESSAGE");
-      printf("ERROR TcpMsgSocket INVALID MESSAGE\n");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID MESSAGE");
+      printf("TcpMsgSocket ERROR INVALID MESSAGE\n");
       mStatus=tByteBuffer.getError();
       return false;
    }
@@ -248,8 +248,8 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SOCKET");
-      printf("ERROR TcpMsgSocket INVALID SOCKET\n");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID SOCKET");
+      printf("TcpMsgSocket ERROR INVALID SOCKET\n");
       delete aMsg;
       return false;
    }
@@ -271,8 +271,8 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    }
    else
    {
-      Trc::write(mTI, 0, "ERROR TcpMsgSocket INVALID SEND\n");
-      printf("ERROR TcpMsgSocket INVALID SEND\n");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID SEND\n");
+      printf("TcpMsgSocket ERROR INVALID SEND\n");
    }
 
    // Metrics.

@@ -137,7 +137,6 @@ restart:
    if (mSocket.doConnect())
    {
       // Connection was established.
-      Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
       mConnectionFlag = true;
 
       // Process a session change because a
@@ -248,6 +247,15 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
    {
       printf("ERROR processSessionChange qcall invalid\n");
       return;
+   }
+
+   if (aEstablished)
+   {
+      Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
+   }
+   else
+   {
+      Trc::write(mTI, 0, "TcpMsgClientThread DISCONNECTED");
    }
 
    // Invoke the session qcall to notify that a session has been established

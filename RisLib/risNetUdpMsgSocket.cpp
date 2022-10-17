@@ -73,6 +73,7 @@ void UdpMsgSocket::configure()
    BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
+   BaseClass::setOptionReuseAddr();
    BaseClass::doBind();
 
    // Set valid flag from base class results.
@@ -303,20 +304,22 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
       }
    }
 
-   mTxCount++;
-
    if (tRet)
    {
-      //printf("UdpMsgSocket tx message %d\n", mTxLength);
+      // The send was successful.
+      // Metrics.
+      mTxCount++;
+      mMsgMonkey->mTxMsgMetrics->update(aMsg, mTxLength);
    }
    else
    {
+      // The send was not successful.
       Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID SEND");
       printf("UdpMsgSocket ERROR INVALID SEND\n");
+      // Set the socket invalid.
+      mValidFlag = false;
+      doClose();
    }
-
-   // Metrics.
-   mMsgMonkey->mTxMsgMetrics->update(aMsg, mTxLength);
 
    // Delete the message.
    delete aMsg;

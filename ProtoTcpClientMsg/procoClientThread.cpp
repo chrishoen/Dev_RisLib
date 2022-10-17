@@ -235,7 +235,7 @@ void ClientThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      MsgHelper::initialize(tTxMsg, 1000);
+      tTxMsg->initialize(1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mMsgThread->sendMsg(tTxMsg);
    }

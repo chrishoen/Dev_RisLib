@@ -166,8 +166,8 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "ERROR UdpMsgSocket INVALID SOCKET");
-      printf("ERROR UdpMsgSocket INVALID SOCKET\n");
+      Trc::write(mTI, 0, "UdpMsgSocket  ERROR INVALID SOCKET");
+      printf("UdpMsgSocket ERROR INVALID SOCKET\n");
       return false;
    }
 
@@ -194,8 +194,8 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
       }
       else
       {
-         Trc::write(mTI, 0, "ERROR UdpMsgSocket %d %d", BaseClass::mStatus, BaseClass::mError);
-         printf("ERROR UdpMsgSocket %d %d\n", BaseClass::mStatus, BaseClass::mError);
+         Trc::write(mTI, 0, "UdpMsgSocket ERROR %d %d", BaseClass::mStatus, BaseClass::mError);
+         printf("UdpMsgSocket ERROR %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }
@@ -224,8 +224,8 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMsgMonkey->mHeaderValidFlag)
    {
-      Trc::write(mTI, 0, "ERROR UdpMsgSocket INVALID HEADER %d %d", mStatus, mError);
-      printf("ERROR UdpMsgSocket INVALID HEADER %d %d\n", mStatus, mError);
+      Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID HEADER %d %d", mStatus, mError);
+      printf("UdpMsgSocket ERROR INVALID HEADER %d %d\n", mStatus, mError);
       return false;
    }
 
@@ -242,8 +242,8 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Test for errors.
    if (aMsg == 0)
    {
-      Trc::write(mTI, 0, "ERROR UdpMsgSocket INVALID MESSAGE %d %d", mStatus, mError);
-      printf("ERROR UdpMsgSocket INVALID MESSAGE %d %d\n", mStatus, mError);
+      Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID MESSAGE %d %d", mStatus, mError);
+      printf("UdpMsgSocket ERROR INVALID MESSAGE %d %d\n", mStatus, mError);
       mStatus = tByteBuffer.getError();
       return false;
    }
@@ -270,8 +270,8 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "ERROR UdpMsgSocket INVALID SOCKET");
-      printf("ERROR UdpMsgSocket INVALID SOCKET\n");
+      Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID SOCKET");
+      printf("UdpMsgSocket ERROR INVALID SOCKET\n");
       delete aMsg;
       return false;
    }
@@ -311,8 +311,8 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
    }
    else
    {
-      Trc::write(mTI, 0, "ERROR UdpMsgSocket INVALID SEND");
-      printf("ERROR UdpMsgSocket INVALID SEND\n");
+      Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID SEND");
+      printf("UdpMsgSocket ERROR INVALID SEND\n");
    }
 
    // Metrics.

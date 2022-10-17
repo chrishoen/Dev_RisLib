@@ -88,9 +88,12 @@ void TcpMsgSocket::configure(bool aShowFlag)
       Trc::write(mTI, 0, "TcpMsgSocket       PASS %16s : %5d",
          BaseClass::mRemote.mString,
          BaseClass::mRemote.mPort);
-      printf("TcpMsgSocket       PASS %16s : %5d\n",
-         BaseClass::mRemote.mString,
-         BaseClass::mRemote.mPort);
+      if (aShowFlag)
+      {
+         printf("TcpMsgSocket       PASS %16s : %5d\n",
+            BaseClass::mRemote.mString,
+            BaseClass::mRemote.mPort);
+      }
    }
    else if (!mValidFlag)
    {
@@ -99,11 +102,14 @@ void TcpMsgSocket::configure(bool aShowFlag)
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
          BaseClass::mError);
-      printf("TcpMsgSocket       FAIL %16s : %5d $ %d %d\n",
-         BaseClass::mRemote.mString,
-         BaseClass::mRemote.mPort,
-         BaseClass::mStatus,
-         BaseClass::mError);
+      if (aShowFlag)
+      {
+         printf("TcpMsgSocket       FAIL %16s : %5d $ %d %d\n",
+            BaseClass::mRemote.mString,
+            BaseClass::mRemote.mPort,
+            BaseClass::mStatus,
+            BaseClass::mError);
+      }
    }
 }
 

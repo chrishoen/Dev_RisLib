@@ -1,56 +1,84 @@
 {
-   "version": 3,
-   "configurePresets": [
-      {
-         "name": "base",
-         "description": "Windows host with the Visual Studio development environment.",
-         "hidden": true,
-         "generator": "Ninja",
-         "binaryDir": "${sourceDir}/out/build/${presetName}",
-         "installDir": "${sourceDir}/out/install/${presetName}",
-         "condition": {
-            "type": "equals",
-            "lhs": "${hostSystemName}",
-            "rhs": "Windows"
-         }
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "description": "Windows host with the Visual Studio development environment.",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows",
+      "displayName": "windows",
+      "description": "Target Windows (64-bit) with the Visual Studio development environment. (Release)",
+      "inherits": "base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
       },
-      {
-         "name": "windows",
-         "displayName": "windows",
-         "description": "Target Windows (64-bit) with the Visual Studio development environment. (Release)",
-         "inherits": "base",
-         "architecture": {
-            "value": "x64",
-            "strategy": "external"
-         },
-         "cacheVariables": {
-            "CMAKE_C_COMPILER": "cl.exe",
-            "CMAKE_CXX_COMPILER": "cl.exe",
-            "CMAKE_BUILD_TYPE": "Release",
-            "MYMODE": {
-               "type": "STRING",
-               "value": "windows"
-            }
-         }
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe",
+        "CMAKE_BUILD_TYPE": "Release",
+        "MYMODE": {
+          "type": "STRING",
+          "value": "windows"
+        }
+      }
+    },
+    {
+      "name": "beagle",
+      "displayName": "beagle",
+      "description": "Target debian arm7 for beaglebone or rpi",
+      "inherits": "base",
+      "toolchainFile": "${sourceDir}\\MyBeagleToolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "MYMODE": {
+          "type": "STRING",
+          "value": "beagle"
+        }
       },
-      {
-         "name": "beagle",
-         "displayName": "beagle",
-         "description": "Target debian arm7 for beaglebone or rpi",
-         "inherits": "base",
-         "toolchainFile": "${sourceDir}\\MyBeagleToolchain.cmake",
-         "cacheVariables": {
-            "CMAKE_BUILD_TYPE": "Release",
-            "MYMODE": {
-               "type": "STRING",
-               "value": "beagle"
-            }
-         },
-         "vendor": {
-            "microsoft.com/VisualStudioSettings/CMake/1.0": {
-               "hostOS": [ "Windows" ]
-            }
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Windows"
+          ]
+        }
+      }
+    },
+   {
+      "name": "linux-prime-x64",
+      "displayName": "linux-prime-x64",
+      "description": "Target the Windows Subsystem for Linux (WSL) or a remote Linux system.",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "cacheVariables": {
+         "CMAKE_BUILD_TYPE": "Release",
+         "MYMODE": {
+            "type": "STRING",
+            "value": "linux-prime-x64"
+         }
+
+      },
+      "condition": {
+         "type": "equals",
+         "lhs": "${hostSystemName}",
+         "rhs": "Linux"
+      },
+      "vendor": {
+         "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+            "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
          }
       }
-   ]
+   }
+  ]
 }

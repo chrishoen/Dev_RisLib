@@ -22,6 +22,10 @@ elseif (MYMODE STREQUAL "beagle")
 elseif (MYMODE STREQUAL "steno-arm")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
       COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} stenotgt:/opt/prime/bin)")
+
 elseif(MYMODE STREQUAL "linux-prime-x64")
    install(TARGETS ${project} DESTINATION "/opt/prime/bin")
+elseif (MYMODE STREQUAL "linux-prime-arm8")
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} stenotgt:/opt/prime/bin)")
 endif()

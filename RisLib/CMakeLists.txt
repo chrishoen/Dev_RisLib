@@ -27,8 +27,12 @@ elseif(MYMODE STREQUAL "steno-arm")
 elseif(MYMODE STREQUAL "steno-wsl")
    install(FILES ${inc_files} DESTINATION "target/rislib/include")
    install(TARGETS RisLib DESTINATION "target/rislib/lib/x86")
+
 elseif(MYMODE STREQUAL "linux-prime-x64")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS ${project} DESTINATION "/opt/prime/lib/x64")
+elseif(MYMODE STREQUAL "linux-prime-arm8")
+   install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
+   install(TARGETS ${project} DESTINATION "/opt/prime/lib/arm8")
 endif()
 

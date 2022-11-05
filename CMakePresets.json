@@ -79,6 +79,34 @@
             "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
          }
       }
+   },
+   {
+      "name": "linux-prime-arm8",
+      "displayName": "linux-prime-arm8",
+      "description": "Target the Windows Subsystem for Linux (WSL) or a remote Linux system.",
+      "generator": "Ninja",
+      "toolchainFile": "${sourceDir}\\imx8mm-toolchain.cmake",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "cacheVariables": {
+         "CMAKE_BUILD_TYPE": "Release",
+         "MYMODE": {
+            "type": "STRING",
+            "value": "linux-prime-arm8"
+         }
+
+      },
+      "condition": {
+         "type": "equals",
+         "lhs": "${hostSystemName}",
+         "rhs": "Linux"
+      },
+      "vendor": {
+         "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+            "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+         }
+      }
    }
+
   ]
 }

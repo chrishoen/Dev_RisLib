@@ -14,49 +14,49 @@
         "rhs": "Windows"
       }
     },
-    {
-      "name": "windows",
-      "displayName": "windows",
+   {
+      "name": "prime-windows",
+      "displayName": "prime-windows",
       "description": "Target Windows (64-bit) with the Visual Studio development environment. (Release)",
       "inherits": "base",
       "architecture": {
-        "value": "x64",
-        "strategy": "external"
+         "value": "x64",
+         "strategy": "external"
       },
       "cacheVariables": {
-        "CMAKE_C_COMPILER": "cl.exe",
-        "CMAKE_CXX_COMPILER": "cl.exe",
-        "CMAKE_BUILD_TYPE": "Release",
-        "MYMODE": {
-          "type": "STRING",
-          "value": "windows"
-        }
+         "CMAKE_C_COMPILER": "cl.exe",
+         "CMAKE_CXX_COMPILER": "cl.exe",
+         "CMAKE_BUILD_TYPE": "Release",
+         "MYMODE": {
+            "type": "STRING",
+            "value": "prime-windows"
+         }
       }
-    },
-    {
-      "name": "beagle",
-      "displayName": "beagle",
+   },
+   {
+      "name": "prime-arm7",
+      "displayName": "prime-arm7",
       "description": "Target debian arm7 for beaglebone or rpi",
       "inherits": "base",
       "toolchainFile": "${sourceDir}\\MyBeagleToolchain.cmake",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "MYMODE": {
-          "type": "STRING",
-          "value": "beagle"
-        }
+         "CMAKE_BUILD_TYPE": "Release",
+         "MYMODE": {
+            "type": "STRING",
+            "value": "prime-arm7"
+         }
       },
       "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/1.0": {
-          "hostOS": [
-            "Windows"
-          ]
-        }
+         "microsoft.com/VisualStudioSettings/CMake/1.0": {
+            "hostOS": [
+               "Windows"
+            ]
+         }
       }
-    },
+   },
    {
-      "name": "linux-prime-x64",
-      "displayName": "linux-prime-x64",
+      "name": "prime-x64",
+      "displayName": "prime-x64",
       "description": "Target the Windows Subsystem for Linux (WSL) or a remote Linux system.",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
@@ -65,7 +65,7 @@
          "CMAKE_BUILD_TYPE": "Release",
          "MYMODE": {
             "type": "STRING",
-            "value": "linux-prime-x64"
+            "value": "prime-x64"
          }
 
       },
@@ -81,8 +81,8 @@
       }
    },
    {
-      "name": "linux-prime-arm8",
-      "displayName": "linux-prime-arm8",
+      "name": "prime-arm8",
+      "displayName": "prime-arm8",
       "description": "Target the Windows Subsystem for Linux (WSL) or a remote Linux system.",
       "generator": "Ninja",
       "toolchainFile": "${sourceDir}\\imx8mm-toolchain.cmake",
@@ -92,7 +92,7 @@
          "CMAKE_BUILD_TYPE": "Release",
          "MYMODE": {
             "type": "STRING",
-            "value": "linux-prime-arm8"
+            "value": "prime-arm8"
          }
 
       },

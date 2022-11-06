@@ -1,5 +1,5 @@
 # Dev_RisLib
-### real time infrastructure library, C++, vstudio, cmake windows and linux
+### RisLib real time infrastructure library, C++, vstudio and vscode, cmake, windows and linux
 
 This is a library of C++ classes that provides some realtime functionality. Features include:
    1. Thread base classes.
@@ -9,12 +9,12 @@ This is a library of C++ classes that provides some realtime functionality. Feat
    5. Threads for TCP server and client, UDP, and serial that are used to communicate binary messages.
    6. Command line executive classes for console and parameter and parameters files.
    7. A filtered print facility that can redirect to separate windows.
-   8. Thread Services classes that provide for instumentation of threads.
-   8. Miscellaneous utility functions.
+   8. Trace buffers that provide for instumentation of threads.
+   9. Miscellaneous utility functions.
 
-This library is written for Windows and Linux in Visual Studio, using the cmake paradigm. The classes are based on Win32 or pthread realtime functions for threads and sockets and such. The library is portable. The details of the provided functionality that are specific to Win32 are contained in a small set of `*_win.cpp` or `*_linux.cpp`files. It is the intention of the library that programs built under Windows can be rebuilt seamlessly under Linux. CMake is used to implement the cross platform functionality.
+This library is written for Windows and Linux in Visual Studio and VS Code, using open folder cmake . The classes are based on either Win32 or Linux support for threads and sockets and such. The library is portable and the details of the provided functionality that are specific to Win32 or Linux are contained in a small set of `*_win.cpp` or `*_linux.cpp`files.
 
-The solution contains the library project and a set of associated unit test projects.
+The solution contains the library project and a set of unit test and protorype projects.
 
 ## Classes
 ``` markdown
@@ -153,38 +153,50 @@ WaitableTest       -- unit test for waitables
 ``` markdown
 This supports builds for the following platforms:
 
-beagle  -- builds on windows for a debian arm7 target, tested on beaglebone black, raspberrypi4
-dart    -- builds on remote ubuntu for a yocto aarch64 target, tested on veriscite dart
-ubuntu  -- builds on remote ubuntu for a ubuntu target, tested on intel nuc
+arm7    -- builds on windows for a debian arm7 target, tested on beaglebone black, raspberrypi4
+arm8    -- builds on linux or wsl for a yocto aarch64 target, tested on veriscite mini dart board
+ubuntu  -- builds on linux or wsl for a ubuntu target, tested on intel nuc and wsl
 windows -- builds on windows for a windows target, tested on intel nuc
 ```
+## CMakePresets
+``` markdown
+This uses CMakePresets.json, cmake 3.18 is required.
+
+prime-windows  -- Target windows, install to c:/aaa_prime/RisLib
+prime-x64      -- Target ubuntu, install to /opt/prime
+prime-arm7     -- Target debian arm7 for beaglebone or rpi, install to /opt/prime
+prime-arm8     -- Target varisite mini dart board, install to /opt/prime
+```
+
 
 ## CMake Files
 ``` markdown
-CMakeLists.txt               -- Solution main cmake file
-CMakeSettings.json           -- current  cmake settings, copied from one of the following
-CMakeSettings_beagle.json    -- specific cmake settings
-CMakeSettings_dart.json      -- specific cmake settings
-CMakeSettings_ubuntu.json    -- specific cmake settings
-CMakeSettings_win.json       -- specific cmake settings
+CMakeLists.txt               -- main cmake file
+CMakePresets.json            -- cmake presets, requires cmake 3.18
 imx8mm-toolchain.cmake       -- specific toolchain file
 MyBeagleToolchain.cmake      -- specific toolchain file
+
 MyCodeMacros.cmake           -- macros for compiler settings
-MyConfig.cmake               -- current  config variables, copied from one of the following
-MyConfig_beagle.cmake        -- specific config variables
-MyConfig_dart.cmake          -- specific config variables
-MyConfig_ubuntu.cmake        -- specific config variables   
-MyConfig_win.cmake           -- specific config variables
-MyGlobalImports.cmake        -- macros for importing global libraries
+MyInstall.cmake              -- include for cmake installs
 MyLocalImports.cmake         -- macros for importing local libraries
 MyOverrides.cmake            -- some cmake overrides
 MyPostBuild.cmake            -- macros for post build copying
 MyPrecompiledHeader.cmake    -- macros for using precompiled headers
 MySpecial.cmake              -- special debuf stuff  
-set_for_beagle.bat           -- copy specific CMakeSettings.json and MyConfig.cmake to current
-set_for_dart.bat             -- copy specific CMakeSettings.json and MyConfig.cmake to current
-set_for_ubuntu.bat           -- copy specific CMakeSettings.json and MyConfig.cmake to current
-set_for_win.bat              -- copy specific CMakeSettings.json and MyConfig.cmake to current
+```
 
-Before start a new build session, run one of the set_for_* bat files
+## Building from the command line 
+``` markdown
+Here's an example for cleaning, building, and installing. It uses the cmake preset prime-x64.
+
+git clone git@github.com:chrishoen/Dev_RisLib.git
+sudo chmod 777 Dev
+mv Dev_RisLib rislib
+cd rislib
+git checkout develop
+
+cmake --preset prime-x64
+cmake --build out/build/prime-x64 --target clean
+cmake --build out/build/prime-x64 -v -j 8
+cmake --install out/build/prime-x64
 ```

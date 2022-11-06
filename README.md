@@ -27,85 +27,126 @@ prnPrintFilterTable.h         -- filtered print facility, filter table
 prnPrint.h                    -- filtered print facility
 prnPrintSettings.h            -- filtered print facility, settings
 risAlphaDir.h                 -- relocatable Alpha directory for C:\Alpha\Bin, C:\Alpha\Settings, etc
+risBaseDir.h                  -- base directory utilities
+risBitUtils.h                 -- bit utilities
+risByteBlob.h                 -- byte content binary blob
 risByteBuffer.h               -- byte buffer for byte content binary message scheme
 risByteContent.h              -- byte content base class for binary message scheme
-risCallPointer.h              -- class templates that manage function pointers for c++ classes
 risCmdLineCmd.h               -- command line command. is executed by a command line executive
 risCmdLineConsole.h           -- execute command lines from the console, using a command line executive
 risCmdLineExec.h              -- command line executive base class
 risCmdLineFile.h              -- execute command lines from a file, using a command line executive
 risCmdLineParms.h             -- support for command line parameters files
+risCmdLineReader.h            -- support for reading command lines from stdin 
+risCmdLineScript.h            -- execute command lines from a script file
 risCmdLineString.h            -- execute command lines from a string, using a command line executive
 risCmdLineTables.h            -- lookup tables that can be read from a command line file
 risContainers.h               -- some legacy container class templates, queues, stacks ...
 risContainers2.h              -- more of the same
-risLFIndex.h                  -- lock free index
-risLMPacketQueue.h            -- a packet queue that uses semaphores to lock concurrent access
+risLCCriticalSection.h        -- locking critical sections
+risLCPointerQueue.h           -- locking pointer queue
 risLogic.h                    -- some and or not logic support for masks
 risMemoryPtr.h                -- memory pointer support
+risMonitor.h                  -- monitor variables
+risNanoConvert.h              -- nanosecond time conversions
 risNanoTime.h                 -- nanosecond time facility based on cpu clock
+risNetInterfaces.h            -- network interface support
 risNetPortDef.h               -- default network socket port definitions
 risNetSessionStateList.h      -- session state list used by a tcp server to track tcp client connections
+risNetSettings.h              -- settings used by the udp and tcp socket threads
 risNetTcpMsgClientThread.h    -- tcp client thread based on byte content binary messages
 risNetTcpMsgServerThread.h    -- tcp server thread based on byte content binary messages
 risNetTcpMsgSocket.h          -- tcp socket for byte content binary messages 
+risNetTcpServerHubSocket.h    -- tcp server hub socket, does accept/select
 risNetUdpMsgSocket.h          -- udp socket for byte content binary messages 
 risNetUdpMsgThread.h          -- udp peer thread based on byte content binary messages
 risNetUdpStringSocket.h       -- udp thread that passes strings 
-risPointerStack.h             -- pointer stack
+risNetUdpStringThread.h       -- udp peer thread based on strings
 risPortableCalls.h            -- some system calls that are portable
-risPortableTypes.h            -- legacy
 risProgramTime.h              -- provides time from start of program based on hires cpu clock
+risSequence.h                 -- state machines that generate sequences of ntuples of integers
 risSerialHeaderBuffer.h       -- serial header buffer used to detect binary message headers
 risSerialMsgPort.h            -- serial port for byte content binary messags
 risSerialMsgThread.h          -- serial thread based on byte content binary messages
-risSerialPort.h               -- portable serial port
-risSockets.h                  -- portable socket classes
+risSerialPort.h               -- serial port
+risSerialSettings.h           -- serial port settings
+risSerialStringPort.h         -- serial port for strings
+risSerialStringThread.h       -- serial thread based on strings
+risSharedMemory.h             -- shared memory support
+risSleep.h                    -- sleep utilities
+risSockets.h                  -- socket classes
+risSRSWObjectQueue.h          -- single reader single writer object queue
+risSRSWPointerQueue.h         -- single reader single pointer object queue
+risSRSWStringQueue.h          -- single reader single writer string queue
+risSRSWValueQueue.h           -- single reader single writer value queue
 risStatistics.h               -- statistics classes for mean, stddev, min,max
-risSystemTime.h               -- system time classes
+risSystemCalls.h              -- system call support
+risThreadsNotify.h            -- thread notifier
+risThreadsPeriodicThread.h    -- periodic thread
+risThreadsPriorities.h        -- thread priorities
 risThreadsProcess.h           -- support for process priority and clocking
 risThreadsQCall.h             -- qcalls are queue function calls, deferred procedure calls
 risThreadsQCallThread.h       -- qcall thread, waits on a queue of calls and executes them serially
-risThreadsQueue.h             -- legacy thread synchonized queues
+risThreadsRandomThread.h      -- thread that sleeps for a random time
 risThreadsSynch.h             -- thread synchronization classes, mutex semaphores, event semaphores, etc
 risThreadsThreads.h           -- thread base classes
 risThreadsTimer.h             -- thread timer for periodic threads
 risThreadsTimerThread.h       -- timer thread base class
 risThreadsTwoThread.h         -- two thread base class, for threads that send a command and wait for a notification
+risThreadsWaitable.h          -- waitable thread mechanism, can wait for a time or be aborted
 risTimeMarker.h               -- time marker used to measure software timing
-ris_priorities.h              -- default thread priorities
 stdafx.h                      -- used for precompiled header files
+risTrace.h                    -- trace buffer program interface
+risTraceBuffer.h              -- trace buffer implementation
 ```
-
 ## Solution Projects
 ``` markdown
-ByteContent     -- unit test for byte content
-Classes         -- constructor and destructor experiments
-CmdLineTest1    -- experiments for command line commands
-CommonLib       -- common library -- byte content messages and settings
-Experiment      -- experiments
-Functions       -- function pointer experiments
-Parms           -- unit test for parms files
-PrintTest       -- unit test for print facility
-PrintView       -- PrintView.exe build
-Program         -- unit test for program configuration
-ProtoSerial     -- prototype for byte content message, serial
-ProtoString     -- prototype for byte content message, upd string
-ProtoTcpClient  -- prototype for byte content message, tcp client
-ProtoTcpServer  -- prototype for byte content message, tcp client
-ProtoUdp        -- prototype for byte content message, udp peer
-RisLib          -- realtime infrastructure library -- this is the library
-SerialComm      -- unit test for serial communications
-TableTest       -- unit est for lookup tables
-Test            -- general test project
-ThreadNotify    -- unit test for thread notification class
-ThreadQCall     -- unit test for qcall threads
-ThreadSample    -- sample thread project
-ThreadServices  -- unit test for thread services classes
-ThreadSynch     -- unit test for thread synchronization classes
-ThreadTest      -- unit test for thread base classes
-TimerTest       -- unit test for timer classes
-TimerThreadTest -- unit test for timer threads and priorites and cores
+ByteContent        -- unit test for byte content
+Classes            -- constructor and destructor experiments
+CmdLineTest        -- experiments for command line commands
+CommonLib          -- common library used some of by the unit tests
+eth0               -- network interface experiments
+Experiment         -- experiments
+FileFunctions      -- unit test for file function
+Functions          -- function pointer experiments
+LogFiles           --  unit test for log files
+MyProgram1         -- program place holder
+NamedSemaphore     -- unit test for named semaphores
+Parms              -- unit test for parms file
+PeriodicTest       --  unit test for periodic threads
+PortResponder      -- prototype udp port responder thread
+PrintTest          -- unit test for print facility
+PrintView          -- PrintView.exe build
+ProtoArgs          -- prototype for program arguments
+ProtoSerial        -- prototype for byte content messages
+ProtoSerialMsg     -- prototype for byte content message via serial port
+ProtoSerialString  -- prototype for strings, serial port
+ProtoTcpClientMsg  -- prototype for byte content message, tcp client
+ProtoTcpServerMsg  -- prototype for byte content message, tcp client
+ProtoUdpMsg        -- prototype for byte content message, udp
+ProtoUdpString     -- prototype for strings, udp
+QCallTest          -- unit test for qcall threads
+RandomTest         -- unit test for random threads
+Readline           -- unit test for readline
+RisLib             -- realtime infrastructure library -- this is the library
+Script             -- unit test for a script runner
+Sequence           -- unit test for a sequence
+SharedMemory       -- unit test for shared memory
+Sleep              -- unit test for sleeps
+Stash              -- old code stashed away
+StringQueue        -- unit test string queue
+TableTest          -- unit test for lookup tables
+Test               -- general test project
+ThreadNotify       -- unit test for thread notification class
+ThreadQCall        -- unit test for qcall threads
+ThreadSample       -- sample thread project
+ThreadSynch        -- unit test for thread synchronization classes
+ThreadTest         -- unit test for thread base classes
+TimerTest          -- unit test for timer classes
+TimerThreadTest    -- unit test for timer threads and priorites and cores
+Trace              -- unit test for trace buffers
+WaitableTest       -- unit test for waitables
+
 ```
  
 ## Build target platforms

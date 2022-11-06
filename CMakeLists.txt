@@ -1,13 +1,12 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/MyOverrides.cmake")
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
-set (MY_MACRO_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-
-include(MyCodeMacros.cmake)
-include(MyLocalImports.cmake)
-include(MyPrecompiledHeader.cmake)
-include(MySpecial.cmake)
+set(MY_MACRO_DIR "${CMAKE_CURRENT_SOURCE_DIR}/zzzMacros")
+set(CMAKE_USER_MAKE_RULES_OVERRIDE "${MY_MACRO_DIR}/MyOverrides.cmake")
+include("${MY_MACRO_DIR}/MyCodeMacros.cmake")
+include("${MY_MACRO_DIR}/MyLocalImports.cmake")
+include("${MY_MACRO_DIR}/MyPrecompiledHeader.cmake")
+include("${MY_MACRO_DIR}/MySpecial.cmake")
 
 project ("Dev_RisLib")
 my_print_cmake_vars()

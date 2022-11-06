@@ -8,6 +8,8 @@ my_add_compile_options (${project})
 my_add_pch (${project})
 
 
+include("${MY_MACRO_DIR}/MyInstall.cmake")
+
 return()
 if (MSVC)
    install(TARGETS MyProgram1 DESTINATION "C:/aaa_prime/RisLib")

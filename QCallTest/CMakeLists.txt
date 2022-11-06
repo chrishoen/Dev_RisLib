@@ -10,3 +10,4 @@ my_add_pch (QCallTest)
 my_inc_import_RisLib(QCallTest)
 my_lib_import_RisLib(QCallTest)
 
+include("${MY_MACRO_DIR}/MyInstall.cmake")

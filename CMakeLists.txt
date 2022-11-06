@@ -2,14 +2,15 @@
 
 set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/MyOverrides.cmake")
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
+set (MY_MACRO_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
 include(MyCodeMacros.cmake)
 include(MyLocalImports.cmake)
 include(MyPrecompiledHeader.cmake)
 include(MySpecial.cmake)
 
 project ("Dev_RisLib")
-my_special1() 
-
+my_print_cmake_vars()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("Test")

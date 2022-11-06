@@ -9,6 +9,10 @@ my_add_pch (${project})
 my_inc_import_RisLib(${project})
 my_lib_import_RisLib(${project})
 
+message(STATUS "*************************MY_MACRO_DIR       " ${MY_MACRO_DIR})
+include("${MY_MACRO_DIR}/MyInstall.cmake")
+return()
+
 if (MSVC)
    install(TARGETS ${project} DESTINATION "C:/aaa_prime/RisLib")
 elseif(MYMODE STREQUAL "prime-x64")

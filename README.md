@@ -6,7 +6,7 @@ This is a library of C++ classes that provides some realtime functionality. Feat
    2. QCall threads. These are threads that service queues that contain calls (class function pointers).
    3. ByteContent, a scheme to encapsulate binary messages with C++ classes and pack/unpack them into byte buffers.
    4. Socket classes. Serial port classes.
-   5. Threads for TCP server and client, UDP, and serial that are used to communicate binary messages.
+   5. Threads for TCP server and client, UDP, and serial that are used to communicate binary messages and strings.
    6. Command line executive classes for console and parameter and parameters files.
    7. A filtered print facility that can redirect to separate windows.
    8. Trace buffers that provide for instumentation of threads.
@@ -99,7 +99,7 @@ stdafx.h                      -- used for precompiled header files
 risTrace.h                    -- trace buffer program interface
 risTraceBuffer.h              -- trace buffer implementation
 ```
-## Solution Projects
+## Projects
 ``` markdown
 ByteContent        -- unit test for byte content
 Classes            -- constructor and destructor experiments

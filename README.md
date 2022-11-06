@@ -200,3 +200,11 @@ cmake --build out/build/prime-x64 --target clean
 cmake --build out/build/prime-x64 -v -j 8
 cmake --install out/build/prime-x64
 ```
+
+## Note: Installing cmake 
+``` markdown
+To install cmake version 25 on ubuntu to /usr/bin, this worked for me.
+
+wget https://github.com/Kitware/CMake/releases/download/v3.25.0-rc3/cmake-3.25.0-rc3-linux-x86_64.sh
+sudo ./cmake-3.25.0-rc3-linux-x86_64.sh --skip-license --prefix=/usr
+```

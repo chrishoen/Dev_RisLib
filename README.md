@@ -203,8 +203,14 @@ cmake --install out/build/prime-x64
 
 ## Note: Installing cmake 
 ``` markdown
-To install cmake version 25 on ubuntu to /usr/bin, this worked for me.
+To install cmake version 3.25 on ubuntu to /usr/bin, this worked for me.
 
 wget https://github.com/Kitware/CMake/releases/download/v3.25.0-rc3/cmake-3.25.0-rc3-linux-x86_64.sh
 sudo ./cmake-3.25.0-rc3-linux-x86_64.sh --skip-license --prefix=/usr
+
+
+To install cmake version 3.19 for visual studio integration on ubuntu to /usr/bin, this worked for me.
+
+wget https://github.com/microsoft/CMake/releases/download/v3.19.4268486/cmake-3.19.4268486-MSVC_2-Linux-x86.sh
+sudo ./cmake-3.19.4268486-MSVC_2-Linux-x86.sh --skip-license --prefix=/usr
 ```

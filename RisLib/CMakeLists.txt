@@ -11,6 +11,10 @@ my_add_pch (${project})
 
 target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 
+if (MYSTANDALONE)
+   return()
+endif()
+
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")

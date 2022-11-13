@@ -1,5 +1,9 @@
 ﻿cmake_minimum_required(VERSION 3.10)
 
+if (MYSTANDALONE)
+   return()
+endif()
+
 if (MSVC)
    install(TARGETS ${project} DESTINATION "C:/aaa_prime/RisLib")
 elseif(MYMODE STREQUAL "prime-x64")

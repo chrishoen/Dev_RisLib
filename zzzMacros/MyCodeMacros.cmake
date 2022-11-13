@@ -39,6 +39,11 @@ endfunction()
 
 function(my_add_compile_options _target)
 
+   if (MYSTANDALONE)
+      return()
+   endif()
+
+
    if(MSVC)
       target_compile_options(${_target} PRIVATE "/WX")
       target_compile_options(${_target} PRIVATE "/wd4996")
@@ -89,6 +94,11 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_compile_options_so _target)
+
+   if (MYSTANDALONE)
+      return()
+   endif()
+
    message(STATUS "my_add_compile_options************************ " ${_target})
    #message(STATUS "CMAKE_CXX_FLAGS************************ " ${CMAKE_CXX_FLAGS})
    #message(STATUS "CMAKE_CXX_FLAGS_RELEASE**************** " ${CMAKE_CXX_FLAGS_RELEASE})

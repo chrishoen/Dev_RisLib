@@ -47,20 +47,24 @@ void TcpServerHubSocket::initialize(Settings& aSettings)
 //******************************************************************************
 // Configure the socket.
 
-void TcpServerHubSocket::configure()
+void TcpServerHubSocket::configure(bool aShowFlag)
 {
    // Configure the socket.
    BaseClass::reset();
-   BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
+   BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    BaseClass::doSocket();
    BaseClass::setOptionReuseAddr();
+   BaseClass::setOptionNoDelay();
+   BaseClass::setOptionDontLinger();
+
+
    BaseClass::doBind();
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
 
    // Show.
-   if (mValidFlag)
+   if (mValidFlag && aShowFlag)
    {
       Trc::write(mTI, 0, "TcpServerHubSocket PASS %16s : %5d",
          BaseClass::mLocal.mString,
@@ -69,7 +73,7 @@ void TcpServerHubSocket::configure()
          BaseClass::mLocal.mString,
          BaseClass::mLocal.mPort);
    }
-   else
+   else if (!mValidFlag)
    {
       Trc::write(mTI, 0, "TcpServerHubSocket FAIL % 16s : % d $ % d % d",
          BaseClass::mLocal.mString,
@@ -82,18 +86,6 @@ void TcpServerHubSocket::configure()
          BaseClass::mStatus,
          BaseClass::mError);
    }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This re-initializes the socket.
-
-void TcpServerHubSocket::reconfigure()
-{
-   BaseClass::doSocket();
-   BaseClass::setOptionReuseAddr();
-   BaseClass::doBind();
 }
 
 //******************************************************************************

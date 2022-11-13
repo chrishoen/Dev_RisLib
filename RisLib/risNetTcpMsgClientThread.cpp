@@ -36,9 +36,13 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
    mRxMsgQCall = aSettings.mRxMsgQCall;
    mTI = aSettings.mTraceIndex;
 
-   // Member variables.
-   mConnectionFlag=false;
-
+   // Initialize variables.
+   mTI = mSettings.mTraceIndex;
+   mConnectionFlag = false;
+   mErrorCount = 0;
+   mRestartCount = 0;
+   mRxCount = 0;
+   mTxCount = 0;
 }
 
 //******************************************************************************
@@ -49,103 +53,154 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 
 void TcpMsgClientThread::threadInitFunction()
 {
-   // Initialize and configure the socket.
+   Trc::write(mTI, 0, "TcpMsgClientThread::threadInitFunction");
+
+   // Initialize the socket.
    mSocket.initialize(mSettings);
-   mSocket.configure();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread run function, base class overload.
-// It contains a while loop that manages the connection to the server and
-// receives messages.
+// Thread run function. This is called by the base class immediately
+// after the thread init function. It runs a loop that blocks on 
+// socket connect/receives and then processes them.
 
 void TcpMsgClientThread::threadRunFunction()
 {
+   Trc::write(mTI, 0, "TcpMsgClientThread::threadRunFunction");
+
+   // Top of the loop.
+   mRestartCount = 0;
    mConnectionFlag = false;
-   bool tGoing = mSocket.mValidFlag;
+   bool tSleepFlag = false;
+   bool tShowFlag = true;
+   int tRestartCode = 0;
+   int tRet = 0;
+   ByteContent* tMsg = 0;
 
-   while(tGoing)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Restart.
+
+restart:
+   // Guard.
+   if (mTerminateFlag) goto end;
+
+   // Sleep.
+   tSleepFlag = true;
+   if (tSleepFlag)
    {
-      //************************************************************************
-      //************************************************************************
-      //************************************************************************
-      // If not connected.
+      BaseClass::threadSleep(1000);
+   }
+   tSleepFlag = true;
+   Trc::write(mTI, 0, "TcpMsgClientThread restart %3d $ %3d", mRestartCount,tRestartCode);
+   if (tShowFlag)
+   {
+      Prn::print(Prn::Show1, "TcpMsgClientThread restart %3d $ %3d", mRestartCount, tRestartCode);
+   }
+   mRestartCount++;
 
-      if (!mConnectionFlag)
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Open device.
+
+   // If the socket is open then close it.
+   if (mSocket.mValidFlag)
+   {
+      Trc::write(mTI, 0, "restart close socket");
+      mSocket.doClose();
+      mSocket.mValidFlag = false;
+   }
+
+   // Configure the message socket.
+   mSocket.configure(tShowFlag);
+   if (!mSocket.mValidFlag)
+   {
+      // If error then restart.
+      tRestartCode = 101;
+      goto restart;
+   }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Reconnect.
+
+   // Guard.
+   if (mTerminateFlag) return;
+   mConnectionFlag = false;
+
+   // Try to connect.
+   if (mSocket.doConnect())
+   {
+      // Connection was established.
+      mConnectionFlag = true;
+
+      // Process a session change because a
+      // new session has been established.
+      processSessionChange(true);
+   }
+   else
+   {
+      tSleepFlag = false;
+      tShowFlag = false;
+      tRestartCode = 102;
+      goto restart;
+   }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Rereceive.
+
+receive:
+   // Guard.
+   if (mTerminateFlag) return;
+
+   // Try to receive a message with a blocking receive call.
+   // If a message was received then process it.
+   // If a message was not received then the connection was lost.  
+   if (mSocket.doReceiveMsg(tMsg))
+   {
+      // Message was correctly received.
+      // Process the receive message.
+      processRxMsg(tMsg);
+      // Repeat.
+      goto receive;
+   }
+   else
+   {
+      // Message was not correctly received, so
+      // Connection was lost.
+      mConnectionFlag = false;
+
+      // Process a session change because a
+      // session has been disestablished.
+      processSessionChange(false);
+
+      if (mSocket.mValidFlag)
       {
-         // Try to connect.
-         if (mSocket.doConnect())
-         {
-            // Connection was established.
-            Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
-            mConnectionFlag = true;
-
-            // Process a session change because a
-            // new session has been established.
-            processSessionChange(true);
-         }
-         else 
-         {
-            // Connection was not established.
-            Trc::write(mTI, 0, "TcpMsgClientThread DISCONNECTED");
-
-            mConnectionFlag = false;
-
-            // Close the socket and reconfigure.
-            mSocket.doClose();
-            mSocket.reconfigure();
-//          mSocket.configure();
-
-            // Sleep.
-            threadSleep(500);
-         }
+         tSleepFlag = false;
+         tShowFlag = false;
+         tRestartCode = 103;
+         goto restart;
       }
-
-      //************************************************************************
-      //************************************************************************
-      //************************************************************************
-      // If connected.
       else
       {
-         // Try to receive a message with a blocking receive call.
-         // If a message was received then process it.
-         // If a message was not received then the connection was lost.  
-         ByteContent* tMsg=0;
-         if (mSocket.doReceiveMsg(tMsg))
-         {
-            // Message was correctly received.
-            // Process the receive message.
-            if (tMsg)
-            {
-               processRxMsg(tMsg);
-            }
-         }
-         else
-         {
-            // Message was not correctly received, so
-            // Connection was lost.
-            //printf("Recv failed, Connection lost\n");
-            mConnectionFlag = false;
-
-            // Process a session change because a
-            // session has been disestablished.
-            processSessionChange(false);
-         }
+         tSleepFlag = false;
+         tShowFlag = true;
+         tRestartCode = 104;
+         goto restart;
       }
+   }
 
-      //************************************************************************
-      //************************************************************************
-      //************************************************************************
-      // If termination request, exit the loop
-      // This is set by shutdown, see below.
-
-      if (mTerminateFlag)
-      {
-         tGoing=false;
-      }  
-   }         
+   // Done.
+end:
+   Trc::write(mTI, 0, "TcpMsgClientThread::threadRunFunction done");
+   return;
 }
 
 //******************************************************************************
@@ -192,6 +247,15 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
    {
       printf("ERROR processSessionChange qcall invalid\n");
       return;
+   }
+
+   if (aEstablished)
+   {
+      Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
+   }
+   else
+   {
+      Trc::write(mTI, 0, "TcpMsgClientThread DISCONNECTED");
    }
 
    // Invoke the session qcall to notify that a session has been established

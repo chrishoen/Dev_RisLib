@@ -38,7 +38,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // Receive on this port.
+   // Receive on this address and port.
+   char mLocalIpAddr[20];
    int mLocalIpPort;
 
    // Transmit to this address and port.
@@ -91,8 +92,8 @@ public:
    Settings();
 
    // Set member.
-   void setLocalPort (int aIpPort);
-   void setRemoteAddress(char* aIpAddr, int aIpPort);
+   void setLocalAddress (const char* aIpAddr, int aIpPort);
+   void setRemoteAddress(const char* aIpAddr, int aIpPort);
 
    // Set member.
    void setUdpWrapFlag(bool aUdpWrapFlag);

@@ -75,12 +75,13 @@ void ServerThread::threadInitFunction()
 
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
-   tSettings.setLocalPort(gTcpSettings.mTcpServerPort);
+   tSettings.setLocalAddress(gTcpSettings.mTcpServerAddress, gTcpSettings.mTcpServerPort);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mMaxSessions = gTcpSettings.mTcpMaxSessions;
    tSettings.mServerSessionQCall = mSessionQCall;
    tSettings.mServerRxMsgQCall = mRxMsgQCall;
    tSettings.mTraceIndex = 11;
+   Trc::start(1);
    Trc::start(11);
 
    // Create the child thread with the settings.
@@ -323,7 +324,6 @@ void ServerThread::sendTestMsg(int aAppNumber)
 
    // Send a message on socket at the session index.
    TestMsg* tMsg = new TestMsg;
-   tMsg->mCode1 = 201;
    mMsgThread->sendMsg(tSessionIndex, tMsg);
 }
 

@@ -10,3 +10,4 @@ my_add_pch (ReadLine)
 my_inc_import_RisLib(ReadLine)
 my_lib_import_RisLib(ReadLine)
 
+include("${MY_MACRO_DIR}/MyInstall.cmake")

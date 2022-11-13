@@ -86,12 +86,18 @@ public:
    typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
    RxMsgQCall mRxMsgQCall;
 
-   // If this flag is true then a connection has been established with the 
-   // server and sendMsg can be called.
-   bool mConnectionFlag;
-
    // Program trace index.
    int mTI;
+
+   // If true then the serial port is open. If false then it is closed
+   // because of an error.
+   bool mConnectionFlag;
+
+   // Metrics.
+   int mErrorCount;
+   int mRestartCount;
+   int mRxCount;
+   int mTxCount;
 
    //***************************************************************************
    //***************************************************************************

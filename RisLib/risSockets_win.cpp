@@ -751,8 +751,6 @@ bool BaseTcpStreamSocket::doSocket()
    if (mBaseSpecific->mDesc==INVALID_SOCKET) tStatus = -1;
    else                       tStatus =  0;
 
-   setOptionDontLinger();
-
    return updateError(tStatus);
 }
 

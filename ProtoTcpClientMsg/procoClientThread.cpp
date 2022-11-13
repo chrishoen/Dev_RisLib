@@ -74,11 +74,12 @@ void ClientThread::threadInitFunction()
 
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
-   tSettings.setRemoteAddress(gTcpSettings.mTcpServerIPAddress, gTcpSettings.mTcpServerPort);
+   tSettings.setRemoteAddress(gTcpSettings.mTcpServerAddress, gTcpSettings.mTcpServerPort);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;
    tSettings.mTraceIndex = 11;
+   Trc::start(1);
    Trc::start(11);
 
    // Create the child thread with the settings.
@@ -163,7 +164,7 @@ void ClientThread::executeOnTimer(int aTimerCount)
    if (mTPCode == 1)
    {
       EchoRequestMsg* tTxMsg = new EchoRequestMsg;
-      MsgHelper::initialize(tTxMsg);
+      tTxMsg->initialize(1000);
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)
@@ -234,7 +235,7 @@ void ClientThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      MsgHelper::initialize(tTxMsg, 1000);
+      tTxMsg->initialize(1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mMsgThread->sendMsg(tTxMsg);
    }

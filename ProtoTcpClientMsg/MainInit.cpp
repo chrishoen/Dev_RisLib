@@ -29,7 +29,7 @@ void main_initialize()
    Ris::setBaseDirectoryToCurrent();
 
    // Set the process priority class.
-   Ris::Threads::enterProcessHigh();
+// Ris::Threads::enterProcessHigh();
 
    //***************************************************************************
    //***************************************************************************

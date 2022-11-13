@@ -8,6 +8,8 @@ my_add_compile_options (${project})
 my_add_pch (${project})
 
 
+include("${MY_MACRO_DIR}/MyInstall.cmake")
+
 return()
 if (MSVC)
    install(TARGETS MyProgram1 DESTINATION "C:/aaa_prime/RisLib")
@@ -19,6 +21,6 @@ elseif (MYMODE STREQUAL "beagle")
 elseif (MYMODE STREQUAL "steno-arm")
 
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/MyProgram1 root@stenotgt:/home/root/stenograph/bin)")
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/MyProgram1 stenotgt:/opt/prime/bin)")
 endif()
 

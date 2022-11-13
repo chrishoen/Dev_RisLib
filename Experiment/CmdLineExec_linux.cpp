@@ -121,20 +121,6 @@ void CmdLineExec::executeGetAddr(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Ris::Sockets::SocketAddress tA1;
-   Ris::Sockets::SocketAddress tA2;
-   tA1.setByHostName("192.168.1.9", 56001);
-   tA2.setByAddress(tA1.mAddress, tA1.mPort);
-
-   Prn::print(0, "A1");
-   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
-   Prn::print(0, "value    %x", tA1.mAddress);
-   Prn::print(0, "string   %s", tA1.mString);
-
-   Prn::print(0, "A2");
-   Prn::print(0, "valid    %s", my_string_from_bool(tA2.mValid));
-   Prn::print(0, "value    %x", tA2.mAddress);
-   Prn::print(0, "string   %s", tA2.mString);
 }
 
 //******************************************************************************
@@ -144,7 +130,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, "sms3");
-   Ris::Net::UdpTxStringSocket tSocket;
+   Ris::Net::UdpStringSocket tSocket;
    Ris::Net::Settings tSettings;
 
    tSettings.mTestForLocal = true;
@@ -174,15 +160,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, "remotehost");
-   Ris::Sockets::SocketAddress tA1;
-   tA1.setByHostName(aCmd->argString(1), 56001);
-
-   Prn::print(0, "A1");
-   Prn::print(0, "valid    %s", my_string_from_bool(tA1.mValid));
-   Prn::print(0, "value    %x", tA1.mAddress);
-   Prn::print(0, "port     %d", tA1.mPort);
-   Prn::print(0, "string   %s", tA1.mString);
 }
 
 //******************************************************************************

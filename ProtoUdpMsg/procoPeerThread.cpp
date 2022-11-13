@@ -79,8 +79,8 @@ void PeerThread::threadInitFunction()
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setLocalPort(gUdpSettings.mMyUdpPort);
-   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
+   tSettings.setLocalAddress(gUdpSettings.mMyUdpAddress, gUdpSettings.mMyUdpPort);
+   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpAddress, gUdpSettings.mOtherUdpPort);
    tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mRxMsgQCall = mRxMsgQCall;
@@ -139,7 +139,7 @@ void PeerThread::executeOnTimer(int aTimerCount)
    if (mTPCode == 1)
    {
       EchoRequestMsg* tTxMsg = new EchoRequestMsg;
-      MsgHelper::initialize(tTxMsg);
+      tTxMsg->initialize(1000);
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)
@@ -210,7 +210,7 @@ void PeerThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      MsgHelper::initialize(tTxMsg, 1000);
+      tTxMsg->initialize(1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mMsgThread->sendMsg(tTxMsg);
    }

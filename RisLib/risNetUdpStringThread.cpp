@@ -35,6 +35,12 @@ UdpStringThread::UdpStringThread(Settings& aSettings)
 
    // Initialize variables.
    mTI = mSettings.mTraceIndex;
+   mConnectionFlag = false;
+   mErrorCount = 0;
+   mRestartCount = 0;
+   mRxCount = 0;
+   mTxCount = 0;
+
 }
 
 //******************************************************************************
@@ -46,27 +52,74 @@ UdpStringThread::UdpStringThread(Settings& aSettings)
 void UdpStringThread::threadInitFunction()
 {
    Trc::write(mTI, 1, "UdpStringThread::threadInitFunction");
-   // Initialize and configure the string socket.
-   mStringSocket.initialize(mSettings);
-   mStringSocket.configure();
    Trc::write(mTI, 1, "UdpStringThread::threadInitFunction done");
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread run function. This is called by the base class for the main 
-// thread processing. Execute a while loop that does read calls.
-// The loop exits when the thread is canceled.
+// Thread run function. This is called by the base class immediately
+// after the thread init function. It runs a loop that blocks on 
+// the udp port receives and then processes them. The loop terminates
+// when the serial port receive is aborted.
 
-void  UdpStringThread::threadRunFunction()
+void UdpStringThread::threadRunFunction()
 {
-   Trc::write(mTI, 1, "UdpStringThread::threadRunFunction");
-   bool tGoing=mStringSocket.mValidFlag;
-   bool tFirstFlag = true;
+   Trc::write(mTI, 0, "UdpStringThread::threadRunFunction");
 
-   while(tGoing)
+   // Top of the loop.
+   mRestartCount = 0;
+   mConnectionFlag = false;
+
+restart:
+   // Guard.
+   if (mTerminateFlag) return;
+   int tRet = 0;
+
+   // Sleep.
+   if (mRestartCount > 0)
    {
+      BaseClass::threadSleep(1000);
+   }
+   Trc::write(mTI, 0, "UdpStringThread restart %d", mRestartCount);
+   Prn::print(Prn::Show1, "UdpStringThread restart %d", mRestartCount);
+   mRestartCount++;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Open device.
+
+   // If the socket is open then close it.
+   if (mStringSocket.mValidFlag)
+   {
+      mStringSocket.doClose();
+   }
+
+   // Initialize and configure the message socket.
+   mStringSocket.initialize(mSettings);
+   mStringSocket.configure();
+   if (!mStringSocket.mValidFlag)
+   {
+      // If error then restart.
+      goto restart;
+   }
+
+   // Connection was established.
+   mConnectionFlag = true;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Loop to receive strings.
+
+   while (!BaseClass::mTerminateFlag)
+   {
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Receive.
+
       // Try to receive a message with a blocking receive call. If a message
       // was received then process it.
       if (mStringSocket.doRecvString())
@@ -77,17 +130,26 @@ void  UdpStringThread::threadRunFunction()
       }
       else
       {
-         // Message was not correctly received.
-      }
+         Trc::write(mTI, 1, "UdpStringThread::threadRunFunction recv String ERROR");
 
-      // If termination request then exit the loop.
-      // This is set by shutdown, see below.
-      if (mTerminateFlag)
-      {
-         tGoing=false;
-      }  
-   }         
-   Trc::write(mTI, 1, "UdpStringThread::threadRunFunction done");
+         // Check for terminate.
+         if (BaseClass::mTerminateFlag)
+         {
+            Trc::write(mTI, 0, "UdpStringThread read TERMINATE");
+            goto end;
+         }
+         else
+         {
+            mStringSocket.mValidFlag = false;
+            goto restart;
+         }
+      }
+   }
+
+   // Done.
+end:
+   Trc::write(mTI, 0, "UdpStringThread::threadRunFunction done");
+   return;
 }
 
 //******************************************************************************

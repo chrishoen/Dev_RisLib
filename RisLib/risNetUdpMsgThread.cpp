@@ -40,7 +40,6 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
    mRestartCount = 0;
    mRxCount = 0;
    mTxCount = 0;
-
 }
 
 //******************************************************************************
@@ -52,8 +51,6 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 void UdpMsgThread::threadInitFunction()
 {
    Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction");
-
-   Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -153,45 +150,6 @@ restart:
 end:
    Trc::write(mTI, 0, "UdpMsgThread::threadRunFunction done");
    return;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Thread run function, base class overload.
-// It contains a while loop that receives messages.
-
-void  UdpMsgThread::threadRunFunction22()
-{
-   Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction");
-   bool tGoing = mMsgSocket.mValidFlag;
-   bool tFirstFlag = true;
-
-   while(tGoing)
-   {
-      // Try to receive a message with a blocking receive call. If a message
-      // was received then process it.
-      ByteContent* tMsg=0;
-      if (mMsgSocket.doReceiveMsg(tMsg))
-      {
-         Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg");
-         // Message was correctly received.
-         // Call the receive callback qcall.
-         processRxMsg(tMsg);
-      }
-      else
-      {
-         Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg ERROR");
-      }
-
-      // If termination request then exit the loop.
-      // This is set by shutdown, see below.
-      if (BaseThread::mTerminateFlag)
-      {
-         tGoing=false;
-      }  
-   }         
-   Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction done");
 }
 
 //******************************************************************************

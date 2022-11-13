@@ -214,3 +214,28 @@ To install cmake version 3.19 for visual studio integration on ubuntu to /usr/bi
 wget https://github.com/microsoft/CMake/releases/download/v3.19.4268486/cmake-3.19.4268486-MSVC_2-Linux-x86.sh
 sudo ./cmake-3.19.4268486-MSVC_2-Linux-x86.sh --skip-license --prefix=/usr
 ```
+
+
+## Note: using CMake install 
+``` markdown
+cmake install is used to copy to target directories.
+
+The unit test projects on windows use:
+
+c:/aaa_prime/RisLib
+c:/aaa_prime/files
+c:/aaa_prime/log
+
+The unit test projects on linux use in:
+
+/opt/prime/bin
+/opt/prime/files
+/opt/prime/log
+
+
+For the linux projects, Dev_RisLib/Files/prime.tar.gz can be used to create the directories used by the test programs.
+
+cd /opt
+sudo tar -zxvf prime.tar.gz
+
+```

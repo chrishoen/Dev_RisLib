@@ -53,7 +53,7 @@ void UdpRxBinarySocket::initialize(Settings& aSettings)
 void UdpRxBinarySocket::configure()
 {
    // Configure the socket.
-   BaseClass::mLocal.setForAny(mSettings.mLocalIpPort);
+   BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
    BaseClass::doSocket();
    BaseClass::doBind();
 

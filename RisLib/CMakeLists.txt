@@ -11,12 +11,35 @@ my_add_pch (${project})
 
 target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 
+if (MYSTANDALONE)
+   return()
+endif()
+
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
-elseif(MYMODE STREQUAL "cpdev1" OR MYMODE STREQUAL "wsl" OR MYMODE STREQUAL "wsl-cpdev1")
+elseif(MYMODE STREQUAL "prime-x64")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
-   install(TARGETS ${project} DESTINATION "/opt/prime/lib")
+   install(TARGETS ${project} DESTINATION "/opt/prime/lib/x64")
+elseif(MYMODE STREQUAL "prime-arm7")
+   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
+   install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
+elseif(MYMODE STREQUAL "prime-arm8")
+   install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
+   install(TARGETS ${project} DESTINATION "/opt/prime/lib/arm8")
+endif()
+
+
+
+
+return()
+if (MSVC)
+   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
+   install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
+#elseif(MYMODE STREQUAL "cpdev1" OR MYMODE STREQUAL "wsl" OR MYMODE STREQUAL "wsl-cpdev1")
+elseif(MYMODE STREQUAL "cpdev1" OR MYMODE STREQUAL "wsl")
+   install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
+   install(TARGETS ${project} DESTINATION "/opt/prime/lib/x64")
 elseif(MYMODE STREQUAL "beagle")
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")

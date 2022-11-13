@@ -35,8 +35,9 @@ void UdpSettings::reset()
 
    mMyAppNumber = 0;
 
+   strcpy(mMyUdpAddress, "0.0.0.0");
    mMyUdpPort = 0;
-   mOtherUdpIPAddress[0]=0;
+   mOtherUdpAddress[0]=0;
    mOtherUdpPort = 0;
    mUdpWrapFlag = false;
    mUdpBroadcast = false;
@@ -58,8 +59,9 @@ void UdpSettings::show()
 
    printf("MyAppNumber             %16d\n", mMyAppNumber);
 
+   printf("MyUdpAddress            %16s\n", mMyUdpAddress);
    printf("MyUdpPort               %16d\n", mMyUdpPort);
-   printf("OtherUdpAddress         %16s\n", mOtherUdpIPAddress);
+   printf("OtherUdpAddress         %16s\n", mOtherUdpAddress);
    printf("OtherUdpPort            %16d\n", mOtherUdpPort);
    printf("UdpWrapflag             %16s\n", my_string_from_bool(mUdpWrapFlag));
    printf("UdpBroadcast            %16s\n", my_string_from_bool(mUdpBroadcast));
@@ -85,8 +87,9 @@ void UdpSettings::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("MyAppNumber"))         mMyAppNumber = aCmd->argInt(1);
 
+   if (aCmd->isCmd("MyUdpAddress"))        aCmd->copyArgString(1, mMyUdpAddress, cMaxStringSize);
    if (aCmd->isCmd("MyUdpPort"))           mMyUdpPort = aCmd->argInt(1);
-   if (aCmd->isCmd("OtherUdpAddress"))     aCmd->copyArgString(1, mOtherUdpIPAddress,cMaxStringSize);
+   if (aCmd->isCmd("OtherUdpAddress"))     aCmd->copyArgString(1, mOtherUdpAddress,cMaxStringSize);
    if (aCmd->isCmd("OtherUdpPort"))        mOtherUdpPort = aCmd->argInt(1);
    if (aCmd->isCmd("UdpWrapFlag"))         mUdpWrapFlag = aCmd->argBool(1);
    if (aCmd->isCmd("UdpBroadcast"))        mUdpBroadcast = aCmd->argBool(1);

@@ -29,7 +29,7 @@
          "cmakeCommandArgs": "",
          "buildCommandArgs": "",
          "ctestCommandArgs": "",
-         "inheritEnvironments": [ "msvc_x64_x64" ],
+         "inheritEnvironments": [ "msvc_ubu_ubu" ],
          "variables": [
             {
                "name": "MYMODE",
@@ -47,7 +47,7 @@
          "cmakeCommandArgs": "",
          "buildCommandArgs": "",
          "ctestCommandArgs": "",
-         "inheritEnvironments": [ "linux_x64" ],
+         "inheritEnvironments": [ "linux_ubu" ],
          "remoteMachineName": "${defaultRemoteMachineName}",
          "remoteCMakeListsRoot": "$HOME/.vs/${projectDirName}/src",
          "remoteBuildRoot": "$HOME/.vs/${projectDirName}/out/build/${name}",
@@ -74,7 +74,7 @@
          "cmakeCommandArgs": "",
          "buildCommandArgs": "",
          "ctestCommandArgs": "",
-         "inheritEnvironments": [ "linux_x64" ],
+         "inheritEnvironments": [ "linux_ubu" ],
          "wslPath": "${defaultWSLPath}",
          "variables": [
             {
@@ -94,7 +94,7 @@
          "cmakeCommandArgs": "",
          "buildCommandArgs": "",
          "ctestCommandArgs": "",
-         "inheritEnvironments": [ "linux_x64" ],
+         "inheritEnvironments": [ "linux_ubu" ],
          "wslPath": "${defaultWSLPath}",
          "variables": [
             {
@@ -135,7 +135,7 @@
          "cmakeCommandArgs": "",
          "buildCommandArgs": "",
          "ctestCommandArgs": "",
-         "inheritEnvironments": [ "linux_x64" ],
+         "inheritEnvironments": [ "linux_ubu" ],
          "wslPath": "${defaultWSLPath}",
          "variables": [
             {

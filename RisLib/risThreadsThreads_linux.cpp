@@ -288,7 +288,7 @@ void BaseThread::threadFunction()
 //******************************************************************************
 //******************************************************************************
 
-void BaseThread::threadExceptionFunction(char* aStr)
+void BaseThread::threadExceptionFunction(const char* aStr)
 {
    Prn::print(0,"BaseThread::threadExceptionFunction %s",aStr);
 }
@@ -482,7 +482,7 @@ void threadSleep(int aTicks)
 //******************************************************************************
 //******************************************************************************
 
-void halt(char* aPrintStr)
+void halt(const char* aPrintStr)
 {
    printf("HALTING %s\n", aPrintStr);
    exit(1);

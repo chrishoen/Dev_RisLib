@@ -194,7 +194,7 @@ public:
 
    // This is called if there is an exception thrown in the above threadFunction.
    // Exceptions should throw a char*.
-   virtual void threadExceptionFunction(char* aStr);
+   virtual void threadExceptionFunction(const char* aStr);
 
    // This virtual is overloaded by inheritors to shutdown the thread.
    virtual void shutdownThread();
@@ -258,7 +258,7 @@ int countsPerOneSecond();
 void threadSleep(int aTicks);
 
 // Halt the program.
-void halt(char* aPrintStr=0);
+void halt(const char* aPrintStr=0);
 
 //******************************************************************************
 //******************************************************************************

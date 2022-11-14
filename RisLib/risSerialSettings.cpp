@@ -66,7 +66,7 @@ int int_from_string_SerialSettingsTermMode(const char* aTermMode)
    return cSerialTermMode_NULL;
 }
 
-char* string_from_int_SerialSettingsTermMode(int aTermMode)
+const char* string_from_int_SerialSettingsTermMode(int aTermMode)
 {
    switch (aTermMode)
    {
@@ -82,13 +82,5 @@ char* string_from_int_SerialSettingsTermMode(int aTermMode)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#if 0
-cSerialTermMode_Zero
-cSerialTermMode_LF
-cSerialTermMode_CR
-cSerialTermMode_CRLF
-#endif
-
-
 }//namespace
 

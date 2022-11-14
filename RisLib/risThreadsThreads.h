@@ -243,7 +243,7 @@ public:
    // Methods.
 
    // Helpers.
-   char* asStringThreadRunState();
+   const char* asStringThreadRunState();
 };
 
 //******************************************************************************

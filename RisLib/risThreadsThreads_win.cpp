@@ -363,7 +363,7 @@ void BaseThread::showThreadInfo()
 //******************************************************************************
 //******************************************************************************
 
-char* BaseThread::asStringThreadRunState()
+const char* BaseThread::asStringThreadRunState()
 {
    switch (mThreadRunState)
    {

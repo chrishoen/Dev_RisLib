@@ -5,13 +5,14 @@ project(${project} CXX)
 my_find_src_files (src_files ${project})
 my_find_inc_files (inc_files)
 add_library (${project} STATIC ${src_files})
-my_add_compile_options (${project})
-
-my_add_pch (${project})
+if (PROJECT_IS_TOP_LEVEL)
+   my_add_compile_options (${project})
+   my_add_pch (${project})
+endif()
 
 target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 
-if (MYSTANDALONE)
+if (NOT PROJECT_IS_TOP_LEVEL)
    return()
 endif()
 
@@ -27,27 +28,5 @@ elseif(MYMODE STREQUAL "prime-arm7")
 elseif(MYMODE STREQUAL "prime-arm8")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS ${project} DESTINATION "/opt/prime/lib/arm8")
-endif()
-
-
-
-
-return()
-if (MSVC)
-   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
-   install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
-#elseif(MYMODE STREQUAL "cpdev1" OR MYMODE STREQUAL "wsl" OR MYMODE STREQUAL "wsl-cpdev1")
-elseif(MYMODE STREQUAL "cpdev1" OR MYMODE STREQUAL "wsl")
-   install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
-   install(TARGETS ${project} DESTINATION "/opt/prime/lib/ubu")
-elseif(MYMODE STREQUAL "beagle")
-   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
-   install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
-elseif(MYMODE STREQUAL "steno-arm")
-   install(FILES ${inc_files} DESTINATION "target/rislib/include")
-   install(TARGETS ${project} DESTINATION "target/rislib/lib/arm")
-elseif(MYMODE STREQUAL "steno-wsl")
-   install(FILES ${inc_files} DESTINATION "target/rislib/include")
-   install(TARGETS RisLib DESTINATION "target/rislib/lib/x86")
 endif()
 

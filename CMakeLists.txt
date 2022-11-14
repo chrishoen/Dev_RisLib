@@ -1,12 +1,16 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-if (RISLIB_STANDALONE)
-   set(MYSTANDALONE true)
-endif()
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 set(MY_MACRO_DIR "${CMAKE_CURRENT_SOURCE_DIR}/zzzMacros")
 set(CMAKE_USER_MAKE_RULES_OVERRIDE "${MY_MACRO_DIR}/MyOverrides.cmake")
+
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.21")
+  # PROJECT_IS_TOP_LEVEL is defined automatically
+elseif (CMAKE_CURRENT_BINARY_DIR STREQUAL CMAKE_BINARY_DIR)
+  set(PROJECT_IS_TOP_LEVEL TRUE)
+else()
+  set(PROJECT_IS_TOP_LEVEL FALSE)
+endif()
 
 include("${MY_MACRO_DIR}/MyCodeMacros.cmake")
 include("${MY_MACRO_DIR}/MyLocalImports.cmake")
@@ -16,7 +20,7 @@ include("${MY_MACRO_DIR}/MySpecial.cmake")
 project ("Dev_RisLib")
 my_print_cmake_vars()
 
-if (MYSTANDALONE)
+if (NOT PROJECT_IS_TOP_LEVEL)
    add_subdirectory ("RisLib")
    return ()
 endif()

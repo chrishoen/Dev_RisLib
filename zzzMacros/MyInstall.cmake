@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.10)
 
-if (MYSTANDALONE)
+if (NOT PROJECT_IS_TOP_LEVEL)
    return()
 endif()
 

@@ -278,10 +278,6 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_pch _target)
-   if (MYSTANDALONE)
-      return()
-   endif()
-
    message(STATUS "my_add_pch new******************************** " ${_target})
    target_precompile_headers(${_target} PRIVATE "stdafx.h")
 endfunction()

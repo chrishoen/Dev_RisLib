@@ -4,7 +4,7 @@
 
 function(my_print_cmake_vars)
 
-   message(STATUS "my_special1***********************************************************BEGIN")
+   message(STATUS "my_special1***********************************************************BEGIN RISLIB")
    message(STATUS "CMAKE_SYSTEM_PROCESSOR   " ${CMAKE_SYSTEM_PROCESSOR})
    message(STATUS "CMAKE_CXX_COMPILER_ID    " ${CMAKE_CXX_COMPILER_ID})
    message(STATUS "CMAKE_C_COMPILER         " ${CMAKE_C_COMPILER})
@@ -27,8 +27,8 @@ function(my_print_cmake_vars)
    message(STATUS "PROJECT_SOURCE_DIR       " ${PROJECT_SOURCE_DIR})
    message(STATUS "THIRD_PARTY_LIB_DIR      " ${THIRD_PARTY_LIB_DIR})
    message(STATUS "MYMODE                   " ${MYMODE})
-   message(STATUS "MYSTANDALONE             " ${MYSTANDALONE})
-   message(STATUS "my_special1***********************************************************END")
+   message(STATUS "PROJECT_IS_TOP_LEVEL     " ${PROJECT_IS_TOP_LEVEL})
+   message(STATUS "my_special1***********************************************************END RISLIB")
 endfunction()
 
 #*******************************************************************************

@@ -34,8 +34,8 @@
          }
       },
       {
-         "name": "prime-x64",
-         "displayName": "prime-x64",
+         "name": "prime-ubu",
+         "displayName": "prime-ubu",
          "description": "Target ubuntu, install to /opt/prime.",
          "generator": "Ninja",
          "binaryDir": "${sourceDir}/out/build/${presetName}",
@@ -44,7 +44,7 @@
             "CMAKE_BUILD_TYPE": "Release",
             "MYMODE": {
                "type": "STRING",
-               "value": "prime-x64"
+               "value": "prime-ubu"
             }
 
          },

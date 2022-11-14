@@ -163,7 +163,7 @@ windows -- builds on windows for a windows target, tested on intel nuc
 This uses CMakePresets.json, cmake 3.18 is required.
 
 prime-windows  -- Target windows, install to c:/aaa_prime/RisLib
-prime-x64      -- Target ubuntu, install to /opt/prime
+prime-ubu      -- Target ubuntu, install to /opt/prime
 prime-arm7     -- Target debian arm7 for beaglebone or rpi, install to /opt/prime
 prime-arm8     -- Target varisite mini dart board, install to /opt/prime
 ```
@@ -187,7 +187,7 @@ MySpecial.cmake              -- special debuf stuff
 
 ## Building from the command line 
 ``` markdown
-Here's an example for cleaning, building, and installing. It uses the cmake preset prime-x64.
+Here's an example for cleaning, building, and installing. It uses the cmake preset prime-ubu.
 
 git clone git@github.com:chrishoen/Dev_RisLib.git
 sudo chmod 777 Dev
@@ -195,10 +195,10 @@ mv Dev_RisLib rislib
 cd rislib
 git checkout develop
 
-cmake --preset prime-x64
-cmake --build out/build/prime-x64 --target clean
-cmake --build out/build/prime-x64 -v -j 8
-cmake --install out/build/prime-x64
+cmake --preset prime-ubu
+cmake --build out/build/prime-ubu --target clean
+cmake --build out/build/prime-ubu -v -j 8
+cmake --install out/build/prime-ubu
 ```
 
 ## Note: Installing cmake 

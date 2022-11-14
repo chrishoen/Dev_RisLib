@@ -6,7 +6,7 @@ endif()
 
 if (MSVC)
    install(TARGETS ${project} DESTINATION "C:/aaa_prime/RisLib")
-elseif(MYMODE STREQUAL "prime-x64")
+elseif(MYMODE STREQUAL "prime-ubu")
    install(TARGETS ${project} DESTINATION "/opt/prime/bin")
 elseif (MYMODE STREQUAL "prime-arm7")
    install(CODE "execute_process(COMMAND_ECHO STDOUT

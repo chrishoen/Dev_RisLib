@@ -39,7 +39,8 @@ endfunction()
 
 function(my_add_compile_options _target)
 
-   if (MYSTANDALONE)
+   if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      target_compile_options(${_target} PRIVATE "-w")
       return()
    endif()
 
@@ -95,7 +96,8 @@ endfunction()
 
 function(my_add_compile_options_so _target)
 
-   if (MYSTANDALONE)
+   if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      target_compile_options(${_target} PRIVATE "-w")
       return()
    endif()
 

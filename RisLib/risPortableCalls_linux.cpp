@@ -243,7 +243,7 @@ void portableChdirUpFromBin()
    strncat(tString, "..", 998);
    tString[998] = 0;
    portableChdir(tString);
-   delete tString;
+   delete[] tString;
 }
 
 //******************************************************************************
@@ -258,7 +258,7 @@ void portableChdirToBin()
    strncpy(tString, portableGetBinDir(), 999);
    tString[999] = 0;
    portableChdir(tString);
-   delete tString;
+   delete[] tString;
 }
 
 //******************************************************************************

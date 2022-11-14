@@ -35,7 +35,7 @@ void copyFile(const char* aDestinFilePath, const char* aSourceFilePath)
    char* tString = new char[2000];
    sprintf(tString, "cp %s %s", aSourceFilePath, aDestinFilePath);
    Ris::doSystemCommand(tString);
-   delete tString;
+   delete[] tString;
 }
 
 //******************************************************************************
@@ -48,7 +48,7 @@ void moveFile(const char* aDestinFilePath, const char* aSourceFilePath)
    char* tString = new char[2000];
    sprintf(tString, "mv %s %s", aSourceFilePath, aDestinFilePath);
    Ris::doSystemCommand(tString);
-   delete tString;
+   delete[] tString;
 }
 
 //******************************************************************************
@@ -61,7 +61,7 @@ void deleteFile(const char* aFilePath)
    char* tString = new char[2000];
    sprintf(tString, "rm %s", aFilePath);
    Ris::doSystemCommand(tString);
-   delete tString;
+   delete[] tString;
 }
 
 //******************************************************************************
@@ -76,7 +76,7 @@ void touchFile(const char* aFilePath)
    Ris::doSystemCommand(tString);
 // sprintf(tString, "chmod 666 %s", aFilePath);
 // Ris::doSystemCommand(tString);
-   delete tString;
+   delete[] tString;
 }
 
 //****************************************************************************

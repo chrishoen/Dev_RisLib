@@ -114,7 +114,7 @@ bool SharedMemory::initialize(const char* aName, int aNumBytes, int aPrintFilter
 
 // Prn::print(mPF, "ftok key %s %d", tFilePath, mSpecific->mKey);
 
-   delete tFilePath;
+   delete[] tFilePath;
 
    if (mSpecific->mKey == -1)
    {

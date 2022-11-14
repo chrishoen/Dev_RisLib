@@ -210,8 +210,8 @@ void write2 (int aLogNum, const char* aFormat, ...)
    //-----------------------------------------------------
    // done
 
-   delete tString1;
-   delete tString2;
+   delete[] tString1;
+   delete[] tString2;
 }
 
 //******************************************************************************
@@ -265,8 +265,8 @@ void write3(int aLogNum, const char* aFormat, ...)
    //-----------------------------------------------------
    // done
 
-   delete tString1;
-   delete tString2;
+   delete[] tString1;
+   delete[] tString2;
 }
 
 //******************************************************************************

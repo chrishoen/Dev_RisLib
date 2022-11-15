@@ -39,12 +39,6 @@ endfunction()
 
 function(my_add_compile_options _target)
 
-   if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-      target_compile_options(${_target} PRIVATE "-w")
-      return()
-   endif()
-
-
    if(MSVC)
       target_compile_options(${_target} PRIVATE "/WX")
       target_compile_options(${_target} PRIVATE "/wd4996")
@@ -65,7 +59,8 @@ function(my_add_compile_options _target)
       target_compile_options(${_target} PRIVATE "/Zc:inline")
 
       target_compile_options(${_target} PRIVATE "/D_MBCS")
-   else()
+
+   elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
       target_compile_options(${_target} PRIVATE "-std=c++11")
       target_compile_options(${_target} PRIVATE "-fexceptions")
       target_compile_options(${_target} PRIVATE "-O3")
@@ -86,6 +81,10 @@ function(my_add_compile_options _target)
 #     target_compile_options(${_target} PRIVATE "-Wno-pragma-once-outside-header")
 
       target_compile_definitions(${_target} PRIVATE "-DNDEBUG")
+
+   elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      target_compile_options(${_target} PRIVATE "-w")
+      return()
    endif()
 
 endfunction()
@@ -102,8 +101,6 @@ function(my_add_compile_options_so _target)
    endif()
 
    message(STATUS "my_add_compile_options************************ " ${_target})
-   #message(STATUS "CMAKE_CXX_FLAGS************************ " ${CMAKE_CXX_FLAGS})
-   #message(STATUS "CMAKE_CXX_FLAGS_RELEASE**************** " ${CMAKE_CXX_FLAGS_RELEASE})
 
    if(MSVC)
       target_compile_options(${_target} PRIVATE "/WX")
@@ -125,7 +122,8 @@ function(my_add_compile_options_so _target)
       target_compile_options(${_target} PRIVATE "/Zc:inline")
 
       target_compile_options(${_target} PRIVATE "/D_MBCS")
-   else()
+
+   elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
       target_compile_options(${_target} PRIVATE "-std=c++11")
       target_compile_options(${_target} PRIVATE "-fexceptions")
       target_compile_options(${_target} PRIVATE "-O3")
@@ -146,6 +144,10 @@ function(my_add_compile_options_so _target)
 #     target_compile_options(${_target} PRIVATE "-Wno-pragma-once-outside-header")
 
       target_compile_definitions(${_target} PRIVATE "-DNDEBUG")
+
+   elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      target_compile_options(${_target} PRIVATE "-w")
+      return()
    endif()
 
 endfunction()

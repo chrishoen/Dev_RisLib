@@ -1,9 +1,5 @@
 ﻿cmake_minimum_required(VERSION 3.10)
 
-if (NOT PROJECT_IS_TOP_LEVEL)
-   return()
-endif()
-
 if (MSVC)
    install(TARGETS ${project} DESTINATION "C:/aaa_prime/RisLib")
 elseif(MYMODE STREQUAL "prime-ubu")

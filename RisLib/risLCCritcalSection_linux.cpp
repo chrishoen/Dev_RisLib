@@ -80,8 +80,6 @@ void destroyCriticalSection(void* aCriticalSection)
 
    ret = pthread_mutex_destroy((pthread_mutex_t*)aCriticalSection);
    chkerror(ret, "pthread_mutex_destroy");
-
-   delete aCriticalSection;
 }
 
 //******************************************************************************

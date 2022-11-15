@@ -58,7 +58,6 @@ void leaveCriticalSection(void* aCriticalSection)
 void destroyCriticalSection(void* aCriticalSection)
 {
    DeleteCriticalSection((CRITICAL_SECTION*)aCriticalSection);
-   delete aCriticalSection;
 }
 
 //******************************************************************************

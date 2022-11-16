@@ -170,7 +170,7 @@ bool SerialPort::doOpen()
 
    if (tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions) < 0)
    {
-      printf("serial_open_error_baud\n", errno);
+      printf("serial_open_error_baud\n");
       mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doOpen ERROR baud");
       return false;

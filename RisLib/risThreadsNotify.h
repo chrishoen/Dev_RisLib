@@ -32,7 +32,8 @@ public:
    // Constants.
 
    // Maximum string size.
-   static const int cMaxStringSize = 100;
+   static const int cMaxLabelStringSize = 100;
+   static const int cMaxExceptionStringSize = 200;
 
    // Maximum number of bits.
    static const int cMaxBits = 32;
@@ -48,7 +49,7 @@ public:
    // Members.
 
    // Label string.
-   char mLabel[cMaxStringSize + 2];
+   char mLabel[cMaxLabelStringSize + 2];
 
    // Array of mask bits.
    bool mMask[cMaxBits];
@@ -69,7 +70,7 @@ public:
    int mExceptionCode;
 
    // Exception description string.
-   char mException[cMaxStringSize + 2];
+   char mException[cMaxExceptionStringSize + 2];
 
    // If this true then notification operations are disabled.
    bool mLock;

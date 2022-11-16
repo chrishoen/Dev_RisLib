@@ -39,6 +39,8 @@ endfunction()
 
 function(my_add_compile_options _target)
 
+   return()
+
    if(MSVC)
       target_compile_options(${_target} PRIVATE "/WX")
       target_compile_options(${_target} PRIVATE "/wd4996")
@@ -66,11 +68,6 @@ function(my_add_compile_options _target)
       target_compile_options(${_target} PRIVATE "-O3")
       target_compile_options(${_target} PRIVATE "-fthreadsafe-statics")
       target_compile_options(${_target} PRIVATE "-frtti")
-#     target_compile_options(${_target} PRIVATE "-fomit-frame-pointer")
-
-#     target_compile_options(${_target} PRIVATE "-w")
-#     target_compile_options(${_target} PRIVATE "-Werror")
-#     target_compile_options(${_target} PRIVATE "-Wfatal-errors")
       target_compile_options(${_target} PRIVATE "-Wno-unused-result")
       target_compile_options(${_target} PRIVATE "-Wno-stringop-overflow")
       target_compile_options(${_target} PRIVATE "-Wno-deprecated-declarations")
@@ -78,13 +75,10 @@ function(my_add_compile_options _target)
       target_compile_options(${_target} PRIVATE "-Wno-format")
       target_compile_options(${_target} PRIVATE "-Wno-write-strings")
       target_compile_options(${_target} PRIVATE "-Wno-psabi")
-#     target_compile_options(${_target} PRIVATE "-Wno-pragma-once-outside-header")
-
       target_compile_definitions(${_target} PRIVATE "-DNDEBUG")
 
    elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
       target_compile_options(${_target} PRIVATE "-w")
-      return()
    endif()
 
 endfunction()
@@ -94,11 +88,6 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_compile_options_so _target)
-
-   if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-      target_compile_options(${_target} PRIVATE "-w")
-      return()
-   endif()
 
    message(STATUS "my_add_compile_options************************ " ${_target})
 
@@ -129,25 +118,17 @@ function(my_add_compile_options_so _target)
       target_compile_options(${_target} PRIVATE "-O3")
       target_compile_options(${_target} PRIVATE "-fthreadsafe-statics")
       target_compile_options(${_target} PRIVATE "-frtti")
-#     target_compile_options(${_target} PRIVATE "-fomit-frame-pointer")
       target_compile_options(${_target} PRIVATE "-fPIC")
-
-#     target_compile_options(${_target} PRIVATE "-w")
-#     target_compile_options(${_target} PRIVATE "-Werror")
-#     target_compile_options(${_target} PRIVATE "-Wfatal-errors")
       target_compile_options(${_target} PRIVATE "-Wno-stringop-overflow")
       target_compile_options(${_target} PRIVATE "-Wno-deprecated-declarations")
       target_compile_options(${_target} PRIVATE "-Wno-delete-incomplete")
       target_compile_options(${_target} PRIVATE "-Wno-format")
       target_compile_options(${_target} PRIVATE "-Wno-write-strings")
       target_compile_options(${_target} PRIVATE "-Wno-psabi")
-#     target_compile_options(${_target} PRIVATE "-Wno-pragma-once-outside-header")
-
       target_compile_definitions(${_target} PRIVATE "-DNDEBUG")
 
    elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
       target_compile_options(${_target} PRIVATE "-w")
-      return()
    endif()
 
 endfunction()

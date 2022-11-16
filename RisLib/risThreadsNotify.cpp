@@ -95,7 +95,7 @@ void Notify::setMaskOne(const char* aLabel,int aBitNum)
    reset();
 
    // Set the label.
-   my_strncpy(mLabel, aLabel, cMaxStringSize);
+   my_strncpy(mLabel, aLabel, cMaxLabelStringSize);
 
    // Set the mask bit.
    mMask[aBitNum] = true;
@@ -153,7 +153,7 @@ void Notify::setMaskAny(const char* aLabel,int aNumArgs, ...)
    reset();
 
    // Set the label.
-   my_strncpy(mLabel, aLabel, cMaxStringSize);
+   my_strncpy(mLabel, aLabel, cMaxLabelStringSize);
 
    // Set the mask bit from variable arguments.
    va_list valist;
@@ -218,7 +218,7 @@ void Notify::setMaskAll(const char* aLabel,int aNumArgs, ...)
    reset();
 
    // Set the label.
-   my_strncpy(mLabel, aLabel, cMaxStringSize);
+   my_strncpy(mLabel, aLabel, cMaxLabelStringSize);
 
    // Set the mask bit from variable arguments.
    va_list valist;
@@ -313,7 +313,7 @@ void Notify::testException()
    {
       clearFlags();
       mExceptionCode = cAbortException;
-      sprintf(mException, "aborted %s %d", mLabel, mErrorCode);
+      snprintf(mException, cMaxExceptionStringSize, "aborted %s %d", mLabel, mErrorCode);
       throw cAbortException;
    }
 
@@ -331,7 +331,7 @@ void Notify::testException()
    {
       clearFlags();
       mExceptionCode = cErrorException;
-      sprintf(mException, "error %s %d", mLabel, mErrorCode);
+      snprintf(mException, cMaxExceptionStringSize, "aborted %s %d", mLabel, mErrorCode);
       throw cErrorException;
    }
 }
@@ -372,7 +372,7 @@ void Notify::waitForTimer(int aTimeout)
    reset();
 
    // Set the label.
-   my_strncpy(mLabel, "waitForTimer", cMaxStringSize);
+   my_strncpy(mLabel, "waitForTimer", cMaxLabelStringSize);
 
    // Wait for the event. Only an abort should signal the event. 
    mSem.get(aTimeout);

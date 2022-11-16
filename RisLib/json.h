@@ -322,6 +322,8 @@ msvc_pre1900_c99_snprintf(char* outBuf, size_t size, const char* format, ...);
 #define JSONCPP_OP_EXPLICIT
 #endif
 
+//// bandaid.
+#if 0
 #ifdef __clang__
 #if __has_extension(attribute_deprecated_with_message)
 #define JSONCPP_DEPRECATED(message) __attribute__((deprecated(message)))
@@ -339,6 +341,10 @@ msvc_pre1900_c99_snprintf(char* outBuf, size_t size, const char* format, ...);
 #if !defined(JSONCPP_DEPRECATED)
 #define JSONCPP_DEPRECATED(message)
 #endif // if !defined(JSONCPP_DEPRECATED)
+#endif
+
+//// bandaid.
+#define JSONCPP_DEPRECATED(message)
 
 #if __GNUC__ >= 6
 #define JSON_USE_INT64_DOUBLE_CONVERSION 1

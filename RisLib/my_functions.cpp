@@ -192,6 +192,7 @@ char* my_string_from_double(char* aString, const char* aFormat, double aValue)
 
 double my_time_from_string(char* aString)
 {
+#if 0
    int tLength = (int)strlen(aString);
    char tString[40];
    double tTime=0.0;
@@ -220,6 +221,8 @@ double my_time_from_string(char* aString)
       break;
    }
    return tTime;
+#endif
+   return 0;
 }
 
 char*  my_string_from_time(double aTime, char* aBuffer)

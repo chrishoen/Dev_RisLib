@@ -1,24 +1,46 @@
-SET (CMAKE_CXX_STANDARD 17)
+SET (CMAKE_CXX_STANDARD 20)
 SET (CMAKE_CXX_STANDARD_REQUIRED on)
-
-#message(FATAL_ERROR "############# CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR} #############")
 
 set (CMAKE_SYSTEM_NAME Linux)
 set (CMAKE_SYSTEM_PROCESSOR aarch64)
 
+set (SDK_DIR "/opt/usr_data/sdk")
 set (SDK_DIR $ENV{SDK_DIR})
 set (CROSS_COMPILER_PREFIX "${SDK_DIR}/sysroots/x86_64-fslcsdk-linux/usr/bin/aarch64-fslc-linux/aarch64-fslc-linux-")
 set (CMAKE_SYSROOT "${SDK_DIR}/sysroots/aarch64-fslc-linux/" CACHE STRING "")
 
 set (CMAKE_C_COMPILER "${CROSS_COMPILER_PREFIX}gcc" CACHE FILEPATH "")
-set (CMAKE_C_FLAGS 
-"-O1 -DDEBUG -w -fno-strict-aliasing -pipe -g -feliminate-unused-debug-types -frecord-gcc-switches -fno-omit-frame-pointer -mcpu=cortex-a53+crc+crypto -fstack-protector-strong  -D_FORTIFY_SOURCE=2 --sysroot=${CMAKE_SYSROOT}"
- CACHE STRING "")
+set (CMAKE_C_FLAGS "\
+ -O1 \
+ -DDEBUG \
+ -w \
+ -fno-strict-aliasing \
+ -pipe -g -feliminate-unused-debug-types \
+ -fno-omit-frame-pointer \
+ -mcpu=cortex-a53+crc+crypto \
+ -D_FORTIFY_SOURCE=2 \
+ --sysroot=${CMAKE_SYSROOT} \
+ " CACHE STRING "")
 
 set (CMAKE_CXX_COMPILER "${CROSS_COMPILER_PREFIX}g++" CACHE FILEPATH "")
-set (CMAKE_CXX_FLAGS 
-"-O3 -DNDEBUG -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Wno-unused-variable -Wno-unused-function -fno-strict-aliasing -pipe -g -feliminate-unused-debug-types -frecord-gcc-switches -fno-omit-frame-pointer -mcpu=cortex-a53+crc+crypto -fstack-protector-strong  -D_FORTIFY_SOURCE=2 --sysroot=${CMAKE_SYSROOT}"
- CACHE STRING "")
+set (CMAKE_CXX_FLAGS "\
+ -O3 \
+ -DNDEBUG \
+ -Wall \
+ -Wextra \
+ -Wno-unused-parameter \
+ -Wno-unused-result \
+ -Wno-unused-variable \
+ -Wno-unused-function \
+ -Wno-missing-field-initializers \
+ -Wno-delete-incomplete \
+ -fno-strict-aliasing \
+ -pipe -g -feliminate-unused-debug-types \
+ -fno-omit-frame-pointer \
+ -mcpu=cortex-a53+crc+crypto \
+ -D_FORTIFY_SOURCE=2 \
+ --sysroot=${CMAKE_SYSROOT} \
+ " CACHE STRING "")
 
 
 SET(CMAKE_AR ${CROSS_COMPILER_PREFIX}ar)

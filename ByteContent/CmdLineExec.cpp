@@ -184,5 +184,41 @@ void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
 {
    Ris::ByteBuffer tBuffer(20000);
+
+   char tBytes1[8];
+   char tBytes2[8];
+   char tBytes3[8];
+   char tBytes4[8];
+   memset(tBytes1, 0x21, 8);
+   memset(tBytes2, 0x22, 8);
+   memset(tBytes3, 0x00, 8);
+   memset(tBytes4, 0x00, 8);
+
+   Ris::ByteBlob<1000> tInput1;
+   Ris::ByteBlob<1000> tOutput1;
+
+   tInput1.putBytes(tBytes1, 8);
+   tInput1.putBytes(tBytes2, 8);
+   printf("tInput1.mCopySize %d\n", tInput1.mCopySize);
+
+   tBuffer.setCopyTo();
+   tBuffer.copy(&tInput1);
+   tBuffer.rewind();
+   tBuffer.setCopyFrom();
+   tBuffer.copy(&tOutput1);
+   printf("tOutput1.mCopySize %d\n", tInput1.mCopySize);
+
+   tInput1.getBytes(tBytes3, 8);
+   tInput1.getBytes(tBytes4, 8);
+
+   printf("tBytes3 ");
+   for (int i = 0; i < 8; i++) printf("%02x ", (unsigned)tBytes3[i]);
+   printf("\n");
+   printf("tBytes4 ");
+   for (int i = 0; i < 8; i++) printf("%02x ", (unsigned)tBytes4[i]);
+   printf("\n");
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************

@@ -54,6 +54,9 @@ public:
    // Maximum copy size.
    int mMaxCopySize;
 
+   // Index for get byte operations.
+   int mGetIndex;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -65,6 +68,7 @@ public:
       mBytes = &mMemory[0];
       mCopySize = 0;
       mMaxCopySize = AllocateSize;
+      mGetIndex = 0;
    }
 
    ~ByteBlob()
@@ -96,7 +100,7 @@ public:
       // Guard.
       if (mCopySize + aSize > mMaxCopySize) return false;
 
-      // Add some bytes.
+      // Copy some bytes from the function argument byte pointer.
       char* tBytes = (char*)aBytes;
       for (int i = 0; i < aSize; i++)
       {
@@ -105,6 +109,25 @@ public:
 
       // Increment the copy size.
       mCopySize += aSize;
+      return true;
+   }
+
+   // Get some bytes from the allocated memory array at the current get
+   // index. Increment the get index. Return true if successful.
+   bool getBytes(void* aBytes, int aSize)
+   {
+      // Guard.
+      if (mGetIndex + aSize > mCopySize) return false;
+
+      // Copy some bytes to the function argument byte pointer.
+      char* tBytes = (char*)aBytes;
+      for (int i = 0; i < aSize; i++)
+      {
+         tBytes[i] = mBytes[mGetIndex + i];
+      }
+
+      // Increment the get index.
+      mGetIndex += aSize;
       return true;
    }
 };

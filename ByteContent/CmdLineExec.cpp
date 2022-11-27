@@ -198,7 +198,7 @@ void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
    Ris::ByteBlob<1000> tOutput1;
 
    tInput1.putBytes(tBytes1, 8);
-   tInput1.putBytes(tBytes2, 8);
+// tInput1.putBytes(tBytes2, 8);
    printf("tInput1.mCopySize %d\n", tInput1.mCopySize);
 
    tBuffer.setCopyTo();
@@ -208,8 +208,8 @@ void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
    tBuffer.copy(&tOutput1);
    printf("tOutput1.mCopySize %d\n", tInput1.mCopySize);
 
-   tInput1.getBytes(tBytes3, 8);
-   tInput1.getBytes(tBytes4, 8);
+   if (!tInput1.getBytes(tBytes3, 8)) printf("tBytes3 empty\n");
+   if (!tInput1.getBytes(tBytes4, 8)) printf("tBytes4 empty\n");
 
    printf("tBytes3 ");
    for (int i = 0; i < 8; i++) printf("%02x ", (unsigned)tBytes3[i]);

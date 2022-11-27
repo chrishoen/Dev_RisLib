@@ -223,7 +223,7 @@ bool SerialPort::doOpen()
    mValidFlag = true;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
-   printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
+   printf("SerialPort open    PASS          %s\n", mSettings.mPortDevice);
    Trc::write(mTI, 0, "SerialPort::doOpen done");
    return true;
 }

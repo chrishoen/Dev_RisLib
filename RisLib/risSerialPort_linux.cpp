@@ -205,7 +205,7 @@ bool SerialPort::doOpen()
    // Done.
 
    // Set flags.
-   printf("SerialPort open PASS  %s\n", mSettings.mPortDevice);
+   printf("SerialPort open    PASS          %s\n", mSettings.mPortDevice);
    mOpenFlag = true;
    mValidFlag = true;
    mOpenErrorShowCount = 0;

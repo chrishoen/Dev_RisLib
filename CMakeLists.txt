@@ -12,11 +12,11 @@ project ("Dev_RisLib")
 my_print_cmake_vars()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("ByteContent")
+add_subdirectory ("Test")
 return()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Test")
+add_subdirectory ("ByteContent")
 return()
 
 add_subdirectory ("RisLib")

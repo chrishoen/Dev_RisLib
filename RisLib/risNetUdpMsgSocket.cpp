@@ -84,13 +84,13 @@ void UdpMsgSocket::configure()
    {
       if (!mSettings.mUdpWrapFlag)
       {
-         Trc::write(mTI, 0, "UdpMsgSocket     PASS Rx %16s : %5d Tx %16s : %5d",
+         Trc::write(mTI, 0, "UdpMsgSocket       PASS %16s : %5d Tx %16s : %5d",
             BaseClass::mLocal.mString,
             BaseClass::mLocal.mPort,
             BaseClass::mRemote.mString,
             BaseClass::mRemote.mPort);
 
-         printf("UdpMsgSocket     PASS Rx %16s : %5d Tx %16s : %5d\n",
+         printf("UdpMsgSocket       PASS %16s : %5d Tx %16s : %5d\n",
             BaseClass::mLocal.mString,
             BaseClass::mLocal.mPort,
             BaseClass::mRemote.mString,
@@ -98,11 +98,11 @@ void UdpMsgSocket::configure()
       }
       else
       {
-         Trc::write(mTI, 0, "UdpMsgSocket     PASS Rx %16s : %5d Tx WRAP",
+         Trc::write(mTI, 0, "UdpMsgSocket       PASS %16s : %5d Tx WRAP",
             BaseClass::mLocal.mString,
             BaseClass::mLocal.mPort);
 
-         printf("UdpMsgSocket     PASS Rx %16s : %5d Tx WRAP\n",
+         printf("UdpMsgSocket       PASS %16s : %5d Tx WRAP\n",
             BaseClass::mLocal.mString,
             BaseClass::mLocal.mPort);
       }
@@ -111,7 +111,7 @@ void UdpMsgSocket::configure()
    {
       if (!mSettings.mUdpWrapFlag)
       {
-         Trc::write(mTI, 0, "UdpMsgSocket     FAIL Rx %16s : %5d Tx %16s : %5d  $ %d %d",
+         Trc::write(mTI, 0, "UdpMsgSocket       FAIL %16s : %5d Tx %16s : %5d  $ %d %d",
             BaseClass::mLocal.mString,
             BaseClass::mLocal.mPort,
             BaseClass::mRemote.mString,
@@ -119,7 +119,7 @@ void UdpMsgSocket::configure()
             BaseClass::mStatus,
             BaseClass::mError);
 
-         printf("UdpMsgSocket     FAIL Rx %16s : %5d Tx %16s : %5d  $ %d %d\n",
+         printf("UdpMsgSocket       FAIL %16s : %5d Tx %16s : %5d  $ %d %d\n",
             BaseClass::mLocal.mString,
             BaseClass::mLocal.mPort,
             BaseClass::mRemote.mString,
@@ -129,13 +129,13 @@ void UdpMsgSocket::configure()
       }
       else
       {
-         Trc::write(mTI, 0, "UdpMsgSocket     FAIL Rx %16s : %5d Tx WRAP  $ %d %d",
+         Trc::write(mTI, 0, "UdpMsgSocket       FAIL %16s : %5d Tx WRAP  $ %d %d",
             BaseClass::mLocal.mString,
             BaseClass::mLocal.mPort,
             BaseClass::mStatus,
             BaseClass::mError);
 
-         printf("UdpMsgSocket     FAIL Rx %16s : %5d Tx WRAP  $ %d %d\n",
+         printf("UdpMsgSocket       FAIL %16s : %5d Tx WRAP  $ %d %d\n",
             BaseClass::mLocal.mString,
             BaseClass::mLocal.mPort,
             BaseClass::mStatus,

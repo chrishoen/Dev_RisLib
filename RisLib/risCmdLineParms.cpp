@@ -120,11 +120,11 @@ bool BaseCmdLineParms::isTargetSection(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Alias for readSection(0);
+// Alias for readSection("default");
 
 bool BaseCmdLineParms::readFile()
 {
-   return readSection(0);
+   return readSection("default");
 }
 
 //******************************************************************************

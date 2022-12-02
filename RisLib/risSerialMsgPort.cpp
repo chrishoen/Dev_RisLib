@@ -291,7 +291,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    if (!BaseClass::mValidFlag)
    {
       Trc::write(mTI, 0, "SerialMsgPort::doSendMsg INVALID");
-      mMsgMonkey->destroyMsg(aMsg);
+      delete aMsg;
       return false;
    }
 
@@ -311,7 +311,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    mMsgMonkey->mTxMsgMetrics->update(aMsg, tLength);
 
    // Delete the message.
-   mMsgMonkey->destroyMsg(aMsg);
+   delete aMsg;
 
    // Test for errors.
    if (tRet < 0)

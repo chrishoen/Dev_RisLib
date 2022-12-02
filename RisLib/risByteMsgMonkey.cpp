@@ -17,13 +17,8 @@ namespace Ris
 //******************************************************************************
 // Constructor.
 
-void defaultDestroy(void* aMsg)
-{
-   delete aMsg;
-}
 BaseMsgMonkey::BaseMsgMonkey(
-   CreateMsgFunctionT aCreate,
-   DestroyMsgFunctionT aDestroy)
+   CreateMsgFunctionT aCreate)
 {
    mHeaderLength=0;
    mMessageLength=0;
@@ -32,16 +27,6 @@ BaseMsgMonkey::BaseMsgMonkey(
    mHeaderValidFlag=false;
 
    mCreateMsgFunction = aCreate;
-
-   if (aDestroy)
-   {
-      mDestroyMsgFunction = aDestroy;
-   }
-   else
-   {
-      mDestroyMsgFunction = &defaultDestroy;
-   }
-
    mTxMsgMetrics = &mDefaultTxMsgMetrics;
    mRxMsgMetrics = &mDefaultRxMsgMetrics;
 }
@@ -58,7 +43,6 @@ BaseMsgMonkey::BaseMsgMonkey(
    mHeaderValidFlag = false;
 
    mCreateMsgFunction = aCreate;
-   mDestroyMsgFunction = &defaultDestroy;
 
    mTxMsgMetrics = aTxMsgMetrics;
    mRxMsgMetrics = aRxMsgMetrics;
@@ -155,16 +139,6 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 
    // Done.
    return aMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Destroy a message.
-
-void BaseMsgMonkey::destroyMsg(Ris::ByteContent* aMsg)
-{
-   mDestroyMsgFunction(aMsg);
 }
 
 //******************************************************************************

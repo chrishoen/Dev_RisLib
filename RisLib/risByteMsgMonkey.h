@@ -88,11 +88,6 @@ public:
    typedef void*(*CreateMsgFunctionT)(int);
    CreateMsgFunctionT mCreateMsgFunction;
 
-   // Destroy message function pointer. If null then uses delete.
-   // void destroyMsg(void* aMsg);
-   typedef void(*DestroyMsgFunctionT)(void*);
-   DestroyMsgFunctionT mDestroyMsgFunction;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -114,8 +109,7 @@ public:
 
    // Constructor.
    BaseMsgMonkey(
-      CreateMsgFunctionT aCreate, 
-      DestroyMsgFunctionT aDestroy = 0);
+      CreateMsgFunctionT aCreate);
    BaseMsgMonkey(
       CreateMsgFunctionT aCreate,
       BaseMsgMetrics* aTxMsgMetrics,
@@ -155,9 +149,6 @@ public:
    // Copy a message from a byte buffer.
    // This first extracts the header parms.
    Ris::ByteContent* makeMsgFromBuffer (Ris::ByteBuffer* aBuffer);
-
-   // Destroy a message.
-   void destroyMsg(Ris::ByteContent* aMsg);
 
    //***************************************************************************
    //***************************************************************************

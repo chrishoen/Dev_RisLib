@@ -12,7 +12,11 @@ project ("Dev_RisLib")
 my_print_cmake_vars()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("ByteContent")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoTcpClientMsg")
+add_subdirectory ("ProtoTcpServerMsg")
+add_subdirectory ("ProtoUdpMsg")
+add_subdirectory ("ProtoUdpString")
 return()
 
 add_subdirectory ("RisLib")

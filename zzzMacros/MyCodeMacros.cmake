@@ -39,8 +39,6 @@ endfunction()
 
 function(my_add_compile_options _target)
 
-   return()
-
    if(MSVC)
       target_compile_options(${_target} PRIVATE "/WX")
       target_compile_options(${_target} PRIVATE "/wd4996")

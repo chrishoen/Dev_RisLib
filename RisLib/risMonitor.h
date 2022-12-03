@@ -20,9 +20,26 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// The following rules are for shared memory regions that are shared between
+// different processes (who therefore have different address spaces):
+// 
+// 1) No constructors.
+// 2) No pointers.
+// 3) No dynamic memory, this means no std::vector, ...
+// 4) No vtables, this means no virtual functions.
+// 5) Be careful with your atomic loads and stores.
+//
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This is a variable that can be bound to another variable and used to
 // monitor it. It provides an update function that calculates delta,
-// min, and max.
+// min, and max. 
+// 
+// Instances are shared memory safe. There is no constructor, there is an
+// explicit reset function that is called by the bind function. If an
+// instance lives in shared memory, care must be taken that the instance
+// is initialized (bind) and updated in only one owner address space.
 
 template <typename T>
 class Monitor 
@@ -51,8 +68,8 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Constructor.
-   Monitor ()
+   // There is no constructor.
+   void reset ()
    {
       mValue = 0;
       mLastValue = 0;
@@ -65,6 +82,7 @@ public:
    // Bind to another variable.
    void bind(T* aPtr)
    {
+      reset();
       mPtr = aPtr;
    }
 

@@ -27,8 +27,8 @@ BaseMsgMonkey::BaseMsgMonkey(
    mHeaderValidFlag=false;
 
    mCreateMsgFunction = aCreate;
-   mTxMsgMetrics = &mDefaultTxMsgMetrics;
-   mRxMsgMetrics = &mDefaultRxMsgMetrics;
+   mBaseTxMsgMetrics = &mDefaultTxMsgMetrics;
+   mBaseRxMsgMetrics = &mDefaultRxMsgMetrics;
 
    mDefaultTxMsgMetrics.resetBaseVars();
    mDefaultRxMsgMetrics.resetBaseVars();
@@ -47,8 +47,8 @@ BaseMsgMonkey::BaseMsgMonkey(
 
    mCreateMsgFunction = aCreate;
 
-   mTxMsgMetrics = aTxMsgMetrics;
-   mRxMsgMetrics = aRxMsgMetrics;
+   mBaseTxMsgMetrics = aTxMsgMetrics;
+   mBaseRxMsgMetrics = aRxMsgMetrics;
    resetMsgMetrics();
 }
 
@@ -153,18 +153,18 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 // Reset the metrics.
 void BaseMsgMonkey::resetMsgMetrics()
 {
-   mTxMsgMetrics->resetBaseVars();
-   mRxMsgMetrics->resetBaseVars();
+   mBaseTxMsgMetrics->resetBaseVars();
+   mBaseRxMsgMetrics->resetBaseVars();
 }
 
 // Update the metrics with a message and a length.
 void BaseMsgMonkey::updateTxMsgMetrics(ByteContent* aMsg, int aMsgLength)
 {
-   mTxMsgMetrics->updateBaseVars(aMsg, aMsgLength);
+   mBaseTxMsgMetrics->updateBaseVars(aMsg, aMsgLength);
 }
 void BaseMsgMonkey::updateRxMsgMetrics(ByteContent* aMsg, int aMsgLength)
 {
-   mRxMsgMetrics->updateBaseVars(aMsg, aMsgLength);
+   mBaseRxMsgMetrics->updateBaseVars(aMsg, aMsgLength);
 }
 
 //******************************************************************************

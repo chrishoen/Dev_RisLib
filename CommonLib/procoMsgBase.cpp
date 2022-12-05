@@ -250,6 +250,10 @@ MsgMonkey::MsgMonkey()
    // Reset the metrics.
    mStoreTxMsgMetrics.resetAllVars();
    mStoreRxMsgMetrics.resetAllVars();
+
+   // Set the pointers.
+   mTxMsgMetrics = &mStoreTxMsgMetrics;
+   mRxMsgMetrics = &mStoreRxMsgMetrics;
 }
 
 MsgMonkey::~MsgMonkey()

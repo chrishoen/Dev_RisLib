@@ -103,8 +103,8 @@ public:
 
    // Message metrics. These point to the default metrics or to an
    // inheritors metrics, depending on the constructor.
-   BaseMsgMetrics* mTxMsgMetrics;
-   BaseMsgMetrics* mRxMsgMetrics;
+   BaseMsgMetrics* mBaseTxMsgMetrics;
+   BaseMsgMetrics* mBaseRxMsgMetrics;
 
    // Default message metrics.
    BaseMsgMetrics mDefaultTxMsgMetrics;

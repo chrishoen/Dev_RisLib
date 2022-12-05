@@ -270,7 +270,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 
    // Metrics.
    mRxMsgCount++;
-   mMsgMonkey->mRxMsgMetrics->update(aMsg, mMsgMonkey->mMessageLength);
+   mMsgMonkey->updateRxMsgMetrics(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
    Trc::write(mTI, 0, "SerialMsgPort::doReceiveMsg done");
@@ -308,7 +308,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 
    // Metrics.
    mTxMsgCount++;
-   mMsgMonkey->mTxMsgMetrics->update(aMsg, tLength);
+   mMsgMonkey->updateTxMsgMetrics(aMsg, tLength);
 
    // Delete the message.
    delete aMsg;

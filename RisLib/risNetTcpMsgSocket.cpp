@@ -229,7 +229,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    }
 
    // Metrics.
-   mMsgMonkey->mRxMsgMetrics->update(aMsg, mMsgMonkey->mMessageLength);
+   mMsgMonkey->updateRxMsgMetrics(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
    mRxCount++;
@@ -276,7 +276,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    }
 
    // Metrics.
-   mMsgMonkey->mTxMsgMetrics->update(aMsg, mTxLength);
+   mMsgMonkey->updateTxMsgMetrics(aMsg, mTxLength);
 
    // Delete the message.
    delete aMsg;

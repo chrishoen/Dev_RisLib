@@ -29,6 +29,9 @@ BaseMsgMonkey::BaseMsgMonkey(
    mCreateMsgFunction = aCreate;
    mTxMsgMetrics = &mDefaultTxMsgMetrics;
    mRxMsgMetrics = &mDefaultRxMsgMetrics;
+
+   mDefaultTxMsgMetrics.resetBaseVars();
+   mDefaultRxMsgMetrics.resetBaseVars();
 }
 
 BaseMsgMonkey::BaseMsgMonkey(
@@ -46,6 +49,7 @@ BaseMsgMonkey::BaseMsgMonkey(
 
    mTxMsgMetrics = aTxMsgMetrics;
    mRxMsgMetrics = aRxMsgMetrics;
+   resetMsgMetrics();
 }
 
 //******************************************************************************
@@ -144,19 +148,41 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constructor.
+// Metrics.
 
-BaseMsgMetrics::BaseMsgMetrics()
+// Reset the metrics.
+void BaseMsgMonkey::resetMsgMetrics()
+{
+   mTxMsgMetrics->resetBaseVars();
+   mRxMsgMetrics->resetBaseVars();
+}
+
+// Update the metrics with a message and a length.
+void BaseMsgMonkey::updateTxMsgMetrics(ByteContent* aMsg, int aMsgLength)
+{
+   mTxMsgMetrics->updateBaseVars(aMsg, aMsgLength);
+}
+void BaseMsgMonkey::updateRxMsgMetrics(ByteContent* aMsg, int aMsgLength)
+{
+   mRxMsgMetrics->updateBaseVars(aMsg, aMsgLength);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// No constructor.
+
+void BaseMsgMetrics::resetBaseVars()
 {
    mMsgCount = 0;
    mByteCount = 0;
 }
 
 // Update the metrics with a message and a length.
-void BaseMsgMetrics::update(ByteContent* aMsg, int aMsgLength)
+void BaseMsgMetrics::updateBaseVars(ByteContent* aMsg, int aMsgLength)
 {
    mMsgCount++;
    mByteCount += aMsgLength;

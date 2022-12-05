@@ -134,7 +134,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::MsgMetrics tMsgMetrics;
    ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-   tMsgMetrics.update(tMsg, 100);
+   tMsgMetrics.updateAllVars(tMsg, 100);
 }
 
 //******************************************************************************

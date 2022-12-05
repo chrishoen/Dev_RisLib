@@ -193,10 +193,14 @@ void Header::headerReCopyToFrom  (Ris::ByteBuffer* aBuffer,BaseMsg* aParent)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor.
+// No constructor.
 
-MsgMetrics::MsgMetrics()
+void MsgMetrics::resetAllVars()
 {
+   // Reset the base class metrics.
+   Baseclass::resetBaseVars();
+
+   // Reset specific message metrics.
    mTestMsgCount = 0;
    mFirstMessageMsgCount = 0;
    mEchoRequestMsgCount = 0;
@@ -206,15 +210,13 @@ MsgMetrics::MsgMetrics()
 }
 
 // Update the metrics with a message and a length.
-void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
+void MsgMetrics::updateAllVars(Ris::ByteContent* aMsg, int aMsgLength)
 {
    // Update the base class metrics.
-   Baseclass::update(aMsg, aMsgLength);
+   Baseclass::updateBaseVars(aMsg, aMsgLength);
 
    // Update specific message metrics.
-// BaseMsg* tMsg = static_cast<BaseMsg*>(aMsg);
    BaseMsg* tMsg = (BaseMsg*)aMsg;
-
 
    switch (tMsg->mMessageType)
    {
@@ -244,7 +246,10 @@ MsgMonkey::MsgMonkey()
 {
    // Set member variables.
    mSourceId = 0;
-  
+
+   // Reset the metrics.
+   mStoreTxMsgMetrics.resetAllVars();
+   mStoreRxMsgMetrics.resetAllVars();
 }
 
 MsgMonkey::~MsgMonkey()
@@ -302,6 +307,28 @@ void MsgMonkey::processBeforeSend(Ris::ByteContent* aMsg)
    {
       tx->mHeader.mSourceId=mSourceId;
    }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Metrics.
+
+// Reset the metrics.
+void MsgMonkey::resetMsgMetrics()
+{
+   mStoreTxMsgMetrics.resetAllVars();
+   mStoreRxMsgMetrics.resetAllVars();
+}
+
+// Update the metrics with a message and a length.
+void MsgMonkey::updateTxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength)
+{
+   mStoreTxMsgMetrics.updateAllVars(aMsg, aMsgLength);
+}
+void MsgMonkey::updateRxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength)
+{
+   mStoreRxMsgMetrics.updateAllVars(aMsg, aMsgLength);
 }
 
 //******************************************************************************

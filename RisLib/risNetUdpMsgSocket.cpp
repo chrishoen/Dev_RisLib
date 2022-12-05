@@ -250,7 +250,7 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    }
 
    // Metrics.
-   mMsgMonkey->mRxMsgMetrics->update(aMsg, mMsgMonkey->mMessageLength);
+   mMsgMonkey->updateRxMsgMetrics(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
    Trc::write(mTI, 1, "UdpMsgSocket doReceiveMsg done %d %d", mStatus, mError);
@@ -309,7 +309,7 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
       // The send was successful.
       // Metrics.
       mTxCount++;
-      mMsgMonkey->mTxMsgMetrics->update(aMsg, mTxLength);
+      mMsgMonkey->updateTxMsgMetrics(aMsg, mTxLength);
    }
    else
    {

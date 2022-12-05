@@ -18,7 +18,16 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a base class for message metrics.
+// The following rules are for shared memory, regions that are shared between
+//  different processes(who therefore have different address spaces) :
+//
+//  1) No constructors.
+//  2) No pointers.
+//  3) No dynamic memory, this means no std::vector, ...
+//  4) No vtables, this means no virtual functions.
+//  5) Be careful with your loadsand stores.
+//
+// This is a base class for message metrics. It is shared memory safe.
 
 class BaseMsgMetrics
 {
@@ -38,12 +47,11 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Contructor.
-   BaseMsgMetrics();
-   virtual ~BaseMsgMetrics() {}
+   // No constructor.
+   void resetBaseVars();
 
    // Update the metrics with a message and a length.
-   virtual void update(ByteContent* aMsg, int aMsgLength);
+   void updateBaseVars(ByteContent* aMsg, int aMsgLength);
 };
 
 //******************************************************************************
@@ -173,6 +181,18 @@ public:
    // bytes and then compare it with the checksum stored in the message footer.
    virtual bool validateMessageFooter(Ris::ByteBuffer* aBuffer,Ris::ByteContent* aMsg)
    { return true; };
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, metrics.
+
+   // Reset the metrics.
+   virtual void resetMsgMetrics();
+
+   // Update the metrics with a message and a length.
+   virtual void updateTxMsgMetrics(ByteContent* aMsg, int aMsgLength);
+   virtual void updateRxMsgMetrics(ByteContent* aMsg, int aMsgLength);
 };
 
 //******************************************************************************

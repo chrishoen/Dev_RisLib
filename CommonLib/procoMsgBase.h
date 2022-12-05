@@ -175,8 +175,17 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// The following rules are for shared memory, regions that are shared between
+//  different processes(who therefore have different address spaces) :
+//
+//  1) No constructors.
+//  2) No pointers.
+//  3) No dynamic memory, this means no std::vector, ...
+//  4) No vtables, this means no virtual functions.
+//  5) Be careful with your loadsand stores.
+//
 // This is a class for message metrics. An instance is updated by the
-// message monkey during messages trafficing.
+// message monkey during messages trafficing. It is shared memory safe.
 
 class MsgMetrics : public Ris::BaseMsgMetrics
 {
@@ -201,11 +210,11 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Contructor.
-   MsgMetrics();
+   // No constructor.
+   void resetAllVars();
 
    // Update the metrics with a message and a length.
-   void update(Ris::ByteContent* aMsg, int aMsgLength) override;
+   void updateAllVars(Ris::ByteContent* aMsg, int aMsgLength);
 };
 
 //******************************************************************************
@@ -266,6 +275,13 @@ public:
 
    // Preprocess a message before it is sent.
    void processBeforeSend(Ris::ByteContent* aMsg) override;
+
+   // Reset the metrics.
+   void resetMsgMetrics() override;
+
+   // Update the metrics with a message and a length.
+   void updateTxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength) override;
+   void updateRxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength) override;
 };
 
 //*********************************************************************************

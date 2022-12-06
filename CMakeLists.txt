@@ -12,6 +12,9 @@ project ("Dev_RisLib")
 my_print_cmake_vars()
 
 add_subdirectory ("RisLib")
+return()
+
+add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoUdpMsg")
 return()

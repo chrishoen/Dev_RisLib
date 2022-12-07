@@ -77,7 +77,8 @@ function package(){
 	   sudo cp -f rislib.$SHA.tar.xz /home/$USER/Downloads/
 	   echo "Package is availabled at /home/$USER/Downloads/rislib.$SHA.tar.xz"
 	fi
-	sudo cp -f rislib.$SHA.tar.xz $PROJECT_DIR/
+	sudo mkdir -p $PROJECT_DIR/out
+	sudo cp -f rislib.$SHA.tar.xz $PROJECT_DIR/out
 }
 
 function main(){

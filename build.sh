@@ -7,6 +7,7 @@ set -e
 
 #globals:
 PROJECT_DIR=$(pwd)
+SDK_DIR=/opt/usr_data/sdk
 SHA="$(sudo git config --global --add safe.directory $PROJECT_DIR;sudo git rev-parse --verify --short HEAD)"
 
 function parseArgs()
@@ -29,7 +30,7 @@ function popBuildDir(){
 }
 function buildX86(){
 	parseArgs $@
-	SDK_DIR=/opt/usr_data/sdk cmake --preset prime-clang $PROJECT_DIR
+	SDK_DIR=${SDK_DIR} --preset prime-clang $PROJECT_DIR
 	pushd out/build/prime-clang/
 	ninja
 	popd
@@ -37,7 +38,7 @@ function buildX86(){
 
 function buildArm(){
 	parseArgs $@
-	SDK_DIR=/opt/usr_data/sdk cmake --preset prime-arm8 $PROJECT_DIR
+	SDK_DIR=${SDK_DIR} cmake --preset prime-arm8 $PROJECT_DIR
 	pushd out/build/prime-arm8/
 	ninja
 	popd

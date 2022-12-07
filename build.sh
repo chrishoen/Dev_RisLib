@@ -43,6 +43,12 @@ function buildArm(){
 	popd
 }
 
+function stripArchive()
+{
+	local strip="${SDK_DIR}/sysroots/x86_64-fslcsdk-linux/usr/bin/aarch64-fslc-linux/aarch64-fslc-linux-strip"
+	$strip *
+}
+
 function package(){
 	parseArgs $@
 	local workdir=rislib_installs
@@ -53,6 +59,11 @@ function package(){
 	cp $PROJECT_DIR/RisLib/*.h $workdir/includes/
 	cp out/build/prime-clang/RisLib/libRisLib.a $workdir/x86-build/
 	cp out/build/prime-arm8/RisLib/libRisLib.a $workdir/arm-build/
+	
+	pushd $workdir/arm-build/
+	stripArchive
+	popd
+
 
 	tar -cvJf rislib.$SHA.tar.xz $workdir
 	

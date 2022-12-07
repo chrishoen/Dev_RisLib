@@ -60,8 +60,8 @@
          "description": "Target the varisite board, install to /opt/prime.",
          "generator": "Ninja",
          "toolchainFile": "${sourceDir}\\imx8mm-toolchain.cmake",
-         "binaryDir": "${sourceDir}/out/build/${presetName}",
-         "installDir": "${sourceDir}/out/install/${presetName}",
+         "binaryDir": "$env{PWD}/out/build/${presetName}",
+         "installDir": "$env{PWD}/out/install/${presetName}",
          "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
             "MYMODE": {
@@ -114,8 +114,8 @@
          "displayName": "prime-clang",
          "description": "Target ubuntu, with clang, install to /opt/prime.",
          "generator": "Ninja",
-         "binaryDir": "${sourceDir}/out/build/${presetName}",
-         "installDir": "${sourceDir}/out/install/${presetName}",
+         "binaryDir": "$env{PWD}/out/build/${presetName}",
+         "installDir": "$env{PWD}/out/install/${presetName}",
          "cacheVariables": {
             "CMAKE_C_COMPILER": "/usr/bin/clang",
             "CMAKE_CXX_COMPILER": "/usr/bin/clang++",

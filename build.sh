@@ -1,5 +1,5 @@
-#!/bin/bash -xe
-set -xe
+#!/bin/bash -e
+set -e
 
 #git clone git@ssh.dev.azure.com:v3/Stenograph/NextGen/Dev_RisLib rislib
 #git checkout master
@@ -19,9 +19,17 @@ function parseArgs()
 }
 
 
+function pushBuildDir(){
+	local workdir=$(mktemp -d);
+	pushd $workdir
+}
+
+function popBuildDir(){
+	popd
+}
 function buildX86(){
 	parseArgs $@
-	cmake --preset prime-clang
+	SDK_DIR=/opt/usr_data/sdk cmake --preset prime-clang $PROJECT_DIR
 	pushd out/build/prime-clang/
 	ninja
 	popd
@@ -29,7 +37,7 @@ function buildX86(){
 
 function buildArm(){
 	parseArgs $@
-	cmake --preset prime-arm8
+	SDK_DIR=/opt/usr_data/sdk cmake --preset prime-arm8 $PROJECT_DIR
 	pushd out/build/prime-arm8/
 	ninja
 	popd
@@ -37,35 +45,36 @@ function buildArm(){
 
 function package(){
 	parseArgs $@
-	local workdir=$(mktemp -d)
-	mkdir -p $workdir/rislib_installs/x86-build
-	mkdir -p $workdir/rislib_installs/arm-build
-	mkdir -p $workdir/rislib_installs/includes
+	local workdir=rislib_installs
+	mkdir -p $workdir/x86-build
+	mkdir -p $workdir/arm-build
+	mkdir -p $workdir/includes
 
-	cp $PROJECT_DIR/RisLib/*.h $workdir/rislib_installs/includes/
-	cp $PROJECT_DIR/out/build/prime-clang/RisLib/libRisLib.a $workdir/rislib_installs/x86-build/
-	cp $PROJECT_DIR/out/build/prime-arm8/RisLib/libRisLib.a $workdir/rislib_installs/arm-build/
+	cp $PROJECT_DIR/RisLib/*.h $workdir/includes/
+	cp out/build/prime-clang/RisLib/libRisLib.a $workdir/x86-build/
+	cp out/build/prime-arm8/RisLib/libRisLib.a $workdir/arm-build/
 
-	pushd $workdir
-	tar -cvJf rislib.$SHA.tar.xz rislib_installs
-	popd
+	tar -cvJf rislib.$SHA.tar.xz $workdir
 	
-	echo "Package is built at $workdir/rislib.$SHA.tar.xz"
+	echo "Package is built at $(pwd)/$workdir/rislib.$SHA.tar.xz"
 	if [ -d /datadisk/nextgen/out/ ]; then
-	   sudo cp -f $workdir/rislib.$SHA.tar.xz /datadisk/nextgen/out/
+	   sudo cp -f rislib.$SHA.tar.xz /datadisk/nextgen/out/
 	   echo "Package can be downloaded from https://10.57.3.4/artifacts/rislib.$SHA.tar.xz"
 	fi
 	if [ -d /home/$USER/Downloads ]; then
-	   sudo cp -f $workdir/rislib.$SHA.tar.xz /home/$USER/Downloads/
+	   sudo cp -f rislib.$SHA.tar.xz /home/$USER/Downloads/
 	   echo "Package is availabled at /home/$USER/Downloads/rislib.$SHA.tar.xz"
 	fi
+	sudo cp -f rislib.$SHA.tar.xz $PROJECT_DIR/
 }
 
 function main(){
 	parseArgs $@
+	pushBuildDir
 	buildX86
 	buildArm
 	package
+	popBuildDir
 }
 
 time main $@

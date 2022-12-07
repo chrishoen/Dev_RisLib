@@ -36,7 +36,7 @@ pipeline {
             agent { node { label 'linux' } }
             options { skipDefaultCheckout true }
             steps {
-                dir('scm.cpython.' + "${env.BUILD_NUMBER}"){
+                dir('scm.rislib.' + "${env.BUILD_NUMBER}"){
                     checkout scm
                      script {
                         statusCode = sh  script:"""#!/bin/bash

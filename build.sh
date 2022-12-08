@@ -46,8 +46,8 @@ function buildArm(){
 
 function stripArchive()
 {
-	local strip="${SDK_DIR}/sysroots/x86_64-fslcsdk-linux/usr/bin/aarch64-fslc-linux/aarch64-fslc-linux-strip"
-	$strip *
+	local strip="${SDK_DIR}/sysroots/x86_64-fslcsdk-linux/usr/bin/aarch64-fslc-linux/aarch64-fslc-linux-strip --strip-debug --strip-unneeded -p"
+	$strip *.a
 }
 
 function package(){

@@ -111,25 +111,10 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
             {
                int tSpecial = -1;
                sscanf(tCmd.mCommandLine, "%d", &tSpecial);
-               if (tSpecial == 8)
-               {
-                  printf("SUPPRESS PRINTS\n");
-                  // Turn off console prints.
-                  Prn::suppressPrint();
-               }
-               else if (tSpecial == 9)
-               {
-                  printf("UNSUPPRESS PRINTS\n");
-                  // Turn on console prints.
-                  Prn::unsuppressPrint();
-               }
-               else
-               {
-                  printf("SPECIAL %d\n", tSpecial);
-                  // Execute the  given executive, pass it the the
-                  // speical command line command.
-                  aExec->special(tSpecial);
-               }
+               printf("SPECIAL %d\n", tSpecial);
+               // Execute the  given executive, pass it the the
+               // speical command line command.
+               aExec->special(tSpecial);
             }
             // Not exit or special.
             else

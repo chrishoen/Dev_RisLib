@@ -27,6 +27,7 @@ function(my_print_cmake_vars)
    message(STATUS "PROJECT_SOURCE_DIR       " ${PROJECT_SOURCE_DIR})
    message(STATUS "THIRD_PARTY_LIB_DIR      " ${THIRD_PARTY_LIB_DIR})
    message(STATUS "MYMODE                   " ${MYMODE})
+   message(STATUS "MYSTANDALONE             " ${MYSTANDALONE})
    message(STATUS "my_special1***********************************************************END")
 endfunction()
 

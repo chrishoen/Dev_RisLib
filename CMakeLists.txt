@@ -11,6 +11,9 @@ include("${MY_MACRO_DIR}/MySpecial.cmake")
 project ("Dev_RisLib")
 my_print_cmake_vars()
 
+add_subdirectory ("RisLib")
+return()
+
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
 add_subdirectory ("CmdLineTest")

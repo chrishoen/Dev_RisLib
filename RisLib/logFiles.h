@@ -5,6 +5,7 @@ Implements multiple text log files
 ==============================================================================*/
 
 #include <string>
+#include <memory>
 
 //******************************************************************************
 //******************************************************************************
@@ -20,8 +21,8 @@ namespace Log
    void reset    ();
    bool openFile       (int aLogNum,const char* aFilePath);
    bool openFileAppend (int aLogNum,const char* aFilePath);
-   bool openFile       (int aLogNum, std::string* aFilePath);
-   bool openFileAppend (int aLogNum, std::string* aFilePath);
+   bool openFile       (int aLogNum, std::unique_ptr<std::string> aFilePath);
+   bool openFileAppend (int aLogNum, std::unique_ptr<std::string> aFilePath);
 
    void closeFile      (int aLogNum);
    void closeAllFiles ();

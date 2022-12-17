@@ -10,6 +10,7 @@ Command line script file processor.
 //******************************************************************************
 #include <stdio.h>
 #include <string>
+#include <memory>
 
 #include "risCmdLineCmd.h"
 
@@ -58,7 +59,7 @@ public:
 
    // Open the command line script file. Delete the string when done.
    // Return true if successful.
-   bool doOpen(std::string* aFilePath);
+   bool doOpen(std::unique_ptr<std::string> aFilePath);
 
    // Close the command line script file.
    void doClose();

@@ -44,8 +44,6 @@ void reset()
 
 bool openFile(int aLogNum, const char* aFilePath)
 {            
-   // char tBuf[400];
-   // mFile[aLogNum] = fopen(Ris::getAlphaFilePath_Log(tBuf,aFileName),"w");
    mFile[aLogNum] = fopen(aFilePath,"w");
 
    if (mFile[aLogNum]==0)
@@ -57,16 +55,9 @@ bool openFile(int aLogNum, const char* aFilePath)
    return true;
 }
 
-bool openFile(int aLogNum, std::string* aFilePath)
+bool openFile(int aLogNum, std::unique_ptr<std::string> aFilePath)
 {
-   if (aFilePath == 0)
-   {
-      printf("Log::openFile OPEN FAIL NULL\n");
-      return false;
-   }
-
    bool tPass = openFile(aLogNum, aFilePath->c_str());
-   delete aFilePath;
    return tPass;
 }
 
@@ -76,8 +67,6 @@ bool openFile(int aLogNum, std::string* aFilePath)
 
 bool openFileAppend(int aLogNum, const char* aFilePath)
 {            
-// char tBuf[400];
-// mFile[aLogNum] = fopen(Ris::getAlphaFilePath_Log(tBuf, aFileName), "a");
    mFile[aLogNum] = fopen(aFilePath, "w");
 
    if (mFile[aLogNum]==0)
@@ -89,10 +78,9 @@ bool openFileAppend(int aLogNum, const char* aFilePath)
    return true;
 }
 
-bool openFileAppend(int aLogNum, std::string* aFilePath)
+bool openFileAppend(int aLogNum, std::unique_ptr<std::string> aFilePath)
 {
    bool tPass = openFileAppend(aLogNum, aFilePath->c_str());
-   delete aFilePath;
    return tPass;
 }
 

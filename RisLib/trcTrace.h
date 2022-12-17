@@ -5,6 +5,7 @@ Program trace buffer facility interface.
 ==============================================================================*/
 
 #include <string>
+#include <memory>
 
 //******************************************************************************
 //******************************************************************************
@@ -26,7 +27,7 @@ namespace Trc
 
    // Create a log file for a trace. Set the initial log level
    // for the trace. Delete the string when done.
-   void create_log(int aTraceIndex, int aLogLevel, std::string* aFilePath);
+   void create_log(int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath);
 
    // Initialize.
    void initialize();

@@ -75,7 +75,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    std::vector<std::string> tResponse;
    Ris::doSystemCommand("ls", tResponse);
 
-   for (int i = 0; i < tResponse.size(); i++)
+   for (int i = 0; i < (int)tResponse.size(); i++)
    {
       Prn::print(0,"RESPONSE %d $ %s",i, tResponse[i].c_str());
    }
@@ -90,7 +90,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    std::vector<std::string> tResponse;
    Ris::doSystemCommand("ifconfig eth0", tResponse);
 
-   for (int i = 0; i < tResponse.size(); i++)
+   for (int i = 0; i < (int)tResponse.size(); i++)
    {
       Prn::print(0, "RESPONSE %d $ %s", i, tResponse[i].c_str());
    }
@@ -121,7 +121,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    std::string tAddr;
    std::string tMask;
 
-   for (int i = 0; i < tParse.size(); i++)
+   for (int i = 0; i < (int)tParse.size(); i++)
    {
       Prn::print(0, "tParse $ %s", tParse[i].c_str());
       if (tParse[i] == "inet") tAddr = tParse[i + 1];
@@ -158,7 +158,7 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    std::string tGateway;
    bool tDhcpFlag = false;
 
-   for (int i = 0; i < tParse.size(); i++)
+   for (int i = 0; i < (int)tParse.size(); i++)
    {
       Prn::print(0, "tParse $ %s", tParse[i].c_str());
       if (tParse[i] == "via") tGateway = tParse[i + 1];

@@ -68,7 +68,7 @@ public:
    void reset()
    {
       mRows = 0;
-      for (int i = 0; i < MaxRows; i++)
+      for (int i = 0; i < (int)MaxRows; i++)
       {
          // Specialize.
          resetElement(e(i));
@@ -174,7 +174,7 @@ public:
          nestedPop(aCmd);
       }
       // This should be a numerical value.
-      else if (mRows < MaxRows)
+      else if (mRows < (int)MaxRows)
       {
          // Specialize.
          readRow(aCmd);
@@ -246,9 +246,9 @@ public:
    void reset()
    {
       mRows = 0;
-      for (int i = 0; i < MaxRows; i++)
+      for (int i = 0; i < (int)MaxRows; i++)
       {
-         for (int j = 0; j < MaxCols; j++)
+         for (int j = 0; j < (int)MaxCols; j++)
          {
             // Specialize.
             resetElement(e(i,j));
@@ -346,7 +346,7 @@ public:
          nestedPop(aCmd);
       }
       // This should be a numerical value.
-      else if (mRows < MaxRows)
+      else if (mRows < (int)MaxRows)
       {
          // Specialize.
          readRow(aCmd);

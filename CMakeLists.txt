@@ -11,9 +11,6 @@ include("${MY_MACRO_DIR}/MySpecial.cmake")
 project ("Dev_RisLib")
 my_print_cmake_vars()
 
-add_subdirectory ("RisLib")
-return()
-
 add_subdirectory ("ByteContent")
 add_subdirectory ("Classes")
 add_subdirectory ("CmdLineTest")
@@ -49,6 +46,9 @@ add_subdirectory ("ThreadTest")
 add_subdirectory ("TimerTest")
 add_subdirectory ("TimerThreadTest")
 add_subdirectory ("WaitableTest")
+return()
+
+add_subdirectory ("RisLib")
 return()
 
 add_subdirectory ("RisLib")

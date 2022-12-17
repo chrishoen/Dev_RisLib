@@ -136,7 +136,7 @@ void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aF
 }
 
 // Create a log file for a trace. Set the initial log level
-// for the trace. Delete the string when done.
+// for the trace.
 void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath)
 {
    if (aFilePath == 0)

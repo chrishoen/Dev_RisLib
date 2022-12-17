@@ -44,8 +44,7 @@ bool CmdLineScript::doOpen(const char* aFilePath)
    return true;
 }
 
-// Open the command line script file. Delete the string when done.
-// Return true if successful.
+// Open the command line script file. Return true if successful.
 bool CmdLineScript::doOpen(std::unique_ptr<std::string> aFilePath)
 {
    bool tPass = doOpen(aFilePath->c_str());

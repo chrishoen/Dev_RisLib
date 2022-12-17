@@ -108,8 +108,7 @@ public:
    // Set the full file path for the parms file.
    void setFilePath(const char* aFilePath);
 
-   // Set the full file path for the parms file. Delete the string
-   // when done.
+   // Set the full file path for the parms file.
    void setFilePath(std::unique_ptr<std::string> aFilePath);
 
    // Set the file name for the parms file. The full file path will be

@@ -57,8 +57,7 @@ public:
    // Open the command line script file. Return true if successful.
    bool doOpen(const char* aFilePath);
 
-   // Open the command line script file. Delete the string when done.
-   // Return true if successful.
+   // Open the command line script file. Return true if successful.
    bool doOpen(std::unique_ptr<std::string> aFilePath);
 
    // Close the command line script file.

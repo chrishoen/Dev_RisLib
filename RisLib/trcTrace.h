@@ -26,7 +26,7 @@ namespace Trc
    void create_log(int aTraceIndex, int aLogLevel, const char* aFilePath);
 
    // Create a log file for a trace. Set the initial log level
-   // for the trace. Delete the string when done.
+   // for the trace.
    void create_log(int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath);
 
    // Initialize.

@@ -30,7 +30,7 @@ function popBuildDir(){
 }
 function buildX86(){
 	parseArgs $@
-	SDK_DIR=${SDK_DIR} cmake --preset prime-clang $PROJECT_DIR
+	SDK_DIR=${SDK_DIR} cmake --preset prime-clang -DMYSTANDALONE=true $PROJECT_DIR
 	pushd out/build/prime-clang/
 	ninja
 	popd
@@ -38,7 +38,7 @@ function buildX86(){
 
 function buildArm(){
 	parseArgs $@
-	SDK_DIR=${SDK_DIR} cmake --preset prime-arm8 $PROJECT_DIR
+	SDK_DIR=${SDK_DIR} cmake --preset prime-arm8 -DMYSTANDALONE=true $PROJECT_DIR
 	pushd out/build/prime-arm8/
 	ninja
 	popd

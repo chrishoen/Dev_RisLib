@@ -267,3 +267,5 @@ paket-files/
 __pycache__/
 *.pyc
 /build
+
+.docker_run_cmd

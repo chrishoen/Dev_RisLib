@@ -68,7 +68,9 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
 
       if (strlen(tCommandLine)==0)
       {
-         // Ignore empty command.
+         // For an empty command line, which is only an enter, execute the
+         //  given executive, callint special command with -1.
+         aExec->special(-1);
       }
 
       //************************************************************************

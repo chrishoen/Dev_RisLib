@@ -63,9 +63,8 @@ public:
 
    // This is overridden by inheriting classes to execute special command
    // lines. A special command is one that consists of only a single digit
-   // "0" .. "9" followed by an enter. "8" is reserved to suppress prints
-   // and "9" is reserved to unsuppress prints. This method is called for
-   // "0" through "7".
+   // "0" .. "9" followed by an enter. An empty command line, which would
+   // be only an enter, results in this getting called with a -1.
    virtual void special(int aSpecial) {};
 
    // This is overridden by inheriting classes to execute a help command.

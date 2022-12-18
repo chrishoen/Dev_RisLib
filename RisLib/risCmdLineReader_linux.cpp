@@ -57,7 +57,7 @@ char* CmdLineReader::readLine(char* aString, int aMaxSize)
    free(tString);
 
    // Return the string.
-   return tString;
+   return aString;
 }
    
 

@@ -5,9 +5,9 @@ set lib=%gui%\extlibs\rislib\installs\arm-build
 set dev_rislib=C:\Prime\DevelopLib\Dev_RisLib
 set build=C:\Users\chris\Desktop\out\build\prime-arm8
 
+rmdir /s /q  %inc%
+rmdir /s /q  %lib%
 
-
-rmdir /s /q %gui%\extlibs
 mkdir %inc%
 mkdir %lib%
 

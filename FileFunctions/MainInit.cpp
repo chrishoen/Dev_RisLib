@@ -10,8 +10,6 @@
 void main_initialize(int argc,char** argv)
 {
    printf("FileFunctions Program********************************************BEGIN\n");
-   printf("FileFunctions Program********************************************BEGIN\n");
-   printf("FileFunctions Program********************************************BEGIN\n\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -48,7 +46,6 @@ void main_finalize()
    Prn::finalizePrint();
 
    // Done.
-   printf("\n");
    printf("FileFunctions Program********************************************END\n\n");
 }
 

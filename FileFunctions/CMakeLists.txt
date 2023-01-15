@@ -1,14 +1,12 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.10)
+set (project "FileFunctions")
+project(${project} CXX)
+my_find_src_files (src_files ${project})
+add_executable (${project} ${src_files})
+my_add_compile_options (${project})
+my_add_pch (${project})
 
-project (FileFunctions CXX)
+my_inc_import_RisLib(${project})
+my_lib_import_RisLib(${project})
 
-my_find_src_files (src_files FileFunctions)
-add_executable (FileFunctions ${src_files})
-my_add_compile_options (FileFunctions)
-my_add_pch (FileFunctions)
-
-
-my_inc_import_RisLib(FileFunctions)
-my_lib_import_RisLib(FileFunctions)
-
-
+include("${MY_MACRO_DIR}/MyInstall.cmake")

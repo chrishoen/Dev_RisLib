@@ -5,7 +5,7 @@ set (CMAKE_SYSTEM_NAME Linux)
 set (CMAKE_SYSTEM_PROCESSOR aarch64)
 
 set (SDK_DIR "/opt/usr_data/sdk")
-set (SDK_DIR $ENV{SDK_DIR})
+#set (SDK_DIR $ENV{SDK_DIR})
 set (CROSS_COMPILER_PREFIX "${SDK_DIR}/sysroots/x86_64-fslcsdk-linux/usr/bin/aarch64-fslc-linux/aarch64-fslc-linux-")
 set (CMAKE_SYSROOT "${SDK_DIR}/sysroots/aarch64-fslc-linux/" CACHE STRING "")
 

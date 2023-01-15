@@ -79,6 +79,22 @@ void touchFile(const char* aFilePath)
    delete[] tString;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// chmod a file for 666.
+
+void doFilePermissions666(const char* aFilePath)
+{
+   chmod(aFilePath, 0666);
+}
+
+// chmod a file for 666.
+void doFilePermissions666(const std::string& aFilePath)
+{
+   chmod(aFilePath.c_str(), 0666);
+}
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -111,7 +127,7 @@ int doLockFile_OpenAndLock(const char* aLockName)
 void doLockFile_UnlockAndClose(int aFileDesc)
 {
    struct flock lock;
-   lock.l_type = F_WRLCK;    /* read/write (exclusive versus shared) lock */
+   lock.l_type = F_UNLCK;    /* read/write (exclusive versus shared) lock */
    lock.l_whence = SEEK_SET; /* base for seek offsets */
    lock.l_start = 0;         /* 1st byte in file */
    lock.l_len = 0;           /* 0 here means 'until EOF' */
@@ -124,18 +140,86 @@ void doLockFile_UnlockAndClose(int aFileDesc)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// chmod a file for 666.
+// Open a file and lock it. Return a file handle.
 
-void doFilePermissions666(const char* aFilePath)
+FILE* doOpenAndLockForRead(const char* aFilePath)
 {
-   chmod(aFilePath, 0666);
+   FILE* tFile = fopen(aFilePath, "r");
+   int tFileDesc = fileno(tFile);
+
+   struct flock lock;
+   lock.l_type = F_RDLCK;    /* read/write (exclusive versus shared) lock */
+   lock.l_whence = SEEK_SET; /* base for seek offsets */
+   lock.l_start = 0;         /* 1st byte in file */
+   lock.l_len = 0;           /* 0 here means 'until EOF' */
+   lock.l_pid = getpid();    /* process id */
+
+   fcntl(tFileDesc, F_SETLKW, &lock);
+   return tFile;
 }
 
-// chmod a file for 666.
-void doFilePermissions666(const std::string& aFilePath)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Open a file and lock it. Return a file handle.
+
+FILE* doOpenAndLockForWrite(const char* aFilePath)
 {
-   chmod(aFilePath.c_str(), 0666);
+   FILE* tFile = fopen(aFilePath, "w");
+   int tFileDesc = fileno(tFile);
+
+   struct flock lock;
+   lock.l_type = F_WRLCK;    /* read/write (exclusive versus shared) lock */
+   lock.l_whence = SEEK_SET; /* base for seek offsets */
+   lock.l_start = 0;         /* 1st byte in file */
+   lock.l_len = 0;           /* 0 here means 'until EOF' */
+   lock.l_pid = getpid();    /* process id */
+
+   fcntl(tFileDesc, F_SETLKW, &lock);
+   return tFile;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Open a file and lock it. Return a file handle.
+
+FILE* doOpenAndLockForReadWrite(const char* aFilePath)
+{
+   FILE* tFile = fopen(aFilePath, "rw");
+   int tFileDesc = fileno(tFile);
+
+   struct flock lock;
+   lock.l_type = F_WRLCK;    /* read/write (exclusive versus shared) lock */
+   lock.l_whence = SEEK_SET; /* base for seek offsets */
+   lock.l_start = 0;         /* 1st byte in file */
+   lock.l_len = 0;           /* 0 here means 'until EOF' */
+   lock.l_pid = getpid();    /* process id */
+
+   fcntl(tFileDesc, F_SETLKW, &lock);
+   return tFile;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Unlock an opened and locked file and close it.
+
+void doUnlockAndClose(FILE* aFile)
+{
+   int tFileDesc = fileno(aFile);
+
+   struct flock lock;
+   lock.l_type = F_UNLCK;    /* read/write (exclusive versus shared) lock */
+   lock.l_whence = SEEK_SET; /* base for seek offsets */
+   lock.l_start = 0;         /* 1st byte in file */
+   lock.l_len = 0;           /* 0 here means 'until EOF' */
+   lock.l_pid = getpid();    /* process id */
+
+   fcntl(tFileDesc, F_SETLKW, &lock);
+   fclose(aFile);
+}
+
 
 //****************************************************************************
 //****************************************************************************

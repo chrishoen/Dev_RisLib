@@ -67,23 +67,31 @@ std::string doGetRandomFileName();
 //******************************************************************************
 // Methods.
 
-// Open a lock file and lock it. Return a file descriptor to the
-// opened lock file.
-int doLockFile_OpenAndLock(const char* aLockName);
+// chmod a file for 666.
+void doFilePermissions666(const char* aFilePath);
 
-// Unlock an opened lock file and close it.
-void doLockFile_UnlockAndClose(int aFileDesc);
+// chmod a file for 666.
+void doFilePermissions666(const std::string& aFilePath);
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Methods.
 
-// chmod a file for 666.
-void doFilePermissions666(const char* aFilePath);
+// Open a lock file and lock it. Return a file descriptor to the
+// opened lock file.
+int doLockFile_OpenAndLock(const char* aLockName);
 
-// chmod a file for 666.
-void doFilePermissions666(const std::string& aFilePath);
+// Unlock on opened lock file and close it.
+void doLockFile_UnlockAndClose(int aFileDesc);
+
+// Open a file and lock it. Return a file handle.
+FILE* doOpenAndLockForRead(const char* aFilePath);
+FILE* doOpenAndLockForWrite(const char* aFilePath);
+FILE* doOpenAndLockForReadWrite(const char* aFilePath);
+
+// Unlock an opened and locked file and close it.
+void doUnlockAndClose(FILE* aFile);
 
 //******************************************************************************
 //******************************************************************************

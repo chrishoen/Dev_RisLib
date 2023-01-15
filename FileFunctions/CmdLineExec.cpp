@@ -47,7 +47,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeLock(Ris::CmdLineCmd* aCmd)
 {
-   mLockFile = Ris::doLockFile_OpenAndLock("mylockfile101");
+   mLockFile = Ris::doLockFile_OpenAndLockForWrite("mylockfile101");
    Prn::print(0, "done");
 }
 

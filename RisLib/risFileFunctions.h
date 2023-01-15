@@ -80,7 +80,8 @@ void doFilePermissions666(const std::string& aFilePath);
 
 // Open a lock file and lock it. Return a file descriptor to the
 // opened lock file.
-int doLockFile_OpenAndLock(const char* aLockName);
+int doLockFile_OpenAndLockForRead(const char* aLockName);
+int doLockFile_OpenAndLockForWrite(const char* aLockName);
 
 // Unlock on opened lock file and close it.
 void doLockFile_UnlockAndClose(int aFileDesc);

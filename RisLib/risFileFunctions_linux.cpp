@@ -101,7 +101,24 @@ void doFilePermissions666(const std::string& aFilePath)
 // Open a lock file and lock it. Return a file descriptor to the
 // opened lock file.
 
-int doLockFile_OpenAndLock(const char* aLockName)
+int doLockFile_OpenAndLockForRead(const char* aLockName)
+{
+   char tFilePath[200];
+   sprintf(tFilePath, "/var/lock/%s", aLockName);
+   int tFileDesc = open(tFilePath, O_RDWR | O_CREAT, 0666);
+
+   struct flock lock;
+   lock.l_type = F_RDLCK;    /* read/write (exclusive versus shared) lock */
+   lock.l_whence = SEEK_SET; /* base for seek offsets */
+   lock.l_start = 0;         /* 1st byte in file */
+   lock.l_len = 0;           /* 0 here means 'until EOF' */
+   lock.l_pid = getpid();    /* process id */
+
+   fcntl(tFileDesc, F_SETLKW, &lock);
+   return tFileDesc;
+}     
+
+int doLockFile_OpenAndLockForWrite(const char* aLockName)
 {
    char tFilePath[200];
    sprintf(tFilePath, "/var/lock/%s", aLockName);
@@ -115,9 +132,8 @@ int doLockFile_OpenAndLock(const char* aLockName)
    lock.l_pid = getpid();    /* process id */
 
    fcntl(tFileDesc, F_SETLKW, &lock);
-
    return tFileDesc;
-}     
+}
 
 //****************************************************************************
 //****************************************************************************

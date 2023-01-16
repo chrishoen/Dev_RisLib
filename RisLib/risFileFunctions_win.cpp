@@ -45,13 +45,32 @@ void touchFile(const char* aFilePath)
    delete[] tString;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// chmod a file for 666.
+
+void doFilePermissions666(const char* aFilePath)
+{
+}
+
+// chmod a file for 666.
+void doFilePermissions666(const std::string& aFilePath)
+{
+}
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
 // Open a lock file and lock it. Return a file descriptor to the
 // opened lock file.
 
-int doLockFile_OpenAndLock(const char* aLockName)
+int doLockFile_OpenAndLockForRead(const char* aLockName)
+{
+   return 0;
+}
+
+int doLockFile_OpenAndLockForWrite(const char* aLockName)
 {
    return 0;
 }
@@ -68,15 +87,44 @@ void doLockFile_UnlockAndClose(int aFileDesc)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// chmod a file for 666.
+// Open a file and lock it. Return a file handle.
 
-void doFilePermissions666(const char* aFilePath)
+FILE* doOpenAndLockForRead(const char* aFilePath)
 {
+   FILE* tFile = fopen(aFilePath, "r");
+   return tFile;
 }
 
-// chmod a file for 666.
-void doFilePermissions666(const std::string& aFilePath)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Open a file and lock it. Return a file handle.
+
+FILE* doOpenAndLockForWrite(const char* aFilePath)
 {
+   FILE* tFile = fopen(aFilePath, "w");
+   return tFile;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Open a file and lock it. Return a file handle.
+
+FILE* doOpenAndLockForReadWrite(const char* aFilePath)
+{
+   FILE* tFile = fopen(aFilePath, "rw");
+   return tFile;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Unlock an opened and locked file and close it.
+
+void doUnlockAndClose(FILE* aFile)
+{
+   fclose(aFile);
 }
 
 //******************************************************************************

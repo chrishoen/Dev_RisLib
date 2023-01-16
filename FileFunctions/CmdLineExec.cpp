@@ -37,8 +37,31 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
    if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
 
+   if (aCmd->isCmd("R"))    executeRead(aCmd);
+   if (aCmd->isCmd("W"))    executeWrite(aCmd);
    if (aCmd->isCmd("Lock"))    executeLock(aCmd);
    if (aCmd->isCmd("Unlock"))  executeUnlock(aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
+{
+   mSettings.doRead();
+   mSettings.show();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 101);
+   mSettings.mInput = aCmd->argFloat(1);
+   mSettings.doWrite();
 }
 
 //******************************************************************************

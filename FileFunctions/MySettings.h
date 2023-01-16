@@ -67,9 +67,9 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Initialize, there's no constructor. This is called once by the process
-   // who first creates the shared memory.
-   void initialize();
+   // Constructor.
+   MySettings();
+   void reset();
 
    //***************************************************************************
    //***************************************************************************

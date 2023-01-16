@@ -12,11 +12,15 @@
 //******************************************************************************
 // Constructor.
 
-void MySettings::initialize()
+MySettings::MySettings()
 {
-   mValidFlag = false;
-   
+   reset();
+}
+
+void MySettings::reset()
+{
    strcpy(mFilePath,"/opt/prime/files/mysettings.json");
+   mValidFlag = false;
 
    mAlarmEnable = false;
    mBuzzerEnable = false;
@@ -27,7 +31,7 @@ void MySettings::initialize()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a json value from the class member variables.
+// Return a json value derived from the class member variables.
 
 Json::Value MySettings::getJsonValueFromMembers()
 {
@@ -115,7 +119,7 @@ void MySettings::doRead()
    if (!Ris::portableFilePathExists(mFilePath))
    {
       Prn::print(mPF, "MySettings::doRead NOT EXIST, writing defaults");
-      initialize();
+      reset();
       doWrite();
       mValidFlag = true;
       return;

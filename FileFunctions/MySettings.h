@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Auxiliary alarm info.
+Settings json file class.
 ==============================================================================*/
 
 //******************************************************************************
@@ -14,12 +14,9 @@ Auxiliary alarm info.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This class contains auxiliary alarm configuration and state information.
-// This class is designed such that instances will reside in shared memory. 
+// This class contains a set of member variables that are stored in a
+// json file. The file is intended to have a single writer and multiple
+// readers.
 
 class MySettings
 {
@@ -71,6 +68,9 @@ public:
    // Methods.
 
    // Read the member variables from the json file. Use file locks.
+   // If the file doesn't exist then set the member variables to 
+   // defaults and write the file so that it does exist. This will
+   // create a file for the first time with defaults.
    void doRead();
 
    // Write the member variables to the json file. Use file locks.
@@ -87,7 +87,7 @@ public:
    // Set the member variables from a json value.
    void setMembersFromJsonValue(Json::Value aValue);
 
-   // Support.
+   // Print the member variables.
    void show();
 };
 

@@ -19,7 +19,14 @@ MySettings::MySettings()
 
 void MySettings::reset()
 {
-   strcpy(mFilePath,"/opt/prime/files/mysettings.json");
+   if (Ris::portableIsWindows())
+   {
+      strcpy(mFilePath, "c:/aaa_prime/files/mysettings.json");
+   }
+   else
+   {
+      strcpy(mFilePath, "/opt/prime/files/mysettings.json");
+   }
    mAlarmEnable = false;
    mBuzzerEnable = false;
    mRawInput = 9000;
@@ -75,10 +82,10 @@ void MySettings::setMembersFromJsonValue(Json::Value aJsonValue)
 
 void MySettings::doWrite()
 {
-   // Get a json value from the class member variables.
+   // Get a json value from the member variables.
    Json::Value tJsonValue = getJsonValueFromMembers();
 
-   // Write the json variable to a string.
+   // Write the json value to a string.
    std::string tString;
    std::stringstream tStream;
    Json::StreamWriterBuilder tBuilder;
@@ -98,13 +105,15 @@ void MySettings::doWrite()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read the class member variables from the json file.
-// Use file locks.
+// Read the member variables from the json file. Use file locks.
+// If the file doesn't exist then set the member variables to 
+// defaults and write the file so that it does exist. This will
+// create a file for the first time with defaults.
 
 void MySettings::doRead()
 {
-   // If the json file doesn't exist then set the class member variables
-   // to defaults, write the class to the file, and exit. This will
+   // If the json file doesn't exist then set the member variables
+   // to defaults, write them to the file, and exit. This will
    // create a file for the first time with defaults.
    if (!Ris::portableFilePathExists(mFilePath))
    {
@@ -118,7 +127,7 @@ void MySettings::doRead()
    // Unlock the file and close it.
    FILE* tFile = Ris::doOpenAndLockForRead(mFilePath);
    char* tBuffer = new char[1001];
-   int tRet = fread(tBuffer, 1, 1000, tFile);
+   int tRet = (int)fread(tBuffer, 1, 1000, tFile);
    if (tRet < 0)
    {
       Prn::print(0, "MySettings::doRead FAIL1");
@@ -135,8 +144,8 @@ void MySettings::doRead()
    Json::CharReaderBuilder tBuilder;
    Json::CharReader* tReader = tBuilder.newCharReader();
    bool tPass = tReader->parse(tBeginDoc, tEndDoc, &tJsonValue, &tError);
-   delete[] tBuffer;
    delete tReader;
+   delete[] tBuffer;
    if (!tPass)
    {
       Prn::print(0, "MySettings::doRead FAIL2 parse error");

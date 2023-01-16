@@ -102,11 +102,11 @@ void doWriteJsonToFile(
 {
    // Write the json value to the output file.
    std::ofstream tOutputFile(aFilePath, std::ofstream::out);
-   Json::StyledStreamWriter tWriter;
-   tWriter.write(tOutputFile, aJsonValue);
+   Json::StreamWriterBuilder tBuilder;
+   Json::StreamWriter* tWriter = tBuilder.newStreamWriter();
+   tWriter->write(aJsonValue, &tOutputFile);
+   delete tWriter;
    tOutputFile.close();
-   // Set permissions.
-   doFilePermissions666(aFilePath);
 }
 
 //******************************************************************************
@@ -120,7 +120,15 @@ void doReadJsonFromFile(
 {
    // Read the json value from the input file.
    std::ifstream tInputFile(aFilePath);
-   tInputFile >> aJsonValue;
+   Json::CharReaderBuilder tBuilder;
+   Json::CharReader* tReader = tBuilder.newCharReader();
+   std::string tError;
+   if (!Json::parseFromStream(tBuilder, tInputFile, &aJsonValue, &tError))
+   {
+      printf("doReadJsonFromFile %s", tError.c_str());
+   }
+   delete tReader;
+   tInputFile.close();
 }
 
 //****************************************************************************

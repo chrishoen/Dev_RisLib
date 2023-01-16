@@ -29,26 +29,20 @@ public:
    //***************************************************************************
    // Constants.
 
-   static const int cMaxStringSize = 100;
+   static const int cMaxStringSize = 200;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
-
-   // True if valid.
-   bool mValidFlag;
 
    // Json file path.
    char mFilePath[cMaxStringSize];
 
-   // Instrumentation.
-   int mPF;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members.
+   // Members. These are read from/written to the json file.
 
    // If true then the alarm is enabled.
    bool mAlarmEnable;
@@ -76,27 +70,22 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Read from the json file.
+   // Read the member variables from the json file. Use file locks.
    void doRead();
 
-   // Write to the json file.
+   // Write the member variables to the json file. Use file locks.
    void doWrite();
-   void doWrite2();
 
-   // Return a json value from the class member variables.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Helpers.
+
+   // Return a json value from the member variables.
    Json::Value getJsonValueFromMembers();
 
-   // Set the class member variables from a json value.
+   // Set the member variables from a json value.
    void setMembersFromJsonValue(Json::Value aValue);
-
-   // Return a string with json for all of the class member variables.
-   std::string getJsonString();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
 
    // Support.
    void show();

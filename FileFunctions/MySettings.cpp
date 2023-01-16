@@ -20,8 +20,6 @@ MySettings::MySettings()
 void MySettings::reset()
 {
    strcpy(mFilePath,"/opt/prime/files/mysettings.json");
-   mValidFlag = false;
-
    mAlarmEnable = false;
    mBuzzerEnable = false;
    mRawInput = 9000;
@@ -58,7 +56,6 @@ void MySettings::setMembersFromJsonValue(Json::Value aJsonValue)
 {
    try
    {
-      // Copy members.
       mAlarmEnable = aJsonValue["AlarmEnable"].asBool();
       mBuzzerEnable = aJsonValue["BuzzerEnable"].asBool();
       mRawInput = std::stof(aJsonValue["RawInput"].asString());
@@ -66,54 +63,19 @@ void MySettings::setMembersFromJsonValue(Json::Value aJsonValue)
    }
    catch (...)
    {
-      Prn::print(mPF, "MySettings::setMembersFromJsonValue EXCEPTION");
+      Prn::print(0, "MySettings::setMembersFromJsonValue EXCEPTION");
    }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a string with json for all of the variables.
-
-std::string MySettings::getJsonString()
-{
-   // Json variable.
-   Json::Value tJsonValue = getJsonValueFromMembers();
-
-   std::string tString;
-   Json::FastWriter tWriter;
-   tString = tWriter.write(tJsonValue);
-   return tString;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Write to the json file.
-
-void MySettings::doWrite2()
-{
-   // Json variable.
-   Json::Value tJsonValue = getJsonValueFromMembers();
-
-   // Write the json variable to a string.
-   std::string tString;
-   Json::FastWriter tWriter;
-   tString = tWriter.write(tJsonValue);
-
-   FILE* tFile = Ris::doOpenAndLockForWrite(mFilePath);
-   fwrite(tString.c_str(), 1, tString.length(), tFile);
-   Ris::doUnlockAndClose(tFile);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Write to the json file.
+// Write the class member variables to the json file.
+// Use file locks
 
 void MySettings::doWrite()
 {
-   // Json variable.
+   // Get a json value from the class member variables.
    Json::Value tJsonValue = getJsonValueFromMembers();
 
    // Write the json variable to a string.
@@ -122,9 +84,12 @@ void MySettings::doWrite()
    Json::StreamWriterBuilder tBuilder;
    Json::StreamWriter* tWriter = tBuilder.newStreamWriter();
    tWriter->write(tJsonValue, &tStream);
+   tStream << std::endl;
    tString = tStream.str();
    delete tWriter;
 
+   // Open the file with a write lock. Write the string to the file. 
+   // Unlock the file and close it.
    FILE* tFile = Ris::doOpenAndLockForWrite(mFilePath);
    fwrite(tString.c_str(), 1, tString.length(), tFile);
    Ris::doUnlockAndClose(tFile);
@@ -133,7 +98,8 @@ void MySettings::doWrite()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read from the json file.
+// Read the class member variables from the json file.
+// Use file locks.
 
 void MySettings::doRead()
 {
@@ -142,10 +108,9 @@ void MySettings::doRead()
    // create a file for the first time with defaults.
    if (!Ris::portableFilePathExists(mFilePath))
    {
-      Prn::print(mPF, "MySettings::doRead NOT EXIST, writing defaults");
+      Prn::print(0, "MySettings::doRead NOT EXIST, writing defaults");
       reset();
       doWrite();
-      mValidFlag = true;
       return;
    }
 
@@ -156,7 +121,7 @@ void MySettings::doRead()
    int tRet = fread(tBuffer, 1, 1000, tFile);
    if (tRet < 0)
    {
-      Prn::print(mPF, "MySettings::doRead FAIL1");
+      Prn::print(0, "MySettings::doRead FAIL1");
       Ris::doUnlockAndClose(tFile);
       return;
    }
@@ -174,7 +139,7 @@ void MySettings::doRead()
    delete tReader;
    if (!tPass)
    {
-      Prn::print(mPF, "MySettings::doRead FAIL2 parse error");
+      Prn::print(0, "MySettings::doRead FAIL2 parse error");
       return;
    }
 
@@ -190,13 +155,12 @@ void MySettings::doRead()
 
 void MySettings::show()
 {
-   if (!Prn::getFilter(mPF)) return;
-   Prn::print(mPF, "");
-
-   Prn::print(mPF, "BuzzerEnable           %s", my_string_from_bool(mBuzzerEnable));
-   Prn::print(mPF, "AlarmEnable            %s", my_string_from_bool(mAlarmEnable));
-   Prn::print(mPF, "RawInput               %.1f", mRawInput);
-   Prn::print(mPF, "Input                  %.1f", mInput);
+   Prn::print(0, "");
+   Prn::print(0, "BuzzerEnable           %s", my_string_from_bool(mBuzzerEnable));
+   Prn::print(0, "AlarmEnable            %s", my_string_from_bool(mAlarmEnable));
+   Prn::print(0, "RawInput               %.1f", mRawInput);
+   Prn::print(0, "Input                  %.1f", mInput);
+   Prn::print(0, "");
 }
 
 //******************************************************************************

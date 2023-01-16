@@ -41,8 +41,6 @@ public:
 
    // Json file path.
    char mFilePath[cMaxStringSize];
-   char mLockFileName[cMaxStringSize];
-   int mLockFile;
 
    // Instrumentation.
    int mPF;
@@ -64,22 +62,6 @@ public:
    // Calibrated measurement input.
    float mInput;
 
-   // Measurement input override.
-   float mOverrideInput;
-
-   // High level carrier measurement thresholds.
-   float mThreshHi;
-   float mThreshLo;
-
-   // If true then the input is above threshold low.
-   bool mInRange;
-
-   // If true then the input is above threshold high.
-   bool mDetect;
-
-   // Condition state. If true then the alarm is active.
-   bool mCState;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -94,25 +76,19 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Lock the json file and read from it.
-   void doReadModifyWriteBegin();
-
-   // Perform the calculation, write to the json file, and unlock it.
-   void doReadModifyWriteEnd();
-
-   // Lock the json file, read from it, and unlock it.
-   void doProtectedRead();
-
    // Read from the json file.
    void doRead();
 
    // Write to the json file.
    void doWrite();
 
-   // Return a json value for all of the variables.
-   Json::Value getJsonValue();
+   // Return a json value from the class member variables.
+   Json::Value getJsonValueFromMembers();
 
-   // Return a string with json for all of the variables.
+   // Set the class member variables from a json value.
+   void setMembersFromJsonValue(Json::Value aValue);
+
+   // Return a string with json for all of the class member variables.
    std::string getJsonString();
 
    //***************************************************************************

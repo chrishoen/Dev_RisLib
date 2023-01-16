@@ -17,54 +17,19 @@ void MySettings::initialize()
    mValidFlag = false;
    
    strcpy(mFilePath,"/opt/prime/files/mysettings.json");
-   strcpy(mLockFileName, "mysettings");
-   mLockFile = 0;
-   mPF = 0;
 
    mAlarmEnable = false;
    mBuzzerEnable = false;
    mRawInput = 9000;
    mInput = -60;
-   mOverrideInput = -60;
-   mThreshHi = -99;
-   mThreshLo = -60;
-   mInRange = false;
-   mDetect = false;
-   mCState = false;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Return a json value from the class member variables.
 
-// Lock the json file and read from it.
-void MySettings::doReadModifyWriteBegin()
-{
-   mLockFile = Ris::doLockFile_OpenAndLockForWrite(mLockFileName);
-   doRead();
-}
-
-// Perform the calculation, write to the json file, and unlock it.
-void MySettings::doReadModifyWriteEnd()
-{
-   doWrite();
-   Ris::doLockFile_UnlockAndClose(mLockFile);
-}
-
-// Lock the json file, read from it, and unlock it.
-void MySettings::doProtectedRead()
-{
-   mLockFile = Ris::doLockFile_OpenAndLockForRead(mLockFileName);
-   doRead();
-   Ris::doLockFile_UnlockAndClose(mLockFile);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Return a json value for all of the variables.
-
-Json::Value MySettings::getJsonValue()
+Json::Value MySettings::getJsonValueFromMembers()
 {
    // Json variables.
    Json::Value tJsonValue;
@@ -75,14 +40,30 @@ Json::Value MySettings::getJsonValue()
    tJsonValue["BuzzerEnable"] = mBuzzerEnable;
    tJsonValue["RawInput"] = my_string_from_float(tBuffer, "%.2f", mRawInput);
    tJsonValue["Input"] = my_string_from_float(tBuffer, "%.2f", mInput);
-   tJsonValue["ThreshHi"] = my_string_from_float(tBuffer, "%.2f", mThreshHi);
-   tJsonValue["ThreshLo"] = my_string_from_float(tBuffer, "%.2f", mThreshLo);
-   tJsonValue["InRange"] = mInRange;
-   tJsonValue["Detect"] = mDetect;
-   tJsonValue["CState"] = mCState;
 
    // Done.
    return tJsonValue;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the class member variables from a json value.
+
+void MySettings::setMembersFromJsonValue(Json::Value aJsonValue)
+{
+   try
+   {
+      // Copy members.
+      mAlarmEnable = aJsonValue["AlarmEnable"].asBool();
+      mBuzzerEnable = aJsonValue["BuzzerEnable"].asBool();
+      mRawInput = std::stof(aJsonValue["RawInput"].asString());
+      mInput = std::stof(aJsonValue["Input"].asString());
+   }
+   catch (...)
+   {
+      Prn::print(mPF, "MySettings::setMembersFromJsonValue EXCEPTION");
+   }
 }
 
 //******************************************************************************
@@ -92,14 +73,8 @@ Json::Value MySettings::getJsonValue()
 
 std::string MySettings::getJsonString()
 {
-   // If this is not valid then read from the json file.
-   if (!mValidFlag)
-   {
-      doProtectedRead();
-   }
-
    // Json variable.
-   Json::Value tJsonValue = getJsonValue();
+   Json::Value tJsonValue = getJsonValueFromMembers();
 
    std::string tString;
    Json::FastWriter tWriter;
@@ -114,19 +89,17 @@ std::string MySettings::getJsonString()
 
 void MySettings::doWrite()
 {
-   // Json variables.
-   Json::Value tJsonValue;
-   char tBuffer[40];
+   // Json variable.
+   Json::Value tJsonValue = getJsonValueFromMembers();
 
-   // Copy members.
-   tJsonValue["AlarmEnable"] = mAlarmEnable;
-   tJsonValue["BuzzerEnable"] = mBuzzerEnable;
-   tJsonValue["ThreshHi"] = my_string_from_float(tBuffer, "%.2f", mThreshHi);
+   // Write the json variable to a string.
+   std::string tString;
+   Json::FastWriter tWriter;
+   tString = tWriter.write(tJsonValue);
 
-   // Write to json file.
-   Ris::doWriteJsonToFile(
-      tJsonValue,           // Input
-      mFilePath);           // Input
+   FILE* tFile = Ris::doOpenAndLockForWrite(mFilePath);
+   fwrite(tString.c_str(), 1, tString.length(), tFile);
+   Ris::doUnlockAndClose(tFile);
 }
 
 //******************************************************************************
@@ -136,38 +109,49 @@ void MySettings::doWrite()
 
 void MySettings::doRead()
 {
-   // Json variables.
-   Json::Value tJsonValue;
-
-   // If the json file doesn't exist.
+   // If the json file doesn't exist then set the class member variables
+   // to defaults, write the class to the file, and exit. This will
+   // create a file for the first time with defaults.
    if (!Ris::portableFilePathExists(mFilePath))
    {
-      Prn::print(mPF, "MySettings::doRead NOT EXIST");
-      // Write to the file, so that it exists.
+      Prn::print(mPF, "MySettings::doRead NOT EXIST, writing defaults");
       initialize();
       doWrite();
       mValidFlag = true;
       return;
    }
 
-   try
+   // Open the file with a read lock. Read from the file into a buffer. 
+   // Unlock the file and close it.
+   FILE* tFile = Ris::doOpenAndLockForRead(mFilePath);
+   char* tBuffer = new char[1001];
+   int tRet = fread(tBuffer, 1, 1000, tFile);
+   if (tRet < 0)
    {
-      // Read from json file.
-      Ris::doReadJsonFromFile(
-         tJsonValue,           // Output
-         mFilePath);           // Input
-
-      // Copy members.
-      mAlarmEnable = tJsonValue["AlarmEnable"].asBool();
-      mBuzzerEnable = tJsonValue["BuzzerEnable"].asBool();
-      mThreshHi = std::stof(tJsonValue["ThreshHi"].asString());
+      Prn::print(mPF, "MySettings::doRead FAIL1");
+      Ris::doUnlockAndClose(tFile);
+      return;
    }
-   catch (...)
+   Ris::doUnlockAndClose(tFile);
+
+   // Parse the buffer into a json value.
+   char* tBeginDoc = tBuffer;
+   char* tEndDoc = tBuffer + tRet;
+   Json::Value tJsonValue;
+   std::string tError;
+   Json::CharReaderBuilder tBuilder;
+   Json::CharReader* tReader = tBuilder.newCharReader();
+   bool tPass = tReader->parse(tBeginDoc, tEndDoc, &tJsonValue, &tError);
+   delete[] tBuffer;
+   delete tReader;
+   if (!tPass)
    {
-      Prn::print(mPF, "MySettings::doRead EXCEPTION");
+      Prn::print(mPF, "MySettings::doRead FAIL2 parse error");
+      return;
    }
 
-   mValidFlag = true;
+   // Set the class member variables from the json value.
+   setMembersFromJsonValue(tJsonValue);
 }
 
 //******************************************************************************
@@ -185,11 +169,6 @@ void MySettings::show()
    Prn::print(mPF, "AlarmEnable            %s", my_string_from_bool(mAlarmEnable));
    Prn::print(mPF, "RawInput               %.1f", mRawInput);
    Prn::print(mPF, "Input                  %.1f", mInput);
-   Prn::print(mPF, "ThreshHi               %.1f", mThreshHi);
-   Prn::print(mPF, "ThreshLo               %.1f", mThreshLo);
-   Prn::print(mPF, "InRange                %s",   my_string_from_bool(mInRange));
-   Prn::print(mPF, "Detect                 %s",   my_string_from_bool(mDetect));
-   Prn::print(mPF, "CState                 %s",   my_string_from_bool(mCState));
 }
 
 //******************************************************************************

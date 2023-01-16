@@ -91,7 +91,7 @@ std::string MySettings::getJsonString()
 //******************************************************************************
 // Write to the json file.
 
-void MySettings::doWrite()
+void MySettings::doWrite2()
 {
    // Json variable.
    Json::Value tJsonValue = getJsonValueFromMembers();
@@ -100,6 +100,30 @@ void MySettings::doWrite()
    std::string tString;
    Json::FastWriter tWriter;
    tString = tWriter.write(tJsonValue);
+
+   FILE* tFile = Ris::doOpenAndLockForWrite(mFilePath);
+   fwrite(tString.c_str(), 1, tString.length(), tFile);
+   Ris::doUnlockAndClose(tFile);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write to the json file.
+
+void MySettings::doWrite()
+{
+   // Json variable.
+   Json::Value tJsonValue = getJsonValueFromMembers();
+
+   // Write the json variable to a string.
+   std::string tString;
+   std::stringstream tStream;
+   Json::StreamWriterBuilder tBuilder;
+   Json::StreamWriter* tWriter = tBuilder.newStreamWriter();
+   tWriter->write(tJsonValue, &tStream);
+   tString = tStream.str();
+   delete tWriter;
 
    FILE* tFile = Ris::doOpenAndLockForWrite(mFilePath);
    fwrite(tString.c_str(), 1, tString.length(), tFile);

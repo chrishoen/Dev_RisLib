@@ -81,6 +81,7 @@ public:
 
    // Write to the json file.
    void doWrite();
+   void doWrite2();
 
    // Return a json value from the class member variables.
    Json::Value getJsonValueFromMembers();

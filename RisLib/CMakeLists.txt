@@ -26,5 +26,7 @@ elseif(MYMODE STREQUAL "prime-arm7")
 elseif(MYMODE STREQUAL "prime-arm8")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS ${project} DESTINATION "/opt/prime/lib/arm8")
+   install(FILES ${inc_files} DESTINATION "/mnt/c/Prime/AAA_Work/Dev_Audio/extlibs/rislib/installs/include")
+   install(TARGETS ${project} DESTINATION "/mnt/c/Prime/AAA_Work/Dev_Audio/extlibs/rislib/installs/arm-build")
 endif()
 

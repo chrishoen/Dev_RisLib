@@ -48,7 +48,8 @@ Json::Value MySettings1::getJsonValueFromMembers()
    tJsonValue["AlarmEnable"] = mAlarmEnable;
    tJsonValue["BuzzerEnable"] = mBuzzerEnable;
    tJsonValue["RawInput"] = my_string_from_float(tBuffer, "%.2f", mRawInput);
-   tJsonValue["Input"] = my_string_from_float(tBuffer, "%.2f", mInput);
+// tJsonValue["Input"] = my_string_from_float(tBuffer, "%.2f", mInput);
+   tJsonValue["Input"] = mInput;
 
    // Done.
    return tJsonValue;
@@ -66,7 +67,8 @@ void MySettings1::setMembersFromJsonValue(Json::Value aJsonValue)
       mAlarmEnable = aJsonValue["AlarmEnable"].asBool();
       mBuzzerEnable = aJsonValue["BuzzerEnable"].asBool();
       mRawInput = std::stof(aJsonValue["RawInput"].asString());
-      mInput = std::stof(aJsonValue["Input"].asString());
+//    mInput = std::stof(aJsonValue["Input"].asString());
+      mInput = aJsonValue["Input"].asFloat();
    }
    catch (...)
    {
@@ -81,6 +83,37 @@ void MySettings1::setMembersFromJsonValue(Json::Value aJsonValue)
 // Use file locks
 
 void MySettings1::doWrite()
+{
+   // Get a json value from the member variables.
+   Json::Value tJsonValue = getJsonValueFromMembers();
+
+   // Write the json value to a string.
+   std::string tString;
+   std::stringstream tStream;
+   Json::StreamWriterBuilder tBuilder;
+// tBuilder["precision"] = 4;
+// tBuilder["precisionType"] = "decimal";
+   tBuilder["precision"] = ".4";
+
+   const std::unique_ptr<Json::StreamWriter> tWriter(tBuilder.newStreamWriter());
+   tWriter->write(tJsonValue, &tStream);
+   tStream << std::endl;
+   tString = tStream.str();
+
+   // Open the file with a write lock. Write the string to the file. 
+   // Unlock the file and close it.
+   FILE* tFile = Ris::doOpenAndLockForWrite(mFilePath);
+   fwrite(tString.c_str(), 1, tString.length(), tFile);
+   Ris::doUnlockAndClose(tFile);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write the class member variables to the json file.
+// Use file locks
+
+void MySettings1::doWrite2()
 {
    // Get a json value from the member variables.
    Json::Value tJsonValue = getJsonValueFromMembers();

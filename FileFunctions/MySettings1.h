@@ -18,7 +18,7 @@ Settings json file class.
 // json file. The file is intended to have a single writer and multiple
 // readers.
 
-class MySettings
+class MySettings1
 {
 public:
    //***************************************************************************
@@ -59,7 +59,7 @@ public:
    // Methods.
 
    // Constructor.
-   MySettings();
+   MySettings1();
    void reset();
 
    //***************************************************************************

@@ -5,19 +5,19 @@
 
 #include "risFileFunctions.h"
 
-#include "MySettings.h"
+#include "MySettings2.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Constructor.
 
-MySettings::MySettings()
+MySettings2::MySettings2()
 {
    reset();
 }
 
-void MySettings::reset()
+void MySettings2::reset()
 {
    if (Ris::portableIsWindows())
    {
@@ -38,7 +38,7 @@ void MySettings::reset()
 //******************************************************************************
 // Return a json value derived from the class member variables.
 
-Json::Value MySettings::getJsonValueFromMembers()
+Json::Value MySettings2::getJsonValueFromMembers()
 {
    // Json variables.
    Json::Value tJsonValue;
@@ -59,7 +59,7 @@ Json::Value MySettings::getJsonValueFromMembers()
 //******************************************************************************
 // Set the class member variables from a json value.
 
-void MySettings::setMembersFromJsonValue(Json::Value aJsonValue)
+void MySettings2::setMembersFromJsonValue(Json::Value aJsonValue)
 {
    try
    {
@@ -70,17 +70,78 @@ void MySettings::setMembersFromJsonValue(Json::Value aJsonValue)
    }
    catch (...)
    {
-      Prn::print(0, "MySettings::setMembersFromJsonValue EXCEPTION");
+      Prn::print(0, "MySettings2::setMembersFromJsonValue EXCEPTION");
    }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Write the class member variables to the json file.
-// Use file locks
+// Begin a read/modify/write operation. Read member variables
+// from the json file.
+// 
+// If the json file doesn't exist then set the member variables to 
+// defaults, open and lock the file, and exit.
+// If the file does exist then open and lock the file, read the
+// member variables from the file, and exit.
+// After this executes the file remains locked until a call to
+// doReadModifyWriteBegin.
 
-void MySettings::doWrite()
+void MySettings2::doReadModifyWriteBegin()
+{
+   // If the json file doesn't exist then set the member variables
+   // to defaults, open the file with a write lock, and exit. This will
+   // create a file for the first time with defaults.
+   if (!Ris::portableFilePathExists(mFilePath))
+   {
+      Prn::print(0, "MySettings2::doRead NOT EXIST, writing defaults");
+      reset();
+      mFile = Ris::doOpenAndLockForWrite(mFilePath);
+      return;
+   }
+
+   // Open the file with a write lock. Read from the file into a buffer. 
+   mFile = Ris::doOpenAndLockForReadWrite(mFilePath);
+   char* tBuffer = new char[1001];
+   int tRet = (int)fread(tBuffer, 1, 1000, mFile);
+   if (tRet < 0)
+   {
+      Prn::print(0, "MySettings2::doRead FAIL1");
+      Ris::doUnlockAndClose(mFile);
+      return;
+   }
+
+   // Parse the buffer into a json value.
+   char* tBeginDoc = tBuffer;
+   char* tEndDoc = tBuffer + tRet;
+   Json::Value tJsonValue;
+   std::string tError;
+   Json::CharReaderBuilder tBuilder;
+   Json::CharReader* tReader = tBuilder.newCharReader();
+   bool tPass = tReader->parse(tBeginDoc, tEndDoc, &tJsonValue, &tError);
+   delete tReader;
+   delete[] tBuffer;
+   if (!tPass)
+   {
+      Prn::print(0, "MySettings2::doRead FAIL2 parse error");
+      return;
+   }
+
+   // Set the class member variables from the json value.
+   setMembersFromJsonValue(tJsonValue);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// End a read/modify/write operation. Write modified member variables
+// to the json file.
+//
+// Reopen the file to the beginning, truncating it.
+// Write the member variables to the file.
+// Unlock and close the file.
+
+void MySettings2::doReadModifyWriteEnd()
 {
    // Get a json value from the member variables.
    Json::Value tJsonValue = getJsonValueFromMembers();
@@ -95,11 +156,13 @@ void MySettings::doWrite()
    tString = tStream.str();
    delete tWriter;
 
-   // Open the file with a write lock. Write the string to the file. 
+   // Reopen the file for write. This seeks to the beginning and truncates
+   // but does not change the file lock.
+   // Write the string to the file. 
    // Unlock the file and close it.
-   FILE* tFile = Ris::doOpenAndLockForWrite(mFilePath);
-   fwrite(tString.c_str(), 1, tString.length(), tFile);
-   Ris::doUnlockAndClose(tFile);
+   freopen(0, "w", mFile);
+   fwrite(tString.c_str(), 1, tString.length(), mFile);
+   Ris::doUnlockAndClose(mFile);
 }
 
 //******************************************************************************
@@ -107,19 +170,20 @@ void MySettings::doWrite()
 //******************************************************************************
 // Read the member variables from the json file. Use file locks.
 // If the file doesn't exist then set the member variables to 
-// defaults and write the file so that it does exist. This will
+// defaults and write to the file so that it does exist. This will
 // create a file for the first time with defaults.
 
-void MySettings::doRead()
+void MySettings2::doRead()
 {
    // If the json file doesn't exist then set the member variables
    // to defaults, write them to the file, and exit. This will
    // create a file for the first time with defaults.
    if (!Ris::portableFilePathExists(mFilePath))
    {
-      Prn::print(0, "MySettings::doRead NOT EXIST, writing defaults");
+      Prn::print(0, "MySettings2::doRead NOT EXIST, writing defaults");
       reset();
-      doWrite();
+      doReadModifyWriteBegin();
+      doReadModifyWriteEnd();
       return;
    }
 
@@ -130,7 +194,7 @@ void MySettings::doRead()
    int tRet = (int)fread(tBuffer, 1, 1000, tFile);
    if (tRet < 0)
    {
-      Prn::print(0, "MySettings::doRead FAIL1");
+      Prn::print(0, "MySettings2::doRead FAIL1");
       Ris::doUnlockAndClose(tFile);
       return;
    }
@@ -148,7 +212,7 @@ void MySettings::doRead()
    delete[] tBuffer;
    if (!tPass)
    {
-      Prn::print(0, "MySettings::doRead FAIL2 parse error");
+      Prn::print(0, "MySettings2::doRead FAIL2 parse error");
       return;
    }
 
@@ -162,7 +226,7 @@ void MySettings::doRead()
 //******************************************************************************
 // Show.
 
-void MySettings::show()
+void MySettings2::show()
 {
    Prn::print(0, "");
    Prn::print(0, "BuzzerEnable           %s", my_string_from_bool(mBuzzerEnable));

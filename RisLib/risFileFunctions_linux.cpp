@@ -161,6 +161,11 @@ void doLockFile_UnlockAndClose(int aFileDesc)
 FILE* doOpenAndLockForRead(const char* aFilePath)
 {
    FILE* tFile = fopen(aFilePath, "r");
+   if (!tFile)
+   {
+      printf("doOpenAndLockForRead FAIL %s\n", aFilePath);
+      return 0;
+   }
    int tFileDesc = fileno(tFile);
 
    struct flock lock;
@@ -182,6 +187,11 @@ FILE* doOpenAndLockForRead(const char* aFilePath)
 FILE* doOpenAndLockForWrite(const char* aFilePath)
 {
    FILE* tFile = fopen(aFilePath, "w");
+   if (!tFile)
+   {
+      printf("doOpenAndLockForWrite FAIL %s\n", aFilePath);
+      return 0;
+   }
    int tFileDesc = fileno(tFile);
 
    struct flock lock;
@@ -202,7 +212,12 @@ FILE* doOpenAndLockForWrite(const char* aFilePath)
 
 FILE* doOpenAndLockForReadWrite(const char* aFilePath)
 {
-   FILE* tFile = fopen(aFilePath, "rw");
+   FILE* tFile = fopen(aFilePath, "r+");
+   if (!tFile)
+   {
+      printf("doOpenAndLockForReadWrite FAIL %s\n", aFilePath);
+      return 0;
+   }
    int tFileDesc = fileno(tFile);
 
    struct flock lock;

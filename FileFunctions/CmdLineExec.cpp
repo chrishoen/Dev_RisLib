@@ -37,8 +37,13 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO4"))  executeGo4(aCmd);
    if (aCmd->isCmd("GO5"))  executeGo5(aCmd);
 
-   if (aCmd->isCmd("R"))    executeRead(aCmd);
-   if (aCmd->isCmd("W"))    executeWrite(aCmd);
+   if (aCmd->isCmd("W1"))    executeWrite1(aCmd);
+   if (aCmd->isCmd("R1"))    executeRead1(aCmd);
+
+   if (aCmd->isCmd("B2"))    executeBegin2(aCmd);
+   if (aCmd->isCmd("E2"))    executeEnd2(aCmd);
+   if (aCmd->isCmd("R2"))    executeRead2(aCmd);
+
    if (aCmd->isCmd("Lock"))    executeLock(aCmd);
    if (aCmd->isCmd("Unlock"))  executeUnlock(aCmd);
 }
@@ -47,21 +52,41 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeWrite1(Ris::CmdLineCmd* aCmd)
 {
-   mSettings.doRead();
-   mSettings.show();
+   aCmd->setArgDefault(1, 101);
+   mSettings1.mInput = aCmd->argFloat(1);
+   mSettings1.doWrite();
+}
+
+void CmdLineExec::executeRead1(Ris::CmdLineCmd* aCmd)
+{
+   mSettings1.doRead();
+   mSettings1.show();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeBegin2(Ris::CmdLineCmd* aCmd)
+{
+   mSettings2.doReadModifyWriteBegin();
+   Prn::print(0, "done");
+}
+
+void CmdLineExec::executeEnd2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 101);
-   mSettings.mInput = aCmd->argFloat(1);
-   mSettings.doWrite();
+   mSettings2.mInput = aCmd->argFloat(1);
+   mSettings2.doReadModifyWriteEnd();
+   Prn::print(0, "done");
+}
+
+void CmdLineExec::executeRead2(Ris::CmdLineCmd* aCmd)
+{
+   mSettings2.doRead();
+   mSettings2.show();
 }
 
 //******************************************************************************

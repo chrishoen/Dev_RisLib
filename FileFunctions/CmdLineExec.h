@@ -8,7 +8,8 @@ Program command line executive.
 //******************************************************************************
 //******************************************************************************
 
-#include "MySettings.h"
+#include "MySettings1.h"
+#include "MySettings2.h"
 #include "risCmdLineExec.h"
 
 //******************************************************************************
@@ -30,7 +31,8 @@ public:
    //***************************************************************************
    // Members.
 
-   MySettings mSettings;
+   MySettings1 mSettings1;
+   MySettings2 mSettings2;
    int mLockFile;
 
    //***************************************************************************
@@ -63,8 +65,13 @@ public:
    void executeGo4(Ris::CmdLineCmd* aCmd);
    void executeGo5(Ris::CmdLineCmd* aCmd);
 
-   void executeRead(Ris::CmdLineCmd* aCmd);
-   void executeWrite(Ris::CmdLineCmd* aCmd);
+   void executeRead1(Ris::CmdLineCmd* aCmd);
+   void executeWrite1(Ris::CmdLineCmd* aCmd);
+
+   void executeBegin2(Ris::CmdLineCmd* aCmd);
+   void executeEnd2(Ris::CmdLineCmd* aCmd);
+   void executeRead2(Ris::CmdLineCmd* aCmd);
+
    void executeLock(Ris::CmdLineCmd* aCmd);
    void executeUnlock(Ris::CmdLineCmd* aCmd);
 };

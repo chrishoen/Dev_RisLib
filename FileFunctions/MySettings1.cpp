@@ -91,42 +91,10 @@ void MySettings1::doWrite()
    std::string tString;
    std::stringstream tStream;
    Json::StreamWriterBuilder tBuilder;
-// tBuilder["precision"] = 4;
-// tBuilder["precisionType"] = "decimal";
-   tBuilder["precision"] = ".4";
-
    const std::unique_ptr<Json::StreamWriter> tWriter(tBuilder.newStreamWriter());
    tWriter->write(tJsonValue, &tStream);
    tStream << std::endl;
    tString = tStream.str();
-
-   // Open the file with a write lock. Write the string to the file. 
-   // Unlock the file and close it.
-   FILE* tFile = Ris::doOpenAndLockForWrite(mFilePath);
-   fwrite(tString.c_str(), 1, tString.length(), tFile);
-   Ris::doUnlockAndClose(tFile);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Write the class member variables to the json file.
-// Use file locks
-
-void MySettings1::doWrite2()
-{
-   // Get a json value from the member variables.
-   Json::Value tJsonValue = getJsonValueFromMembers();
-
-   // Write the json value to a string.
-   std::string tString;
-   std::stringstream tStream;
-   Json::StreamWriterBuilder tBuilder;
-   Json::StreamWriter* tWriter = tBuilder.newStreamWriter();
-   tWriter->write(tJsonValue, &tStream);
-   tStream << std::endl;
-   tString = tStream.str();
-   delete tWriter;
 
    // Open the file with a write lock. Write the string to the file. 
    // Unlock the file and close it.

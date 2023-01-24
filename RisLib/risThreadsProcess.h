@@ -32,6 +32,11 @@ void showCurrentThreadInfo();
 //******************************************************************************
 // These handle signals.
 
+// Post to the termination semaphore.
+void postTermination();
+
+// Block on the termination semaphore. This can be posted to by the above
+// call or by a kill signal.
 void waitForTermination();
 
 //******************************************************************************

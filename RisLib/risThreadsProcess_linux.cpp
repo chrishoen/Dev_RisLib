@@ -142,6 +142,11 @@ void sig_handler(int signum)
    rTerminateSem.put();
 }
 
+void postTermination()
+{
+   rTerminateSem.put();
+}
+
 void waitForTermination()
 {
    // Register signal handler.
@@ -154,7 +159,6 @@ void waitForTermination()
    rTerminateSem.get();
    printf("TERMINATING\n");
 }
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

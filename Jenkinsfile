@@ -42,7 +42,7 @@ pipeline {
                         statusCode = sh  script:"""#!/bin/bash
                         printenv
                         git checkout "\${CURRENT_BRANCH}"
-                        project_path=\$(echo "\$PWD" | sed -r "s|/var|\$HOSTPATH|")
+                        project_path=\$(echo "\$PWD" | sed -r "s|\$JENKINS_HOME|\$HOST_JENKINS_HOME|")
                         ./enter-docker.sh build_number="${env.BUILD_NUMBER}" job_name="${env.JOB_NAME}" project_path="\${project_path}" 
                         """, returnStatus:true
 

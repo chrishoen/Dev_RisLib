@@ -17,11 +17,14 @@ if (MYSTANDALONE)
 endif()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("FileFunctions")
 return()
 
 add_subdirectory ("RisLib")
 add_subdirectory ("Test")
+return()
+
+add_subdirectory ("RisLib")
+add_subdirectory ("FileFunctions")
 return()
 
 add_subdirectory ("RisLib")

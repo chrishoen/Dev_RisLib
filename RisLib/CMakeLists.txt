@@ -26,5 +26,8 @@ elseif(MYMODE STREQUAL "prime-arm7")
 elseif(MYMODE STREQUAL "prime-arm8")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS ${project} DESTINATION "/opt/prime/lib/arm8")
+elseif(MYMODE STREQUAL "prime-ubu")
+   install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
+   install(TARGETS ${project} DESTINATION "/opt/prime/lib/ubu")
 endif()
 

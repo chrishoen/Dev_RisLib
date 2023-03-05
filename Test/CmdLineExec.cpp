@@ -47,12 +47,34 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+
+typedef union MacAddrUnionT
+{
+    typedef struct MacWordStructT
+    {
+        unsigned long mLsw;
+        unsigned short mMsw;
+    } MacWordStruct;
+    MacWordStruct mWordStruct;
+    unsigned char mBytes[6];
+} MacAddrUnion;
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "start");
-   int tRet = system(
-      "sudo setcap 'cap_sys_nice=eip cap_sys_resource=eip cap_fowner=eip cap_ipc_lock=eip cap_ipc_owner=eip' /opt/prime/bin/captest");
-   Prn::print(0, "finish %d", tRet);
+    MacAddrUnion tUnion;
+    memset(&tUnion, 0, sizeof(tUnion));
+    tUnion.mBytes[0] = 0x00;
+    tUnion.mBytes[1] = 0x11;
+    tUnion.mBytes[2] = 0x22;
+    tUnion.mBytes[3] = 0x33;
+    tUnion.mBytes[4] = 0x44;
+    tUnion.mBytes[5] = 0x55;
+
+    unsigned int tLsw = tUnion.mWordStruct.mLsw;
+    unsigned int tMsw = tUnion.mWordStruct.mMsw;
+
+    Prn::print(0, "tLsw %08x", tLsw);
+    Prn::print(0, "tMsw %08x", tMsw);
 }
 
 

@@ -31,6 +31,8 @@ ProcThread::ProcThread()
    // Initialize member variables.
    mUdpStringThread = 0;
    mConnectionFlag = false;
+   mTxCount = 0;
+   mRxCount = 0;
    mTPFlag = false;
 }
 
@@ -135,7 +137,7 @@ void ProcThread::executeOnTimer(int aTimerCount)
 
 void ProcThread::executeRxString(std::string* aString)
 {
-   Prn::print(Prn::Show1, "ProcThread::executeRxString %s", aString->c_str());
+   Prn::print(Prn::Show1, "RxString %4d %s", mRxCount++, aString->c_str());
    delete aString;
 }
 

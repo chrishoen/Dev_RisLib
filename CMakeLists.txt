@@ -17,7 +17,8 @@ if (MYSTANDALONE)
 endif()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("Test")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoUdpString")
 return()
 
 add_subdirectory ("RisLib")

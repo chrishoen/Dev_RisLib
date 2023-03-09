@@ -1,7 +1,6 @@
 
 #include "stdafx.h"
 
-#include <windows.h>
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
@@ -33,8 +32,6 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    // Launch program threads.
-
-   Prn::print(0, "GetCurrentThreadId %d", GetCurrentThreadId());
 
    if (true)
    {

@@ -1,8 +1,7 @@
 
 #include "stdafx.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "myassert.h
 
 #include "procoUdpSettings.h"
 #include "procoProcThread.h"
@@ -87,6 +86,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
+    assert(0);
 }
 
 //******************************************************************************

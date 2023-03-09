@@ -1,6 +1,11 @@
 
 #include "stdafx.h"
 
+#include <windows.h>
+#include <winioctl.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "procoUdpSettings.h"
 #include "procoProcThread.h"
 #include "procoMonitorThread.h"
@@ -84,6 +89,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
+    Prn::print(0, "GetCurrentThreadId %d", GetCurrentThreadId());
 }
 
 //******************************************************************************

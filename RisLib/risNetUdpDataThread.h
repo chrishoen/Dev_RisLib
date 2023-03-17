@@ -66,7 +66,7 @@ public:
    RxDataQCall mRxDataQCall;
 
    // Receive data maximum receive data size.
-   int mRxDataMaxSize;
+   int mMaxDataSize;
 
    // Program trace index.
    int mTI;

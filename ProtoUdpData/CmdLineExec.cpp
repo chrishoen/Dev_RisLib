@@ -66,16 +66,12 @@ void CmdLineExec::special(int aSpecial)
 
 void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 {
-   char tString[100];
-   if (aCmd->numArg() == 0)
-   {
-      strcpy(tString, "ABCD");
-   }
-   else
-   {
-      sprintf(tString, "%s", aCmd->argWhole());
-   }
-   gProcThread->sendString(new std::string(tString));
+   char tData[100];
+   //memset(tData, 2, 100);
+   //tData[0] = 1;
+   //tData[99] = 3;
+
+   gProcThread->sendData(tData, 100);
 }
 
 //******************************************************************************

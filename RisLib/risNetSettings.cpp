@@ -32,7 +32,7 @@ Settings::Settings()
    mFlags = 0;
    mMsgMonkey = 0;
    mThreadPriority = Ris::Threads::gPriorities.mUdp;
-   mRxDataMaxSize = 1500;
+   mMaxDataSize = 1500;
 }
 
 void Settings::setLocalAddress(const char* aIpAddr, int aIpPort)

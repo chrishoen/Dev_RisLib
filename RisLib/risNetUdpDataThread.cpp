@@ -32,7 +32,7 @@ UdpDataThread::UdpDataThread(Settings& aSettings)
    // Store settings.
    mSettings = aSettings;
    mRxDataQCall = aSettings.mRxDataQCall;
-   mRxDataMaxSize = aSettings.mRxDataMaxSize;
+   mMaxDataSize = aSettings.mMaxDataSize;
 
    // Initialize variables.
    mTI = mSettings.mTraceIndex;
@@ -123,7 +123,7 @@ restart:
 
       // Try to receive a message with a blocking receive call. If a message
       // was received then process it.
-      char* tData = new char[mRxDataMaxSize];
+      char* tData = new char[mMaxDataSize];
       int tSize = 0;
       if (mDataSocket.doRecvData(tData, &tSize))
       {
@@ -219,7 +219,6 @@ void UdpDataThread::sendData (const char* aData, int aSize)
 
    // Send the data.
    mDataSocket.doSendData(aData, aSize);
-   delete aData;
 }
 
 //******************************************************************************

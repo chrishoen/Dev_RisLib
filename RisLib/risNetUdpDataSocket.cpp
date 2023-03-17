@@ -174,7 +174,7 @@ void UdpDataSocket::configure()
 
 bool UdpDataSocket::doRecvData(char* aData, int* aSize)
 {
-   Trc::write(mTI, 0, "UdpDataSocket::doReceiveString");
+   Trc::write(mTI, 0, "UdpDataSocket::doRecData");
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -226,7 +226,7 @@ bool UdpDataSocket::doRecvData(char* aData, int* aSize)
 
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
-   Trc::write(mTI, 1, "UdpDataSocket doReceiveString done %d %d", mStatus, mError);
+   Trc::write(mTI, 1, "UdpDataSocket doRecvData done %d %d", mStatus, mError);
    mRxCount++;
    *aSize = mRxSize;
    return true;
@@ -241,7 +241,7 @@ bool UdpDataSocket::doRecvData(char* aData, int* aSize)
 
 bool UdpDataSocket::doSendData(const char* aData, int aSize)
 {
-   Trc::write(mTI, 0, "UdpDataSocket::doSendString");
+   Trc::write(mTI, 0, "UdpDataSocket::doSendData");
    // Guard.
    if (!mValidFlag)
    {
@@ -262,7 +262,7 @@ bool UdpDataSocket::doSendData(const char* aData, int aSize)
       // If this is wrapping then send to the last received from address.
       if (mRxCount)
       {
-         Trc::write(mTI, 1, "UdpDataSocket::doSendString WRAP Tx %16s : %5d  ",
+         Trc::write(mTI, 1, "UdpDataSocket::doSendData WRAP Tx %16s : %5d  ",
             mFromAddress.mString,
             mFromAddress.mPort);
          // If this is wrapping then send to the last received from address.

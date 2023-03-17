@@ -86,8 +86,8 @@ public:
    // Receive data callback qcall.
    Ris::Threads::QCall2 <char*,int> mRxDataQCall;
 
-   // Receive data maximum receive data size.
-   int mRxDataMaxSize;
+   // Maximum receive data size.
+   int mMaxDataSize;
 
    //***************************************************************************
    //***************************************************************************

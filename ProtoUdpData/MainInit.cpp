@@ -14,7 +14,7 @@
 
 void main_initialize()
 {
-   printf("ProtoUdpString Program**********************************************BEGIN\n");
+   printf("ProtoUdpData Program**********************************************BEGIN\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -53,7 +53,7 @@ void main_initialize()
    Trc::create_buffer(1,  3, "message");
    Trc::create_buffer(11, 3, "udp");
    Trc::set_default_trace_index(11);
-   Trc::create_log(11, 4, "log/ProtoUdpString_trace11.log");
+   Trc::create_log(11, 4, "log/ProtoUdpData_trace11.log");
    Trc::initialize();
 
    //***************************************************************************
@@ -96,7 +96,7 @@ void main_finalize()
    // Exit process
    ////Ris::Threads::exitProcess();
 
-   printf("ProtoUdpString Program**********************************************BEGIN\n");
+   printf("ProtoUdpData Program**********************************************BEGIN\n");
 }
 
 //******************************************************************************

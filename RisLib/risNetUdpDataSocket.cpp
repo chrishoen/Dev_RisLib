@@ -25,9 +25,8 @@ namespace Net
 
 UdpDataSocket::UdpDataSocket()
 {
-   mRxBuffer = 0;
-   mTxLength = 0;
-   mRxLength = 0;
+   mTxSize = 0;
+   mRxSize = 0;
    mTxCount = 0;
    mRxCount = 0;
    mValidFlag = false;
@@ -46,9 +45,8 @@ void UdpDataSocket::initialize(Settings& aSettings)
    mSettings = aSettings;
 
    // Variables.
-   mRxBuffer = (char*)malloc(cBufferSize);
-   mTxLength = 0;
-   mRxLength = 0;
+   mTxSize = 0;
+   mRxSize = 0;
    mTxCount = 0;
    mRxCount = 0;
    mValidFlag = false;
@@ -59,7 +57,6 @@ void UdpDataSocket::initialize(Settings& aSettings)
 
 UdpDataSocket::~UdpDataSocket()
 {
-   if (mRxBuffer) free(mRxBuffer);
 }
 
 //******************************************************************************
@@ -175,7 +172,7 @@ void UdpDataSocket::configure()
 // This receives a datagram from the socket into a byte buffer and then
 // extracts a message from the byte buffer
 
-bool UdpDataSocket::doRecvData()
+bool UdpDataSocket::doRecvData(char* aData, int* aSize)
 {
    Trc::write(mTI, 0, "UdpDataSocket::doReceiveString");
    //***************************************************************************
@@ -184,8 +181,8 @@ bool UdpDataSocket::doRecvData()
    // Initialize.
 
    // Do this first.
-   mRxBuffer=0;
-   mRxLength=0;
+   mRxSize = 0;
+   *aSize = 0;
 
    // Guard.
    if (!mValidFlag)
@@ -201,13 +198,13 @@ bool UdpDataSocket::doRecvData()
    // Read the data into the receive buffer.
 
    // Read from the socket.
-   BaseClass::doRecvFrom(mFromAddress,mRxBuffer,mRxLength,cBufferSize);
+   BaseClass::doRecvFrom(mFromAddress, aData, mRxSize, cBufferSize);
 
    // Guard.
    // If bad status then return false.
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
-   if (mRxLength <= 0)
+   if (mRxSize <= 0)
    {
       if (BaseClass::mError == 0)
       {
@@ -225,12 +222,13 @@ bool UdpDataSocket::doRecvData()
       mFromAddress.mString,
       mFromAddress.mPort);
 
-   //printf("UdpDataSocket rx message %d\n", mRxLength);
+   //printf("UdpDataSocket rx message %d\n", mRxSize);
 
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
    Trc::write(mTI, 1, "UdpDataSocket doReceiveString done %d %d", mStatus, mError);
    mRxCount++;
+   *aSize = mRxSize;
    return true;
 }
 
@@ -241,7 +239,7 @@ bool UdpDataSocket::doRecvData()
 // It returns true if successful.
 // It is protected by the transmit mutex.
 
-bool UdpDataSocket::doSendData(const char* aData, int aLength)
+bool UdpDataSocket::doSendData(const char* aData, int aSize)
 {
    Trc::write(mTI, 0, "UdpDataSocket::doSendString");
    // Guard.
@@ -257,7 +255,7 @@ bool UdpDataSocket::doSendData(const char* aData, int aLength)
    if (!mSettings.mUdpWrapFlag)
    {
       // If this is not wrapping then send to the remote address.
-      tRet = doSendTo(mRemote, aData, aLength);
+      tRet = doSendTo(mRemote, aData, aSize);
    }
    else
    {
@@ -268,7 +266,7 @@ bool UdpDataSocket::doSendData(const char* aData, int aLength)
             mFromAddress.mString,
             mFromAddress.mPort);
          // If this is wrapping then send to the last received from address.
-         tRet = doSendTo(mFromAddress, aData, aLength);
+         tRet = doSendTo(mFromAddress, aData, aSize);
       }
    }
 
@@ -276,7 +274,7 @@ bool UdpDataSocket::doSendData(const char* aData, int aLength)
    {
       // The send was successful.
       // Metrics.
-      mTxLength = aLength;
+      mTxSize = aSize;
       mTxCount++;
    }
    else
@@ -290,7 +288,7 @@ bool UdpDataSocket::doSendData(const char* aData, int aLength)
    }
 
    // Done.
-   Trc::write(mTI, 1, "UdpDataSocket::doSendMsg done %d", mTxLength);
+   Trc::write(mTI, 1, "UdpDataSocket::doSendMsg done %d", mTxSize);
    return tRet;
 }
 

@@ -81,7 +81,13 @@ public:
    Ris::Threads::QCall2<int,Ris::ByteContent*> mServerRxMsgQCall;
 
    // Receive string callback qcall.
-   Ris::Threads::QCall1 < std::string *> mRxStringQCall;
+   Ris::Threads::QCall1 <std::string*> mRxStringQCall;
+
+   // Receive data callback qcall.
+   Ris::Threads::QCall2 <char*,int> mRxDataQCall;
+
+   // Receive data maximum receive data size.
+   int mRxDataMaxSize;
 
    //***************************************************************************
    //***************************************************************************

@@ -55,12 +55,9 @@ public:
    // True if the socket is valid.
    bool mValidFlag;
 
-   // Received data buffer.
-   char* mRxBuffer;
-
    // Metrics.
-   int mTxLength;
-   int mRxLength;
+   int mTxSize;
+   int mRxSize;
    int mTxCount;
    int mRxCount;
 
@@ -93,12 +90,12 @@ public:
    // Receive a data into the allocated receive buffer.
    // It returns true if successful.
    // The recvfrom address is stored in mFromAddress.
-   bool doRecvData ();
+   bool doRecvData (char* aData, int* aSize);
 
    // Send a data over the socket via a blocking send call.
    // It returns true if successful.
    // It is protected by the transmit mutex.
-   bool doSendData(const char* aData, int aLength);
+   bool doSendData(const char* aData, int aSize);
 };
 //******************************************************************************
 //******************************************************************************

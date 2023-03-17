@@ -67,9 +67,9 @@ void CmdLineExec::special(int aSpecial)
 void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 {
    char tData[100];
-   //memset(tData, 2, 100);
-   //tData[0] = 1;
-   //tData[99] = 3;
+   memset(tData, 2, 100);
+   tData[0] = 1;
+   tData[99] = 3;
 
    gProcThread->sendData(tData, 100);
 }

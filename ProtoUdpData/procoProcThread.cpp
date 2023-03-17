@@ -23,7 +23,7 @@ ProcThread::ProcThread()
    // Set base class variables.
    BaseClass::setThreadName("Udp");
    BaseClass::setThreadPriorityHigh();
-   BaseClass::mTimerPeriod = 100;
+   BaseClass::mTimerPeriod = 10;
 
    // Initialize qcalls.
    mRxDataQCall.bind   (this,&ProcThread::executeRxData);

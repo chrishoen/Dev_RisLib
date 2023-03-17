@@ -66,12 +66,15 @@ void CmdLineExec::special(int aSpecial)
 
 void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 {
-   char tData[100];
-   memset(tData, 2, 100);
+   aCmd->setArgDefault(1, 1472);
+   int tSize = aCmd->argInt(1);
+   char* tData = new char[tSize];
+   memset(tData, 2, tSize);
    tData[0] = 1;
-   tData[99] = 3;
+   tData[tSize - 1] = 3;
 
-   gProcThread->sendData(tData, 100);
+   gProcThread->sendData(tData, tSize);
+   Prn::print(0, "SEND %d", tSize);
 }
 
 //******************************************************************************

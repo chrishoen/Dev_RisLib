@@ -23,7 +23,7 @@ ProcThread::ProcThread()
    // Set base class variables.
    BaseClass::setThreadName("Udp");
    BaseClass::setThreadPriorityHigh();
-   BaseClass::mTimerPeriod = 1000;
+   BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
    mRxDataQCall.bind   (this,&ProcThread::executeRxData);
@@ -122,7 +122,7 @@ void ProcThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
 
-   int tSize = 1472;
+   int tSize = 1000;
    char* tData = new char[tSize];
    memset(tData, 2, tSize);
    tData[0] = 1;

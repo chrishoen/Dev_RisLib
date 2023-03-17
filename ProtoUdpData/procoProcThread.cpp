@@ -27,7 +27,7 @@ ProcThread::ProcThread()
 
    // Initialize qcalls.
    mRxDataQCall.bind   (this,&ProcThread::executeRxData);
-   mMaxDataSize = 1000;
+   mMaxDataSize = 1472;
 
    // Initialize member variables.
    mUdpDataThread = 0;
@@ -122,13 +122,17 @@ void ProcThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
 
-   char tData[100];
-   memset(tData, 2, 100);
+   int tSize = 1472;
+   char* tData = new char[tSize];
+   memset(tData, 2, tSize);
    tData[0] = 1;
-   tData[99] = 3;
+   tData[tSize - 1] = 3;
 
    // Send data.
-   sendData(tData, 100);
+   sendData(tData, tSize);
+
+   // Done.
+   delete tData;
 }
 
 //******************************************************************************
@@ -141,6 +145,12 @@ void ProcThread::executeOnTimer(int aTimerCount)
 
 void ProcThread::executeRxData(char* aData, int aSize)
 {
+   Prn::print(Prn::Show1, "RECV: %d %d $ %u %u %u %u", mRxCount++, aSize,
+      (unsigned)aData[0], (unsigned)aData[1],
+      (unsigned)aData[aSize - 2], (unsigned)aData[aSize - 1]);
+   delete aData;
+   return;
+
    Prn::print(Prn::Show1, "RxData %d %d", mRxCount++, aSize);
    delete aData;
 }

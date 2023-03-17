@@ -75,6 +75,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 
    gProcThread->sendData(tData, tSize);
    Prn::print(0, "SEND %d", tSize);
+   delete tData;
 }
 
 //******************************************************************************

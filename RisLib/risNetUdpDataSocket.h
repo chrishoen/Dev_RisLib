@@ -56,11 +56,11 @@ public:
    bool mValidFlag;
 
    // Metrics.
-   int mTxSize;
-   int mRxSize;
-   int mTxCount;
-   int mRxCount;
-
+   int mTxMsgCount;
+   int mRxMsgCount;
+   long long mTxByteCount;
+   long long mRxByteCount;
+    
    // Program trace index.
    int mTI;
 

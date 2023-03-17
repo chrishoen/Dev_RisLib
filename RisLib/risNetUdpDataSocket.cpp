@@ -25,10 +25,10 @@ namespace Net
 
 UdpDataSocket::UdpDataSocket()
 {
-   mTxSize = 0;
-   mRxSize = 0;
-   mTxCount = 0;
-   mRxCount = 0;
+   mTxMsgCount = 0;
+   mTxByteCount = 0;
+   mRxMsgCount = 0;
+   mRxByteCount = 0;
    mValidFlag = false;
    mTI = 0;
    mPrintDisable = false;
@@ -45,10 +45,10 @@ void UdpDataSocket::initialize(Settings& aSettings)
    mSettings = aSettings;
 
    // Variables.
-   mTxSize = 0;
-   mRxSize = 0;
-   mTxCount = 0;
-   mRxCount = 0;
+   mTxMsgCount = 0;
+   mTxByteCount = 0;
+   mRxMsgCount = 0;
+   mRxByteCount = 0;
    mValidFlag = false;
    mTI = mSettings.mTraceIndex;
    mPrintDisable = false;
@@ -181,7 +181,7 @@ bool UdpDataSocket::doRecvData(char* aData, int* aSize)
    // Initialize.
 
    // Do this first.
-   mRxSize = 0;
+   int tSize = 0;
    *aSize = 0;
 
    // Guard.
@@ -198,13 +198,13 @@ bool UdpDataSocket::doRecvData(char* aData, int* aSize)
    // Read the data into the receive buffer.
 
    // Read from the socket.
-   BaseClass::doRecvFrom(mFromAddress, aData, mRxSize, cBufferSize);
+   BaseClass::doRecvFrom(mFromAddress, aData, tSize, cBufferSize);
 
    // Guard.
    // If bad status then return false.
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
-   if (mRxSize <= 0)
+   if (tSize <= 0)
    {
       if (BaseClass::mError == 0)
       {
@@ -227,8 +227,9 @@ bool UdpDataSocket::doRecvData(char* aData, int* aSize)
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
    Trc::write(mTI, 1, "UdpDataSocket doRecvData done %d %d", mStatus, mError);
-   mRxCount++;
-   *aSize = mRxSize;
+   mRxMsgCount++;
+   mRxByteCount += tSize;
+   *aSize = tSize;
    return true;
 }
 
@@ -260,7 +261,7 @@ bool UdpDataSocket::doSendData(const char* aData, int aSize)
    else
    {
       // If this is wrapping then send to the last received from address.
-      if (mRxCount)
+      if (mRxMsgCount)
       {
          Trc::write(mTI, 1, "UdpDataSocket::doSendData WRAP Tx %16s : %5d  ",
             mFromAddress.mString,
@@ -274,8 +275,8 @@ bool UdpDataSocket::doSendData(const char* aData, int aSize)
    {
       // The send was successful.
       // Metrics.
-      mTxSize = aSize;
-      mTxCount++;
+      mTxMsgCount++;
+      mTxByteCount += aSize;
    }
    else
    {
@@ -288,7 +289,7 @@ bool UdpDataSocket::doSendData(const char* aData, int aSize)
    }
 
    // Done.
-   Trc::write(mTI, 1, "UdpDataSocket::doSendMsg done %d", mTxSize);
+   Trc::write(mTI, 1, "UdpDataSocket::doSendMsg done %d", aSize);
    return tRet;
 }
 

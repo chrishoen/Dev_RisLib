@@ -40,9 +40,9 @@ public:
    // Members. Monitor variables.
 
    // Message counts.
-   Ris::Monitor<int> mMon_TxDataCount;
+   Ris::Monitor<int> mMon_TxMsgCount;
    Ris::Monitor<long long> mMon_TxByteCount;
-   Ris::Monitor<int> mMon_RxDataCount;
+   Ris::Monitor<int> mMon_RxMsgCount;
    Ris::Monitor<long long> mMon_RxByteCount;
 
    //***************************************************************************

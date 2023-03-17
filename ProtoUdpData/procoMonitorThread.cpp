@@ -32,17 +32,22 @@ MonitorThread::MonitorThread()
    mShowCode = 0;
 
    // Bind member variables.
+   Ris::Net::UdpDataSocket* tSocket = &gProcThread->mUdpDataThread->mDataSocket;
 
-   Ris::Net::UdpDataSocket* tDataSocket = (Ris::Net::UdpDataSocket*)&gProcThread->mUdpDataThread->mDataSocket;
-   mMon_TxDataCount.bind(&tDataSocket->mTxCount);
-   mMon_RxDataCount.bind(&tDataSocket->mRxCount);
+   mMon_TxMsgCount.bind(&tSocket->mTxMsgCount);
+   mMon_TxByteCount.bind(&tSocket->mTxByteCount);
+   mMon_RxMsgCount.bind(&tSocket->mRxMsgCount);
+   mMon_RxByteCount.bind(&tSocket->mRxByteCount);
+
 }
 
 // Update status variables.
 void MonitorThread::update()
 {
-   mMon_TxDataCount.update();
-   mMon_RxDataCount.update();
+   mMon_TxMsgCount.update();
+   mMon_TxByteCount.update();
+   mMon_RxMsgCount.update();
+   mMon_RxByteCount.update();
 }
 
 //******************************************************************************
@@ -58,14 +63,14 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 2)
    {
-      Prn::print(Prn::Show2, "TxDataCount               %-10d  %d",
-         mMon_TxDataCount.mValue, mMon_TxDataCount.mDelta);
-      Prn::print(Prn::Show2, "TxByteCount                 %-10lld  %lld",
+      Prn::print(Prn::Show2, "TxMsgCount               %-10d  %d",
+         mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
+      Prn::print(Prn::Show2, "TxByteCount              %-10lld  %lld",
          mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
 
-      Prn::print(Prn::Show2, "RxDataCount               %-10d  %d",
-         mMon_RxDataCount.mValue, mMon_RxDataCount.mDelta);
-      Prn::print(Prn::Show2, "RxByteCount                 %-10lld  %lld",
+      Prn::print(Prn::Show2, "RxMsgCount               %-10d  %d",
+         mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
+      Prn::print(Prn::Show2, "RxByteCount              %-10lld  %lld",
          mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
 
       Prn::print(Prn::Show2, "");

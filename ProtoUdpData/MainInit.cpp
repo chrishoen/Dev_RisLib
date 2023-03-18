@@ -41,7 +41,7 @@ void main_initialize()
    Prn::initializePrint();
 
    // Initialize print filters.
-   Prn::setFilter(Prn::Show1, true);
+   Prn::setFilter(Prn::Show1, false);
    Prn::setFilter(Prn::Show2, false);
 
    //***************************************************************************

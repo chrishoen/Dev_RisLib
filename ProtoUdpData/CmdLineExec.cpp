@@ -123,3 +123,21 @@ void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeHelp(Ris::CmdLineCmd* aCmd)
+{
+    Prn::print(0, "help ***********************************");
+    Prn::print(0, "");
+    Prn::print(0, "special commands 0..9");
+    Prn::print(0, "0          -- don't show monitor or receive prints");
+    Prn::print(0, "1          -- show receive prints");
+    Prn::print(0, "2          -- show monitor prints");
+    Prn::print(0, "SEND       -- send a udp datagram");
+    Prn::print(0, "TP 1/0     -- enable/disable sending periodic udp datagrams");
+    Prn::print(0, "");
+    Prn::print(0, "trc help   -- show trace help");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+

@@ -31,6 +31,12 @@ MonitorThread::MonitorThread()
    mTPFlag = true;
    mShowCode = 0;
 
+   // Autostart.
+   mShowCode = 2;
+   Prn::setFilter(Prn::Show1, false);
+   Prn::setFilter(Prn::Show2, true);
+
+
    // Bind member variables.
    Ris::Net::UdpDataSocket* tSocket = &gProcThread->mUdpDataThread->mDataSocket;
 

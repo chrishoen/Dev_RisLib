@@ -35,6 +35,9 @@ ProcThread::ProcThread()
    mTxCount = 0;
    mRxCount = 0;
    mTPFlag = false;
+
+   // Autostart.
+   mTPFlag = true;
 }
 
 ProcThread::~ProcThread()

@@ -14,8 +14,6 @@ if (RISLIB_STANDALONE)
    return()
 endif()
 
-return()
-
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
    install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")

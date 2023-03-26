@@ -38,7 +38,7 @@
          "displayName": "prime-arm7",
          "description": "Target debian arm7 for beaglebone or rpi, install to /opt/prime",
          "inherits": "base",
-         "toolchainFile": "${sourceDir}\\MyBeagleToolchain.cmake",
+         "toolchainFile": "${sourceDir}\\beaglebone-toolchain.cmake",
          "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
             "MYMODE": {
@@ -67,6 +67,33 @@
             "MYMODE": {
                "type": "STRING",
                "value": "prime-arm8"
+            }
+
+         },
+         "condition": {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+         },
+         "vendor": {
+            "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+               "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+            }
+         }
+      },
+      {
+         "name": "prime-rpi",
+         "displayName": "prime-rpi",
+         "description": "Target the raspberrypi4, install to /opt/prime.",
+         "generator": "Ninja",
+         "toolchainFile": "${sourceDir}\\rpi-toolchain.cmake",
+         "binaryDir": "${sourceDir}/out/build/${presetName}",
+         "installDir": "${sourceDir}/out/install/${presetName}",
+         "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "MYMODE": {
+               "type": "STRING",
+               "value": "prime-rpi"
             }
 
          },

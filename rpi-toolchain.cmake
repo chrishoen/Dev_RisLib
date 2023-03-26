@@ -4,9 +4,9 @@ SET (CMAKE_CXX_STANDARD_REQUIRED on)
 set (CMAKE_SYSTEM_NAME Linux)
 set (CMAKE_SYSTEM_PROCESSOR aarch64)
 
-set (SDK_DIR "/opt/usr_data/sdk")
-set (CROSS_COMPILER_PREFIX "${SDK_DIR}/sysroots/x86_64-fslcsdk-linux/usr/bin/aarch64-fslc-linux/aarch64-fslc-linux-")
-set (CMAKE_SYSROOT "${SDK_DIR}/sysroots/aarch64-fslc-linux/" CACHE STRING "")
+set (CROSS_DIR "/opt/toolchain/cross-pi-gcc-10.3.0-64")
+set (CROSS_COMPILER_PREFIX "${CROSS_DIR}/bin/aarch64-linux-gnu-")
+set (CMAKE_SYSROOT "${CROSS_DIR}/aarch64-linux-gnu/libc" CACHE STRING "")
 
 set (CMAKE_C_COMPILER "${CROSS_COMPILER_PREFIX}gcc" CACHE FILEPATH "")
 set (CMAKE_C_FLAGS "\
@@ -60,8 +60,6 @@ include_directories (SYSTEM
     "${CMAKE_SYSROOT}/usr/include/"
     )
 link_directories(
-    "${SDK_DIR}/sysroots/aarch64-fslc-linux/"
-    "${SDK_DIR}/sysroots/aarch64-fslc-linux/usr/lib"
-    "${SDK_DIR}/sysroots/aarch64-fslc-linux/usr/lib/aarch64-fslc-linux/9.3.0"
+    "${CROSS_DIR}/aarch64-linux-gnu/libc/usr/lib64"
     )
 

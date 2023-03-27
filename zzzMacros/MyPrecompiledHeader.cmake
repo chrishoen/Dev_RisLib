@@ -261,7 +261,7 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_pch22 _target)
-   if (MYMODE STREQUAL "steno-arm")
+   if (MYMODE STREQUAL "steno-arm" OR MYMODE STREQUAL "prime-rpi")
       #return()
    endif()
 

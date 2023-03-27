@@ -57,9 +57,11 @@ set (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set (CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 include_directories (SYSTEM 
-    "${CMAKE_SYSROOT}/usr/include/"
+   "${CROSS_DIR}/aarch64-linux-gnu/libc/usr/include"
+   "${CROSS_DIR}/rpi/usr/include"
     )
 link_directories(
-    "${CROSS_DIR}/aarch64-linux-gnu/libc/usr/lib64"
+   "${CROSS_DIR}/aarch64-linux-gnu/libc/usr/lib64"
+   "${CROSS_DIR}/rpi/usr/lib/aarch64-linux-gnu"
     )
 

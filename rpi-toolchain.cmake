@@ -60,9 +60,9 @@ include_directories (SYSTEM
    "${CROSS_DIR}/aarch64-linux-gnu/libc/usr/include"
    "${CROSS_DIR}/aarch64-linux-gnu/rpi/usr/include"
     )
+
 link_directories(
    "${CROSS_DIR}/aarch64-linux-gnu/libc/lib64"
    "${CROSS_DIR}/aarch64-linux-gnu/libc/usr/lib64"
-   "${CROSS_DIR}/aarch64-linux-gnu/rpi/usr/lib/aarch64-linux-gnu"
     )
 

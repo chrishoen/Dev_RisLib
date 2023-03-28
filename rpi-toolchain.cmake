@@ -5,8 +5,10 @@ set (CMAKE_SYSTEM_NAME Linux)
 set (CMAKE_SYSTEM_PROCESSOR aarch64)
 
 set (CROSS_DIR "/opt/toolchain/cross-pi-gcc-10.3.0-64")
+set (ARCH_DIR "${CROSS_DIR}/aarch64-linux-gnu")
+set (CMAKE_SYSROOT "${ARCH_DIR}/libc" CACHE STRING "")
+
 set (CROSS_COMPILER_PREFIX "${CROSS_DIR}/bin/aarch64-linux-gnu-")
-set (CMAKE_SYSROOT "${CROSS_DIR}/aarch64-linux-gnu/libc" CACHE STRING "")
 
 set (CMAKE_C_COMPILER "${CROSS_COMPILER_PREFIX}gcc" CACHE FILEPATH "")
 set (CMAKE_C_FLAGS "\
@@ -57,12 +59,10 @@ set (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set (CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 include_directories (SYSTEM 
-   "${CROSS_DIR}/aarch64-linux-gnu/libc/usr/include"
-   "${CROSS_DIR}/aarch64-linux-gnu/rpi/usr/include"
+   "${ARCH_DIR}/libc/usr/include"
     )
 
 link_directories(
-   "${CROSS_DIR}/aarch64-linux-gnu/libc/lib64"
-   "${CROSS_DIR}/aarch64-linux-gnu/libc/usr/lib64"
+   "${ARCH_DIR}/libc/usr/lib64"
     )
 

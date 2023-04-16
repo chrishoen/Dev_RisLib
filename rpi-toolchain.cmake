@@ -62,7 +62,7 @@ include_directories (SYSTEM
    "${ARCH_DIR}/libc/usr/include"
     )
 
-link_directories(
+link_directories(SYSTEM 
    "${ARCH_DIR}/libc/usr/lib64"
     )
 

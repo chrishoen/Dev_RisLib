@@ -310,7 +310,11 @@ void SerialStringThread::sendString(const char* aString)
 
 void SerialStringThread::sendString(std::string* aString)
 {
-   mSerialStringPort.doSendString(aString->c_str());
+   if (mSerialStringPort.doSendString(aString->c_str()) < 0)
+   {
+      printf("mSerialStringPort FAIL - CLOSE\n");
+      mSerialStringPort.doClose();
+   }
    delete aString;
 }
 

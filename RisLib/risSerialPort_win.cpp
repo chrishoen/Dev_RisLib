@@ -680,6 +680,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       {
          mPortErrorCount++;
          Trc::write(mTI, 0, "SerialPort::doSendBytes ERROR 1");
+         doAbort();
          return cSerialRetError;
       }
    }
@@ -689,6 +690,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doSendBytes TIMEOUT");
       printf("serial port send timeout\n");
+      doAbort();
       return cSerialRetTimeout;
    }
    break;
@@ -696,6 +698,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    {
       mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doSendBytes ERROR 2");
+      doAbort();
       return cSerialRetError;
    }
    break;

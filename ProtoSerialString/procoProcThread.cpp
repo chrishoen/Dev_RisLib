@@ -155,7 +155,8 @@ void ProcThread::executeSession(bool aConnected)
 
 void ProcThread::executeRxString(std::string* aString)
 {
-   Prn::print(Prn::Show1, "ProcThread::executeRxString %s", aString->c_str());
+// Prn::print(Prn::Show1, "ProcThread::executeRxString %s", aString->c_str());
+   Prn::print(Prn::Show1, "RX: %s", aString->c_str());
    delete aString;
 }
 

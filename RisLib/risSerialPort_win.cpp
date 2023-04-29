@@ -362,11 +362,11 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    DWORD tRet = 0;
    DWORD tNumRead = 0;
    DWORD tNumToRead = aRequestBytes;
-   bool tWaitingOnRead = false;
+   bool tWaitForCompletion = false;
    OVERLAPPED tOverlapped;
    memset(&tOverlapped, 0, sizeof(tOverlapped));
    tOverlapped.hEvent = mSpecific->mRxEventHandle;
-   DWORD tRxTimeout = mSettings.mRxTimeout == 0 ? INFINITE : mSettings.mRxTimeout;
+   DWORD tWaitTimeout = mSettings.mRxTimeout == 0 ? INFINITE : mSettings.mRxTimeout;
 
    // Issue read operation, overlapped i/o.
    tRet = ReadFile(mSpecific->mPortHandle, aData, tNumToRead, &tNumRead, &tOverlapped);
@@ -375,7 +375,7 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    if (tRet)
    {
       // Do not wait for completion.
-      tWaitingOnRead = false;
+      tWaitForCompletion = false;
    }
    else
    {
@@ -397,15 +397,15 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
       else
       {
          // Wait for completion.
-         tWaitingOnRead = true;
+         tWaitForCompletion = true;
       }
    }
 
    // If waiting for completion.
-   if (tWaitingOnRead)
+   if (tWaitForCompletion)
    {
       // Wait for overlapped i/o completion.
-      tRet = WaitForSingleObject(tOverlapped.hEvent, tRxTimeout);
+      tRet = WaitForSingleObject(tOverlapped.hEvent, tWaitTimeout);
 
       // Select on the returned status code.
       switch (tRet)
@@ -503,64 +503,124 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       return cSerialRetError;
    }
 
-   // Local variables.
-   DWORD tRet = 0;
-   DWORD tNumWritten = 0;
-   OVERLAPPED tOverlapped = { 0 };
-   tOverlapped.hEvent = mSpecific->mTxEventHandle;
-
+   // Clear errors.
    ClearCommError(mSpecific->mPortHandle, 0, 0);
 
-   // Write bytes to the port.
-   if (WriteFile(mSpecific->mPortHandle, aData, aNumBytes, &tNumWritten, &tOverlapped))
-   {
-      // Write was successful.
-      mTxByteCount += tNumWritten;
-      Trc::write(mTI, 0, "doSendBytes::doSendBytes done 1");
-      return tNumWritten;
-   }
+   // Locals.
+   DWORD tRet = 0;
+   DWORD tNumWritten = 0;
+   DWORD tNumToWrite = aNumBytes;
+   bool tWaitForCompletion = false;
+   OVERLAPPED tOverlapped;
+   memset(&tOverlapped, 0, sizeof(tOverlapped));
+   tOverlapped.hEvent = mSpecific->mTxEventHandle;
+   DWORD tWaitTimeout = 1000;
 
-   // Write is pending.
-// tRet = WaitForSingleObject(tOverlapped.hEvent, INFINITE);
-   tRet = WaitForSingleObject(tOverlapped.hEvent, 1000);
-   switch (tRet)
+   // Issue write operation, overlapped i/o.
+   tRet = WriteFile(mSpecific->mPortHandle, aData, tNumToWrite, &tNumWritten, &tOverlapped);
+
+   // If the write completes immediately.
+   if (tRet)
    {
-      // OVERLAPPED structure's event has been signaled. 
-   case WAIT_OBJECT_0:
+      // Do not wait for completion.
+      tWaitForCompletion = false;
+   }
+   else
    {
-      if (GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
+      // Check for abort.
+      if (GetLastError() == ERROR_OPERATION_ABORTED)
       {
-         mTxByteCount += tNumWritten;
-         Trc::write(mTI, 0, "doSendBytes::doSendBytes done 2");
-         return tNumWritten;
+         ClearCommError(mSpecific->mPortHandle, 0, 0);
+         Trc::write(mTI, 0, "SerialPort::doSendBytes ABORTED1");
+         return cSerialRetAbort;
       }
-      else
+      // Check for errors.
+      else if (GetLastError() != ERROR_IO_PENDING)
       {
          mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL 1");
+         Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL1 %d", GetLastError());
          return cSerialRetError;
       }
+      // The write is pending.
+      else
+      {
+         // Wait for completion.
+         tWaitForCompletion = true;
+      }
    }
-   break;
-   case WAIT_TIMEOUT:
+
+   // If waiting for completion.
+   if (tWaitForCompletion)
+   {
+      // Wait for overlapped i/o completion.
+      tRet = WaitForSingleObject(tOverlapped.hEvent, tWaitTimeout);
+
+      // Select on the returned status code.
+      switch (tRet)
+      {
+      case WAIT_FAILED:
+      {
+         mPortErrorCount++;
+         Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL2");
+         return cSerialRetError;
+      }
+      break;
+      case WAIT_ABANDONED:
+      {
+         mPortErrorCount++;
+         Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL3");
+         return cSerialRetError;
+      }
+      break;
+      case WAIT_TIMEOUT:
+      {
+         Trc::write(mTI, 0, "SerialPort::doSendBytes TIMEOUT");
+         printf("serial_poll_error_2 timeout\n");
+         return cSerialRetTimeout;
+      }
+      break;
+      case WAIT_OBJECT_0:
+      {
+         // Check overlapped result for abort or for errors.
+         if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
+         {
+            if (GetLastError() == ERROR_OPERATION_ABORTED)
+            {
+               ClearCommError(mSpecific->mPortHandle, 0, 0);
+               Trc::write(mTI, 0, "SerialPort::doSendBytes ABORTED2");
+               return cSerialRetAbort;
+            }
+            else
+            {
+               mPortErrorCount++;
+               Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL4");
+               return cSerialRetError;
+            }
+         }
+         // Check overlapped result for write empty.
+         if (tNumWritten == 0)
+         {
+            mPortErrorCount++;
+            Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL write empty");
+            return cSerialRetEmpty;
+         }
+      }
+      break;
+      }
+   }
+
+   // Check number of bytes.
+   if (tNumWritten != tNumToWrite)
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doSendBytes TIMEOUT");
-      printf("serial port send timeout\n");
-      return cSerialRetTimeout;
-   }
-   break;
-   default:
-   {
-      mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL 2");
+      Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL5");
       return cSerialRetError;
    }
-   break;
-   }
+
+   // Success.
    mTxByteCount += tNumWritten;
-   Trc::write(mTI, 0, "doSendBytes::doSendBytes done 3");
-   return 0;
+   Trc::write(mTI, 0, "SerialPort::doSendBytes done");
+   return tNumWritten;
 }
 
 //******************************************************************************

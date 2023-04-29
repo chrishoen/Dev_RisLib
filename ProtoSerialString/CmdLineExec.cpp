@@ -1,5 +1,8 @@
 
 #include "stdafx.h"
+#if 0
+#include <windows.h>
+#endif
 
 #include "procoSerialParms.h"
 #include "procoProcThread.h"
@@ -28,6 +31,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("TP"))        ProtoComm::gProcThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
+   if (aCmd->isCmd("A"))         executeAbort(aCmd);
+   if (aCmd->isCmd("C"))         executeClose(aCmd);
+   if (aCmd->isCmd("G"))         executeGo1(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -82,8 +88,42 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
+{
+   gProcThread->mSerialStringThread->mSerialStringPort.doAbort();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeClose(Ris::CmdLineCmd* aCmd)
+{
+   gProcThread->mSerialStringThread->mSerialStringPort.doClose();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+#if 0
+class SerialPortSpecific
+{
+public:
+   HANDLE mPortHandle;
+   HANDLE mRxEventHandle;
+   HANDLE mTxEventHandle;
+};
+
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
+   DWORD tModemStat = 0;
+   SerialPortSpecific* tSpecific = (SerialPortSpecific*)gProcThread->mSerialStringThread->mSerialStringPort.mSpecific;
+   if (!GetCommModemStatus(tSpecific->mPortHandle, &tModemStat))
+   {
+      Prn::print(0, "GetCommModemStatus FAIL");
+      return;
+   }
+   Prn::print(0, "GetCommModemStatus %x", tModemStat);
 }
 
 //******************************************************************************
@@ -92,12 +132,22 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   SerialPortSpecific* tSpecific = (SerialPortSpecific*)gProcThread->mSerialStringThread->mSerialStringPort.mSpecific;
+   ClearCommError(tSpecific->mPortHandle, 0, 0);
+   Prn::print(0, "ClearCommError");
 }
+#endif
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+{
+}
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+}
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
 }

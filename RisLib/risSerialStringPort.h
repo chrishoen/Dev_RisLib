@@ -49,7 +49,7 @@ public:
    // Buffer size.
    int mBufferSize;
 
-   // String termination modes. (NULL, CR, LF, CRLF).
+   // String termination modes. (NULL, CR \r 13, LF \n 10, CRLF \r\n).
    int mTxTermMode;
    int mRxTermMode;
 

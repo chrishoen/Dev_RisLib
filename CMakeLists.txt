@@ -18,6 +18,11 @@ if (MYSTANDALONE)
 endif()
 
 add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoSerialString")
+return()
+
+add_subdirectory ("RisLib")
 add_subdirectory ("Test")
 return()
 

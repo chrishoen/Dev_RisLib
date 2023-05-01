@@ -10,13 +10,12 @@ my_add_pch (${project})
 target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 
 if (RISLIB_STANDALONE)
-
    return()
 endif()
 
 if (MSVC)
-#   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
-#   install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
+   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
+   install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
 elseif(MYMODE STREQUAL "prime-x64")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS ${project} DESTINATION "/opt/prime/lib/x64")

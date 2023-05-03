@@ -64,7 +64,23 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members
+   // Constants.
+
+   // Copy direction. This specifies the direction of copy operations.
+   // Copy to does a put, copy from does a get.
+   static const int cCopyTo = 0;
+   static const int cCopyFrom = 1;
+
+   // Error codes.
+   static const int cNoError = 0;
+   static const int cBufferOverflow = 1;
+   static const int cBadPointer = 2;
+   static const int cChecksumError = 3;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Pointer and index members.
    // 
@@ -86,18 +102,12 @@ public:
 
    // Copy direction. This specifies the direction of copy operations.
    // Copy to does a put, copy from does a get.
-   static const int cCopyTo = 0;
-   static const int cCopyFrom = 1;
    int mCopyDirection;
 
    // Error code.
-   static const int cNoError = 0;
-   static const int cBufferOverflow = 1;
-   static const int cBadPointer = 2;
-   static const int cChecksumError = 3;
    int mError;
 
-   // Memory allocation code, itdetermines if the destructor does a memFree.
+   // Memory allocation code, determines if the destructor does a memFree.
    int mMemAllocCode;
 
    //***************************************************************************
@@ -211,22 +221,22 @@ public:
 
    // Copy a value to/from the buffer, depending on the value of the buffer 
    // direction flag.
-   void copy(unsigned char*      aValue);
-   void copy(unsigned short*     aValue);
-   void copy(unsigned int*       aValue);
+   void copy(unsigned char* aValue);
+   void copy(unsigned short* aValue);
+   void copy(unsigned int* aValue);
    void copy(unsigned long long* aValue);
-   void copy(char*               aValue);
-   void copy(short*              aValue);
-   void copy(int*                aValue);
-   void copy(long long*          aValue);
-   void copy(float*              aValue);
-   void copy(double*             aValue);
-   void copy(bool*               aValue);
+   void copy(char* aValue);
+   void copy(short* aValue);
+   void copy(int* aValue);
+   void copy(long long* aValue);
+   void copy(float* aValue);
+   void copy(double* aValue);
+   void copy(bool* aValue);
 
-   void copyS(unsigned char*      aString);
-   void copyS(char*               aString);
-   void copyZ(char*               aString, int aMaxStringSize);
-   void copyZ(unsigned char*      aString, int aMaxStringSize);
+   void copyS(unsigned char* aString);
+   void copyS(char* aString);
+   void copyZ(char* aString, int aMaxStringSize);
+   void copyZ(unsigned char* aString, int aMaxStringSize);
 
    void copyBlock(void* aValue, int aSize);
 

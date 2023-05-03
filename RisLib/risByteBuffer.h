@@ -95,6 +95,10 @@ public:
    int    mWorkingLength;
    int    mMaxLength;
 
+   // Save working index and length.
+   int    mSaveIndex;
+   int    mSaveLength;
+
    // Marker members.
    int mMarkerStartIndex;
    int mMarkerEndIndex;
@@ -183,6 +187,10 @@ public:
    void setMarkerStart();
    int setMarkerEnd();
    int getMarkerLength();
+
+   // Save working index and length.
+   void saveWorking();
+   void restoreWorking();
 
    //***************************************************************************
    //***************************************************************************

@@ -74,6 +74,9 @@ public:
    // if it did not (for example: a commented line, an exit, a loop, or
    // an end loop).
    bool doRead(CmdLineCmd* aCmd);
+
+   // If currently in a loop, then exit it.
+   void doExitLoop();
 };
 
 //******************************************************************************

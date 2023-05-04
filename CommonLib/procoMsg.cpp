@@ -343,7 +343,7 @@ void ByteBlobMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 // Create a new message, based on a message type.
 
-void* createMsg(int aMessageType)
+Ris::ByteContent* doCreateMsg(int aMessageType)
 {
    Ris::ByteContent* tMsg = 0;
 

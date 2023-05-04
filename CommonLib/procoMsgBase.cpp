@@ -337,7 +337,7 @@ void MsgMonkey::updateRxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Create a message from the message set, base on the message type.
+// Create a message from the message set, based on the message type.
 
 Ris::ByteContent* MsgMonkey::createMsg(int aMessageType)
 {

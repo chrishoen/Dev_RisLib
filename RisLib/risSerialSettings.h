@@ -74,6 +74,9 @@ public:
    // If true then use RS485.
    bool m485Flag;
 
+   // If true then use bluetooth.
+   bool mBthFlag;
+
    // Thread processor number and priority.
    Ris::Threads::Priority mThreadPriority;
 

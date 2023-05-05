@@ -69,6 +69,7 @@ void ProcThread::threadInitFunction()
    tSerialSettings.mSessionQCall = mSessionQCall;
    tSerialSettings.mRxStringQCall = mRxStringQCall;
    tSerialSettings.mTraceIndex = 11;
+   tSerialSettings.mBthFlag = gSerialParms.mBthFlag;
    Trc::start(11);
 
    // Create child thread with the settings.

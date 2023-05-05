@@ -31,6 +31,7 @@ ProcThread::ProcThread()
 
    // Initialize member variables.
    mSerialStringThread = 0;
+   mSerialBthThread = 0;
    mConnectionFlag = false;
    mTPFlag = false;
 }
@@ -76,7 +77,17 @@ void ProcThread::threadInitFunction()
    mSerialStringThread = new Ris::SerialStringThread(tSerialSettings);
 
    // Launch child thread.
-   mSerialStringThread->launchThread(); 
+   mSerialStringThread->launchThread();
+
+   // If bluetooth.
+   if (tSerialSettings.mBthFlag)
+   {
+      // Create bluetooth thread with the settings.
+      mSerialBthThread = new Ris::SerialBthThread(&mSerialStringThread->mSerialStringPort);
+
+      // Launch bluetooth thread.
+      mSerialBthThread->launchThread();
+   }
 }
 
 //******************************************************************************

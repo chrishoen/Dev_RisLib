@@ -10,6 +10,7 @@ Serial string prototype thread class.
 
 #include "risThreadsQCallThread.h"
 #include "risSerialStringThread.h"
+#include "risSerialBthThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -59,6 +60,9 @@ public:
    // Serial string thread, this manages serial string connections and
    // string transmission and reception.
    Ris::SerialStringThread*  mSerialStringThread;
+
+   // Serial bluetooth thread, this monitors a bluetooth connection
+   Ris::SerialBthThread* mSerialBthThread;
 
    //***************************************************************************
    //***************************************************************************

@@ -227,7 +227,13 @@ int SerialBthThread::doBthTest()
 
    // Success.
    Trc::write(mTI, 0, "SerialPort::doBthTest done %x", tEvtMask);
-   Prn::print(0, "doBthTest %x", tEvtMask);
+   Prn::print(0, "doBthTest EvtMask %x", tEvtMask);
+
+   DWORD tModemStat = 0xff;
+   GetCommModemStatus(mSpecific->mPortHandle, &tModemStat);
+
+   Trc::write(mTI, 0, "ModemStat %x", tModemStat);
+   Prn::print(Prn::Show1, "ModemStat %x", tModemStat);
    return 0;
 }
 

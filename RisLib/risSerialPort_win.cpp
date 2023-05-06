@@ -25,8 +25,8 @@ class SerialPort::Specific
 {
 public:
    HANDLE mPortHandle;
-   HANDLE mRxEventHandle;
-   HANDLE mTxEventHandle;
+   HANDLE mReadCompletion;
+   HANDLE mWriteCompletion;
 };
 
 //******************************************************************************
@@ -37,8 +37,8 @@ SerialPort::SerialPort()
 {
    mSpecific = new Specific;
    mSpecific->mPortHandle = 0;
-   mSpecific->mRxEventHandle = 0;
-   mSpecific->mTxEventHandle = 0;
+   mSpecific->mReadCompletion = 0;
+   mSpecific->mWriteCompletion = 0;
    mOpenFlag = false;
    mValidFlag = false;
    mAbortFlag = false;
@@ -94,8 +94,8 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Create overlapped io completion events.
 
-   mSpecific->mRxEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
-   mSpecific->mTxEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mSpecific->mReadCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mSpecific->mWriteCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
 
    //***************************************************************************
    //***************************************************************************
@@ -251,18 +251,18 @@ void SerialPort::doClose()
    doFlush();
 
    // Unblock any pending writes.
-   SetEvent(mSpecific->mTxEventHandle);
+   SetEvent(mSpecific->mWriteCompletion);
 
    // Cancel any pending i/o.
    CancelIoEx(mSpecific->mPortHandle, 0);
 
    // Close the handles.
    CloseHandle(mSpecific->mPortHandle);
-   CloseHandle(mSpecific->mRxEventHandle);
-   CloseHandle(mSpecific->mTxEventHandle);
+   CloseHandle(mSpecific->mReadCompletion);
+   CloseHandle(mSpecific->mWriteCompletion);
    mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
-   mSpecific->mRxEventHandle = INVALID_HANDLE_VALUE;
-   mSpecific->mTxEventHandle = INVALID_HANDLE_VALUE;
+   mSpecific->mReadCompletion = INVALID_HANDLE_VALUE;
+   mSpecific->mWriteCompletion = INVALID_HANDLE_VALUE;
    mValidFlag = false;
    Trc::write(mTI, 0, "SerialPort::doClose done");
 }
@@ -299,7 +299,7 @@ void SerialPort::doAbort()
    }
 
    // Post to the event semaphore.
-   SetEvent(mSpecific->mRxEventHandle);
+   SetEvent(mSpecific->mReadCompletion);
    Trc::write(mTI, 0, "SerialPort::doAbort done");
 }
 
@@ -365,7 +365,7 @@ int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
    bool tWaitForCompletion = false;
    OVERLAPPED tOverlapped;
    memset(&tOverlapped, 0, sizeof(tOverlapped));
-   tOverlapped.hEvent = mSpecific->mRxEventHandle;
+   tOverlapped.hEvent = mSpecific->mReadCompletion;
    DWORD tWaitTimeout = mSettings.mRxTimeout == 0 ? INFINITE : mSettings.mRxTimeout;
 
    // Issue read operation, overlapped i/o.
@@ -513,7 +513,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    bool tWaitForCompletion = false;
    OVERLAPPED tOverlapped;
    memset(&tOverlapped, 0, sizeof(tOverlapped));
-   tOverlapped.hEvent = mSpecific->mTxEventHandle;
+   tOverlapped.hEvent = mSpecific->mWriteCompletion;
    DWORD tWaitTimeout = 1000;
 
    // Issue write operation, overlapped i/o.

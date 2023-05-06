@@ -18,20 +18,20 @@ namespace Ris
 //******************************************************************************
 // Portable specifics.
 
-class SerialBthThread::Specific
+class SerialPort::Specific
 {
 public:
    HANDLE mPortHandle;
-   HANDLE mRxEventHandle;
-   HANDLE mTxEventHandle;
+   HANDLE mReadCompletion;
+   HANDLE mWriteCompletion;
 };
 
 class SerialBthThread::Specific
 {
 public:
    HANDLE mPortHandle;
-   HANDLE mRxEventHandle;
-   HANDLE mTxEventHandle;
+   HANDLE mCommEvent;
+   DWORD  mCommMask;
 };
 
 //******************************************************************************
@@ -47,7 +47,12 @@ SerialBthThread::SerialBthThread(Ris::SerialPort* aSerialPort)
    // Set member variables.
    mSerialPort = aSerialPort;
    mTI = mSerialPort->mSettings.mTraceIndex;
-   mSpecific = (Specific*)mSerialPort->mSpecific;
+
+   // Set specific variables.
+   mSpecific = new Specific;
+   mSpecific->mPortHandle = (Specific*)mSerialPort->mSpecific->mPortHandle;
+   mSpecific->mCommEvent = 0;
+   mSpecific->mCommMask = 0;
 }
 
 //******************************************************************************
@@ -58,6 +63,18 @@ SerialBthThread::SerialBthThread(Ris::SerialPort* aSerialPort)
 
 void SerialBthThread::threadInitFunction()
 {
+   Prn::print(0, "SerialBthThread::threadInitFunction");
+
+   // Set the comm event mask.
+   mSpecific->mCommMask =
+      EV_BREAK |
+      EV_CTS |
+      EV_DSR |
+      EV_ERR |
+      EV_RING |
+      EV_RLSD;
+
+   SetCommMask(mSpecific->mPortHandle, mSpecific->mCommMask);
 }
 
 //******************************************************************************

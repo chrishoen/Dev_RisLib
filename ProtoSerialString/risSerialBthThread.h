@@ -75,6 +75,15 @@ public:
    // Thread shutdown function. Set the termination flag, post to the 
    // waitable event and wait for the thread to terminate.
    void shutdownThread() override;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Do bluetooth test with WaitCommEvent.
+   int doBthTest();
+
 };
 
 //******************************************************************************

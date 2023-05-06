@@ -83,6 +83,7 @@ void ProcThread::threadInitFunction()
    // If bluetooth.
    if (tSerialSettings.mBthFlag)
    {
+      BaseClass::threadSleep(2000);
       // Create bluetooth thread with the settings.
       mSerialBthThread = new Ris::SerialBthThread(&mSerialStringThread->mSerialStringPort);
 

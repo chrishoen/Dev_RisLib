@@ -31,7 +31,6 @@ ProcThread::ProcThread()
 
    // Initialize member variables.
    mSerialStringThread = 0;
-   mSerialBthThread = 0;
    mConnectionFlag = false;
    mTPFlag = false;
 }
@@ -39,7 +38,6 @@ ProcThread::ProcThread()
 ProcThread::~ProcThread()
 {
    if (mSerialStringThread) delete mSerialStringThread;
-   if (mSerialBthThread) delete mSerialBthThread;
 }
 
 //******************************************************************************
@@ -79,17 +77,6 @@ void ProcThread::threadInitFunction()
 
    // Launch child thread.
    mSerialStringThread->launchThread();
-
-   // If bluetooth.
-   if (tSerialSettings.mBthFlag)
-   {
-      BaseClass::threadSleep(2000);
-      // Create bluetooth thread with the settings.
-      mSerialBthThread = new Ris::SerialBthThread(&mSerialStringThread->mSerialStringPort);
-
-      // Launch bluetooth thread.
-      mSerialBthThread->launchThread();
-   }
 }
 
 //******************************************************************************
@@ -107,12 +94,6 @@ void ProcThread::threadExitFunction()
    {
       mSerialStringThread->shutdownThread();
       mSerialStringThread = 0;
-   }
-   // Shutdown the child thread.
-   if (mSerialBthThread)
-   {
-      mSerialBthThread->shutdownThread();
-      mSerialBthThread = 0;
    }
 
    Prn::print(0, "ProcThread::threadExitFunction END");

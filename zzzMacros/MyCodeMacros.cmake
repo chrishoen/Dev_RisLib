@@ -7,9 +7,9 @@ function(my_find_src_files _a_src_files _target)
    file(GLOB _src_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp *.c)
 
    if(MSVC)
-      list(FILTER _src_files EXCLUDE REGEX ".*_linux.cpp$")
+      list(FILTER _src_files EXCLUDE REGEX ".*_linux*.cpp$")
    else()
-      list(FILTER _src_files EXCLUDE REGEX ".*_win.cpp$")
+      list(FILTER _src_files EXCLUDE REGEX ".*_win*.cpp$")
    endif()
 
    set(${_a_src_files} ${_src_files} PARENT_SCOPE)

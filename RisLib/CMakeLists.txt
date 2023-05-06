@@ -3,6 +3,13 @@ set (project "RisLib")
 project(${project} CXX)
 
 my_find_src_files (src_files ${project})
+if (MSVC)
+   list(REMOVE_ITEM src_files "risSerialPort_win.cpp")
+   list(APPEND src_files "${CMAKE_SOURCE_DIR}/RisLib2/risSerialPort_win_port.cpp")
+   list(APPEND src_files "${CMAKE_SOURCE_DIR}/RisLib2/risSerialPort_win_read1.cpp")
+   list(APPEND src_files "${CMAKE_SOURCE_DIR}/RisLib2/risSerialPort_win_write.cpp")
+endif()
+
 my_find_inc_files (inc_files)
 add_library (${project} STATIC ${src_files})
 my_add_pch (${project})
@@ -12,6 +19,7 @@ target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 if (RISLIB_STANDALONE)
    return()
 endif()
+
 
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")

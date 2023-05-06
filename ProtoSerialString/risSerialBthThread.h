@@ -65,7 +65,7 @@ public:
 
    // Thread run function. This is called by the base class immediately 
    // after the thread init function. It runs a loop that monitors the
-   // bluetooth.
+   // bluetooth. If it detects an error then it resets the serial port.
    void threadRunFunction() override;
 
    // Thread exit function. This is called by the base class immedidately

@@ -81,8 +81,8 @@ void SerialBthThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread run function. This is called by the base class immediately 
-// after the thread init function. It runs a loop that waits for the
-// timer or the termination event.
+// after the thread init function. It runs a loop that monitors the
+// bluetooth. If it detects an error then it resets the serial port.
 
 void SerialBthThread::threadRunFunction()
 {
@@ -96,6 +96,7 @@ void SerialBthThread::threadRunFunction()
 
 void SerialBthThread::threadExitFunction()
 {
+   Prn::print(0, "SerialBthThread::threadExitFunction");
 }
 
 //******************************************************************************

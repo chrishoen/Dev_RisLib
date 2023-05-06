@@ -68,15 +68,15 @@ public:
    char mSerialPortSetup[cMaxStringSize];
    int  mSerialRxTimeout;
 
+   // If true then use bluetooth.
+   bool mBthFlag;
+
    // Serial string port termination modes.
    int mTxTermMode;
    int mRxTermMode;
 
    // Message thread timer period.
    int mThreadTimerPeriod;
-
-   // If true then use bluetooth.
-   bool mBthFlag;
 
    //***************************************************************************
    //***************************************************************************

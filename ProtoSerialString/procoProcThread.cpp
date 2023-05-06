@@ -39,6 +39,7 @@ ProcThread::ProcThread()
 ProcThread::~ProcThread()
 {
    if (mSerialStringThread) delete mSerialStringThread;
+   if (mSerialBthThread) delete mSerialBthThread;
 }
 
 //******************************************************************************
@@ -101,7 +102,17 @@ void ProcThread::threadExitFunction()
    Prn::print(0, "ProcThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
-   mSerialStringThread->shutdownThread();
+   if (mSerialStringThread)
+   {
+      mSerialStringThread->shutdownThread();
+      mSerialStringThread = 0;
+   }
+   // Shutdown the child thread.
+   if (mSerialBthThread)
+   {
+      mSerialBthThread->shutdownThread();
+      mSerialBthThread = 0;
+   }
 
    Prn::print(0, "ProcThread::threadExitFunction END");
 }

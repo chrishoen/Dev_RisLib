@@ -4,12 +4,35 @@
 
 #include "stdafx.h"
 
+#include <windows.h>
+
 #include "prnPrint.h"
 
 #include "risSerialBthThread.h"
 
 namespace Ris
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Portable specifics.
+
+class SerialBthThread::Specific
+{
+public:
+   HANDLE mPortHandle;
+   HANDLE mRxEventHandle;
+   HANDLE mTxEventHandle;
+};
+
+class SerialBthThread::Specific
+{
+public:
+   HANDLE mPortHandle;
+   HANDLE mRxEventHandle;
+   HANDLE mTxEventHandle;
+};
 
 //******************************************************************************
 //******************************************************************************
@@ -24,6 +47,7 @@ SerialBthThread::SerialBthThread(Ris::SerialPort* aSerialPort)
    // Set member variables.
    mSerialPort = aSerialPort;
    mTI = mSerialPort->mSettings.mTraceIndex;
+   mSpecific = (Specific*)mSerialPort->mSpecific;
 }
 
 //******************************************************************************

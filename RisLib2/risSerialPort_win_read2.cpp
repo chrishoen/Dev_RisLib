@@ -41,18 +41,37 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
 {
    Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes2");
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Locals.
+
+   // Wait.
    DWORD tRet = 0;
-   DWORD tNumRead = 0;
-   DWORD tNumToRead = aRequestBytes;
    bool tWaitForCompletion = false;
-   OVERLAPPED tOverlapped;
-   memset(&tOverlapped, 0, sizeof(tOverlapped));
-   tOverlapped.hEvent = mSpecific->mReadCompletion;
    DWORD tWaitTimeout = mSettings.mRxTimeout == 0 ? INFINITE : mSettings.mRxTimeout;
 
+   // Read.
+   DWORD tNumRead = 0;
+   DWORD tNumToRead = aRequestBytes;
+   OVERLAPPED tReadOverlapped;
+   memset(&tReadOverlapped, 0, sizeof(tReadOverlapped));
+   tReadOverlapped.hEvent = mSpecific->mReadCompletion;
+
+   // Comm.
+   DWORD tEvtMask = 0;
+   DWORD tNumDummy = 0;
+   OVERLAPPED tCommOverlapped;
+   memset(&tCommOverlapped, 0, sizeof(tCommOverlapped));
+   tCommOverlapped.hEvent = mSpecific->mCommCompletion;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read.
+   
    // Issue read operation, overlapped i/o.
-   tRet = ReadFile(mSpecific->mPortHandle, aData, tNumToRead, &tNumRead, &tOverlapped);
+   tRet = ReadFile(mSpecific->mPortHandle, aData, tNumToRead, &tNumRead, &tReadOverlapped);
 
    // If the read completes immediately.
    if (tRet)
@@ -84,11 +103,54 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
       }
    }
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Comm.
+
+   // If waiting for completion.
+   if (tWaitForCompletion)
+   {
+      // Issue wait comm event operation, overlapped i/o.
+      tRet = WaitCommEvent(mSpecific->mPortHandle, &tEvtMask, &tCommOverlapped);
+
+      // If the wait comm event completes immediately.
+      if (tRet)
+      {
+         // TODO
+      }
+      else
+      {
+         // Check for abort.
+         if (GetLastError() == ERROR_OPERATION_ABORTED)
+         {
+            ClearCommError(mSpecific->mPortHandle, 0, 0);
+            Trc::write(mTI, 0, "SerialPort::doBthTest ABORTED1");
+            return cSerialRetAbort;
+         }
+         // Check for errors.
+         else if (GetLastError() != ERROR_IO_PENDING)
+         {
+            Trc::write(mTI, 0, "SerialPort::doBthTest FAIL1 %d", GetLastError());
+            return cSerialRetError;
+         }
+         // The comm event is pending.
+         else
+         {
+         }
+      }
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Wait.
+
    // If waiting for completion.
    if (tWaitForCompletion)
    {
       // Wait for overlapped i/o completion.
-      tRet = WaitForSingleObject(tOverlapped.hEvent, tWaitTimeout);
+      tRet = WaitForSingleObject(tReadOverlapped.hEvent, tWaitTimeout);
 
       // Select on the returned status code.
       switch (tRet)
@@ -117,7 +179,7 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
       case WAIT_OBJECT_0:
       {
          // Check overlapped result for abort or for errors.
-         if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumRead, FALSE))
+         if (!GetOverlappedResult(mSpecific->mPortHandle, &tReadOverlapped, &tNumRead, FALSE))
          {
             if (GetLastError() == ERROR_OPERATION_ABORTED)
             {
@@ -143,6 +205,11 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
       break;
       }
    }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Done.
 
    // Check number of bytes.
    if (tNumRead != tNumToRead)

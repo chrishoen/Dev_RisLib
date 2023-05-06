@@ -27,6 +27,7 @@ public:
    HANDLE mPortHandle;
    HANDLE mReadCompletion;
    HANDLE mWriteCompletion;
+   HANDLE mCommCompletion;
 };
 
 //******************************************************************************
@@ -62,6 +63,10 @@ void SerialPort::initialize(SerialSettings& aSettings)
    mTI = aSettings.mTraceIndex;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
+
+   mSpecific->mReadCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mSpecific->mWriteCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mSpecific->mCommCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
 }
 
 //******************************************************************************
@@ -87,15 +92,6 @@ bool SerialPort::doOpen()
 
    mValidFlag = false;
    mAbortFlag = false;
-
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Create overlapped io completion events.
-
-   mSpecific->mReadCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
-   mSpecific->mWriteCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
 
    //***************************************************************************
    //***************************************************************************
@@ -258,11 +254,7 @@ void SerialPort::doClose()
 
    // Close the handles.
    CloseHandle(mSpecific->mPortHandle);
-   CloseHandle(mSpecific->mReadCompletion);
-   CloseHandle(mSpecific->mWriteCompletion);
    mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
-   mSpecific->mReadCompletion = INVALID_HANDLE_VALUE;
-   mSpecific->mWriteCompletion = INVALID_HANDLE_VALUE;
    mValidFlag = false;
    Trc::write(mTI, 0, "SerialPort::doClose done");
 }

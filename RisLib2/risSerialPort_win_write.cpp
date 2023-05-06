@@ -27,6 +27,7 @@ public:
    HANDLE mPortHandle;
    HANDLE mReadCompletion;
    HANDLE mWriteCompletion;
+   HANDLE mCommCompletion;
 };
 
 //******************************************************************************

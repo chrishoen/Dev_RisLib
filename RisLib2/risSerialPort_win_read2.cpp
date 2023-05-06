@@ -32,68 +32,13 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return the number of bytes that are available to receive.
-
-int SerialPort::doGetAvailableReceiveBytes()
-{
-   COMSTAT tComStat;
-   ClearCommError(mSpecific->mPortHandle, 0, &tComStat);
-   return (int)tComStat.cbInQue;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This doesn't work.
-
-int SerialPort::doReceiveAnyBytes(char *aData, int aNumBytes)
-{
-   return 0;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Receive one byte. Block until the byte has been received.
-// Copy the byte into the pointer argument.
-// Return one or a negative error code. 
-
-int SerialPort::doReceiveOneByte(char* aByte)
-{
-   return doReceiveAllBytes(aByte, 1);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Receive a requested number of bytes. Block until all of the bytes
 // have been received. Copy the bytes into the pointer argument.
 // Return the number of bytes received or a negative error code.
 
-int SerialPort::doReceiveAllBytes(char* aData, int aRequestBytes)
+int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
 {
-   // If not bluetooth.
-   if (!mSettings.mBthFlag)
-   {
-      return doReceiveAllBytes1(aData, aRequestBytes);
-   }
-   // If bluetooth.
-   else
-   {
-      return doReceiveAllBytes2(aData, aRequestBytes);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Receive a requested number of bytes. Block until all of the bytes
-// have been received. Copy the bytes into the pointer argument.
-// Return the number of bytes received or a negative error code.
-
-int SerialPort::doReceiveAllBytes1(char* aData, int aRequestBytes)
-{
-   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes1");
+   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes2");
 
    // Locals.
    DWORD tRet = 0;

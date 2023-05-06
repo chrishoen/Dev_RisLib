@@ -134,19 +134,33 @@ public:
    // Methods.
 
    // Receive any available bytes. Block until at least one byte has
-   // been received. Return the number of bytes received or a negative
-   // error code. Copy the bytes into the pointer argument.
+   // been received. Copy the bytes into the pointer argument.
+   // Return the number of bytes received or a negative error code. 
    int doReceiveAnyBytes(char* aBytes, int aMaxNumBytes);
 
    // Receive a requested number of bytes. Block until all of the bytes
-   // have been received. Return the number of bytes received or a
-   // negative error code. Copy the bytes into the pointer argument.
+   // have been received. Copy the bytes into the pointer argument.
+   // Return the number of bytes received or a negative error code.
    int doReceiveAllBytes(char* aBytes, int aRequestBytes);
 
-   // Receive one byte. Block until the byte has been received. Return
-   // one or zero or a negative error code. Copy the byte into the
-   // pointer argument.
+   // Receive one byte. Block until the byte has been received.
+   // Copy the byte into the pointer argument.
+   // Return one or a negative error code. 
    int doReceiveOneByte(char* aByte);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Windows only.
+
+   // Receive a requested number of bytes. Block until all of the bytes
+   // have been received. Copy the bytes into the pointer argument.
+   // Return the number of bytes received or a negative error code.
+   //
+   // If normal then call the first one.
+   // If bluetooth then call the seconds one. 
+   int doReceiveAllBytes1(char* aBytes, int aRequestBytes);
+   int doReceiveAllBytes2(char* aBytes, int aRequestBytes);
 };
 
 //******************************************************************************

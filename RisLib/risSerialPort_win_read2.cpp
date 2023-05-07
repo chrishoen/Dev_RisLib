@@ -19,6 +19,23 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Get the comm modem status. Return true if the modem is valid.
+
+bool SerialPort::doGetModemStatus()
+{
+   DWORD tModemStat = 0xff;
+   GetCommModemStatus(mPortHandle, &tModemStat);
+
+   Trc::write(mTI, 0, "ModemStat %x", tModemStat);
+   Prn::print(Prn::Show1, "ModemStat %x", tModemStat);
+
+   mModemValid = tModemStat != 0;
+   return mModemValid;
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Receive a requested number of bytes. Block until all of the bytes
 // have been received. Copy the bytes into the pointer argument.
 // Return the number of bytes received or a negative error code.
@@ -34,8 +51,10 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
 
    // Wait.
    DWORD tRet = 0;
-   bool tWaitForCompletion = false;
    DWORD tWaitTimeout = mSettings.mRxTimeout == 0 ? INFINITE : mSettings.mRxTimeout;
+   HANDLE tWaitHandles[2];
+   memset(&tWaitHandles, 0, 2 * sizeof(HANDLE));
+   DWORD tWaitCount = 0;
 
    // Read.
    DWORD tNumRead = 0;
@@ -43,6 +62,7 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
    OVERLAPPED tReadOverlapped;
    memset(&tReadOverlapped, 0, sizeof(tReadOverlapped));
    tReadOverlapped.hEvent = mReadCompletion;
+   bool tReadPending = false;
 
    // Comm.
    DWORD tEvtMask = 0;
@@ -50,6 +70,7 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
    OVERLAPPED tCommOverlapped;
    memset(&tCommOverlapped, 0, sizeof(tCommOverlapped));
    tCommOverlapped.hEvent = mCommCompletion;
+   bool tCommPending = false;
 
    //***************************************************************************
    //***************************************************************************
@@ -62,8 +83,54 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
    // If the read completes immediately.
    if (tRet)
    {
-      // Do not wait for completion.
-      tWaitForCompletion = false;
+      // Check number of bytes.
+      if (tNumRead != tNumToRead)
+      {
+         mPortErrorCount++;
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL1");
+         return cSerialRetError;
+      }
+
+      // Done. Success.
+      mRxByteCount += tNumRead;
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes done1");
+      return tNumRead;
+   }
+
+   // Check for read abort.
+   if (GetLastError() == ERROR_OPERATION_ABORTED)
+   {
+      ClearCommError(mPortHandle, 0, 0);
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED1");
+      return cSerialRetAbort;
+   }
+   // Check for read errors.
+   else if (GetLastError() != ERROR_IO_PENDING)
+   {
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL1");
+      return cSerialRetError;
+   }
+   // The read is pending.
+   tReadPending = true;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Comm.
+
+   // Issue wait comm event operation, overlapped i/o.
+   tRet = WaitCommEvent(mPortHandle, &tEvtMask, &tCommOverlapped);
+
+   // If the wait comm event completes immediately.
+   if (tRet)
+   {
+      // Check the comm modem status.
+      if (!doGetModemStatus())
+      {
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL2 modem");
+         return cSerialRetError;
+      }
    }
    else
    {
@@ -71,125 +138,100 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
       if (GetLastError() == ERROR_OPERATION_ABORTED)
       {
          ClearCommError(mPortHandle, 0, 0);
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED1");
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED2");
          return cSerialRetAbort;
       }
       // Check for errors.
       else if (GetLastError() != ERROR_IO_PENDING)
       {
-         mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL1");
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL3 %d", GetLastError());
          return cSerialRetError;
       }
-      // The read is pending.
+      // The comm event is pending.
       else
       {
-         // Wait for completion.
-         tWaitForCompletion = true;
+         tCommPending = true;
       }
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Comm.
+   // Wait. At this point a read is pending and a comm event might
+   // be pending.
 
-   // If waiting for completion.
-   if (tWaitForCompletion)
+   // Setup the wait parameters.
+   memset(&tWaitHandles, 0, 2 * sizeof(HANDLE));
+   tWaitHandles[0] = mReadCompletion;
+   tWaitCount = 1;
+   if (tCommPending)
    {
-      // Issue wait comm event operation, overlapped i/o.
-      tRet = WaitCommEvent(mPortHandle, &tEvtMask, &tCommOverlapped);
+      tWaitHandles[1] = mCommCompletion;
+      tWaitCount = 2;
+   }
 
-      // If the wait comm event completes immediately.
-      if (tRet)
+   // Wait for overlapped i/o completion.
+   tRet = WaitForMultipleObjects(tWaitCount, tWaitHandles, FALSE, tWaitTimeout);
+
+   // Select on the returned status code.
+   switch (tRet)
+   {
+   case WAIT_FAILED:
+   {
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL2");
+      return cSerialRetError;
+   }
+   break;
+   case WAIT_TIMEOUT:
+   {
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes TIMEOUT");
+      printf("serial_poll_error_2 timeout\n");
+      return cSerialRetTimeout;
+   }
+   break;
+   case WAIT_OBJECT_0:
+   {
+      // Read completion.
+      
+      // Check overlapped result for read abort or read errors.
+      if (!GetOverlappedResult(mPortHandle, &tReadOverlapped, &tNumRead, FALSE))
       {
-         // TODO
-      }
-      else
-      {
-         // Check for abort.
          if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
             ClearCommError(mPortHandle, 0, 0);
-            Trc::write(mTI, 0, "SerialPort::doBthTest ABORTED1");
+            Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED2");
             return cSerialRetAbort;
          }
-         // Check for errors.
-         else if (GetLastError() != ERROR_IO_PENDING)
-         {
-            Trc::write(mTI, 0, "SerialPort::doBthTest FAIL1 %d", GetLastError());
-            return cSerialRetError;
-         }
-         // The comm event is pending.
          else
          {
-         }
-      }
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Wait.
-
-   // If waiting for completion.
-   if (tWaitForCompletion)
-   {
-      // Wait for overlapped i/o completion.
-      tRet = WaitForSingleObject(tReadOverlapped.hEvent, tWaitTimeout);
-
-      // Select on the returned status code.
-      switch (tRet)
-      {
-      case WAIT_FAILED:
-      {
-         mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL2");
-         return cSerialRetError;
-      }
-      break;
-      case WAIT_ABANDONED:
-      {
-         mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL3");
-         return cSerialRetError;
-      }
-      break;
-      case WAIT_TIMEOUT:
-      {
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes TIMEOUT");
-         printf("serial_poll_error_2 timeout\n");
-         return cSerialRetTimeout;
-      }
-      break;
-      case WAIT_OBJECT_0:
-      {
-         // Check overlapped result for abort or for errors.
-         if (!GetOverlappedResult(mPortHandle, &tReadOverlapped, &tNumRead, FALSE))
-         {
-            if (GetLastError() == ERROR_OPERATION_ABORTED)
-            {
-               ClearCommError(mPortHandle, 0, 0);
-               Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED2");
-               return cSerialRetAbort;
-            }
-            else
-            {
-               mPortErrorCount++;
-               Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL4");
-               return cSerialRetError;
-            }
-         }
-         // Check overlapped result for read empty.
-         if (tNumRead == 0)
-         {
             mPortErrorCount++;
-            Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL read empty");
-            return cSerialRetEmpty;
+            Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL4");
+            return cSerialRetError;
          }
       }
-      break;
+
+      // Check overlapped result for read empty.
+      if (tNumRead == 0)
+      {
+         mPortErrorCount++;
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL read empty");
+         return cSerialRetEmpty;
       }
+      // Check number of bytes.
+      if (tNumRead != tNumToRead)
+      {
+         mPortErrorCount++;
+         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL5");
+         return cSerialRetError;
+      }
+
+      // Success.
+      mRxByteCount += tNumRead;
+      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes done2");
+      return tNumRead;
+   }
+   break;
    }
 
    //***************************************************************************
@@ -197,18 +239,9 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
    //***************************************************************************
    // Done.
 
-   // Check number of bytes.
-   if (tNumRead != tNumToRead)
-   {
-      mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL5");
-      return cSerialRetError;
-   }
-
-   // Success.
-   mRxByteCount += tNumRead;
-   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes done");
-   return tNumRead;
+   // Should never get here.
+   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL99");
+   return cSerialRetError;
 }
 
 //******************************************************************************

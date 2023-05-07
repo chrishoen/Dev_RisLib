@@ -81,10 +81,14 @@ public:
    //***************************************************************************
    // Members. Windows specific.
 
+   // Handles.
    HANDLE mPortHandle;
    HANDLE mReadCompletion;
    HANDLE mWriteCompletion;
    HANDLE mCommCompletion;
+
+   // If true then the modem is valid.
+   bool mModemValid;
 
    //***************************************************************************
    //***************************************************************************
@@ -169,6 +173,9 @@ public:
    // If bluetooth then call the seconds one. 
    int doReceiveAllBytes1(char* aBytes, int aRequestBytes);
    int doReceiveAllBytes2(char* aBytes, int aRequestBytes);
+
+   // Get the comm modem status. Return true if the modem is valid.
+   bool doGetModemStatus();
 };
 
 //******************************************************************************

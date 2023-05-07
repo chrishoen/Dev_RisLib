@@ -4,31 +4,15 @@
 
 #include "stdafx.h"
 
-#include <windows.h>
-
 #include "my_functions.h"
 #include "risPortableCalls.h"
 #include "prnPrint.h"
 #include "trcTrace.h"
 
-#include "risSerialPort.h"
+#include "risSerialPort_win.h"
 
 namespace Ris
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Portable specifics.
-
-class SerialPort::Specific
-{
-public:
-   HANDLE mPortHandle;
-   HANDLE mReadCompletion;
-   HANDLE mWriteCompletion;
-   HANDLE mCommCompletion;
-};
 
 //******************************************************************************
 //******************************************************************************
@@ -47,7 +31,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    }
 
    // Clear errors.
-   ClearCommError(mSpecific->mPortHandle, 0, 0);
+   ClearCommError(mPortHandle, 0, 0);
 
    // Locals.
    DWORD tRet = 0;
@@ -56,11 +40,11 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    bool tWaitForCompletion = false;
    OVERLAPPED tOverlapped;
    memset(&tOverlapped, 0, sizeof(tOverlapped));
-   tOverlapped.hEvent = mSpecific->mWriteCompletion;
+   tOverlapped.hEvent = mWriteCompletion;
    DWORD tWaitTimeout = 1000;
 
    // Issue write operation, overlapped i/o.
-   tRet = WriteFile(mSpecific->mPortHandle, aData, tNumToWrite, &tNumWritten, &tOverlapped);
+   tRet = WriteFile(mPortHandle, aData, tNumToWrite, &tNumWritten, &tOverlapped);
 
    // If the write completes immediately.
    if (tRet)
@@ -73,7 +57,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       // Check for abort.
       if (GetLastError() == ERROR_OPERATION_ABORTED)
       {
-         ClearCommError(mSpecific->mPortHandle, 0, 0);
+         ClearCommError(mPortHandle, 0, 0);
          Trc::write(mTI, 0, "SerialPort::doSendBytes ABORTED1");
          return cSerialRetAbort;
       }
@@ -125,11 +109,11 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       case WAIT_OBJECT_0:
       {
          // Check overlapped result for abort or for errors.
-         if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumWritten, FALSE))
+         if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tNumWritten, FALSE))
          {
             if (GetLastError() == ERROR_OPERATION_ABORTED)
             {
-               ClearCommError(mSpecific->mPortHandle, 0, 0);
+               ClearCommError(mPortHandle, 0, 0);
                Trc::write(mTI, 0, "SerialPort::doSendBytes ABORTED2");
                return cSerialRetAbort;
             }

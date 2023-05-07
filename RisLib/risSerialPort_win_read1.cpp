@@ -11,24 +11,10 @@
 #include "prnPrint.h"
 #include "trcTrace.h"
 
-#include "risSerialPort.h"
+#include "risSerialPort_win.h"
 
 namespace Ris
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Portable specifics.
-
-class SerialPort::Specific
-{
-public:
-   HANDLE mPortHandle;
-   HANDLE mReadCompletion;
-   HANDLE mWriteCompletion;
-   HANDLE mCommCompletion;
-};
 
 //******************************************************************************
 //******************************************************************************
@@ -38,7 +24,7 @@ public:
 int SerialPort::doGetAvailableReceiveBytes()
 {
    COMSTAT tComStat;
-   ClearCommError(mSpecific->mPortHandle, 0, &tComStat);
+   ClearCommError(mPortHandle, 0, &tComStat);
    return (int)tComStat.cbInQue;
 }
 
@@ -103,11 +89,11 @@ int SerialPort::doReceiveAllBytes1(char* aData, int aRequestBytes)
    bool tWaitForCompletion = false;
    OVERLAPPED tOverlapped;
    memset(&tOverlapped, 0, sizeof(tOverlapped));
-   tOverlapped.hEvent = mSpecific->mReadCompletion;
+   tOverlapped.hEvent = mReadCompletion;
    DWORD tWaitTimeout = mSettings.mRxTimeout == 0 ? INFINITE : mSettings.mRxTimeout;
 
    // Issue read operation, overlapped i/o.
-   tRet = ReadFile(mSpecific->mPortHandle, aData, tNumToRead, &tNumRead, &tOverlapped);
+   tRet = ReadFile(mPortHandle, aData, tNumToRead, &tNumRead, &tOverlapped);
 
    // If the read completes immediately.
    if (tRet)
@@ -120,7 +106,7 @@ int SerialPort::doReceiveAllBytes1(char* aData, int aRequestBytes)
       // Check for abort.
       if (GetLastError() == ERROR_OPERATION_ABORTED)
       {
-         ClearCommError(mSpecific->mPortHandle, 0, 0);
+         ClearCommError(mPortHandle, 0, 0);
          Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED1");
          return cSerialRetAbort;
       }
@@ -172,11 +158,11 @@ int SerialPort::doReceiveAllBytes1(char* aData, int aRequestBytes)
       case WAIT_OBJECT_0:
       {
          // Check overlapped result for abort or for errors.
-         if (!GetOverlappedResult(mSpecific->mPortHandle, &tOverlapped, &tNumRead, FALSE))
+         if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tNumRead, FALSE))
          {
             if (GetLastError() == ERROR_OPERATION_ABORTED)
             {
-               ClearCommError(mSpecific->mPortHandle, 0, 0);
+               ClearCommError(mPortHandle, 0, 0);
                Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED2");
                return cSerialRetAbort;
             }

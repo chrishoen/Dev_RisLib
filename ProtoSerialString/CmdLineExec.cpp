@@ -117,8 +117,8 @@ public:
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
    DWORD tModemStat = 0;
-   SerialPortSpecific* tSpecific = (SerialPortSpecific*)gProcThread->mSerialStringThread->mSerialStringPort.mSpecific;
-   if (!GetCommModemStatus(tSpecific->mPortHandle, &tModemStat))
+   HANDLE tPortHandle = gProcThread->mSerialStringThread->mSerialStringPort.mPortHandle;
+   if (!GetCommModemStatus(tPortHandle, &tModemStat))
    {
       Prn::print(0, "GetCommModemStatus FAIL");
       return;
@@ -132,8 +132,8 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   SerialPortSpecific* tSpecific = (SerialPortSpecific*)gProcThread->mSerialStringThread->mSerialStringPort.mSpecific;
-   ClearCommError(tSpecific->mPortHandle, 0, 0);
+   HANDLE tPortHandle = gProcThread->mSerialStringThread->mSerialStringPort.mPortHandle;
+   ClearCommError(tPortHandle, 0, 0);
    Prn::print(0, "ClearCommError");
 }
 

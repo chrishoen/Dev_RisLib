@@ -11,7 +11,7 @@
 #include "prnPrint.h"
 #include "trcTrace.h"
 
-#include "risSerialPort.h"
+#include "risSerialPort_win.h"
 
 namespace Ris
 {
@@ -19,27 +19,12 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Portable specifics.
-
-class SerialPort::Specific
-{
-public:
-   HANDLE mPortHandle;
-   HANDLE mReadCompletion;
-   HANDLE mWriteCompletion;
-   HANDLE mCommCompletion;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
 SerialPort::SerialPort()
 {
-   mSpecific = new Specific;
-   mSpecific->mPortHandle = 0;
-   mSpecific->mReadCompletion = 0;
-   mSpecific->mWriteCompletion = 0;
+   mPortHandle = 0;
+   mReadCompletion = 0;
+   mWriteCompletion = 0;
    mOpenFlag = false;
    mValidFlag = false;
    mAbortFlag = false;
@@ -54,7 +39,6 @@ SerialPort::SerialPort()
 SerialPort::~SerialPort(void)
 {
    //doClose();
-   delete mSpecific;
 }
 
 void SerialPort::initialize(SerialSettings& aSettings)
@@ -64,9 +48,9 @@ void SerialPort::initialize(SerialSettings& aSettings)
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
 
-   mSpecific->mReadCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
-   mSpecific->mWriteCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
-   mSpecific->mCommCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mReadCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mWriteCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mCommCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
 }
 
 //******************************************************************************
@@ -98,7 +82,7 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Create file.
 
-   mSpecific->mPortHandle = CreateFile(mSettings.mPortDevice,
+   mPortHandle = CreateFile(mSettings.mPortDevice,
       GENERIC_READ | GENERIC_WRITE,
       0,
       0,
@@ -106,7 +90,7 @@ bool SerialPort::doOpen()
       FILE_FLAG_OVERLAPPED,
       0);
 
-   if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
+   if (mPortHandle == INVALID_HANDLE_VALUE)
    {
       if (mOpenErrorShowCount == 0)
       {
@@ -119,7 +103,7 @@ bool SerialPort::doOpen()
    }
 
    // Setup buffers.
-   SetupComm(mSpecific->mPortHandle,0x20000, 0x20000);
+   SetupComm(mPortHandle,0x20000, 0x20000);
 
    //***************************************************************************
    //***************************************************************************
@@ -134,7 +118,7 @@ bool SerialPort::doOpen()
       memset(&dcb, 0, sizeof(dcb));
       dcb.DCBlength = sizeof(dcb);
 
-      GetCommState(mSpecific->mPortHandle, &dcb);
+      GetCommState(mPortHandle, &dcb);
 
       BuildCommDCB(mSettings.mPortSetup, &dcb);
 
@@ -149,7 +133,7 @@ bool SerialPort::doOpen()
       bool going = true;
       while (going)
       {
-         if (SetCommState(mSpecific->mPortHandle, &dcb))
+         if (SetCommState(mPortHandle, &dcb))
          {
             // Successful, exit loop
             going = false;
@@ -164,8 +148,8 @@ bool SerialPort::doOpen()
             // Retry failed, abort initialization
             if (count++ == 10)
             {
-               CloseHandle(mSpecific->mPortHandle);
-               mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
+               CloseHandle(mPortHandle);
+               mPortHandle = INVALID_HANDLE_VALUE;
                mPortErrorCount++;
                Trc::write(mTI, 0, "SerialPort::doOpen FAIL retry");
                return false;
@@ -183,10 +167,10 @@ bool SerialPort::doOpen()
    COMMTIMEOUTS tCommTimeouts;
    memset(&tCommTimeouts, 0, sizeof(tCommTimeouts));
 
-   if(!SetCommTimeouts(mSpecific->mPortHandle, &tCommTimeouts))
+   if(!SetCommTimeouts(mPortHandle, &tCommTimeouts))
    {
-      CloseHandle(mSpecific->mPortHandle);
-      mSpecific->mPortHandle=INVALID_HANDLE_VALUE;
+      CloseHandle(mPortHandle);
+      mPortHandle=INVALID_HANDLE_VALUE;
       mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doOpen FAIL2");
       return false;
@@ -236,7 +220,7 @@ void SerialPort::doClose()
    mValidFlag = false;
 
    // Test handle.
-   if (mSpecific->mPortHandle == INVALID_HANDLE_VALUE)
+   if (mPortHandle == INVALID_HANDLE_VALUE)
    {
       mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doClose INVALID HANDLE");
@@ -247,14 +231,14 @@ void SerialPort::doClose()
    doFlush();
 
    // Unblock any pending writes.
-   SetEvent(mSpecific->mWriteCompletion);
+   SetEvent(mWriteCompletion);
 
    // Cancel any pending i/o.
-   CancelIoEx(mSpecific->mPortHandle, 0);
+   CancelIoEx(mPortHandle, 0);
 
    // Close the handles.
-   CloseHandle(mSpecific->mPortHandle);
-   mSpecific->mPortHandle = INVALID_HANDLE_VALUE;
+   CloseHandle(mPortHandle);
+   mPortHandle = INVALID_HANDLE_VALUE;
    mValidFlag = false;
    Trc::write(mTI, 0, "SerialPort::doClose done");
 }
@@ -291,7 +275,7 @@ void SerialPort::doAbort()
    }
 
    // Post to the event semaphore.
-   SetEvent(mSpecific->mReadCompletion);
+   SetEvent(mReadCompletion);
    Trc::write(mTI, 0, "SerialPort::doAbort done");
 }
 
@@ -304,15 +288,15 @@ void SerialPort::doFlush()
 {
    Trc::write(mTI, 0, "SerialPort::doFlush");
 
-   ClearCommError(mSpecific->mPortHandle,0,0);
+   ClearCommError(mPortHandle,0,0);
 
    DWORD lFlags = 
       PURGE_RXABORT | PURGE_RXCLEAR |
       PURGE_TXABORT | PURGE_TXCLEAR;
 
-   PurgeComm(mSpecific->mPortHandle, lFlags);
+   PurgeComm(mPortHandle, lFlags);
 
-   ClearCommError(mSpecific->mPortHandle, 0, 0);
+   ClearCommError(mPortHandle, 0, 0);
 
    Trc::write(mTI, 0, "SerialPort::doFlush done");
 }

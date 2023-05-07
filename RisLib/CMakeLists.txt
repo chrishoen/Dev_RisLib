@@ -1,16 +1,7 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 set (project "RisLib")
 project(${project} CXX)
-
 my_find_src_files (src_files ${project})
-if (MSVC)
-   list(REMOVE_ITEM src_files "risSerialPort_win.cpp")
-   list(APPEND src_files "${CMAKE_SOURCE_DIR}/RisLib2/risSerialPort_win_port.cpp")
-   list(APPEND src_files "${CMAKE_SOURCE_DIR}/RisLib2/risSerialPort_win_read1.cpp")
-   list(APPEND src_files "${CMAKE_SOURCE_DIR}/RisLib2/risSerialPort_win_read2.cpp")
-   list(APPEND src_files "${CMAKE_SOURCE_DIR}/RisLib2/risSerialPort_win_write.cpp")
-endif()
-
 my_find_inc_files (inc_files)
 add_library (${project} STATIC ${src_files})
 my_add_pch (${project})

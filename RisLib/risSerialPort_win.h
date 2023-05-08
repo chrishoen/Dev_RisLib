@@ -102,16 +102,19 @@ public:
    OVERLAPPED mWriteOverlapped;
    OVERLAPPED mCommOverlapped;
 
+   // If true then this is the first read after a successful open.
+   bool mFirstReadFlag;
+
    // If true then an overlapped io is pending.
    bool mReadPending;
    bool mWritePending;
    bool mCommPending;
 
+   // If true then receive calls use comm events and modem status.
+   bool mUseModemStatus;
+
    // If true then the modem is valid.
    bool mModemValid;
-
-   // If true then this is the first read after a successful open.
-   bool mFirstReadFlag;
 
    //***************************************************************************
    //***************************************************************************

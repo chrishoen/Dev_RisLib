@@ -22,6 +22,7 @@ namespace Ris
 
 SerialPort::SerialPort()
 {
+   // Set member variables.
    mOpenFlag = false;
    mValidFlag = false;
    mAbortFlag = false;
@@ -32,17 +33,22 @@ SerialPort::SerialPort()
    mTxByteCount = 0;
    mPortErrorCount = 0;
 
-   mPortHandle = 0;
-   mReadCompletion = 0;
-   mWriteCompletion = 0;
-   mCommCompletion = 0;
+   // Set windows specific member variables.
+   mPortHandle = INVALID_HANDLE_VALUE;
+   mReadCompletion = INVALID_HANDLE_VALUE;
+   mWriteCompletion = INVALID_HANDLE_VALUE;
+   mCommCompletion = INVALID_HANDLE_VALUE;
+
    memset(&mReadOverlapped, 0, sizeof(mReadOverlapped));
    memset(&mWriteOverlapped, 0, sizeof(mWriteOverlapped));
    memset(&mCommOverlapped, 0, sizeof(mCommOverlapped));
+
+   mFirstReadFlag = false;
    mReadPending = false;
    mWritePending = false;
    mCommPending = false;
-   mFirstReadFlag = false;
+   mUseModemStatus = false;
+   mModemValid = false;
 }
 
 SerialPort::~SerialPort(void)
@@ -60,6 +66,8 @@ void SerialPort::initialize(SerialSettings& aSettings)
    mReadCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
    mWriteCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
    mCommCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+   mUseModemStatus = mSettings.mBthFlag;
 }
 
 //******************************************************************************

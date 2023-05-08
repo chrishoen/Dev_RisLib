@@ -26,7 +26,7 @@ namespace Ris
 int SerialPort::doReceiveBytes(char* aData, int aNumBytes)
 {
    // If not bluetooth.
-   if (!mSettings.mBthFlag)
+   if (!mUseModemStatus)
    {
       return doReceiveBytes1(aData, aNumBytes);
    }

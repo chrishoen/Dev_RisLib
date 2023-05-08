@@ -161,14 +161,14 @@ int SerialPort::doReceiveAnyBytes(char* aBytes, int aMaxNumBytes)
 // have been received. Return the number of bytes received or a
 // negative error code. Copy the bytes into the pointer argument.
 
-int SerialPort::doReceiveAllBytes(char* aBytes, int aRequestBytes)
+int SerialPort::doReceiveBytes(char* aBytes, int aRequestBytes)
 {
-   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes");
+   Trc::write(mTI, 0, "SerialPort::doReceiveBytes");
    // Guard.
    int tRet = 0;
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes INVALID 1");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes INVALID 1");
       return cSerialRetError;
    }
 
@@ -205,24 +205,7 @@ int SerialPort::doReceiveAllBytes(char* aBytes, int aRequestBytes)
    // equal to the requested number of bytes. If failure then return
    // the negative error code.
    mRxByteCount += tRet;
-   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes done");
-   return tRet;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Receive one byte. Block until the byte has been received. Return
-// one or zero or a negative error code. Copy the byte into the
-// pointer argument.
-
-int SerialPort::doReceiveOneByte(char* aByte)
-{
-   int tRet = doReceiveAnyBytes(aByte, 1);
-   if (tRet > 0)
-   {
-      mRxByteCount += tRet;
-   }
+   Trc::write(mTI, 0, "SerialPort::doReceiveBytes done");
    return tRet;
 }
 

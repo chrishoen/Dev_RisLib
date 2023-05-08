@@ -40,9 +40,9 @@ bool SerialPort::doGetModemStatus()
 // have been received. Copy the bytes into the pointer argument.
 // Return the number of bytes received or a negative error code.
 
-int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
+int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
 {
-   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes2");
+   Trc::write(mTI, 0, "SerialPort::doReceiveBytes2");
 
    //***************************************************************************
    //***************************************************************************
@@ -58,7 +58,7 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
 
    // Read.
    DWORD tNumRead = 0;
-   DWORD tNumToRead = aRequestBytes;
+   DWORD tNumToRead = aNumBytes;
    OVERLAPPED tReadOverlapped;
    memset(&tReadOverlapped, 0, sizeof(tReadOverlapped));
    tReadOverlapped.hEvent = mReadCompletion;
@@ -87,13 +87,13 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
       if (tNumRead != tNumToRead)
       {
          mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL1");
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL1");
          return cSerialRetError;
       }
 
       // Done. Success.
       mRxByteCount += tNumRead;
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes done1");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes done1");
       return tNumRead;
    }
 
@@ -101,14 +101,14 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
    if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
       ClearCommError(mPortHandle, 0, 0);
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED1");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED1");
       return cSerialRetAbort;
    }
    // Check for read errors.
    else if (GetLastError() != ERROR_IO_PENDING)
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL1");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL1");
       return cSerialRetError;
    }
    // The read is pending.
@@ -128,7 +128,7 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
       // Check the comm modem status.
       if (!doGetModemStatus())
       {
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL2 modem");
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL2 modem");
          return cSerialRetError;
       }
    }
@@ -138,13 +138,13 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
       if (GetLastError() == ERROR_OPERATION_ABORTED)
       {
          ClearCommError(mPortHandle, 0, 0);
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED2");
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED2");
          return cSerialRetAbort;
       }
       // Check for errors.
       else if (GetLastError() != ERROR_IO_PENDING)
       {
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL3 %d", GetLastError());
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL3 %d", GetLastError());
          return cSerialRetError;
       }
       // The comm event is pending.
@@ -179,13 +179,13 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
    case WAIT_FAILED:
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL2");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL2");
       return cSerialRetError;
    }
    break;
    case WAIT_TIMEOUT:
    {
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes TIMEOUT");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes TIMEOUT");
       printf("serial_poll_error_2 timeout\n");
       return cSerialRetTimeout;
    }
@@ -199,7 +199,7 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
    default:
    {
       // Should never get here.
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL991");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL991");
       return cSerialRetError;
    }
    }
@@ -220,13 +220,13 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
          if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
             ClearCommError(mPortHandle, 0, 0);
-            Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED2");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED2");
             return cSerialRetAbort;
          }
          else
          {
             mPortErrorCount++;
-            Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL4");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL4");
             return cSerialRetError;
          }
       }
@@ -235,20 +235,20 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
       if (tNumRead == 0)
       {
          mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL read empty");
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read empty");
          return cSerialRetEmpty;
       }
       // Check number of bytes.
       if (tNumRead != tNumToRead)
       {
          mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL5");
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL5");
          return cSerialRetError;
       }
 
       // Success.
       mRxByteCount += tNumRead;
-      Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes done2");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes done2");
       return tNumRead;
    }
 
@@ -265,13 +265,13 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
          if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
             ClearCommError(mPortHandle, 0, 0);
-            Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes ABORTED2");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED2");
             return cSerialRetAbort;
          }
          else
          {
             mPortErrorCount++;
-            Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL4");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL4");
             return cSerialRetError;
          }
       }
@@ -284,7 +284,7 @@ int SerialPort::doReceiveAllBytes2(char* aData, int aRequestBytes)
    // Done.
 
    // Should never get here.
-   Trc::write(mTI, 0, "SerialPort::doReceiveAllBytes FAIL992");
+   Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL992");
    return cSerialRetError;
 }
 

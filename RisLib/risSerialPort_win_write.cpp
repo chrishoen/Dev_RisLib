@@ -17,7 +17,7 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a fixed number of bytes. Return the actual number of bytes
+// Send a requested number of bytes. Return the actual number of bytes
 // sent or a negative error code.
 
 int SerialPort::doSendBytes(const char* aData, int aNumBytes)

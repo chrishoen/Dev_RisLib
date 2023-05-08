@@ -118,7 +118,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    if (mHeaderReadState == cHeaderReadAll)
    {
       // Read the header from the serial port into the byte buffer.
-      tRet = BaseClass::doReceiveAllBytes(tByteBuffer.getBaseAddress(),mHeaderLength);
+      tRet = BaseClass::doReceiveBytes(tByteBuffer.getBaseAddress(),mHeaderLength);
 
       // Test the return code.
       if (tRet > 0)
@@ -174,7 +174,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       {
          // Read one byte.
          char tByte;
-         tRet = BaseClass::doReceiveOneByte(&tByte);
+         tRet = BaseClass::doReceiveBytes(&tByte, 1);
 
          // Test the return code.
          if (tRet > 0)
@@ -227,7 +227,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    int   tPayloadLength = mMsgMonkey->mPayloadLength;
    char* tPayloadBuffer = tByteBuffer.getBaseAddress() + mHeaderLength;
 
-   tRet = BaseClass::doReceiveAllBytes(tPayloadBuffer,tPayloadLength);
+   tRet = BaseClass::doReceiveBytes(tPayloadBuffer,tPayloadLength);
 
    // Test the return code.
    if (tRet > 0)

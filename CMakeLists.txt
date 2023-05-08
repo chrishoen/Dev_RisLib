@@ -20,6 +20,7 @@ endif()
 add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoSerialString")
+add_subdirectory ("ProtoSerialMsg")
 return()
 
 add_subdirectory ("RisLib")

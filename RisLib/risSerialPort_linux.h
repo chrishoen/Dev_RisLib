@@ -108,6 +108,23 @@ public:
    // Flush serial port buffers.
    void doFlush();
 
+   // Abort a pending serial port receive.
+   void doAbort();
+
+   // Receive a requested number of bytes. Block until all of the bytes
+   // have been received. Copy the bytes into the pointer argument.
+   // Return the number of bytes received or a negative error code.
+   int doReceiveBytes(char* aBytes, int aNumBytes);
+
+   // Send a requested number of bytes. Return the actual number of bytes
+   // sent or a negative error code.
+   int doSendBytes(const char* aBytes, int aNumBytes);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Linux specific.
+
    // Drain serial port buffers.
    void doDrain();
 
@@ -120,51 +137,10 @@ public:
    // Return the number of bytes that are available to receive.
    int doGetAvailableReceiveBytes();
 
-   // Abort a pending serial port receive.
-   void doAbort();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Send a fixed number of bytes. Return the actual number of bytes
-   // sent or a negative error code.
-   int  doSendBytes(const char *aBytes, int aNumBytes);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
    // Receive any available bytes. Block until at least one byte has
    // been received. Copy the bytes into the pointer argument.
    // Return the number of bytes received or a negative error code. 
    int doReceiveAnyBytes(char* aBytes, int aMaxNumBytes);
-
-   // Receive a requested number of bytes. Block until all of the bytes
-   // have been received. Copy the bytes into the pointer argument.
-   // Return the number of bytes received or a negative error code.
-   int doReceiveAllBytes(char* aBytes, int aRequestBytes);
-
-   // Receive one byte. Block until the byte has been received.
-   // Copy the byte into the pointer argument.
-   // Return one or a negative error code. 
-   int doReceiveOneByte(char* aByte);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods. Windows only.
-
-   // Receive a requested number of bytes. Block until all of the bytes
-   // have been received. Copy the bytes into the pointer argument.
-   // Return the number of bytes received or a negative error code.
-   //
-   // If normal then call the first one.
-   // If bluetooth then call the seconds one. 
-   int doReceiveAllBytes1(char* aBytes, int aRequestBytes);
-   int doReceiveAllBytes2(char* aBytes, int aRequestBytes);
 };
 
 //******************************************************************************

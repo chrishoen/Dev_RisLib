@@ -116,54 +116,22 @@ public:
    // Flush serial port buffers.
    void doFlush();
 
-   // Drain serial port buffers.
-   void doDrain();
-
-   // Suspend serial port transmits and receives.
-   void doSuspend();
-
-   // Resume serial port transmits and receives.
-   void doResume();
-
-   // Return the number of bytes that are available to receive.
-   int doGetAvailableReceiveBytes();
-
    // Abort a pending serial port receive.
    void doAbort();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Send a fixed number of bytes. Return the actual number of bytes
-   // sent or a negative error code.
-   int  doSendBytes(const char *aBytes, int aNumBytes);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Receive any available bytes. Block until at least one byte has
-   // been received. Copy the bytes into the pointer argument.
-   // Return the number of bytes received or a negative error code. 
-   int doReceiveAnyBytes(char* aBytes, int aMaxNumBytes);
 
    // Receive a requested number of bytes. Block until all of the bytes
    // have been received. Copy the bytes into the pointer argument.
    // Return the number of bytes received or a negative error code.
-   int doReceiveAllBytes(char* aBytes, int aRequestBytes);
+   int doReceiveBytes(char* aBytes, int aNumBytes);
 
-   // Receive one byte. Block until the byte has been received.
-   // Copy the byte into the pointer argument.
-   // Return one or a negative error code. 
-   int doReceiveOneByte(char* aByte);
+   // Send a requested number of bytes. Return the actual number of bytes
+   // sent or a negative error code.
+   int doSendBytes(const char *aBytes, int aNumBytes);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. Windows only.
+   // Methods. Windows specific.
 
    // Receive a requested number of bytes. Block until all of the bytes
    // have been received. Copy the bytes into the pointer argument.
@@ -171,8 +139,8 @@ public:
    //
    // If normal then call the first one.
    // If bluetooth then call the seconds one. 
-   int doReceiveAllBytes1(char* aBytes, int aRequestBytes);
-   int doReceiveAllBytes2(char* aBytes, int aRequestBytes);
+   int doReceiveBytes1(char* aBytes, int aNumBytes);
+   int doReceiveBytes2(char* aBytes, int aNumBytes);
 
    // Get the comm modem status. Return true if the modem is valid.
    bool doGetModemStatus();

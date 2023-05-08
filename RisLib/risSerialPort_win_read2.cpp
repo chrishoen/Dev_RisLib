@@ -19,28 +19,6 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Get the comm modem status. Return true if the modem is valid.
-
-bool SerialPort::doGetModemStatus()
-{
-   if (!mUseModemStatus) return true;
-
-   DWORD tModemStat = 0xff;
-   GetCommModemStatus(mPortHandle, &tModemStat);
-
-   mModemValid = (tModemStat & cCommModemMask) != 0;
-
-   if (!mModemValid)
-   {
-      Trc::write(mTI, 0, "ModemStatus INVALID %x", tModemStat);
-      Prn::print(0,      "ModemStatus INVALID %x", tModemStat);
-   }
-   return mModemValid;
-}
-   
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Receive a requested number of bytes. Block until all of the bytes
 // have been received. Copy the bytes into the pointer argument.
 // Return the number of bytes received or a negative error code.
@@ -100,7 +78,7 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
    // Issue read operation, overlapped i/o.
    tRet = ReadFile(mPortHandle, aData, tNumToRead, &tNumRead, &mReadOverlapped);
 
-   // If the read completes immediately.
+   // If it completes immediately.
    if (tRet)
    {
       // Check for read empty.
@@ -111,10 +89,10 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
          return cSerialRetEmpty;
       }
       // Check number of bytes.
-      if (tNumRead != tNumToRead)
+      else if (tNumRead != tNumToRead)
       {
          mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL1");
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL1 read");
          return cSerialRetError;
       }
 
@@ -124,23 +102,27 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
       return tNumRead;
    }
 
-   // Check for read abort.
+   // Check for pending. 
+   if (GetLastError() == ERROR_IO_PENDING)
+   {
+      // ReadFile is pending.
+      mReadPending = true;
+   }
+   // Check for abort.
    if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
-      Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED1");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED1 read");
       ClearCommError(mPortHandle, 0, 0);
       return cSerialRetAbort;
    }
-   // Check for read errors.
-   else if (GetLastError() != ERROR_IO_PENDING)
+   // Anything else is an error.
+   else
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL1");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL2 read %d", GetLastError());
       return cSerialRetError;
    }
-   // The read returned with ERROR_IO_PENDING.
-   mReadPending = true;
-   // At this point the read is pending.
+   // Note: At this point ReadFile is pending.
 
    //***************************************************************************
    //***************************************************************************
@@ -165,7 +147,7 @@ RestartComm:
       // Issue wait comm event operation, overlapped i/o.
       tRet = WaitCommEvent(mPortHandle, &tEvtMask, &mCommOverlapped);
 
-      // If the wait comm event completes immediately.
+      // If it completes immediately.
       if (tRet)
       {
          // Check the comm modem status.
@@ -177,33 +159,35 @@ RestartComm:
          else
          {
             // The modem status was okay, so there was a spurious comm event
-            // that will be ignored. This will go back to the top of the loop.
+            // that will be ignored. This will repeat the loop because comm
+            // is still pending.
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes spurious comm event");
          }
       }
       else
       {
+         // Check for pending.
+         if (GetLastError() == ERROR_IO_PENDING)
+         {
+            // WaitCommEvent is pending.
+            mCommPending = true;
+         }
          // Check for abort.
-         if (GetLastError() == ERROR_OPERATION_ABORTED)
+         else if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED2");
             ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
-         // Check for errors.
-         else if (GetLastError() != ERROR_IO_PENDING)
+         // Anything else is an error.
+         else
          {
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL3 %d", GetLastError());
             return cSerialRetError;
          }
-         // The comm event is pending.
-         else
-         {
-            mCommPending = true;
-         }
       }
    }
-   // At this point the ReadFile and WaitForEvent are both pending.
+   // Note: At this point ReadFile and WaitForEvent are both pending.
 
    //***************************************************************************
    //***************************************************************************
@@ -254,14 +238,14 @@ RestartComm:
    break;
    default:
    {
-      // Should never get here.
+      // Should never get here. 
       Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL991");
       return cSerialRetError;
    }
    }
    
-   // At this point the wait call returned with no timeout or errors.
-   // Check the overlapped results for read and comm event completion. 
+   // Note: At this point the wait call returned with no timeout or errors.
+   // Check the overlapped results. 
 
    //***************************************************************************
    //***************************************************************************
@@ -270,28 +254,31 @@ RestartComm:
 
    if (tTestCommResults)
    {
-      // Check comm overlapped result for abort or errors.
+      // Check overlapped result.
       if (!GetOverlappedResult(mPortHandle, &mCommOverlapped, &tNumDummy, FALSE))
       {
+         // Check for still pending.
          if (GetLastError() == ERROR_IO_INCOMPLETE)
          {
-            // Comm event is still pending.
+            // WaitCommEvent is still pending.
          }
+         // Check for abort.
          else if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED3");
             ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
+         // Anything else is an error.
          else
          {
             mPortErrorCount++;
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL4");
             return cSerialRetError;
          }
-         // Comm event is still pending and no errors.
+         // Note: WaitCommEvent is still pending and no errors.
       }
-      // Comm event completion.
+      // WaitCommEvent completion.
       else
       {
          // Check the comm modem status.
@@ -300,10 +287,11 @@ RestartComm:
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL modem3");
             return cSerialRetError;
          }
-         // Comm event is no longer pending.
+         // WaitCommEvent completed successfully.
          mCommPending = false;
       }
    }
+   // Note: At this point WaitCommEvent is or is not still pending.
 
    //***************************************************************************
    //***************************************************************************
@@ -312,61 +300,58 @@ RestartComm:
 
    if (tTestReadResults)
    {
-      // Check read overlapped result for abort or errors.
+      // Check overlapped result.
       if (!GetOverlappedResult(mPortHandle, &mReadOverlapped, &tNumRead, FALSE))
       {
+         // Check for still pending.
          if (GetLastError() == ERROR_IO_INCOMPLETE)
          {
-            // The read is still pending.
+            // ReadFile is still pending.
          }
+         // Check for abort.
          else if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED4");
             ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
+         // Anything else is an error.
          else
          {
             mPortErrorCount++;
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL4 %d", GetLastError());
             return cSerialRetError;
          }
-         // The read is still pending. WaitForMultipleObjects returned because
-         // the comm event completed. Restart the wait for comm event and call
-         // WaitForMultipleObjects again.
-         if (!mCommPending)
-         {
-            // Should never get here.
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL992");
-            return cSerialRetError;
-         }
       }
       else
       {
-         // The read completed successfully.
+         // ReadFile completed successfully.
          mReadPending = false;
       }
    }
-
-   // If ReadFile is still pending and WaitCommEvent is not pending
-   // then there was a spurious event, so restart the WaitCommEvent
-   // and fall through to the WaitForMultipleObjects.
-   if (mReadPending && !mCommPending)
-   {
-      goto RestartComm;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // ReadFile completed successfully. Check for errors.
-
-   if (mReadPending)
+   // At this point, ReadFile OR WaitCommEvent completed successfully.
+   if (mReadPending && mCommPending)
    {
       // Should never get here.
       Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL996");
       return cSerialRetError;
    }
+
+   // If ReadFile is still pending and WaitCommEvent is not pending
+   // then there was a spurious event, so restart the WaitCommEvent
+   // and fall through to repeat the WaitForMultipleObjects.
+   if (mReadPending && !mCommPending)
+   {
+      goto RestartComm;
+   }
+
+   // Note: At this point, ReadFile completed successfully and WaitCommEvent
+   // is or is not still pending.
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // ReadFile completed successfully. Check for errors.
 
    // Check overlapped result for read empty.
    if (tNumRead == 0)
@@ -386,7 +371,7 @@ RestartComm:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Done. The read completed successfully. The comm event might have
+   // Done. ReadFile completed successfully. WaitCommEvent might have
    // or might not have completed successfully. If it did not complete
    // then it will be restarted the next time receive is called.
 

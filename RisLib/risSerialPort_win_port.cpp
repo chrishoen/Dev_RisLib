@@ -62,11 +62,6 @@ void SerialPort::initialize(SerialSettings& aSettings)
    mTI = aSettings.mTraceIndex;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
-
-   mReadCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
-   mWriteCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
-   mCommCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
-
    mUseModemStatus = mSettings.mBthFlag;
 }
 
@@ -187,9 +182,24 @@ bool SerialPort::doOpen()
    if(!SetCommTimeouts(mPortHandle, &tCommTimeouts))
    {
       CloseHandle(mPortHandle);
-      mPortHandle=INVALID_HANDLE_VALUE;
+      mPortHandle = INVALID_HANDLE_VALUE;
       mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doOpen FAIL2");
+      return false;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Modem status.
+
+   // Test if the modem status is valid.
+   if (mUseModemStatus && !doGetModemStatus())
+   {
+      CloseHandle(mPortHandle);
+      mPortHandle = INVALID_HANDLE_VALUE;
+      mPortErrorCount++;
+      Trc::write(mTI, 0, "SerialPort::doOpen FAIL3");
       return false;
    }
 
@@ -210,6 +220,14 @@ bool SerialPort::doOpen()
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
    mFirstReadFlag = true;
+
+   mReadCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   mWriteCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   if (mUseModemStatus)
+   {
+      mCommCompletion = CreateEvent(NULL, TRUE, FALSE, NULL);
+   }
+
    printf("SerialPort open    PASS          %s\n", mSettings.mPortDevice);
    Trc::write(mTI, 0, "SerialPort::doOpen done");
    return true;
@@ -248,15 +266,24 @@ void SerialPort::doClose()
    // Flush.
    doFlush();
 
-   // Unblock any pending writes.
-   SetEvent(mWriteCompletion);
-
-   // Cancel any pending i/o.
+   // Cancel any pending i/o. This will cause any waits for overlapped io
+   // to return with ERROR_ABORTED.
    CancelIoEx(mPortHandle, 0);
+   Sleep(100);
 
    // Close the handles.
    CloseHandle(mPortHandle);
+   CloseHandle(mReadCompletion);
+   CloseHandle(mWriteCompletion);
    mPortHandle = INVALID_HANDLE_VALUE;
+   mReadCompletion = INVALID_HANDLE_VALUE;
+   mWriteCompletion = INVALID_HANDLE_VALUE;
+   if (mUseModemStatus)
+   {
+      CloseHandle(mCommCompletion);
+      mCommCompletion = INVALID_HANDLE_VALUE;
+   }
+
    mValidFlag = false;
    Trc::write(mTI, 0, "SerialPort::doClose done");
 }
@@ -293,7 +320,11 @@ void SerialPort::doAbort()
    }
 
    // Post to the event semaphore.
-   SetEvent(mReadCompletion);
+   //SetEvent(mReadCompletion);
+
+   // Cancel any pending i/o. This will cause any waits for overlapped io
+   // to return with ERROR_ABORTED.
+   CancelIoEx(mPortHandle, 0);
    Trc::write(mTI, 0, "SerialPort::doAbort done");
 }
 
@@ -317,6 +348,28 @@ void SerialPort::doFlush()
    ClearCommError(mPortHandle, 0, 0);
 
    Trc::write(mTI, 0, "SerialPort::doFlush done");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Get the comm modem status. Return true if the modem is valid.
+
+bool SerialPort::doGetModemStatus()
+{
+   if (!mUseModemStatus) return true;
+
+   DWORD tModemStat = 0xff;
+   GetCommModemStatus(mPortHandle, &tModemStat);
+
+   mModemValid = (tModemStat & cCommModemMask) != 0;
+
+   if (!mModemValid)
+   {
+      Trc::write(mTI, 0, "ModemStatus INVALID %x", tModemStat);
+      Prn::print(0, "ModemStatus INVALID %x", tModemStat);
+   }
+   return mModemValid;
 }
 
 //******************************************************************************

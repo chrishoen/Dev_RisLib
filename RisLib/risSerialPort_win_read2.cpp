@@ -128,6 +128,7 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
    if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
       Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED1");
+      ClearCommError(mPortHandle, 0, 0);
       return cSerialRetAbort;
    }
    // Check for read errors.
@@ -187,6 +188,7 @@ RestartComm:
          if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED2");
+            ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
          // Check for errors.
@@ -276,8 +278,8 @@ RestartComm:
          }
          else if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
-            ////ClearCommError(mPortHandle, 0, 0);
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED2");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED3");
+            ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
          else
@@ -317,7 +319,8 @@ RestartComm:
          }
          else if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED2");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED4");
+            ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
          else

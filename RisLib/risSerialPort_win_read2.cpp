@@ -95,7 +95,7 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Start overlapped read.
+   // Start overlapped ReadFile.
 
    // Issue read operation, overlapped i/o.
    tRet = ReadFile(mPortHandle, aData, tNumToRead, &tNumRead, &mReadOverlapped);
@@ -145,12 +145,11 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // If not pending then start overlapped wait for comm event. This 
+   // If not pending then start overlapped WaitCommEvent. This 
    // might be pending from a previous receive call. Because there might 
    // be spurious comm events, loop until pending or exit if error.
    // A spurious comm event happens when there is a comm event but the
-   //  modem status is still
-   // okay.
+   // modem status is still okay.
 
 RestartComm:
 
@@ -204,17 +203,17 @@ RestartComm:
          }
       }
    }
-   // At this point the read and the comm event are both pending.
+   // At this point the ReadFile and WaitForEvent are both pending.
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Wait for comm event or read completion.
+   // Wait for ReadFile or WaitForCommEvent completion.
 
    // Setup the wait parameters.
    memset(&tWaitHandles, 0, 2 * sizeof(HANDLE));
-   tWaitHandles[1] = mCommCompletion;
    tWaitHandles[0] = mReadCompletion;
+   tWaitHandles[1] = mCommCompletion;
    tWaitCount = 2;
    tTestReadResults = false;
    tTestCommResults = false;
@@ -240,15 +239,17 @@ RestartComm:
    }
    break;
    case WAIT_OBJECT_0:
-      // Read completed and comm event might have completed.
-      tTestCommResults = true;
-      tTestReadResults = true;
-   case WAIT_OBJECT_0 + 1:
-   // Read did not completed and comm event completed.
    {
-      // read or comm event completion.
-      tTestCommResults = false;
+      // ReadFile completed and WaitCommEvent might have completed.
       tTestReadResults = true;
+      tTestCommResults = true;
+   }
+   break;
+   case WAIT_OBJECT_0 + 1:
+   {
+      // ReadFile did not complete and WaitCommEvent completed.
+      tTestReadResults = false;
+      tTestCommResults = true;
    }
    break;
    default:
@@ -265,7 +266,7 @@ RestartComm:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Check comm event results.
+   // Check WaitCommEvent results.
 
    if (tTestCommResults)
    {
@@ -288,6 +289,7 @@ RestartComm:
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL4");
             return cSerialRetError;
          }
+         // Comm event is still pending and no errors.
       }
       // Comm event completion.
       else
@@ -306,7 +308,7 @@ RestartComm:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Check read results.
+   // Check ReadFile results.
 
    if (tTestReadResults)
    {
@@ -338,7 +340,6 @@ RestartComm:
             Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL992");
             return cSerialRetError;
          }
-         goto RestartComm;
       }
       else
       {
@@ -346,8 +347,19 @@ RestartComm:
          mReadPending = false;
       }
    }
-   // At this point the read completed successfully. If the read and comm both 
-   // completed at the same then the comm will no longer be pending.
+
+   // If ReadFile is still pending and WaitCommEvent is not pending
+   // then there was a spurious event, so restart the WaitCommEvent
+   // and fall through to the WaitForMultipleObjects.
+   if (mReadPending && !mCommPending)
+   {
+      goto RestartComm;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // ReadFile completed successfully. Check for errors.
 
    if (mReadPending)
    {

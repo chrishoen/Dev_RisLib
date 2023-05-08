@@ -53,13 +53,12 @@ int SerialPort::doReceiveBytes1(char* aData, int aNumBytes)
    DWORD tNumRead = 0;
    DWORD tNumToRead = aNumBytes;
    bool tWaitForCompletion = false;
-   OVERLAPPED tOverlapped;
-   memset(&tOverlapped, 0, sizeof(tOverlapped));
-   tOverlapped.hEvent = mReadCompletion;
+   memset(&mReadOverlapped, 0, sizeof(mReadOverlapped));
+   mReadOverlapped.hEvent = mReadCompletion;
    DWORD tWaitTimeout = mSettings.mRxTimeout == 0 ? INFINITE : mSettings.mRxTimeout;
 
    // Issue read operation, overlapped i/o.
-   tRet = ReadFile(mPortHandle, aData, tNumToRead, &tNumRead, &tOverlapped);
+   tRet = ReadFile(mPortHandle, aData, tNumToRead, &tNumRead, &mReadOverlapped);
 
    // If the read completes immediately.
    if (tRet)
@@ -95,7 +94,7 @@ int SerialPort::doReceiveBytes1(char* aData, int aNumBytes)
    if (tWaitForCompletion)
    {
       // Wait for overlapped i/o completion.
-      tRet = WaitForSingleObject(tOverlapped.hEvent, tWaitTimeout);
+      tRet = WaitForSingleObject(mReadOverlapped.hEvent, tWaitTimeout);
 
       // Select on the returned status code.
       switch (tRet)
@@ -124,7 +123,7 @@ int SerialPort::doReceiveBytes1(char* aData, int aNumBytes)
       case WAIT_OBJECT_0:
       {
          // Check overlapped result for abort or for errors.
-         if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tNumRead, FALSE))
+         if (!GetOverlappedResult(mPortHandle, &mReadOverlapped, &tNumRead, FALSE))
          {
             if (GetLastError() == ERROR_OPERATION_ABORTED)
             {

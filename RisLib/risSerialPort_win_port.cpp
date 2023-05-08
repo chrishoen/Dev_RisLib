@@ -22,9 +22,6 @@ namespace Ris
 
 SerialPort::SerialPort()
 {
-   mPortHandle = 0;
-   mReadCompletion = 0;
-   mWriteCompletion = 0;
    mOpenFlag = false;
    mValidFlag = false;
    mAbortFlag = false;
@@ -34,6 +31,18 @@ SerialPort::SerialPort()
    mRxByteCount = 0;
    mTxByteCount = 0;
    mPortErrorCount = 0;
+
+   mPortHandle = 0;
+   mReadCompletion = 0;
+   mWriteCompletion = 0;
+   mCommCompletion = 0;
+   memset(&mReadOverlapped, 0, sizeof(mReadOverlapped));
+   memset(&mWriteOverlapped, 0, sizeof(mWriteOverlapped));
+   memset(&mCommOverlapped, 0, sizeof(mCommOverlapped));
+   mReadPending = false;
+   mWritePending = false;
+   mCommPending = false;
+   mFirstReadFlag = false;
 }
 
 SerialPort::~SerialPort(void)
@@ -192,6 +201,7 @@ bool SerialPort::doOpen()
    mValidFlag = true;
    mOpenErrorShowCount = 0;
    mCloseErrorShowCount = 0;
+   mFirstReadFlag = true;
    printf("SerialPort open    PASS          %s\n", mSettings.mPortDevice);
    Trc::write(mTI, 0, "SerialPort::doOpen done");
    return true;

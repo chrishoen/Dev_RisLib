@@ -27,13 +27,23 @@ namespace Ris
 // Serial port return codes, if retval >=0 then no error and retval is
 // number of bytes that were transferred. If retval < 0 then use these
 // return codes.
-
 static const int cSerialRetSuccess   =  1;  
 static const int cSerialRetEmpty     =  0;
 static const int cSerialRetError     = -1;
 static const int cSerialRetTimeout   = -2;
 static const int cSerialRetAbort     = -3;
 static const int cSerialRetDataError = -4;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constants. Windows specific.
+
+// Comm event mask. Passed to SetCommMask;
+static const DWORD cCommEvtMask = EV_DSR;
+
+// Comm modem status mask. Passed to GetCommModemStatus.
+static const DWORD cCommModemMask = MS_DSR_ON;
 
 //******************************************************************************
 //******************************************************************************
@@ -87,8 +97,21 @@ public:
    HANDLE mWriteCompletion;
    HANDLE mCommCompletion;
 
+   // Overlapped, persistent between read calls. 
+   OVERLAPPED mReadOverlapped;
+   OVERLAPPED mWriteOverlapped;
+   OVERLAPPED mCommOverlapped;
+
+   // If true then an overlapped io is pending.
+   bool mReadPending;
+   bool mWritePending;
+   bool mCommPending;
+
    // If true then the modem is valid.
    bool mModemValid;
+
+   // If true then this is the first read after a successful open.
+   bool mFirstReadFlag;
 
    //***************************************************************************
    //***************************************************************************

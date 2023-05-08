@@ -38,13 +38,12 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    DWORD tNumWritten = 0;
    DWORD tNumToWrite = aNumBytes;
    bool tWaitForCompletion = false;
-   OVERLAPPED tOverlapped;
-   memset(&tOverlapped, 0, sizeof(tOverlapped));
-   tOverlapped.hEvent = mWriteCompletion;
+   memset(&mWriteOverlapped, 0, sizeof(mWriteOverlapped));
+   mWriteOverlapped.hEvent = mWriteCompletion;
    DWORD tWaitTimeout = 1000;
 
    // Issue write operation, overlapped i/o.
-   tRet = WriteFile(mPortHandle, aData, tNumToWrite, &tNumWritten, &tOverlapped);
+   tRet = WriteFile(mPortHandle, aData, tNumToWrite, &tNumWritten, &mWriteOverlapped);
 
    // If the write completes immediately.
    if (tRet)
@@ -80,7 +79,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    if (tWaitForCompletion)
    {
       // Wait for overlapped i/o completion.
-      tRet = WaitForSingleObject(tOverlapped.hEvent, tWaitTimeout);
+      tRet = WaitForSingleObject(mWriteOverlapped.hEvent, tWaitTimeout);
 
       // Select on the returned status code.
       switch (tRet)
@@ -109,7 +108,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       case WAIT_OBJECT_0:
       {
          // Check overlapped result for abort or for errors.
-         if (!GetOverlappedResult(mPortHandle, &tOverlapped, &tNumWritten, FALSE))
+         if (!GetOverlappedResult(mPortHandle, &mWriteOverlapped, &tNumWritten, FALSE))
          {
             if (GetLastError() == ERROR_OPERATION_ABORTED)
             {

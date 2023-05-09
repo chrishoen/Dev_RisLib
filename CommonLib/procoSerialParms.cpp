@@ -47,6 +47,7 @@ void SerialParms::reset()
    mTxTermMode = 0;
    mRxTermMode = 0;
    mThreadTimerPeriod = 0;
+   mTraceLogEnable = false;
 }
 
 //******************************************************************************
@@ -71,6 +72,7 @@ void SerialParms::show()
 
    printf("\n");
    printf("ThreadTimerPeriod       %-12d\n", mThreadTimerPeriod);
+   printf("TraceLogEnable          %-12s\n", my_string_from_bool(mTraceLogEnable));
 
    printf("SerialParms************************************************\n");
    printf("\n");
@@ -94,6 +96,7 @@ void SerialParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TxTermMode"))        mTxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
    if (aCmd->isCmd("RxTermMode"))        mRxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
    if (aCmd->isCmd("ThreadTimerPeriod")) mThreadTimerPeriod = aCmd->argInt(1);
+   if (aCmd->isCmd("TraceLogEnable"))    mTraceLogEnable = aCmd->argBool(1);
 }
 
 //******************************************************************************

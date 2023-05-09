@@ -49,22 +49,26 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Read parameters files.
+
+   ProtoComm::gSerialParms.reset();
+   ProtoComm::gSerialParms.readSection("default");
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize trace facility.
 
    Trc::reset();
    Trc::create_buffer(1,  3, "string");
    Trc::create_buffer(11, 3, "serial");
    Trc::set_default_trace_index(11);
-   Trc::create_log(11, 4, "log/trace-ProtoSerialString-serial.log");
+
+   if (ProtoComm::gSerialParms.mTraceLogEnable)
+   {
+      Trc::create_log(11, 4, "log/trace-ProtoSerialString-serial.log");
+   }
    Trc::initialize();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Read parameters files.
-
-   ProtoComm::gSerialParms.reset();
-   ProtoComm::gSerialParms.readSection("default");
 }
 
 //******************************************************************************

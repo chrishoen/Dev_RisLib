@@ -114,7 +114,7 @@ public:
    HANDLE mTxEventHandle;
 };
 
-void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
+void doGetModemStatus()
 {
    DWORD tModemStat = 0;
    HANDLE tPortHandle = gProcThread->mSerialStringThread->mSerialStringPort.mPortHandle;
@@ -126,15 +126,19 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
    Prn::print(0, "GetCommModemStatus %x", tModemStat);
 }
 
+void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
+{
+   doGetModemStatus();
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   HANDLE tPortHandle = gProcThread->mSerialStringThread->mSerialStringPort.mPortHandle;
-   ClearCommError(tPortHandle, 0, 0);
-   Prn::print(0, "ClearCommError");
+   doGetModemStatus();
+   doGetModemStatus();
 }
 
 //******************************************************************************

@@ -119,6 +119,13 @@ restart:
       goto restart;
    }
 
+   // Wait for modem valid.
+   if (!mSerialMsgPort.doWaitForModemValid())
+   {
+      // If error then restart.
+      goto restart;
+   }
+
    // Connection was established.
    mConnectionFlag = true;
 

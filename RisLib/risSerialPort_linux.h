@@ -102,6 +102,9 @@ public:
    // Open the serial port and configure with the settings.
    bool doOpen();
 
+   // Wait for the modem to be valid. Return true if successful.
+   bool doWaitForModemValid();
+
    // Close the serial port.
    void doClose();
 

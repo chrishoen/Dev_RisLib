@@ -140,7 +140,6 @@ restart:
       goto restart;
    }
 
-
    // Connection was established.
    mConnectionFlag = true;
 

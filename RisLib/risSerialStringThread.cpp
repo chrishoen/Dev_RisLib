@@ -133,6 +133,14 @@ restart:
       goto restart;
    }
 
+   // Wait for modem valid.
+   if (!mSerialStringPort.doWaitForModemValid())
+   {
+      // If error then restart.
+      goto restart;
+   }
+
+
    // Connection was established.
    mConnectionFlag = true;
 

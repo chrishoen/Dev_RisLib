@@ -191,21 +191,6 @@ bool SerialPort::doOpen()
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Modem status.
-
-   // Test if the modem status is valid.
-   if (mUseModemStatus && !doGetModemStatus())
-   {
-      CloseHandle(mPortHandle);
-      mPortHandle = INVALID_HANDLE_VALUE;
-      mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doOpen FAIL3");
-      return false;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Purge.
 
    doFlush();
@@ -360,16 +345,62 @@ bool SerialPort::doGetModemStatus()
    if (!mUseModemStatus) return true;
 
    DWORD tModemStat = 0xff;
-   GetCommModemStatus(mPortHandle, &tModemStat);
+   if (!GetCommModemStatus(mPortHandle, &tModemStat))
+   {
+      return false;
+   }
 
    mModemValid = (tModemStat & cCommModemMask) != 0;
 
    if (!mModemValid)
    {
-      Trc::write(mTI, 0, "ModemStatus INVALID %x", tModemStat);
-      Prn::print(0, "ModemStatus INVALID %x", tModemStat);
+      Trc::write(mTI, 0, "SerialPort::ModemStatus INVALID %x", tModemStat);
+      Prn::print(0, "SerialPort::ModemStatus INVALID %x", tModemStat);
    }
    return mModemValid;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Wait for the modem to be valid. Return zero if successful.
+// Return a negative error code if unsuccessful.
+
+bool SerialPort::doWaitForModemValid()
+{
+   if (!mUseModemStatus) return true;
+
+   while (true)
+   {
+      DWORD tModemStat = 0xff;
+      if (!GetCommModemStatus(mPortHandle, &tModemStat))
+      {
+         Trc::write(mTI, 0, "SerialPort::doWaitForModemStatus FAIL %d", GetLastError());
+         return false;
+      }
+
+      if (mAbortFlag)
+      {
+         return false;
+      }
+
+      mModemValid = (tModemStat & cCommModemMask) != 0;
+
+      if (mModemValid)
+      {
+         Trc::write(mTI, 0, "SerialPort::doWaitForModemValid PASS %x", tModemStat);
+         Prn::print(0, "SerialPort::doWaitForModemValid PASS %x", tModemStat);
+         return true;
+      }
+      else
+      {
+         Trc::write(mTI, 0, "SerialPort::doWaitForModemValid INVALID %x", tModemStat);
+         Prn::print(0, "SerialPort::doWaitForModemValid INVALID %x", tModemStat);
+         Sleep(100);
+      }
+   }
+
+   return false;
 }
 
 //******************************************************************************

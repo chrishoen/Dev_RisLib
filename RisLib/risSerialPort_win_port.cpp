@@ -95,8 +95,11 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Create file.
 
-   Prn::print(0, "SerialPort::doOpen CreateFile");
-   Trc::write(mTI, 0, "SerialPort::doOpen CreateFile");
+   if (mUseModemStatus)
+   {
+      Prn::print(0, "SerialPort::doOpen CreateFile");
+      Trc::write(mTI, 0, "SerialPort::doOpen CreateFile");
+   }
 
    double tCreateFileStartTime = Ris::getProgramTime();
    mPortHandle = CreateFile(mSettings.mPortDevice,
@@ -118,13 +121,19 @@ bool SerialPort::doOpen()
       Trc::write(mTI, 0, "SerialPort::doOpen FAIL1");
 
       double tCreateFileDuration = Ris::getProgramTime() - tCreateFileStartTime;
-      Prn::print(0, "SerialPort::doOpen CreateFile FAIL1 %.3f", tCreateFileDuration);
-      Trc::write(mTI, 0, "SerialPort::doOpen CreateFile FAIL u %.3f", tCreateFileDuration);
+      if (mUseModemStatus)
+      {
+         Prn::print(0, "SerialPort::doOpen CreateFile FAIL1 %.3f", tCreateFileDuration);
+         Trc::write(mTI, 0, "SerialPort::doOpen CreateFile FAIL u %.3f", tCreateFileDuration);
+      }
       return false;
    }
    double tCreateFileDuration = Ris::getProgramTime() - tCreateFileStartTime;
-   Prn::print(0,      "SerialPort::doOpen CreateFile done %.3f", tCreateFileDuration);
-   Trc::write(mTI, 0, "SerialPort::doOpen CreateFile done %.3f", tCreateFileDuration);
+   if (mUseModemStatus)
+   {
+      Prn::print(0, "SerialPort::doOpen CreateFile done %.3f", tCreateFileDuration);
+      Trc::write(mTI, 0, "SerialPort::doOpen CreateFile done %.3f", tCreateFileDuration);
+   }
 
    // Setup buffers.
    SetupComm(mPortHandle,0x20000, 0x20000);

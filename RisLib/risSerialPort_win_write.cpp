@@ -23,10 +23,18 @@ namespace Ris
 int SerialPort::doSendBytes(const char* aData, int aNumBytes)
 {
    Trc::write(mTI, 0, "SerialPort::doSendBytes");
+
    // Guard.
    if (!mValidFlag)
    {
       Trc::write(mTI, 0, "SerialPort::doSendBytes INVALID");
+      return cSerialRetError;
+   }
+
+   // Check the comm modem status.
+   if (!doGetModemStatus())
+   {
+      Trc::write(mTI, 0, "SerialPort::doSendBytes FAIL modem1");
       return cSerialRetError;
    }
 

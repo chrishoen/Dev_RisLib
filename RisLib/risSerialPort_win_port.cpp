@@ -242,6 +242,8 @@ void SerialPort::doClose()
       return;
    }
 
+   ClearCommError(mPortHandle, 0, 0);
+
    int tRet = 0;
 
    // Set invalid.

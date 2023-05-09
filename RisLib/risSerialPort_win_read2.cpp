@@ -25,7 +25,7 @@ namespace Ris
 
 int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
 {
-   Trc::write(mTI, 0, "SerialPort::doReceiveBytes2");
+   Trc::write(mTI, 0, "SerialPort::doReceiveBytes2 %s", mFirstReadFlag ? "first" : "");
 
    // Check the comm modem status.
    if (!doGetModemStatus())

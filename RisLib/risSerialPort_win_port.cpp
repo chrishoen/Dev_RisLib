@@ -112,9 +112,9 @@ bool SerialPort::doOpen()
 
    if (mPortHandle == INVALID_HANDLE_VALUE)
    {
-      if (mOpenErrorShowCount == 0)
+      if (mOpenErrorShowCount == 0 && !mUseModemStatus)
       {
-         printf("serial_open_error_1 %s %d %s\n", mSettings.mPortDevice, errno, strerror(errno));
+         printf("serial_open_error_1 %s %d\n", mSettings.mPortDevice, GetLastError());
       }
       mOpenErrorShowCount++;
       mPortErrorCount++;
@@ -123,8 +123,8 @@ bool SerialPort::doOpen()
       double tCreateFileDuration = Ris::getProgramTime() - tCreateFileStartTime;
       if (mUseModemStatus)
       {
-         Prn::print(0, "SerialPort::doOpen CreateFile FAIL1 %.3f", tCreateFileDuration);
-         Trc::write(mTI, 0, "SerialPort::doOpen CreateFile FAIL u %.3f", tCreateFileDuration);
+         Prn::print(0, "SerialPort::doOpen CreateFile FAIL1 %d %.3f", GetLastError(), tCreateFileDuration);
+         Trc::write(mTI, 0, "SerialPort::doOpen CreateFile FAIL1 %d %.3f", GetLastError(), tCreateFileDuration);
       }
       return false;
    }

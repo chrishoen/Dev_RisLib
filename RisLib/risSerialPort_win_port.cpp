@@ -116,6 +116,10 @@ bool SerialPort::doOpen()
       mOpenErrorShowCount++;
       mPortErrorCount++;
       Trc::write(mTI, 0, "SerialPort::doOpen FAIL1");
+
+      double tCreateFileDuration = Ris::getProgramTime() - tCreateFileStartTime;
+      Prn::print(0, "SerialPort::doOpen CreateFile FAIL1 %.3f", tCreateFileDuration);
+      Trc::write(mTI, 0, "SerialPort::doOpen CreateFile FAIL u %.3f", tCreateFileDuration);
       return false;
    }
    double tCreateFileDuration = Ris::getProgramTime() - tCreateFileStartTime;

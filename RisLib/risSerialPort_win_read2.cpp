@@ -69,13 +69,6 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
       mFirstReadFlag = false;
       mReadPending = false;
       mCommPending = false;
-
-      // Set the comm event mask. Do this each time.
-      if (!SetCommMask(mPortHandle, cCommEvtMask))
-      {
-         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL comm mask %d", GetLastError());
-         return cSerialRetError;
-      }
    }
 
    //***************************************************************************
@@ -145,6 +138,13 @@ RestartComm:
 
    while (!mCommPending)
    {
+      // Set the comm event mask. Do this each time.
+      if (!SetCommMask(mPortHandle, cCommEvtMask))
+      {
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL comm mask %d", GetLastError());
+         return cSerialRetError;
+      }
+
       // Issue wait comm event operation, overlapped i/o.
       tRet = WaitCommEvent(mPortHandle, &tEvtMask, &mCommOverlapped);
 

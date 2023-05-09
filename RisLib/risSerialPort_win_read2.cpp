@@ -65,9 +65,17 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
    // Check for first read after successful open.
    if (mFirstReadFlag)
    {
+      // Set variables.
       mFirstReadFlag = false;
       mReadPending = false;
       mCommPending = false;
+
+      // Set the comm event mask. Do this each time.
+      if (!SetCommMask(mPortHandle, cCommEvtMask))
+      {
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL comm mask %d", GetLastError());
+         return cSerialRetError;
+      }
    }
 
    //***************************************************************************
@@ -85,14 +93,14 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
       if (tNumRead == 0)
       {
          mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read empty");
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read1 empty");
          return cSerialRetEmpty;
       }
       // Check number of bytes.
       else if (tNumRead != tNumToRead)
       {
          mPortErrorCount++;
-         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL1 read");
+         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read1 num");
          return cSerialRetError;
       }
 
@@ -111,7 +119,7 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
    // Check for abort.
    else if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
-      Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED1 read");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED read1");
       ClearCommError(mPortHandle, 0, 0);
       return cSerialRetAbort;
    }
@@ -119,7 +127,7 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
    else
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL2 read %d", GetLastError());
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read1 error %d", GetLastError());
       return cSerialRetError;
    }
    // Note: At this point ReadFile is pending.
@@ -137,13 +145,6 @@ RestartComm:
 
    while (!mCommPending)
    {
-      // Set the comm event mask. Do this each time.
-      if (!SetCommMask(mPortHandle, cCommEvtMask))
-      {
-         Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL comm mask %d", GetLastError());
-         return cSerialRetError;
-      }
-
       // Issue wait comm event operation, overlapped i/o.
       tRet = WaitCommEvent(mPortHandle, &tEvtMask, &mCommOverlapped);
 
@@ -175,14 +176,14 @@ RestartComm:
          // Check for abort.
          else if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED2");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED comm1");
             ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
          // Anything else is an error.
          else
          {
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL3 %d", GetLastError());
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL comm1 error %d", GetLastError());
             return cSerialRetError;
          }
       }
@@ -211,13 +212,13 @@ RestartComm:
    case WAIT_FAILED:
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL2");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL WAIT_FAILED");
       return cSerialRetError;
    }
    break;
    case WAIT_TIMEOUT:
    {
-      Trc::write(mTI, 0, "SerialPort::doReceiveBytes TIMEOUT");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes WAIT_TIMEOUT");
       printf("serial_poll_error_2 timeout\n");
       return cSerialRetTimeout;
    }
@@ -265,7 +266,7 @@ RestartComm:
          // Check for abort.
          else if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED3");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED comm2");
             ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
@@ -273,7 +274,7 @@ RestartComm:
          else
          {
             mPortErrorCount++;
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL4");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL comm2 error %d", GetLastError());
             return cSerialRetError;
          }
          // Note: WaitCommEvent is still pending and no errors.
@@ -311,7 +312,7 @@ RestartComm:
          // Check for abort.
          else if (GetLastError() == ERROR_OPERATION_ABORTED)
          {
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED4");
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED read2");
             ClearCommError(mPortHandle, 0, 0);
             return cSerialRetAbort;
          }
@@ -319,7 +320,7 @@ RestartComm:
          else
          {
             mPortErrorCount++;
-            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL4 %d", GetLastError());
+            Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read2 error %d", GetLastError());
             return cSerialRetError;
          }
       }
@@ -357,14 +358,14 @@ RestartComm:
    if (tNumRead == 0)
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read empty");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read2 empty");
       return cSerialRetEmpty;
    }
    // Check number of bytes.
    if (tNumRead != tNumToRead)
    {
       mPortErrorCount++;
-      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL5");
+      Trc::write(mTI, 0, "SerialPort::doReceiveBytes FAIL read2 num");
       return cSerialRetError;
    }
 

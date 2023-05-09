@@ -109,7 +109,7 @@ int SerialPort::doReceiveBytes2(char* aData, int aNumBytes)
       mReadPending = true;
    }
    // Check for abort.
-   if (GetLastError() == ERROR_OPERATION_ABORTED)
+   else if (GetLastError() == ERROR_OPERATION_ABORTED)
    {
       Trc::write(mTI, 0, "SerialPort::doReceiveBytes ABORTED1 read");
       ClearCommError(mPortHandle, 0, 0);

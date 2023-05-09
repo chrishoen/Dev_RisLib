@@ -8,6 +8,7 @@
 
 #include "my_functions.h"
 #include "risPortableCalls.h"
+#include "risProgramTime.h"
 #include "prnPrint.h"
 #include "trcTrace.h"
 
@@ -94,6 +95,10 @@ bool SerialPort::doOpen()
    //***************************************************************************
    // Create file.
 
+   Prn::print(0, "SerialPort::doOpen CreateFile");
+   Trc::write(mTI, 0, "SerialPort::doOpen CreateFile");
+
+   double tCreateFileStartTime = Ris::getProgramTime();
    mPortHandle = CreateFile(mSettings.mPortDevice,
       GENERIC_READ | GENERIC_WRITE,
       0,
@@ -113,6 +118,9 @@ bool SerialPort::doOpen()
       Trc::write(mTI, 0, "SerialPort::doOpen FAIL1");
       return false;
    }
+   double tCreateFileDuration = Ris::getProgramTime() - tCreateFileStartTime;
+   Prn::print(0,      "SerialPort::doOpen CreateFile done %.3f", tCreateFileDuration);
+   Trc::write(mTI, 0, "SerialPort::doOpen CreateFile done %.3f", tCreateFileDuration);
 
    // Setup buffers.
    SetupComm(mPortHandle,0x20000, 0x20000);

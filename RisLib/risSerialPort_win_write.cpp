@@ -48,7 +48,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
    bool tWaitForCompletion = false;
    memset(&mWriteOverlapped, 0, sizeof(mWriteOverlapped));
    mWriteOverlapped.hEvent = mWriteCompletion;
-   DWORD tWaitTimeout = 1000;
+   DWORD tWaitTimeout = mSettings.mTxTimeout == 0 ? INFINITE : mSettings.mTxTimeout;
 
    // Issue write operation, overlapped i/o.
    tRet = WriteFile(mPortHandle, aData, tNumToWrite, &tNumWritten, &mWriteOverlapped);

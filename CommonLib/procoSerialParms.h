@@ -66,6 +66,7 @@ public:
    // Serial setup and port.
    char mSerialPortDevice[cMaxStringSize];
    char mSerialPortSetup[cMaxStringSize];
+   int  mSerialTxTimeout;
    int  mSerialRxTimeout;
 
    // If true then use bluetooth.

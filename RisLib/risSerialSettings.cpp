@@ -27,6 +27,7 @@ void SerialSettings::reset()
    mIdent = -1;
    mPortDevice[0] = 0;
    mPortSetup[0] = 0;
+   mTxTimeout = 0;
    mRxTimeout = 0;
    mTxTermMode = 0;
    mRxTermMode = 0;

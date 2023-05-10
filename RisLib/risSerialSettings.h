@@ -61,7 +61,8 @@ public:
    // "9600,N,8,1". If empty string then use system defaults.
    char mPortSetup[16];
 
-   // Receive timeout. Milliseconds, 0 means no timeout.
+   // Send and receive timeouts. Milliseconds, 0 means infinite timeout.
+   int mTxTimeout;
    int mRxTimeout;
 
    // Termination modes. LF (\n,10) or CRLF (\r\n,13,10).

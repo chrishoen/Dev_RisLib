@@ -63,6 +63,7 @@ void ProcThread::threadInitFunction()
 
    tSerialSettings.setPortDevice(gSerialParms.mSerialPortDevice);
    tSerialSettings.setPortSetup(gSerialParms.mSerialPortSetup);
+   tSerialSettings.mTxTimeout = gSerialParms.mSerialTxTimeout;
    tSerialSettings.mRxTimeout = gSerialParms.mSerialRxTimeout;
    tSerialSettings.mTxTermMode = gSerialParms.mTxTermMode;
    tSerialSettings.mRxTermMode = gSerialParms.mRxTermMode;

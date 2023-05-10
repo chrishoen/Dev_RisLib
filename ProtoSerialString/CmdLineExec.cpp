@@ -82,6 +82,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
       sprintf(tString, "%s", aCmd->argWhole());
    }
    gProcThread->sendString(new std::string(tString));
+   Prn::print(0, "done");
 }
 
 //******************************************************************************

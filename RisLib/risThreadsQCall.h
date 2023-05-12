@@ -133,6 +133,11 @@ executed by the thread run function and then deleted.
 
 #include <functional>
 
+#ifdef WIN32 
+#pragma warning(push)
+#pragma warning(disable:26495)
+#endif
+
 namespace Ris
 {
 namespace Threads
@@ -677,3 +682,6 @@ public:
 }//namespace
 }//namespace
 
+#ifdef WIN32 
+#pragma warning(pop)
+#endif

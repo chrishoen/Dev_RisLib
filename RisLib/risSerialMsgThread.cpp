@@ -30,6 +30,8 @@ SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
 
    mSettings = aSettings;
+   mSuspendReq = false;
+   mSuspendFlag = false;
    mSessionQCall = aSettings.mSessionQCall;
    mRxMsgQCall = aSettings.mRxMsgQCall;
 
@@ -167,6 +169,11 @@ restart:
          Trc::write(mTI, 0, "SerialMsgThread read ERROR");
          goto restart;
       }
+      else if (tRet == Ris::cSerialRetDataError)
+      {
+         Trc::write(mTI, 0, "SerialMsgThread read DATA ERROR");
+         goto restart;
+      }
       else if (tRet == Ris::cSerialRetTimeout)
       {
          Trc::write(mTI, 0, "SerialMsgThread read TIMEOUT");
@@ -175,11 +182,18 @@ restart:
       else if (tRet == Ris::cSerialRetAbort)
       {
          Trc::write(mTI, 0, "SerialMsgThread read ABORT");
-         goto restart;
-      }
-      else if (tRet == Ris::cSerialRetDataError)
-      {
-         Trc::write(mTI, 0, "SerialMsgThread read DATA ERROR");
+         if (mSuspendReq)
+         {
+            // If the abort was caused by a suspension request then
+            // close the serial port and wait on the resume semaphore.
+            Trc::write(mTI, 0, "SerialMsgThread SUSPENDED");
+            Prn::print(0, 0, "SerialMsgThread SUSPENDED");
+            mSuspendReq = false;
+            mSerialMsgPort.doClose();
+            mSuspendFlag = true;
+            mResumeSem.get();
+            mSuspendFlag = false;
+         }
          goto restart;
       }
       // Process the read.
@@ -235,6 +249,30 @@ void SerialMsgThread::shutdownThread()
    BaseClass::shutdownThread();
 
    Trc::write(mTI, 0, "SerialMsgThread::shutdownThread done");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the suspension request flag and abort the pending receive. This
+// will cause the thread to close the serial port and then block on the
+// resume semaphore.
+
+void SerialMsgThread::doSuspend()
+{
+   mSuspendReq = true;
+   mSerialMsgPort.doAbort();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Post to the resume semaphore to wake up the thread and enter the 
+// restart loop.
+
+void SerialMsgThread::doResume()
+{
+   mResumeSem.put();
 }
 
 //******************************************************************************

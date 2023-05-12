@@ -145,7 +145,10 @@ public:
    // Send a transmit message through the socket to the peer. It executes a
    // blocking send call in the context of the calling thread. It is protected
    // by a mutex semaphore.
-   void sendMsg (Ris::ByteContent* aMsg);
+
+   // Send a message via the serial port. Return the number of bytes
+   // transferred or a negative error code.
+   int doSendMsg (Ris::ByteContent* aMsg);
 };
 
 //******************************************************************************

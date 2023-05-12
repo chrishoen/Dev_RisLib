@@ -243,7 +243,7 @@ void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
       MsgHelper::initialize(tTxMsg, 1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
-      mSerialMsgThread->sendMsg(tTxMsg);
+      mSerialMsgThread->doSendMsg(tTxMsg);
    }
    if (mShowCode == 3)
    {
@@ -301,7 +301,7 @@ void ProcThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 
 void ProcThread::sendMsg(BaseMsg* aTxMsg)
 {
-   mSerialMsgThread->sendMsg(aTxMsg);
+   mSerialMsgThread->doSendMsg(aTxMsg);
    mTxCount++;
 }
 
@@ -315,7 +315,7 @@ void ProcThread::sendTestMsg()
    TestMsg* tMsg = new TestMsg;
    tMsg->mCode1 = 201;
 
-   mSerialMsgThread->sendMsg(tMsg);
+   mSerialMsgThread->doSendMsg(tMsg);
 }
 
 //******************************************************************************

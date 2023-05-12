@@ -173,7 +173,7 @@ void ProcThread::executeRxString(std::string* aString)
 
 void ProcThread::sendString(std::string* aString)
 {
-   mSerialStringThread->sendString(aString);
+   mSerialStringThread->doSendString(aString);
 }
 
 //******************************************************************************

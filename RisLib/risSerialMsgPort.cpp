@@ -281,10 +281,10 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 //******************************************************************************
 //******************************************************************************
 // Copy a message into a byte buffer and then send the byte buffer to the
-// serial port with a blocking write call. Return true if successful.
-// This is protected by the transmit mutex.
+// serial port with a blocking write call. Return the total number of
+// bytes transmitted or a negative error code.
 
-bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
+int SerialMsgPort::doSendMsg(ByteContent* aMsg)
 {
    Trc::write(mTI, 0, "SerialMsgPort::doSendMsg");
    // Guard.
@@ -292,7 +292,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    {
       Trc::write(mTI, 0, "SerialMsgPort::doSendMsg INVALID");
       delete aMsg;
-      return false;
+      return Ris::cSerialRetError;
    }
 
    // Create a byte buffer from heap memory.
@@ -316,13 +316,13 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Test for errors.
    if (tRet < 0)
    {
-      Trc::write(mTI, 0, "SerialMsgPort::doSendMsg ERROR 1");
-      return false;
+      Trc::write(mTI, 0, "SerialMsgPort::doSendMsg ERROR %d", tRet);
+      return tRet;
    }
 
    // Success.
    Trc::write(mTI, 0, "SerialMsgPort::doSendMsg done");
-   return true;
+   return tRet;
 }
 
 //******************************************************************************

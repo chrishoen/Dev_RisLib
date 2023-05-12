@@ -275,13 +275,12 @@ void SerialMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a transmit message through the socket to the peer. It executes a
-// blocking send call in the context of the calling thread. It is protected
-// by a mutex semaphore.
+// Send a message via the serial port. Return the number of bytes
+// transferred or a negative error code.
 
-void SerialMsgThread::sendMsg (Ris::ByteContent* aMsg)
+int SerialMsgThread::doSendMsg (Ris::ByteContent* aMsg)
 {
-   mSerialMsgPort.doSendMsg(aMsg);
+   return mSerialMsgPort.doSendMsg(aMsg);
 }
 
 //******************************************************************************

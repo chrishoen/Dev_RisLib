@@ -65,6 +65,9 @@ public:
    int mTxTimeout;
    int mRxTimeout;
 
+   // If true then delete a message after sending it.
+   bool mTxDeleteAfterSend;
+
    // Termination modes. LF (\n,10) or CRLF (\r\n,13,10).
    int mTxTermMode;
    int mRxTermMode;

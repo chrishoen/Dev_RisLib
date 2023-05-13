@@ -120,8 +120,8 @@ public:
    // Methods.
 
    // Copy a message into a byte buffer and then send the byte buffer to the
-   // serial port with a blocking write call. Return the total number of
-   // bytes transmitted or a negative error code.
+   // serial port with a blocking write call. Delete the message when done.
+   // Return the total number of bytes transmitted or a negative error code.
    int doSendMsg(ByteContent* aTxMsg);
 
    // Receive a message from the serial port with blocking read calls into a

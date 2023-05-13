@@ -29,6 +29,7 @@ void SerialSettings::reset()
    mPortSetup[0] = 0;
    mTxTimeout = 0;
    mRxTimeout = 0;
+   mTxDeleteAfterSend = true;
    mTxTermMode = 0;
    mRxTermMode = 0;
    mTraceIndex = 0;

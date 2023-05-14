@@ -254,6 +254,16 @@ void SerialMsgThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Abort the serial message port blocked receive call.
+
+void SerialMsgThread::doAbort()
+{
+   mSerialMsgPort.doAbort();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Set the suspension request flag and abort the pending receive. This
 // will cause the thread to close the serial port and then block on the
 // resume semaphore.

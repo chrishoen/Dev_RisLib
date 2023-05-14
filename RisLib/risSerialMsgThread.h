@@ -157,6 +157,9 @@ public:
    // transferred or a negative error code.
    int doSendMsg (Ris::ByteContent* aMsg);
 
+   // Abort the serial message port blocked receive call.
+   void doAbort();
+
    // Set the suspension request flag and abort the pending receive. This
    // will cause the thread to close the serial port and then block on the
    // resume semaphore.

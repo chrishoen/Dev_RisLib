@@ -139,7 +139,7 @@ void ProcThread::executeOnTimer(int aTimerCount)
    if (mTPCode == 1)
    {
       EchoRequestMsg* tTxMsg = new EchoRequestMsg;
-      MsgHelper::initialize(tTxMsg);
+      MsgHelper::initialize(tTxMsg, 0);
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)
@@ -241,7 +241,7 @@ void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      MsgHelper::initialize(tTxMsg, 1000);
+      MsgHelper::initialize(tTxMsg, 0);
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mSerialMsgThread->doSendMsg(tTxMsg);
    }

@@ -241,7 +241,7 @@ void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      MsgHelper::initialize(tTxMsg, 0);
+      tTxMsg->initialize(0);
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mSerialMsgThread->doSendMsg(tTxMsg);
    }

@@ -138,7 +138,7 @@ EchoResponseMsg::EchoResponseMsg()
    mCode3 = 203;
    mCode4 = 204;
 
-   mNumWords = MaxWords;
+   mNumWords = 0;
    mWords[0] = 0;
 }
 

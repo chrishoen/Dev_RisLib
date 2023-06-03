@@ -25,7 +25,7 @@ ProcThread::ProcThread()
    // Set base class variables.
    BaseClass::setThreadName("Proc");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
-   BaseClass::mTimerPeriod = 100;
+   BaseClass::mTimerPeriod = gSerialParms.mThreadTimerPeriod;
 
    // Initialize qcalls.
    mSessionQCall.bind(this, &ProcThread::executeSession);

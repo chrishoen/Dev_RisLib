@@ -151,6 +151,23 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       return cSerialRetError;
    }
 
+   // If bluetooth then flush the transmit.
+   if (mSettings.mBthFlag)
+   {
+      Trc::write(mTI, 6, "SerialPort::doSendBytes flush");
+
+      ClearCommError(mPortHandle, 0, 0);
+
+      DWORD lFlags =
+         PURGE_TXABORT | PURGE_TXCLEAR;
+
+      PurgeComm(mPortHandle, lFlags);
+
+      ClearCommError(mPortHandle, 0, 0);
+
+      Trc::write(mTI, 6, "SerialPort::doSendBytes flush done");
+   }
+
    // Success.
    mTxByteCount += tNumWritten;
    Trc::write(mTI, 0, "SerialPort::doSendBytes done");

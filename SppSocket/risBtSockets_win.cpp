@@ -28,7 +28,7 @@ namespace BtSockets
 //******************************************************************************
 //******************************************************************************
 
-SocketAddress::SocketAddress()
+BtSocketAddress::BtSocketAddress()
 {
    reset();
 }
@@ -37,53 +37,11 @@ SocketAddress::SocketAddress()
 //******************************************************************************
 //******************************************************************************
 
-void SocketAddress::reset()
+void BtSocketAddress::reset()
 {
    mValid = false;
-   mAddress = 0;
-   strcpy(mString, "invalid");
-   mPort = 0;
+   memset(&mBtAddress, 0, sizeof(mBtAddress));
 }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void SocketAddress::setByAddress(unsigned aAddress, int aPort)
-{
-   reset();
-   mAddress = aAddress;
-   struct in_addr tInAddr;
-   tInAddr.s_addr = htonl(mAddress);
-   strncpy(mString, inet_ntoa(tInAddr), 16);
-   mValid = true;
-   mPort = aPort;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void SocketAddress::setByAddress(const char* aString, int aPort)
-{
-   reset();
-   if (strlen(aString) > 16) return;
-   unsigned int tAddress = ntohl(inet_addr(aString));
-   setByAddress(tAddress, aPort);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-class BaseSocket::BaseSpecific
-{
-public:
-   SOCKET mDesc;
-};
 
 //******************************************************************************
 //******************************************************************************
@@ -91,8 +49,17 @@ public:
 
 BaseSocket::BaseSocket()
 {
-   mBaseSpecific = new BaseSpecific;
    reset();
+}
+
+void BaseSocket::reset()
+{
+   mLocal.reset();
+   mRemote.reset();
+   mDesc = INVALID_SOCKET;
+
+   mStatus = 0;
+   mError = 0;
 }
 
 //******************************************************************************
@@ -103,46 +70,6 @@ BaseSocket::~BaseSocket()
 {
    doClose();
    reset();
-   delete mBaseSpecific;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool BaseSocket::doBind()
-{
-   if (mStatus < 0) return false;
-
-   if (!mLocal.mValid)
-   {
-      setError(666);
-      return false;
-   }
-
-   int tStatus = 0;
-   sockaddr_in localName; memset(&localName, 0, sizeof(localName));
-   localName.sin_family = AF_INET;
-   localName.sin_addr.s_addr = htonl(mLocal.mAddress);
-   localName.sin_port = htons(mLocal.mPort);
-
-   tStatus = bind(mBaseSpecific->mDesc, (sockaddr*)&localName, sizeof(localName));
-   return updateError(tStatus);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void BaseSocket::reset()
-{
-   mStatus       = 0;
-   mError        = 0;
-   mBaseSpecific->mDesc  = -1;
-   mType         = 0;
-   mProtocol     = 0;
-   mLocal.reset();
-   mRemote.reset();
 }
 
 //******************************************************************************
@@ -153,7 +80,7 @@ bool BaseSocket::doClose()
 {
    int tStatus=0;
 
-   tStatus = closesocket(mBaseSpecific->mDesc);
+   tStatus = closesocket(mDesc);
    return updateError(tStatus);
 }
 
@@ -235,7 +162,7 @@ bool BaseSocket::ioctlBlocking(bool aBlocking)
    u_long value;
    if (aBlocking) value=0;
    else           value=1;
-   tStatus = ioctlsocket(mBaseSpecific->mDesc, FIONBIO, &value);
+   tStatus = ioctlsocket(mDesc, FIONBIO, &value);
    return updateError(tStatus);
 }
 
@@ -250,13 +177,9 @@ bool BaseTcpStreamSocket::doSocket()
 {
    if (mStatus < 0) return false;
 
-   int tStatus = 0;
-   mType = SOCK_STREAM;
-   mProtocol = 0;
-   mBaseSpecific->mDesc = socket(AF_INET, mType, mProtocol);
+   mDesc = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
 
-   tStatus = mBaseSpecific->mDesc == INVALID_SOCKET ? -1 : 0;
-
+   int tStatus = mDesc == INVALID_SOCKET ? -1 : 0;
    return updateError(tStatus);
 }
 
@@ -275,12 +198,10 @@ bool BaseTcpStreamSocket::doConnect()
    }
 
    int tStatus = 0;
-   sockaddr_in hostName;memset(&hostName,0,sizeof(hostName));
-   hostName.sin_family      = AF_INET;
-   hostName.sin_addr.s_addr = htonl(mRemote.mAddress);
-   hostName.sin_port        = htons(mRemote.mPort);
-   tStatus = connect(mBaseSpecific->mDesc,(sockaddr*) &hostName,sizeof(hostName));
-
+   tStatus = connect(
+      mDesc, 
+      (struct sockaddr*)&mRemote.mBtAddress, 
+      sizeof(SOCKADDR_BTH));
    return updateError(tStatus);
 }
 
@@ -302,7 +223,7 @@ bool BaseTcpStreamSocket::doSend(const char* aPayload,int aLength)
    bool going=true;
    while(going)
    {
-      tStatus=send(mBaseSpecific->mDesc,&aPayload[bytesTotal],bytesRemaining,0);
+      tStatus=send(mDesc,&aPayload[bytesTotal],bytesRemaining,0);
       if(tStatus>0)
       {
          bytesTotal     += tStatus;
@@ -340,7 +261,7 @@ bool BaseTcpStreamSocket::doRecv(char* aPayload,int aLength,int& aStatus)
    bool going=true;
    while(going)
    {
-      tStatus=recv(mBaseSpecific->mDesc,&aPayload[bytesTotal],bytesRemaining,0);
+      tStatus=recv(mDesc,&aPayload[bytesTotal],bytesRemaining,0);
       if(tStatus>0)
       {
          bytesTotal     += tStatus;
@@ -359,49 +280,6 @@ bool BaseTcpStreamSocket::doRecv(char* aPayload,int aLength,int& aStatus)
    aStatus=tStatus;
    return updateError(tStatus);
 }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-char* memAlloc(int aSize)
-{
-   return (char*)GlobalAlloc(0,aSize);
-}
-void  memFree(char* aMem)
-{
-   GlobalFree(aMem);
-}
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-class SocketInitClass
-{
-public:
-   SocketInitClass()
-   {
-      WORD    Version = MAKEWORD(2,2);
-      WSADATA Data;
-
-      WSAStartup(Version,&Data);
-   }
-   ~SocketInitClass()
-   {
-      WSACleanup();
-   }
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-SocketInitClass gSocketInitInstance;
 
 //******************************************************************************
 //******************************************************************************

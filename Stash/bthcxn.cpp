@@ -382,17 +382,45 @@ ULONG RunClientMode(_In_ SOCKADDR_BTH RemoteAddr, _In_ int iMaxCxnCycles)
                 break;
             }
 
+#if 0
             //
             // Connect the socket (pSocket) to a given remote socket represented by address (pServerAddr)
             //
-            if ( SOCKET_ERROR == connect(LocalSocket,
-                                         (struct sockaddr *) &SockAddrBthServer,
-                                         sizeof(SOCKADDR_BTH)) ) {
-                wprintf(L"=CRITICAL= | connect() call failed. WSAGetLastError=[%d]\n", WSAGetLastError());
-                ulRetCode = CXN_ERROR;
-                break;
-            }
+            bool tFoundChan = false;
+            for (int tChan = 0; tChan < 40; tChan++)
+            {
+               SockAddrBthServer.port = tChan;
+               SockAddrBthServer.port = BT_PORT_ANY;
 
+               printf("SHOW SockAddrBthServer.btAddr         %llx\n", SockAddrBthServer.btAddr);
+               printf("SHOW SockAddrBthServer.port           %d\n", SockAddrBthServer.port);
+               if (SOCKET_ERROR != connect(LocalSocket,
+                  (struct sockaddr*)&SockAddrBthServer,
+                  sizeof(SOCKADDR_BTH)))
+               {
+                  printf("SHOW connect() PASS %d\n", tChan);
+                  tFoundChan = true;
+                  break;
+               }
+            }
+            if (!tFoundChan)
+            {
+               wprintf(L"=CRITICAL= | connect() call failed. WSAGetLastError=[%d]\n", WSAGetLastError());
+               ulRetCode = CXN_ERROR;
+               break;
+            }
+#endif
+            //
+            // Connect the socket (pSocket) to a given remote socket represented by address (pServerAddr)
+            //
+            SockAddrBthServer.port = BT_PORT_ANY;
+            if (SOCKET_ERROR == connect(LocalSocket,
+               (struct sockaddr*)&SockAddrBthServer,
+               sizeof(SOCKADDR_BTH))) {
+               wprintf(L"=CRITICAL= | connect() call failed. WSAGetLastError=[%d]\n", WSAGetLastError());
+               ulRetCode = CXN_ERROR;
+               break;
+            }
             //
             // send() call indicates winsock2 to send the given data
             // of a specified length over a given connection.

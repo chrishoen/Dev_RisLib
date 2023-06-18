@@ -9,13 +9,10 @@
 #include <bluetoothapis.h>
 #include "risBtFindAddress.h"
 
-
+// SPP UUID 1101
 // {00001101-0000-1000-8000-00805F9B34FB}
 //                                00001101    0000    1000    80    00    00    80    5F    9B    34    FB}
 DEFINE_GUID(g_guidServiceClass, 0x00001101, 0x0000, 0x1000, 0x80, 0x00, 0x00, 0x80, 0x5f, 0x9b, 0x34, 0xfb);
-
-#define CXN_TEST_DATA_STRING              ("ABCDEFGH")
-#define CXN_TRANSFER_DATA_LENGTH          (sizeof(CXN_TEST_DATA_STRING))
 
 
 #define CXN_BDADDR_STR_LEN                17   // 6 two-digit hex values plus 5 colons
@@ -31,25 +28,16 @@ namespace Ris
 namespace BtSockets
 {
 
-
-char g_szRemoteName[BTH_MAX_NAME_SIZE + 1] = { 0 };  // 1 extra for trailing NULL character
-char g_szRemoteAddr[CXN_BDADDR_STR_LEN + 1] = { 0 }; // 1 extra for trailing NULL character
-int  g_ulMaxCxnCycles = 1;
-
-
-
-///ULONG NameToBthAddr(_In_ const LPSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemoteBthAddr);
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//
-// NameToBthAddr converts a bluetooth device name to a bluetooth address,
-// if required by performing inquiry with remote name requests.
-// This function demonstrates device inquiry, with optional LUP flags.
+// This was derived from sample btcxn.cpp
+/// ULONG NameToBthAddr(_In_ const LPSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemoteBthAddr);
 //
 bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aRemoteName)
 {
+   aSocketAddress->reset();
+
    const LPSTR pszRemoteName = (LPSTR)aRemoteName;
    PSOCKADDR_BTH pRemoteBtAddr = &aSocketAddress->mBtAddress;
 
@@ -85,7 +73,7 @@ bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aRemoteN
 
          if (0 == iRetryCount)
          {
-            printf("*INFO* | Inquiring device from cache...\n");
+            //printf("*INFO* | Inquiring device from cache...\n");
          }
          else
          {
@@ -123,7 +111,6 @@ bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aRemoteN
 
          ulFlags =
             LUP_CONTAINERS |
-            LUP_FLUSHCACHE |
             LUP_RETURN_NAME |
             LUP_RETURN_ADDR;
 
@@ -176,9 +163,9 @@ bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aRemoteN
                      sizeof(*pRemoteBtAddr));
                   bRemoteDeviceFound = TRUE;
                   bContinueLookup = FALSE;
-                  printf("SHOW WSAQuerySet\n");
-                  printf("SHOW SockAddrBthServer.btAddr         %llx\n", pRemoteBtAddr->btAddr);
-                  printf("SHOW SockAddrBthServer.port           %d\n", pRemoteBtAddr->port);
+                  //printf("SHOW WSAQuerySet\n");
+                  //printf("SHOW SockAddrBthServer.btAddr         %llx\n", pRemoteBtAddr->btAddr);
+                  //printf("SHOW SockAddrBthServer.port           %d\n", pRemoteBtAddr->port);
                }
             }
             else
@@ -238,13 +225,15 @@ bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aRemoteN
    if (bRemoteDeviceFound)
    {
       iResult = CXN_SUCCESS;
+      aSocketAddress->mValid = true;
    }
    else
    {
       iResult = CXN_ERROR;
+      aSocketAddress->mValid = false;
    }
 
-   return iResult == CXN_SUCCESS;
+   return (iResult == CXN_SUCCESS);
 }
 
 //******************************************************************************

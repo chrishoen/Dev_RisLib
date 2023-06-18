@@ -5,10 +5,18 @@
 #include <stdio.h>
 #include "string.h"
 
-#include "risProgramTime.h"
-#include "risBitUtils.h"
-#include "my_functions.h"
+#include "risBtSockets.h"
+#include "risBtFindAddress.h"
+
 #include "CmdLineExec.h"
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+const char* mServiceName = "Stenograph Writer";
+
+Ris::BtSockets::BtSocketAddress mRemoteAddress;
 
 //******************************************************************************
 //******************************************************************************
@@ -35,6 +43,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"))   reset();
+   if (aCmd->isCmd("FIND"))   executeFind(aCmd);
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))    executeGo3(aCmd);
@@ -47,34 +56,24 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-
-typedef union MacAddrUnionT
+void CmdLineExec::executeFind(Ris::CmdLineCmd* aCmd)
 {
-    typedef struct MacWordStructT
-    {
-        unsigned long mLsw;
-        unsigned short mMsw;
-    } MacWordStruct;
-    MacWordStruct mWordStruct;
-    unsigned char mBytes[6];
-} MacAddrUnion;
+   if (!Ris::BtSockets::doFindAddressFromName(&mRemoteAddress, mServiceName))
+   {
+      Prn::print(0, "FAIL");
+      return;
+   }
+
+   Prn::print(0, "address %012llx", mRemoteAddress.mBtAddress.btAddr);
+   Prn::print(0, "port    %d", mRemoteAddress.mBtAddress.port);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-    MacAddrUnion tUnion;
-    memset(&tUnion, 0, sizeof(tUnion));
-    tUnion.mBytes[0] = 0x00;
-    tUnion.mBytes[1] = 0x11;
-    tUnion.mBytes[2] = 0x22;
-    tUnion.mBytes[3] = 0x33;
-    tUnion.mBytes[4] = 0x44;
-    tUnion.mBytes[5] = 0x55;
-
-    unsigned int tLsw = tUnion.mWordStruct.mLsw;
-    unsigned int tMsw = tUnion.mWordStruct.mMsw;
-
-    Prn::print(0, "tLsw %08x", tLsw);
-    Prn::print(0, "tMsw %08x", tMsw);
 }
 
 
@@ -92,19 +91,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned tValue1 = 0;
-   unsigned tValue2 = 0;
-   tValue1 = 0x00000000;
-   tValue1 = 0x0000ffff;
-   Prn::print(0, "%08x", tValue1);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   tValue2 = Ris::setBit(tValue1, tBitNum, tBitValue);
-
-   Prn::print(0, "%08x", tValue2);
 }
 
 //******************************************************************************
@@ -113,16 +99,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned char tValue = 0x0f;
-   Prn::print(0, "%02x", tValue);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   Ris::setBit(&tValue, tBitNum, tBitValue);
-
-   Prn::print(0, "%02x", tValue);
 }
 
 //******************************************************************************
@@ -131,10 +107,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   printf("printf\n");
-   Prn::print(0, "Prn::print 0");
-   Prn::print(Prn::Show1, "Prn::print Prn::Show1");
-   Prn::print(Prn::Show2, "Prn::print Prn::Show");
 }
 
 //******************************************************************************
@@ -143,12 +115,5 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "Ris::portableGetCurrentDir() %s", Ris::portableGetCurrentDir());
-   Prn::print(0, "Ris::portableGetBinDir() %s", Ris::portableGetBinDir());
-   double tTime = Ris::getProgramTime();
-   unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
-
-   Prn::print(0, "Ris::getProgramTime           %10.6f", tTime);
-   Prn::print(0, "Ris::getCpuTimeUIntMs         %10d", tTimeMS);
 }
 

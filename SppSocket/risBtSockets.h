@@ -34,6 +34,8 @@ TcpClientSocket connects to a Hub and send/recv with a node.
 
 ==============================================================================*/
 
+#include <Windows.h>
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -42,12 +44,6 @@ namespace Ris
 {
 namespace BtSockets
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool isIpAddressValid(const char* aString);
 
 //******************************************************************************
 //******************************************************************************
@@ -67,11 +63,6 @@ public:
 
    void setByAddress(unsigned aAddress, int aPort);
    void setByAddress(const char* aString, int aPort);
-   void setForAny(int aPort);
-   void setForBroadcast(int aPort);
-
-   bool isBroadcast();
-   bool isMulticast();
 };
 
 //******************************************************************************
@@ -104,40 +95,11 @@ public:
    int mStatus;
    int mError;
 
-   bool setOptionReuseAddr ();
-   bool setOptionBroadcast ();
-   bool setOptionDontRoute ();
-   bool setOptionDontLinger();
-   bool setOptionNoDelay();
-
-   bool ioctlFlush         ();
    bool ioctlBlocking      (bool aBlocking);
-   bool ioctlGetBcastAddr  (SocketAddress& aBcastAddr);
-
-   void testRemoteAddress(bool aTestForLocal);
 
 public:
    class BaseSpecific;
    BaseSpecific* mBaseSpecific;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-class BaseUdpSocket : public BaseSocket
-{
-public:
-
-   virtual bool doSocket    ();
-   virtual bool setMulticast();
-   virtual bool doConnect   ();
-   virtual bool doSend      (const char* aPayload,int& aLength);
-   virtual bool doRecv      (char* aPayload,int& aLength,int aMaxLength);
-   virtual bool doSendTo    (SocketAddress& aHost,const char* aPayload,int& aLength);
-   virtual bool doRecvFrom  (SocketAddress& aHost,char* aPayload,int& aLength,int aMaxLength);
-
-   bool setOptionMulticast  (SocketAddress& aGroup,SocketAddress& aInterface);
 };
 
 //******************************************************************************
@@ -152,43 +114,6 @@ public:
    bool doConnect ();
    bool doSend    (const char* aPayload,int aLength);
    bool doRecv    (char* aPayload,int aLength,int& aStatus);
-
-   bool setOptionKeepAlive();
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-class BaseTcpServerHubSocket : public BaseSocket
-{
-public:
-   BaseTcpServerHubSocket();
-   virtual ~BaseTcpServerHubSocket();
-
-   bool doSocket ();
-   bool doListen ();
-   bool doAccept (BaseTcpStreamSocket& aStream);
-
-   void resetReadSet     ();
-   void addSelfToReadSet ();
-   void addToReadSet     (BaseTcpStreamSocket* aStream);
-   bool isSelfInReadSet  ();
-   bool isInReadSet      (BaseTcpStreamSocket* aStream);
-   int  selectOnReadSet  ();
-
-public:
-   class Specific;
-   Specific* mSpecific;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-class BaseTcpServerNodeSocket : public BaseTcpStreamSocket
-{
-public:
 };
 
 //******************************************************************************

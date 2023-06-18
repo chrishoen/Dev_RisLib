@@ -95,7 +95,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-class BaseTcpStreamSocket : public BaseSocket
+class BaseSppStreamSocket : public BaseSocket
 {
 public:
 
@@ -109,7 +109,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-class BaseTcpClientSocket : public BaseTcpStreamSocket
+class BaseSppClientSocket : public BaseSppStreamSocket
 {
 public:
 };

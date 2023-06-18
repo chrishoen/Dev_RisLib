@@ -226,6 +226,8 @@ bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aRemoteN
    {
       iResult = CXN_SUCCESS;
       aSocketAddress->mValid = true;
+      aSocketAddress->mBtAddress.port = BT_PORT_ANY;
+      aSocketAddress->mBtAddress.serviceClassId = g_guidServiceClass;
    }
    else
    {

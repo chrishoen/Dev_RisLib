@@ -54,6 +54,8 @@ public:
 
    // Execute specific commands.
    void executeFind(Ris::CmdLineCmd* aCmd);
+   void executeConnect(Ris::CmdLineCmd* aCmd);
+   void executeClose(Ris::CmdLineCmd* aCmd);
 
    void executeGo1(Ris::CmdLineCmd* aCmd);
    void executeGo2(Ris::CmdLineCmd* aCmd);

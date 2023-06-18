@@ -17,6 +17,7 @@
 const char* mServiceName = "Stenograph Writer";
 
 Ris::BtSockets::BtSocketAddress mRemoteAddress;
+Ris::BtSockets::BaseSppStreamSocket mRemoteSocket;
 
 //******************************************************************************
 //******************************************************************************
@@ -44,6 +45,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"))   reset();
    if (aCmd->isCmd("FIND"))   executeFind(aCmd);
+   if (aCmd->isCmd("CONN"))   executeConnect(aCmd);
+   if (aCmd->isCmd("CL"))     executeClose(aCmd);
+
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))    executeGo3(aCmd);
@@ -66,6 +70,33 @@ void CmdLineExec::executeFind(Ris::CmdLineCmd* aCmd)
 
    Prn::print(0, "address %012llx", mRemoteAddress.mBtAddress.btAddr);
    Prn::print(0, "port    %d", mRemoteAddress.mBtAddress.port);
+
+   mRemoteSocket.mRemote.reset();
+   mRemoteSocket.mRemote = mRemoteAddress;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeConnect(Ris::CmdLineCmd* aCmd)
+{
+   mRemoteSocket.doSocket();
+   if (!mRemoteSocket.doConnect())
+   {
+      Prn::print(0, "FAIL");
+      return;
+   }
+   Prn::print(0, "Pass");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeClose(Ris::CmdLineCmd* aCmd)
+{
+   mRemoteSocket.doClose();
 }
 
 //******************************************************************************

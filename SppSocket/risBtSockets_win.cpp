@@ -173,7 +173,7 @@ bool BaseSocket::ioctlBlocking(bool aBlocking)
 //******************************************************************************
 //******************************************************************************
 
-bool BaseTcpStreamSocket::doSocket()
+bool BaseSppStreamSocket::doSocket()
 {
    if (mStatus < 0) return false;
 
@@ -187,7 +187,7 @@ bool BaseTcpStreamSocket::doSocket()
 //******************************************************************************
 //******************************************************************************
 
-bool BaseTcpStreamSocket::doConnect()
+bool BaseSppStreamSocket::doConnect()
 {
    if (mStatus < 0) return false;
 
@@ -196,7 +196,6 @@ bool BaseTcpStreamSocket::doConnect()
       setError(666);
       return false;
    }
-
    int tStatus = 0;
    tStatus = connect(
       mDesc, 
@@ -209,7 +208,7 @@ bool BaseTcpStreamSocket::doConnect()
 //******************************************************************************
 //******************************************************************************
 
-bool BaseTcpStreamSocket::doSend(const char* aPayload,int aLength)
+bool BaseSppStreamSocket::doSend(const char* aPayload,int aLength)
 {
    if (mStatus < 0) return false;
 
@@ -247,7 +246,7 @@ bool BaseTcpStreamSocket::doSend(const char* aPayload,int aLength)
 //******************************************************************************
 //******************************************************************************
 
-bool BaseTcpStreamSocket::doRecv(char* aPayload,int aLength,int& aStatus)
+bool BaseSppStreamSocket::doRecv(char* aPayload,int aLength,int& aStatus)
 {
    if (mStatus < 0) return false;
 

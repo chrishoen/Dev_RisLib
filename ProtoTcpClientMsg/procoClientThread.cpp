@@ -139,12 +139,13 @@ void ClientThread::executeSession(bool aConnected)
    if (aConnected)
    {
       Prn::print(Prn::Show1, "ClientThread CONNECTED");
-
+#if 0
       // Transmit a FirstMessage to the server to inform it of who this 
       // client is.
       FirstMessageMsg* tTxMsg = new FirstMessageMsg;
       tTxMsg->mCode1 = gTcpSettings.mMyAppNumber;
       sendMsg(tTxMsg);
+#endif
    }
    else
    {

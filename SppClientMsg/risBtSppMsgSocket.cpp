@@ -110,6 +110,11 @@ void SppMsgSocket::configure(
             BaseClass::mError);
       }
    }
+
+   if (!ioctlBlocking(true))
+   {
+      printf("SppMsgSocket BLOCKING FAIL\n");
+   }
 }
 
 //******************************************************************************

@@ -261,6 +261,7 @@ bool BaseSppStreamSocket::doRecv(char* aPayload,int aLength,int& aStatus)
    while(going)
    {
       tStatus=recv(mDesc,&aPayload[bytesTotal],bytesRemaining,0);
+      printf("RECV %d %d\n", tStatus, WSAGetLastError());
       if(tStatus>0)
       {
          bytesTotal     += tStatus;

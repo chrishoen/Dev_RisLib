@@ -38,24 +38,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // Receive on this address and port.
-   char mLocalIpAddr[20];
-   int mLocalIpPort;
-
    // Transmit to this address and port.
-   char mRemoteIpAddr[20];
-   int  mRemoteIpPort;
-
-   // If true then test that the remote address is local.
-   bool mTestForLocal;
-
-   // If true then use the first receive from ip address as the
-   // transmit ip address. Don't open the transmit socket until
-   // a message is received.
-   bool mUdpWrapFlag;
-
-   // If true then broadcast udp sends.
-   bool mUdpBroadcast;
+   char mRemoteName[100];
 
    // Max number of tcp server sessions.
    int mMaxSessions;
@@ -96,14 +80,6 @@ public:
 
    // Constructor.
    Settings();
-
-   // Set member.
-   void setLocalAddress (const char* aIpAddr, int aIpPort);
-   void setRemoteAddress(const char* aIpAddr, int aIpPort);
-
-   // Set member.
-   void setUdpWrapFlag(bool aUdpWrapFlag);
-   void setUdpBroadcast(bool aUdpBroadcast);
 };
 
 //******************************************************************************

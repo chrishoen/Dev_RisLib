@@ -18,7 +18,10 @@ namespace BtSockets
 //******************************************************************************
 
 
-bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aName);
+bool doFindAddressFromName(
+   BtSocketAddress* aSocketAddress, 
+   const char* aRemoteName,
+   bool aFlushCache);
 
 //******************************************************************************
 //******************************************************************************

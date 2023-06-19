@@ -15,8 +15,6 @@
 //******************************************************************************
 //******************************************************************************
 
-const char* mServiceName = "Stenograph Writer";
-
 Ris::BtSockets::BtSocketAddress mRemoteAddress;
 Ris::BtSockets::BaseSppStreamSocket mRemoteSocket;
 
@@ -65,7 +63,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeFind(Ris::CmdLineCmd* aCmd)
 {
-   if (!Ris::BtSockets::doFindAddressFromName(&mRemoteAddress, mServiceName))
+   if (!Ris::BtSockets::doFindAddressFromName(
+      &mRemoteAddress,
+      ProtoComm::gSppParms.mRemoteName,
+      aCmd->argBool(1)))
    {
       Prn::print(0, "FAIL");
       return;

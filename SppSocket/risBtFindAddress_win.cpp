@@ -34,7 +34,10 @@ namespace BtSockets
 // This was derived from sample btcxn.cpp
 /// ULONG NameToBthAddr(_In_ const LPSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemoteBthAddr);
 //
-bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aRemoteName)
+bool doFindAddressFromName(
+   BtSocketAddress* aSocketAddress,
+   const char* aRemoteName,
+   bool aFlushCache)
 {
    aSocketAddress->reset();
 
@@ -113,6 +116,11 @@ bool doFindAddressFromName(BtSocketAddress* aSocketAddress, const char* aRemoteN
             LUP_CONTAINERS |
             LUP_RETURN_NAME |
             LUP_RETURN_ADDR;
+
+         if (aFlushCache)
+         {
+            ulFlags |= LUP_FLUSHCACHE;
+         }
 
          iResult = WSALookupServiceBegin(pWSAQuerySet, ulFlags, &hLookup);
 

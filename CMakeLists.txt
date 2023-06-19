@@ -18,7 +18,7 @@ if (MYSTANDALONE)
 endif()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("SppSocket")
+add_subdirectory ("SppClientMsg")
 return()
 
 add_subdirectory ("RisLib")

@@ -9,7 +9,8 @@ Udp message prototype thread class.
 //******************************************************************************
 
 #include "risThreadsQCallThread.h"
-#include "risBtSppMsgClientThread.h"
+#include "risSerialMsgThread.h"
+#include "risBtSppClientMsgThread.h"
 
 #include "procoMsg.h"
 
@@ -61,7 +62,7 @@ public:
 
    // Tcp message thread, this manages tcp message connections and
    // message transmission and reception.
-   Ris::Bt::SppMsgClientThread* mMsgThread;
+   Ris::Bt::SppClientMsgThread* mMsgThread;
 
    // Message monkey used by mMsgThread.
    MsgMonkey* mMsgMonkey;
@@ -122,7 +123,7 @@ public:
    // qcall registered to the mTcpMsgThread child thread. It is invoked when
    // a session is established or disestablished (when this client connects or
    // disconnects to the server). 
-   Ris::Bt::SppMsgClientThread::SessionQCall mSessionQCall;
+   Ris::Bt::SppClientMsgThread::SessionQCall mSessionQCall;
 
    // Maintain session state variables. When a connection is established it
    // sends a FirstMessage to the server to inform it of it's identity.This is
@@ -136,7 +137,7 @@ public:
 
    // qcall registered to the mTcpMsgThread child thread. It is invoked when
    // a message is received. It process the received messages.
-   Ris::Bt::SppMsgClientThread::RxMsgQCall mRxMsgQCall;
+   Ris::Bt::SppClientMsgThread::RxMsgQCall mRxMsgQCall;
 
    // Call one of the specific receive message handlers. This is bound to the
    // qcall.

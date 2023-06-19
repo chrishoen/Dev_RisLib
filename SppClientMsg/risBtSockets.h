@@ -34,7 +34,9 @@ TcpClientSocket connects to a Hub and send/recv with a node.
 
 ==============================================================================*/
 
-#include <winsock2.h>
+
+#include <windows.h>
+//#include <winsock2.h>
 #include <ws2bth.h>
 
 

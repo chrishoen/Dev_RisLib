@@ -13,7 +13,7 @@
 #include "risThreadsPriorities.h"
 
 #include "risBtFindAddress.h"
-#include "risBtSppMsgClientThread.h"
+#include "risBtSppClientMsgThread.h"
 
 namespace Ris
 {
@@ -25,7 +25,7 @@ namespace Bt
 //******************************************************************************
 // Constructor.
 
-SppMsgClientThread::SppMsgClientThread(Settings& aSettings)
+SppClientMsgThread::SppClientMsgThread(Settings& aSettings)
 {
    // Base class variables.
    BaseClass::setThreadName("SppMsgClient");
@@ -53,9 +53,9 @@ SppMsgClientThread::SppMsgClientThread(Settings& aSettings)
 // Thread init function, base class overload.
 // It initializes the socket.
 
-void SppMsgClientThread::threadInitFunction()
+void SppClientMsgThread::threadInitFunction()
 {
-   Trc::write(mTI, 0, "SppMsgClientThread::threadInitFunction");
+   Trc::write(mTI, 0, "SppClientMsgThread::threadInitFunction");
 
    // Initialize the socket.
    mSocket.initialize(mSettings);
@@ -68,9 +68,9 @@ void SppMsgClientThread::threadInitFunction()
 // after the thread init function. It runs a loop that blocks on 
 // socket connect/receives and then processes them.
 
-void SppMsgClientThread::threadRunFunction()
+void SppClientMsgThread::threadRunFunction()
 {
-   Trc::write(mTI, 0, "SppMsgClientThread::threadRunFunction");
+   Trc::write(mTI, 0, "SppClientMsgThread::threadRunFunction");
 
    // Top of the loop.
    mFindCount = 0;
@@ -123,10 +123,10 @@ restart:
       BaseClass::threadSleep(1000);
    }
    tSleepFlag = true;
-   Trc::write(mTI, 0, "SppMsgClientThread restart %3d $ %3d", mRestartCount,tRestartCode);
+   Trc::write(mTI, 0, "SppClientMsgThread restart %3d $ %3d", mRestartCount,tRestartCode);
    if (tShowFlag)
    {
-      Prn::print(Prn::Show1, "SppMsgClientThread restart %3d $ %3d", mRestartCount, tRestartCode);
+      Prn::print(Prn::Show1, "SppClientMsgThread restart %3d $ %3d", mRestartCount, tRestartCode);
    }
    mRestartCount++;
 
@@ -227,7 +227,7 @@ receive:
 
    // Done.
 end:
-   Trc::write(mTI, 0, "SppMsgClientThread::threadRunFunction done");
+   Trc::write(mTI, 0, "SppClientMsgThread::threadRunFunction done");
    return;
 }
 
@@ -236,7 +236,7 @@ end:
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void SppMsgClientThread::threadExitFunction()
+void SppClientMsgThread::threadExitFunction()
 {
 }
 
@@ -251,7 +251,7 @@ void SppMsgClientThread::threadExitFunction()
 // then the terminate request flag will be polled and the the
 // threadRunFunction will exit.
 
-void SppMsgClientThread::shutdownThread()
+void SppClientMsgThread::shutdownThread()
 {
    BaseThread::mTerminateFlag = true;
 
@@ -268,7 +268,7 @@ void SppMsgClientThread::shutdownThread()
 // session is disestablished. It invokes the mSessionQCall that is
 // registered at initialization.
 
-void SppMsgClientThread::processSessionChange(bool aEstablished)
+void SppClientMsgThread::processSessionChange(bool aEstablished)
 {
    // Guard.
    if (!mSessionQCall.isValid())
@@ -279,11 +279,11 @@ void SppMsgClientThread::processSessionChange(bool aEstablished)
 
    if (aEstablished)
    {
-      Trc::write(mTI, 0, "SppMsgClientThread CONNECTED");
+      Trc::write(mTI, 0, "SppClientMsgThread CONNECTED");
    }
    else
    {
-      Trc::write(mTI, 0, "SppMsgClientThread DISCONNECTED");
+      Trc::write(mTI, 0, "SppClientMsgThread DISCONNECTED");
    }
 
    // Invoke the session qcall to notify that a session has been established
@@ -298,7 +298,7 @@ void SppMsgClientThread::processSessionChange(bool aEstablished)
 // threadRunFunction when a message is received. It invokes the
 // mRxMsgQCall that is registered at initialization.
 
-void SppMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
+void SppClientMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Guard.
    if (!mRxMsgQCall.isValid()) return;
@@ -314,7 +314,7 @@ void SppMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
 // blocking send call in the context of the calling thread. It is protected
 // by a mutex semaphore.
 
-void SppMsgClientThread::sendMsg(ByteContent* aMsg)
+void SppClientMsgThread::sendMsg(ByteContent* aMsg)
 {
    if (!aMsg) return;
 

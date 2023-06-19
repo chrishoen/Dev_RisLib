@@ -83,7 +83,7 @@ void ClientThread::threadInitFunction()
    Trc::start(11);
 
    // Create the child thread with the settings.
-   mMsgThread = new Ris::Bt::SppMsgClientThread(tSettings);
+   mMsgThread = new Ris::Bt::SppClientMsgThread(tSettings);
 
    // Launch the child thread.
    mMsgThread->launchThread();

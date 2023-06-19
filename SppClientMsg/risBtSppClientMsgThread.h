@@ -59,7 +59,7 @@ namespace Bt
 // notify the parent. When the child thread receives a message it invokes a
 // message qcall to pass it to the parent for processing.
 
-class SppMsgClientThread : public Ris::Threads::BaseThread
+class SppClientMsgThread : public Ris::Threads::BaseThread
 {
 private:
    typedef Ris::Threads::BaseThread BaseClass;
@@ -108,7 +108,7 @@ public:
    // Methods.
    
    // Constructor.
-   SppMsgClientThread(Settings& aSettings);
+   SppClientMsgThread(Settings& aSettings);
 
    //***************************************************************************
    //***************************************************************************

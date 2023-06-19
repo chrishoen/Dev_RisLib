@@ -1,79 +1,85 @@
 #pragma once
 
 /*==============================================================================
-Program command line executive.
+Program monitor timer thread.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risCmdLineExec.h"
+#include "risThreadsTimerThread.h"
+#include "risMonitor.h"
 
+namespace ProtoComm
+{
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class is the program command line executive. It processes user
-// command line inputs and executes them. It inherits from the command line
-// command executive base class, which provides an interface for executing
-// command line commands. It provides an override execute function that is
-// called by a console executive when it receives a console command line input.
-// The execute function then executes the command.
+// This is a timer thread that monitors program status and prints it.
 
-class CmdLineExec : public Ris::BaseCmdLineExec
+class MonitorThread : public Ris::Threads::BaseTimerThread
 {
 public:
+   typedef Ris::Threads::BaseTimerThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Infrastructure.
+   // If true then process status.
+   bool mTPFlag;
 
-   CmdLineExec();
-   void reset() override;
+   // Select show mode.
+   int mShowCode;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Members. Monitor variables.
 
-   // Base class override. Execute a command line command. It calls one of
-   // the following specific command execution functions. This is called by
-   // the owner of this object to pass command line commands to it. 
-   void execute(Ris::CmdLineCmd* aCmd) override;
-   void special(int aSpecial) override;
+   // Message counts.
+   Ris::Monitor<int> mMon_TxMsgCount;
+   Ris::Monitor<long long> mMon_TxByteCount;
+   Ris::Monitor<int> mMon_RxMsgCount;
+   Ris::Monitor<long long> mMon_RxByteCount;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Execute specific commands.
-   void executeFind(Ris::CmdLineCmd* aCmd);
-   void executeConnect(Ris::CmdLineCmd* aCmd);
-   void executeClose(Ris::CmdLineCmd* aCmd);
+   // Constructor.
+   MonitorThread();
 
-   void executeSend(Ris::CmdLineCmd* aCmd);
-   void executeEcho(Ris::CmdLineCmd* aCmd);
-   void executeData(Ris::CmdLineCmd* aCmd);
-   void executeAbort(Ris::CmdLineCmd* aCmd);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Thread base class overloads.
 
-   void executeGo1(Ris::CmdLineCmd* aCmd);
-   void executeGo2(Ris::CmdLineCmd* aCmd);
-   void executeGo3(Ris::CmdLineCmd* aCmd);
-   void executeGo4(Ris::CmdLineCmd* aCmd);
-   void executeGo5(Ris::CmdLineCmd* aCmd);
-   void executeGo6(Ris::CmdLineCmd* aCmd);
+   // Update status variables.
+   void update();
 
-   void executeParms(Ris::CmdLineCmd* aCmd);
+   // Execute periodically. This is called by the base class timer. It 
+   // updates monitor variables and shows them as program status.
+   void executeOnTimer(int aTimeCount) override;
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Global instance.
+
+#ifdef _PROCOMONITORTHREAD_CPP_
+           MonitorThread* gMonitorThread = 0;
+#else
+   extern  MonitorThread* gMonitorThread;
+#endif
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+}//namespace
+
 

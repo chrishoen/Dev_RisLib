@@ -78,6 +78,8 @@ public:
    //***************************************************************************
    // Methods.
 
+   void setRemoteName(const char* aRemoteName);
+
    // Constructor.
    Settings();
 };

@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "procoMsgHelper.h"
-#include "procoTcpSettings.h"
+#include "procoSppParms.h"
 
 #define  _PROCOCLIENTTHREAD_CPP_
 #include "procoClientThread.h"
@@ -73,8 +73,8 @@ void ClientThread::threadInitFunction()
    Trc::write(11, 0, "ClientThread::threadInitFunction");
 
    // Instance of network socket settings.
-   Ris::Net::Settings tSettings;
-   tSettings.setRemoteAddress(gTcpSettings.mTcpServerAddress, gTcpSettings.mTcpServerPort);
+   Ris::Bt::Settings tSettings;
+   tSettings.setRemoteName(gSppParms.mRemoteName);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;
@@ -83,7 +83,7 @@ void ClientThread::threadInitFunction()
    Trc::start(11);
 
    // Create the child thread with the settings.
-   mMsgThread = new Ris::Net::TcpMsgClientThread(tSettings);
+   mMsgThread = new Ris::Bt::SppMsgClientThread(tSettings);
 
    // Launch the child thread.
    mMsgThread->launchThread();
@@ -143,7 +143,7 @@ void ClientThread::executeSession(bool aConnected)
       // Transmit a FirstMessage to the server to inform it of who this 
       // client is.
       FirstMessageMsg* tTxMsg = new FirstMessageMsg;
-      tTxMsg->mCode1 = gTcpSettings.mMyAppNumber;
+      tTxMsg->mCode1 = 101;
       sendMsg(tTxMsg);
    }
    else
@@ -164,7 +164,7 @@ void ClientThread::executeOnTimer(int aTimerCount)
    if (mTPCode == 1)
    {
       EchoRequestMsg* tTxMsg = new EchoRequestMsg;
-      MsgHelper::initialize(tTxMsg, 0);
+      tTxMsg->initialize(1000);
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)

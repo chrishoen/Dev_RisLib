@@ -9,7 +9,16 @@
 #include "risBtFindAddress.h"
 #include "procoSppParms.h"
 
+#include "procoMsg.h"
+#include "procoMsgHelper.h"
+
+#include "procoClientThread.h"
+#include "procoMonitorThread.h"
+
+
 #include "CmdLineExec.h"
+
+using namespace ProtoComm;
 
 //******************************************************************************
 //******************************************************************************
@@ -43,6 +52,13 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"))   reset();
+
+   if (aCmd->isCmd("TP"))        ProtoComm::gClientThread->mTPCode = aCmd->argInt(1);
+   if (aCmd->isCmd("SEND"))      executeSend(aCmd);
+   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
+   if (aCmd->isCmd("DATA"))      executeData(aCmd);
+   if (aCmd->isCmd("ABORT"))     executeAbort(aCmd);
+
    if (aCmd->isCmd("FIND"))   executeFind(aCmd);
    if (aCmd->isCmd("CONN"))   executeConnect(aCmd);
    if (aCmd->isCmd("CL"))     executeClose(aCmd);
@@ -55,6 +71,78 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO6"))    executeGo6(aCmd);
 
    if (aCmd->isCmd("PARMS"))  executeParms(aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::special(int aSpecial)
+{
+   ProtoComm::gClientThread->mShowCode = aSpecial;
+   ProtoComm::gMonitorThread->mShowCode = aSpecial;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 1);
+   int tMsgType = aCmd->argInt(1);
+
+   switch (tMsgType)
+   {
+   case 1:
+   {
+      ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+      MsgHelper::initialize(tMsg);
+      gClientThread->sendMsg(tMsg);
+      break;
+   }
+   case 5:
+   {
+      ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+      MsgHelper::initialize(tMsg);
+      gClientThread->sendMsg(tMsg);
+      break;
+   }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 0);
+   int tNumWords = aCmd->argInt(1);
+
+   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
+   MsgHelper::initialize(tMsg, tNumWords);
+   gClientThread->sendMsg(tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
+{
+   ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+   MsgHelper::initialize(tMsg);
+
+   gClientThread->sendMsg(tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
+{
 }
 
 //******************************************************************************

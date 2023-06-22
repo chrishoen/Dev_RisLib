@@ -184,6 +184,31 @@ char* my_string_from_double(char* aString, const char* aFormat, double aValue)
    return aString;
 }
 
+// Return string from bluetooth mac address.
+typedef struct _MY_BLUETOOTH_ADDRESS
+{
+   union
+   {
+      unsigned long long ullLong;
+      unsigned char rgBytes[6];
+   };
+} MY_BLUETOOTH_ADDRESS_STRUCT;
+
+char* my_string_from_btaddr(char* aString, unsigned long long aValue)
+{
+   MY_BLUETOOTH_ADDRESS_STRUCT tTemp;
+   tTemp.ullLong = aValue;
+
+   sprintf(aString, "%02x:%02x:%02x:%02x:%02x:%02x\n",
+      tTemp.rgBytes[5],
+      tTemp.rgBytes[4],
+      tTemp.rgBytes[3],
+      tTemp.rgBytes[2],
+      tTemp.rgBytes[1],
+      tTemp.rgBytes[0]);
+
+   return aString;
+}
 
 //******************************************************************************
 //******************************************************************************

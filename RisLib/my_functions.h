@@ -76,6 +76,9 @@ char* my_string_from_float(char* aString, const char* aFormat, float aValue);
 // Return formatted string from double.
 char* my_string_from_double(char* aString, const char* aFormat, double aValue);
 
+// Return string from bluetooth mac address.
+char* my_string_from_btaddr(char* aString, unsigned long long aValue);
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

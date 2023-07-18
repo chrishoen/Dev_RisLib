@@ -318,6 +318,18 @@ char* my_timestamp3(char* aBuffer)
    return aBuffer;
 }
 
+char* my_timestamp4(char* aBuffer)
+{
+   timespec tTimeSpec;
+   timespec_get(&tTimeSpec, TIME_UTC);
+
+   char tTemp[40];
+   strftime(tTemp, 40, "%T", localtime(&tTimeSpec.tv_sec));
+   sprintf(aBuffer, "%s.%03ld", tTemp, tTimeSpec.tv_nsec / 1000000);
+
+   return aBuffer;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

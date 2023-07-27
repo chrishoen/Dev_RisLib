@@ -18,7 +18,6 @@ if (MYSTANDALONE)
 endif()
 
 add_subdirectory ("RisLib")
-add_subdirectory ("PrintTest")
 return()
 
 add_subdirectory ("RisLib")

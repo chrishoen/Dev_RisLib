@@ -149,6 +149,7 @@ bool portableFilePathExists (const char* aFilePath)
 
 char* portableFullPath(char* aBuffer, const char* aFilePath)
 {
+   if (aBuffer == 0) aBuffer = (char*)malloc(_MAX_PATH);
    return _fullpath(aBuffer, aFilePath, _MAX_PATH);
 }
 

@@ -237,5 +237,10 @@ For the linux projects, Dev_RisLib/Files/prime.tar.gz can be used to create the 
 
 cd /opt
 sudo tar -zxvf prime.tar.gz
+```
 
+## Note: Importing RisLib into other projects 
+``` markdown
+For the windows projects, RisLib is installed at "C:\ProgramData\MyLib", 
+where it can be accessed by other, external, projects.
 ```

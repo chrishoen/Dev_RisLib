@@ -98,7 +98,7 @@ int SerialStringPort::doReceiveString (char* aString, int aMaxSize)
       // one or zero or a negative error code. Copy the byte into the
       // pointer argument.
       char tRxChar = 0;
-      tRet = BaseClass::doReceiveOneByte(&tRxChar);
+      tRet = BaseClass::doReceiveBytes(&tRxChar, 1);
 
       // Test the return code.
       if (tRet != 1) return tRet;

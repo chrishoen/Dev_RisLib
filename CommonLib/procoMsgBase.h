@@ -286,6 +286,9 @@ public:
    // Update the metrics with a message and a length.
    void updateTxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength) override;
    void updateRxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength) override;
+
+   // Create a message from the message set, based on the message type.
+   Ris::ByteContent* createMsg(int aMessageType) override;
 };
 
 //*********************************************************************************

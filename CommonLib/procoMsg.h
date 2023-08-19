@@ -276,10 +276,7 @@ public:
 // Message creator:
 
 // Create a new message, based on a message type.
-void* createMsg(int aMessageType);
-
-// Destroy a message.
-//void destroyMsg(void* aMsg);
+Ris::ByteContent* doCreateMsg(int aMessageType);
 
 //******************************************************************************
 //******************************************************************************

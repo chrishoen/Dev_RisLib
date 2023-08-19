@@ -171,53 +171,54 @@ namespace Prn
    static const int  Comm3             = 238;
    static const int  Comm4             = 239;
 
-   static const int  Show1             = 240;
-   static const int  Show2             = 241;
-   static const int  Show3             = 242;
-   static const int  Show4             = 243;
-   static const int  Show5             = 244;
-   static const int  Show6             = 245;
+   static const int  Show0             = 240;
+   static const int  Show1             = 241;
+   static const int  Show2             = 242;
+   static const int  Show3             = 243;
+   static const int  Show4             = 244;
+   static const int  Show5             = 245;
+   static const int  Show6             = 246;
 
-   static const int  Calc1             = 246;
-   static const int  Calc2             = 247;
-   static const int  Calc3             = 248;
-   static const int  Calc4             = 249;
+   static const int  Calc1             = 247;
+   static const int  Calc2             = 248;
+   static const int  Calc3             = 249;
+   static const int  Calc4             = 250;
 
-   static const int  DspRun1           = 250;
-   static const int  DspRun2           = 251;
-   static const int  DspRun3           = 252;
-   static const int  DspRun4           = 253;
+   static const int  DspRun1           = 251;
+   static const int  DspRun2           = 252;
+   static const int  DspRun3           = 253;
+   static const int  DspRun4           = 254;
 
-   static const int  Calc11            = 254;
-   static const int  Calc12            = 255;
-   static const int  Calc13            = 256;
-   static const int  Calc14            = 257;
-   static const int  Calc21            = 258;
-   static const int  Calc22            = 259;
-   static const int  Calc23            = 260;
-   static const int  Calc24            = 261;
+   static const int  Calc11            = 255;
+   static const int  Calc12            = 256;
+   static const int  Calc13            = 257;
+   static const int  Calc14            = 258;
+   static const int  Calc21            = 259;
+   static const int  Calc22            = 260;
+   static const int  Calc23            = 261;
+   static const int  Calc24            = 262;
 
-   static const int  ShowA             = 262;
-   static const int  ShowB             = 263;
-   static const int  ShowC             = 264;
-   static const int  ShowD             = 265;
-   static const int  ShowS             = 266;
-   static const int  ShowT             = 267;
+   static const int  ShowA             = 263;
+   static const int  ShowB             = 264;
+   static const int  ShowC             = 265;
+   static const int  ShowD             = 266;
+   static const int  ShowS             = 267;
+   static const int  ShowT             = 268;
 
-   static const int  ShowTx1           = 268;
-   static const int  ShowTx2           = 269;
-   static const int  ShowTx3           = 270;
-   static const int  ShowTx4           = 271;
+   static const int  ShowTx1           = 269;
+   static const int  ShowTx2           = 270;
+   static const int  ShowTx3           = 271;
+   static const int  ShowTx4           = 272;
 
-   static const int  ShowRx1           = 272;
-   static const int  ShowRx2           = 273;
-   static const int  ShowRx3           = 274;
-   static const int  ShowRx4           = 275;
+   static const int  ShowRx1           = 273;
+   static const int  ShowRx2           = 274;
+   static const int  ShowRx3           = 275;
+   static const int  ShowRx4           = 276;
 
-   static const int  ShowTxJ           = 276;
-   static const int  ShowRxJ           = 277;
+   static const int  ShowTxJ           = 277;
+   static const int  ShowRxJ           = 278;
 
-   static const int  FTMsg             = 278;
+   static const int  FTMsg             = 279;
 
 //******************************************************************************
 //******************************************************************************

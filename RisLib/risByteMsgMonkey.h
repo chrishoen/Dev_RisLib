@@ -91,16 +91,6 @@ public:
    //***************************************************************************
    // Members.
 
-   // Create message function pointer.
-   // void* createMsg(int aMessageType);
-   typedef void*(*CreateMsgFunctionT)(int);
-   CreateMsgFunctionT mCreateMsgFunction;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
    // Message metrics. These point to the default metrics or to an
    // inheritors metrics, depending on the constructor.
    BaseMsgMetrics* mBaseTxMsgMetrics;
@@ -116,10 +106,8 @@ public:
    // Methods.
 
    // Constructor.
+   BaseMsgMonkey();
    BaseMsgMonkey(
-      CreateMsgFunctionT aCreate);
-   BaseMsgMonkey(
-      CreateMsgFunctionT aCreate,
       BaseMsgMetrics* aTxMsgMetrics,
       BaseMsgMetrics* aRxMsgMetrics);
    virtual ~BaseMsgMonkey() {}
@@ -193,6 +181,14 @@ public:
    // Update the metrics with a message and a length.
    virtual void updateTxMsgMetrics(ByteContent* aMsg, int aMsgLength);
    virtual void updateRxMsgMetrics(ByteContent* aMsg, int aMsgLength);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods, create messages.
+
+   // Create a message from the message set, base on the message type.
+   virtual ByteContent* createMsg(int aMessageType) = 0;
 };
 
 //******************************************************************************

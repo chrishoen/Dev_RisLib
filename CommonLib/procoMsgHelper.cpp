@@ -73,6 +73,7 @@ void MsgHelper::initialize(EchoResponseMsg* aMsg, int aNumWords)
    aMsg->mCode2 = 402;
    aMsg->mCode3 = 403;
    aMsg->mCode4 = 404;
+   aMsg->mNumWords = aNumWords;
 }
 
 void MsgHelper::show(int aPF, EchoResponseMsg* aMsg)

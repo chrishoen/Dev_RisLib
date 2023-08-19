@@ -165,13 +165,15 @@ public:
    // Methods.
 
    // Send a null terminated string via the serial port. Append terminator
-   // bytes as specified in the settings.
-   void sendString(const char* aString);
+   // bytes as specified in the settings. Return the number of bytes 
+   // transferred or a negative error code.
+   int doSendString(const char* aString);
 
    // Send a null terminated string via the serial port. Append terminator
    // bytes as specified in the settings. The string is deleted after
-   // transmission.
-   void sendString(std::string* aString);
+   // transmission. Return the number of bytes transferred or a negative
+   // error code.
+   int doSendString(std::string* aString);
 };
 
 //******************************************************************************

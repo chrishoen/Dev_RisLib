@@ -1,7 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 set (project "RisLib")
 project(${project} CXX)
-
 my_find_src_files (src_files ${project})
 my_find_inc_files (inc_files)
 add_library (${project} STATIC ${src_files})
@@ -10,19 +9,19 @@ my_add_pch (${project})
 target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 
 if (RISLIB_STANDALONE)
-
    return()
 endif()
 
+
 if (MSVC)
-   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
-   install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
+   install(FILES ${inc_files} DESTINATION "C:/ProgramData/MyLib/include/RisLib")
+   install(TARGETS ${project} DESTINATION "C:/ProgramData/MyLib/lib")
 elseif(MYMODE STREQUAL "prime-x64")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS ${project} DESTINATION "/opt/prime/lib/x64")
 elseif(MYMODE STREQUAL "prime-arm7")
-   install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/RisLib")
-   install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
+   install(FILES ${inc_files} DESTINATION "C:/ProgramData/MyLib/include/RisLib")
+   install(TARGETS ${project} DESTINATION "C:/ProgramData/MyLib/lib")
 elseif(MYMODE STREQUAL "prime-arm8")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS ${project} DESTINATION "/opt/prime/lib/arm8")

@@ -4,6 +4,7 @@
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
+#include "MainArgs.h"
 #include "MainInit.h"
 
 #include "procoProcThread.h"
@@ -18,9 +19,11 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Begin program.
+   // Initialize program resources.
 
-   main_initialize(argc,argv);
+   gMainArgs.initialize(argc, argv);
+   gMainArgs.show();
+   main_initialize();
 
    //***************************************************************************
    //***************************************************************************
@@ -67,7 +70,7 @@ int main(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // End program.
+   // Finalize program resources.
 
    main_finalize();
    return 0;

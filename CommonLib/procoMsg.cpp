@@ -138,7 +138,7 @@ EchoResponseMsg::EchoResponseMsg()
    mCode3 = 203;
    mCode4 = 204;
 
-   mNumWords = MaxWords;
+   mNumWords = 0;
    mWords[0] = 0;
 }
 
@@ -343,7 +343,7 @@ void ByteBlobMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 // Create a new message, based on a message type.
 
-void* createMsg(int aMessageType)
+Ris::ByteContent* doCreateMsg(int aMessageType)
 {
    Ris::ByteContent* tMsg = 0;
 

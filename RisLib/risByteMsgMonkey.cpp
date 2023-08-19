@@ -17,8 +17,7 @@ namespace Ris
 //******************************************************************************
 // Constructor.
 
-BaseMsgMonkey::BaseMsgMonkey(
-   CreateMsgFunctionT aCreate)
+BaseMsgMonkey::BaseMsgMonkey()
 {
    mHeaderLength=0;
    mMessageLength=0;
@@ -26,7 +25,6 @@ BaseMsgMonkey::BaseMsgMonkey(
    mPayloadLength=0;
    mHeaderValidFlag=false;
 
-   mCreateMsgFunction = aCreate;
    mBaseTxMsgMetrics = &mDefaultTxMsgMetrics;
    mBaseRxMsgMetrics = &mDefaultRxMsgMetrics;
 
@@ -35,7 +33,6 @@ BaseMsgMonkey::BaseMsgMonkey(
 }
 
 BaseMsgMonkey::BaseMsgMonkey(
-   CreateMsgFunctionT aCreate,
    BaseMsgMetrics* aTxMsgMetrics,
    BaseMsgMetrics* aRxMsgMetrics)
 {
@@ -44,8 +41,6 @@ BaseMsgMonkey::BaseMsgMonkey(
    mMessageType = 0;
    mPayloadLength = 0;
    mHeaderValidFlag = false;
-
-   mCreateMsgFunction = aCreate;
 
    mBaseTxMsgMetrics = aTxMsgMetrics;
    mBaseRxMsgMetrics = aRxMsgMetrics;
@@ -89,7 +84,7 @@ Ris::ByteContent* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 
    // Call inheritor's creator to create a new message based on the
    // message type that was extracted from the header.
-   Ris::ByteContent* aMsg = (Ris::ByteContent*)mCreateMsgFunction(mMessageType);
+   Ris::ByteContent* aMsg = createMsg(mMessageType);
 
    // Guard
    if (!aMsg) return 0;
@@ -116,7 +111,7 @@ Ris::ByteContent* BaseMsgMonkey::getMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 // 2) Create a new message object of the type specifed by the identifiers 
 //    that were extracted from the header
 // 3) Copy the data from the byte buffer into the new message object
-// and returns a pointer to the base class.
+//    and return a pointer to it.
 
 Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 {
@@ -133,16 +128,23 @@ Ris::ByteContent* BaseMsgMonkey::makeMsgFromBuffer (Ris::ByteBuffer* aBuffer)
 
    // Call inheritor's creator to create a new message based on the
    // message type that was extracted from the header.
-   Ris::ByteContent* aMsg = (Ris::ByteContent*)mCreateMsgFunction(mMessageType);
+   Ris::ByteContent* tMsg = createMsg(mMessageType);
 
    // Guard
-   if (!aMsg) return 0;
+   if (!tMsg) return 0;
 
-   // Call inheritor's copier to copy from the buffer to the message.
-   aMsg->copyToFrom(aBuffer);
+   // Copy from the buffer to the message.
+   tMsg->copyToFrom(aBuffer);
+
+   // Test for copy from errors.
+   if (aBuffer->getError())
+   {
+      delete tMsg;
+      return 0;
+   }
 
    // Done.
-   return aMsg;
+   return tMsg;
 }
 
 //******************************************************************************

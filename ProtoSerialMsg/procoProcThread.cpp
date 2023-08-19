@@ -25,7 +25,7 @@ ProcThread::ProcThread()
    // Set base class variables.
    BaseClass::setThreadName("Proc");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
-   BaseClass::mTimerPeriod = 100;
+   BaseClass::mTimerPeriod = gSerialParms.mThreadTimerPeriod;
 
    // Initialize qcalls.
    mSessionQCall.bind(this, &ProcThread::executeSession);
@@ -139,7 +139,7 @@ void ProcThread::executeOnTimer(int aTimerCount)
    if (mTPCode == 1)
    {
       EchoRequestMsg* tTxMsg = new EchoRequestMsg;
-      MsgHelper::initialize(tTxMsg);
+      MsgHelper::initialize(tTxMsg, 0);
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)
@@ -241,9 +241,9 @@ void ProcThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      MsgHelper::initialize(tTxMsg, 1000);
+      tTxMsg->initialize(0);
       tTxMsg->mCode1 = aRxMsg->mCode1;
-      mSerialMsgThread->sendMsg(tTxMsg);
+      mSerialMsgThread->doSendMsg(tTxMsg);
    }
    if (mShowCode == 3)
    {
@@ -301,7 +301,7 @@ void ProcThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 
 void ProcThread::sendMsg(BaseMsg* aTxMsg)
 {
-   mSerialMsgThread->sendMsg(aTxMsg);
+   mSerialMsgThread->doSendMsg(aTxMsg);
    mTxCount++;
 }
 
@@ -315,7 +315,7 @@ void ProcThread::sendTestMsg()
    TestMsg* tMsg = new TestMsg;
    tMsg->mCode1 = 201;
 
-   mSerialMsgThread->sendMsg(tMsg);
+   mSerialMsgThread->doSendMsg(tMsg);
 }
 
 //******************************************************************************

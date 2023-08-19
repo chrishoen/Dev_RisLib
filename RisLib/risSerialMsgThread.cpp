@@ -30,6 +30,8 @@ SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
    BaseClass::setThreadPriority(aSettings.mThreadPriority);
 
    mSettings = aSettings;
+   mSuspendReq = false;
+   mSuspendFlag = false;
    mSessionQCall = aSettings.mSessionQCall;
    mRxMsgQCall = aSettings.mRxMsgQCall;
 
@@ -119,6 +121,13 @@ restart:
       goto restart;
    }
 
+   // Wait for modem valid.
+   if (!mSerialMsgPort.doWaitForModemValid())
+   {
+      // If error then restart.
+      goto restart;
+   }
+
    // Connection was established.
    mConnectionFlag = true;
 
@@ -160,6 +169,11 @@ restart:
          Trc::write(mTI, 0, "SerialMsgThread read ERROR");
          goto restart;
       }
+      else if (tRet == Ris::cSerialRetDataError)
+      {
+         Trc::write(mTI, 0, "SerialMsgThread read DATA ERROR");
+         goto restart;
+      }
       else if (tRet == Ris::cSerialRetTimeout)
       {
          Trc::write(mTI, 0, "SerialMsgThread read TIMEOUT");
@@ -168,11 +182,18 @@ restart:
       else if (tRet == Ris::cSerialRetAbort)
       {
          Trc::write(mTI, 0, "SerialMsgThread read ABORT");
-         goto restart;
-      }
-      else if (tRet == Ris::cSerialRetDataError)
-      {
-         Trc::write(mTI, 0, "SerialMsgThread read DATA ERROR");
+         if (mSuspendReq)
+         {
+            // If the abort was caused by a suspension request then
+            // close the serial port and wait on the resume semaphore.
+            Trc::write(mTI, 0, "SerialMsgThread SUSPENDED");
+            Prn::print(0, 0, "SerialMsgThread SUSPENDED");
+            mSuspendReq = false;
+            mSerialMsgPort.doClose();
+            mSuspendFlag = true;
+            mResumeSem.get();
+            mSuspendFlag = false;
+         }
          goto restart;
       }
       // Process the read.
@@ -233,6 +254,40 @@ void SerialMsgThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Abort the serial message port blocked receive call.
+
+void SerialMsgThread::doAbort()
+{
+   mSerialMsgPort.doAbort();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set the suspension request flag and abort the pending receive. This
+// will cause the thread to close the serial port and then block on the
+// resume semaphore.
+
+void SerialMsgThread::doSuspend()
+{
+   mSuspendReq = true;
+   mSerialMsgPort.doAbort();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Post to the resume semaphore to wake up the thread and enter the 
+// restart loop.
+
+void SerialMsgThread::doResume()
+{
+   mResumeSem.put();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Notify the parent thread that a session has changed. This is called by
 // the threadRunFunction when a new session is established or an existing
 // session is disestablished. It invokes the mSessionQCall that is
@@ -268,13 +323,12 @@ void SerialMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a transmit message through the socket to the peer. It executes a
-// blocking send call in the context of the calling thread. It is protected
-// by a mutex semaphore.
+// Send a message via the serial port. Return the number of bytes
+// transferred or a negative error code.
 
-void SerialMsgThread::sendMsg (Ris::ByteContent* aMsg)
+int SerialMsgThread::doSendMsg (Ris::ByteContent* aMsg)
 {
-   mSerialMsgPort.doSendMsg(aMsg);
+   return mSerialMsgPort.doSendMsg(aMsg);
 }
 
 //******************************************************************************

@@ -76,6 +76,9 @@ char* my_string_from_float(char* aString, const char* aFormat, float aValue);
 // Return formatted string from double.
 char* my_string_from_double(char* aString, const char* aFormat, double aValue);
 
+// Return string from bluetooth mac address.
+char* my_string_from_btaddr(char* aString, unsigned long long aValue);
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -99,6 +102,9 @@ char* my_timestamp2(char* aBuffer);
 
 // Return current timestamp. 2021-02-11.19:29:10.001
 char* my_timestamp3(char* aBuffer);
+
+// Return current timestamp. 19:29:10.001
+char* my_timestamp4(char* aBuffer);
 
 // Convert seconds to millisecond ticks
 int    my_ticks_from_time (double aTime);

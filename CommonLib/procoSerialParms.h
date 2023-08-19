@@ -66,7 +66,11 @@ public:
    // Serial setup and port.
    char mSerialPortDevice[cMaxStringSize];
    char mSerialPortSetup[cMaxStringSize];
+   int  mSerialTxTimeout;
    int  mSerialRxTimeout;
+
+   // If true then use bluetooth.
+   bool mBthFlag;
 
    // Serial string port termination modes.
    int mTxTermMode;
@@ -74,6 +78,9 @@ public:
 
    // Message thread timer period.
    int mThreadTimerPeriod;
+
+   // Trace variables.
+   bool mTraceLogEnable;
 
    //***************************************************************************
    //***************************************************************************

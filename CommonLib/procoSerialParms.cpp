@@ -42,10 +42,13 @@ void SerialParms::reset()
 
    mSerialPortDevice[0] = 0;
    mSerialPortSetup[0] = 0;
+   mSerialTxTimeout = 0;
    mSerialRxTimeout = 0;
+   mBthFlag = false;
    mTxTermMode = 0;
    mRxTermMode = 0;
    mThreadTimerPeriod = 0;
+   mTraceLogEnable = false;
 }
 
 //******************************************************************************
@@ -60,7 +63,10 @@ void SerialParms::show()
 
    printf("SerialPortDevice        %-12s\n", mSerialPortDevice);
    printf("SerialPortSetup         %-12s\n", mSerialPortSetup);
+   printf("SerialTxTimeout         %-12d\n", mSerialTxTimeout);
    printf("SerialRxTimeout         %-12d\n", mSerialRxTimeout);
+   printf("BthFlag                 %-12s\n", my_string_from_bool(mBthFlag));
+
 
    printf("\n");
    printf("TxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mTxTermMode));
@@ -68,6 +74,7 @@ void SerialParms::show()
 
    printf("\n");
    printf("ThreadTimerPeriod       %-12d\n", mThreadTimerPeriod);
+   printf("TraceLogEnable          %-12s\n", my_string_from_bool(mTraceLogEnable));
 
    printf("SerialParms************************************************\n");
    printf("\n");
@@ -86,10 +93,13 @@ void SerialParms::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("SerialPortDevice"))  aCmd->copyArgString(1, mSerialPortDevice, cMaxStringSize);
    if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup, cMaxStringSize);
+   if (aCmd->isCmd("SerialTxTimeout"))   mSerialTxTimeout = aCmd->argInt(1);
    if (aCmd->isCmd("SerialRxTimeout"))   mSerialRxTimeout = aCmd->argInt(1);
+   if (aCmd->isCmd("BthFlag"))           mBthFlag = aCmd->argBool(1);
    if (aCmd->isCmd("TxTermMode"))        mTxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
    if (aCmd->isCmd("RxTermMode"))        mRxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
    if (aCmd->isCmd("ThreadTimerPeriod")) mThreadTimerPeriod = aCmd->argInt(1);
+   if (aCmd->isCmd("TraceLogEnable"))    mTraceLogEnable = aCmd->argBool(1);
 }
 
 //******************************************************************************

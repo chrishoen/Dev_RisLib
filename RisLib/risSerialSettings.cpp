@@ -26,12 +26,15 @@ void SerialSettings::reset()
 {
    mIdent = -1;
    mPortDevice[0] = 0;
-   mPortSetup[0] = 0;
+   strcpy(mPortSetup, "115200,N,8,1");
+   mTxTimeout = 0;
    mRxTimeout = 0;
+   mTxDeleteAfterSend = true;
    mTxTermMode = 0;
    mRxTermMode = 0;
    mTraceIndex = 0;
    m485Flag = false;
+   mBthFlag = false;
    mMsgMonkey = 0;
    mThreadPriority = Ris::Threads::gPriorities.mSerial;
    mRxStringCallback = 0;

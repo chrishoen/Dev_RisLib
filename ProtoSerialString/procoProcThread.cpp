@@ -63,19 +63,21 @@ void ProcThread::threadInitFunction()
 
    tSerialSettings.setPortDevice(gSerialParms.mSerialPortDevice);
    tSerialSettings.setPortSetup(gSerialParms.mSerialPortSetup);
+   tSerialSettings.mTxTimeout = gSerialParms.mSerialTxTimeout;
    tSerialSettings.mRxTimeout = gSerialParms.mSerialRxTimeout;
    tSerialSettings.mTxTermMode = gSerialParms.mTxTermMode;
    tSerialSettings.mRxTermMode = gSerialParms.mRxTermMode;
    tSerialSettings.mSessionQCall = mSessionQCall;
    tSerialSettings.mRxStringQCall = mRxStringQCall;
    tSerialSettings.mTraceIndex = 11;
+   tSerialSettings.mBthFlag = gSerialParms.mBthFlag;
    Trc::start(11);
 
    // Create child thread with the settings.
    mSerialStringThread = new Ris::SerialStringThread(tSerialSettings);
 
    // Launch child thread.
-   mSerialStringThread->launchThread(); 
+   mSerialStringThread->launchThread();
 }
 
 //******************************************************************************
@@ -89,7 +91,11 @@ void ProcThread::threadExitFunction()
    Prn::print(0, "ProcThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
-   mSerialStringThread->shutdownThread();
+   if (mSerialStringThread)
+   {
+      mSerialStringThread->shutdownThread();
+      mSerialStringThread = 0;
+   }
 
    Prn::print(0, "ProcThread::threadExitFunction END");
 }
@@ -155,7 +161,8 @@ void ProcThread::executeSession(bool aConnected)
 
 void ProcThread::executeRxString(std::string* aString)
 {
-   Prn::print(Prn::Show1, "ProcThread::executeRxString %s", aString->c_str());
+// Prn::print(Prn::Show1, "ProcThread::executeRxString %s", aString->c_str());
+   Prn::print(Prn::Show1, "RX: %s", aString->c_str());
    delete aString;
 }
 
@@ -166,7 +173,7 @@ void ProcThread::executeRxString(std::string* aString)
 
 void ProcThread::sendString(std::string* aString)
 {
-   mSerialStringThread->sendString(aString);
+   mSerialStringThread->doSendString(aString);
 }
 
 //******************************************************************************

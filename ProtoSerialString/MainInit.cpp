@@ -5,6 +5,8 @@
 #include "risBaseDir.h"
 
 #include "procoSerialParms.h"
+#include "MainArgs.h"
+#include "MainInit.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -14,7 +16,7 @@
 //******************************************************************************
 // Initialize.
 
-void main_initialize(int argc,char** argv)
+void main_initialize()
 {
    printf("ProtoSerialString Program****************************************BEGIN\n");
 
@@ -49,22 +51,41 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Read parameters files.
+
+   if (gMainArgs.mPeerIdent == 1)
+   {
+      ProtoComm::gSerialParms.reset();
+      ProtoComm::gSerialParms.readSection("default");
+      Prn::print(0, "PARMS PEER1 DEFAULT %s", ProtoComm::gSerialParms.mSerialPortDevice);
+   }
+   else if (gMainArgs.mPeerIdent == 2)
+   {
+      ProtoComm::gSerialParms.reset();
+      ProtoComm::gSerialParms.readSection("Peer2");
+      Prn::print(0, "PARMS PEER2 %s", ProtoComm::gSerialParms.mSerialPortDevice);
+   }
+   else
+   {
+      printf("MAIN ARGS ERROR\n");
+      exit(-1);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize trace facility.
 
    Trc::reset();
    Trc::create_buffer(1,  3, "string");
    Trc::create_buffer(11, 3, "serial");
    Trc::set_default_trace_index(11);
-   //Trc::create_log(11, 4, "log/ProtoSerialString_trace11.log");
+
+   if (ProtoComm::gSerialParms.mTraceLogEnable)
+   {
+      Trc::create_log(11, 4, "log/trace-ProtoSerialString-serial.log");
+   }
    Trc::initialize();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Read parameters files.
-
-   ProtoComm::gSerialParms.reset();
-   ProtoComm::gSerialParms.readSection("default");
 }
 
 //******************************************************************************

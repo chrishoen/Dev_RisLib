@@ -58,25 +58,46 @@ class ByteContent;
 // maintains a buffer length, which contains the number of bytes that have
 // been put into the buffer.
 
-class  ByteBuffer
+class ByteBuffer
 {
 public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members
+   // Constants.
 
-   // Pointer members.
+   // Copy direction. This specifies the direction of copy operations.
+   // Copy to does a put, copy from does a get.
+   static const int cCopyTo = 0;
+   static const int cCopyFrom = 1;
+
+   // Error codes.
+   static const int cNoError = 0;
+   static const int cBufferOverflow = 1;
+   static const int cBadPointer = 2;
+   static const int cChecksumError = 3;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Pointer and index members.
+   // 
    // The base pointer contains the address of the beginning of the
-   // buffer. The working pointer contains the address in the buffer
-   // to which the next put or get operation will operate. The
-   // working length contains the number of bytes that have been put
-   // into the buffer. The max length is maxlength of the buffer,
-   // it is the size allocated for the buffer
+   // buffer. The working index is the index into the buffer to which
+   // the next put or get operation will operate. The working length
+   // contains the number of bytes that have been put into the buffer.
+   // The max length is maxlength of the buffer, it is the size allocated
+   // for the buffer
    char*  mBaseBytes;
    int    mWorkingIndex;
    int    mWorkingLength;
    int    mMaxLength;
+
+   // Save working index and length.
+   int    mSaveIndex;
+   int    mSaveLength;
 
    // Marker members.
    int mMarkerStartIndex;
@@ -85,17 +106,12 @@ public:
 
    // Copy direction. This specifies the direction of copy operations.
    // Copy to does a put, copy from does a get.
-   static const int cCopyTo   = 0;
-   static const int cCopyFrom = 1;
    int mCopyDirection;
 
    // Error code.
-   static const int cNoError          = 0;
-   static const int cBufferOverflow   = 1;
-   static const int cBadPointer       = 2;
    int mError;
 
-   // Memory allocation code, itdetermines if the destructor does a memFree.
+   // Memory allocation code, determines if the destructor does a memFree.
    int mMemAllocCode;
 
    //***************************************************************************
@@ -104,24 +120,24 @@ public:
    // Intrastructure.
 
    // Default constructor        does not do a memory alloc operation.
-   ByteBuffer ();
+   ByteBuffer();
 
    // Allocates heap memory of given size  
    // This constructor           does do a memory alloc operation.
    // It's associated destructor does do a memory free  operation.
-   ByteBuffer (int aSize);
+   ByteBuffer(int aSize);
 
    // Assigns pre-allocated memory
    // This constructor           does not do a memory alloc operation.
    // It's associated destructor does not do a memory free  operation.
-   ByteBuffer (char* aAddress,int aSize);
+   ByteBuffer(char* aAddress,int aSize);
 
    // Deallocates any allocated memory.
-  ~ByteBuffer ();
+  ~ByteBuffer();
    
    // Heap memory, if allocated then destructor frees it
-   void  memAlloc (int aSize);
-   void  memFree  ();
+   void memAlloc(int aSize);
+   void memFree();
 
    //***************************************************************************
    //***************************************************************************
@@ -134,12 +150,12 @@ public:
    // copy direction is for a put operation.
    // advance advances the working pointer and the length
 
-   void  reset();
-   void  rewind();
-   void  forward     (int aByteSize=1);
-   void  reverse     (int aByteSize = 1);
-   void  advance     (int aByteSize=1);
-   void  fillZero    (int aByteSize=1);
+   void reset();
+   void rewind();
+   void forward(int aByteSize=1);
+   void reverse(int aByteSize = 1);
+   void advance(int aByteSize=1);
+   void fillZero(int aByteSize=1);
 
    //***************************************************************************
    //***************************************************************************
@@ -147,7 +163,7 @@ public:
    // Methods, byte boundaries.
 
    // Advance to the next byte boundary.
-   void  advanceToNextByteBoundary(int aByteBoundary);
+   void advanceToNextByteBoundary(int aByteBoundary);
 
    //***************************************************************************
    //***************************************************************************
@@ -155,22 +171,26 @@ public:
    // Methods, buffer position.
 
    // Get the address of the start of the buffer
-   char*  getBaseAddress ();
+   char* getBaseAddress();
 
    // Set the buffer working index.
-   void  setPosition (int aIndex);
+   void setPosition(int aIndex);
 
    // Get the buffer working index.
-   int getPosition ();
+   int getPosition();
 
    // Get the buffer address at the working index.
-   char* getPositionC ();
-   void* getPositionV ();
+   char* getPositionC();
+   void* getPositionV();
 
    // Buffer working index marker.
    void setMarkerStart();
-   int  setMarkerEnd();
-   int  getMarkerLength();
+   int setMarkerEnd();
+   int getMarkerLength();
+
+   // Save working index and length.
+   void saveWorking();
+   void restoreWorking();
 
    //***************************************************************************
    //***************************************************************************
@@ -183,11 +203,11 @@ public:
    // Buffer length. This is the number of bytes that have
    // actually been put into the buffer, the actual data length.
    void setLength(int aValue);
-   int  getLength();
+   int getLength();
 
    // Error codes.
    void setError(int aValue);
-   int  getError();
+   int getError();
 
    //***************************************************************************
    //***************************************************************************
@@ -196,11 +216,11 @@ public:
 
    // Set the direction of copy operations
    // copy to does a put, copy from does a get.
-   void setCopyTo ();
-   void setCopyFrom ();
+   void setCopyTo();
+   void setCopyFrom();
 
-   bool isCopyTo ();
-   bool isCopyFrom ();
+   bool isCopyTo();
+   bool isCopyFrom();
 
    //***************************************************************************
    //***************************************************************************
@@ -209,29 +229,29 @@ public:
 
    // Copy a value to/from the buffer, depending on the value of the buffer 
    // direction flag.
-   void copy  (unsigned char*      aValue);
-   void copy  (unsigned short*     aValue);
-   void copy  (unsigned int*       aValue);
-   void copy  (unsigned long long* aValue);
-   void copy  (char*               aValue);
-   void copy  (short*              aValue);
-   void copy  (int*                aValue);
-   void copy  (long long*          aValue);
-   void copy  (float*              aValue);
-   void copy  (double*             aValue);
-   void copy  (bool*               aValue);
+   void copy(unsigned char* aValue);
+   void copy(unsigned short* aValue);
+   void copy(unsigned int* aValue);
+   void copy(unsigned long long* aValue);
+   void copy(char* aValue);
+   void copy(short* aValue);
+   void copy(int* aValue);
+   void copy(long long* aValue);
+   void copy(float* aValue);
+   void copy(double* aValue);
+   void copy(bool* aValue);
 
-   void copyS (unsigned char*      aString);
-   void copyS (char*               aString);
-   void copyZ (char*               aString, int aMaxStringSize);
-   void copyZ (unsigned char*      aString, int aMaxStringSize);
+   void copyS(unsigned char* aString);
+   void copyS(char* aString);
+   void copyZ(char* aString, int aMaxStringSize);
+   void copyZ(unsigned char* aString, int aMaxStringSize);
 
-   void copyBlock (void* aValue, int aSize);
+   void copyBlock(void* aValue, int aSize);
 
    // Copy an object that inherits from ByteContent to/from a byte buffer.
-   void copy          (ByteContent* content);
-   void putToBuffer   (ByteContent* content);
-   void getFromBuffer (ByteContent* content);
+   void copy(ByteContent* content);
+   void putToBuffer(ByteContent* content);
+   void getFromBuffer(ByteContent* content);
 
    //************************************************************************
    //************************************************************************
@@ -253,7 +273,6 @@ public:
    // Methods, helpers.
 
    void show(const char* aLabel, int tSize);
-
 };
 
 //***************************************************************************

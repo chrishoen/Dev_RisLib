@@ -118,7 +118,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    if (mHeaderReadState == cHeaderReadAll)
    {
       // Read the header from the serial port into the byte buffer.
-      tRet = BaseClass::doReceiveAllBytes(tByteBuffer.getBaseAddress(),mHeaderLength);
+      tRet = BaseClass::doReceiveBytes(tByteBuffer.getBaseAddress(),mHeaderLength);
 
       // Test the return code.
       if (tRet > 0)
@@ -174,7 +174,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       {
          // Read one byte.
          char tByte;
-         tRet = BaseClass::doReceiveOneByte(&tByte);
+         tRet = BaseClass::doReceiveBytes(&tByte, 1);
 
          // Test the return code.
          if (tRet > 0)
@@ -227,7 +227,7 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    int   tPayloadLength = mMsgMonkey->mPayloadLength;
    char* tPayloadBuffer = tByteBuffer.getBaseAddress() + mHeaderLength;
 
-   tRet = BaseClass::doReceiveAllBytes(tPayloadBuffer,tPayloadLength);
+   tRet = BaseClass::doReceiveBytes(tPayloadBuffer,tPayloadLength);
 
    // Test the return code.
    if (tRet > 0)
@@ -281,18 +281,21 @@ int SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 //******************************************************************************
 //******************************************************************************
 // Copy a message into a byte buffer and then send the byte buffer to the
-// serial port with a blocking write call. Return true if successful.
-// This is protected by the transmit mutex.
+// serial port with a blocking write call. Delete the message when done.
+// Return the total number of bytes transmitted or a negative error code.
 
-bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
+int SerialMsgPort::doSendMsg(ByteContent* aMsg)
 {
    Trc::write(mTI, 0, "SerialMsgPort::doSendMsg");
    // Guard.
    if (!BaseClass::mValidFlag)
    {
       Trc::write(mTI, 0, "SerialMsgPort::doSendMsg INVALID");
-      delete aMsg;
-      return false;
+      if (mSettings.mTxDeleteAfterSend)
+      {
+         delete aMsg;
+      }
+      return Ris::cSerialRetError;
    }
 
    // Create a byte buffer from heap memory.
@@ -311,18 +314,21 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    mMsgMonkey->updateTxMsgMetrics(aMsg, tLength);
 
    // Delete the message.
-   delete aMsg;
+   if (mSettings.mTxDeleteAfterSend)
+   {
+      delete aMsg;
+   }
 
    // Test for errors.
    if (tRet < 0)
    {
-      Trc::write(mTI, 0, "SerialMsgPort::doSendMsg ERROR 1");
-      return false;
+      Trc::write(mTI, 0, "SerialMsgPort::doSendMsg ERROR %d", tRet);
+      return tRet;
    }
 
    // Success.
    Trc::write(mTI, 0, "SerialMsgPort::doSendMsg done");
-   return true;
+   return tRet;
 }
 
 //******************************************************************************

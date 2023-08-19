@@ -61,8 +61,12 @@ public:
    // "9600,N,8,1". If empty string then use system defaults.
    char mPortSetup[16];
 
-   // Receive timeout. Milliseconds, 0 means no timeout.
+   // Send and receive timeouts. Milliseconds, 0 means infinite timeout.
+   int mTxTimeout;
    int mRxTimeout;
+
+   // If true then delete a message after sending it.
+   bool mTxDeleteAfterSend;
 
    // Termination modes. LF (\n,10) or CRLF (\r\n,13,10).
    int mTxTermMode;
@@ -73,6 +77,9 @@ public:
 
    // If true then use RS485.
    bool m485Flag;
+
+   // If true then use bluetooth.
+   bool mBthFlag;
 
    // Thread processor number and priority.
    Ris::Threads::Priority mThreadPriority;

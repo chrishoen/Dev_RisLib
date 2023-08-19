@@ -7,9 +7,9 @@ function(my_find_src_files _a_src_files _target)
    file(GLOB _src_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp *.c)
 
    if(MSVC)
-      list(FILTER _src_files EXCLUDE REGEX ".*_linux.cpp$")
+      list(FILTER _src_files EXCLUDE REGEX ".*_linux")
    else()
-      list(FILTER _src_files EXCLUDE REGEX ".*_win.cpp$")
+      list(FILTER _src_files EXCLUDE REGEX ".*_win")
    endif()
 
    set(${_a_src_files} ${_src_files} PARENT_SCOPE)
@@ -31,6 +31,13 @@ endfunction()
 function(my_find_inc_files _a_inc_files)
 
    file(GLOB _inc_files ${PROJECT_SOURCE_DIR}/*.h)
+
+   if(MSVC)
+      list(FILTER _src_files EXCLUDE REGEX ".*_linux")
+   else()
+      list(FILTER _src_files EXCLUDE REGEX ".*_win")
+   endif()
+
    set(${_a_inc_files} ${_inc_files} PARENT_SCOPE)
 
 endfunction()

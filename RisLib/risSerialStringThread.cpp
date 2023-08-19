@@ -133,6 +133,13 @@ restart:
       goto restart;
    }
 
+   // Wait for modem valid.
+   if (!mSerialStringPort.doWaitForModemValid())
+   {
+      // If error then restart.
+      goto restart;
+   }
+
    // Connection was established.
    mConnectionFlag = true;
 
@@ -294,11 +301,12 @@ void SerialStringThread::processRxString(char* aString)
 //******************************************************************************
 //******************************************************************************
 // Send a null terminated string via the serial port. Append terminator
-// bytes as specified in the settings.
+// bytes as specified in the settings. Return the number of bytes 
+// transferred or a negative error code.
 
-void SerialStringThread::sendString(const char* aString)
+int SerialStringThread::doSendString(const char* aString)
 {
-   mSerialStringPort.doSendString(aString);
+   return mSerialStringPort.doSendString(aString);
 }
 
 //******************************************************************************
@@ -306,12 +314,14 @@ void SerialStringThread::sendString(const char* aString)
 //******************************************************************************
 // Send a null terminated string via the serial port. Append terminator
 // bytes as specified in the settings. The string is deleted after
-// transmission.
+// transmission. Return the number of bytes transferred or a negative
+// error code.
 
-void SerialStringThread::sendString(std::string* aString)
+int SerialStringThread::doSendString(std::string* aString)
 {
-   mSerialStringPort.doSendString(aString->c_str());
+   int tRet = mSerialStringPort.doSendString(aString->c_str());
    delete aString;
+   return tRet;
 }
 
 //******************************************************************************

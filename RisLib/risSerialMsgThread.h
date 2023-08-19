@@ -10,6 +10,7 @@ Serial port message thread.
 
 #include "risThreadsThreads.h"
 #include "risThreadsQCall.h"
+#include "risThreadsSynch.h"
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 #include "risSerialMsgPort.h"
@@ -67,6 +68,16 @@ public:
    // If true then the serial port is open. If false then it is closed
    // because of an error.
    bool mConnectionFlag;
+
+   // If true then the last serial port abort was a suspension request.
+   bool mSuspendReq;
+
+   // If true then serial port is closed and sends and receives are 
+   // suspended.
+   bool mSuspendFlag;
+
+   // If suspended then the thread blocks on this semaphore.
+   Ris::Threads::BinarySemaphore mResumeSem;
 
    // This is a qcall that is invoked when a session is established or
    // disestablished. It is registered by the parent thread at
@@ -142,10 +153,21 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a transmit message through the socket to the peer. It executes a
-   // blocking send call in the context of the calling thread. It is protected
-   // by a mutex semaphore.
-   void sendMsg (Ris::ByteContent* aMsg);
+   // Send a message via the serial port. Return the number of bytes
+   // transferred or a negative error code.
+   int doSendMsg (Ris::ByteContent* aMsg);
+
+   // Abort the serial message port blocked receive call.
+   void doAbort();
+
+   // Set the suspension request flag and abort the pending receive. This
+   // will cause the thread to close the serial port and then block on the
+   // resume semaphore.
+   void doSuspend();
+
+   // Post to the resume semaphore to wake up the thread and enter the 
+   // restart loop.
+   void doResume();
 };
 
 //******************************************************************************

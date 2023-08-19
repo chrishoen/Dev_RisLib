@@ -240,7 +240,6 @@ void MsgMetrics::updateAllVars(Ris::ByteContent* aMsg, int aMsgLength)
 
 MsgMonkey::MsgMonkey()
    : Ris::BaseMsgMonkey(
-      ProtoComm::createMsg,
       &mStoreTxMsgMetrics,
       &mStoreRxMsgMetrics)
 {
@@ -333,6 +332,16 @@ void MsgMonkey::updateTxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength)
 void MsgMonkey::updateRxMsgMetrics(Ris::ByteContent* aMsg, int aMsgLength)
 {
    mStoreRxMsgMetrics.updateAllVars(aMsg, aMsgLength);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Create a message from the message set, based on the message type.
+
+Ris::ByteContent* MsgMonkey::createMsg(int aMessageType)
+{
+   return doCreateMsg(aMessageType);
 }
 
 //******************************************************************************

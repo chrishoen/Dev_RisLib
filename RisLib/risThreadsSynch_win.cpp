@@ -59,9 +59,10 @@ void BinarySemaphore::put()
 }
 
 // Get from the semaphore, block until timeout, return true if no timeout.
-bool BinarySemaphore::get(int timeout)
+bool BinarySemaphore::get(int aTimeout)
 {
-   return WaitForSingleObject(mSpecific->mHandle,timeout) != WAIT_TIMEOUT ;
+   //if (aTimeout == 0) return true;
+   return WaitForSingleObject(mSpecific->mHandle,aTimeout) != WAIT_TIMEOUT ;
 }
 
 //******************************************************************************
@@ -113,9 +114,10 @@ void CountingSemaphore::put()
 }
 
 // Get from the semaphore, block until timeout, return true if no timeout.
-bool CountingSemaphore::get(int timeout)
+bool CountingSemaphore::get(int aTimeout)
 {
-   switch (WaitForSingleObject(mSpecific->mHandle,timeout))
+// if (aTimeout == 0) return true;
+   switch (WaitForSingleObject(mSpecific->mHandle,aTimeout))
    {
       case WAIT_OBJECT_0      : return true;  break;
       case WAIT_TIMEOUT       : return false; break;
@@ -306,4 +308,3 @@ void NamedSemaphore::get()
 //******************************************************************************
 }//namespace
 }//namespace
-

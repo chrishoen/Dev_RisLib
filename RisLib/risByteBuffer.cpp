@@ -25,6 +25,8 @@ ByteBuffer::ByteBuffer ()
 {
    mWorkingIndex = 0;
    mWorkingLength = 0;
+   mSaveIndex = 0;
+   mSaveLength = 0;
    mMarkerStartIndex = 0;
    mMarkerEndIndex = 0;
    mMarkerLength = 0;
@@ -40,6 +42,8 @@ ByteBuffer::ByteBuffer (int aSize)
 {
    mWorkingIndex = 0;
    mWorkingLength = 0;
+   mSaveIndex = 0;
+   mSaveLength = 0;
    mMarkerStartIndex = 0;
    mMarkerEndIndex = 0;
    mMarkerLength = 0;
@@ -55,6 +59,8 @@ ByteBuffer::ByteBuffer (char* aAddress,int aSize)
 {
    mWorkingIndex = 0;
    mWorkingLength = 0;
+   mSaveIndex = 0;
+   mSaveLength = 0;
    mMarkerStartIndex = 0;
    mMarkerEndIndex = 0;
    mMarkerLength = 0;
@@ -331,9 +337,22 @@ int  ByteBuffer::setMarkerEnd()
    mMarkerLength = mMarkerEndIndex - mMarkerStartIndex;
    return mMarkerLength;
 }
-int  ByteBuffer::getMarkerLength()
+int ByteBuffer::getMarkerLength()
 {
    return mMarkerLength;
+}
+
+// Save working index and length.
+void ByteBuffer::saveWorking()
+{
+   mSaveIndex = mWorkingIndex;
+   mSaveLength = mWorkingLength;
+}
+
+void ByteBuffer::restoreWorking()
+{
+   mWorkingIndex = mSaveIndex;
+   mWorkingLength = mSaveLength;
 }
 
 //******************************************************************************

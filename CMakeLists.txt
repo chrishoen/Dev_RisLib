@@ -17,6 +17,7 @@ if (MYSTANDALONE)
   return()
 endif()
 
+add_subdirectory ("ExampleQCall")
 add_subdirectory ("RisLib")
 return()
 

@@ -811,7 +811,7 @@ void ByteBuffer::show(const char* aLabel)
       if (i % 8 == 0) printf("\n");
       printf("%02x ", (unsigned char)mBaseBytes[i]);
    }
-   printf("\n");
+   printf("\n\n");
 }
 
 //******************************************************************************

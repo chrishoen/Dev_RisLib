@@ -787,18 +787,18 @@ void ByteBuffer::show(const char* aLabel, int aSize)
    printf("%s %d $ ", aLabel, mWorkingLength);
    for (int i = 0; i < aSize; i++)
    {
-      printf("%02x ", (int)mBaseBytes[i]);
+      printf("%02x ", (unsigned char)mBaseBytes[i]);
    }
    printf("\n");
 }
 
 void ByteBuffer::show(const char* aLabel)
 {
-   printf("%s %d $ ", aLabel, mWorkingLength);
+   printf("%s $ %d\n", aLabel, mWorkingLength);
    for (int i = 0; i < mWorkingLength; i++)
    {
-      printf("%02x ", (int)mBaseBytes[i]);
       if (i % 8 == 0) printf("\n");
+      printf("%02x ", (unsigned char)mBaseBytes[i]);
    }
    printf("\n");
 }

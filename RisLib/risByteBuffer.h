@@ -282,6 +282,7 @@ public:
    // Methods, helpers.
 
    void show(const char* aLabel, int tSize);
+   void show(const char* aLabel);
 };
 
 //***************************************************************************

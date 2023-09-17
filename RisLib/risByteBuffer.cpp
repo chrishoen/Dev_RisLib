@@ -785,7 +785,21 @@ void ByteBuffer::peek(int* aValue) { BB_peekValue(this, aValue, 4); }
 void ByteBuffer::show(const char* aLabel, int aSize)
 {
    printf("%s %d $ ", aLabel, mWorkingLength);
-   for (int i = 0; i < aSize; i++) printf("%02x ", (int)mBaseBytes[i]);
+   for (int i = 0; i < aSize; i++)
+   {
+      printf("%02x ", (int)mBaseBytes[i]);
+   }
+   printf("\n");
+}
+
+void ByteBuffer::show(const char* aLabel)
+{
+   printf("%s %d $ ", aLabel, mWorkingLength);
+   for (int i = 0; i < mWorkingLength; i++)
+   {
+      printf("%02x ", (int)mBaseBytes[i]);
+      if (i % 8 == 0) printf("\n");
+   }
    printf("\n");
 }
 

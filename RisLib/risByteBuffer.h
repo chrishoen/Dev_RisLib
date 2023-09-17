@@ -108,6 +108,9 @@ public:
    // Copy to does a put, copy from does a get.
    int mCopyDirection;
 
+   // If true then buffer values are little endian else big endian.
+   bool mLittleEndian;
+
    // Error code.
    int mError;
 
@@ -221,6 +224,12 @@ public:
 
    bool isCopyTo();
    bool isCopyFrom();
+
+   // Set the buffer endianess.
+   void setLittleEndian();
+   void setBigEndian();
+   bool isLittleEndian();
+   bool isBigEndian();
 
    //***************************************************************************
    //***************************************************************************

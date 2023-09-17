@@ -326,6 +326,23 @@ bool ByteBuffer::isCopyFrom ()
    return mCopyDirection==cCopyFrom;
 }
 
+void ByteBuffer::setLittleEndian()
+{
+   mLittleEndian = true;
+}
+void ByteBuffer::setBigEndian()
+{
+   mLittleEndian = false;
+}
+bool ByteBuffer::isLittleEndian()
+{
+   return mLittleEndian;
+}
+bool ByteBuffer::isBigEndian()
+{
+   return !mLittleEndian;
+}
+
 // Buffer working index marker.
 void ByteBuffer::setMarkerStart()
 {
@@ -408,7 +425,14 @@ inline void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
       // Copy bytes to buffer.
       for (int i = 0; i < aSize; i++)
       {
-         tBytes[i] = tSource[i];
+         if (aBuffer->mLittleEndian)
+         {
+            tBytes[i] = tSource[i];
+         }
+         else
+         {
+            tBytes[i] = tSource[aSize - i];
+         }
       }
 
       // Adjust buffer members.
@@ -429,7 +453,14 @@ inline void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
       // Copy bytes from buffer.
       for (int i = 0; i < aSize; i++)
       {
-         tDestin[i] = tBytes[i];
+         if (aBuffer->mLittleEndian)
+         {
+            tDestin[i] = tBytes[i];
+         }
+         else
+         {
+            tDestin[aSize - i] = tBytes[i];
+         }
       }
 
       // Adjust members.
@@ -723,7 +754,14 @@ inline void BB_peekValue(ByteBuffer* aBuffer, void* aValue, int aSize)
    // Copy bytes from buffer.
    for (int i = 0; i < aSize; i++)
    {
-      tDestin[i] = tBytes[i];
+      if (aBuffer->mLittleEndian)
+      {
+         tDestin[i] = tBytes[i];
+      }
+      else
+      {
+         tDestin[aSize - i] = tBytes[i];
+      }
    }
 }
 

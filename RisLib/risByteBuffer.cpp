@@ -31,6 +31,7 @@ ByteBuffer::ByteBuffer ()
    mMarkerEndIndex = 0;
    mMarkerLength = 0;
    mCopyDirection = cCopyTo;
+   mLittleEndian = true;
    mError = 0;
 
    mBaseBytes = 0;
@@ -48,6 +49,7 @@ ByteBuffer::ByteBuffer (int aSize)
    mMarkerEndIndex = 0;
    mMarkerLength = 0;
    mCopyDirection = cCopyTo;
+   mLittleEndian = true;
    mError = 0;
 
    mBaseBytes = (char*)malloc(aSize);
@@ -65,6 +67,7 @@ ByteBuffer::ByteBuffer (char* aAddress,int aSize)
    mMarkerEndIndex = 0;
    mMarkerLength = 0;
    mCopyDirection = cCopyTo;
+   mLittleEndian = true;
    mError = 0;
 
    mBaseBytes = aAddress;
@@ -229,6 +232,14 @@ void ByteBuffer::fillZero (int aSize)
    else
    {
       mWorkingIndex  += aSize;
+   }
+}
+
+void ByteBuffer::fillAll(unsigned char aValue)
+{
+   for (int i = 0; i < mMaxLength; i++)
+   {
+      mBaseBytes[i] = (char)aValue;
    }
 }
 
@@ -431,7 +442,7 @@ inline void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
          }
          else
          {
-            tBytes[i] = tSource[aSize - i];
+            tBytes[aSize - 1 - i] = tSource[i];
          }
       }
 
@@ -459,7 +470,7 @@ inline void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
          }
          else
          {
-            tDestin[aSize - i] = tBytes[i];
+            tDestin[i] = tBytes[aSize - 1 - i];
          }
       }
 
@@ -760,7 +771,7 @@ inline void BB_peekValue(ByteBuffer* aBuffer, void* aValue, int aSize)
       }
       else
       {
-         tDestin[aSize - i] = tBytes[i];
+         tDestin[i] = tBytes[aSize - 1 - i];
       }
    }
 }

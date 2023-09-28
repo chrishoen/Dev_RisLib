@@ -109,7 +109,7 @@ int SerialPort::doSendBytes(const char* aData, int aNumBytes)
       case WAIT_TIMEOUT:
       {
          Trc::write(mTI, 0, "SerialPort::doSendBytes TIMEOUT");
-         Prn::print(0,      "SerialPort::doSendBytes TIMEOUT");
+         //Prn::print(0,      "SerialPort::doSendBytes TIMEOUT");
          return cSerialRetTimeout;
       }
       break;

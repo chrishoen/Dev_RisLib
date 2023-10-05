@@ -67,7 +67,7 @@ bool openFile(int aLogNum, std::unique_ptr<std::string> aFilePath)
 
 bool openFileAppend(int aLogNum, const char* aFilePath)
 {            
-   mFile[aLogNum] = fopen(aFilePath, "w");
+   mFile[aLogNum] = fopen(aFilePath, "a");
 
    if (mFile[aLogNum]==0)
    {

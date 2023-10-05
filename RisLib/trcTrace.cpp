@@ -33,16 +33,16 @@ void create_buffer(int aTraceIndex, int aWriteLevel, const char* aLabel)
 
 // Create a log file for a trace. Set the initial log level
 // for the trace.
-void create_log(int aTraceIndex, int aLogLevel, const char* aFilePath)
+void create_log(int aTraceIndex, int aLogLevel, const char* aFilePath, bool aAppend)
 {
-   gTraceBuffer.doCreateLogFile(aTraceIndex, aLogLevel, aFilePath);
+   gTraceBuffer.doCreateLogFile(aTraceIndex, aLogLevel, aFilePath, aAppend);
 }
 
 // Create a log file for a trace. Set the initial log level
 // for the trace.
-void create_log(int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath)
+void create_log(int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath, bool aAppend)
 {
-   gTraceBuffer.doCreateLogFile(aTraceIndex, aLogLevel, aFilePath->c_str());
+   gTraceBuffer.doCreateLogFile(aTraceIndex, aLogLevel, aFilePath->c_str(), aAppend);
 }
 
 // Initialize.

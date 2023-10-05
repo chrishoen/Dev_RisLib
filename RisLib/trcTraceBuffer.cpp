@@ -117,13 +117,22 @@ void TraceBuffer::doCreateBuffer(int aTraceIndex, int aWriteLevel, const char* a
 // Create a log file for a trace. Set the initial log level
 // for the trace.
 
-void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aFilePath)
+void TraceBuffer::doCreateLogFile(
+   int aTraceIndex, int aLogLevel, const char* aFilePath, bool aAppend)
 {
    // Guard.
    if (aTraceIndex < 1 || aTraceIndex >= cNumTraces) return;
 
    // Create the log file.
-   mLogFile[aTraceIndex] = fopen(aFilePath, "w");
+   if (aAppend)
+   {
+      mLogFile[aTraceIndex] = fopen(aFilePath, "a");
+   }
+   else
+   {
+      mLogFile[aTraceIndex] = fopen(aFilePath, "w");
+   }
+
    if (mLogFile[aTraceIndex] == 0)
    {
       printf("TRACE ERROR COULD NOT CREATE LOG FILE %s\n", aFilePath);
@@ -137,7 +146,8 @@ void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aF
 
 // Create a log file for a trace. Set the initial log level
 // for the trace.
-void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath)
+void TraceBuffer::doCreateLogFile(
+   int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath, bool aAppend)
 {
    if (aFilePath == 0)
    {
@@ -145,7 +155,7 @@ void TraceBuffer::doCreateLogFile(int aTraceIndex, int aLogLevel, std::unique_pt
       return;
    }
 
-   doCreateLogFile(aTraceIndex, aLogLevel, aFilePath->c_str());
+   doCreateLogFile(aTraceIndex, aLogLevel, aFilePath->c_str(), aAppend);
 }
 
 //******************************************************************************

@@ -23,11 +23,13 @@ namespace Trc
 
    // Create a log file for a trace. Set the initial log level
    // for the trace.
-   void create_log(int aTraceIndex, int aLogLevel, const char* aFilePath);
+   void create_log(
+      int aTraceIndex, int aLogLevel, const char* aFilePath, bool aAppend = false);
 
    // Create a log file for a trace. Set the initial log level
    // for the trace.
-   void create_log(int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath);
+   void create_log(
+      int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath, bool aAppend = false);
 
    // Initialize.
    void initialize();

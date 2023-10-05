@@ -148,11 +148,13 @@ public:
 
    // Create a log file for a trace. Set the initial log level
    // for the trace.
-   void doCreateLogFile(int aTraceIndex, int aLogLevel, const char* aFilePath);
+   void doCreateLogFile(
+      int aTraceIndex, int aLogLevel, const char* aFilePath, bool aAppend = false);
 
    // Create a log file for a trace. Set the initial log level
    // for the trace.
-   void doCreateLogFile(int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath);
+   void doCreateLogFile(
+      int aTraceIndex, int aLogLevel, std::unique_ptr<std::string> aFilePath, bool aAppend = false);
 
    // Start a trace on a buffer pair. Reset the write index and enable writes.
    // If the buffer number is -1 then start all buffers.

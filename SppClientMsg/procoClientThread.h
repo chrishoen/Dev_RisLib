@@ -97,11 +97,11 @@ public:
 
    // Thread init function. This is called by the base class immedidately 
    // after the thread starts running. It creates and launches the 
-   // child TcpMsgClientThread.
+   // child TcpClientMsgThread.
    void threadInitFunction() override;
 
    // Thread exit function. This is called by the base class immedidately
-   // before the thread is terminated. It shuts down the child TcpMsgClientThread.
+   // before the thread is terminated. It shuts down the child TcpClientMsgThread.
    void threadExitFunction() override;
 
    // Thread shutdown function. This calls the base class shutdownThread

@@ -12,7 +12,7 @@
 #include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
-#include "risNetTcpMsgServerThread.h"
+#include "risNetTcpServerMsgThread.h"
 
 namespace Ris
 {
@@ -24,7 +24,7 @@ namespace Net
 //******************************************************************************
 // Constructor.
 
-TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
+TcpServerMsgThread::TcpServerMsgThread(Settings& aSettings)
 {
    // Base class variables.
    BaseClass::setThreadName("TcpMsgServer");
@@ -52,9 +52,9 @@ TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
 // Thread init function, base class overload.
 // It configures the sockets.
 
-void TcpMsgServerThread::threadInitFunction()
+void TcpServerMsgThread::threadInitFunction()
 {
-   Trc::write(mTI, 0, "TcpMsgServerThread::threadInitFunction");
+   Trc::write(mTI, 0, "TcpServerMsgThread::threadInitFunction");
 
    // Initialize and configure the hub socket.
    mHubSocket.initialize(mSettings);
@@ -75,9 +75,9 @@ void TcpMsgServerThread::threadInitFunction()
 // It contains a while loop that does a select call to manage the hub socket
 // and the set of node sockets.
 
-void TcpMsgServerThread::threadRunFunction()
+void TcpServerMsgThread::threadRunFunction()
 {
-   Trc::write(mTI, 0, "TcpMsgServerThread::threadRunFunction");
+   Trc::write(mTI, 0, "TcpServerMsgThread::threadRunFunction");
 
    // Top of the loop.
    mRestartCount = 0;
@@ -102,10 +102,10 @@ restart:
       BaseClass::threadSleep(1000);
    }
    tSleepFlag = true;
-   Trc::write(mTI, 0, "TcpMsgServerThread restart %d", mRestartCount);
+   Trc::write(mTI, 0, "TcpServerMsgThread restart %d", mRestartCount);
    if (tShowFlag)
    {
-      Prn::print(Prn::Show1, "TcpMsgServerThread restart %d", mRestartCount);
+      Prn::print(Prn::Show1, "TcpServerMsgThread restart %d", mRestartCount);
    }
    mRestartCount++;
 
@@ -314,7 +314,7 @@ restart:
 
    // Done.
 end:
-   Trc::write(mTI, 0, "TcpMsgServerThread::threadRunFunction done");
+   Trc::write(mTI, 0, "TcpServerMsgThread::threadRunFunction done");
    return;
 }
 
@@ -324,7 +324,7 @@ end:
 // Thread exit function, base class overload.
 // It closes all open sockets.
 
-void TcpMsgServerThread::threadExitFunction()
+void TcpServerMsgThread::threadExitFunction()
 {
    mHubSocket.doClose();
    for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
@@ -344,16 +344,16 @@ void TcpMsgServerThread::threadExitFunction()
 // session is disestablished. It invokes the mSessionQCall that is
 // registered at initialization.
 
-void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablished)
+void TcpServerMsgThread::processSessionChange(int aSessionIndex,bool aEstablished)
 {
    // Trace.
    if (aEstablished)
    {
-      Trc::write(mTI, 0, "TcpMsgServerThread CONNECTED");
+      Trc::write(mTI, 0, "TcpServerMsgThread CONNECTED");
    }
    else
    {
-      Trc::write(mTI, 0, "TcpMsgServerThread DISCONNECTED");
+      Trc::write(mTI, 0, "TcpServerMsgThread DISCONNECTED");
    }
 
    // Invoke the session qcall to notify that a session has
@@ -368,7 +368,7 @@ void TcpMsgServerThread::processSessionChange(int aSessionIndex,bool aEstablishe
 // threadRunFunction when a message is received. It invokes the
 // mRxMsgQCall that is registered at initialization.
 
-void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
+void TcpServerMsgThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 {
    // Invoke the receive QCall.
    mRxMsgQCall(aSessionIndex,aMsg);
@@ -381,7 +381,7 @@ void TcpMsgServerThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 // to the client. It executes a blocking send() call in the context of
 // the calling thread. It is protected by a mutex semaphore.
 
-void TcpMsgServerThread::sendMsg(int aSessionIndex, ByteContent* aMsg)
+void TcpServerMsgThread::sendMsg(int aSessionIndex, ByteContent* aMsg)
 {
    if (!aMsg) return;
 

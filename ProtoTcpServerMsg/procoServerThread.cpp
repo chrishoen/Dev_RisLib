@@ -67,7 +67,7 @@ void ServerThread::showThreadInfo()
 //******************************************************************************
 // Thread init function. This is called by the base class immedidately 
 // after the thread starts running. It creates and launches the 
-// child TcpMsgServerThread.
+// child TcpServerMsgThread.
 
 void ServerThread::threadInitFunction()
 {
@@ -85,7 +85,7 @@ void ServerThread::threadInitFunction()
    Trc::start(11);
 
    // Create the child thread with the settings.
-   mMsgThread = new Ris::Net::TcpMsgServerThread(tSettings);
+   mMsgThread = new Ris::Net::TcpServerMsgThread(tSettings);
 
    // Launch the child thread.
    mMsgThread->launchThread();
@@ -97,7 +97,7 @@ void ServerThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immedidately
-// before the thread is terminated. It shuts down the child TcpMsgServerThread.
+// before the thread is terminated. It shuts down the child TcpServerMsgThread.
 
 void ServerThread::threadExitFunction()
 {

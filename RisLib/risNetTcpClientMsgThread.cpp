@@ -12,7 +12,7 @@
 #include "trcTrace.h"
 
 #include "risThreadsPriorities.h"
-#include "risNetTcpMsgClientThread.h"
+#include "risNetTcpClientMsgThread.h"
 
 namespace Ris
 {
@@ -24,7 +24,7 @@ namespace Net
 //******************************************************************************
 // Constructor.
 
-TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
+TcpClientMsgThread::TcpClientMsgThread(Settings& aSettings)
 {
    // Base class variables.
    BaseClass::setThreadName("TcpMsgClient");
@@ -51,9 +51,9 @@ TcpMsgClientThread::TcpMsgClientThread(Settings& aSettings)
 // Thread init function, base class overload.
 // It initializes the socket.
 
-void TcpMsgClientThread::threadInitFunction()
+void TcpClientMsgThread::threadInitFunction()
 {
-   Trc::write(mTI, 0, "TcpMsgClientThread::threadInitFunction");
+   Trc::write(mTI, 0, "TcpClientMsgThread::threadInitFunction");
 
    // Initialize the socket.
    mSocket.initialize(mSettings);
@@ -66,9 +66,9 @@ void TcpMsgClientThread::threadInitFunction()
 // after the thread init function. It runs a loop that blocks on 
 // socket connect/receives and then processes them.
 
-void TcpMsgClientThread::threadRunFunction()
+void TcpClientMsgThread::threadRunFunction()
 {
-   Trc::write(mTI, 0, "TcpMsgClientThread::threadRunFunction");
+   Trc::write(mTI, 0, "TcpClientMsgThread::threadRunFunction");
 
    // Top of the loop.
    mRestartCount = 0;
@@ -95,10 +95,10 @@ restart:
       BaseClass::threadSleep(1000);
    }
    tSleepFlag = true;
-   Trc::write(mTI, 0, "TcpMsgClientThread restart %3d $ %3d", mRestartCount,tRestartCode);
+   Trc::write(mTI, 0, "TcpClientMsgThread restart %3d $ %3d", mRestartCount,tRestartCode);
    if (tShowFlag)
    {
-      Prn::print(Prn::Show1, "TcpMsgClientThread restart %3d $ %3d", mRestartCount, tRestartCode);
+      Prn::print(Prn::Show1, "TcpClientMsgThread restart %3d $ %3d", mRestartCount, tRestartCode);
    }
    mRestartCount++;
 
@@ -199,7 +199,7 @@ receive:
 
    // Done.
 end:
-   Trc::write(mTI, 0, "TcpMsgClientThread::threadRunFunction done");
+   Trc::write(mTI, 0, "TcpClientMsgThread::threadRunFunction done");
    return;
 }
 
@@ -208,7 +208,7 @@ end:
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void TcpMsgClientThread::threadExitFunction()
+void TcpClientMsgThread::threadExitFunction()
 {
 }
 
@@ -223,7 +223,7 @@ void TcpMsgClientThread::threadExitFunction()
 // then the terminate request flag will be polled and the the
 // threadRunFunction will exit.
 
-void TcpMsgClientThread::shutdownThread()
+void TcpClientMsgThread::shutdownThread()
 {
    BaseThread::mTerminateFlag = true;
 
@@ -240,7 +240,7 @@ void TcpMsgClientThread::shutdownThread()
 // session is disestablished. It invokes the mSessionQCall that is
 // registered at initialization.
 
-void TcpMsgClientThread::processSessionChange(bool aEstablished)
+void TcpClientMsgThread::processSessionChange(bool aEstablished)
 {
    // Guard.
    if (!mSessionQCall.isValid())
@@ -251,11 +251,11 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
 
    if (aEstablished)
    {
-      Trc::write(mTI, 0, "TcpMsgClientThread CONNECTED");
+      Trc::write(mTI, 0, "TcpClientMsgThread CONNECTED");
    }
    else
    {
-      Trc::write(mTI, 0, "TcpMsgClientThread DISCONNECTED");
+      Trc::write(mTI, 0, "TcpClientMsgThread DISCONNECTED");
    }
 
    // Invoke the session qcall to notify that a session has been established
@@ -270,7 +270,7 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
 // threadRunFunction when a message is received. It invokes the
 // mRxMsgQCall that is registered at initialization.
 
-void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
+void TcpClientMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Guard.
    if (!mRxMsgQCall.isValid()) return;
@@ -286,7 +286,7 @@ void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
 // blocking send call in the context of the calling thread. It is protected
 // by a mutex semaphore.
 
-void TcpMsgClientThread::sendMsg(ByteContent* aMsg)
+void TcpClientMsgThread::sendMsg(ByteContent* aMsg)
 {
    if (!aMsg) return;
 

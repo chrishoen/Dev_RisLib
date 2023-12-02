@@ -9,7 +9,7 @@ Udp message prototype thread class.
 //******************************************************************************
 
 #include "risThreadsQCallThread.h"
-#include "risNetTcpMsgClientThread.h"
+#include "risNetTcpClientMsgThread.h"
 
 #include "procoMsg.h"
 
@@ -61,7 +61,7 @@ public:
 
    // Tcp message thread, this manages tcp message connections and
    // message transmission and reception.
-   Ris::Net::TcpMsgClientThread* mMsgThread;
+   Ris::Net::TcpClientMsgThread* mMsgThread;
 
    // Message monkey used by mMsgThread.
    MsgMonkey* mMsgMonkey;
@@ -96,11 +96,11 @@ public:
 
    // Thread init function. This is called by the base class immedidately 
    // after the thread starts running. It creates and launches the 
-   // child TcpMsgClientThread.
+   // child TcpClientMsgThread.
    void threadInitFunction() override;
 
    // Thread exit function. This is called by the base class immedidately
-   // before the thread is terminated. It shuts down the child TcpMsgClientThread.
+   // before the thread is terminated. It shuts down the child TcpClientMsgThread.
    void threadExitFunction() override;
 
    // Thread shutdown function. This calls the base class shutdownThread
@@ -122,7 +122,7 @@ public:
    // qcall registered to the mTcpMsgThread child thread. It is invoked when
    // a session is established or disestablished (when this client connects or
    // disconnects to the server). 
-   Ris::Net::TcpMsgClientThread::SessionQCall mSessionQCall;
+   Ris::Net::TcpClientMsgThread::SessionQCall mSessionQCall;
 
    // Maintain session state variables. When a connection is established it
    // sends a FirstMessage to the server to inform it of it's identity.This is
@@ -136,7 +136,7 @@ public:
 
    // qcall registered to the mTcpMsgThread child thread. It is invoked when
    // a message is received. It process the received messages.
-   Ris::Net::TcpMsgClientThread::RxMsgQCall mRxMsgQCall;
+   Ris::Net::TcpClientMsgThread::RxMsgQCall mRxMsgQCall;
 
    // Call one of the specific receive message handlers. This is bound to the
    // qcall.

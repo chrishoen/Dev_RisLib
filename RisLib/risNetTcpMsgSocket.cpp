@@ -168,6 +168,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
       Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID READ");
       return false;
    }
+   Trc::write(mTI, 0, "TcpMsgSocket::doReceiveMsg recv header");
 
    // Set the buffer length.
    tByteBuffer.setLength(tHeaderLength);
@@ -205,6 +206,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
       printf("TcpMsgSocket ERROR INVALID RECV\n");
       return false;
    }
+   Trc::write(mTI, 0, "TcpMsgSocket::doReceiveMsg payload %d", tPayloadLength);
 
    // Set the buffer length.
    tByteBuffer.setLength(mMsgMonkey->mMessageLength);

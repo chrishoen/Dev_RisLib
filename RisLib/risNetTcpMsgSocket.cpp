@@ -234,7 +234,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    mMsgMonkey->updateRxMsgMetrics(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
-   Trc::write(mTI, 1, "doReceiveMsg done %d %d", mRxCount, mMsgMonkey->mMessageLength);
+   Trc::write(mTI, 1, "doReceiveMsg %d %d", mRxCount, mMsgMonkey->mMessageLength);
    mRxCount++;
    return true;
 }

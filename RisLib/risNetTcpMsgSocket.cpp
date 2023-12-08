@@ -168,7 +168,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
       Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID READ");
       return false;
    }
-   Trc::write(mTI, 0, "TcpMsgSocket::doReceiveMsg recv header");
+   Trc::write(mTI, 9, "TcpMsgSocket::doReceiveMsg recv header");
 
    // Set the buffer length.
    tByteBuffer.setLength(tHeaderLength);
@@ -206,7 +206,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
       printf("TcpMsgSocket ERROR INVALID RECV\n");
       return false;
    }
-   Trc::write(mTI, 0, "TcpMsgSocket::doReceiveMsg payload %d", tPayloadLength);
+   Trc::write(mTI, 9, "TcpMsgSocket::doReceiveMsg payload %d", tPayloadLength);
 
    // Set the buffer length.
    tByteBuffer.setLength(mMsgMonkey->mMessageLength);
@@ -234,6 +234,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    mMsgMonkey->updateRxMsgMetrics(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
+   Trc::write(mTI, 1, "TcpMsgSocket::doReceiveMsg done %d %d", mRxCount, mMsgMonkey->mMessageLength);
    mRxCount++;
    return true;
 }
@@ -284,7 +285,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    delete aMsg;
 
    // Done.
-   Trc::write(mTI, 4, "TcpMsgSocket doSendMsg %d", mTxLength);
+   Trc::write(mTI, 1, "TcpMsgSocket doSendMsg %d", mTxLength);
    return tRet;
 }
 

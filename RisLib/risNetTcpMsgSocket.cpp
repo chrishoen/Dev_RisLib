@@ -234,7 +234,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    mMsgMonkey->updateRxMsgMetrics(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
-   Trc::write(mTI, 1, "TcpMsgSocket::doReceiveMsg done %d %d", mRxCount, mMsgMonkey->mMessageLength);
+   Trc::write(mTI, 1, "doReceiveMsg done %d %d", mRxCount, mMsgMonkey->mMessageLength);
    mRxCount++;
    return true;
 }
@@ -266,7 +266,6 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Transmit the buffer.
    mTxLength = tByteBuffer.getLength();
    bool tRet = doSend(tByteBuffer.getBaseAddress(), mTxLength);
-   mTxCount++;
 
    if (tRet)
    {
@@ -285,7 +284,8 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    delete aMsg;
 
    // Done.
-   Trc::write(mTI, 1, "TcpMsgSocket doSendMsg %d", mTxLength);
+   Trc::write(mTI, 1, "doSendMsg %d %d", mTxCount, mTxLength);
+   mTxCount++;
    return tRet;
 }
 

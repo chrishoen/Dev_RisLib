@@ -273,8 +273,8 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    }
    else
    {
-      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID SEND\n");
-      printf("TcpMsgSocket ERROR INVALID SEND\n");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID SEND %d\n", mError);
+      printf("TcpMsgSocket ERROR INVALID SEND %d\n", mError);
    }
 
    // Metrics.

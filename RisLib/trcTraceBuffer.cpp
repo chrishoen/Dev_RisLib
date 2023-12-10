@@ -46,6 +46,7 @@ namespace Trc
          mTraceLabel[i][0] = 0;
          mFirstTimetag = 0;
          mWriteFirstFlag = false;
+         mUseAbsoluteTime = true;
       }
       mTraceIndexSet.clear();
       mInitFlag = false;
@@ -312,21 +313,33 @@ void TraceBuffer::doWrite(int aTraceIndex, int aLevel, const char* aString)
    // Lock.
    mMutex[aTraceIndex]->lock();
 
-   // Get a timetag from the program time.
-   double tTimetag = Ris::getProgramTime();
-
-   // Store the first timetag.
-   if (mWriteFirstFlag)
+   // Get a timetag string.
+   char tTimetagString[40];
+   if (mUseAbsoluteTime)
    {
-      mWriteFirstFlag = false;
-      mFirstTimetag = tTimetag;
+      my_timestamp4(tTimetagString);
+      strcat(tTimetagString, " $ ");
    }
+   else
+   {
+      // Get a timetag from the program time.
+      double tTimetag = Ris::getProgramTime();
+      sprintf(tTimetagString, "%7.3f $ ", tTimetag);
+
+      // Store the first timetag.
+      if (mWriteFirstFlag)
+      {
+         mWriteFirstFlag = false;
+         mFirstTimetag = tTimetag;
+      }
+   }
+
 
    // 
    // Add the timetag and the input string to a temp string.
    char tString[cMaxStringSize + 1];
-   snprintf(tString, cMaxStringSize, "%7.3f $ %s", tTimetag, aString);
-   tString[cMaxStringSize] = 0;
+   strcpy(tString, tTimetagString);
+   strcat(tString, aString);
 
    // Write to the buffers.
    if (tWriteToBuffer)
@@ -414,11 +427,20 @@ void TraceBuffer::doShowFirst(int aTraceIndex, int aShowSize)
 void TraceBuffer::doShowLast(int aTraceIndex, int aShowSize)
 {
    if (!isValidTrace(aTraceIndex)) return;
-   printf("TRACE LAST******************************* %d %d %.3f %.3f\n",
-      aTraceIndex,
-      aShowSize,
-      mFirstTimetag,
-      Ris::getProgramTime());
+   if (mUseAbsoluteTime)
+   {
+      printf("TRACE LAST******************************* %d %d\n",
+         aTraceIndex,
+         aShowSize);
+   }
+   else
+   {
+      printf("TRACE LAST******************************* %d %d %.3f %.3f\n",
+         aTraceIndex,
+         aShowSize,
+         mFirstTimetag,
+         Ris::getProgramTime());
+   }
 
    if (mNextWriteIndex[aTraceIndex] == 0)
    {

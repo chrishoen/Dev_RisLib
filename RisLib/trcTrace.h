@@ -55,7 +55,11 @@ namespace Trc
    // Set default show trace index.
    void set_default_trace_index(int aTraceIndex);
 
-//******************************************************************************
+   // Use absolute or program time for timetag.
+   void use_absolute_timetag();
+   void use_program_timetag();
+
+   //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace

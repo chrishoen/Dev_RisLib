@@ -75,7 +75,7 @@ void TcpMsgSocket::configure(bool aShowFlag)
    BaseClass::reset();
    BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
-   BaseClass::setOptionKeepAlive();
+   //BaseClass::setOptionKeepAlive();
    BaseClass::setOptionNoDelay();
    BaseClass::setOptionDontLinger();
 

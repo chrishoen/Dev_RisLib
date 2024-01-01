@@ -635,8 +635,44 @@ char* my_stringLL(char* aString, long long aValue)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Return a ipv4 address in host order converted from a string.
+
+unsigned my_ipv4_addr_from_string(const char* aString)
+{
+   unsigned tA0 = 0;
+   unsigned tA1 = 0;
+   unsigned tA2 = 0;
+   unsigned tA3 = 0;
+
+   if (sscanf(aString, "%u.%u.%u.%u", &tA3, &tA2, &tA1, &tA0) != 4)
+   {
+      return 0;
+   }
+
+   return (tA3 << 24) | (tA2 << 16) | (tA1 << 8) | (tA0);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a string converted from an ipv4 address in host order.
+
+char* my_string_from_ipv4_addr(char* aBuffer, unsigned aAddress)
+{
+   sprintf(aBuffer, "%lu.%lu.%lu.%lu",
+      (aAddress >> 24),
+      (aAddress >> 16 & 0xff),
+      (aAddress >> 8 & 0xff),
+      (aAddress & 0xff));
+   return aBuffer;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 void my_halt(char* aString)
 {
    printf("HALT$HALT$HALT$HALT$HALT$$$$ %s\n",aString);
    exit(-1);
 }
+

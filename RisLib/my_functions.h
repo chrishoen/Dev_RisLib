@@ -154,6 +154,17 @@ bool my_compare_files (char* aFile1Path, char* aFile2Path, int aNumOfBytes);
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// IP.
+
+// Return an ipv4 address in host order converted from a string.
+unsigned my_ipv4_addr_from_string(const char* aString);
+
+// Return a string converted from an ipv4 address in host order.
+char* my_string_from_ipv4_addr(char* aBuffer, unsigned aAddress);
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Program halt.
 
 void my_halt(char* aString=0);

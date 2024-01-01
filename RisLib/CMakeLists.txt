@@ -13,9 +13,12 @@ if (RISLIB_STANDALONE)
 endif()
 
 
-if (MSVC)
+if (MYMODE STREQUAL "prime-windows")
    install(FILES ${inc_files} DESTINATION "C:/ProgramData/MyLib/include/RisLib")
    install(TARGETS ${project} DESTINATION "C:/ProgramData/MyLib/lib")
+elseif (MYMODE STREQUAL "prime-windows-x86")
+   install(FILES ${inc_files} DESTINATION "C:/ProgramData/MyLib/include/RisLib")
+   install(TARGETS ${project} DESTINATION "C:/ProgramData/MyLib/libwin32")
 elseif(MYMODE STREQUAL "prime-x64")
    install(FILES ${inc_files} DESTINATION "/opt/prime/include/RisLib")
    install(TARGETS ${project} DESTINATION "/opt/prime/lib/x64")

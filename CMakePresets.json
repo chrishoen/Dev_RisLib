@@ -34,6 +34,25 @@
          }
       },
       {
+         "name": "prime-windows-x86",
+         "displayName": "prime-windows-x86",
+         "description": "Target Windows, install to c:/aaa_prime/RisLib. (Release)",
+         "inherits": "base",
+         "architecture": {
+            "value": "x86",
+            "strategy": "external"
+         },
+         "cacheVariables": {
+            "CMAKE_C_COMPILER": "cl.exe",
+            "CMAKE_CXX_COMPILER": "cl.exe",
+            "CMAKE_BUILD_TYPE": "Release",
+            "MYMODE": {
+               "type": "STRING",
+               "value": "prime-windows-x86"
+            }
+         }
+      },
+      {
          "name": "prime-arm7",
          "displayName": "prime-arm7",
          "description": "Target debian arm7 for beaglebone or rpi, install to /opt/prime",

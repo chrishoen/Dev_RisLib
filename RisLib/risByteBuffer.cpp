@@ -75,6 +75,24 @@ ByteBuffer::ByteBuffer (char* aAddress,int aSize)
    mMemAllocCode = 0;
 }
 
+void ByteBuffer::initialize(char* aAddress, int aSize)
+{
+   mWorkingIndex = 0;
+   mWorkingLength = 0;
+   mSaveIndex = 0;
+   mSaveLength = 0;
+   mMarkerStartIndex = 0;
+   mMarkerEndIndex = 0;
+   mMarkerLength = 0;
+   mCopyDirection = cCopyTo;
+   mLittleEndian = true;
+   mError = 0;
+
+   mBaseBytes = aAddress;
+   mMaxLength = aSize;
+   mMemAllocCode = 0;
+}
+
 ByteBuffer::~ByteBuffer ()
 {
    if(mMemAllocCode)

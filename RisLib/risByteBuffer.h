@@ -135,6 +135,9 @@ public:
    // It's associated destructor does not do a memory free  operation.
    ByteBuffer(char* aAddress,int aSize);
 
+   // Same.
+   void initialize(char* aAddress, int aSize);
+
    // Deallocates any allocated memory.
   ~ByteBuffer();
    

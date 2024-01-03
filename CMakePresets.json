@@ -45,7 +45,7 @@
          "cacheVariables": {
             "CMAKE_C_COMPILER": "cl.exe",
             "CMAKE_CXX_COMPILER": "cl.exe",
-            "CMAKE_BUILD_TYPE": "Release",
+            "CMAKE_BUILD_TYPE": "Debug",
             "MYMODE": {
                "type": "STRING",
                "value": "prime-windows-x86"

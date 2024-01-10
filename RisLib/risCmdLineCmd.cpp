@@ -262,6 +262,29 @@ unsigned int CmdLineCmd::argUnsigned(int aArgIndex)
 //******************************************************************************
 // Return argument value.
 
+unsigned long long CmdLineCmd::argULL(int aArgIndex)
+{
+   unsigned long long tValue = 0;
+
+   // Guard.
+   if (!mArgFlag[aArgIndex]) return 0;
+
+   // Convert argument string.
+   sscanf(mArgPtr[aArgIndex], "%lld", &tValue);
+   if (tValue == 0)
+   {
+      sscanf(mArgPtr[aArgIndex], "%llx", &tValue);
+   }
+
+   // Return argument value.
+   return tValue;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return argument value.
+
 bool CmdLineCmd::argBool(int aArgIndex)
 {
    // Guard.
@@ -490,6 +513,21 @@ void CmdLineCmd::setArgDefaultUnsigned(int aArgIndex, unsigned aValue)
    if (aArgIndex <= mArgNum) return;
 
    sprintf(mArgPtr[aArgIndex],"%d",aValue);
+
+   mArgFlag[aArgIndex] = true;
+   mArgNum = aArgIndex;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Set default argument.
+
+void CmdLineCmd::setArgDefaultULL(int aArgIndex, unsigned long long aValue)
+{
+   if (aArgIndex <= mArgNum) return;
+
+   sprintf(mArgPtr[aArgIndex], "%lld", aValue);
 
    mArgFlag[aArgIndex] = true;
    mArgNum = aArgIndex;

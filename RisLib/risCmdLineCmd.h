@@ -128,13 +128,14 @@ public:
    // Return an argument from the command line.
    // These are given the argument index, such that argInt(1) returns the
    // first argument as an integer and argInt(2) returns the second argument.
-   int      argInt        (int aArgIndex);
-   unsigned argUnsigned   (int aArgIndex);
-   bool     argBool       (int aArgIndex);
-   double   argDouble     (int aArgIndex);
-   float    argFloat      (int aArgIndex);
-   double   argAngle      (int aArgIndex);
-   char*    argString     (int aArgIndex);
+   int                argInt        (int aArgIndex);
+   unsigned           argUnsigned   (int aArgIndex);
+   unsigned long long argULL        (int aArgIndex);
+   bool               argBool       (int aArgIndex);
+   double             argDouble     (int aArgIndex);
+   float              argFloat      (int aArgIndex);
+   double             argAngle      (int aArgIndex);
+   char*              argString     (int aArgIndex);
 
    // Test argument against a string.
    // It compares the argument with the string.
@@ -154,11 +155,12 @@ public:
 
    // Set defaults for arguments from the command line.
    // These are used as defaults if no arguments are entered.
-   void setArgDefault         (int argIndex,  int      aValue);
-   void setArgDefaultUnsigned (int aArgIndex, unsigned aValue);
-   void setArgDefault         (int argIndex,  bool     aValue);
-   void setArgDefault         (int argIndex,  double   aValue);
-   void setArgDefault         (int argIndex,  char*    aString);
+   void setArgDefault           (int argIndex,  int      aValue);
+   void setArgDefaultUnsigned   (int aArgIndex, unsigned aValue);
+   void setArgDefaultULL        (int aArgIndex, unsigned long long aValue);
+   void setArgDefault           (int argIndex,  bool     aValue);
+   void setArgDefault           (int argIndex,  double   aValue);
+   void setArgDefault           (int argIndex,  char*    aString);
 
    //***************************************************************************
    //***************************************************************************

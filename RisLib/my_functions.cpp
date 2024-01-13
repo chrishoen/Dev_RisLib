@@ -659,7 +659,7 @@ unsigned my_ipv4_addr_from_string(const char* aString)
 
 char* my_string_from_ipv4_addr(char* aBuffer, unsigned aAddress)
 {
-   sprintf(aBuffer, "%lu.%lu.%lu.%lu",
+   sprintf(aBuffer, "%u.%u.%u.%u",
       (aAddress >> 24),
       (aAddress >> 16 & 0xff),
       (aAddress >> 8 & 0xff),

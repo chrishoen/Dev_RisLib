@@ -29,7 +29,7 @@ void main_initialize()
    Ris::setBaseDirectoryToCurrent();
 
    // Set the process priority class.
-   Ris::Threads::enterProcessHigh();
+   ////Ris::Threads::enterProcessHigh();
 
    //***************************************************************************
    //***************************************************************************
@@ -94,7 +94,7 @@ void main_finalize()
    Trc::finalize();
 
    // Exit process
-   Ris::Threads::exitProcess();
+   ////Ris::Threads::exitProcess();
 
    printf("ProtoUdpMsg Program**********************************************BEGIN\n");
 }

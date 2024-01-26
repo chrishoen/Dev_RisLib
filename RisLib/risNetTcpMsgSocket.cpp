@@ -165,7 +165,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    // Returning false means socket was closed.
    if (!tRet || tStatus<=0)
    {
-      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID READ");
+      Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID READ %d", mError);
       return false;
    }
    Trc::write(mTI, 9, "TcpMsgSocket::doReceiveMsg recv header");
@@ -265,7 +265,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 
    // Transmit the buffer.
    mTxLength = tByteBuffer.getLength();
-   bool tRet = doSend(tByteBuffer.getBaseAddress(), mTxLength);
+   bool tRet = BaseClass::doSend(tByteBuffer.getBaseAddress(), mTxLength);
 
    if (tRet)
    {

@@ -257,7 +257,7 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
       return false;
    }
 
-   // Create a byte buffer from preallocated memory.
+   // Create a byte buffer using heap memory.
    ByteBuffer tByteBuffer(mMemorySize);
 
    // Copy the message to the buffer.

@@ -252,7 +252,7 @@ bool UdpStringSocket::doSendString(const char* aString)
 
    // Transmit the string.
    bool tRet = false;
-   int mTxLength = (int)strlen(aString);
+   int mTxLength = (int)strlen(aString) + 1;
    if (!mSettings.mUdpWrapFlag)
    {
       // If this is not wrapping then send to the remote address.

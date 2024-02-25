@@ -31,13 +31,6 @@ public:
    //***************************************************************************
    // Constants.
 
-   // Maximum string size.
-   static const int cMaxLabelStringSize = 100;
-   static const int cMaxExceptionStringSize = 200;
-
-   // Maximum number of bits.
-   static const int cMaxBits = 32;
-
    // Throw codes.
    static const int cAbortException   = 666;
    static const int cTimeoutException = 667;
@@ -48,19 +41,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // Label string.
-   char mLabel[cMaxLabelStringSize + 2];
-
-   // Array of mask bits.
-   bool mMask[cMaxBits];
-
-   // Array of latch bits.
-   bool mLatch[cMaxBits];
-
-   // If this flag is true then the setting of any masked latch bit will
-   // cause an event to be signaled. If this flag is false then the setting
-   // of all masked latch bits will cause an event to be signaled.
-   bool mAnyFlag;
+   // If this flag is true then a notify event occured.
+   bool mEventFlag;
 
    // Error code. If not zero then an error occurred. This is set by
    // notifiers.
@@ -68,9 +50,6 @@ public:
 
    // This indicates the cause of an exception.
    int mExceptionCode;
-
-   // Exception description string.
-   char mException[cMaxExceptionStringSize + 2];
 
    // If this true then notification operations are disabled.
    bool mLock;
@@ -110,24 +89,6 @@ public:
    //***************************************************************************
    // Methods. These are used to initialize and wait for notifications.
 
-   // Test for exceptions. Test for suspensions. Clear all of the mask and
-   // latch bits and set a single mask bit. These are called before waiting
-   // for a notification. 
-   void setMaskOne(int aBitNum);
-   void setMaskOne(const char* aLabel,int aBitNum);
-
-   // Test for exceptions. Test for suspensions. Clear all of the mask and
-   // latch bits and set a variable list of mask bits. Set the trap condition
-   // for OR. These are called before waiting for a notification. 
-   void setMaskAny(int aNumArgs, ...);
-   void setMaskAny(const char* aLabel,int aNumArgs, ...);
-
-   // Test for exceptions. Test for suspensions. Clear all of the mask and
-   // latch bits and set a variable list of mask bits. Set the trap condition
-   // for AND. These are called before waiting for a notification. 
-   void setMaskAll(int aNumArgs, ...);
-   void setMaskAll(const char* aLabel,int aNumArgs, ...);
-
    // Test for an exception condition. If an abort, timeout, or error has
    // occurred then throw the corresponding exception.
    void testException();
@@ -147,12 +108,12 @@ public:
 
    // Set a bit in the bit latch and conditionally signal the event semaphore.
    // This wakes up a thread that is waiting for a notification.
-   void notify(int aBitNum);
+   void notify();
 
    // Set a bit in the bit latch and conditionally signal the event semaphore.
    // Also set the error flag and error code. This wakes up a thread that is
    // waiting for a notification.
-   void notifyError(int aBitNum,int aError);
+   void notifyError(int aError);
 
    // Set the abort flag and signal the event semaphore. This will abort any 
    // of the above set, test, or wait calls.

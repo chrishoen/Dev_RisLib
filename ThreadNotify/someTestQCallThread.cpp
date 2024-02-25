@@ -83,12 +83,13 @@ void TestQCallThread::executeTest1(int aTimeout)
 
    try
    {
-      mNotify.setMaskOne("label1",1);
+      mNotify.reset();
       mNotify.wait(aTimeout);
    }
    catch (int aException)
    {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest1 %d %s", aException,mNotify.mException);
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest1 %d %d",
+         aException,mNotify.mExceptionCode);
    }
 
    Prn::print(Prn::View11, "Test1 END");
@@ -105,12 +106,13 @@ void TestQCallThread::executeTest2(int aTimeout)
 
    try
    {
-      mNotify.setMaskAny("label1", 2, 1, 2);
+      mNotify.reset();
       mNotify.wait(aTimeout);
    }
    catch (int aException)
    {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest2 %d %s", aException, mNotify.mException);
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest2 %d %d", 
+         aException, mNotify.mExceptionCode);
    }
 
    Prn::print(Prn::View11, "Test2 END");
@@ -127,12 +129,13 @@ void TestQCallThread::executeTest3(int aTimeout)
 
    try
    {
-      mNotify.setMaskAll("label1", 2, 1, 2);
+      mNotify.reset();
       mNotify.wait(aTimeout);
    }
    catch (int aException)
    {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest3 %d %s", aException, mNotify.mException);
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest3 %d %d", 
+         aException, mNotify.mExceptionCode);
    }
 
    Prn::print(Prn::View11, "Test3 END");
@@ -158,7 +161,8 @@ void TestQCallThread::executeTest4(int aTimeout)
    }
    catch (int aException)
    {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest4 %d %s", aException, mNotify.mException);
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest4 %d %s", 
+         aException, mNotify.mExceptionCode);
    }
 
    Prn::print(Prn::View11, "Test4 END");

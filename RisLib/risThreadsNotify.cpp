@@ -36,15 +36,8 @@ Notify::Notify()
 void Notify::reset()
 {
    mLock = true;
-   for (int i = 0; i < cMaxBits; i++)
-   {
-      mMask[i]   = false;
-      mLatch[i]  = false;
-   }
    mErrorCode = 0;
-   mLabel[0] = 0;
-   mException[0] = 0;
-   mAnyFlag = false;
+   mEventFlag = false;
    mAbortFlag = false;
    mTimeoutFlag = false;
    mErrorFlag = 0;
@@ -53,6 +46,7 @@ void Notify::reset()
 
 void Notify::clearFlags()
 {
+   mEventFlag = false;
    mAbortFlag = false;
    mTimeoutFlag = false;
    mErrorFlag = 0;
@@ -61,229 +55,29 @@ void Notify::clearFlags()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Clear all of the mask and latch bits and set a single mask bit.
+// Set the event flag and signal the event semaphore.
 
-void Notify::setMaskOne(int aBitNum)
+void Notify::notify()
 {
-   // Test for exception conditions.
-   testException();
-
-   // Reset all variables and reset the event semaphore.
-   reset();
-
-   // Set the mask bit.
-   mMask[aBitNum] = true;
-
-   // Set the any flag for the OR trap condition.
-   mAnyFlag = true;
-
-   // Enable notifications.
-   mLock = false;
+   // Set the flag.
+   mEventFlag = true;
+   // Signal the event.
+   mSem.put();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Clear all of the mask and latch bits and set a single mask bit.
+// Set the error flag and signal the event semaphore.
 
-void Notify::setMaskOne(const char* aLabel,int aBitNum)
+void Notify::notifyError(int aError)
 {
-   // Test for exception conditions.
-   testException();
-
-   // Reset all variables and reset the event semaphore.
-   reset();
-
-   // Set the label.
-   my_strncpy(mLabel, aLabel, cMaxLabelStringSize);
-
-   // Set the mask bit.
-   mMask[aBitNum] = true;
-
-   // Set the any flag for the OR trap condition.
-   mAnyFlag = true;
-
-   // Enable notifications.
-   mLock = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Clear all of the mask and latch bits and set a variable list of mask bits.
-// Set the trap condition for OR.
-
-void Notify::setMaskAny(int aNumArgs, ...)
-{
-   // Test for exception conditions.
-   testException();
-
-   // Reset all variables and reset the event semaphore.
-   reset();
-
-   // Set the mask bit from variable arguments.
-   va_list valist;
-   va_start(valist, aNumArgs);
-   for (int i = 0; i < aNumArgs; i++)
-   {
-      int tBitNum = va_arg(valist, int);
-      mMask[tBitNum] = true;
-   }
-   va_end(valist);
-
-   // Set the any flag for the OR trap condition.
-   mAnyFlag = true;
-
-   // Enable notifications.
-   mLock = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Clear all of the mask and latch bits and set a variable list of mask bits.
-// Set the trap condition for OR.
-
-void Notify::setMaskAny(const char* aLabel,int aNumArgs, ...)
-{
-   // Test for exception conditions.
-   testException();
-
-   // Reset all variables and reset the event semaphore.
-   reset();
-
-   // Set the label.
-   my_strncpy(mLabel, aLabel, cMaxLabelStringSize);
-
-   // Set the mask bit from variable arguments.
-   va_list valist;
-   va_start(valist, aNumArgs);
-   for (int i = 0; i < aNumArgs; i++)
-   {
-      int tBitNum = va_arg(valist, int);
-      mMask[tBitNum] = true;
-   }
-   va_end(valist);
-
-   // Set the any flag for the OR trap condition.
-   mAnyFlag = true;
-
-   // Enable notifications.
-   mLock = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Clear all of the mask and latch bits and set a variable list of mask bits.
-// Set the trap condition for AND.
-
-void Notify::setMaskAll(int aNumArgs, ...)
-{
-   // Test for exception conditions.
-   testException();
-
-   // Reset all variables and reset the event semaphore.
-   reset();
-
-   // Set the mask bit from variable arguments.
-   va_list valist;
-   va_start(valist, aNumArgs);
-   for (int i = 0; i < aNumArgs; i++)
-   {
-      int tBitNum = va_arg(valist, int);
-      mMask[tBitNum] = true;
-   }
-   va_end(valist);
-
-   // Set the any flag for the AND trap condition.
-   mAnyFlag = false;
-
-   // Enable notifications.
-   mLock = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Clear all of the mask and latch bits and set a variable list of mask bits.
-// Set the trap condition for AND.
-
-void Notify::setMaskAll(const char* aLabel,int aNumArgs, ...)
-{
-   // Test for exception conditions.
-   testException();
-
-   // Reset all variables and reset the event semaphore.
-   reset();
-
-   // Set the label.
-   my_strncpy(mLabel, aLabel, cMaxLabelStringSize);
-
-   // Set the mask bit from variable arguments.
-   va_list valist;
-   va_start(valist, aNumArgs);
-   for (int i = 0; i < aNumArgs; i++)
-   {
-      int tBitNum = va_arg(valist, int);
-      mMask[tBitNum] = true;
-   }
-   va_end(valist);
-
-   // Set the any flag for the AND trap condition.
-   mAnyFlag = false;
-
-   // Enable notifications.
-   mLock = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set a bit in the bit latch and conditionally signal the event
-// semaphore.
-
-void Notify::notify(int aBitNum)
-{
-   // Guard.
-   if (mLock) return;
-
-   // Set the latch bit.
-   mLatch[aBitNum] = true;
-
-   // Test the masked latch bits for OR and AND trap conditions.
-   bool tAnyFound = false;
-   bool tAllFound = true;
-   for (int i = 0; i < cMaxBits; i++)
-   {
-      if (mMask[i])
-      {
-         if (mLatch[i]) tAnyFound = true;
-         else           tAllFound = false;
-      }
-   }
-   if (!tAnyFound) tAllFound = false;
-
-   // Test if the OR trap condition is true and any latched bits were found
-   // or if the AND trap condition is true and all latched birs were found.
-   if ((mAnyFlag && tAnyFound) || (!mAnyFlag && tAllFound))
-   {
-      // Signal the event.
-      mSem.put();
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set a bit in the bit latch and conditionally signal the event
-// semaphore. Also set the error code.
-
-void Notify::notifyError(int aBitNum, int aError)
-{
+   // Store the error code.
    mErrorCode = aError;
+   // Set the flag.
    mErrorFlag = true;
-   notify(aBitNum);
+   // Signal the event.
+   mSem.put();
 }
 
 //******************************************************************************
@@ -293,7 +87,7 @@ void Notify::notifyError(int aBitNum, int aError)
 
 void Notify::abort()
 {
-   // Set the abort flag.
+   // Set the flag.
    mAbortFlag = true;
 
    // Signal the event.
@@ -313,7 +107,6 @@ void Notify::testException()
    {
       clearFlags();
       mExceptionCode = cAbortException;
-      snprintf(mException, cMaxExceptionStringSize, "aborted %s %d", mLabel, mErrorCode);
       throw cAbortException;
    }
 
@@ -322,7 +115,6 @@ void Notify::testException()
    {
       clearFlags();
       mExceptionCode = cTimeoutException;
-      sprintf(mException, "timeout %s",mLabel);
       throw cTimeoutException;
    }
 
@@ -331,7 +123,6 @@ void Notify::testException()
    {
       clearFlags();
       mExceptionCode = cErrorException;
-      snprintf(mException, cMaxExceptionStringSize, "aborted %s %d", mLabel, mErrorCode);
       throw cErrorException;
    }
 }
@@ -370,9 +161,6 @@ void Notify::waitForTimer(int aTimeout)
 
    // Reset all variables.
    reset();
-
-   // Set the label.
-   my_strncpy(mLabel, "waitForTimer", cMaxLabelStringSize);
 
    // Wait for the event. Only an abort should signal the event. 
    mSem.get(aTimeout);

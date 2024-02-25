@@ -83,14 +83,18 @@ void TestQCallThread::executeTest1(int aTimeout)
 
    try
    {
-      mNotify.reset();
+      mNotify.restart(true);
       mNotify.wait(aTimeout);
    }
    catch (int aException)
    {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest1 %d %d",
-         aException,mNotify.mExceptionCode);
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest1 %d",
+         aException);
    }
+   Prn::print(Prn::View11, "TestQCallThread::executeTest1 %d %d %d",
+      mNotify.mAbortFlag,
+      mNotify.mTimeoutFlag,
+      mNotify.mNotifyFlag);
 
    Prn::print(Prn::View11, "Test1 END");
 }
@@ -104,16 +108,13 @@ void TestQCallThread::executeTest2(int aTimeout)
 {
    Prn::print(Prn::View11, "Test2 BEGIN");
 
-   try
-   {
-      mNotify.reset();
-      mNotify.wait(aTimeout);
-   }
-   catch (int aException)
-   {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest2 %d %d", 
-         aException, mNotify.mExceptionCode);
-   }
+   mNotify.restart(false);
+   mNotify.wait(aTimeout);
+
+   Prn::print(Prn::View11, "TestQCallThread::executeTest1 %d %d %d",
+      mNotify.mAbortFlag,
+      mNotify.mTimeoutFlag,
+      mNotify.mNotifyFlag);
 
    Prn::print(Prn::View11, "Test2 END");
 }
@@ -126,18 +127,6 @@ void TestQCallThread::executeTest2(int aTimeout)
 void TestQCallThread::executeTest3(int aTimeout)
 {
    Prn::print(Prn::View11, "Test3 BEGIN");
-
-   try
-   {
-      mNotify.reset();
-      mNotify.wait(aTimeout);
-   }
-   catch (int aException)
-   {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest3 %d %d", 
-         aException, mNotify.mExceptionCode);
-   }
-
    Prn::print(Prn::View11, "Test3 END");
 }
 
@@ -149,22 +138,6 @@ void TestQCallThread::executeTest3(int aTimeout)
 void TestQCallThread::executeTest4(int aTimeout)
 {
    Prn::print(Prn::View11, "Test4 BEGIN");
-
-   int tCount = 0;
-   try
-   {
-      while (true)
-      {
-         Prn::print(Prn::View11, "Test4 %d", tCount++);
-         mNotify.waitForTimer(aTimeout);
-      }
-   }
-   catch (int aException)
-   {
-      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest4 %d %s", 
-         aException, mNotify.mExceptionCode);
-   }
-
    Prn::print(Prn::View11, "Test4 END");
 }
 

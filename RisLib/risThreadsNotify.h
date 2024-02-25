@@ -41,27 +41,18 @@ public:
    //***************************************************************************
    // Members.
 
+
+   // If true then exceptions are enabled.
+   int mEnableExceptions;
+
    // If this flag is true then a notify event occured.
-   bool mEventFlag;
-
-   // Error code. If not zero then an error occurred. This is set by
-   // notifiers.
-   int mErrorCode;
-
-   // This indicates the cause of an exception.
-   int mExceptionCode;
-
-   // If this true then notification operations are disabled.
-   bool mLock;
+   bool mNotifyFlag;
 
    // If this true then an abort notification occurred.
    bool mAbortFlag;
 
    // If this true then a timeout occurred.
    bool mTimeoutFlag;
-
-   // If this true then an error occurred.
-   bool mErrorFlag;
 
    //***************************************************************************
    //***************************************************************************
@@ -70,8 +61,7 @@ public:
 
    // Binary semaphore event that the owning thread blocks on. It is signaled
    // by other threads to notify the owning thread of a notification event.
-// BinarySemaphore mSem;
-   CountingSemaphore mSem;
+   BinarySemaphore mSem;
 
 public:
    //***************************************************************************
@@ -81,42 +71,34 @@ public:
 
    // Constructor.
    Notify();
-   void reset();
-   void clearFlags();
+   void resetVars();
+
+   // Restart.
+   void restart(bool aEnableExceptions);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods. These are used to initialize and wait for notifications.
 
-   // Test for an exception condition. If an abort, timeout, or error has
-   // occurred then throw the corresponding exception.
-   void testException();
+   // If exceptions are enabled then throw an abort if the abort flag is set.
+   // Else return the abort flag.
+   bool testForAbort();
 
-   // Test for exceptions. Wait for a bit to be set. If the wait times out
-   // then set the timeout flag. Test for exceptions.
-   void wait(int aTimeout);
-
-   // Test for exceptions. Wait for a specified time. Ignore any bit
-   // notifications except an abort. Test for exceptions.
-   void waitForTimer(int aTimeout);
+   // If there is an abort pending then return false. Wait for a notify. 
+   // Return true if there was not an abort or timeout.
+   bool wait(int aTimeout);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods. These are used to send notifications.
 
-   // Set a bit in the bit latch and conditionally signal the event semaphore.
+   // Set the notify flag and signal the event semaphore.
    // This wakes up a thread that is waiting for a notification.
    void notify();
 
-   // Set a bit in the bit latch and conditionally signal the event semaphore.
-   // Also set the error flag and error code. This wakes up a thread that is
-   // waiting for a notification.
-   void notifyError(int aError);
-
-   // Set the abort flag and signal the event semaphore. This will abort any 
-   // of the above set, test, or wait calls.
+   // Set the abort flag and signal the event semaphore.
    void abort();
 };
 

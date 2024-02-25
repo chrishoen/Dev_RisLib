@@ -25,7 +25,7 @@ namespace Threads
 
 Notify::Notify()
 {
-   reset();
+   resetVars();
 }
 
 //******************************************************************************
@@ -33,23 +33,20 @@ Notify::Notify()
 //******************************************************************************
 // Reset the bit mask.
 
-void Notify::reset()
+void Notify::resetVars()
 {
-   mLock = true;
-   mErrorCode = 0;
-   mEventFlag = false;
+   mEnableExceptions = true;
+   mNotifyFlag = false;
    mAbortFlag = false;
    mTimeoutFlag = false;
-   mErrorFlag = 0;
-   mSem.reset();
 }
 
-void Notify::clearFlags()
+// Restart.
+void Notify::restart(bool aEnableExceptions)
 {
-   mEventFlag = false;
-   mAbortFlag = false;
-   mTimeoutFlag = false;
-   mErrorFlag = 0;
+   resetVars();
+   mEnableExceptions = aEnableExceptions;
+   mSem.reset();
 }
 
 //******************************************************************************
@@ -60,22 +57,8 @@ void Notify::clearFlags()
 void Notify::notify()
 {
    // Set the flag.
-   mEventFlag = true;
-   // Signal the event.
-   mSem.put();
-}
+   mNotifyFlag = true;
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Set the error flag and signal the event semaphore.
-
-void Notify::notifyError(int aError)
-{
-   // Store the error code.
-   mErrorCode = aError;
-   // Set the flag.
-   mErrorFlag = true;
    // Signal the event.
    mSem.put();
 }
@@ -97,76 +80,49 @@ void Notify::abort()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Test for an exception condition. If an abort, timeout, or error
-// has occurred then throw the corresponding exception.
+// If exceptions are enabled then throw an abort if the abort flag is set.
+// Else return the abort flag.
 
-void Notify::testException()
+bool Notify::testForAbort()
 {
-   // Test for an abort condition.
-   if (mAbortFlag)
+   if (mEnableExceptions)
    {
-      clearFlags();
-      mExceptionCode = cAbortException;
-      throw cAbortException;
+      if (mAbortFlag)
+      {
+         throw cAbortException;
+      }
+      else
+      {
+         return false;
+      }
    }
-
-   // Test for a timeout condition.
-   if (mTimeoutFlag)
+   else
    {
-      clearFlags();
-      mExceptionCode = cTimeoutException;
-      throw cTimeoutException;
-   }
-
-   // Test for an error condition.
-   if (mErrorFlag)
-   {
-      clearFlags();
-      mExceptionCode = cErrorException;
-      throw cErrorException;
+      return mAbortFlag;
    }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Wait for a bit to be set. Test for exception conditions.
+// If there is an abort pending then return false. Wait for a notify. 
+// Return true if there was not an abort or timeout.
 
-void Notify::wait(int aTimeout)
+bool Notify::wait(int aTimeout)
 {
-   // Test for exception conditions.
-   testException();
+   // Test for an abort.
+   if (testForAbort()) return false;
 
    // Wait for the event. Set the timeout flag if the wait times out.
    if (!mSem.get(aTimeout))
    {
       // A timeout occurred.
       mTimeoutFlag = true;
+      return false;
    }
 
-   // Test for exception conditions.
-   testException();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Wait for a specified time. Ignore any bit notifications except an abort.
-// Test for exception conditions.
-
-void Notify::waitForTimer(int aTimeout)
-{
-   // Test for exception conditions.
-   testException();
-
-   // Reset all variables.
-   reset();
-
-   // Wait for the event. Only an abort should signal the event. 
-   mSem.get(aTimeout);
-
-   // Test for exception conditions.
-   testException();
+   // Return true if there was not an abort or timeout.
+   return !testForAbort();
 }
 
 //******************************************************************************

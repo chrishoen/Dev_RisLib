@@ -38,7 +38,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("TEST4"))     executeTest4(aCmd);
 
    if (aCmd->isCmd("N"))         executeNotify(aCmd);
-   if (aCmd->isCmd("Error"))     executeError(aCmd);
    if (aCmd->isCmd("A"))         executeAbort(aCmd);
 
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
@@ -107,16 +106,6 @@ void CmdLineExec::executeNotify(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeError(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->setArgDefault(1, 101);
-   Some::gTestQCallThread->mNotify.notifyError(aCmd->argInt(1));
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 {
    Some::gTestQCallThread->mNotify.abort();
@@ -128,7 +117,6 @@ void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Some::gTestQCallThread->mNotify.notify();
 }
 
 //******************************************************************************

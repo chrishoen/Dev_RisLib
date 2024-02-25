@@ -60,7 +60,6 @@ public:
    void executeTest4    (Ris::CmdLineCmd* aCmd);
 
    void executeNotify   (Ris::CmdLineCmd* aCmd);
-   void executeError    (Ris::CmdLineCmd* aCmd);
    void executeAbort    (Ris::CmdLineCmd* aCmd);
 
    void executeGo1      (Ris::CmdLineCmd* aCmd);

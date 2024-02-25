@@ -384,53 +384,6 @@ void Notify::waitForTimer(int aTimeout)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor.
-
-NotifyWrapper::NotifyWrapper()
-{
-   mNotify = 0;
-   mBitNum = 0;
-}
-
-// Constructor.
-NotifyWrapper::NotifyWrapper(Notify* aNotify, int aBitNum)
-{
-   mNotify = aNotify;
-   mBitNum = aBitNum;
-}
-
-// Set.
-void NotifyWrapper::set(Notify* aNotify, int aBitNum)
-{
-   mNotify = aNotify;
-   mBitNum = aBitNum;
-}
-
-// Set.
-void NotifyWrapper::set(Notify* aNotify)
-{
-   mNotify = aNotify;
-}
-
-// Set.
-void NotifyWrapper::set(int aBitNum)
-{
-   mBitNum = aBitNum;
-}
-
-void NotifyWrapper::notify()
-{
-   if (mNotify) mNotify->notify(mBitNum);
-}
-
-void NotifyWrapper::notifyError(int aErrorCode)
-{
-   if (mNotify) mNotify->notifyError(mBitNum,aErrorCode);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 }//namespace
 }//namespace
 

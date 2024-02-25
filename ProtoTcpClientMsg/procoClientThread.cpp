@@ -296,7 +296,7 @@ void ClientThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 
 void ClientThread::sendMsg(BaseMsg* aTxMsg)
 {
-   mMsgThread->sendMsg(aTxMsg);
+   mMsgThread->doSendMsg(aTxMsg);
    mTxCount++;
 }
 
@@ -310,7 +310,7 @@ void ClientThread::sendTestMsg()
    TestMsg* tMsg = new TestMsg;
    tMsg->mCode1 = 201;
 
-   mMsgThread->sendMsg(tMsg);
+   mMsgThread->doSendMsg(tMsg);
 }
 
 //******************************************************************************

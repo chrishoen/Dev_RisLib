@@ -282,11 +282,22 @@ void TcpClientMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Close the socket to restart the loop. This causes the recv to fail
+// and a disconnect to occur.
+
+void TcpClientMsgThread::doRestart()
+{
+   mSocket.doClose();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Send a transmit message through the socket to the server. It executes a
 // blocking send call in the context of the calling thread. It is protected
 // by a mutex semaphore.
 
-void TcpClientMsgThread::sendMsg(ByteContent* aMsg)
+void TcpClientMsgThread::doSendMsg(ByteContent* aMsg)
 {
    if (!aMsg) return;
 

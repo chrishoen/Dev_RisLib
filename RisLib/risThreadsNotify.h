@@ -88,6 +88,7 @@ public:
    // If there is an abort pending then return false. Wait for a notify. 
    // Return true if there was not an abort or timeout.
    bool wait(int aTimeout);
+   bool waitForever();
 
    //***************************************************************************
    //***************************************************************************

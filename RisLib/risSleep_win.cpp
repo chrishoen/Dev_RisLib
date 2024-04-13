@@ -7,6 +7,7 @@
 
 #include "stdafx.h"
 
+#include <Windows.h>
 #include "risSleep.h"
 
 namespace Ris
@@ -25,10 +26,6 @@ void sleepMs(int aSleepForMs)
 //******************************************************************************
 //******************************************************************************
 // Sleep microseconds.
-
-void sleepUs(int aSleepForUs)
-{
-}
 
 //******************************************************************************
 //******************************************************************************
@@ -54,21 +51,21 @@ void RandomSleepMs::initialize(int aSleepMeanMs, double aSleepRandom)
    if (aSleepRandom > 1) aSleepRandom = 1;
    mSleepMeanMs = aSleepMeanMs;
    mSleepRandom = aSleepRandom;
-   mSleepUs1 = (int)(mSleepMeanMs * 1000 * (1.0 - mSleepRandom));
-   mSleepUs2 = (int)(mSleepMeanMs * 1000 * (1.0 + mSleepRandom));
+   mSleepMs1 = (int)(mSleepMeanMs * (1.0 - mSleepRandom));
+   mSleepMs2 = (int)(mSleepMeanMs * (1.0 + mSleepRandom));
 
    // Seed the random number generator.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
-   mRandomDistribution = std::uniform_int_distribution<>(mSleepUs1, mSleepUs2);
+   mRandomDistribution = std::uniform_int_distribution<>(mSleepMs1, mSleepMs2);
 }
 
 void RandomSleepMs::doSleep()
 {
    // Get a random sleep time.
-   int tSleepUs = mRandomDistribution(mRandomGenerator);
+   int tSleepMs = mRandomDistribution(mRandomGenerator);
    // Sleep.
-   sleepUs(tSleepUs);
+   Sleep(tSleepMs);
 }
 
 //******************************************************************************

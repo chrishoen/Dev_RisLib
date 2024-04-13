@@ -60,6 +60,11 @@ public:
    int mSleepUs1; // = SleepMeanMs * 1000 * (1 - SleepRandom)
    int mSleepUs2; // = SleepMeanMs * 1000 * (1 + SleepRandom)
 
+   // Timer interval range, milliseconds. These provide the bounds for a
+   // uniform random number generator that generates a random sleep interval.
+   int mSleepMs1; // = SleepMeanMs * (1 - SleepRandom)
+   int mSleepMs2; // = SleepMeanMs * (1 + SleepRandom)
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

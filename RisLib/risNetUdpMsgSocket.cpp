@@ -69,12 +69,34 @@ void UdpMsgSocket::initialize(Settings& aSettings)
 
 void UdpMsgSocket::configure()
 {
+   // Set the socket receive address.
+   if (mSettings.mLocalIpPort)
+   {
+      BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
+   }
+
+   // Set the socket send address.
+   if (mSettings.mRemoteIpPort)
+   {
+      BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   }
+
    // Configure the socket.
-   BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
-   BaseClass::mRemote.setByAddress(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
    BaseClass::doSocket();
-   BaseClass::setOptionReuseAddr();
-   BaseClass::doBind();
+
+   // If listening then bind the socket to the receive address.
+   if (BaseClass::mLocal.mPort)
+   {
+      BaseClass::setOptionReuseAddr();
+      BaseClass::doBind();
+   }
+
+   // Test for broadcast.
+   if (mSettings.mUdpBroadcast)
+   {
+      BaseClass::mRemote.setForBroadcast(mSettings.mRemoteIpPort);
+      BaseClass::setOptionBroadcast();
+   }
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;

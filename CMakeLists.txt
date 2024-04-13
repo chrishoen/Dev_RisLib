@@ -19,6 +19,10 @@ endif()
 
 
 add_subdirectory ("RisLib")
+add_subdirectory ("Sleep")
+return()
+
+add_subdirectory ("RisLib")
 return()
 
 add_subdirectory ("RisLib")

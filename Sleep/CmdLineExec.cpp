@@ -66,13 +66,29 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "BEGIN");
+   double tStartTime;
+   double tEndTime;
+   double tDelta;
    Ris::RandomSleepMs tSleep(1000, 0.2);
-   double tStartTime = Ris::getProgramTime();
+
+   Prn::print(0, "BEGIN");
+   tStartTime = Ris::getProgramTime();
    tSleep.doSleep();
-   double tEndTime = Ris::getProgramTime();
-   double tDelta = tEndTime - tStartTime;
-   Prn::print(0, "END %.4f", tDelta);
+   tEndTime = Ris::getProgramTime();
+   tDelta = tEndTime - tStartTime;
+   Prn::print(0, "END1 %.4f", tDelta);
+
+   tStartTime = Ris::getProgramTime();
+   tSleep.doSleep();
+   tEndTime = Ris::getProgramTime();
+   tDelta = tEndTime - tStartTime;
+   Prn::print(0, "END2 %.4f", tDelta);
+
+   tStartTime = Ris::getProgramTime();
+   tSleep.doSleep();
+   tEndTime = Ris::getProgramTime();
+   tDelta = tEndTime - tStartTime;
+   Prn::print(0, "END3 %.4f", tDelta);
 }
 
 //******************************************************************************
@@ -83,12 +99,6 @@ Ris::RandomSleepMs mSleep(1000, 0.2);
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "BEGIN");
-   double tStartTime = Ris::getProgramTime();
-   mSleep.doSleep();
-   double tEndTime = Ris::getProgramTime();
-   double tDelta = tEndTime - tStartTime;
-   Prn::print(0, "END %.4f", tDelta);
 }
 
 //******************************************************************************

@@ -83,6 +83,7 @@ public:
    RandomSleepMs();
    RandomSleepMs(int aSleepMeanMs, double aSleepRandom);
    void initialize(int aSleepMeanMs, double aSleepRandom);
+   void initialize(int aSleepRandomIntervalMs1, int aSleepRandomIntervalMs2);
 
    //***************************************************************************
    //***************************************************************************

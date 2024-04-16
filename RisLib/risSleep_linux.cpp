@@ -78,6 +78,19 @@ void RandomSleepMs::initialize(int aSleepMeanMs, double aSleepRandom)
    mRandomDistribution = std::uniform_int_distribution<>(mSleepUs1, mSleepUs2);
 }
 
+void RandomSleepMs::initialize(int aSleepRandomIntervalMs1, int aSleepRandomIntervalMs2)
+{
+   // Calculate the time limits for the random number generator.
+   mSleepUs1 = aSleepRandomIntervalMs1 * 1000;
+   mSleepUs2 = aSleepRandomIntervalMs2 * 1000;
+
+   // Seed the random number generator.
+   std::random_device tRandomDevice;
+   mRandomGenerator.seed(tRandomDevice());
+   mRandomDistribution = std::uniform_int_distribution<>(mSleepUs1, mSleepUs2);
+}
+
+
 void RandomSleepMs::doSleep()
 {
    // Get a random sleep time.

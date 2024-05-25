@@ -238,7 +238,7 @@ void ClientThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
       tTxMsg->initialize(1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
-      mMsgThread->sendMsg(tTxMsg);
+      mMsgThread->doSendMsg(tTxMsg);
    }
    if (mShowCode == 3)
    {

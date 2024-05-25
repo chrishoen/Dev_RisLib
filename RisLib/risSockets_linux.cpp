@@ -187,7 +187,7 @@ void BaseSocket::reset()
 
 bool BaseSocket::doClose()
 {
-   if (mBaseSpecific->mDesc == -1) return false;
+// if (mBaseSpecific->mDesc == -1) return false;
    // tStatus = close(mBaseSpecific->mDesc);
    shutdown(mBaseSpecific->mDesc, SHUT_RDWR);
    close(mBaseSpecific->mDesc);

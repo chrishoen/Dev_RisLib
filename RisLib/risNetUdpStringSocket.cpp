@@ -64,6 +64,9 @@ void UdpStringSocket::initialize(Settings& aSettings)
 
 void UdpStringSocket::configure()
 {
+   // Reset the socket.
+   BaseClass::reset();
+
    // Set the socket receive address.
    if (mSettings.mLocalIpPort)
    {

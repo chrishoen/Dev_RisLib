@@ -17,6 +17,6 @@ elseif (MYMODE STREQUAL "prime-arm8")
 #     COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} stenotgt:/opt/prime/bin)")
 elseif (MYMODE STREQUAL "prime-rpi")
    install(CODE "execute_process(COMMAND_ECHO STDOUT
-      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} rpx1:/opt/prime/bin)")
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} rpx4:/opt/prime/bin)")
 endif()
 

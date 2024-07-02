@@ -37,7 +37,9 @@ ProcThread::ProcThread()
    mTPFlag = false;
 
    // Autostart.
+#if 0
    mTPFlag = true;
+#endif
 }
 
 ProcThread::~ProcThread()

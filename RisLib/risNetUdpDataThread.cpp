@@ -72,7 +72,8 @@ void UdpDataThread::threadRunFunction()
    mRestartCount = 0;
    mConnectionFlag = false;
 
-restart:
+Restart:
+
    // Guard.
    if (mTerminateFlag) return;
    int tRet = 0;
@@ -91,11 +92,8 @@ restart:
    //***************************************************************************
    // Open device.
 
-   // If the socket is open then close it.
-   if (mDataSocket.mValidFlag)
-   {
-      mDataSocket.doClose();
-   }
+   // Close the socket.
+   mDataSocket.doClose();
 
    // Initialize and configure the message socket.
    mDataSocket.initialize(mSettings);
@@ -103,7 +101,7 @@ restart:
    if (!mDataSocket.mValidFlag)
    {
       // If error then restart.
-      goto restart;
+      goto Restart;
    }
 
    // Connection was established.
@@ -121,36 +119,39 @@ restart:
       //************************************************************************
       // Receive.
 
-      // Try to receive a message with a blocking receive call. If a message
+      // Try to receive data with a blocking receive call. If data
       // was received then process it.
       char* tData = new char[mMaxDataSize];
       int tSize = 0;
       if (mDataSocket.doRecvData(tData, &tSize))
       {
-         // Message was correctly received.
+         // Data was correctly received.
          // Call the receive callback qcall.
          processRxData(tData, tSize);
       }
       else
       {
+         // Data was not correctly received. 
          Trc::write(mTI, 1, "UdpDataThread::threadRunFunction recv Data ERROR");
 
          // Check for terminate.
          if (BaseClass::mTerminateFlag)
          {
+            // Terminate.
             Trc::write(mTI, 0, "UdpDataThread read TERMINATE");
-            goto end;
+            goto End;
          }
          else
          {
+            // Restart.
             mDataSocket.mValidFlag = false;
-            goto restart;
+            goto Restart;
          }
       }
    }
 
    // Done.
-end:
+End:
    Trc::write(mTI, 0, "UdpDataThread::threadRunFunction done");
    return;
 }

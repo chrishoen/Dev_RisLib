@@ -79,20 +79,20 @@ void UdpDataSocket::configure()
    }
 
    // Configure the socket.
-   BaseClass::doSocket();
+   if (!BaseClass::doSocket()) goto ConfigDone;
 
    // If listening then bind the socket to the receive address.
    if (BaseClass::mLocal.mPort)
    {
       BaseClass::setOptionReuseAddr();
-      BaseClass::doBind();
+      if (!BaseClass::doBind()) goto ConfigDone;
    }
 
    // Test for broadcast.
    if (mSettings.mUdpBroadcast)
    {
       BaseClass::mRemote.setForBroadcast(mSettings.mRemoteIpPort);
-      BaseClass::setOptionBroadcast();
+      if (!BaseClass::setOptionBroadcast()) goto ConfigDone;
    }
 
    // Set valid flag from base class results.
@@ -100,6 +100,8 @@ void UdpDataSocket::configure()
 
    // Guard for don't print status.
    if (mPrintDisable) return;
+
+ConfigDone:
 
    // Show.
    if (mValidFlag)
@@ -187,8 +189,8 @@ bool UdpDataSocket::doRecvData(char* aData, int* aSize)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "UdpDataSocket ERROR INVALID SOCKET");
-      printf("UdpDataSocket ERROR INVALID SOCKET\n");
+      Trc::write(mTI, 0, "UdpDataSocket::doRecvData ERROR INVALID SOCKET");
+      printf("UdpDataSocket::doRecvData ERROR INVALID SOCKET\n");
       return false;
    }
 
@@ -208,17 +210,17 @@ bool UdpDataSocket::doRecvData(char* aData, int* aSize)
    {
       if (BaseClass::mError == 0)
       {
-         Trc::write(mTI, 0, "UdpDataSocket CLOSED");
+         Trc::write(mTI, 0, "UdpDataSocket::doRecvData CLOSED");
       }
       else
       {
-         Trc::write(mTI, 0, "UdpDataSocket ERROR %d %d", BaseClass::mStatus, BaseClass::mError);
-         printf("UdpDataSocket ERROR %d %d\n", BaseClass::mStatus, BaseClass::mError);
+         Trc::write(mTI, 0, "UdpDataSocket::doRecvData ERROR %d %d", BaseClass::mStatus, BaseClass::mError);
+         printf("UdpDataSocket::doRecvData ERROR %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }
 
-   Trc::write(mTI, 1, "UdpDataSocket::doRecvFrom %16s : %5d  ",
+   Trc::write(mTI, 1, "UdpDataSocket::doRecvData %16s : %5d  ",
       mFromAddress.mString,
       mFromAddress.mPort);
 
@@ -246,8 +248,8 @@ bool UdpDataSocket::doSendData(const char* aData, int aSize)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "UdpDataSocket ERROR INVALID SOCKET");
-      printf("UdpDataSocket ERROR INVALID SOCKET\n");
+      Trc::write(mTI, 0, "UdpDataSocket::doSendData ERROR INVALID SOCKET");
+      printf("UdpDataSocket::doSendData ERROR INVALID SOCKET\n");
       return false;
    }
 
@@ -281,15 +283,15 @@ bool UdpDataSocket::doSendData(const char* aData, int aSize)
    else
    {
       // The send was not successful.
-      Trc::write(mTI, 0, "UdpDataSocket ERROR INVALID SEND");
-      printf("UdpMsgSocket ERROR INVALID SEND\n");
+      Trc::write(mTI, 0, "UdpDataSocket::doSendData ERROR INVALID SEND");
+      printf("UdpMsgSocket::doSendData ERROR INVALID SEND\n");
       // Set the socket invalid.
       mValidFlag = false;
       doClose();
    }
 
    // Done.
-   Trc::write(mTI, 1, "UdpDataSocket::doSendMsg done %d", aSize);
+   Trc::write(mTI, 1, "UdpDataSocket::doSendData done %d", aSize);
    return tRet;
 }
 

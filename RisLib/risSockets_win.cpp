@@ -355,8 +355,7 @@ bool BaseSocket::ioctlBlocking(bool aBlocking)
 bool BaseSocket::ioctlFlush ()
 {
    int tStatus = 0;
-   u_long value = 0;
-   tStatus = ioctlsocket(mBaseSpecific->mDesc,SIO_FLUSH,&value);
+   tStatus = ioctlsocket(mBaseSpecific->mDesc,SIO_FLUSH,(u_long*)0);
    return updateError(tStatus);
 }
 

@@ -18,6 +18,12 @@ if (MYSTANDALONE)
 endif()
 
 
+
+add_subdirectory ("RisLib")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ProtoUdpMsg")
+return()
+
 add_subdirectory ("RisLib")
 return()
 
@@ -25,12 +31,7 @@ add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoUdpMsg")
 add_subdirectory ("ProtoUdpString")
-return()
-
-add_subdirectory ("RisLib")
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoUdpMsg")
-add_subdirectory ("ProtoUdpString")
+add_subdirectory ("ProtoUdpData")
 add_subdirectory ("ProtoTcpClientMsg")
 add_subdirectory ("ProtoTcpServerMsg")
 return()

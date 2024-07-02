@@ -52,16 +52,16 @@ void TcpServerHubSocket::configure(bool aShowFlag)
    // Configure the socket.
    BaseClass::reset();
    BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
-   BaseClass::doSocket();
-   BaseClass::setOptionReuseAddr();
-   BaseClass::setOptionNoDelay();
-   BaseClass::setOptionDontLinger();
-
-
-   BaseClass::doBind();
+   if (!BaseClass::doSocket()) goto ConfigDone;
+   if (!BaseClass::setOptionReuseAddr()) goto ConfigDone;
+   if (!BaseClass::setOptionNoDelay()) goto ConfigDone;
+   if (!BaseClass::setOptionDontLinger()) goto ConfigDone;
+   if (!BaseClass::doBind()) goto ConfigDone;
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
+
+ConfigDone:
 
    // Show.
    if (mValidFlag && aShowFlag)

@@ -92,9 +92,10 @@ void TcpServerMsgThread::threadRunFunction()
    //******************************************************************************
    // Restart.
 
-restart:
+Restart:
+
    // Guard.
-   if (mTerminateFlag) goto end;
+   if (mTerminateFlag) goto End;
 
    // Sleep.
    if (tSleepFlag)
@@ -126,7 +127,7 @@ restart:
    if (!mHubSocket.mValidFlag)
    {
       // If error then restart.
-      goto restart;
+      goto Restart;
    }
 
    // Do a nonblocking listen to put the hub socket in listen mode.
@@ -313,7 +314,7 @@ restart:
 
 
    // Done.
-end:
+End:
    Trc::write(mTI, 0, "TcpServerMsgThread::threadRunFunction done");
    return;
 }

@@ -84,9 +84,10 @@ void TcpClientMsgThread::threadRunFunction()
 //******************************************************************************
 // Restart.
 
-restart:
+Restart:
+
    // Guard.
-   if (mTerminateFlag) goto end;
+   if (mTerminateFlag) goto End;
 
    // Sleep.
    tSleepFlag = true;
@@ -121,7 +122,7 @@ restart:
    {
       // If error then restart.
       tRestartCode = 101;
-      goto restart;
+      goto Restart;
    }
 
 //******************************************************************************
@@ -145,10 +146,11 @@ restart:
    }
    else
    {
+      // Connection was not established, restart.
       tSleepFlag = false;
       tShowFlag = false;
       tRestartCode = 102;
-      goto restart;
+      goto Restart;
    }
 
 //******************************************************************************
@@ -156,7 +158,7 @@ restart:
 //******************************************************************************
 // Rereceive.
 
-receive:
+Receive:
    // Guard.
    if (mTerminateFlag) return;
 
@@ -169,7 +171,7 @@ receive:
       // Process the receive message.
       processRxMsg(tMsg);
       // Repeat.
-      goto receive;
+      goto Receive;
    }
    else
    {
@@ -186,19 +188,19 @@ receive:
          tSleepFlag = false;
          tShowFlag = false;
          tRestartCode = 103;
-         goto restart;
+         goto Restart;
       }
       else
       {
          tSleepFlag = false;
          tShowFlag = true;
          tRestartCode = 104;
-         goto restart;
+         goto Restart;
       }
    }
 
    // Done.
-end:
+End:
    Trc::write(mTI, 0, "TcpClientMsgThread::threadRunFunction done");
    return;
 }

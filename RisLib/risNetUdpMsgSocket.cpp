@@ -85,25 +85,27 @@ void UdpMsgSocket::configure()
    }
 
    // Configure the socket.
-   BaseClass::doSocket();
+   if (!BaseClass::doSocket()) goto ConfigDone;
+
 
    // If listening then bind the socket to the receive address.
    if (BaseClass::mLocal.mPort)
    {
-      BaseClass::setOptionReuseAddr();
-      BaseClass::doBind();
+      if (!BaseClass::setOptionReuseAddr()) goto ConfigDone;
+      if (!BaseClass::doBind()) goto ConfigDone;
    }
 
    // Test for broadcast.
    if (mSettings.mUdpBroadcast)
    {
       BaseClass::mRemote.setForBroadcast(mSettings.mRemoteIpPort);
-      BaseClass::setOptionBroadcast();
+      if (!BaseClass::setOptionBroadcast()) goto ConfigDone;
    }
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
 
+ConfigDone:
    // Show.
    if (mValidFlag)
    {
@@ -192,8 +194,8 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "UdpMsgSocket  ERROR INVALID SOCKET");
-      printf("UdpMsgSocket ERROR INVALID SOCKET\n");
+      Trc::write(mTI, 0, "UdpMsgSocket::doReceiveMsg  ERROR INVALID SOCKET");
+      printf("UdpMsgSocket::doReceiveMsg ERROR INVALID SOCKET\n");
       return false;
    }
 
@@ -216,12 +218,12 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    {
       if (BaseClass::mError == 0)
       {
-         Trc::write(mTI, 0, "UdpMsgSocket CLOSED");
+         Trc::write(mTI, 0, "UdpMsgSocket::doReceiveMsg CLOSED");
       }
       else
       {
-         Trc::write(mTI, 0, "UdpMsgSocket ERROR %d %d", BaseClass::mStatus, BaseClass::mError);
-         printf("UdpMsgSocket ERROR %d %d\n", BaseClass::mStatus, BaseClass::mError);
+         Trc::write(mTI, 0, "UdpMsgSocket::doReceiveMsg ERROR %d %d", BaseClass::mStatus, BaseClass::mError);
+         printf("UdpMsgSocket::doReceiveMsg ERROR %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }
@@ -250,8 +252,8 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMsgMonkey->mHeaderValidFlag)
    {
-      Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID HEADER %d %d", mStatus, mError);
-      printf("UdpMsgSocket ERROR INVALID HEADER %d %d\n", mStatus, mError);
+      Trc::write(mTI, 0, "UdpMsgSocket::doReceiveMsg ERROR INVALID HEADER %d %d", mStatus, mError);
+      printf("UdpMsgSocket::doReceiveMsg ERROR INVALID HEADER %d %d\n", mStatus, mError);
       return false;
    }
 
@@ -268,8 +270,8 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Test for errors.
    if (aMsg == 0)
    {
-      Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID MESSAGE %d %d", mStatus, mError);
-      printf("UdpMsgSocket ERROR INVALID MESSAGE %d %d\n", mStatus, mError);
+      Trc::write(mTI, 0, "UdpMsgSocket::doReceiveMsg ERROR INVALID MESSAGE %d %d", mStatus, mError);
+      printf("UdpMsgSocket::doReceiveMsg ERROR INVALID MESSAGE %d %d\n", mStatus, mError);
       mStatus = tByteBuffer.getError();
       return false;
    }
@@ -278,7 +280,7 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    mMsgMonkey->updateRxMsgMetrics(aMsg, mMsgMonkey->mMessageLength);
 
    // Done.
-   Trc::write(mTI, 1, "UdpMsgSocket doReceiveMsg done %d %d", mStatus, mError);
+   Trc::write(mTI, 1, "UdpMsgSocket::doReceiveMsg done %d %d", mStatus, mError);
    mRxCount++;
    return true;
 }
@@ -296,8 +298,8 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID SOCKET");
-      printf("UdpMsgSocket ERROR INVALID SOCKET\n");
+      Trc::write(mTI, 0, "UdpMsgSocket::doSendMsg ERROR INVALID SOCKET");
+      printf("UdpMsgSocket::doSendMsg ERROR INVALID SOCKET\n");
       delete aMsg;
       return false;
    }
@@ -339,8 +341,8 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
    else
    {
       // The send was not successful.
-      Trc::write(mTI, 0, "UdpMsgSocket ERROR INVALID SEND");
-      printf("UdpMsgSocket ERROR INVALID SEND\n");
+      Trc::write(mTI, 0, "UdpMsgSocket::doSendMsg ERROR INVALID SEND");
+      printf("UdpMsgSocket::doSendMsg ERROR INVALID SEND\n");
       // Set the socket invalid.
       mValidFlag = false;
       doClose();

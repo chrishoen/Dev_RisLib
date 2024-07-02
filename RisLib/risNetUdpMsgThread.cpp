@@ -88,11 +88,8 @@ restart:
    //***************************************************************************
    // Open device.
 
-   // If the socket is open then close it.
-   if (mMsgSocket.mValidFlag)
-   {
-      mMsgSocket.doClose();
-   }
+   // Close the socket.
+   mMsgSocket.doClose();
 
    // Initialize and configure the message socket.
    mMsgSocket.initialize(mSettings);

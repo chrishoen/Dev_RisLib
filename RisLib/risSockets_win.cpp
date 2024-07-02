@@ -168,8 +168,10 @@ void BaseSocket::reset()
 bool BaseSocket::doClose()
 {
    int tStatus=0;
-
-   tStatus = closesocket(mBaseSpecific->mDesc);
+   if (mBaseSpecific->mDesc != -1)
+   {
+      tStatus = closesocket(mBaseSpecific->mDesc);
+   }
    return updateError(tStatus);
 }
 

@@ -106,6 +106,7 @@ void UdpMsgSocket::configure()
    mValidFlag = BaseClass::mStatus == 0;
 
 ConfigDone:
+
    // Show.
    if (mValidFlag)
    {

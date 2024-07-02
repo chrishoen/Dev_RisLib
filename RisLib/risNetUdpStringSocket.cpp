@@ -80,24 +80,26 @@ void UdpStringSocket::configure()
    }
 
    // Configure the socket.
-   BaseClass::doSocket();
+   if (!BaseClass::doSocket()) goto ConfigDone;
 
    // If listening then bind the socket to the receive address.
    if (BaseClass::mLocal.mPort)
    {
-      BaseClass::setOptionReuseAddr();
-      BaseClass::doBind();
+      if (!BaseClass::setOptionReuseAddr()) goto ConfigDone;
+      if (!BaseClass::doBind()) goto ConfigDone;
    }
 
    // Test for broadcast.
    if (mSettings.mUdpBroadcast)
    {
       BaseClass::mRemote.setForBroadcast(mSettings.mRemoteIpPort);
-      BaseClass::setOptionBroadcast();
+      if (!BaseClass::setOptionBroadcast()) goto ConfigDone;
    }
 
    // Set valid flag from base class results.
    mValidFlag = BaseClass::mStatus == 0;
+
+ConfigDone:
 
    // Guard for don't print status.
    if (mPrintDisable) return;
@@ -188,8 +190,8 @@ bool UdpStringSocket::doRecvString()
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "UdpStringSocket ERROR INVALID SOCKET");
-      printf("UdpStringSocket ERROR INVALID SOCKET\n");
+      Trc::write(mTI, 0, "UdpStringSocket::doRecvString ERROR INVALID SOCKET");
+      printf("UdpStringSocket::doRecvString ERROR INVALID SOCKET\n");
       return false;
    }
 
@@ -209,17 +211,17 @@ bool UdpStringSocket::doRecvString()
    {
       if (BaseClass::mError == 0)
       {
-         Trc::write(mTI, 0, "UdpStringSocket CLOSED");
+         Trc::write(mTI, 0, "UdpStringSocket::doRecvString CLOSED");
       }
       else
       {
-         Trc::write(mTI, 0, "UdpStringSocket ERROR %d %d", BaseClass::mStatus, BaseClass::mError);
-         printf("UdpStringSocket ERROR %d %d\n", BaseClass::mStatus, BaseClass::mError);
+         Trc::write(mTI, 0, "UdpStringSocket::doRecvString ERROR %d %d", BaseClass::mStatus, BaseClass::mError);
+         printf("UdpStringSocket::doRecvString ERROR %d %d\n", BaseClass::mStatus, BaseClass::mError);
       }
       return false;
    }
 
-   Trc::write(mTI, 1, "UdpStringSocket::doRecvFrom %16s : %5d  ",
+   Trc::write(mTI, 1, "UdpStringSocket::doRecvString %16s : %5d  ",
       mFromAddress.mString,
       mFromAddress.mPort);
 
@@ -248,8 +250,8 @@ bool UdpStringSocket::doSendString(const char* aString)
    // Guard.
    if (!mValidFlag)
    {
-      Trc::write(mTI, 0, "UdpStringSocket ERROR INVALID SOCKET");
-      printf("UdpStringSocket ERROR INVALID SOCKET\n");
+      Trc::write(mTI, 0, "UdpStringSocket::doSendString ERROR INVALID SOCKET");
+      printf("UdpStringSocket::doSendString ERROR INVALID SOCKET\n");
       return false;
    }
 
@@ -283,15 +285,15 @@ bool UdpStringSocket::doSendString(const char* aString)
    else
    {
       // The send was not successful.
-      Trc::write(mTI, 0, "UdpStringSocket ERROR INVALID SEND");
-      printf("UdpMsgSocket ERROR INVALID SEND\n");
+      Trc::write(mTI, 0, "UdpStringSocket::doSendString ERROR INVALID SEND");
+      printf("UdpMsgSocket::doSendString ERROR INVALID SEND\n");
       // Set the socket invalid.
       mValidFlag = false;
       doClose();
    }
 
    // Done.
-   Trc::write(mTI, 1, "UdpStringSocket::doSendMsg done %d", mTxLength);
+   Trc::write(mTI, 1, "UdpStringSocket::doSendString done %d", mTxLength);
    return tRet;
 }
 

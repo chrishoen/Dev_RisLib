@@ -69,7 +69,8 @@ void UdpMsgThread::threadRunFunction()
    mRestartCount = 0;
    mConnectionFlag = false;
 
-restart:
+Restart:
+
    // Guard.
    if (mTerminateFlag) return;
    int tRet = 0;
@@ -97,7 +98,7 @@ restart:
    if (!mMsgSocket.mValidFlag)
    {
       // If error then restart.
-      goto restart;
+      goto Restart;
    }
 
    // Connection was established.
@@ -127,24 +128,27 @@ restart:
       }
       else
       {
+         // Message was not correctly received.
          Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg ERROR");
 
          // Check for terminate.
          if (BaseClass::mTerminateFlag)
          {
+            // Terminate.
             Trc::write(mTI, 0, "UdpMsgThread read TERMINATE");
-            goto end;
+            goto End;
          }
          else
          {
+            // Restart.
             mMsgSocket.mValidFlag = false;
-            goto restart;
+            goto Restart;
          }
       }
    }
 
    // Done.
-end:
+End:
    Trc::write(mTI, 0, "UdpMsgThread::threadRunFunction done");
    return;
 }

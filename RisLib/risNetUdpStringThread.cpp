@@ -71,7 +71,8 @@ void UdpStringThread::threadRunFunction()
    mRestartCount = 0;
    mConnectionFlag = false;
 
-restart:
+Restart:
+
    // Guard.
    if (mTerminateFlag) return;
    int tRet = 0;
@@ -90,11 +91,8 @@ restart:
    //***************************************************************************
    // Open device.
 
-   // If the socket is open then close it.
-   if (mStringSocket.mValidFlag)
-   {
-      mStringSocket.doClose();
-   }
+   // Close the socket.
+   mStringSocket.doClose();
 
    // Initialize and configure the message socket.
    mStringSocket.initialize(mSettings);
@@ -102,7 +100,7 @@ restart:
    if (!mStringSocket.mValidFlag)
    {
       // If error then restart.
-      goto restart;
+      goto Restart;
    }
 
    // Connection was established.
@@ -120,34 +118,37 @@ restart:
       //************************************************************************
       // Receive.
 
-      // Try to receive a message with a blocking receive call. If a message
+      // Try to receive a string with a blocking receive call. If a string
       // was received then process it.
       if (mStringSocket.doRecvString())
       {
-         // Message was correctly received.
+         // String was correctly received.
          // Call the receive callback qcall.
          processRxString(new std::string(mStringSocket.mRxString));
       }
       else
       {
+         // String was not correctly received.
          Trc::write(mTI, 1, "UdpStringThread::threadRunFunction recv String ERROR");
 
          // Check for terminate.
          if (BaseClass::mTerminateFlag)
          {
+            // Terminate.
             Trc::write(mTI, 0, "UdpStringThread read TERMINATE");
-            goto end;
+            goto End;
          }
          else
          {
+            // Restart.
             mStringSocket.mValidFlag = false;
-            goto restart;
+            goto Restart;
          }
       }
    }
 
    // Done.
-end:
+End:
    Trc::write(mTI, 0, "UdpStringThread::threadRunFunction done");
    return;
 }

@@ -35,7 +35,6 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 
    // Initialize variables.
    mTI = mSettings.mTraceIndex;
-   mConnectionFlag = false;
    mErrorCount = 0;
    mRestartCount = 0;
    mRxCount = 0;
@@ -51,6 +50,9 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 void UdpMsgThread::threadInitFunction()
 {
    Trc::write(mTI, 1, "UdpMsgThread::threadInitFunction");
+
+   // Initialize the socket according to the settings.
+   mMsgSocket.initialize(&mSettings);
 }
 
 //******************************************************************************
@@ -58,8 +60,8 @@ void UdpMsgThread::threadInitFunction()
 //******************************************************************************
 // Thread run function. This is called by the base class immediately
 // after the thread init function. It runs a loop that blocks on 
-// the udp port receives and then processes them. The loop terminates
-// when the serial port receive is aborted.
+// udp port receives and then processes them. The loop terminates
+// when the socket is closed by the shutdown call.
 
 void UdpMsgThread::threadRunFunction()
 {
@@ -67,7 +69,6 @@ void UdpMsgThread::threadRunFunction()
 
    // Top of the loop.
    mRestartCount = 0;
-   mConnectionFlag = false;
 
 Restart:
 
@@ -75,7 +76,7 @@ Restart:
    if (mTerminateFlag) return;
    int tRet = 0;
 
-   // Sleep.
+   // If not first time then sleep.
    if (mRestartCount > 0)
    {
       BaseClass::threadSleep(1000);
@@ -92,8 +93,7 @@ Restart:
    // Close the socket.
    mMsgSocket.doClose();
 
-   // Initialize and configure the message socket.
-   mMsgSocket.initialize(mSettings);
+   // Configure the socket.
    mMsgSocket.configure();
    if (!mMsgSocket.mValidFlag)
    {
@@ -101,13 +101,11 @@ Restart:
       goto Restart;
    }
 
-   // Connection was established.
-   mConnectionFlag = true;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Loop to receive messages.
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Loop to receive strings.
 
    while (!BaseClass::mTerminateFlag)
    {
@@ -123,12 +121,12 @@ Restart:
       {
          Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg");
          // Message was correctly received.
-         // Call the receive callback qcall.
          processRxMsg(tMsg);
       }
       else
       {
-         // Message was not correctly received.
+         // Message was not correctly received or the socket was
+         // closed by the shutdown procedure.
          Trc::write(mTI, 1, "UdpMsgThread::threadRunFunction recv msg ERROR");
 
          // Check for terminate.
@@ -136,19 +134,17 @@ Restart:
          {
             // Terminate.
             Trc::write(mTI, 0, "UdpMsgThread read TERMINATE");
-            goto End;
+            break;
          }
          else
          {
             // Restart.
-            mMsgSocket.mValidFlag = false;
             goto Restart;
          }
       }
    }
 
    // Done.
-End:
    Trc::write(mTI, 0, "UdpMsgThread::threadRunFunction done");
    return;
 }
@@ -166,22 +162,24 @@ void UdpMsgThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Shutdown, base class overload.
-// This sets the terminate request flag and closes the socket.
+// Shutdown, base class overload. This sets the terminate request flag
+// and closes the socket.
 //
-// If the while loop in the threadRunFunction is blocked on doReceiveMsg then
-// closing the socket will cause doReceiveMsg to return with false and 
-// then the terminate request flag will be polled and the threadRunFunction 
-// will exit.
+// If the while loop in the thread run function is blocked on receiving a 
+// message then closing the socket will cause the receive call to return with
+// false and then the terminate request flag will be polled and the
+// thread run function will exit.
 
 void UdpMsgThread::shutdownThread()
 {
    Trc::write(mTI, 1, "UdpMsgThread::shutdownThread");
+
+   // Set the terminate flag, close the socket, and wait for the thread
+   // to terminate.
    BaseThread::mTerminateFlag = true;
-
    mMsgSocket.doClose();
-
    BaseThread::waitForThreadTerminate();
+
    Trc::write(mTI, 1, "UdpMsgThread::shutdownThread done");
 }
 
@@ -189,8 +187,8 @@ void UdpMsgThread::shutdownThread()
 //******************************************************************************
 //******************************************************************************
 // Pass a received message to the parent thread. This is called by the
-// threadRunFunction when a message is received. It invokes the
-// mRxMsgQCall that is registered at initialization.
+// thread run function when a message is received. It invokes the
+// receive message qcall that is registered at initialization.
 
 void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
@@ -205,7 +203,7 @@ void UdpMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 // Send a transmit message through the socket to the peer. It executes a
-// blocking send call in the context of the calling thread.
+// send call in the context of the calling thread.
 
 void UdpMsgThread::sendMsg (Ris::ByteContent* aMsg)
 {

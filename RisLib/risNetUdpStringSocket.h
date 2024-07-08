@@ -79,7 +79,7 @@ public:
    UdpStringSocket();
 
    // Initialize variables.
-   void initialize(Settings& aSettings);
+   void initialize(Settings* aSettings);
 
    // Configure the socket. This does socket and bind calls.
    void configure();

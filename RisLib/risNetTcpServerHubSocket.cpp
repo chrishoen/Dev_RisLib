@@ -57,9 +57,7 @@ void TcpServerHubSocket::configure(bool aShowFlag)
    if (!BaseClass::setOptionNoDelay()) goto ConfigDone;
    if (!BaseClass::setOptionDontLinger()) goto ConfigDone;
    if (!BaseClass::doBind()) goto ConfigDone;
-
-   // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
+   mValidFlag = true;
 
 ConfigDone:
 

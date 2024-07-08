@@ -34,10 +34,10 @@ UdpRxBinarySocket::UdpRxBinarySocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpRxBinarySocket::initialize(Settings& aSettings)
+void UdpRxBinarySocket::initialize(Settings* aSettings)
 {
-   // Store the settings pointer.
-   mSettings = aSettings;
+   // Store a copy of the settings.
+   mSettings = *aSettings;
 
    // Variables.
    mRxLength = 0;
@@ -53,12 +53,13 @@ void UdpRxBinarySocket::initialize(Settings& aSettings)
 void UdpRxBinarySocket::configure()
 {
    // Configure the socket.
+   BaseClass::reset();
    BaseClass::mLocal.setByAddress(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
-   BaseClass::doSocket();
-   BaseClass::doBind();
+   if (!BaseClass::doSocket()) goto ConfigDone;
+   if (!BaseClass::doBind()) goto ConfigDone;
+   mValidFlag = true;
 
-   // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
+ConfigDone:
 
    // Show.
    if (mValidFlag)

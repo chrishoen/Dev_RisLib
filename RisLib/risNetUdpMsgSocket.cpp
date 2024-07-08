@@ -40,10 +40,10 @@ UdpMsgSocket::~UdpMsgSocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpMsgSocket::initialize(Settings& aSettings)
+void UdpMsgSocket::initialize(Settings* aSettings)
 {
-   // Store the settings pointer.
-   mSettings = aSettings;
+   // Store a copy of the settings.
+   mSettings = *aSettings;
 
    // Store the message monkey.
    mMsgMonkey = mSettings.mMsgMonkey;
@@ -102,8 +102,8 @@ void UdpMsgSocket::configure()
       if (!BaseClass::setOptionBroadcast()) goto ConfigDone;
    }
 
-   // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
+   // Set valid.
+   mValidFlag = true;
 
 ConfigDone:
 
@@ -176,10 +176,8 @@ ConfigDone:
 //******************************************************************************
 //******************************************************************************
 // Receive a message from the socket with a blocking recv call into a
-// byte buffer and extract a message from the byte buffer. Return the
-// message and true if successful. As part of the termination process,
-// returning false means that the socket was closed or that there was
-// an error.
+// byte buffer and then extract a message from the byte buffer. Return
+// the message and true if successful.
 
 bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 {
@@ -200,7 +198,7 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
       return false;
    }
 
-   // Create a byte buffer from preallocated memory.
+   // Create a byte buffer at preallocated memory.
    ByteBuffer tByteBuffer(mRxMemory, mMemorySize);
 
    //***************************************************************************
@@ -211,10 +209,7 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    tByteBuffer.setCopyFrom();
    BaseClass::doRecvFrom(mFromAddress, tByteBuffer.getBaseAddress(), mRxLength, mMemorySize);
 
-   // Guard.
-   // If bad status then return false.
-   // Returning true  means socket was not closed.
-   // Returning false means socket was closed.
+   // Guard. If bad status then return false.
    if (mRxLength <= 0)
    {
       if (BaseClass::mError == 0)
@@ -229,11 +224,6 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
       return false;
    }
 
-   //printf("UdpMsgSocket rx message %d\n", mRxLength);
-   //printf("UdpMsgSocket     FROM %16s : %5d\n",
-   //   mFromAddress.mString,
-   //   mLocal.mPort);
-
    // Set the buffer length.
    tByteBuffer.setLength(mRxLength);
 
@@ -245,10 +235,6 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 
    // Extract the header.
    mMsgMonkey->extractMessageHeaderParms(&tByteBuffer);
-
-   //printf("UdpMsgSocket rx header %d %d\n",
-   //   mMsgMonkey->mHeaderValidFlag,
-   //   mMsgMonkey->mHeaderLength);
 
    // If the header is not valid then error.
    if (!mMsgMonkey->mHeaderValidFlag)
@@ -289,9 +275,8 @@ bool UdpMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy a message into a byte buffer and then send the byte buffer to the
-// socket with a blocking send call. Return true if successful.
-// It is protected by the transmit mutex.
+// Copy a message into a byte buffer and then send the byte buffer
+// to the socket with a send call. Return true if successful.
 
 bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
 {
@@ -312,39 +297,33 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
    mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
 
    // Transmit the buffer.
-   mTxLength = tByteBuffer.getLength();
+   int tTxLength = tByteBuffer.getLength();
    bool tRet = false;
    if (!mSettings.mUdpWrapFlag)
    {
       // If this is not wrapping then send to the remote address.
-      tRet = doSendTo(mRemote, tByteBuffer.getBaseAddress(), mTxLength);
+      tRet = doSendTo(mRemote, tByteBuffer.getBaseAddress(), tTxLength);
    }
-   else
+   else if(mRxCount)
    {
-      // If this is wrapping then send to the last received from address.
-      if (mRxCount)
-      {
-         Trc::write(mTI, 1, "UdpMsgSocket::doSendMsg WRAP Tx %16s : %5d",
-            mFromAddress.mString,
-            mFromAddress.mPort);
-         // If this is wrapping then send to the last received from address.
-         tRet = doSendTo(mFromAddress, tByteBuffer.getBaseAddress(), mTxLength);
-      }
+      // If this is wrapping then send to the last received from address, 
+      // if it is valid (rx count is greater than zero).
+      tRet = doSendTo(mFromAddress, tByteBuffer.getBaseAddress(), tTxLength);
    }
 
    if (tRet)
    {
-      // The send was successful.
-      // Metrics.
+      // The send was successful. Update metrics.
       mTxCount++;
-      mMsgMonkey->updateTxMsgMetrics(aMsg, mTxLength);
+      mTxLength = tTxLength;
+      mMsgMonkey->updateTxMsgMetrics(aMsg, tTxLength);
    }
    else
    {
       // The send was not successful.
       Trc::write(mTI, 0, "UdpMsgSocket::doSendMsg ERROR INVALID SEND");
       printf("UdpMsgSocket::doSendMsg ERROR INVALID SEND\n");
-      // Set the socket invalid.
+      // Set the socket invalid and close it.
       mValidFlag = false;
       doClose();
    }
@@ -352,7 +331,7 @@ bool UdpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Delete the message.
    delete aMsg;
 
-   // Done.
+   // Done. Return true if successful.
    Trc::write(mTI, 1, "UdpMsgSocket::doSendMsg done %d", mTxLength);
    return tRet;
 }

@@ -23,14 +23,14 @@ namespace Net
 // Udp message thread.
 //
 // This is a thread that provides the execution context for a udp peer that
-// that communicates byte content messages with another udp peer.
+// that communicates messages with another udp peer.
 //
-// It contains a receive  udp socket that is bound to a local address.
-// It contains a transmit udp socket that is bound to a remote address.
+// The messages follow the byte content message scheme.
+// 
+// It contains a udp socket that is bound to a local address and that
+// sends to a remote address.
 //
-// The data that is communicated via the sockets is encapsulated according to
-// the byte content messaging scheme. It sends and receives byte content
-// messages.
+// The data that is communicated via the sockets is encapsulated by messages.
 //
 // The thread is structured around a while loop that does a recvfrom
 // call to receive a message on the socket.
@@ -43,7 +43,8 @@ namespace Net
 // that performs message processing. The parent creates the child and
 // registers a receive message qcall callback to it. When the child thread
 // receives a message it invokes the message qcall to pass it to the parent
-// for processing.
+// for processing. The parent thread can send messages to the udp peer
+// via the class send calls.
 
 class UdpMsgThread : public Ris::Threads::BaseThread
 {
@@ -63,16 +64,12 @@ public:
    UdpMsgSocket mMsgSocket;
 
    // This is a qcall callback that is invoked when a message is received.
-   // It is registered by the parent thread at initialzation.
+   // It is registered by the parent thread at initialzation via the settings.
    typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
    RxMsgQCall mRxMsgQCall;
 
    // Program trace index.
    int mTI;
-
-   // If true then the serial port is open. If false then it is closed
-   // because of an error.
-   bool mConnectionFlag;
 
    // Metrics.
    int mErrorCount;
@@ -96,15 +93,19 @@ public:
    // Setup the socket.
    void threadInitFunction()override;
 
-   // Execute a while loop that does recv calls. The loop exits
-   // when the socket is closed and the termination flag is true.
+   // Thread run function. This is called by the base class for the main 
+   // thread processing. It executes a while loop that does receive calls.
+   // When a message is received, it is passed to the parent via the receive
+   // qcall. The loop exits when the thread is shutdown.
    void threadRunFunction()override;
 
-   // Print.
+   // Thread exit function. This is called by the base class immediately
+   // before the thread is terminated.
    void threadExitFunction()override;
 
-   // Set the termination flag, close the socket and wait for the thread to
-   // terminate.
+   // Thread shutdown function. This is called in the context of the parent
+   // thread. It sets the termination flag, closes the socket, and waits
+   // for the thread to terminate.
    void shutdownThread()override; 
 
    //***************************************************************************
@@ -113,8 +114,8 @@ public:
    // Methods.
 
    // Pass a received message to the parent thread. This is called by the
-   // threadRunFunction when a message is received. It invokes the
-   // mRxMsgQCall that is registered at initialization.
+   // thread run function when a message is received. It invokes the
+   // receive qcall that is registered at initialization.
    virtual void processRxMsg(Ris::ByteContent* aMsg);
 
    //***************************************************************************
@@ -123,8 +124,8 @@ public:
    // Methods.
 
    // Send a transmit message through the socket to the peer. It executes a
-   // blocking send call in the context of the calling thread. It is protected
-   // by a mutex semaphore.
+   // send call in the context of the calling thread. It deletes the message
+   // when done.
    void sendMsg(Ris::ByteContent* aMsg);
 };
 

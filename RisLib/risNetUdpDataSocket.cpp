@@ -39,10 +39,10 @@ UdpDataSocket::UdpDataSocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpDataSocket::initialize(Settings& aSettings)
+void UdpDataSocket::initialize(Settings* aSettings)
 {
    // Store the settings pointer.
-   mSettings = aSettings;
+   mSettings = *aSettings;
 
    // Variables.
    mTxMsgCount = 0;

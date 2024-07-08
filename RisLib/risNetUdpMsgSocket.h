@@ -25,8 +25,8 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Udp message socket. This class encapsulates a udp socket that
-// sends and receives messages that are based on the byte content message
+// Udp message socket. This class encapsulates a udp socket that sends
+// and receives messages that are based on the byte content message
 // encapsulation scheme.
 
 class UdpMsgSocket : public Sockets::BaseUdpSocket
@@ -40,7 +40,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Settings.
+   // Network settings.
    Settings mSettings;
 
    //***************************************************************************
@@ -72,7 +72,7 @@ public:
    // True if the socket is valid.
    bool mValidFlag;
 
-   // The recvfrom address is stored here.
+   // The recvfrom address from the last receive call.
    Sockets::SocketAddress mFromAddress;
 
    // Metrics.
@@ -93,8 +93,8 @@ public:
    UdpMsgSocket(); 
    ~UdpMsgSocket(); 
 
-   // Initialize variables.
-   void initialize(Settings& aSettings);
+   // Initialize variables and allocate memory.
+   void initialize(Settings* aSettings);
 
    // Configure the socket. This does socket and bind calls.
    void configure();
@@ -105,15 +105,12 @@ public:
    // Methods.
 
    // Receive a message from the socket with a blocking recv call into a
-   // byte buffer and extract a message from the byte buffer. Return the
-   // message and true if successful. As part of the termination process,
-   // returning false means that the socket was closed or that there was
-   // an error.
+   // byte buffer and then extract a message from the byte buffer. Return
+   // the message and true if successful.
    bool doReceiveMsg (ByteContent*& aRxMsg);
 
-   // Copy a message into a byte buffer and then send the byte buffer to the
-   // socket with a blocking send call. Return true if successful.
-   // It is protected by the transmit mutex.
+   // Copy a message into a byte buffer and then send the byte buffer
+   // to the socket with a send call. Return true if successful.
    bool doSendMsg(ByteContent* aMsg);
 };
 

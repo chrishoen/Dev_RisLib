@@ -40,10 +40,10 @@ UdpStringSocket::UdpStringSocket()
 //******************************************************************************
 // Initialize variables.
 
-void UdpStringSocket::initialize(Settings& aSettings)
+void UdpStringSocket::initialize(Settings* aSettings)
 {
-   // Store the settings pointer.
-   mSettings = aSettings;
+   // Store a copy of the settings.
+   mSettings = *aSettings;
 
    // Variables.
    mRxString[0] = 0;
@@ -89,19 +89,19 @@ void UdpStringSocket::configure()
       if (!BaseClass::doBind()) goto ConfigDone;
    }
 
-   // Test for broadcast.
+   // If broadcast then set accordingly.
    if (mSettings.mUdpBroadcast)
    {
       BaseClass::mRemote.setForBroadcast(mSettings.mRemoteIpPort);
       if (!BaseClass::setOptionBroadcast()) goto ConfigDone;
    }
 
-   // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
+   // Set valid.
+   mValidFlag = true;
 
 ConfigDone:
 
-   // Guard for don't print status.
+   // Test for don't print status.
    if (mPrintDisable) return;
 
    // Show.
@@ -172,8 +172,8 @@ ConfigDone:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This receives a datagram from the socket into a byte buffer and then
-// extracts a message from the byte buffer
+// Receive a datagram from the socket into a byte buffer and then
+// extract a message from the byte buffer
 
 bool UdpStringSocket::doRecvString()
 {
@@ -183,10 +183,6 @@ bool UdpStringSocket::doRecvString()
    //***************************************************************************
    // Initialize.
 
-   // Do this first.
-   mRxString[0]=0;
-   mRxLength=0;
-
    // Guard.
    if (!mValidFlag)
    {
@@ -194,6 +190,10 @@ bool UdpStringSocket::doRecvString()
       printf("UdpStringSocket::doRecvString ERROR INVALID SOCKET\n");
       return false;
    }
+
+   // Initialize.
+   mRxString[0] = 0;
+   mRxLength = 0;
 
    //***************************************************************************
    //***************************************************************************
@@ -203,10 +203,7 @@ bool UdpStringSocket::doRecvString()
    // Read from the socket.
    BaseClass::doRecvFrom(mFromAddress,mRxString,mRxLength,cStringSize);
 
-   // Guard.
    // If bad status then return false.
-   // Returning true  means socket was not closed.
-   // Returning false means socket was closed.
    if (mRxLength <= 0)
    {
       if (BaseClass::mError == 0)
@@ -225,13 +222,10 @@ bool UdpStringSocket::doRecvString()
       mFromAddress.mString,
       mFromAddress.mPort);
 
-   //printf("UdpStringSocket rx message %d\n", mRxLength);
-
    // Add null terminator.
    mRxString[mRxLength] = 0;
 
-   // Returning true  means socket was not closed.
-   // Returning false means socket was closed.
+   // Done.
    Trc::write(mTI, 1, "UdpStringSocket doReceiveString done %d %d", mStatus, mError);
    mRxCount++;
    return true;
@@ -240,13 +234,12 @@ bool UdpStringSocket::doRecvString()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a string over the socket via a blocking send call.
-// It returns true if successful.
-// It is protected by the transmit mutex.
+// Send a string over the socket via a send call. Return true if successful.
 
 bool UdpStringSocket::doSendString(const char* aString)
 {
    Trc::write(mTI, 0, "UdpStringSocket::doSendString");
+
    // Guard.
    if (!mValidFlag)
    {
@@ -263,23 +256,16 @@ bool UdpStringSocket::doSendString(const char* aString)
       // If this is not wrapping then send to the remote address.
       tRet = doSendTo(mRemote, aString, mTxLength);
    }
-   else
+   else if (mRxCount)
    {
-      // If this is wrapping then send to the last received from address.
-      if (mRxCount)
-      {
-         Trc::write(mTI, 1, "UdpStringSocket::doSendString WRAP Tx %16s : %5d  ",
-            mFromAddress.mString,
-            mFromAddress.mPort);
-         // If this is wrapping then send to the last received from address.
-         tRet = doSendTo(mFromAddress, aString, mTxLength);
-      }
+      // If this is wrapping then send to the last received from address, 
+      // if it is valid (rx count is greater than zero).
+      tRet = doSendTo(mFromAddress, aString, mTxLength);
    }
 
    if (tRet)
    {
-      // The send was successful.
-      // Metrics.
+      // The send was successful. Update metrics.
       mTxCount++;
    }
    else
@@ -287,12 +273,12 @@ bool UdpStringSocket::doSendString(const char* aString)
       // The send was not successful.
       Trc::write(mTI, 0, "UdpStringSocket::doSendString ERROR INVALID SEND");
       printf("UdpMsgSocket::doSendString ERROR INVALID SEND\n");
-      // Set the socket invalid.
+      // Set the socket invalid and close it.
       mValidFlag = false;
       doClose();
    }
 
-   // Done.
+   // Done. Return true if successful.
    Trc::write(mTI, 1, "UdpStringSocket::doSendString done %d", mTxLength);
    return tRet;
 }

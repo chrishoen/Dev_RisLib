@@ -27,8 +27,8 @@ namespace Net
 // This is a thread that provides the execution context for a udp peer that
 // that communicates strings with another udp peer.
 //
-// It contains a receive  udp socket that is bound to a local address.
-// It contains a transmit udp socket that is bound to a remote address.
+// It contains a udp socket that is bound to a local address and that
+// sends to a remote address.
 //
 // The data that is communicated via the sockets is encapsulated by strings.
 //
@@ -43,7 +43,8 @@ namespace Net
 // that performs string processing. The parent creates the child and
 // registers a receive string qcall callback to it. When the child thread
 // receives a string it invokes the string qcall to pass it to the parent
-// for processing.
+// for processing. The parent thread can send strings to the udp peer
+// via the class send calls.
 
 class UdpStringThread : public Ris::Threads::BaseThread
 {
@@ -63,16 +64,12 @@ public:
    UdpStringSocket mStringSocket;
 
    // This is a qcall callback that is invoked when a string is received.
-   // It is registered by the parent thread at initialzation.
+   // It is registered by the parent thread at initialzation via the settings.
    typedef Ris::Threads::QCall1<std::string*> RxStringQCall;
    RxStringQCall mRxStringQCall;
 
    // Program trace index.
    int mTI;
-
-   // If true then the serial port is open. If false then it is closed
-   // because of an error.
-   bool mConnectionFlag;
 
    // Metrics.
    int mErrorCount;
@@ -94,12 +91,13 @@ public:
    // Methods, thread base class overloads:
 
    // Thread init function. This is called by the base class immediately 
-   // after the thread starts running. It configures the sockets.
+   // after the thread starts running. It initializes the socket.
    void threadInitFunction() override;
 
    // Thread run function. This is called by the base class for the main 
-   // thread processing. Execute a while loop that does read calls.
-   // The loop exits when the thread is canceled.
+   // thread processing. It executes a while loop that does receive calls.
+   // When a string is received, it is passed to the parent via the receive
+   // qcall. The loop exits when the thread is shutdown.
    void threadRunFunction() override;
 
    // Thread exit function. This is called by the base class immediately
@@ -107,8 +105,8 @@ public:
    void threadExitFunction() override;
 
    // Thread shutdown function. This is called in the context of the parent
-   // thread. Set the termination flag, close the socket and wait for the
-   // thread to terminate.
+   // thread. It sets the termination flag, closes the socket, and waits
+   // for the thread to terminate.
    void shutdownThread() override; 
 
    //***************************************************************************
@@ -117,23 +115,22 @@ public:
    // Methods.
 
    // Pass a received string to the parent thread. This is called by the
-   // threadRunFunction when a string is received. It invokes the
-   // mRxStringQCall that is registered at initialization.
+   // thread run function when a string is received. It invokes the
+   // receive qcall that is registered at initialization.
    virtual void processRxString(std::string* aString);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods. These can be called by the parent thread.
 
    // Send a transmit string through the socket to the peer. It executes a
-   // blocking send call in the context of the calling thread. Delete the
-   // string when done.
+   // send call in the context of the calling thread. It deletes the string
+   // when done.
    void sendString(std::string* aString);
 
    // Send a transmit string through the socket to the peer. It executes a
-   // blocking send call in the context of the calling thread. Delete the
-   // string when done.
+   // send call in the context of the calling thread.
    void sendString(const char* aString);
 };
 

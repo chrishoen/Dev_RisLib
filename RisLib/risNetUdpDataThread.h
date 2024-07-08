@@ -23,15 +23,17 @@ namespace Net
 // Udp data thread.
 //
 // This is a thread that provides the execution context for a udp peer that
-// that communicates data with another udp peer.
+// that communicates datas with another udp peer.
+// 
+// The data is raw binary data from a given pointer and length.
 //
-// It contains a receive  udp socket that is bound to a local address.
-// It contains a transmit udp socket that is bound to a remote address.
+// It contains a udp socket that is bound to a local address and that
+// sends to a remote address.
 //
-// The data that is communicated via the sockets is encapsulated by data.
+// The data that is communicated via the sockets is encapsulated by datas.
 //
 // The thread is structured around a while loop that does a recvfrom
-// call to receive a data on the socket.
+// call to receive data on the socket.
 //
 // The thread provides serialized access to the socket and associated 
 // state variables and it provides the context for the blocking of the 
@@ -40,8 +42,9 @@ namespace Net
 // An instance of this thread is created as a child thread of a parent thread
 // that performs data processing. The parent creates the child and
 // registers a receive data qcall callback to it. When the child thread
-// receives a data it invokes the data qcall to pass it to the parent
-// for processing.
+// receives data it invokes the data qcall to pass it to the parent
+// for processing. The parent thread can send datas to the udp peer
+// via the class send calls.
 
 class UdpDataThread : public Ris::Threads::BaseThread
 {
@@ -61,7 +64,7 @@ public:
    UdpDataSocket mDataSocket;
 
    // This is a qcall callback that is invoked when a data is received.
-   // It is registered by the parent thread at initialzation.
+   // It is registered by the parent thread at initialzation via the settings.
    typedef Ris::Threads::QCall2<char*,int> RxDataQCall;
    RxDataQCall mRxDataQCall;
 
@@ -70,10 +73,6 @@ public:
 
    // Program trace index.
    int mTI;
-
-   // If true then the serial port is open. If false then it is closed
-   // because of an error.
-   bool mConnectionFlag;
 
    // Metrics.
    int mErrorCount;
@@ -95,12 +94,13 @@ public:
    // Methods, thread base class overloads:
 
    // Thread init function. This is called by the base class immediately 
-   // after the thread starts running. It configures the sockets.
+   // after the thread starts running. It initializes the socket.
    void threadInitFunction() override;
 
    // Thread run function. This is called by the base class for the main 
-   // thread processing. Execute a while loop that does read calls.
-   // The loop exits when the thread is canceled.
+   // thread processing. It executes a while loop that does receive calls.
+   // When data is received, it is passed to the parent via the receive
+   // qcall. The loop exits when the thread is shutdown.
    void threadRunFunction() override;
 
    // Thread exit function. This is called by the base class immediately
@@ -108,8 +108,8 @@ public:
    void threadExitFunction() override;
 
    // Thread shutdown function. This is called in the context of the parent
-   // thread. Set the termination flag, close the socket and wait for the
-   // thread to terminate.
+   // thread. It sets the termination flag, closes the socket, and waits
+   // for the thread to terminate.
    void shutdownThread() override; 
 
    //***************************************************************************
@@ -118,8 +118,8 @@ public:
    // Methods.
 
    // Pass a received data to the parent thread. This is called by the
-   // threadRunFunction when a data is received. It invokes the
-   // mRxDataQCall that is registered at initialization.
+   // thread run function when data is received. It invokes the
+   // receive qcall that is registered at initialization.
    virtual void processRxData(char* aData, int aSize);
 
    //***************************************************************************
@@ -128,8 +128,7 @@ public:
    // Methods.
 
    // Send a transmit data through the socket to the peer. It executes a
-   // blocking send call in the context of the calling thread. Delete the
-   // data when done.
+   // send call in the context of the calling thread.
    void sendData(const char* aData, int aSize);
 };
 

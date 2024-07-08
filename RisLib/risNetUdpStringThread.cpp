@@ -35,7 +35,6 @@ UdpStringThread::UdpStringThread(Settings& aSettings)
 
    // Initialize variables.
    mTI = mSettings.mTraceIndex;
-   mConnectionFlag = false;
    mErrorCount = 0;
    mRestartCount = 0;
    mRxCount = 0;
@@ -53,6 +52,9 @@ void UdpStringThread::threadInitFunction()
 {
    Trc::write(mTI, 1, "UdpStringThread::threadInitFunction");
    Trc::write(mTI, 1, "UdpStringThread::threadInitFunction done");
+
+   // Initialize the socket according to the settings.
+   mStringSocket.initialize(&mSettings);
 }
 
 //******************************************************************************
@@ -60,8 +62,8 @@ void UdpStringThread::threadInitFunction()
 //******************************************************************************
 // Thread run function. This is called by the base class immediately
 // after the thread init function. It runs a loop that blocks on 
-// the udp port receives and then processes them. The loop terminates
-// when the serial port receive is aborted.
+// udp port receives and then processes them. The loop terminates
+// when the socket is closed by the shutdown call.
 
 void UdpStringThread::threadRunFunction()
 {
@@ -69,7 +71,6 @@ void UdpStringThread::threadRunFunction()
 
    // Top of the loop.
    mRestartCount = 0;
-   mConnectionFlag = false;
 
 Restart:
 
@@ -94,17 +95,13 @@ Restart:
    // Close the socket.
    mStringSocket.doClose();
 
-   // Initialize and configure the message socket.
-   mStringSocket.initialize(mSettings);
+   // Configure the socket.
    mStringSocket.configure();
    if (!mStringSocket.mValidFlag)
    {
       // If error then restart.
       goto Restart;
    }
-
-   // Connection was established.
-   mConnectionFlag = true;
 
    //***************************************************************************
    //***************************************************************************
@@ -167,23 +164,24 @@ void UdpStringThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread shutdown function. This is called in the context of the parent
-// thread. Set the termination flag, close the socket and wait for the
-// thread to terminate.
+// Shutdown, base class overload. This sets the terminate request flag
+// and closes the socket.
 //
-// If the while loop in the threadRunFunction is blocked on doReceiveString then
-// closing the socket will cause doReceiveString to return with false and 
-// then the terminate request flag will be polled and the threadRunFunction 
-// will exit.
+// If the while loop in the thread run function is blocked on receiving a 
+// message then closing the socket will cause the receive call to return with
+// false and then the terminate request flag will be polled and the
+// thread run function will exit.
 
 void UdpStringThread::shutdownThread()
 {
    Trc::write(mTI, 1, "UdpStringThread::shutdownThread");
+
+   // Set the terminate flag, close the socket, and wait for the thread
+   // to terminate.
    BaseThread::mTerminateFlag = true;
-
    mStringSocket.doClose();
-
    BaseThread::waitForThreadTerminate();
+
    Trc::write(mTI, 1, "UdpStringThread::shutdownThread done");
 }
 

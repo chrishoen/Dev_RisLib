@@ -78,9 +78,7 @@ void TcpMsgSocket::configure(bool aShowFlag)
    if (!BaseClass::setOptionKeepAlive()) goto ConfigDone;
    if (!BaseClass::setOptionNoDelay()) goto ConfigDone;
    if (!BaseClass::setOptionDontLinger()) goto ConfigDone;
-
-   // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
+   mValidFlag = true;
 
 ConfigDone:
 

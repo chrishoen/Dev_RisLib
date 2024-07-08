@@ -56,7 +56,7 @@ void TcpClientMsgThread::threadInitFunction()
    Trc::write(mTI, 0, "TcpClientMsgThread::threadInitFunction");
 
    // Initialize the socket.
-   mSocket.initialize(mSettings);
+   mSocket.initialize(&mSettings);
 }
 
 //******************************************************************************
@@ -175,8 +175,8 @@ Receive:
    }
    else
    {
-      // Message was not correctly received, so
-      // Connection was lost.
+      // Message was not correctly received,
+      // so the cconnection was lost.
       mConnectionFlag = false;
 
       // Process a session change because a
@@ -217,21 +217,25 @@ void TcpClientMsgThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Shutdown, base class overload.
-// This sets the terminate request flag and closes the socket.
+// Shutdown, base class overload. This sets the terminate request flag
+// and closes the socket.
 //
-// If the while loop in the threadRunFunction is blocked on doRecvMsg then
-// closing the socket will cause doRecvMsg to return with false and 
-// then the terminate request flag will be polled and the the
-// threadRunFunction will exit.
+// If the while loop in the thread run function is blocked on receiving a 
+// message then closing the socket will cause the receive call to return with
+// false and then the terminate request flag will be polled and the
+// thread run function will exit.
 
 void TcpClientMsgThread::shutdownThread()
 {
+   Trc::write(mTI, 1, "TcpClientMsgThread::shutdownThread");
+
+   // Set the terminate flag, close the socket, and wait for the thread
+   // to terminate.
    BaseThread::mTerminateFlag = true;
-
    mSocket.doClose();
-
    BaseThread::waitForThreadTerminate();
+
+   Trc::write(mTI, 1, "TcpClientMsgThread::shutdownThread done");
 }
 
 //******************************************************************************
@@ -296,8 +300,7 @@ void TcpClientMsgThread::doRestart()
 //******************************************************************************
 //******************************************************************************
 // Send a transmit message through the socket to the server. It executes a
-// blocking send call in the context of the calling thread. It is protected
-// by a mutex semaphore.
+// blocking send call in the context of the calling thread.
 
 void TcpClientMsgThread::doSendMsg(ByteContent* aMsg)
 {

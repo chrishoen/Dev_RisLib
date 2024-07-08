@@ -80,7 +80,7 @@ public:
    // thread at initialization.
    BaseMsgMonkey* mMsgMonkey;
 
-   // General purpose valid flag.
+   // If true then valid.
    bool mValidFlag;
 
    // Metrics.
@@ -102,7 +102,7 @@ public:
   ~TcpMsgSocket(); 
 
    // Initialize variables.
-   void initialize(Settings& aSettings);
+   void initialize(Settings* aSettings);
 
    // Configure the socket. This does socket and bind calls.
    void configure(bool aShowFlag);
@@ -114,14 +114,11 @@ public:
 
    // Copy a message into a byte buffer and then send the byte buffer to the
    // socket with a blocking send call. Return true if successful.
-   // It is protected by the transmit mutex.
    bool doSendMsg(ByteContent*  aTxMsg);
 
    // Receive a message from the socket with a blocking recv call into a
    // byte buffer and extract a message from the byte buffer. Return the
-   // message and true if successful. As part of the termination process,
-   // returning false means that the socket was closed or that there was
-   // an error.
+   // message and true if successful.
    bool doReceiveMsg (ByteContent*& aRxMsg);
 };
 

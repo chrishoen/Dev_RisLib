@@ -194,7 +194,7 @@ public:
 
    // Send a transmit message through the node socket at the session index
    // to the client. It executes a blocking send call in the context of
-   // the calling thread. It is protected by a mutex semaphore.
+   // the calling thread.
    void sendMsg(int aSessionIndex, ByteContent* aMsg);
 };
 

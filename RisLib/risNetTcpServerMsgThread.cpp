@@ -63,10 +63,9 @@ void TcpServerMsgThread::threadInitFunction()
    // Initialize the node sockets.
    for (int tSessionIndex=0;tSessionIndex<mMaxSessions;tSessionIndex++)
    {
-      mNodeSocket[tSessionIndex].initialize(mSettings);
+      mNodeSocket[tSessionIndex].initialize(&mSettings);
    }
 }
-
 
 //******************************************************************************
 //******************************************************************************
@@ -87,9 +86,9 @@ void TcpServerMsgThread::threadRunFunction()
    int tRet = 0;
    ByteContent* tMsg = 0;
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Restart.
 
 Restart:
@@ -133,7 +132,6 @@ Restart:
    // Do a nonblocking listen to put the hub socket in listen mode.
    mHubSocket.doListen();
    mListenFlag = true;
-   //printf("doListen %d %d\n",mHubSocket.mStatus,mHubSocket.mError);
 
    //***************************************************************************
    //***************************************************************************
@@ -278,7 +276,7 @@ Restart:
                   {
                      // The receive failed, so the connection was shutdown by the client.
                      // Therefore, disestablish the session.  
-                     //printf("Recv failed, closing session %d\n",tSessionIndex);
+
                      // Reset the socket.
                      mNodeSocket[tSessionIndex].doClose();
                      mNodeSocket[tSessionIndex].reset();
@@ -298,7 +296,6 @@ Restart:
                         mHubSocket.configure(false);
                         mHubSocket.doListen();
                         mListenFlag=true;
-                        //printf("opening listener, doListen %d %d\n",mHubSocket.mStatus,mHubSocket.mError);
                      } 
                   }   
                }
@@ -379,8 +376,8 @@ void TcpServerMsgThread::processRxMsg(int aSessionIndex,Ris::ByteContent* aMsg)
 //******************************************************************************
 //******************************************************************************
 // Send a transmit message through the node socket at the session index
-// to the client. It executes a blocking send() call in the context of
-// the calling thread. It is protected by a mutex semaphore.
+// to the client. It executes a blocking send call in the context of
+// the calling thread.
 
 void TcpServerMsgThread::sendMsg(int aSessionIndex, ByteContent* aMsg)
 {

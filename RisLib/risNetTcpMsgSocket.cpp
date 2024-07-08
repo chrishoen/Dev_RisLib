@@ -45,10 +45,10 @@ TcpMsgSocket::~TcpMsgSocket()
 //******************************************************************************
 // Initialize variables.
 
-void TcpMsgSocket::initialize(Settings& aSettings)
+void TcpMsgSocket::initialize(Settings* aSettings)
 {
-   // Store the settings.
-   mSettings = aSettings;
+   // Store a copy of the settings.
+   mSettings = *aSettings;
 
    // Store the message monkey.
    mMsgMonkey = mSettings.mMsgMonkey;
@@ -159,10 +159,7 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
    tRet = BaseClass::doRecv(tHeaderBuffer,tHeaderLength,tStatus);
    //printf("doRecvH %d %d\n",mStatus,mError);
 
-   // Guard.
-   // If bad status then return false.
-   // Returning true  means socket was not closed.
-   // Returning false means socket was closed.
+   // Guard. If bad status then return false.
    if (!tRet || tStatus<=0)
    {
       Trc::write(mTI, 0, "TcpMsgSocket ERROR INVALID READ %d", mError);
@@ -244,7 +241,6 @@ bool TcpMsgSocket::doReceiveMsg (ByteContent*& aMsg)
 //******************************************************************************
 // Copy a message into a byte buffer and then send the byte buffer to the
 // socket with a blocking send call. Return true if successful.
-// It is protected by the transmit mutex.
 
 bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
 {
@@ -264,8 +260,8 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    mMsgMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
 
    // Transmit the buffer.
-   mTxLength = tByteBuffer.getLength();
-   bool tRet = BaseClass::doSend(tByteBuffer.getBaseAddress(), mTxLength);
+   int tTxLength = tByteBuffer.getLength();
+   bool tRet = BaseClass::doSend(tByteBuffer.getBaseAddress(), tTxLength);
 
    if (tRet)
    {
@@ -283,9 +279,12 @@ bool TcpMsgSocket::doSendMsg(ByteContent* aMsg)
    // Delete the message.
    delete aMsg;
 
-   // Done.
-   Trc::write(mTI, 1, "doSendMsg    %d %d", mTxCount, mTxLength);
+   // Metrics.
    mTxCount++;
+   mTxLength = tTxLength;
+
+   // Done. Return true if successful.
+   Trc::write(mTI, 1, "doSendMsg    %d %d", mTxCount, tTxLength);
    return tRet;
 }
 

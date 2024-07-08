@@ -148,8 +148,7 @@ public:
    // Methods.
    
    // Send a transmit message through the socket to the server. It executes a
-   // blocking send call in the context of the calling thread. It is protected
-   // by a mutex semaphore.
+   // blocking send call in the context of the calling thread.
    void doSendMsg(ByteContent* aTxMsg);
 
    // Close the socket to restart the loop. This causes the recv to fail

@@ -16,7 +16,6 @@ set (CMAKE_C_FLAGS "\
  -fno-strict-aliasing \
  -pipe -g -feliminate-unused-debug-types \
  -fno-omit-frame-pointer \
- -mcpu=cortex-a53+crc+crypto \
  -D_FORTIFY_SOURCE=2 \
  --sysroot=${CMAKE_SYSROOT} \
  " CACHE STRING "")
@@ -59,8 +58,8 @@ include_directories (SYSTEM
     "${CMAKE_SYSROOT}/usr/include/"
     )
 link_directories(
-    "${SDK_DIR}/sysroots/aarch64-fslc-linux/"
-    "${SDK_DIR}/sysroots/aarch64-fslc-linux/usr/lib"
-    "${SDK_DIR}/sysroots/aarch64-fslc-linux/usr/lib/aarch64-fslc-linux/9.3.0"
+    "${SDK_DIR}/sysroots/armv8a-fsl-linux/"
+    "${SDK_DIR}/sysroots/armv8a-fsl-linux/usr/lib"
+    "${SDK_DIR}/sysroots/armv8a-fsl-linux/usr/lib/aarch64-fsl-linux/12.2.0"
     )
 

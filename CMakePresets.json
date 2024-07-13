@@ -195,7 +195,7 @@
         "CMAKE_BUILD_TYPE": "Release",
         "MYMODE": {
           "type": "STRING",
-          "value": "prime-arm8"
+          "value": "stenotgt"
         }
 
       },

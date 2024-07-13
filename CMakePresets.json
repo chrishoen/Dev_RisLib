@@ -34,25 +34,6 @@
       }
     },
     {
-      "name": "prime-windows-x86",
-      "displayName": "prime-windows-x86",
-      "description": "Target Windows, install to c:/aaa_prime/RisLib. (Release)",
-      "inherits": "base",
-      "architecture": {
-        "value": "x86",
-        "strategy": "external"
-      },
-      "cacheVariables": {
-        "CMAKE_C_COMPILER": "cl.exe",
-        "CMAKE_CXX_COMPILER": "cl.exe",
-        "CMAKE_BUILD_TYPE": "Debug",
-        "MYMODE": {
-          "type": "STRING",
-          "value": "prime-windows-x86"
-        }
-      }
-    },
-    {
       "name": "prime-arm7",
       "displayName": "prime-arm7",
       "description": "Target debian arm7 for beaglebone or rpi, install to /opt/prime",
@@ -156,41 +137,13 @@
       }
     },
     {
-      "name": "prime-clang",
-      "displayName": "prime-clang",
-      "description": "Target ubuntu, with clang, install to /opt/prime.",
-      "generator": "Ninja",
-      "binaryDir": "$env{PWD}/out/build/${presetName}",
-      "installDir": "$env{PWD}/out/install/${presetName}",
-      "cacheVariables": {
-        "CMAKE_C_COMPILER": "/usr/bin/clang",
-        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-        "CMAKE_BUILD_TYPE": "Release",
-        "MYMODE": {
-          "type": "STRING",
-          "value": "prime-ubu"
-        }
-
-      },
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Linux"
-      },
-      "vendor": {
-        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
-          "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
-        }
-      }
-    },
-    {
       "name": "stenotgt",
       "displayName": "stenotgt",
-      "description": "Target the varisite board, install to /opt/prime.",
+      "description": "Target the varisite mx93, install to /opt/prime.",
       "generator": "Ninja",
       "toolchainFile": "${sourceDir}\\mx93-toolchain.cmake",
-      "binaryDir": "$env{PWD}/out/build/${presetName}",
-      "installDir": "$env{PWD}/out/install/${presetName}",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "MYMODE": {

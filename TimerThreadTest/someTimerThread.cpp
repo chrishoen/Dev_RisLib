@@ -29,7 +29,7 @@ TimerThread::TimerThread()
    
    // Set base class variables.
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
-   BaseClass::setThreadPriority(10);
+   BaseClass::setThreadPriority(70);
 
    // Set timer period.
    BaseClass::mTimerPeriod = 250;

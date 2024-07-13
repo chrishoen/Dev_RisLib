@@ -20,6 +20,10 @@ endif()
 
 
 add_subdirectory ("RisLib")
+add_subdirectory ("TimerThreadTest")
+return()
+
+add_subdirectory ("RisLib")
 add_subdirectory ("CommonLib")
 add_subdirectory ("ProtoUdpMsg")
 return()

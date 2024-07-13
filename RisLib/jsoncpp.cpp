@@ -71,7 +71,9 @@ license you like.
 
 
 
-
+#ifndef WIN32
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 
 #include "json.h"
 

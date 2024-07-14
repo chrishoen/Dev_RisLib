@@ -137,8 +137,8 @@
       }
     },
     {
-      "name": "stenotgt",
-      "displayName": "stenotgt",
+      "name": "writer",
+      "displayName": "writer",
       "description": "Target the varisite mx93, install to /opt/prime.",
       "generator": "Ninja",
       "toolchainFile": "${sourceDir}\\mx93-toolchain.cmake",
@@ -148,7 +148,7 @@
         "CMAKE_BUILD_TYPE": "Release",
         "MYMODE": {
           "type": "STRING",
-          "value": "stenotgt"
+          "value": "writer"
         }
 
       },

@@ -33,7 +33,6 @@ PeerThread::PeerThread()
    // Initialize member variables.
    mMsgThread = 0;
    mMsgMonkey = new MsgMonkey;
-   mConnectionFlag = false;
    mTPCode = 0;
    mRxCount = 0;
    mTxCount = 0;
@@ -68,8 +67,8 @@ void PeerThread::showThreadInfo()
 //******************************************************************************
 //******************************************************************************
 // Thread init function. This is called by the base class immedidately 
-// after the thread starts running. It creates and launches the 
-// child UdpMsgThread.
+// after the thread starts running. It creates and launches the child
+// message thread.
 
 void PeerThread::threadInitFunction()
 {
@@ -99,7 +98,8 @@ void PeerThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immedidately
-// before the thread is terminated. It shuts down the child UdpMsgThread.
+// before the thread is terminated. It shuts down the child message
+// thread.
 
 void PeerThread::threadExitFunction()
 {
@@ -154,9 +154,9 @@ void PeerThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 // qcall registered to the mMsgThread child thread. It is invoked by
-// the child thread when a message is received.
-// Based on the receive message type, call one of the specific receive
-// message handlers. This is bound to the qcall.
+// the child thread when a message is received. Based on the receive
+// message type, call one of the following specific receive message
+// handlers. This is bound to the qcall.
 
 void PeerThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
@@ -266,7 +266,7 @@ void PeerThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via mMsgThread:
+// Send a message via the child message thread:
 
 void PeerThread::sendMsg(BaseMsg* aTxMsg)
 {
@@ -277,7 +277,7 @@ void PeerThread::sendMsg(BaseMsg* aTxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via mMsgThread:
+// Send a message via the child message thread:
 
 void PeerThread::sendTestMsg()
 {

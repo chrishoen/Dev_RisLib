@@ -66,7 +66,7 @@ void ClientThread::showThreadInfo()
 //******************************************************************************
 // Thread init function. This is called by the base class immedidately 
 // after the thread starts running. It creates and launches the 
-// child TcpClientMsgThread.
+// child message thread.
 
 void ClientThread::threadInitFunction()
 {
@@ -95,7 +95,7 @@ void ClientThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immedidately
-// before the thread is terminated. It shuts down the child TcpClientMsgThread.
+// before the thread is terminated. It shuts down the child message thread.
 
 void ClientThread::threadExitFunction()
 {
@@ -181,8 +181,8 @@ void ClientThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // qcall registered to the mMsgThread child thread. It is invoked by
 // the child thread when a message is received.
-// Based on the receive message type, call one of the specific receive
-// message handlers. This is bound to the qcall.
+// Based on the receive message type, call one of the following specific
+// receive message handlers. This is bound to the qcall.
 
 void ClientThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
@@ -292,7 +292,7 @@ void ClientThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via mMsgThread:
+// Send a message via the child message thread:
 
 void ClientThread::sendMsg(BaseMsg* aTxMsg)
 {
@@ -303,7 +303,7 @@ void ClientThread::sendMsg(BaseMsg* aTxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via mMsgThread:
+// Send a message via the child message thread:
 
 void ClientThread::sendTestMsg()
 {

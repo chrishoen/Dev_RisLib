@@ -67,7 +67,7 @@ void ServerThread::showThreadInfo()
 //******************************************************************************
 // Thread init function. This is called by the base class immedidately 
 // after the thread starts running. It creates and launches the 
-// child TcpServerMsgThread.
+// child message thread.
 
 void ServerThread::threadInitFunction()
 {
@@ -97,7 +97,7 @@ void ServerThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immedidately
-// before the thread is terminated. It shuts down the child TcpServerMsgThread.
+// before the thread is terminated. It shuts down the child message thread.
 
 void ServerThread::threadExitFunction()
 {
@@ -168,7 +168,7 @@ void ServerThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 // qcall registered to the mMsgThread child thread. It is invoked by
-// the child thread when a message is received.
+// the child messag thread when a message is received.
 // Based on the receive message type, call one of the specific receive
 // message handlers. This is bound to the qcall.
 
@@ -303,7 +303,7 @@ void ServerThread::processRxMsg(int aSessionIndex, ProtoComm::ByteBlobMsg* aRxMs
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via mMsgThread:
+// Send a message via the child message thread.
 
 void ServerThread::sendMsg(int aSessionIndex, BaseMsg* aTxMsg)
 {
@@ -314,7 +314,7 @@ void ServerThread::sendMsg(int aSessionIndex, BaseMsg* aTxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a message via mMsgThread:
+// Send a message via the child message thread.
 
 void ServerThread::sendTestMsg(int aAppNumber)
 {

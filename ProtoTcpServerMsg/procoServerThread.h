@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Udp message prototype thread class.
+Tcp server message thread prototype class.
 ==============================================================================*/
 
 //******************************************************************************
@@ -24,30 +24,26 @@ namespace ProtoComm
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Udp message prototype thread class. It processes messages that are
-// communicated via a tcp channel. The messages follow the byte content
-// binary message scheme.
+// Tcp server message thread class. It processes messages that are
+// communicated via tcp sockets. The messages follow the byte content binary
+// message scheme.
 //
-// This is a prototype tcp thread class. It inherits from BaseQCallThread to
-// obtain a call queue based thread functionality.
+// It inherits from BaseQCallThread to obtain a call queue based thread
+// functionality.
 //
-// The prototype thread creates a child tcp message thread that establishes
-// and manages a tcp connection, receives messages and passes them to the
-// parent via a qcall callback, and allows for the transmission of messages.
-// the child thread also notifies the parent thread of tcp connection
-// establishment/disestablishment via a qcall callback.
+// The thread creates a child tcp server message thread that manages a tcp
+// server connection, receives messages and passes them to this thread via
+// a qcall callback, and provides for the transmission of messages.
 // 
-// The prototype thread is based on a call queue and it uses qcalls to
-// interface to the child thread. When the child thread detects a session
-// change it invokes the prototypes thread's mSessionQCall, which defers
-// execution of its executeSession member function. Likewise, when the child
-// thread receives a message it invokes the tcp thread's mRxMsgQCall, which
-// defers  execution of its executeRxMsg member function. 
+// This thread is based on a call queue and it uses qcalls to interface to
+// the child thread. When the child thread receives a message it invokes this
+// threads receive message qcall, which defers execution of its receive
+// message member function, which then processes the message. 
 //
-// The child thread provides the execution context for actually managing
-// session changes and receiving messages. The parent thread provides the
-// execution context for processing the session changes and the received 
-// messages.
+// The child thread provides the execution context for managing the socket
+// and receiving messages on it. This thread provides the execution
+// context for processing the received messages and for sending messags.
+//
 //
 
 class  ServerThread : public Ris::Threads::BaseQCallThread
@@ -60,11 +56,11 @@ public:
    //***************************************************************************
    // Members.
 
-   // Udp message thread, this manages tcp message connections and
+   // Tcp message thread, this manages tcp message connections and
    // message transmission and reception.
    Ris::Net::TcpServerMsgThread* mMsgThread;
 
-   // Message monkey used by mMsgThread.
+   // Message monkey used by the child message thread.
    MsgMonkey* mMsgMonkey;
 
    // Session state list. This contains state for each connected session.
@@ -103,11 +99,11 @@ public:
 
    // Thread init function. This is called by the base class immedidately 
    // after the thread starts running. It creates and launches the 
-   // child TcpServerMsgThread.
+   // child message thread.
    void threadInitFunction() override;
 
    // Thread exit function. This is called by the base class immedidately
-   // before the thread is terminated. It shuts down the child TcpServerMsgThread.
+   // before the thread is terminated. It shuts down the child message thread.
    void threadExitFunction() override;
 
    // Thread shutdown function. This calls the base class shutdownThread
@@ -126,9 +122,9 @@ public:
    //***************************************************************************
    // Methods. Session qcall.
 
-   // qcall registered to the mTcpMsgThread child thread. It is invoked when
-   // a session is established or disestablished (when this client connects or
-   // disconnects to the server). 
+   // qcall registered to the child message thread. It is invoked when
+   // a session is established or disestablished (when a client connects or
+   // disconnects to this server). 
    Ris::Net::TcpServerMsgThread::SessionQCall mSessionQCall;
 
    // This is bound to the qcall. Maintain the session state list.
@@ -139,12 +135,12 @@ public:
    //***************************************************************************
    // Methods. Receive message qcall.
 
-   // qcall registered to the mTcpMsgThread child thread. It is invoked when
+   // qcall registered to the child message thread. It is invoked when
    // a message is received. It process the received messages.
    Ris::Net::TcpServerMsgThread::RxMsgQCall mRxMsgQCall;
 
-   // This is bound to the qcall. Call one of the specific receive message
-   // handlers.
+   // This is bound to the qcall. Call one of the following specific receive
+   // message handlers.
    void executeRxMsg(int aSessionIndex, Ris::ByteContent* aMsg);
 
    //***************************************************************************
@@ -166,7 +162,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Send a message via mMsgThread:
+   // Send a message via the child message thread:
    void sendMsg (int aSessionIndex, BaseMsg* aTxMsg);
    void sendTestMsg(int aAppNumber);
 };

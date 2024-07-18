@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 
-#include "procoUdpSettings.h"
+#include "procoUdpParms.h"
 #include "procoProcThread.h"
 #include "procoMonitorThread.h"
 
@@ -116,7 +116,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gUdpSettings.show();
+   ProtoComm::gUdpParms.show();
 }
 
 //******************************************************************************

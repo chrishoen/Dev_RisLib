@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "procoMsgHelper.h"
-#include "procoTcpSettings.h"
+#include "procoTcpParms.h"
 
 #define  _PROCOSERVERTHREAD_CPP_
 #include "procoServerThread.h"
@@ -75,9 +75,9 @@ void ServerThread::threadInitFunction()
 
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
-   tSettings.setLocalAddress(gTcpSettings.mTcpServerAddress, gTcpSettings.mTcpServerPort);
+   tSettings.setLocalAddress(gTcpParms.mTcpServerAddress, gTcpParms.mTcpServerPort);
    tSettings.mMsgMonkey = mMsgMonkey;
-   tSettings.mMaxSessions = gTcpSettings.mTcpMaxSessions;
+   tSettings.mMaxSessions = gTcpParms.mTcpMaxSessions;
    tSettings.mServerSessionQCall = mSessionQCall;
    tSettings.mServerRxMsgQCall = mRxMsgQCall;
    tSettings.mTraceIndex = 11;

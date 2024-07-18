@@ -3,7 +3,7 @@
 
 #include "risThreadsProcess.h"
 #include "risBaseDir.h"
-#include "procoUdpSettings.h"
+#include "procoUdpParms.h"
 #include "MainArgs.h"
 #include "MainInit.h"
 
@@ -63,15 +63,15 @@ void main_initialize()
 
    if (gMainArgs.mPeerIdent == 1)
    {
-      ProtoComm::gUdpSettings.reset();
-      ProtoComm::gUdpSettings.readSection("default");
-      ProtoComm::gUdpSettings.readSection("UdpPeer1");
+      ProtoComm::gUdpParms.reset();
+      ProtoComm::gUdpParms.readSection("default");
+      ProtoComm::gUdpParms.readSection("UdpPeer1");
    }
    else if (gMainArgs.mPeerIdent == 2)
    {
-      ProtoComm::gUdpSettings.reset();
-      ProtoComm::gUdpSettings.readSection("default");
-      ProtoComm::gUdpSettings.readSection("UdpPeer2");
+      ProtoComm::gUdpParms.reset();
+      ProtoComm::gUdpParms.readSection("default");
+      ProtoComm::gUdpParms.readSection("UdpPeer2");
    }
    else
    {

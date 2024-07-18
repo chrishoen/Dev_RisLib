@@ -8,8 +8,8 @@
 #include "risPortableCalls.h"
 
 
-#define  _PROCOTCPSETTINGS_CPP_
-#include "procoTcpSettings.h"
+#define  _PROCOTCPPARMS_CPP_
+#include "procoTcpParms.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -23,15 +23,15 @@ namespace ProtoComm
 //******************************************************************************
 // Constructor.
 
-TcpSettings::TcpSettings()
+TcpParms::TcpParms()
 {
    reset();
 }
 
-void TcpSettings::reset()
+void TcpParms::reset()
 {
    BaseClass::reset();
-   BaseClass::setFilePath("files/ProtoComm_TcpSettings.txt");
+   BaseClass::setFilePath("files/ProtoComm_TcpParms.txt");
 
    mMyAppNumber = 0;
 
@@ -48,10 +48,10 @@ void TcpSettings::reset()
 //******************************************************************************
 // Show.
 
-void TcpSettings::show()
+void TcpParms::show()
 {
    printf("\n");
-   printf("TcpSettings************************************************ %s\n", mTargetSection);
+   printf("TcpParms************************************************ %s\n", mTargetSection);
 
    printf("MyAppNumber             %16d\n",       mMyAppNumber);
 
@@ -63,7 +63,7 @@ void TcpSettings::show()
    printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
    printf("NumWords                %16d\n", mNumWords);
 
-   printf("TcpSettings************************************************\n");
+   printf("TcpParms************************************************\n");
    printf("\n");
 }
 
@@ -74,7 +74,7 @@ void TcpSettings::show()
 // member variable.  Only process commands for the target section.This is
 // called by the associated command file object for each command in the file.
 
-void TcpSettings::execute(Ris::CmdLineCmd* aCmd)
+void TcpParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
@@ -94,7 +94,7 @@ void TcpSettings::execute(Ris::CmdLineCmd* aCmd)
 // Calculate expanded member variables. This is called after the entire
 // section of the command file has been processed.
 
-void TcpSettings::expand()
+void TcpParms::expand()
 {
 }
 

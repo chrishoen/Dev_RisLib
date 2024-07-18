@@ -47,7 +47,7 @@ namespace ProtoComm
 // structure. If so, then this class is the root.
 // 
 
-class UdpSettings : public Ris::BaseCmdLineParms
+class UdpParms : public Ris::BaseCmdLineParms
 {
 public:
 
@@ -104,7 +104,7 @@ public:
 
    // Constructor,
    typedef Ris::BaseCmdLineParms BaseClass;
-   UdpSettings();
+   UdpParms();
    void reset();
    void show();
 
@@ -123,10 +123,10 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _PROCOUDPSETTINGS_CPP_
-   UdpSettings gUdpSettings;
+#ifdef _PROCOUDPPARMS_CPP_
+   UdpParms gUdpParms;
 #else
-   extern UdpSettings gUdpSettings;
+   extern UdpParms gUdpParms;
 #endif
 
 //******************************************************************************

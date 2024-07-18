@@ -3,7 +3,7 @@
 
 #include "risThreadsProcess.h"
 #include "risBaseDir.h"
-#include "procoTcpSettings.h"
+#include "procoTcpParms.h"
 #include "MainArgs.h"
 #include "MainInit.h"
 
@@ -63,15 +63,15 @@ void main_initialize()
 
    if (gMainArgs.mClientIdent == 1)
    {
-      ProtoComm::gTcpSettings.reset();
-      ProtoComm::gTcpSettings.readSection("default");
-      ProtoComm::gTcpSettings.readSection("TcpClient1");
+      ProtoComm::gTcpParms.reset();
+      ProtoComm::gTcpParms.readSection("default");
+      ProtoComm::gTcpParms.readSection("TcpClient1");
    }
    else if (gMainArgs.mClientIdent == 2)
    {
-      ProtoComm::gTcpSettings.reset();
-      ProtoComm::gTcpSettings.readSection("default");
-      ProtoComm::gTcpSettings.readSection("TcpClient2");
+      ProtoComm::gTcpParms.reset();
+      ProtoComm::gTcpParms.readSection("default");
+      ProtoComm::gTcpParms.readSection("TcpClient2");
    }
    else
    {

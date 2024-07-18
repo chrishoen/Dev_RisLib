@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "procoMsgHelper.h"
-#include "procoUdpSettings.h"
+#include "procoUdpParms.h"
 
 #define  _PROCOPEERTHREAD_CPP_
 #include "procoPeerThread.h"
@@ -79,9 +79,9 @@ void PeerThread::threadInitFunction()
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setLocalAddress(gUdpSettings.mMyUdpAddress, gUdpSettings.mMyUdpPort);
-   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpAddress, gUdpSettings.mOtherUdpPort);
-   tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
+   tSettings.setLocalAddress(gUdpParms.mMyUdpAddress, gUdpParms.mMyUdpPort);
+   tSettings.setRemoteAddress(gUdpParms.mOtherUdpAddress, gUdpParms.mOtherUdpPort);
+   tSettings.setUdpWrapFlag(gUdpParms.mUdpWrapFlag);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mRxMsgQCall = mRxMsgQCall;
    tSettings.mTraceIndex = 11;

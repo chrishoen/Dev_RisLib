@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "procoMsgHelper.h"
-#include "procoTcpSettings.h"
+#include "procoTcpParms.h"
 
 #define  _PROCOCLIENTTHREAD_CPP_
 #include "procoClientThread.h"
@@ -74,7 +74,7 @@ void ClientThread::threadInitFunction()
 
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
-   tSettings.setRemoteAddress(gTcpSettings.mTcpServerAddress, gTcpSettings.mTcpServerPort);
+   tSettings.setRemoteAddress(gTcpParms.mTcpServerAddress, gTcpParms.mTcpServerPort);
    tSettings.mMsgMonkey = mMsgMonkey;
    tSettings.mClientSessionQCall = mSessionQCall;
    tSettings.mRxMsgQCall = mRxMsgQCall;
@@ -143,7 +143,7 @@ void ClientThread::executeSession(bool aConnected)
       // Transmit a FirstMessage to the server to inform it of who this 
       // client is.
       FirstMessageMsg* tTxMsg = new FirstMessageMsg;
-      tTxMsg->mCode1 = gTcpSettings.mMyAppNumber;
+      tTxMsg->mCode1 = gTcpParms.mMyAppNumber;
       sendMsg(tTxMsg);
 #endif
    }

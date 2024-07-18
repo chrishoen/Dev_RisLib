@@ -47,7 +47,7 @@ namespace ProtoComm
 // structure. If so, then this class is the root.
 // 
 
-class TcpSettings : public Ris::BaseCmdLineParms
+class TcpParms : public Ris::BaseCmdLineParms
 {
 public:
 
@@ -96,7 +96,7 @@ public:
 
    // Constructor,
    typedef Ris::BaseCmdLineParms BaseClass;
-   TcpSettings();
+   TcpParms();
    void reset();
    void show();
 
@@ -115,10 +115,10 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _PROCOTCPSETTINGS_CPP_
-   TcpSettings gTcpSettings;
+#ifdef _PROCOTCPPARMS_CPP_
+   TcpParms gTcpParms;
 #else
-   extern TcpSettings gTcpSettings;
+   extern TcpParms gTcpParms;
 #endif
 
 //******************************************************************************

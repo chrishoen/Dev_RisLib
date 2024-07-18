@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 
-#include "procoTcpSettings.h"
+#include "procoTcpParms.h"
 #include "procoMsg.h"
 #include "procoMsgHelper.h"
 
@@ -165,7 +165,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gTcpSettings.show();
+   ProtoComm::gTcpParms.show();
 }
 
 //******************************************************************************

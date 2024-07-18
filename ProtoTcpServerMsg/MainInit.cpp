@@ -3,7 +3,7 @@
 
 #include "risThreadsProcess.h"
 #include "risBaseDir.h"
-#include "procoTcpSettings.h"
+#include "procoTcpParms.h"
 #include "MainArgs.h"
 #include "MainInit.h"
 
@@ -66,9 +66,9 @@ void main_initialize()
    //***************************************************************************
    // Read parameters files.
 
-   ProtoComm::gTcpSettings.reset();
-   ProtoComm::gTcpSettings.readSection("default");
-   ProtoComm::gTcpSettings.readSection("TcpServer");
+   ProtoComm::gTcpParms.reset();
+   ProtoComm::gTcpParms.readSection("default");
+   ProtoComm::gTcpParms.readSection("TcpServer");
 }
 
 //******************************************************************************

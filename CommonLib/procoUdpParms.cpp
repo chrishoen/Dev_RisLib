@@ -8,8 +8,8 @@
 #include "risPortableCalls.h"
 
 
-#define  _PROCOUDPSETTINGS_CPP_
-#include "procoUdpSettings.h"
+#define  _PROCOUDPPARMS_CPP_
+#include "procoUdpParms.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -23,15 +23,15 @@ namespace ProtoComm
 //******************************************************************************
 // Constructor.
 
-UdpSettings::UdpSettings()
+UdpParms::UdpParms()
 {
    reset();
 }
 
-void UdpSettings::reset()
+void UdpParms::reset()
 {
    BaseClass::reset();
-   BaseClass::setFilePath("files/ProtoComm_UdpSettings.txt");
+   BaseClass::setFilePath("files/ProtoComm_UdpParms.txt");
 
    mMyAppNumber = 0;
 
@@ -52,10 +52,10 @@ void UdpSettings::reset()
 //******************************************************************************
 // Show.
 
-void UdpSettings::show()
+void UdpParms::show()
 {
    printf("\n");
-   printf("UdpSettings************************************************ %s\n", mTargetSection);
+   printf("UdpParms************************************************ %s\n", mTargetSection);
 
    printf("MyAppNumber             %16d\n", mMyAppNumber);
 
@@ -70,7 +70,7 @@ void UdpSettings::show()
    printf("ThreadTimerPeriod       %16d\n", mThreadTimerPeriod);
    printf("NumWords                %16d\n", mNumWords);
 
-   printf("UdpSettings************************************************\n");
+   printf("UdpParms************************************************\n");
    printf("\n");
 }
 
@@ -81,7 +81,7 @@ void UdpSettings::show()
 // member variable.  Only process commands for the target section.This is
 // called by the associated command file object for each command in the file.
 
-void UdpSettings::execute(Ris::CmdLineCmd* aCmd)
+void UdpParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
@@ -104,7 +104,7 @@ void UdpSettings::execute(Ris::CmdLineCmd* aCmd)
 // Calculate expanded member variables. This is called after the entire
 // section of the command file has been processed.
 
-void UdpSettings::expand()
+void UdpParms::expand()
 {
 }
 

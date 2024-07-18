@@ -6,7 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "procoUdpSettings.h"
+#include "procoUdpParms.h"
 
 #define  _PROCOPROCTHREAD_CPP_
 #include "procoProcThread.h"
@@ -71,10 +71,10 @@ void ProcThread::threadInitFunction()
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
-   tSettings.setLocalAddress(gUdpSettings.mMyUdpAddress, gUdpSettings.mMyUdpPort);
-   tSettings.setRemoteAddress(gUdpSettings.mOtherUdpAddress, gUdpSettings.mOtherUdpPort);
-   tSettings.setUdpWrapFlag(gUdpSettings.mUdpWrapFlag);
-   tSettings.setUdpBroadcast(gUdpSettings.mUdpBroadcast);
+   tSettings.setLocalAddress(gUdpParms.mMyUdpAddress, gUdpParms.mMyUdpPort);
+   tSettings.setRemoteAddress(gUdpParms.mOtherUdpAddress, gUdpParms.mOtherUdpPort);
+   tSettings.setUdpWrapFlag(gUdpParms.mUdpWrapFlag);
+   tSettings.setUdpBroadcast(gUdpParms.mUdpBroadcast);
    tSettings.mRxDataQCall = mRxDataQCall;
    tSettings.mMaxDataSize = mMaxDataSize;
    tSettings.mTraceIndex = 11;

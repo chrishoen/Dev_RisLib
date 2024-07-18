@@ -84,7 +84,7 @@ void ServerThread::threadInitFunction()
    Trc::start(1);
    Trc::start(11);
 
-   // Create the child thread with the settings.
+   // Create the child thread according to the settings.
    mMsgThread = new Ris::Net::TcpServerMsgThread(tSettings);
 
    // Launch the child thread.

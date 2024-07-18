@@ -85,7 +85,7 @@ void PeerThread::threadInitFunction()
    tSettings.mRxMsgQCall = mRxMsgQCall;
    tSettings.mTraceIndex = 11;
 
-   // Create the child thread with the settings.
+   // Create the child thread according to the settings.
    mMsgThread = new Ris::Net::UdpMsgThread(tSettings);
 
    // Launch the child thread.

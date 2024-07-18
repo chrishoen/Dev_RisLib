@@ -30,7 +30,6 @@ ProcThread::ProcThread()
 
    // Initialize member variables.
    mUdpStringThread = 0;
-   mConnectionFlag = false;
    mTxCount = 0;
    mRxCount = 0;
    mTPFlag = false;
@@ -55,7 +54,7 @@ void ProcThread::show()
 //******************************************************************************
 // Thread init function. This is called by the base class immedidately 
 // after the thread starts running. It creates and launches the 
-// child UdpStringThread.
+// child string thread.
 
 void ProcThread::threadInitFunction()
 {
@@ -72,7 +71,7 @@ void ProcThread::threadInitFunction()
    tSettings.mRxStringQCall = mRxStringQCall;
    tSettings.mTraceIndex = 11;
 
-   // Create the child thread with the settings.
+   // Create the child thread according to the settings.
    mUdpStringThread = new Ris::Net::UdpStringThread(tSettings);
 
    // Launch the child thread.
@@ -85,7 +84,7 @@ void ProcThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immedidately
-// before the thread is terminated. It shuts down the child UdpStringThread.
+// before the thread is terminated. It shuts down the child string thread.
 
 void ProcThread::threadExitFunction()
 {
@@ -130,7 +129,7 @@ void ProcThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// qcall registered to the mUdpStringThread child thread. It is invoked by
+// qcall registered to the child string thread. It is invoked by
 // the child thread when a string is received.
 // Based on the receive string type, call one of the specific receive
 // string handlers. This is bound to the qcall.
@@ -144,7 +143,7 @@ void ProcThread::executeRxString(std::string* aString)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send a string via mUdpStringThread:
+// Send a string via the child thread.
 
 void ProcThread::sendString(std::string* aString)
 {
